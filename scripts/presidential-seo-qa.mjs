@@ -1299,6 +1299,213 @@ function checkRouteShellFoundation() {
   }
 }
 
+function checkRouteShellSchemaFoundation() {
+  const helperPath = "src/lib/seo/schema/routeShell.ts";
+  const schemaIndexPath = "src/lib/seo/schema/index.ts";
+  const componentPath = "src/components/seo/presidential-route-shell.tsx";
+
+  const requiredFiles = [helperPath, schemaIndexPath, componentPath];
+  const missingFiles = requiredFiles.filter((file) => !projectFileExists(file));
+
+  if (missingFiles.length === 0) {
+    addResult(
+      "PASS",
+      "schema.routeShell.files",
+      "Route-shell JSON-LD helper, schema export, and shared shell component exist.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "schema.routeShell.files",
+      "Route-shell JSON-LD foundation files are missing.",
+      missingFiles,
+      "Create the Step 8F route-shell schema helper and wire it through the shared route shell.",
+    );
+    return;
+  }
+
+  const helperText = readProjectFile(helperPath);
+  const schemaIndexText = readProjectFile(schemaIndexPath);
+  const componentText = readProjectFile(componentPath);
+
+  const exported =
+    schemaIndexText.includes('export * from "./routeShell"') ||
+    schemaIndexText.includes("export * from './routeShell'");
+
+  if (exported) {
+    addResult(
+      "PASS",
+      "schema.routeShell.export",
+      "Route-shell schema helper is exported through the schema module boundary.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "schema.routeShell.export",
+      "Route-shell schema helper is not exported through the schema module boundary.",
+      [],
+      "Export routeShell from src/lib/seo/schema/index.ts.",
+    );
+  }
+
+  const usesApprovedBuilders =
+    helperText.includes("buildOrganizationSchema") &&
+    helperText.includes("buildWebsiteSchema") &&
+    helperText.includes("buildWebPageSchema") &&
+    helperText.includes("buildBreadcrumbSchema") &&
+    helperText.includes("buildRouteCanonicalUrl(route)") &&
+    helperText.includes("assertMetadataTextSafe");
+
+  if (usesApprovedBuilders) {
+    addResult(
+      "PASS",
+      "schema.routeShell.builders",
+      "Route-shell JSON-LD uses approved schema, canonical, and text-safety helpers.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "schema.routeShell.builders",
+      "Route-shell JSON-LD may bypass approved schema/canonical/text-safety helpers.",
+      [],
+      "Build shell JSON-LD from existing Organization, WebSite, WebPage, BreadcrumbList, canonical, and text-safety helpers.",
+    );
+  }
+
+  const templateGuard =
+    helperText.includes("isRouteTemplate(route)") &&
+    helperText.includes("Cannot build route shell schema for unresolved template route");
+
+  if (templateGuard) {
+    addResult(
+      "PASS",
+      "schema.routeShell.templates",
+      "Route-shell schema refuses unresolved dynamic template routes.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "schema.routeShell.templates",
+      "Route-shell schema may emit JSON-LD for unresolved dynamic templates.",
+      [],
+      "Block JSON-LD generation when route.path or route.canonicalPath contains template tokens.",
+    );
+  }
+
+  const homeOnlyEntitySchema =
+    helperText.includes('if (route.path === "/")') &&
+    helperText.includes('id: "organization"') &&
+    helperText.includes('id: "website"');
+
+  if (homeOnlyEntitySchema) {
+    addResult(
+      "PASS",
+      "schema.routeShell.entityScope",
+      "Organization and WebSite schema are scoped to the home route shell.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "schema.routeShell.entityScope",
+      "Organization/WebSite schema scoping is unclear for route shells.",
+      [],
+      "Keep Organization and WebSite route-shell emission on the home route until a broader schema graph policy is approved.",
+    );
+  }
+
+  const componentWiring =
+    componentText.includes("buildRouteShellJsonLd(route)") &&
+    componentText.includes("jsonLdEntries.map") &&
+    componentText.includes("<JsonLd") &&
+    componentText.includes("data={entry.data}");
+
+  if (componentWiring) {
+    addResult(
+      "PASS",
+      "schema.routeShell.wiring",
+      "Shared route shell renders JSON-LD through the approved JsonLd component.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "schema.routeShell.wiring",
+      "Shared route shell may not render JSON-LD through the approved renderer.",
+      [],
+      "Render buildRouteShellJsonLd(route) entries with the existing JsonLd component.",
+    );
+  }
+
+  const visibleBreadcrumbs =
+    componentText.includes("buildRouteShellBreadcrumbItems(route)") &&
+    componentText.includes('aria-label="Breadcrumb"') &&
+    componentText.includes('aria-current="page"');
+
+  if (visibleBreadcrumbs) {
+    addResult(
+      "PASS",
+      "schema.routeShell.visibleBreadcrumbs",
+      "BreadcrumbList schema is paired with visible breadcrumb navigation in the route shell.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "schema.routeShell.visibleBreadcrumbs",
+      "BreadcrumbList schema may not match visible route shell content.",
+      [],
+      "Render visible breadcrumb navigation when emitting BreadcrumbList schema.",
+    );
+  }
+
+  const suppressedTypes = [
+    "AboutPage",
+    "Article",
+    "ContactPage",
+    "ItemList",
+    "LocalBusiness",
+    "Product",
+  ];
+  const suppressedTypeConstantsPresent = suppressedTypes.every((type) =>
+    helperText.includes(`"${type}"`),
+  );
+  const noUnsupportedBuilderCalls =
+    !helperText.includes("buildArticleSchema") &&
+    !helperText.includes("buildItemListSchema") &&
+    !helperText.includes("buildInformationalProductSchema") &&
+    !helperText.includes("buildAboutPageSchema") &&
+    !helperText.includes("buildContactPageSchema") &&
+    !helperText.includes("buildLocalBusinessSchema") &&
+    !helperText.includes('"@type": "AboutPage"') &&
+    !helperText.includes("'@type': 'AboutPage'") &&
+    !helperText.includes('"@type": "ContactPage"') &&
+    !helperText.includes("'@type': 'ContactPage'") &&
+    !helperText.includes('"@type": "LocalBusiness"') &&
+    !helperText.includes("'@type': 'LocalBusiness'");
+  const noCommerceFields =
+    !/\b(Offer|offers|price|availability|shippingDetails|aggregateRating|review|reviews)\b/.test(
+      helperText,
+    );
+
+  if (suppressedTypeConstantsPresent && noUnsupportedBuilderCalls && noCommerceFields) {
+    addResult(
+      "PASS",
+      "schema.routeShell.restraint",
+      "Route-shell schema suppresses deferred and record-backed schema types and avoids commerce/review fields.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "schema.routeShell.restraint",
+      "Route-shell schema may emit unsupported schema types or commerce/review fields.",
+      [
+        `suppressed type constants present: ${suppressedTypeConstantsPresent}`,
+        `unsupported builder calls absent: ${noUnsupportedBuilderCalls}`,
+        `commerce/review fields absent: ${noCommerceFields}`,
+      ],
+      "Only emit Organization, WebSite, WebPage, and visible BreadcrumbList from route shells until approved records exist.",
+    );
+  }
+}
+
 function checkAgeGateFoundation() {
   const ageGatePath = "src/components/age-gate.tsx";
   const layoutPath = "src/app/layout.tsx";
@@ -1541,7 +1748,7 @@ function checkAgeGateFoundation() {
   }
 }
 
-function checkStep8EScopeBoundary() {
+function checkStep8FScopeBoundary() {
   const outOfScopePaths = [
     "src/app/moon-rocks/silver",
     "src/app/moon-rocks/gold",
@@ -1563,16 +1770,16 @@ function checkStep8EScopeBoundary() {
   if (present.length === 0) {
     addResult(
       "PASS",
-      "scope.step8e",
-      "Step 8E stayed scoped to the age gate overlay and did not create redirect-wall, product/detail, locator data, database, or CMS files.",
+      "scope.step8f",
+      "Step 8F stayed scoped to route-shell schema wiring and did not create redirect-wall, product/detail, locator data, database, or CMS files.",
     );
   } else {
     addResult(
       "FAIL",
-      "scope.step8e",
-      "Step 8E out-of-scope files or folders exist.",
+      "scope.step8f",
+      "Step 8F out-of-scope files or folders exist.",
       present,
-      "Keep Step 8E limited to the age gate overlay foundation.",
+      "Keep Step 8F limited to route-shell JSON-LD/schema wiring foundation.",
     );
   }
 }
@@ -1645,7 +1852,7 @@ function checkLighthouseStatus() {
     addResult(
       "PASS",
       "lighthouse.health",
-      "LHCI health script and config exist; Step 8E respects Step 6B by not treating Windows full autorun as fixed.",
+      "LHCI health script and config exist; Step 8F respects Step 6B by not treating Windows full autorun as fixed.",
     );
     addResult(
       "PENDING",
@@ -1718,7 +1925,7 @@ function printResults() {
   const statusOrder = ["FAIL", "WARN", "PENDING", "HUMAN", "PASS"];
 
   console.log("Presidential SEO QA Harness");
-  console.log("Step 8E age gate overlay foundation checks\n");
+  console.log("Step 8F route-shell schema wiring foundation checks\n");
 
   for (const status of statusOrder) {
     const group = results.filter((result) => result.status === status);
@@ -1764,8 +1971,9 @@ checkRouteRegistryFoundation();
 checkMetadataFoundation();
 checkSitemapRobotsFoundation();
 checkRouteShellFoundation();
+checkRouteShellSchemaFoundation();
 checkAgeGateFoundation();
-checkStep8EScopeBoundary();
+checkStep8FScopeBoundary();
 checkScaffoldSignals(publicCopyFiles);
 checkPendingSystems();
 checkLighthouseStatus();
