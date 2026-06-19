@@ -1348,10 +1348,11 @@ function checkScaffoldSignals(publicCopyFiles) {
   }
 
   addResult(
-    "WARN",
+    "FAIL",
     "scaffold.placeholders",
-    "Starter scaffold copy/assets still exist. Allowed before public page buildout; must be replaced before production SEO routes launch.",
+    "Starter scaffold copy/assets still exist after Step 8D route shell creation.",
     matches.map((match) => `${match.file}:${match.line} ${match.label}`),
+    "Remove starter scaffold copy/assets before Step 8D can remain accepted.",
   );
 }
 
