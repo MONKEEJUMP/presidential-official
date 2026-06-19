@@ -478,6 +478,26 @@ function checkRouteRegistryFoundation() {
     );
   }
 
+  const templateCanonicalGuard =
+    helpersText.includes("isRouteTemplate") &&
+    helpersText.includes("Cannot build a concrete canonical URL for route template");
+
+  if (templateCanonicalGuard) {
+    addResult(
+      "PASS",
+      "routes.canonicalTemplates",
+      "Route canonical helper refuses unresolved dynamic template routes.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routes.canonicalTemplates",
+      "Dynamic template routes can be converted into concrete canonical URLs.",
+      [],
+      "Block bracket-template canonicals until approved source records resolve real paths.",
+    );
+  }
+
   const sitemapEligibilityLogic =
     indexabilityText.includes("isSitemapEligible") &&
     indexabilityText.includes('route.status === "approved"') &&

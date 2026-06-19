@@ -12,7 +12,24 @@ const routesById = new Map<string, SeoRouteRecord>(
   ROUTE_REGISTRY.map((route) => [route.id, route]),
 );
 
+function hasRouteTemplateToken(path: SeoRoutePath): boolean {
+  return path.includes("[") || path.includes("]");
+}
+
+export function isRouteTemplate(route: SeoRouteRecord): boolean {
+  return (
+    hasRouteTemplateToken(route.path) ||
+    hasRouteTemplateToken(route.canonicalPath)
+  );
+}
+
 export function buildRouteCanonicalUrl(route: SeoRouteRecord): string {
+  if (isRouteTemplate(route)) {
+    throw new Error(
+      `Cannot build a concrete canonical URL for route template: ${route.path}`,
+    );
+  }
+
   return canonicalUrl(route.canonicalPath);
 }
 
