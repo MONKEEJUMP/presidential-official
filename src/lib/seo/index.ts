@@ -5,4 +5,6 @@ export * from "./metadata-types";
 export * from "./route-helpers";
 export * from "./route-types";
 export * from "./routes";
+export * from "./robots";
 export * from "./schema";
+export * from "./sitemap";

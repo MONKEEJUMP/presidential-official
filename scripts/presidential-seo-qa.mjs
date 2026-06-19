@@ -788,10 +788,192 @@ function checkMetadataFoundation() {
   }
 }
 
-function checkStep8BScopeBoundary() {
-  const outOfScopePaths = [
+function checkSitemapRobotsFoundation() {
+  const requiredFiles = [
     "src/app/sitemap.ts",
     "src/app/robots.ts",
+    "src/lib/seo/sitemap.ts",
+    "src/lib/seo/robots.ts",
+  ];
+  const missingFiles = requiredFiles.filter((file) => !projectFileExists(file));
+
+  if (missingFiles.length === 0) {
+    addResult(
+      "PASS",
+      "sitemapRobots.foundation.files",
+      "Native sitemap/robots files and SEO helper files exist.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "sitemapRobots.foundation.files",
+      "Step 8C sitemap/robots foundation files are missing.",
+      missingFiles,
+      "Create native Next.js app/sitemap.ts and app/robots.ts plus narrow SEO helpers.",
+    );
+    return;
+  }
+
+  const appSitemapText = readProjectFile("src/app/sitemap.ts");
+  const appRobotsText = readProjectFile("src/app/robots.ts");
+  const sitemapText = readProjectFile("src/lib/seo/sitemap.ts");
+  const robotsText = readProjectFile("src/lib/seo/robots.ts");
+
+  const nativeSitemap =
+    appSitemapText.includes('import type { MetadataRoute } from "next"') &&
+    appSitemapText.includes('from "@/lib/seo/sitemap"') &&
+    appSitemapText.includes("buildPresidentialSitemap()") &&
+    appSitemapText.includes("MetadataRoute.Sitemap");
+
+  if (nativeSitemap) {
+    addResult(
+      "PASS",
+      "sitemap.native",
+      "Next.js native app/sitemap.ts delegates to the Presidential sitemap helper.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "sitemap.native",
+      "Native sitemap file is not wired to the Presidential sitemap source of truth.",
+      [],
+      "Keep app/sitemap.ts as a small MetadataRoute.Sitemap wrapper around buildPresidentialSitemap.",
+    );
+  }
+
+  const sitemapUsesRouteRegistry =
+    sitemapText.includes("ROUTE_REGISTRY") &&
+    sitemapText.includes("isSitemapEligible(route)") &&
+    sitemapText.includes("!isRouteTemplate(route)") &&
+    sitemapText.includes("buildRouteCanonicalUrl(route)");
+
+  if (sitemapUsesRouteRegistry) {
+    addResult(
+      "PASS",
+      "sitemap.registry",
+      "Sitemap helper consumes the route registry, sitemap eligibility, template guard, and canonical URL helper.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "sitemap.registry",
+      "Sitemap helper is not fully tied to route registry eligibility and canonical doctrine.",
+      [],
+      "Build sitemap entries only from eligible concrete route records through buildRouteCanonicalUrl.",
+    );
+  }
+
+  const sitemapRestraint =
+    !sitemapText.includes("images:") &&
+    !sitemapText.includes("videos:") &&
+    !sitemapText.includes("alternates:");
+
+  if (sitemapRestraint) {
+    addResult(
+      "PASS",
+      "sitemap.assetRestraint",
+      "Sitemap foundation does not attach unapproved image, video, or alternate-locale fields.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "sitemap.assetRestraint",
+      "Sitemap helper may attach unapproved image, video, or alternate-locale fields.",
+      [],
+      "Keep rich sitemap extensions out until approved media, locale, and asset provenance records exist.",
+    );
+  }
+
+  const nativeRobots =
+    appRobotsText.includes('import type { MetadataRoute } from "next"') &&
+    appRobotsText.includes('from "@/lib/seo/robots"') &&
+    appRobotsText.includes("buildPresidentialRobots()") &&
+    appRobotsText.includes("MetadataRoute.Robots");
+
+  if (nativeRobots) {
+    addResult(
+      "PASS",
+      "robots.native",
+      "Next.js native app/robots.ts delegates to the Presidential robots helper.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "robots.native",
+      "Native robots file is not wired to the Presidential robots source of truth.",
+      [],
+      "Keep app/robots.ts as a small MetadataRoute.Robots wrapper around buildPresidentialRobots.",
+    );
+  }
+
+  const robotsProductionSitemap =
+    robotsText.includes('canonicalUrl("/sitemap.xml")') &&
+    robotsText.includes("sitemap: ROBOTS_SITEMAP_URL");
+
+  if (robotsProductionSitemap) {
+    addResult(
+      "PASS",
+      "robots.productionSitemap",
+      "Robots helper points crawlers to the canonical production sitemap URL without adding nonessential host directives.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "robots.productionSitemap",
+      "Robots helper does not clearly point to the canonical production sitemap.",
+      [],
+      "Build the robots sitemap field from canonicalUrl('/sitemap.xml') only.",
+    );
+  }
+
+  const robotsPrivateDisallow =
+    robotsText.includes("ROUTE_REGISTRY") &&
+    robotsText.includes("isPrivateOrFutureRoute(route)") &&
+    robotsText.includes('route.kind === "private_system"') &&
+    robotsText.includes("normalizeDisallowPath(route.path)");
+
+  if (robotsPrivateDisallow) {
+    addResult(
+      "PASS",
+      "robots.privateFuture",
+      "Robots disallow paths are derived from private, blocked, and future route records.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "robots.privateFuture",
+      "Robots disallow logic is not clearly derived from private/future route records.",
+      [],
+      "Derive disallow paths from private, blocked, future, and private_system route records.",
+    );
+  }
+
+  const robotsDoesNotBlockPublicPillars =
+    !robotsText.includes('"/moon-rocks"') &&
+    !robotsText.includes('"/moon-pods"') &&
+    !robotsText.includes('"/orbit"') &&
+    !robotsText.includes('"/find-us"') &&
+    robotsText.includes('ROBOTS_ALLOW_PATHS = ["/"]');
+
+  if (robotsDoesNotBlockPublicPillars) {
+    addResult(
+      "PASS",
+      "robots.publicAllowed",
+      "Robots foundation allows the public site root and does not hard-block future public pillar or locator routes.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "robots.publicAllowed",
+      "Robots foundation may block future public pillar or locator routes.",
+      [],
+      "Do not disallow /moon-rocks, /moon-pods, /orbit, /find-us, or /learn at the robots layer.",
+    );
+  }
+}
+
+function checkStep8CScopeBoundary() {
+  const outOfScopePaths = [
     "src/app/moon-rocks",
     "src/app/moon-pods",
     "src/app/orbit",
@@ -807,16 +989,16 @@ function checkStep8BScopeBoundary() {
   if (present.length === 0) {
     addResult(
       "PASS",
-      "scope.step8b",
-      "No Step 8B out-of-scope sitemap, robots, public route, database, or CMS files were created.",
+      "scope.step8c",
+      "Step 8C stayed scoped to sitemap/robots support and did not create public route, database, or CMS files.",
     );
   } else {
     addResult(
       "FAIL",
-      "scope.step8b",
-      "Step 8B out-of-scope files or folders exist.",
+      "scope.step8c",
+      "Step 8C out-of-scope files or folders exist.",
       present,
-      "Keep Step 8B limited to metadata helper foundation only.",
+      "Keep Step 8C limited to sitemap/robots source-of-truth support.",
     );
   }
 }
@@ -853,16 +1035,6 @@ function checkPendingSystems() {
       message: "Route registry does not exist yet; route completeness checks are pending.",
     },
     {
-      rule: "sitemap.native",
-      exists: existsSync(projectPath("src/app/sitemap.ts")),
-      message: "Next.js sitemap does not exist yet; sitemap eligibility checks are pending.",
-    },
-    {
-      rule: "robots.native",
-      exists: existsSync(projectPath("src/app/robots.ts")),
-      message: "Next.js robots file does not exist yet; robots checks are pending.",
-    },
-    {
       rule: "agegate.overlay",
       exists:
         existsSync(projectPath("src/components/age-gate.tsx")) ||
@@ -895,7 +1067,7 @@ function checkLighthouseStatus() {
     addResult(
       "PASS",
       "lighthouse.health",
-      "LHCI health script and config exist; Step 8B respects Step 6B by not treating Windows full autorun as fixed.",
+      "LHCI health script and config exist; Step 8C respects Step 6B by not treating Windows full autorun as fixed.",
     );
     addResult(
       "PENDING",
@@ -968,7 +1140,7 @@ function printResults() {
   const statusOrder = ["FAIL", "WARN", "PENDING", "HUMAN", "PASS"];
 
   console.log("Presidential SEO QA Harness");
-  console.log("Step 8B metadata source foundation checks\n");
+  console.log("Step 8C sitemap and robots source foundation checks\n");
 
   for (const status of statusOrder) {
     const group = results.filter((result) => result.status === status);
@@ -1012,7 +1184,8 @@ checkSameAsWhitelist(sourceFiles);
 checkJsonLdSafety();
 checkRouteRegistryFoundation();
 checkMetadataFoundation();
-checkStep8BScopeBoundary();
+checkSitemapRobotsFoundation();
+checkStep8CScopeBoundary();
 checkScaffoldSignals(publicCopyFiles);
 checkPendingSystems();
 checkLighthouseStatus();
