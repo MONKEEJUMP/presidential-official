@@ -6,13 +6,13 @@ import {
   getStaticRouteRecord,
 } from "@/lib/seo/route-page";
 
-const ROUTE_PATH = "/" as const;
+const ROUTE_PATH = "/moon-pods" as const;
 
 export function generateMetadata(): Metadata {
   return buildStaticRouteMetadata(ROUTE_PATH);
 }
 
-export default function Home() {
+export default function MoonPodsPage() {
   const route = getStaticRouteRecord(ROUTE_PATH);
 
   return <PresidentialRouteShell route={route} />;

@@ -1075,33 +1075,258 @@ function checkSitemapRobotsFoundation() {
   }
 }
 
-function checkStep8CScopeBoundary() {
+function checkRouteShellFoundation() {
+  const routeShellPages = [
+    { routePath: "/", filePath: "src/app/page.tsx" },
+    { routePath: "/moon-rocks", filePath: "src/app/moon-rocks/page.tsx" },
+    { routePath: "/moon-pods", filePath: "src/app/moon-pods/page.tsx" },
+    { routePath: "/orbit", filePath: "src/app/orbit/page.tsx" },
+    { routePath: "/our-story", filePath: "src/app/our-story/page.tsx" },
+    { routePath: "/learn", filePath: "src/app/learn/page.tsx" },
+    { routePath: "/find-us", filePath: "src/app/find-us/page.tsx" },
+    { routePath: "/contact", filePath: "src/app/contact/page.tsx" },
+  ];
+  const missingPages = routeShellPages
+    .filter(({ filePath }) => !projectFileExists(filePath))
+    .map(({ filePath }) => filePath);
+
+  if (missingPages.length === 0) {
+    addResult(
+      "PASS",
+      "routeShells.static.exists",
+      "Mandatory static Presidential route shell files exist.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routeShells.static.exists",
+      "Mandatory static route shell files are missing.",
+      missingPages,
+      "Create only the approved Step 8D static route shells.",
+    );
+    return;
+  }
+
+  const shellHelperExists =
+    projectFileExists("src/lib/seo/route-page.ts") &&
+    projectFileExists("src/components/seo/presidential-route-shell.tsx");
+
+  if (shellHelperExists) {
+    addResult(
+      "PASS",
+      "routeShells.helpers",
+      "Route shell helper and shared Presidential shell component exist.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routeShells.helpers",
+      "Route shell helper or shared component is missing.",
+      [],
+      "Keep route shells shared and source-of-truth driven instead of duplicating page logic.",
+    );
+  }
+
+  const helperText = readProjectFile("src/lib/seo/route-page.ts");
+  const componentText = readProjectFile(
+    "src/components/seo/presidential-route-shell.tsx",
+  );
+
+  const helperUsesRouteRegistry =
+    helperText.includes("getRouteByPath(path)") &&
+    helperText.includes("buildRouteMetadata({ route: getStaticRouteRecord(path) })") &&
+    helperText.includes("isRouteTemplate(route)") &&
+    helperText.includes("STATIC_ROUTE_SHELL_PATHS");
+
+  if (helperUsesRouteRegistry) {
+    addResult(
+      "PASS",
+      "routeShells.registry",
+      "Route shell helper consumes route registry records and metadata helpers.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routeShells.registry",
+      "Route shell helper may bypass the route registry or metadata helper boundary.",
+      [],
+      "Use getRouteByPath plus buildRouteMetadata for static shell metadata.",
+    );
+  }
+
+  const componentUsesRouteRecord =
+    componentText.includes("route.h1") &&
+    componentText.includes("route.description") &&
+    componentText.includes("getStaticRouteShellLinks(route)") &&
+    componentText.includes("For adults 21+ where legal");
+
+  if (componentUsesRouteRecord) {
+    addResult(
+      "PASS",
+      "routeShells.component",
+      "Shared route shell component renders safe route-record copy and filtered internal links.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routeShells.component",
+      "Shared route shell component may not be using safe route-record copy.",
+      [],
+      "Render only route-record title/description and filtered concrete route links at this stage.",
+    );
+  }
+
+  const pageMetadataIssues = [];
+  const pageRegistryIssues = [];
+  const pageShellIssues = [];
+
+  for (const { routePath, filePath } of routeShellPages) {
+    const text = readProjectFile(filePath);
+
+    if (
+      !text.includes(`ROUTE_PATH = "${routePath}"`) ||
+      !text.includes("buildStaticRouteMetadata(ROUTE_PATH)") ||
+      !text.includes("generateMetadata(): Metadata")
+    ) {
+      pageMetadataIssues.push(filePath);
+    }
+
+    if (!text.includes("getStaticRouteRecord(ROUTE_PATH)")) {
+      pageRegistryIssues.push(filePath);
+    }
+
+    if (!text.includes("<PresidentialRouteShell route={route} />")) {
+      pageShellIssues.push(filePath);
+    }
+  }
+
+  if (pageMetadataIssues.length === 0) {
+    addResult(
+      "PASS",
+      "routeShells.metadata",
+      "Static route shells generate metadata through the approved route metadata helper.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routeShells.metadata",
+      "Some route shells do not generate metadata through the approved helper.",
+      pageMetadataIssues,
+      "Use buildStaticRouteMetadata so page metadata flows through buildRouteMetadata.",
+    );
+  }
+
+  if (pageRegistryIssues.length === 0) {
+    addResult(
+      "PASS",
+      "routeShells.records",
+      "Static route shells fetch their route records from the registry helper.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routeShells.records",
+      "Some route shells may be bypassing route registry records.",
+      pageRegistryIssues,
+      "Use getStaticRouteRecord for each route shell.",
+    );
+  }
+
+  if (pageShellIssues.length === 0) {
+    addResult(
+      "PASS",
+      "routeShells.sharedShell",
+      "Static route shells render through the shared Presidential route shell component.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routeShells.sharedShell",
+      "Some route shells may be duplicating shell markup.",
+      pageShellIssues,
+      "Use the shared route shell component until final design is approved.",
+    );
+  }
+
+  const learnGuidePath = "src/app/learn/[guide]/page.tsx";
+  const learnGuideText = projectFileExists(learnGuidePath)
+    ? readProjectFile(learnGuidePath)
+    : "";
+  const learnGuideSafe =
+    learnGuideText.includes("dynamicParams = false") &&
+    learnGuideText.includes("generateStaticParams") &&
+    learnGuideText.includes("return []") &&
+    learnGuideText.includes("notFound()") &&
+    !learnGuideText.includes("buildRouteMetadata") &&
+    !learnGuideText.includes("buildStaticRouteMetadata") &&
+    !learnGuideText.includes("buildRouteCanonicalUrl") &&
+    !learnGuideText.includes("canonicalPath");
+
+  if (learnGuideSafe) {
+    addResult(
+      "PASS",
+      "routeShells.learnGuide",
+      "Learn guide dynamic route is present but emits no fake article pages or unresolved canonicals.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routeShells.learnGuide",
+      "Learn guide route may emit fake pages or unresolved template metadata.",
+      [],
+      "Use empty static params, dynamicParams false, and notFound until approved article records exist.",
+    );
+  }
+
+  const routesText = readProjectFile("src/lib/seo/routes.ts");
+  const noApprovedSitemapRoutes =
+    !/status:\s*"approved"[\s\S]{0,500}?sitemap:\s*"include"/.test(routesText);
+
+  if (noApprovedSitemapRoutes) {
+    addResult(
+      "PASS",
+      "routeShells.sitemapEmpty",
+      "Route shells did not make any route indexable or sitemap-eligible.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routeShells.sitemapEmpty",
+      "A route may have been promoted to approved sitemap eligibility during Step 8D.",
+      [],
+      "Do not make routes indexable or sitemap-eligible until all approval gates pass.",
+    );
+  }
+}
+
+function checkStep8DScopeBoundary() {
   const outOfScopePaths = [
-    "src/app/moon-rocks",
-    "src/app/moon-pods",
-    "src/app/orbit",
-    "src/app/our-story",
-    "src/app/learn",
-    "src/app/find-us",
-    "src/app/contact",
+    "src/app/moon-rocks/silver",
+    "src/app/moon-rocks/gold",
+    "src/app/moon-rocks/rose-gold",
+    "src/app/moon-rocks/[product-or-strain]",
+    "src/app/find-us/[state]",
     "src/lib/db",
     "src/lib/cms",
+    "src/lib/data",
+    "src/content/products",
+    "src/content/stores",
   ];
   const present = outOfScopePaths.filter((path) => projectFileExists(path));
 
   if (present.length === 0) {
     addResult(
       "PASS",
-      "scope.step8c",
-      "Step 8C stayed scoped to sitemap/robots support and did not create public route, database, or CMS files.",
+      "scope.step8d",
+      "Step 8D stayed scoped to static route shells and did not create product/detail, locator data, database, or CMS files.",
     );
   } else {
     addResult(
       "FAIL",
-      "scope.step8c",
-      "Step 8C out-of-scope files or folders exist.",
+      "scope.step8d",
+      "Step 8D out-of-scope files or folders exist.",
       present,
-      "Keep Step 8C limited to sitemap/robots source-of-truth support.",
+      "Keep Step 8D limited to mandatory static route shells and metadata wiring.",
     );
   }
 }
@@ -1145,9 +1370,12 @@ function checkPendingSystems() {
       message: "Age gate component does not exist yet; overlay/crawlability checks are pending.",
     },
     {
-      rule: "locator.data",
-      exists: existsSync(projectPath("src/app/find-us")),
-      message: "Find Us route/data does not exist yet; locator thin-page checks are pending.",
+      rule: "locator.verifiedData",
+      exists:
+        existsSync(projectPath("src/lib/data/verified-stores.ts")) ||
+        existsSync(projectPath("src/content/stores")),
+      message:
+        "Verified store data does not exist yet; locator thin-page checks remain pending.",
     },
   ];
 
@@ -1170,7 +1398,7 @@ function checkLighthouseStatus() {
     addResult(
       "PASS",
       "lighthouse.health",
-      "LHCI health script and config exist; Step 8C respects Step 6B by not treating Windows full autorun as fixed.",
+      "LHCI health script and config exist; Step 8D respects Step 6B by not treating Windows full autorun as fixed.",
     );
     addResult(
       "PENDING",
@@ -1243,7 +1471,7 @@ function printResults() {
   const statusOrder = ["FAIL", "WARN", "PENDING", "HUMAN", "PASS"];
 
   console.log("Presidential SEO QA Harness");
-  console.log("Step 8C sitemap and robots source foundation checks\n");
+  console.log("Step 8D route shell and metadata wiring foundation checks\n");
 
   for (const status of statusOrder) {
     const group = results.filter((result) => result.status === status);
@@ -1288,7 +1516,8 @@ checkJsonLdSafety();
 checkRouteRegistryFoundation();
 checkMetadataFoundation();
 checkSitemapRobotsFoundation();
-checkStep8CScopeBoundary();
+checkRouteShellFoundation();
+checkStep8DScopeBoundary();
 checkScaffoldSignals(publicCopyFiles);
 checkPendingSystems();
 checkLighthouseStatus();
