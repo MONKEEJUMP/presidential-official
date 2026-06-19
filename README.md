@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Presidential Official Web
 
-## Getting Started
+Private Next.js app repository for the official Presidential web rebuild.
 
-First, run the development server:
+## Purpose
+
+This repository contains the production web application code only. Internal strategy documents, source PDFs, intelligence reports, threat research, Obsidian memory, and client-private artifacts stay outside this app repository.
+
+## Stack
+
+- Next.js App Router
+- TypeScript
+- React
+- Tailwind CSS
+- `schema-dts` for type-safe JSON-LD
+- Lighthouse CI health tooling
+- Custom Presidential SEO QA harness
+
+## Scripts
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run lint
+npx tsc --noEmit
+npm run build
+npm run lhci:health
+npm run seo:qa
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## SEO Guardrails
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `https://presidentialmoonrocks.com` is the current canonical production origin until a formal site move is approved.
+- Public SEO surfaces must not contain preview, staging, localhost, alternate-domain, or threat-domain URLs.
+- Product schema is informational only unless explicit client/legal approval changes that.
+- `sameAs` profile links are whitelist-only.
+- Public copy must avoid accusation language, unsupported claims, medical/effect claims, direct-ordering/shipping/pricing/inventory language, and youth-coded language.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Current State
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This app is still in the SEO engineering foundation phase. Public route buildout, sitemap, robots, age gate, database/CMS, visual design, and deployment are not complete yet.

@@ -1,0 +1,26 @@
+export const SCHEMA_CONTEXT = "https://schema.org" as const;
+
+export const PRODUCTION_ORIGIN = "https://presidentialmoonrocks.com" as const;
+export const ORGANIZATION_ID = `${PRODUCTION_ORIGIN}/#organization` as const;
+export const WEBSITE_ID = `${PRODUCTION_ORIGIN}/#website` as const;
+
+export const PRESIDENTIAL_NAME = "Presidential" as const;
+export const PRESIDENTIAL_DESCRIPTION =
+  "Official home of Presidential cannabis products for adults 21+ where legal." as const;
+
+// sameAs is whitelist-only. Add official client-approved profiles here later.
+export const APPROVED_SAME_AS = [] as const satisfies readonly string[];
+
+export function canonicalUrl(path = "/"): string {
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    const parsed = new URL(path);
+    if (parsed.origin !== PRODUCTION_ORIGIN) {
+      throw new Error(`Non-canonical URL is not allowed in public schema: ${path}`);
+    }
+    return parsed.toString();
+  }
+
+  const normalized = path.startsWith("/") ? path : `/${path}`;
+  return new URL(normalized, PRODUCTION_ORIGIN).toString();
+}
+

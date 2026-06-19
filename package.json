@@ -6,14 +6,22 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lhci": "node scripts/run-lhci.mjs",
+    "lhci:health": "lhci healthcheck --fatal",
+    "lhci:collect": "lhci collect",
+    "lhci:assert": "lhci assert",
+    "ci:lighthouse": "npm run build && npm run lhci",
+    "seo:qa": "node scripts/presidential-seo-qa.mjs"
   },
   "dependencies": {
     "next": "16.2.9",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "schema-dts": "^2.0.0"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.15.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
