@@ -6,7 +6,7 @@ const sourceRoots = [
   "src/app",
   "src/components",
   "src/content",
-  "src/lib/seo/schema",
+  "src/lib/seo",
 ];
 const publicCopyRoots = ["src/app", "src/components", "src/content"];
 const textExtensions = new Set([
@@ -42,6 +42,19 @@ function relativePath(path) {
 
 function readProjectFile(path) {
   return readFileSync(projectPath(path), "utf8");
+}
+
+function projectFileExists(path) {
+  return existsSync(projectPath(path));
+}
+
+function getRouteDefinitionText(routesText, routePath) {
+  const marker = `path: "${routePath}",`;
+  const start = routesText.indexOf(marker);
+  if (start === -1) return "";
+
+  const nextRecordStart = routesText.indexOf("\n  {", start + marker.length);
+  return routesText.slice(start, nextRecordStart === -1 ? undefined : nextRecordStart);
 }
 
 function collectTextFiles(paths) {
@@ -381,6 +394,201 @@ function checkJsonLdSafety() {
   );
 }
 
+function checkRouteRegistryFoundation() {
+  const requiredFiles = [
+    "src/lib/seo/route-types.ts",
+    "src/lib/seo/routes.ts",
+    "src/lib/seo/indexability.ts",
+    "src/lib/seo/route-helpers.ts",
+  ];
+  const missingFiles = requiredFiles.filter((file) => !projectFileExists(file));
+
+  if (missingFiles.length === 0) {
+    addResult(
+      "PASS",
+      "routes.registry.files",
+      "Route registry foundation files exist.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routes.registry.files",
+      "Route registry foundation files are missing.",
+      missingFiles,
+      "Create the Step 8A route registry files before route/page work continues.",
+    );
+    return;
+  }
+
+  const routesText = readProjectFile("src/lib/seo/routes.ts");
+  const indexabilityText = readProjectFile("src/lib/seo/indexability.ts");
+  const helpersText = readProjectFile("src/lib/seo/route-helpers.ts");
+  const mandatoryPaths = [
+    "/",
+    "/moon-rocks",
+    "/moon-pods",
+    "/orbit",
+    "/our-story",
+    "/learn",
+    "/learn/[guide]",
+    "/find-us",
+    "/contact",
+  ];
+  const missingMandatoryPaths = mandatoryPaths.filter(
+    (routePath) => !routesText.includes(`"${routePath}"`),
+  );
+
+  if (missingMandatoryPaths.length === 0) {
+    addResult(
+      "PASS",
+      "routes.registry.mandatory",
+      "Mandatory Presidential route set is represented in the route registry.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routes.registry.mandatory",
+      "Mandatory Presidential routes are missing from the route registry.",
+      missingMandatoryPaths,
+      "Represent every doctrine-required route before building public pages.",
+    );
+  }
+
+  const canonicalAlignment =
+    helpersText.includes("PRODUCTION_ORIGIN") &&
+    helpersText.includes("canonicalUrl(route.canonicalPath)") &&
+    helpersText.includes("buildRouteCanonicalUrl");
+
+  if (canonicalAlignment) {
+    addResult(
+      "PASS",
+      "routes.canonical",
+      "Route canonical helper delegates to the production-host canonical URL boundary.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routes.canonical",
+      "Route canonical helper is missing production host alignment.",
+      [
+        `PRODUCTION_ORIGIN referenced: ${helpersText.includes("PRODUCTION_ORIGIN")}`,
+        `canonicalUrl(route.canonicalPath) referenced: ${helpersText.includes("canonicalUrl(route.canonicalPath)")}`,
+      ],
+      "Route canonical URLs must flow through the central canonical URL helper.",
+    );
+  }
+
+  const sitemapEligibilityLogic =
+    indexabilityText.includes("isSitemapEligible") &&
+    indexabilityText.includes('route.status === "approved"') &&
+    indexabilityText.includes('route.indexability === "index_follow"') &&
+    indexabilityText.includes('route.sitemap === "include"') &&
+    indexabilityText.includes("route.blocks.length === 0");
+
+  if (sitemapEligibilityLogic) {
+    addResult(
+      "PASS",
+      "routes.sitemapEligibility",
+      "Sitemap eligibility logic requires approved status, index_follow, include policy, and zero blockers.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routes.sitemapEligibility",
+      "Sitemap eligibility logic is incomplete.",
+      [],
+      "Keep sitemap eligibility strict before creating app/sitemap.ts.",
+    );
+  }
+
+  const privateFutureBlocks = [
+    getRouteDefinitionText(routesText, "/loyalty"),
+    getRouteDefinitionText(routesText, "/admin"),
+    getRouteDefinitionText(routesText, "/api"),
+    getRouteDefinitionText(routesText, "/preview"),
+    getRouteDefinitionText(routesText, "/drafts"),
+    getRouteDefinitionText(routesText, "/internal-threat-research"),
+  ];
+  const privateFutureSafe = privateFutureBlocks.every(
+    (routeText) =>
+      routeText &&
+      routeText.includes('sitemap: "exclude"') &&
+      (routeText.includes('indexability: "noindex"') ||
+        routeText.includes('indexability: "not_published"')),
+  );
+
+  if (privateFutureSafe) {
+    addResult(
+      "PASS",
+      "routes.privateFuture",
+      "Private, blocked, and future route placeholders are not sitemap eligible.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routes.privateFuture",
+      "Private, blocked, or future route placeholders may be sitemap eligible.",
+      [],
+      "Keep private/future/internal route records excluded and noindex/not_published.",
+    );
+  }
+
+  const moonPodsText = getRouteDefinitionText(routesText, "/moon-pods");
+  const orbitText = getRouteDefinitionText(routesText, "/orbit");
+  const pillarGates = ["product_catalog", "product_assets", "product_claims", "compliance_review"];
+  const pillarsStayGated =
+    moonPodsText.includes('status: "conditional"') &&
+    orbitText.includes('status: "conditional"') &&
+    pillarGates.every(
+      (gate) => moonPodsText.includes(`"${gate}"`) && orbitText.includes(`"${gate}"`),
+    );
+
+  if (pillarsStayGated) {
+    addResult(
+      "PASS",
+      "routes.publicPillars.gates",
+      "Moon Pods and Orbit are represented as public pillars but remain gated until product proof and compliance fields pass.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routes.publicPillars.gates",
+      "Moon Pods or Orbit route records lost required proof/compliance gates.",
+      [],
+      "Keep Moon Pods and Orbit conditional until product facts, assets, claims, compliance, and schema gates pass.",
+    );
+  }
+
+  const locatorRouteTexts = [
+    getRouteDefinitionText(routesText, "/find-us"),
+    getRouteDefinitionText(routesText, "/find-us/[state]"),
+    getRouteDefinitionText(routesText, "/find-us/[state]/[city]"),
+    getRouteDefinitionText(routesText, "/find-us/[state]/[city]/[retailer]"),
+  ];
+  const locatorRoutesStayGated = locatorRouteTexts.every(
+    (routeText) =>
+      routeText &&
+      routeText.includes('"verified_store_data"') &&
+      routeText.includes('sitemap: "conditional"'),
+  );
+
+  if (locatorRoutesStayGated) {
+    addResult(
+      "PASS",
+      "routes.locator.gates",
+      "Find Us and locator routes remain gated until verified store data exists.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routes.locator.gates",
+      "Locator route records are missing verified store data gates.",
+      [],
+      "Keep locator routes conditional until verified store data and legal/compliance gates pass.",
+    );
+  }
+}
+
 function checkScaffoldSignals(publicCopyFiles) {
   const scaffoldPatterns = [
     { label: "Create Next App title/copy", regex: /Create Next App|create next app/i },
@@ -400,7 +608,7 @@ function checkScaffoldSignals(publicCopyFiles) {
   addResult(
     "WARN",
     "scaffold.placeholders",
-    "Starter scaffold copy/assets still exist. Allowed in Step 7A only; must be replaced before production SEO routes launch.",
+    "Starter scaffold copy/assets still exist. Allowed before public page buildout; must be replaced before production SEO routes launch.",
     matches.map((match) => `${match.file}:${match.line} ${match.label}`),
   );
 }
@@ -455,7 +663,7 @@ function checkLighthouseStatus() {
     addResult(
       "PASS",
       "lighthouse.health",
-      "LHCI health script and config exist; Step 7A respects Step 6B by not treating Windows full autorun as fixed.",
+      "LHCI health script and config exist; Step 8A respects Step 6B by not treating Windows full autorun as fixed.",
     );
     addResult(
       "PENDING",
@@ -528,7 +736,7 @@ function printResults() {
   const statusOrder = ["FAIL", "WARN", "PENDING", "HUMAN", "PASS"];
 
   console.log("Presidential SEO QA Harness");
-  console.log("Step 7A foundation checks\n");
+  console.log("Step 8A route registry foundation checks\n");
 
   for (const status of statusOrder) {
     const group = results.filter((result) => result.status === status);
@@ -570,6 +778,7 @@ checkCannabisClaims(publicCopyFiles);
 checkProductSchema();
 checkSameAsWhitelist(sourceFiles);
 checkJsonLdSafety();
+checkRouteRegistryFoundation();
 checkScaffoldSignals(publicCopyFiles);
 checkPendingSystems();
 checkLighthouseStatus();
