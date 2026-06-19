@@ -884,6 +884,66 @@ function checkSitemapRobotsFoundation() {
     );
   }
 
+  const hardcodedSitemapRoutePaths = [
+    "/moon-rocks",
+    "/moon-pods",
+    "/orbit",
+    "/learn",
+    "/find-us",
+    "/contact",
+    "/admin",
+    "/api",
+    "/preview",
+    "/drafts",
+    "/internal-threat-research",
+  ].filter(
+    (routePath) =>
+      appSitemapText.includes(`"${routePath}"`) ||
+      appSitemapText.includes(`'${routePath}'`) ||
+      sitemapText.includes(`"${routePath}"`) ||
+      sitemapText.includes(`'${routePath}'`),
+  );
+  const sitemapHasNoIndependentUrls =
+    !/https?:\/\//i.test(appSitemapText) &&
+    !/https?:\/\//i.test(sitemapText) &&
+    hardcodedSitemapRoutePaths.length === 0;
+
+  if (sitemapHasNoIndependentUrls) {
+    addResult(
+      "PASS",
+      "sitemap.noIndependentUrls",
+      "Sitemap foundation does not contain independent hard-coded URLs or route lists.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "sitemap.noIndependentUrls",
+      "Sitemap foundation may be acting as a second route registry.",
+      hardcodedSitemapRoutePaths,
+      "Keep sitemap URLs sourced from ROUTE_REGISTRY eligibility and canonical helpers only.",
+    );
+  }
+
+  const sitemapTemplateGuard =
+    sitemapText.includes("!isRouteTemplate(route)") &&
+    sitemapText.includes("Route is not eligible for sitemap output");
+
+  if (sitemapTemplateGuard) {
+    addResult(
+      "PASS",
+      "sitemap.noTemplates",
+      "Sitemap helper blocks unresolved dynamic template routes from output.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "sitemap.noTemplates",
+      "Sitemap helper may allow unresolved dynamic templates into sitemap output.",
+      [],
+      "Require a concrete approved path before emitting dynamic route family URLs.",
+    );
+  }
+
   const nativeRobots =
     appRobotsText.includes('import type { MetadataRoute } from "next"') &&
     appRobotsText.includes('from "@/lib/seo/robots"') &&
@@ -968,6 +1028,49 @@ function checkSitemapRobotsFoundation() {
       "Robots foundation may block future public pillar or locator routes.",
       [],
       "Do not disallow /moon-rocks, /moon-pods, /orbit, /find-us, or /learn at the robots layer.",
+    );
+  }
+
+  const robotsNotGlobalBlock =
+    robotsText.includes('ROBOTS_ALLOW_PATHS = ["/"]') &&
+    !robotsText.includes('disallow: "/"') &&
+    !robotsText.includes('disallow: ["/"]');
+
+  if (robotsNotGlobalBlock) {
+    addResult(
+      "PASS",
+      "robots.notGlobalBlock",
+      "Robots foundation does not disallow the entire site for all crawlers.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "robots.notGlobalBlock",
+      "Robots foundation may block the whole site.",
+      [],
+      "Allow the public root and do not set Disallow: / for the global crawler rule.",
+    );
+  }
+
+  const robotsNoindexDistinction =
+    !robotsText.includes("isNoindex") &&
+    !robotsText.includes("conditional_index") &&
+    !robotsText.includes("index_follow") &&
+    !robotsText.includes("noindex");
+
+  if (robotsNoindexDistinction) {
+    addResult(
+      "PASS",
+      "robots.noindexDistinction",
+      "Robots helper is not being used as a substitute for page-level noindex metadata.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "robots.noindexDistinction",
+      "Robots helper may be mixing crawl blocking with page-level noindex policy.",
+      [],
+      "Use metadata robots for noindex/follow posture and robots.txt only for crawl boundaries.",
     );
   }
 }
