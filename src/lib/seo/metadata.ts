@@ -14,7 +14,7 @@ import type { SeoRouteRecord } from "./route-types";
 
 export const METADATA_BASE = new URL(PRODUCTION_ORIGIN);
 export const OPEN_GRAPH_SITE_NAME = PRESIDENTIAL_NAME;
-export const TWITTER_CARD_TYPE = "summary_large_image" as const;
+export const TWITTER_CARD_TYPE = "summary" as const;
 
 export function isRouteMetadataIndexable(route: SeoRouteRecord): boolean {
   return (

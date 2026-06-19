@@ -637,6 +637,26 @@ function checkMetadataFoundation() {
   const metadataText = readProjectFile("src/lib/seo/metadata.ts");
   const helpersText = readProjectFile("src/lib/seo/metadata-helpers.ts");
 
+  const nextMetadataType =
+    metadataText.includes('import type { Metadata } from "next"') &&
+    metadataText.includes("buildRouteMetadata(input: BuildRouteMetadataInput): Metadata");
+
+  if (nextMetadataType) {
+    addResult(
+      "PASS",
+      "metadata.nextType",
+      "Metadata helper uses the installed Next.js Metadata type boundary.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "metadata.nextType",
+      "Metadata helper is missing the Next.js Metadata type boundary.",
+      [],
+      "Return typed Next.js Metadata from the route metadata helper.",
+    );
+  }
+
   const canonicalUsesRouteHelpers =
     metadataText.includes("buildRouteMetadataUrlFields") &&
     helpersText.includes("buildRouteCanonicalUrl") &&
@@ -722,6 +742,27 @@ function checkMetadataFoundation() {
       "Open Graph/Twitter metadata may introduce URLs outside the canonical production URL helper.",
       [],
       "Use the canonical production URL for Open Graph and avoid separate social URL construction.",
+    );
+  }
+
+  const conservativeTwitterCard =
+    metadataText.includes('TWITTER_CARD_TYPE = "summary"') &&
+    metadataText.includes("card: TWITTER_CARD_TYPE") &&
+    !metadataText.includes("images:");
+
+  if (conservativeTwitterCard) {
+    addResult(
+      "PASS",
+      "metadata.twitterCard",
+      "Twitter metadata uses a conservative summary card and does not attach unapproved image fields.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "metadata.twitterCard",
+      "Twitter metadata may imply approved large-card image assets before provenance exists.",
+      [],
+      "Use a summary Twitter card until approved social image assets exist.",
     );
   }
 
