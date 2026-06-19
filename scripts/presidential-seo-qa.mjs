@@ -1317,6 +1317,26 @@ function checkAgeGateFoundation() {
   const ageGateText = readProjectFile(ageGatePath);
   const layoutText = readProjectFile(layoutPath);
 
+  const clientComponent =
+    ageGateText.trimStart().startsWith('"use client";') ||
+    ageGateText.trimStart().startsWith("'use client';");
+
+  if (clientComponent) {
+    addResult(
+      "PASS",
+      "agegate.clientComponent",
+      "Age gate is explicitly implemented as a client component for browser-only confirmation state.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "agegate.clientComponent",
+      "Age gate component is missing the client component boundary.",
+      [],
+      "Keep browser storage and event handling inside a client component.",
+    );
+  }
+
   const overlayContract =
     ageGateText.includes('data-presidential-age-gate="overlay"') &&
     ageGateText.includes('role="dialog"') &&
@@ -1471,6 +1491,52 @@ function checkAgeGateFoundation() {
         `cookie used: ${ageGateText.includes("document.cookie")}`,
       ],
       "Keep Step 8E to a non-sensitive adult-confirmation flag.",
+    );
+  }
+
+  const storageToleratesFailure =
+    ageGateText.includes("function readAdultConfirmation") &&
+    ageGateText.includes("function writeAdultConfirmation") &&
+    ageGateText.includes("function clearAdultConfirmation") &&
+    ageGateText.includes("try {") &&
+    ageGateText.includes("catch {");
+
+  if (storageToleratesFailure) {
+    addResult(
+      "PASS",
+      "agegate.storageTolerance",
+      "Age gate localStorage access is isolated behind helpers that tolerate restricted storage failures.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "agegate.storageTolerance",
+      "Age gate storage access may crash in restricted/private browsing modes.",
+      [],
+      "Wrap localStorage reads/writes/removals so storage failures keep the overlay safe instead of crashing the app.",
+    );
+  }
+
+  const keyboardSupport =
+    ageGateText.includes("primaryActionRef") &&
+    ageGateText.includes(".focus()") &&
+    ageGateText.includes("handleDialogKeyDown") &&
+    ageGateText.includes('event.key !== "Tab"') &&
+    ageGateText.includes("event.preventDefault()");
+
+  if (keyboardSupport) {
+    addResult(
+      "PASS",
+      "agegate.keyboardFocus",
+      "Age gate foundation includes minimal focus entry and Tab containment for keyboard users.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "agegate.keyboardFocus",
+      "Age gate foundation is missing minimal keyboard/focus handling.",
+      [],
+      "Move focus into the dialog and keep Tab navigation within the available age-gate controls.",
     );
   }
 }

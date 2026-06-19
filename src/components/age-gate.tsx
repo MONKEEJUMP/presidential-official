@@ -1,19 +1,48 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { KeyboardEvent } from "react";
 
 const ADULT_CONFIRMATION_KEY = "presidential_adult_confirmed";
 
 type AgeGateStatus = "checking" | "accepted" | "blocked";
 
+function readAdultConfirmation() {
+  try {
+    return window.localStorage.getItem(ADULT_CONFIRMATION_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function writeAdultConfirmation() {
+  try {
+    window.localStorage.setItem(ADULT_CONFIRMATION_KEY, "true");
+  } catch {
+    // Storage can fail in private or restricted browsing modes.
+  }
+}
+
+function clearAdultConfirmation() {
+  try {
+    window.localStorage.removeItem(ADULT_CONFIRMATION_KEY);
+  } catch {
+    // Storage can fail in private or restricted browsing modes.
+  }
+}
+
 export function AgeGate() {
   const [status, setStatus] = useState<AgeGateStatus>("checking");
+  const primaryActionRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const statusCheck = window.setTimeout(() => {
-      if (window.localStorage.getItem(ADULT_CONFIRMATION_KEY) === "true") {
+      if (readAdultConfirmation()) {
         setStatus("accepted");
+        return;
       }
+
+      primaryActionRef.current?.focus();
     }, 0);
 
     return () => window.clearTimeout(statusCheck);
@@ -24,13 +53,40 @@ export function AgeGate() {
   }
 
   function acceptGate() {
-    window.localStorage.setItem(ADULT_CONFIRMATION_KEY, "true");
+    writeAdultConfirmation();
     setStatus("accepted");
   }
 
   function declineGate() {
-    window.localStorage.removeItem(ADULT_CONFIRMATION_KEY);
+    clearAdultConfirmation();
     setStatus("blocked");
+  }
+
+  function handleDialogKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (event.key !== "Tab") {
+      return;
+    }
+
+    const focusableControls = Array.from(
+      event.currentTarget.querySelectorAll<HTMLElement>("button"),
+    );
+    const firstControl = focusableControls.at(0);
+    const lastControl = focusableControls.at(-1);
+
+    if (!firstControl || !lastControl) {
+      return;
+    }
+
+    if (event.shiftKey && document.activeElement === firstControl) {
+      event.preventDefault();
+      lastControl.focus();
+      return;
+    }
+
+    if (!event.shiftKey && document.activeElement === lastControl) {
+      event.preventDefault();
+      firstControl.focus();
+    }
   }
 
   return (
@@ -44,6 +100,7 @@ export function AgeGate() {
         aria-labelledby="presidential-age-gate-title"
         aria-modal="true"
         className="w-full max-w-md border border-zinc-200 bg-white p-6 text-zinc-950 shadow-2xl"
+        onKeyDown={handleDialogKeyDown}
         role="dialog"
       >
         <p className="text-sm font-semibold uppercase text-emerald-800">
@@ -74,6 +131,7 @@ export function AgeGate() {
           <button
             className="border border-emerald-900 bg-emerald-900 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-800"
             onClick={acceptGate}
+            ref={primaryActionRef}
             type="button"
           >
             I am 21 or older
