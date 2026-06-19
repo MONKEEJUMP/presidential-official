@@ -1299,13 +1299,193 @@ function checkRouteShellFoundation() {
   }
 }
 
-function checkStep8DScopeBoundary() {
+function checkAgeGateFoundation() {
+  const ageGatePath = "src/components/age-gate.tsx";
+  const layoutPath = "src/app/layout.tsx";
+
+  if (!projectFileExists(ageGatePath)) {
+    addResult(
+      "FAIL",
+      "agegate.overlay.exists",
+      "Age gate overlay component is missing.",
+      [ageGatePath],
+      "Create a minimal overlay component without redirecting page routes.",
+    );
+    return;
+  }
+
+  const ageGateText = readProjectFile(ageGatePath);
+  const layoutText = readProjectFile(layoutPath);
+
+  const overlayContract =
+    ageGateText.includes('data-presidential-age-gate="overlay"') &&
+    ageGateText.includes('role="dialog"') &&
+    ageGateText.includes('aria-modal="true"') &&
+    ageGateText.includes("Adults 21+ where legal");
+
+  if (overlayContract) {
+    addResult(
+      "PASS",
+      "agegate.overlay.contract",
+      "Age gate foundation is an accessible overlay component with conservative adult-access copy.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "agegate.overlay.contract",
+      "Age gate component is missing the expected overlay/accessibility contract.",
+      [
+        `overlay data attribute present: ${ageGateText.includes('data-presidential-age-gate="overlay"')}`,
+        `dialog role present: ${ageGateText.includes('role="dialog"')}`,
+        `aria-modal present: ${ageGateText.includes('aria-modal="true"')}`,
+        `21+ copy present: ${ageGateText.includes("Adults 21+ where legal")}`,
+      ],
+      "Keep the foundation as an accessible overlay with safe adult-access language.",
+    );
+  }
+
+  const layoutMountsGate =
+    layoutText.includes('import { AgeGate } from "@/components/age-gate"') &&
+    layoutText.includes("<AgeGate />");
+  const contentBeforeGate =
+    layoutText.indexOf("{children}") !== -1 &&
+    layoutText.indexOf("<AgeGate />") !== -1 &&
+    layoutText.indexOf("{children}") < layoutText.indexOf("<AgeGate />");
+
+  if (layoutMountsGate && contentBeforeGate) {
+    addResult(
+      "PASS",
+      "agegate.mounting",
+      "Age gate is mounted after page content so route content remains server-rendered and crawlable.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "agegate.mounting",
+      "Age gate may replace or wrap page content instead of overlaying it.",
+      [
+        `layout imports/renders AgeGate: ${layoutMountsGate}`,
+        `children appear before AgeGate: ${contentBeforeGate}`,
+      ],
+      "Render route children first and mount the AgeGate overlay after them in the root layout.",
+    );
+  }
+
+  const ageGateRoutePaths = [
+    "src/app/age-gate",
+    "src/app/age",
+    "src/app/verify-age",
+    "src/app/21-plus",
+  ];
+  const ageGateRoutes = ageGateRoutePaths.filter((path) => projectFileExists(path));
+
+  if (ageGateRoutes.length === 0) {
+    addResult(
+      "PASS",
+      "agegate.noRedirectRoute",
+      "No dedicated age-gate redirect wall route exists.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "agegate.noRedirectRoute",
+      "Dedicated age-gate route folders were found.",
+      ageGateRoutes,
+      "Use an overlay on route content, not a shared redirect wall route.",
+    );
+  }
+
+  const redirectPatterns = [
+    { label: "Next redirect", regex: /\bredirect\s*\(/ },
+    { label: "Next permanent redirect", regex: /\bpermanentRedirect\s*\(/ },
+    { label: "NextResponse redirect", regex: /\bNextResponse\.redirect\b/ },
+    { label: "router push", regex: /\brouter\.push\s*\(/ },
+    { label: "window location", regex: /\bwindow\.location\b|\blocation\.href\b/ },
+  ];
+  const redirectMatches = collectTextFiles(["src/app", "src/components"]).flatMap(
+    (file) => findLineMatches(file, redirectPatterns),
+  );
+
+  if (redirectMatches.length === 0) {
+    addResult(
+      "PASS",
+      "agegate.noRedirects",
+      "No age-gate redirect wall or client navigation redirect code was found in app/components source.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "agegate.noRedirects",
+      "Redirect-like code was found in app/components source.",
+      redirectMatches.map((match) => `${match.file}:${match.line} ${match.label}`),
+      "Do not route users or crawlers away from page-specific content for age gate handling.",
+    );
+  }
+
+  const sensitiveCollectionPatterns = [
+    { label: "form element", regex: /<form\b/i },
+    { label: "input element", regex: /<input\b/i },
+    { label: "select element", regex: /<select\b/i },
+    { label: "birth/DOB collection", regex: /\b(dateOfBirth|birthdate|birth date|dob)\b/i },
+  ];
+  const sensitiveMatches = findLineMatches(
+    projectPath(ageGatePath),
+    sensitiveCollectionPatterns,
+  );
+
+  if (sensitiveMatches.length === 0) {
+    addResult(
+      "PASS",
+      "agegate.noSensitiveCollection",
+      "Age gate foundation does not collect DOB, birthdate, form, input, or select data.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "agegate.noSensitiveCollection",
+      "Age gate foundation appears to collect sensitive age-verification data.",
+      sensitiveMatches.map((match) => `${match.file}:${match.line} ${match.label}`),
+      "Use adult confirmation only unless legal explicitly requires sensitive data collection.",
+    );
+  }
+
+  const confirmationOnly =
+    ageGateText.includes("localStorage") &&
+    ageGateText.includes("presidential_adult_confirmed") &&
+    !ageGateText.includes("document.cookie");
+
+  if (confirmationOnly) {
+    addResult(
+      "PASS",
+      "agegate.confirmationOnly",
+      "Age gate stores only an adult-confirmation flag and does not use cookies.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "agegate.confirmationOnly",
+      "Age gate persistence is not limited to the approved adult-confirmation flag.",
+      [
+        `localStorage used: ${ageGateText.includes("localStorage")}`,
+        `adult confirmation key present: ${ageGateText.includes("presidential_adult_confirmed")}`,
+        `cookie used: ${ageGateText.includes("document.cookie")}`,
+      ],
+      "Keep Step 8E to a non-sensitive adult-confirmation flag.",
+    );
+  }
+}
+
+function checkStep8EScopeBoundary() {
   const outOfScopePaths = [
     "src/app/moon-rocks/silver",
     "src/app/moon-rocks/gold",
     "src/app/moon-rocks/rose-gold",
     "src/app/moon-rocks/[product-or-strain]",
     "src/app/find-us/[state]",
+    "src/app/age-gate",
+    "src/app/age",
+    "src/app/verify-age",
+    "src/app/21-plus",
     "src/lib/db",
     "src/lib/cms",
     "src/lib/data",
@@ -1317,16 +1497,16 @@ function checkStep8DScopeBoundary() {
   if (present.length === 0) {
     addResult(
       "PASS",
-      "scope.step8d",
-      "Step 8D stayed scoped to static route shells and did not create product/detail, locator data, database, or CMS files.",
+      "scope.step8e",
+      "Step 8E stayed scoped to the age gate overlay and did not create redirect-wall, product/detail, locator data, database, or CMS files.",
     );
   } else {
     addResult(
       "FAIL",
-      "scope.step8d",
-      "Step 8D out-of-scope files or folders exist.",
+      "scope.step8e",
+      "Step 8E out-of-scope files or folders exist.",
       present,
-      "Keep Step 8D limited to mandatory static route shells and metadata wiring.",
+      "Keep Step 8E limited to the age gate overlay foundation.",
     );
   }
 }
@@ -1399,7 +1579,7 @@ function checkLighthouseStatus() {
     addResult(
       "PASS",
       "lighthouse.health",
-      "LHCI health script and config exist; Step 8D respects Step 6B by not treating Windows full autorun as fixed.",
+      "LHCI health script and config exist; Step 8E respects Step 6B by not treating Windows full autorun as fixed.",
     );
     addResult(
       "PENDING",
@@ -1472,7 +1652,7 @@ function printResults() {
   const statusOrder = ["FAIL", "WARN", "PENDING", "HUMAN", "PASS"];
 
   console.log("Presidential SEO QA Harness");
-  console.log("Step 8D route shell and metadata wiring foundation checks\n");
+  console.log("Step 8E age gate overlay foundation checks\n");
 
   for (const status of statusOrder) {
     const group = results.filter((result) => result.status === status);
@@ -1518,7 +1698,8 @@ checkRouteRegistryFoundation();
 checkMetadataFoundation();
 checkSitemapRobotsFoundation();
 checkRouteShellFoundation();
-checkStep8DScopeBoundary();
+checkAgeGateFoundation();
+checkStep8EScopeBoundary();
 checkScaffoldSignals(publicCopyFiles);
 checkPendingSystems();
 checkLighthouseStatus();
