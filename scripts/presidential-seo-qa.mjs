@@ -609,6 +609,177 @@ function checkRouteRegistryFoundation() {
   }
 }
 
+function checkMetadataFoundation() {
+  const requiredFiles = [
+    "src/lib/seo/metadata-types.ts",
+    "src/lib/seo/metadata-helpers.ts",
+    "src/lib/seo/metadata.ts",
+  ];
+  const missingFiles = requiredFiles.filter((file) => !projectFileExists(file));
+
+  if (missingFiles.length === 0) {
+    addResult(
+      "PASS",
+      "metadata.foundation.files",
+      "Metadata source-of-truth helper files exist.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "metadata.foundation.files",
+      "Metadata helper foundation files are missing.",
+      missingFiles,
+      "Create the Step 8B metadata helper files before route metadata integration continues.",
+    );
+    return;
+  }
+
+  const metadataText = readProjectFile("src/lib/seo/metadata.ts");
+  const helpersText = readProjectFile("src/lib/seo/metadata-helpers.ts");
+
+  const canonicalUsesRouteHelpers =
+    metadataText.includes("buildRouteMetadataUrlFields") &&
+    helpersText.includes("buildRouteCanonicalUrl") &&
+    helpersText.includes("assertProductionMetadataUrl") &&
+    helpersText.includes("PRODUCTION_ORIGIN");
+
+  if (canonicalUsesRouteHelpers) {
+    addResult(
+      "PASS",
+      "metadata.canonical",
+      "Metadata canonicals use route helpers and the production host boundary.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "metadata.canonical",
+      "Metadata canonical construction does not use the production route helper boundary.",
+      [],
+      "Route metadata canonicals must flow through route helpers and production-host URL validation.",
+    );
+  }
+
+  const templateGuard =
+    helpersText.includes("Cannot build metadata for unresolved route template") &&
+    helpersText.includes("isRouteTemplate(input.route)") &&
+    helpersText.includes("assertConcreteMetadataPath");
+
+  if (templateGuard) {
+    addResult(
+      "PASS",
+      "metadata.templateCanonicals",
+      "Metadata helpers refuse unresolved dynamic template canonicals.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "metadata.templateCanonicals",
+      "Metadata helpers may emit canonical URLs for unresolved dynamic template routes.",
+      [],
+      "Block bracket-template route metadata until a concrete approved source record resolves the path.",
+    );
+  }
+
+  const robotsDerivedFromIndexability =
+    metadataText.includes("buildRouteRobots") &&
+    metadataText.includes("isIndexFollow(route)") &&
+    metadataText.includes('route.status === "approved"') &&
+    metadataText.includes("route.blocks.length === 0") &&
+    metadataText.includes("route.indexability === \"conditional_index\"");
+
+  if (robotsDerivedFromIndexability) {
+    addResult(
+      "PASS",
+      "metadata.robots",
+      "Robots metadata is derived from route approval, indexability, and blockers.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "metadata.robots",
+      "Robots metadata is not clearly derived from route indexability and approval state.",
+      [],
+      "Derive robots metadata from route status, indexability, and blocker state.",
+    );
+  }
+
+  const socialUrlsUseCanonical =
+    metadataText.includes("openGraph") &&
+    metadataText.includes("url: openGraphUrl") &&
+    metadataText.includes("twitter") &&
+    helpersText.includes("openGraphUrl: canonical");
+
+  if (socialUrlsUseCanonical) {
+    addResult(
+      "PASS",
+      "metadata.socialUrls",
+      "Open Graph URL metadata uses the canonical production URL and Twitter metadata does not introduce a separate URL.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "metadata.socialUrls",
+      "Open Graph/Twitter metadata may introduce URLs outside the canonical production URL helper.",
+      [],
+      "Use the canonical production URL for Open Graph and avoid separate social URL construction.",
+    );
+  }
+
+  const textSafety =
+    helpersText.includes("assertMetadataTextSafe") &&
+    metadataText.includes("assertMetadataTextSafe(input.title ?? route.title") &&
+    metadataText.includes("assertMetadataTextSafe(");
+
+  if (textSafety) {
+    addResult(
+      "PASS",
+      "metadata.textSafety",
+      "Metadata title and description pass through a text safety helper before emission.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "metadata.textSafety",
+      "Metadata title/description safety checks are missing.",
+      [],
+      "Run title and description through the metadata text safety helper.",
+    );
+  }
+}
+
+function checkStep8BScopeBoundary() {
+  const outOfScopePaths = [
+    "src/app/sitemap.ts",
+    "src/app/robots.ts",
+    "src/app/moon-rocks",
+    "src/app/moon-pods",
+    "src/app/orbit",
+    "src/app/our-story",
+    "src/app/learn",
+    "src/app/find-us",
+    "src/app/contact",
+    "src/lib/db",
+    "src/lib/cms",
+  ];
+  const present = outOfScopePaths.filter((path) => projectFileExists(path));
+
+  if (present.length === 0) {
+    addResult(
+      "PASS",
+      "scope.step8b",
+      "No Step 8B out-of-scope sitemap, robots, public route, database, or CMS files were created.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "scope.step8b",
+      "Step 8B out-of-scope files or folders exist.",
+      present,
+      "Keep Step 8B limited to metadata helper foundation only.",
+    );
+  }
+}
+
 function checkScaffoldSignals(publicCopyFiles) {
   const scaffoldPatterns = [
     { label: "Create Next App title/copy", regex: /Create Next App|create next app/i },
@@ -683,7 +854,7 @@ function checkLighthouseStatus() {
     addResult(
       "PASS",
       "lighthouse.health",
-      "LHCI health script and config exist; Step 8A respects Step 6B by not treating Windows full autorun as fixed.",
+      "LHCI health script and config exist; Step 8B respects Step 6B by not treating Windows full autorun as fixed.",
     );
     addResult(
       "PENDING",
@@ -756,7 +927,7 @@ function printResults() {
   const statusOrder = ["FAIL", "WARN", "PENDING", "HUMAN", "PASS"];
 
   console.log("Presidential SEO QA Harness");
-  console.log("Step 8A route registry foundation checks\n");
+  console.log("Step 8B metadata source foundation checks\n");
 
   for (const status of statusOrder) {
     const group = results.filter((result) => result.status === status);
@@ -799,6 +970,8 @@ checkProductSchema();
 checkSameAsWhitelist(sourceFiles);
 checkJsonLdSafety();
 checkRouteRegistryFoundation();
+checkMetadataFoundation();
+checkStep8BScopeBoundary();
 checkScaffoldSignals(publicCopyFiles);
 checkPendingSystems();
 checkLighthouseStatus();
