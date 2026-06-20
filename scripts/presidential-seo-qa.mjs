@@ -609,6 +609,209 @@ function checkRouteRegistryFoundation() {
   }
 }
 
+function checkSourceRecordContractFoundation() {
+  const requiredFiles = [
+    "src/lib/seo/source-records/types.ts",
+    "src/lib/seo/source-records/route-publication.ts",
+    "src/lib/seo/source-records/index.ts",
+  ];
+  const missingFiles = requiredFiles.filter((file) => !projectFileExists(file));
+
+  if (missingFiles.length === 0) {
+    addResult(
+      "PASS",
+      "sourceRecords.foundation.files",
+      "Step 8H source-record contract files exist.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "sourceRecords.foundation.files",
+      "Step 8H source-record contract files are missing.",
+      missingFiles,
+      "Create a TypeScript-only source-record contract layer before route promotion work continues.",
+    );
+    return;
+  }
+
+  const typesText = readProjectFile("src/lib/seo/source-records/types.ts");
+  const publicationText = readProjectFile(
+    "src/lib/seo/source-records/route-publication.ts",
+  );
+  const indexabilityText = readProjectFile("src/lib/seo/indexability.ts");
+  const sitemapText = readProjectFile("src/lib/seo/sitemap.ts");
+
+  const requiredStateUnions = [
+    "PublicationStatus",
+    "ApprovalStatus",
+    "ProofStatus",
+    "ComplianceStatus",
+    "AssetStatus",
+    "SchemaStatus",
+    "RoutePublicationIndexability",
+    "RoutePublicationSitemapPolicy",
+    "ConfidentialityStatus",
+    "AllowedUsage",
+    "ProofLevel",
+  ];
+  const missingUnions = requiredStateUnions.filter(
+    (name) => !typesText.includes(`export type ${name} =`),
+  );
+  const looseUnionEscapes = requiredStateUnions.filter((name) => {
+    const unionMatch = typesText.match(
+      new RegExp(`export type ${name} =[\\\\s\\\\S]*?;`),
+    );
+    return Boolean(unionMatch?.[0].includes("| string"));
+  });
+
+  if (missingUnions.length === 0 && looseUnionEscapes.length === 0) {
+    addResult(
+      "PASS",
+      "sourceRecords.stateUnions",
+      "Source-record approval states are explicit unions without loose string escape hatches.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "sourceRecords.stateUnions",
+      "Source-record state unions are incomplete or too loose.",
+      [
+        `missing unions: ${missingUnions.join(", ") || "none"}`,
+        `loose string unions: ${looseUnionEscapes.join(", ") || "none"}`,
+      ],
+      "Keep approval states as explicit TypeScript unions so future publication gates cannot silently widen.",
+    );
+  }
+
+  const requiredRecordTypes = [
+    "SourceRecord",
+    "ProofRecord",
+    "ClaimRecord",
+    "AssetRecord",
+    "AssetProvenanceRecord",
+    "SeoMetadataRecord",
+    "SchemaRecord",
+    "RoutePublicationRecord",
+  ];
+  const missingRecordTypes = requiredRecordTypes.filter(
+    (name) => !typesText.includes(`export type ${name} =`),
+  );
+
+  if (missingRecordTypes.length === 0) {
+    addResult(
+      "PASS",
+      "sourceRecords.recordFamilies",
+      "Source, proof, claim, asset, metadata, schema, and route-publication contracts exist.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "sourceRecords.recordFamilies",
+      "Required Step 8G record families are missing from the TypeScript contract layer.",
+      missingRecordTypes,
+      "Translate Step 8G record families into narrow contracts before approval enforcement continues.",
+    );
+  }
+
+  const routePublicationBridge =
+    publicationText.includes("APPROVED_ROUTE_PUBLICATIONS = []") &&
+    publicationText.includes("satisfies readonly RoutePublicationRecord[]") &&
+    publicationText.includes("getRoutePublicationRecord") &&
+    publicationText.includes("getRoutePublicationGateBlockReasons") &&
+    publicationText.includes("source_record:route_publication_missing") &&
+    publicationText.includes('record.publicationStatus !== "published"') &&
+    publicationText.includes('record.approvalStatus !== "approved"') &&
+    publicationText.includes('record.confidentialityStatus !== "public"') &&
+    publicationText.includes('record.indexability !== "index_follow"') &&
+    publicationText.includes('record.sitemapPolicy !== "include"') &&
+    publicationText.includes('record.canonicalStatus !== "production"') &&
+    publicationText.includes("record.launchBlockers");
+
+  if (routePublicationBridge) {
+    addResult(
+      "PASS",
+      "sourceRecords.routePublicationBridge",
+      "Route publication approval is represented as a separate empty source-record gate, not fake client data.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "sourceRecords.routePublicationBridge",
+      "Route publication approval gate is missing or incomplete.",
+      [],
+      "Keep an empty approved-publication list and require publication, approval, public confidentiality, index_follow, sitemap include, production canonical, and zero launch blockers.",
+    );
+  }
+
+  const indexabilityUsesSourceRecords =
+    indexabilityText.includes("getRoutePublicationGateBlockReasons") &&
+    indexabilityText.includes("reasons.push(...getRoutePublicationGateBlockReasons(route))") &&
+    indexabilityText.includes("getRoutePublicationGateBlockReasons(route).length === 0");
+
+  if (indexabilityUsesSourceRecords) {
+    addResult(
+      "PASS",
+      "sourceRecords.indexabilityGate",
+      "Sitemap eligibility now requires both route registry posture and source-record publication approval.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "sourceRecords.indexabilityGate",
+      "Indexability/sitemap helpers can still bypass the source-record approval gate.",
+      [],
+      "Call getRoutePublicationGateBlockReasons(route) inside sitemap eligibility and block reasons.",
+    );
+  }
+
+  const sitemapStillDelegates =
+    sitemapText.includes("isSitemapEligible(route)") &&
+    sitemapText.includes("!isRouteTemplate(route)") &&
+    !/https?:\/\//i.test(sitemapText);
+
+  if (sitemapStillDelegates) {
+    addResult(
+      "PASS",
+      "sourceRecords.sitemapDelegation",
+      "Sitemap output still delegates to strict eligibility and does not contain independent URLs.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "sourceRecords.sitemapDelegation",
+      "Sitemap helper may bypass eligibility or contain independent URLs.",
+      [],
+      "Keep sitemap generation sourced from route eligibility plus source-record publication approval.",
+    );
+  }
+
+  const publicSeoHelpers =
+    publicationText.includes("isSourceAllowedForPublicSeo") &&
+    publicationText.includes('source.allowedUsage === "production"') &&
+    publicationText.includes("isProofApprovedForPublicClaim") &&
+    publicationText.includes("official_primary") &&
+    publicationText.includes("client_confirmed") &&
+    publicationText.includes("isClaimApprovedForPublicSeo") &&
+    publicationText.includes("isAssetApprovedForPublicSeo") &&
+    publicationText.includes("blacklistCheckStatus");
+
+  if (publicSeoHelpers) {
+    addResult(
+      "PASS",
+      "sourceRecords.publicSeoHelpers",
+      "Public SEO helpers enforce production-only sources, approved proof, approved claims, and asset provenance.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "sourceRecords.publicSeoHelpers",
+      "Public SEO source/proof/claim/asset helper boundaries are incomplete.",
+      [],
+      "Add pure helpers for production sources, approved proof, approved claims, and approved asset provenance.",
+    );
+  }
+}
+
 function checkMetadataFoundation() {
   const requiredFiles = [
     "src/lib/seo/metadata-types.ts",
@@ -1748,7 +1951,7 @@ function checkAgeGateFoundation() {
   }
 }
 
-function checkStep8FScopeBoundary() {
+function checkStep8HScopeBoundary() {
   const outOfScopePaths = [
     "src/app/moon-rocks/silver",
     "src/app/moon-rocks/gold",
@@ -1770,16 +1973,16 @@ function checkStep8FScopeBoundary() {
   if (present.length === 0) {
     addResult(
       "PASS",
-      "scope.step8f",
-      "Step 8F stayed scoped to route-shell schema wiring and did not create redirect-wall, product/detail, locator data, database, or CMS files.",
+      "scope.step8h",
+      "Step 8H stayed scoped to source-record contracts and did not create redirect-wall, product/detail, locator data, database, or CMS files.",
     );
   } else {
     addResult(
       "FAIL",
-      "scope.step8f",
-      "Step 8F out-of-scope files or folders exist.",
+      "scope.step8h",
+      "Step 8H out-of-scope files or folders exist.",
       present,
-      "Keep Step 8F limited to route-shell JSON-LD/schema wiring foundation.",
+      "Keep Step 8H limited to source-record contracts, route publication gates, and QA enforcement.",
     );
   }
 }
@@ -1852,7 +2055,7 @@ function checkLighthouseStatus() {
     addResult(
       "PASS",
       "lighthouse.health",
-      "LHCI health script and config exist; Step 8F respects Step 6B by not treating Windows full autorun as fixed.",
+      "LHCI health script and config exist; Step 8H respects Step 6B by not treating Windows full autorun as fixed.",
     );
     addResult(
       "PENDING",
@@ -1925,7 +2128,7 @@ function printResults() {
   const statusOrder = ["FAIL", "WARN", "PENDING", "HUMAN", "PASS"];
 
   console.log("Presidential SEO QA Harness");
-  console.log("Step 8F route-shell schema wiring foundation checks\n");
+  console.log("Step 8H source-record contract foundation checks\n");
 
   for (const status of statusOrder) {
     const group = results.filter((result) => result.status === status);
@@ -1968,12 +2171,13 @@ checkProductSchema();
 checkSameAsWhitelist(sourceFiles);
 checkJsonLdSafety();
 checkRouteRegistryFoundation();
+checkSourceRecordContractFoundation();
 checkMetadataFoundation();
 checkSitemapRobotsFoundation();
 checkRouteShellFoundation();
 checkRouteShellSchemaFoundation();
 checkAgeGateFoundation();
-checkStep8FScopeBoundary();
+checkStep8HScopeBoundary();
 checkScaffoldSignals(publicCopyFiles);
 checkPendingSystems();
 checkLighthouseStatus();

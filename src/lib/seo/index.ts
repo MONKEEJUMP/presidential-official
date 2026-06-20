@@ -9,3 +9,4 @@ export * from "./robots";
 export * from "./route-page";
 export * from "./schema";
 export * from "./sitemap";
+export * from "./source-records";

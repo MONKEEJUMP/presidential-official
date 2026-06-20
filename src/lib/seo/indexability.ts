@@ -1,4 +1,5 @@
 import type { SeoRouteRecord } from "./route-types";
+import { getRoutePublicationGateBlockReasons } from "./source-records";
 
 export function isIndexFollow(route: SeoRouteRecord): boolean {
   return route.indexability === "index_follow";
@@ -35,6 +36,8 @@ export function getSitemapBlockReasons(route: SeoRouteRecord): readonly string[]
     reasons.push(`block:${block}`);
   }
 
+  reasons.push(...getRoutePublicationGateBlockReasons(route));
+
   return reasons;
 }
 
@@ -43,7 +46,8 @@ export function isSitemapEligible(route: SeoRouteRecord): boolean {
     route.status === "approved" &&
     route.indexability === "index_follow" &&
     route.sitemap === "include" &&
-    route.blocks.length === 0
+    route.blocks.length === 0 &&
+    getRoutePublicationGateBlockReasons(route).length === 0
   );
 }
 
