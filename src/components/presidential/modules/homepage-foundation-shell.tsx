@@ -118,18 +118,21 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
             />
             <div className="grid gap-4 md:grid-cols-3">
               <PlatformPreviewShell
+                ctaLabel="View Moon Rocks platform"
                 description="Product information for Moon Rocks will appear as materials are finalized."
                 href="/moon-rocks"
                 status="blocked_pending_asset_approval"
                 title="Moon Rocks"
               />
               <PlatformPreviewShell
+                ctaLabel="View Moon Pods platform"
                 description="Product information for Moon Pods will appear as materials are finalized."
                 href="/moon-pods"
                 status="blocked_pending_product_facts"
                 title="Moon Pods"
               />
               <PlatformPreviewShell
+                ctaLabel="View Orbit platform"
                 description="Product information for Orbit will appear as materials are finalized."
                 href="/orbit"
                 status="blocked_pending_compliance_review"

@@ -7,6 +7,7 @@ export type PlatformPreviewShellProps = {
   readonly title: string;
   readonly description: string;
   readonly href: SeoRoutePath;
+  readonly ctaLabel?: string;
   readonly status:
     | "blocked_pending_product_facts"
     | "blocked_pending_asset_approval"
@@ -17,6 +18,7 @@ export function PlatformPreviewShell({
   title,
   description,
   href,
+  ctaLabel,
 }: PlatformPreviewShellProps) {
   return (
     <article className="grid gap-5 border border-zinc-200 bg-white p-5">
@@ -36,7 +38,7 @@ export function PlatformPreviewShell({
           Product information will appear as materials are finalized.
         </p>
         <CtaLink href={href} variant="secondary">
-          Explore {title}
+          {ctaLabel ?? `Explore ${title}`}
         </CtaLink>
       </div>
     </article>

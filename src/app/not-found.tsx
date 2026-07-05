@@ -32,13 +32,13 @@ export default function NotFound() {
             className="border border-emerald-900 bg-emerald-900 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-800"
             href="/"
           >
-            Return home
+            Return to Presidential home
           </Link>
           <Link
             className="border border-zinc-300 px-4 py-3 text-sm font-semibold text-zinc-800 transition-colors hover:border-zinc-500"
             href="/learn"
           >
-            Explore learning
+            Explore Presidential learning
           </Link>
         </div>
         <p className="text-sm font-medium text-zinc-600">

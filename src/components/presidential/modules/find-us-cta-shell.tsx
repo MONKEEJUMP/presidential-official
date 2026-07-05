@@ -14,7 +14,7 @@ export function FindUsCtaShell() {
         />
         <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
           <CtaLink href="/find-us" variant="primary">
-            Find Us
+            View Find Us retail path
           </CtaLink>
         </div>
       </div>
