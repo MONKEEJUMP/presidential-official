@@ -54,6 +54,8 @@ const blockedDomainPatterns = [
   { label: "owned alternate domain", regex: /\bpresidential(?:ca\.com|\.vip|\.rocks|\.online|\.us)\b/i },
   { label: "public threat wording", regex: /\b(imposter|hijack(?:ed|ing)?|scam|counterfeit|knockoff|fraud)\b/i },
 ];
+const publicUnlockPattern =
+  /\b(?:publicSeoUnlocked|public_seo_unlocked|routePublicationApproved|route_publication_approved|sitemapUnlocked|sitemap_unlocked|indexabilityUnlocked|indexability_unlocked|metadataUnlocked|metadata_unlocked|schemaUnlocked|schema_unlocked|deploymentApproved|deployment_approved)\s*:\s*true\b|public_unlock\s*[:=]\s*["']yes["']|SAFE_TO_PUBLISH/i;
 
 const publicAssetFilenamePatterns = [
   { label: "draft filename", regex: /\bdraft\b/i },
@@ -186,6 +188,12 @@ function main() {
   const sourceUrlViolations = findUrlOriginViolations(sourceTextFiles);
   const builtUrlViolations = findUrlOriginViolations(builtTextFiles);
   const publicAssetUrlViolations = findUrlOriginViolations(publicAssetTextFiles, { allowW3cSvg: true });
+  const publicUnlockSignalText = [
+    ...sourceTextFiles,
+    ...builtTextFiles,
+    ...publicAssetTextFiles,
+  ].map((file) => readIfExists(file)).join("\n");
+  const hasPublicUnlockSignal = publicUnlockPattern.test(publicUnlockSignalText);
 
   const checks = [
     addCheck(rows, "publicDirectory.exists", existsSync(publicAssetRoot), "public directory exists for future approved assets"),
@@ -201,7 +209,7 @@ function main() {
     addCheck(rows, "builtOutput.onlyApprovedUrlOrigins", builtUrlViolations.length === 0, builtUrlViolations.length ? builtUrlViolations.slice(0, 10).join(" | ") : "built output URL origins are production or schema.org only"),
     addCheck(rows, "sitemap.emptyNoUrlEntries", existsSync(sitemapBodyPath) && !/<url>\s*<loc>/i.test(sitemapBody), "built sitemap remains empty of URL entries"),
     addCheck(rows, "robots.sitemapCanonicalHost", robotsBody.includes("Sitemap: https://presidentialmoonrocks.com/sitemap.xml"), "robots sitemap pointer stays on canonical host"),
-    addCheck(rows, "noPublicUnlockSignals", true, "public surface boundary QA does not approve deployment, publication, sitemap inclusion, route publication, or public SEO"),
+    addCheck(rows, "noPublicUnlockSignals", !hasPublicUnlockSignal, hasPublicUnlockSignal ? "public unlock-shaped signal found in scanned public surfaces" : "public surface boundary QA found no deployment, publication, sitemap inclusion, route publication, or public SEO unlock signals"),
   ];
 
   const verdict = checks.every(Boolean)

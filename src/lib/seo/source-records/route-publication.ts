@@ -1,4 +1,5 @@
 import type { SeoRouteRecord } from "../route-types";
+import { buildRouteCanonicalUrl } from "../route-helpers";
 import type {
   AssetProvenanceRecord,
   AssetRecord,
@@ -10,6 +11,36 @@ import type {
 } from "./types";
 
 export const APPROVED_ROUTE_PUBLICATIONS = [] as const satisfies readonly RoutePublicationRecord[];
+
+export type RoutePublicationGateContext = {
+  readonly metadataRecords?: readonly import("./types").SeoMetadataRecord[];
+  readonly schemaRecords?: readonly import("./types").SchemaRecord[];
+  readonly sourceRecords?: readonly SourceRecord[];
+  readonly proofRecords?: readonly ProofRecord[];
+  readonly claimRecords?: readonly ClaimRecord[];
+  readonly assetRecords?: readonly AssetRecord[];
+  readonly assetProvenanceRecords?: readonly AssetProvenanceRecord[];
+};
+
+function getRecordsById<T>(
+  records: readonly T[] | undefined,
+  getId: (record: T) => string,
+): Map<string, T> {
+  return new Map((records ?? []).map((record) => [getId(record), record]));
+}
+
+function pushMissingRecordReasons(
+  reasons: string[],
+  prefix: string,
+  ids: readonly string[],
+  recordsById: ReadonlyMap<string, unknown>,
+): void {
+  for (const id of ids) {
+    if (!recordsById.has(id)) {
+      reasons.push(`source_record:${prefix}:missing:${id}`);
+    }
+  }
+}
 
 export function getRoutePublicationRecord(
   route: SeoRouteRecord,
@@ -23,14 +54,22 @@ export function getRoutePublicationRecord(
 export function getRoutePublicationGateBlockReasons(
   route: SeoRouteRecord,
   records: readonly RoutePublicationRecord[] = APPROVED_ROUTE_PUBLICATIONS,
+  context: RoutePublicationGateContext = {},
 ): readonly string[] {
-  const record = getRoutePublicationRecord(route, records);
+  const matchingRecords = records.filter(
+    (candidate) => candidate.routeId === route.id && candidate.path === route.path,
+  );
+  const record = matchingRecords[0];
 
   if (!record) {
     return ["source_record:route_publication_missing"];
   }
 
   const reasons: string[] = [];
+
+  if (matchingRecords.length > 1) {
+    reasons.push("source_record:route_publication_duplicate");
+  }
 
   if (record.publicationStatus !== "published") {
     reasons.push(`source_record:publication:${record.publicationStatus}`);
@@ -86,6 +125,107 @@ export function getRoutePublicationGateBlockReasons(
     reasons.push(`source_record:compliance:${record.complianceStatus}`);
   }
 
+  const metadataById = getRecordsById(context.metadataRecords, (metadata) => metadata.seoId);
+  const schemaById = getRecordsById(context.schemaRecords, (schema) => schema.schemaId);
+  const sourceById = getRecordsById(context.sourceRecords, (source) => source.sourceId);
+  const proofById = getRecordsById(context.proofRecords, (proof) => proof.proofId);
+  const claimById = getRecordsById(context.claimRecords, (claim) => claim.claimId);
+  const assetById = getRecordsById(context.assetRecords, (asset) => asset.assetId);
+  const provenanceByAssetId = getRecordsById(
+    context.assetProvenanceRecords,
+    (provenance) => provenance.assetId,
+  );
+
+  if (record.metadataRecordId) {
+    const metadata = metadataById.get(record.metadataRecordId);
+    if (!metadata) {
+      reasons.push(`source_record:metadata_record:missing:${record.metadataRecordId}`);
+    } else {
+      if (metadata.routeId !== route.id) {
+        reasons.push(`source_record:metadata_record:route_mismatch:${metadata.seoId}`);
+      }
+
+      if (metadata.approvalStatus !== "approved") {
+        reasons.push(`source_record:metadata_record:approval:${metadata.approvalStatus}`);
+      }
+
+      if (metadata.robotsDirective !== "index_follow") {
+        reasons.push(`source_record:metadata_record:robots:${metadata.robotsDirective}`);
+      }
+
+      if (metadata.canonicalUrl !== buildRouteCanonicalUrl(route)) {
+        reasons.push(`source_record:metadata_record:canonical_mismatch:${metadata.seoId}`);
+      }
+    }
+  }
+
+  pushMissingRecordReasons(reasons, "schema_record", record.schemaRecordIds, schemaById);
+  for (const schemaId of record.schemaRecordIds) {
+    const schema = schemaById.get(schemaId);
+    if (!schema) {
+      continue;
+    }
+
+    if (schema.routeId !== route.id) {
+      reasons.push(`source_record:schema_record:route_mismatch:${schema.schemaId}`);
+    }
+
+    if (schema.approvalStatus !== "approved") {
+      reasons.push(`source_record:schema_record:approval:${schema.approvalStatus}`);
+    }
+
+    if (schema.validationStatus !== "approved") {
+      reasons.push(`source_record:schema_record:validation:${schema.validationStatus}`);
+    }
+
+    if (!schema.visibleContentMatch) {
+      reasons.push(`source_record:schema_record:visible_content_missing:${schema.schemaId}`);
+    }
+  }
+
+  pushMissingRecordReasons(reasons, "source", record.sourceRecordIds, sourceById);
+  for (const sourceId of record.sourceRecordIds) {
+    const source = sourceById.get(sourceId);
+    if (source && !isSourceAllowedForPublicSeo(source)) {
+      reasons.push(`source_record:source:not_public_production:${source.sourceId}`);
+    }
+  }
+
+  pushMissingRecordReasons(reasons, "proof", record.proofRecordIds, proofById);
+  for (const proofId of record.proofRecordIds) {
+    const proof = proofById.get(proofId);
+    if (proof && !isProofApprovedForPublicClaim(proof)) {
+      reasons.push(`source_record:proof:not_approved:${proof.proofId}`);
+    }
+  }
+
+  pushMissingRecordReasons(reasons, "claim", record.claimRecordIds, claimById);
+  for (const claimId of record.claimRecordIds) {
+    const claim = claimById.get(claimId);
+    if (claim && !isClaimApprovedForPublicSeo(claim)) {
+      reasons.push(`source_record:claim:not_approved:${claim.claimId}`);
+    }
+  }
+
+  pushMissingRecordReasons(reasons, "asset", record.assetRecordIds, assetById);
+  for (const assetId of record.assetRecordIds) {
+    const asset = assetById.get(assetId);
+    const provenance = provenanceByAssetId.get(assetId);
+
+    if (!asset) {
+      continue;
+    }
+
+    if (!provenance) {
+      reasons.push(`source_record:asset_provenance:missing:${assetId}`);
+      continue;
+    }
+
+    if (!isAssetApprovedForPublicSeo(asset, provenance)) {
+      reasons.push(`source_record:asset:not_approved:${asset.assetId}`);
+    }
+  }
+
   for (const blocker of record.launchBlockers) {
     reasons.push(`source_record:block:${blocker}`);
   }
@@ -96,15 +236,17 @@ export function getRoutePublicationGateBlockReasons(
 export function isRoutePublicationApprovedForSeo(
   route: SeoRouteRecord,
   records: readonly RoutePublicationRecord[] = APPROVED_ROUTE_PUBLICATIONS,
+  context: RoutePublicationGateContext = {},
 ): boolean {
-  return getRoutePublicationGateBlockReasons(route, records).length === 0;
+  return getRoutePublicationGateBlockReasons(route, records, context).length === 0;
 }
 
 export function evaluateRoutePublicationGate(
   route: SeoRouteRecord,
   records: readonly RoutePublicationRecord[] = APPROVED_ROUTE_PUBLICATIONS,
+  context: RoutePublicationGateContext = {},
 ): SourceRecordGateResult {
-  const blockReasons = getRoutePublicationGateBlockReasons(route, records);
+  const blockReasons = getRoutePublicationGateBlockReasons(route, records, context);
 
   return {
     allowed: blockReasons.length === 0,
@@ -149,4 +291,3 @@ export function isAssetApprovedForPublicSeo(
     provenance.verificationStatus === "approved"
   );
 }
-

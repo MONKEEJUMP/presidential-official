@@ -56,6 +56,7 @@ export function buildRouteMetadata(input: BuildRouteMetadataInput): Metadata {
     "description",
   );
   const { canonical, openGraphUrl } = buildRouteMetadataUrlFields(input);
+  const socialPreviewApproved = isRouteMetadataIndexable(route);
 
   return {
     metadataBase: METADATA_BASE,
@@ -65,17 +66,21 @@ export function buildRouteMetadata(input: BuildRouteMetadataInput): Metadata {
       canonical,
     },
     robots: buildRouteRobots(route),
-    openGraph: {
-      title,
-      description,
-      url: openGraphUrl,
-      siteName: OPEN_GRAPH_SITE_NAME,
-      type: "website",
-    },
-    twitter: {
-      card: TWITTER_CARD_TYPE,
-      title,
-      description,
-    },
+    ...(socialPreviewApproved
+      ? {
+          openGraph: {
+            title,
+            description,
+            url: openGraphUrl,
+            siteName: OPEN_GRAPH_SITE_NAME,
+            type: "website",
+          },
+          twitter: {
+            card: TWITTER_CARD_TYPE,
+            title,
+            description,
+          },
+        }
+      : {}),
   };
 }

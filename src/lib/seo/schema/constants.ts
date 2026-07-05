@@ -12,6 +12,10 @@ export const PRESIDENTIAL_DESCRIPTION =
 export const APPROVED_SAME_AS = [] as const satisfies readonly string[];
 
 export function canonicalUrl(path = "/"): string {
+  if (path.includes("\\") || path.startsWith("//")) {
+    throw new Error(`Unsafe canonical path is not allowed in public schema: ${path}`);
+  }
+
   if (path.startsWith("http://") || path.startsWith("https://")) {
     const parsed = new URL(path);
     if (parsed.origin !== PRODUCTION_ORIGIN) {
@@ -25,5 +29,10 @@ export function canonicalUrl(path = "/"): string {
     return PRODUCTION_ORIGIN;
   }
 
-  return new URL(normalized, PRODUCTION_ORIGIN).toString();
+  const parsed = new URL(normalized, PRODUCTION_ORIGIN);
+  if (parsed.origin !== PRODUCTION_ORIGIN) {
+    throw new Error(`Non-canonical URL is not allowed in public schema: ${path}`);
+  }
+
+  return parsed.toString();
 }

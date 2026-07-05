@@ -328,6 +328,16 @@ const artifactText = artifactPaths
   .map((path) => readFileSync(path, "utf8"))
   .join("\n")
   .toLowerCase();
+const missingArtifactPaths = artifactPaths.filter((path) => !existsSync(path));
+
+if (missingArtifactPaths.length > 0) {
+  fail(
+    "tracker.requiredArtifactsExist",
+    `Missing artifacts: ${missingArtifactPaths.join(", ")}`,
+  );
+} else {
+  pass("tracker.requiredArtifactsExist", `${artifactPaths.length} required artifacts present`);
+}
 
 const unsafeHits = forbiddenPhrases.filter((phrase) => artifactText.includes(phrase));
 if (unsafeHits.length > 0) {

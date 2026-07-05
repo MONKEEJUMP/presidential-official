@@ -188,6 +188,11 @@ if (homeHtml) {
   const canonicalHref = getAttribute(canonicalTag, "href");
   const ogUrlTag = findMeta(homeHtml, "property", "og:url");
   const ogUrl = getAttribute(ogUrlTag, "content");
+  const descriptionText = [
+    getAttribute(findMeta(homeHtml, "name", "description"), "content"),
+    getAttribute(findMeta(homeHtml, "property", "og:description"), "content"),
+    getAttribute(findMeta(homeHtml, "name", "twitter:description"), "content"),
+  ].filter(Boolean).join(" ");
 
   if (canonicalHref === productionOrigin) {
     pass("metadata.canonicalProductionHost", canonicalHref);
@@ -195,11 +200,18 @@ if (homeHtml) {
     fail("metadata.canonicalProductionHost", `Unexpected canonical href: ${canonicalHref || "missing"}`);
   }
 
-  if (ogUrl === productionOrigin) {
-    pass("metadata.openGraphProductionHost", ogUrl);
+  if (!ogUrl) {
+    pass("metadata.openGraphGatedUntilPublication", "no og:url emitted while route publication gate is closed");
   } else {
-    fail("metadata.openGraphProductionHost", `Unexpected og:url: ${ogUrl || "missing"}`);
+    fail("metadata.openGraphGatedUntilPublication", `Unexpected og:url before route publication: ${ogUrl}`);
   }
+
+  checkNoMatches("metadata.descriptionsNoForbiddenClaims", descriptionText, [
+    { label: "accusation language", regex: /\b(imposter|scam|hijack(?:ed|ing)?|stolen|counterfeit|knockoff|fraud)\b/gi },
+    { label: "medical/effect language", regex: /\b(euphoric|euphoria|relax(?:ing|ed|ation)?|therapeutic|cerebral|uplifting|sedating|pain|anxiety|sleep|cure|treats?)\b/gi },
+    { label: "unsupported superlative", regex: /\b(world'?s strongest|highest form|strongest flavor|most potent|#1\b|number[- ]one|top[- ]?ranked|best)\b/gi },
+    { label: "direct commerce language", regex: /\b(price|pricing|inventory|shipping|delivery|deliver|buy online|order online|direct order|checkout|cart|reviews?|ratings?)\b/gi },
+  ]);
 
   if (!/\b(?:og:image|twitter:image)\b/i.test(homeHtml)) {
     pass("metadata.noSocialImages", "no OG/Twitter images emitted");
@@ -209,12 +221,14 @@ if (homeHtml) {
 
   const jsonLdEntries = extractJsonLd(homeHtml);
   const parseErrors = jsonLdEntries.filter((entry) => entry.error);
-  if (parseErrors.length === 0 && jsonLdEntries.length > 0) {
+  if (parseErrors.length === 0 && jsonLdEntries.length === 0) {
+    pass("jsonld.gatedUntilPublication", "no JSON-LD emitted while route publication gate is closed");
+  } else if (parseErrors.length === 0) {
     pass("jsonld.valid", `${jsonLdEntries.length} JSON-LD script(s) parsed`);
   } else {
     fail(
       "jsonld.valid",
-      parseErrors.map((entry) => `script ${entry.index}: ${entry.error}`).join("; ") || "No JSON-LD found",
+      parseErrors.map((entry) => `script ${entry.index}: ${entry.error}`).join("; "),
     );
   }
 

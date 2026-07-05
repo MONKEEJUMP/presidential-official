@@ -224,6 +224,9 @@ const PUBLIC_ACCUSATION_PATTERNS = [
   { label: "stolen", regex: /\bstolen\b/i },
   { label: "hijacked", regex: /\bhijack(?:ed|ing)?\b/i },
   { label: "scam", regex: /\bscam\b/i },
+  { label: "counterfeit", regex: /\bcounterfeit\b/i },
+  { label: "knockoff", regex: /\bknockoff\b/i },
+  { label: "fraud", regex: /\bfraud\b/i },
 ];
 
 const BLOCKED_CLAIM_PATTERNS = [
@@ -345,6 +348,9 @@ function checkRuntimeLanguageGuard() {
     { label: "cerebral", fragment: "cerebral" },
     { label: "founding father", fragment: "founding father" },
     { label: "founder", fragment: "founders?" },
+    { label: "counterfeit", fragment: "counterfeit" },
+    { label: "knockoff", fragment: "knockoff" },
+    { label: "fraud", fragment: "fraud" },
   ];
   const missing = requiredFragments
     .filter(({ fragment }) => !text.includes(fragment))
@@ -2322,11 +2328,50 @@ function checkReferenceDataQuarantine() {
   const seedDir = join(workspaceRoot, "data", "seed");
   const candidatesDir = join(workspaceRoot, "data", "reference-candidates");
   const ingestionMarker = "NOT FOR INGESTION";
+  const sourceClientDir = join(workspaceRoot, "sources", "client");
+
+  function collectAbsoluteTextFiles(paths) {
+    const files = [];
+
+    function walk(path) {
+      if (!existsSync(path)) return;
+      const stat = statSync(path);
+
+      if (stat.isDirectory()) {
+        for (const entry of readdirSync(path)) {
+          if (
+            entry === "node_modules" ||
+            entry === ".next" ||
+            entry === ".git" ||
+            entry === ".lighthouseci"
+          ) {
+            continue;
+          }
+
+          walk(join(path, entry));
+        }
+        return;
+      }
+
+      if (textExtensions.has(extname(path))) {
+        files.push(path);
+      }
+    }
+
+    for (const path of paths) {
+      walk(path);
+    }
+
+    return files;
+  }
 
   const srcFiles = collectTextFiles(["src"]);
   const referencePatterns = [
     { label: "data/seed reference", regex: /data[\\/]+seed/i },
     { label: "reference-candidates reference", regex: /reference-candidates/i },
+    { label: "sources/client reference", regex: /sources[\\/]+client/i },
+    { label: "google-drive-drop reference", regex: /google-drive-drop/i },
+    { label: "owner-response-drop reference", regex: /owner-response-drop/i },
   ];
   const srcMatches = srcFiles.flatMap((file) =>
     findLineMatches(file, referencePatterns),
@@ -2336,7 +2381,7 @@ function checkReferenceDataQuarantine() {
     addResult(
       "PASS",
       "quarantine.noSrcReferences",
-      "web/src does not import or reference data/seed or data/reference-candidates.",
+      "web/src does not import or reference data/seed, data/reference-candidates, sources/client, google-drive-drop, or owner-response-drop.",
     );
   } else {
     addResult(
@@ -2386,6 +2431,29 @@ function checkReferenceDataQuarantine() {
     return;
   }
 
+  const sourceClientReferences = collectAbsoluteTextFiles([sourceClientDir]).flatMap((file) =>
+    findLineMatches(file, [
+      { label: "approval-shaped source/client public use", regex: /"?(allowed_usage|public_use_status|approval_status|publication_status)"?\s*[:=]\s*"?(production|approved|published|public_use_approved)"?/i },
+      { label: "source/client public unlock phrase", regex: /\b(public seo unlocked|route publication approved|sitemap inclusion approved|safe to publish)\b/i },
+    ]),
+  );
+
+  if (sourceClientReferences.length === 0) {
+    addResult(
+      "PASS",
+      "quarantine.sourceClientCandidateOnly",
+      "sources/client carries no approval-shaped public unlock values in scanned text files.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "quarantine.sourceClientCandidateOnly",
+      "sources/client contains approval-shaped public unlock values.",
+      sourceClientReferences.map((match) => `${match.file}:${match.line} ${match.label}`),
+      "Keep client drops as raw/candidate inputs only. Promotion requires explicit source/proof/approval records.",
+    );
+  }
+
   const candidatesReadmePath = join(candidatesDir, "README.md");
   const candidatesReadmeOk =
     existsSync(candidatesReadmePath) &&
@@ -2417,13 +2485,7 @@ function checkReferenceDataQuarantine() {
       regex: /"(approved_status|approval_status|publication_status)"\s*:\s*"(approved|published|production)"/i,
     },
   ];
-  const candidateFiles = [];
-  for (const entry of readdirSync(candidatesDir)) {
-    const fullPath = join(candidatesDir, entry);
-    if (statSync(fullPath).isFile() && textExtensions.has(extname(fullPath))) {
-      candidateFiles.push(fullPath);
-    }
-  }
+  const candidateFiles = collectAbsoluteTextFiles([candidatesDir]);
   const approvalMatches = candidateFiles.flatMap((file) =>
     findLineMatches(file, approvalShapedPatterns),
   );

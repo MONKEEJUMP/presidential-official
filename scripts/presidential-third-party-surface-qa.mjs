@@ -57,7 +57,8 @@ const externalFrameSrcPattern = /<(?:iframe|embed|object)\b[^>]*\b(?:src|data)=(
 const resourceHintPattern = /<link\b[^>]*\brel=(["'])(?:preconnect|dns-prefetch)\1[^>]*\bhref=(["'])(https?:\/\/[^"']+)\2/gi;
 const publicAnalyticsEnvPattern =
   /\bNEXT_PUBLIC_[A-Z0-9_]*(?:GA|GTM|GOOGLE_ANALYTICS|TAG_MANAGER|PIXEL|TRACK|ANALYTICS|HOTJAR|POSTHOG|SEGMENT|MIXPANEL|AMPLITUDE|SENTRY|CLARITY)[A-Z0-9_]*\b/i;
-const forbiddenCspSourcePattern = /\b(?:https?:\/\/|wss?:\/\/|\*\.|data:|blob:|'unsafe-inline'|'unsafe-eval')/i;
+const forbiddenCspSourcePattern =
+  /(?:https?:\/\/|wss?:\/\/|\*\.|(?:^|[\s;])\*(?=$|[\s;])|data:|blob:|'unsafe-inline'|'unsafe-eval')/i;
 const cspReportingEndpointPattern = /\b(?:report-uri|report-to|Reporting-Endpoints|Report-To)\b/i;
 const publicUnlockPattern =
   /analytics approved|tracking approved|pixel approved|third-party approved|external script approved|connect source approved|tag manager approved|public seo unlocked|route publication approved|sitemap inclusion approved|index,\s*follow approved|deployment approved/i;

@@ -82,17 +82,31 @@ const distRoot = path.join(outDir, "lib", "seo");
 const metadataPath = path.join(distRoot, "metadata.js");
 const metadataHelpersPath = path.join(distRoot, "metadata-helpers.js");
 const routesPath = path.join(distRoot, "routes.js");
+const schemaConstantsPath = path.join(distRoot, "schema", "constants.js");
+const routeShellSchemaPath = path.join(distRoot, "schema", "routeShell.js");
 const publicationPath = path.join(distRoot, "source-records", "route-publication.js");
 
-for (const requiredPath of [metadataPath, metadataHelpersPath, routesPath, publicationPath]) {
+for (const requiredPath of [
+  metadataPath,
+  metadataHelpersPath,
+  routesPath,
+  schemaConstantsPath,
+  routeShellSchemaPath,
+  publicationPath,
+]) {
   assert(existsSync(requiredPath), `Compiled SEO gate test module missing: ${requiredPath}`);
 }
 
-const { buildRouteRobots, isRouteMetadataIndexable } = require(metadataPath);
+const { buildRouteMetadata, buildRouteRobots, isRouteMetadataIndexable } =
+  require(metadataPath);
 const { assertMetadataTextSafe } = require(metadataHelpersPath);
 const { ROUTE_REGISTRY } = require(routesPath);
+const { PRODUCTION_ORIGIN, canonicalUrl } = require(schemaConstantsPath);
+const { buildRouteShellJsonLd } = require(routeShellSchemaPath);
 const {
   APPROVED_ROUTE_PUBLICATIONS,
+  getRoutePublicationGateBlockReasons,
+  isRoutePublicationApprovedForSeo,
   isSourceAllowedForPublicSeo,
 } = require(publicationPath);
 
@@ -119,6 +133,33 @@ for (const route of ROUTE_REGISTRY) {
 const homeRoute = ROUTE_REGISTRY.find((route) => route.path === "/");
 assert(homeRoute, "Home route missing from ROUTE_REGISTRY.");
 
+const blockedCanonicalInputs = [
+  "//evil.example/path",
+  "///evil.example/path",
+  "\\\\evil.example\\path",
+  "/\\evil.example/path",
+  "https://evil.example/path",
+  "http://presidentialmoonrocks.com/path",
+];
+
+for (const candidate of blockedCanonicalInputs) {
+  let blocked = false;
+  try {
+    canonicalUrl(candidate);
+  } catch {
+    blocked = true;
+  }
+
+  assertEqual(blocked, true, `canonicalUrl failed to block unsafe input: ${candidate}`);
+}
+
+assertEqual(canonicalUrl("/"), PRODUCTION_ORIGIN, "Home canonical URL changed.");
+assertEqual(
+  canonicalUrl("/moon-rocks"),
+  `${PRODUCTION_ORIGIN}/moon-rocks`,
+  "Route canonical URL changed.",
+);
+
 const syntheticRegistryPromotion = {
   ...homeRoute,
   status: "approved",
@@ -143,6 +184,24 @@ assertEqual(
   syntheticRobots.googleBot.index,
   false,
   "A registry-only approved route emitted googleBot.index=true without a route-publication record.",
+);
+
+assertEqual(
+  buildRouteShellJsonLd(homeRoute).length,
+  0,
+  "Route shell JSON-LD emitted while the route publication gate is closed.",
+);
+
+const gatedMetadata = buildRouteMetadata({ route: homeRoute });
+assertEqual(
+  "openGraph" in gatedMetadata,
+  false,
+  "Open Graph metadata emitted while the route publication gate is closed.",
+);
+assertEqual(
+  "twitter" in gatedMetadata,
+  false,
+  "Twitter metadata emitted while the route publication gate is closed.",
 );
 
 function buildSyntheticSource(allowedUsage, confidentialityStatus) {
@@ -183,7 +242,185 @@ assertEqual(
   "A production + public source must be allowed for public SEO.",
 );
 
+function buildSyntheticRoutePublication(overrides = {}) {
+  return {
+    routePublicationId: "gate-test-route-publication",
+    routeId: syntheticRegistryPromotion.id,
+    path: syntheticRegistryPromotion.path,
+    contentRecordIds: [],
+    metadataRecordId: "gate-test-metadata",
+    schemaRecordIds: ["gate-test-schema"],
+    assetRecordIds: ["gate-test-asset"],
+    claimRecordIds: ["gate-test-claim"],
+    sourceRecordIds: ["gate-test-source"],
+    proofRecordIds: ["gate-test-proof"],
+    publicationStatus: "published",
+    approvalStatus: "approved",
+    confidentialityStatus: "public",
+    indexability: "index_follow",
+    sitemapPolicy: "include",
+    canonicalStatus: "production",
+    metadataApprovalStatus: "approved",
+    schemaApprovalStatus: "approved",
+    contentApprovalStatus: "approved",
+    assetApprovalStatus: "approved",
+    proofStatus: "verified",
+    complianceStatus: "approved",
+    launchBlockers: [],
+    ...overrides,
+  };
+}
+
+const approvedPublication = buildSyntheticRoutePublication();
+const approvedContext = {
+  metadataRecords: [
+    {
+      seoId: "gate-test-metadata",
+      routeId: syntheticRegistryPromotion.id,
+      h1: syntheticRegistryPromotion.h1,
+      metaTitle: syntheticRegistryPromotion.title,
+      metaDescription: syntheticRegistryPromotion.description,
+      canonicalUrl: canonicalUrl(syntheticRegistryPromotion.canonicalPath),
+      robotsDirective: "index_follow",
+      ogTitle: syntheticRegistryPromotion.title,
+      ogDescription: syntheticRegistryPromotion.description,
+      primaryKeyword: "Presidential",
+      secondaryKeywords: [],
+      approvalStatus: "approved",
+    },
+  ],
+  schemaRecords: [
+    {
+      schemaId: "gate-test-schema",
+      routeId: syntheticRegistryPromotion.id,
+      schemaType: "WebPage",
+      sourceFieldMap: {},
+      claimsUsed: ["gate-test-claim"],
+      visibleContentMatch: true,
+      validationStatus: "approved",
+      approvalStatus: "approved",
+    },
+  ],
+  sourceRecords: [
+    {
+      sourceId: "gate-test-source",
+      sourceName: "Gate test source",
+      sourceType: "client_provided",
+      sourceLocator: "gate-test://source",
+      allowedUsage: "production",
+      confidentialityStatus: "public",
+      publisherOrProvider: "gate-test",
+      confidenceScore: 1,
+    },
+  ],
+  proofRecords: [
+    {
+      proofId: "gate-test-proof",
+      sourceId: "gate-test-source",
+      relatedRecordType: "route_publication",
+      relatedRecordId: approvedPublication.routePublicationId,
+      evidenceType: "client_confirmation",
+      evidenceLocator: "gate-test://proof",
+      proofSummary: "Synthetic approved proof for gate testing.",
+      proofLevel: "client_confirmed",
+      confidenceScore: 1,
+      approvalStatus: "approved",
+    },
+  ],
+  claimRecords: [
+    {
+      claimId: "gate-test-claim",
+      claimText: "Synthetic safe claim.",
+      normalizedClaim: "synthetic safe claim",
+      claimType: "brand_positioning",
+      relatedEntityType: "route_publication",
+      relatedEntityId: approvedPublication.routePublicationId,
+      proofRequired: false,
+      proofStatus: "verified",
+      allowedUses: ["seo"],
+      disallowedUses: [],
+      complianceRiskScore: 0,
+      clientConfirmationNeeded: false,
+      legalReviewRequired: false,
+      approvalStatus: "approved",
+    },
+  ],
+  assetRecords: [
+    {
+      assetId: "gate-test-asset",
+      filename: "gate-test.jpg",
+      storageUrl: "gate-test://asset",
+      assetType: "image",
+      altText: "Presidential package photograph.",
+      usageTier: "public",
+      relatedEntityIds: [approvedPublication.routePublicationId],
+      rightsStatus: "approved",
+      approvalStatus: "approved",
+    },
+  ],
+  assetProvenanceRecords: [
+    {
+      provenanceId: "gate-test-provenance",
+      assetId: "gate-test-asset",
+      sourceId: "gate-test-source",
+      intakeMethod: "client_drop",
+      originalLocator: "gate-test://asset",
+      capturedAt: "2026-07-05T00:00:00.000Z",
+      blacklistCheckStatus: "passed",
+      verificationStatus: "approved",
+    },
+  ],
+};
+
+assertEqual(
+  isRoutePublicationApprovedForSeo(syntheticRegistryPromotion, [
+    approvedPublication,
+  ]),
+  false,
+  "A route publication with missing referenced records became approved.",
+);
+
+assertEqual(
+  isRoutePublicationApprovedForSeo(
+    syntheticRegistryPromotion,
+    [approvedPublication],
+    approvedContext,
+  ),
+  true,
+  "A fully approved route publication context failed the gate.",
+);
+
+assert(
+  getRoutePublicationGateBlockReasons(
+    syntheticRegistryPromotion,
+    [approvedPublication, approvedPublication],
+    approvedContext,
+  ).includes("source_record:route_publication_duplicate"),
+  "Duplicate route publication records were not blocked.",
+);
+
+assertEqual(
+  isRoutePublicationApprovedForSeo(
+    syntheticRegistryPromotion,
+    [approvedPublication],
+    {
+      ...approvedContext,
+      sourceRecords: [
+        {
+          ...approvedContext.sourceRecords[0],
+          allowedUsage: "reference_only",
+        },
+      ],
+    },
+  ),
+  false,
+  "A non-production source record passed route publication.",
+);
+
 const blockedMetadataTexts = [
+  "Counterfeit product warning",
+  "Knockoff product warning",
+  "Fraud claim warning",
   "The strongest cannabis available",
   "The most potent moon rocks",
   "World's strongest pre-rolls",

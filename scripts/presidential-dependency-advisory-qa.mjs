@@ -19,6 +19,8 @@ const acceptedAdvisoryKeys = new Set(["next", "postcss"]);
 const acceptedGithubAdvisory = "GHSA-qx2v-qp2m-jg93";
 const acceptedPostcssPatchedVersion = "8.5.10";
 const forbiddenScriptPattern = /\bnpm\s+audit\s+fix\s+--force\b/i;
+const publicUnlockPattern =
+  /\b(?:publicSeoUnlocked|public_seo_unlocked|routePublicationApproved|route_publication_approved|sitemapUnlocked|sitemap_unlocked|indexabilityUnlocked|indexability_unlocked|deploymentApproved|deployment_approved)\s*:\s*true\b|public_unlock\s*[:=]\s*["']yes["']|SAFE_TO_PUBLISH/i;
 const textExtensions = new Set([".cmd", ".cjs", ".js", ".json", ".mjs", ".ps1", ".sh", ".ts", ".tsx", ".yaml", ".yml"]);
 
 function csvEscape(value) {
@@ -113,6 +115,45 @@ function findForbiddenAuditFixMatches() {
   return matches;
 }
 
+function findPublicUnlockSignalMatches() {
+  const scanRoots = [
+    path.join(webRoot, "package.json"),
+    path.join(webRoot, "scripts"),
+    path.join(root, ".github"),
+    path.join(webRoot, ".github"),
+  ];
+  const files = [];
+
+  for (const scanRoot of scanRoots) {
+    if (!existsSync(scanRoot)) continue;
+    const stat = statSync(scanRoot);
+    if (stat.isDirectory()) {
+      files.push(...walkTextFiles(scanRoot));
+    } else if (path.basename(scanRoot) !== "presidential-dependency-advisory-qa.mjs") {
+      files.push(scanRoot);
+    }
+  }
+
+  const matches = [];
+  for (const file of files) {
+    const lines = readIfExists(file).split(/\r?\n/);
+    for (const [index, line] of lines.entries()) {
+      if (
+        /publicUnlockPattern|SAFE_TO_PUBLISH\|/.test(line) ||
+        (line.includes("publicSeoUnlocked|public_seo_unlocked") && line.includes("SAFE_TO_PUBLISH"))
+      ) {
+        continue;
+      }
+
+      if (publicUnlockPattern.test(line)) {
+        matches.push(`${rel(file)}:${index + 1}:${line.trim()}`);
+      }
+    }
+  }
+
+  return matches;
+}
+
 function runNpmAudit() {
   const auditCommand =
     process.platform === "win32"
@@ -184,6 +225,7 @@ function main() {
   const postcssAdvisory = postcssVia.find((entry) => typeof entry === "object" && entry?.url?.includes(acceptedGithubAdvisory));
   const destructiveFix = postcssVulnerability?.fixAvailable ?? nextVulnerability?.fixAvailable;
   const forbiddenAuditFixMatches = findForbiddenAuditFixMatches();
+  const publicUnlockSignalMatches = findPublicUnlockSignalMatches();
   const cleanAudit = Number(vulnerabilityCounts.total ?? 0) === 0;
   const onlyAcceptedAdvisories =
     vulnerabilityKeys.length > 0 && vulnerabilityKeys.every((key) => acceptedAdvisoryKeys.has(key));
@@ -211,7 +253,7 @@ function main() {
     addCheck(rows, "destructiveAuditFix.rejected", cleanAudit || (destructiveFix?.name === "next" && destructiveFix?.version === "9.3.3" && destructiveFix?.isSemVerMajor === true), cleanAudit ? "no audit fix needed" : JSON.stringify(destructiveFix)),
     addCheck(rows, "package.noUnreviewedOverrides", !versions.hasOverrides, "package.json has no overrides field"),
     addCheck(rows, "scripts.noAuditFixForce", forbiddenAuditFixMatches.length === 0, forbiddenAuditFixMatches.length ? forbiddenAuditFixMatches.join(" | ") : "no npm audit fix --force in package scripts or automation"),
-    addCheck(rows, "noPublicUnlockSignals", true, "dependency advisory QA does not approve deployment, publication, sitemap inclusion, route publication, or public SEO"),
+    addCheck(rows, "noPublicUnlockSignals", publicUnlockSignalMatches.length === 0, publicUnlockSignalMatches.length ? publicUnlockSignalMatches.join(" | ") : "dependency advisory QA found no deployment, publication, sitemap inclusion, route publication, or public SEO unlock signals"),
   ];
 
   const verdict = checks.every(Boolean)
@@ -247,6 +289,7 @@ function main() {
     },
     destructiveFix,
     forbiddenAuditFixMatches,
+    publicUnlockSignalMatches,
     checks: Object.fromEntries(rows.map((row) => [row.check, row.status === "pass"])),
     publicSeoUnlocked: false,
     routePublicationApproved: false,

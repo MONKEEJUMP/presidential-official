@@ -39,6 +39,7 @@ const presidentialSecurityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   async headers() {
     return [
       {

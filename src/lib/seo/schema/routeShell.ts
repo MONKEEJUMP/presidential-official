@@ -9,6 +9,7 @@ import type {
 import { assertMetadataTextSafe } from "../metadata-helpers";
 import { buildRouteCanonicalUrl, isRouteTemplate } from "../route-helpers";
 import type { SeoRouteRecord, SeoSchemaType } from "../route-types";
+import { getRoutePublicationGateBlockReasons } from "../source-records";
 import { buildBreadcrumbSchema } from "./breadcrumb";
 import { buildOrganizationSchema } from "./organization";
 import { buildWebPageSchema } from "./webpage";
@@ -84,6 +85,10 @@ export function buildRouteShellJsonLd(
   route: SeoRouteRecord,
 ): readonly RouteShellJsonLdEntry[] {
   assertConcreteRouteShell(route);
+
+  if (getRoutePublicationGateBlockReasons(route).length > 0) {
+    return [];
+  }
 
   const canonical = buildRouteCanonicalUrl(route);
   const entries: RouteShellJsonLdEntry[] = [];

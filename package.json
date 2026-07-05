@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "node scripts/run-next-build.mjs",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint --max-warnings 0",
     "lhci": "node scripts/run-lhci.mjs",
     "lhci:health": "lhci healthcheck --fatal",
     "lhci:collect": "lhci collect",

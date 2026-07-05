@@ -138,6 +138,12 @@ function main() {
     addCheck(rows, "nextConfig.exists", existsSync(nextConfigPath), nextConfigPath),
     addCheck(
       rows,
+      "builtOutput.exists",
+      builtFiles.length > 0,
+      `${builtFiles.length} built text file(s) scanned`,
+    ),
+    addCheck(
+      rows,
       "nextImage.remotePatternsDeferred",
       !hasRemotePatterns,
       "No next/image remotePatterns are configured until approved asset host and path rules exist",

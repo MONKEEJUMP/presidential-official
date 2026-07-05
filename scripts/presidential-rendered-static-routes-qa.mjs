@@ -471,6 +471,11 @@ function checkRouteHtml(route) {
   const canonicalHref = getAttribute(canonicalTag, "href");
   const ogUrlTag = findMeta(routeHtml, "property", "og:url");
   const ogUrl = getAttribute(ogUrlTag, "content");
+  const descriptionText = [
+    getAttribute(findMeta(routeHtml, "name", "description"), "content"),
+    getAttribute(findMeta(routeHtml, "property", "og:description"), "content"),
+    getAttribute(findMeta(routeHtml, "name", "twitter:description"), "content"),
+  ].filter(Boolean).join(" ");
 
   if (canonicalHref === expectedUrl) {
     pass(`${route.label}.metadata.canonicalProductionHost`, canonicalHref);
@@ -478,11 +483,18 @@ function checkRouteHtml(route) {
     fail(`${route.label}.metadata.canonicalProductionHost`, `Unexpected canonical href: ${canonicalHref || "missing"}; expected ${expectedUrl}`);
   }
 
-  if (ogUrl === expectedUrl) {
-    pass(`${route.label}.metadata.openGraphProductionHost`, ogUrl);
+  if (!ogUrl) {
+    pass(`${route.label}.metadata.openGraphGatedUntilPublication`, "no og:url emitted while route publication gate is closed");
   } else {
-    fail(`${route.label}.metadata.openGraphProductionHost`, `Unexpected og:url: ${ogUrl || "missing"}; expected ${expectedUrl}`);
+    fail(`${route.label}.metadata.openGraphGatedUntilPublication`, `Unexpected og:url before route publication: ${ogUrl}`);
   }
+
+  checkNoMatches(`${route.label}.metadata.descriptionsNoForbiddenClaims`, descriptionText, [
+    { label: "accusation language", regex: /\b(imposter|scam|hijack(?:ed|ing)?|stolen|counterfeit|knockoff|fraud)\b/gi },
+    { label: "medical/effect language", regex: /\b(euphoric|euphoria|relax(?:ing|ed|ation)?|therapeutic|cerebral|uplifting|sedating|pain|anxiety|sleep|cure|treats?)\b/gi },
+    { label: "unsupported superlative", regex: /\b(world'?s strongest|highest form|strongest flavor|most potent|#1\b|number[- ]one|top[- ]?ranked|best)\b/gi },
+    { label: "direct commerce language", regex: /\b(price|pricing|inventory|shipping|delivery|deliver|buy online|order online|direct order|checkout|cart|reviews?|ratings?)\b/gi },
+  ]);
 
   if (!/<meta\s+[^>]*(?:property|name)=["'](?:og:image|twitter:image)["'][^>]*>/i.test(routeHtml)) {
     pass(`${route.label}.metadata.noSocialImages`, "no OG/Twitter image metadata emitted");
@@ -492,12 +504,14 @@ function checkRouteHtml(route) {
 
   const jsonLdEntries = extractJsonLd(routeHtml);
   const parseErrors = jsonLdEntries.filter((entry) => entry.error);
-  if (parseErrors.length === 0 && jsonLdEntries.length > 0) {
+  if (parseErrors.length === 0 && jsonLdEntries.length === 0) {
+    pass(`${route.label}.jsonld.gatedUntilPublication`, "no JSON-LD emitted while route publication gate is closed");
+  } else if (parseErrors.length === 0) {
     pass(`${route.label}.jsonld.valid`, `${jsonLdEntries.length} JSON-LD script(s) parsed`);
   } else {
     fail(
       `${route.label}.jsonld.valid`,
-      parseErrors.map((entry) => `script ${entry.index}: ${entry.error}`).join("; ") || "No JSON-LD found",
+      parseErrors.map((entry) => `script ${entry.index}: ${entry.error}`).join("; "),
     );
   }
 
@@ -520,7 +534,9 @@ function checkRouteHtml(route) {
   }
 
   const schemaTypeSet = new Set(schemaTypes);
-  if (route.path === "/") {
+  if (jsonLdEntries.length === 0) {
+    pass(`${route.label}.jsonld.expectedSchemaShape`, "schema gated until route publication");
+  } else if (route.path === "/") {
     const requiredHomeTypes = ["Organization", "WebSite", "WebPage"];
     const missingHomeTypes = requiredHomeTypes.filter(
       (type) => !schemaTypeSet.has(type),
@@ -561,7 +577,9 @@ function checkRouteHtml(route) {
     .map((entry) => entry.url)
     .filter((url) => url !== expectedUrl);
 
-  if (webPageObjects.length > 0 && badWebPageUrls.length === 0) {
+  if (jsonLdEntries.length === 0) {
+    pass(`${route.label}.jsonld.webPageUrlMatchesCanonical`, "schema gated until route publication");
+  } else if (webPageObjects.length > 0 && badWebPageUrls.length === 0) {
     pass(`${route.label}.jsonld.webPageUrlMatchesCanonical`, expectedUrl);
   } else {
     fail(
