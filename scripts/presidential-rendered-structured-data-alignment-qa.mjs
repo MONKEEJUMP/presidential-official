@@ -596,6 +596,11 @@ function checkSourceContracts() {
   if (packageJsonText) {
     const packageJson = JSON.parse(packageJsonText);
     const scripts = packageJson.scripts ?? {};
+    const verifyBuilt = scripts["seo:verify:built"] ?? "";
+    const linkIntentIndex = verifyBuilt.indexOf("npm run seo:link-intent");
+    const structuredDataIndex = verifyBuilt.indexOf("npm run seo:rendered-structured-data");
+    const evidenceTrackerIndex = verifyBuilt.indexOf("npm run seo:evidence-tracker");
+
     recordCheck(
       "package",
       "script.exists",
@@ -607,12 +612,11 @@ function checkSourceContracts() {
     recordCheck(
       "package",
       "verifyBuilt.includesStep10T",
-      typeof scripts["seo:verify:built"] === "string" &&
-        scripts["seo:verify:built"].includes(
-          "npm run seo:link-intent && npm run seo:rendered-structured-data && npm run seo:evidence-tracker",
-        ),
-      "seo:verify:built runs rendered structured-data alignment after link-intent",
-      `actual=${scripts["seo:verify:built"] ?? "(missing)"}`,
+      linkIntentIndex >= 0 &&
+        structuredDataIndex > linkIntentIndex &&
+        evidenceTrackerIndex > structuredDataIndex,
+      "seo:verify:built runs rendered structured-data alignment after link-intent and before evidence tracker",
+      `actual=${verifyBuilt}`,
     );
   }
 }
