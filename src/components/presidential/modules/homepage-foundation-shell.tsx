@@ -7,60 +7,7 @@ import { MediaSlot } from "../media/media-slot";
 import { CtaLink } from "../primitives/cta-link";
 import { SectionHeading } from "../primitives/section-heading";
 import { FindUsCtaShell } from "./find-us-cta-shell";
-import { HomepageActShell } from "./homepage-act-shell";
 import { PlatformPreviewShell } from "./platform-preview-shell";
-
-const homepageFoundationActs = [
-  {
-    actNumber: 1,
-    title: "Presidential as the parent brand",
-    purpose:
-      "The site opens with one clear signal: Presidential is the official home for Moon Rocks, pre-rolls, blunts, Moon Pods, and Orbit.",
-    mediaLabel: "Official brand presence",
-  },
-  {
-    actNumber: 2,
-    title: "A first-party product ecosystem",
-    purpose:
-      "Every path points back to the official Presidential experience instead of sending visitors through scattered third-party results.",
-    mediaLabel: "Product ecosystem",
-  },
-  {
-    actNumber: 3,
-    title: "Story, product, and retail working together",
-    purpose:
-      "Brand story, product education, and the retail path move as one connected customer journey.",
-    mediaLabel: "Connected journey",
-  },
-  {
-    actNumber: 4,
-    title: "Moon Rocks at the center",
-    purpose:
-      "Moon Rocks anchors the flagship product platform with clean navigation into infused pre-rolls, blunts, learning, and retail.",
-    mediaLabel: "Moon Rocks media",
-  },
-  {
-    actNumber: 5,
-    title: "Moon Pods get their own lane",
-    purpose:
-      "Moon Pods become a dedicated product pillar inside the official Presidential architecture.",
-    mediaLabel: "Moon Pods media",
-  },
-  {
-    actNumber: 6,
-    title: "Orbit supports the next product story",
-    purpose:
-      "Orbit gives the site a clear technology and product-support lane without confusing the core Moon Rocks story.",
-    mediaLabel: "Orbit media",
-  },
-  {
-    actNumber: 7,
-    title: "Retail search becomes first-party",
-    purpose:
-      "The Find Us path turns product interest into licensed retailer discovery inside the official Presidential site.",
-    mediaLabel: "Retail path",
-  },
-] as const;
 
 type HomepageFoundationShellProps = {
   readonly route: SeoRouteRecord;
@@ -91,7 +38,7 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <CtaLink href="/moon-rocks" variant="primary">
-                  Explore Moon Rocks
+                  Enter Moon Rocks
                 </CtaLink>
                 <CtaLink href="/find-us" variant="secondary">
                   Find Presidential products
@@ -166,17 +113,6 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
             </ul>
           </div>
         </Scene>
-
-        {homepageFoundationActs.map((act) => (
-          <HomepageActShell
-            actNumber={act.actNumber}
-            key={act.actNumber}
-            mediaLabel={act.mediaLabel}
-            purpose={act.purpose}
-            title={act.title}
-            tone={act.actNumber % 2 === 0 ? "quiet" : "default"}
-          />
-        ))}
 
         <FindUsCtaShell />
       </SceneStack>

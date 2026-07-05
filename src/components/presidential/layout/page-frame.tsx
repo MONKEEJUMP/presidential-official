@@ -1,5 +1,7 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { SiteHeader } from "./site-header";
+
 type PageFrameProps = {
   readonly children: ReactNode;
   readonly className?: string;
@@ -15,8 +17,11 @@ export function PageFrame({ children, className = "", ...mainProps }: PageFrameP
     .join(" ");
 
   return (
-    <main className={classNames} {...mainProps}>
-      {children}
-    </main>
+    <>
+      <SiteHeader />
+      <main className={classNames} {...mainProps}>
+        {children}
+      </main>
+    </>
   );
 }

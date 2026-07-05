@@ -2828,9 +2828,9 @@ function checkStep9GRouteShellVisualFoundation() {
     "HomepageActShell",
     "PlatformPreviewShell",
     "FindUsCtaShell",
-    "Presidential as the parent brand",
-    "A first-party product ecosystem",
-    "Retail search becomes first-party",
+    "Presidential now has a first-party digital home",
+    "Official Presidential sections",
+    "Enter Moon Rocks",
   ];
   const missingSignals = requiredSignals.filter(
     (signal) => !combinedText.includes(signal),

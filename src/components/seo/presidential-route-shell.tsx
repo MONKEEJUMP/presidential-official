@@ -1,4 +1,7 @@
-import { StaticRouteFoundationShell } from "@/components/presidential";
+import {
+  MoonRocksPlatformShell,
+  StaticRouteFoundationShell,
+} from "@/components/presidential";
 import {
   buildRouteShellBreadcrumbItems,
   buildRouteShellJsonLd,
@@ -22,11 +25,19 @@ export function PresidentialRouteShell({ route }: PresidentialRouteShellProps) {
         <JsonLd key={`${route.id}-${entry.id}`} data={entry.data} />
       ))}
 
+      {route.id === "moon-rocks" ? (
+        <MoonRocksPlatformShell
+          breadcrumbs={breadcrumbs}
+          links={links}
+          route={route}
+        />
+      ) : (
       <StaticRouteFoundationShell
         breadcrumbs={breadcrumbs}
         links={links}
         route={route}
       />
+      )}
     </>
   );
 }

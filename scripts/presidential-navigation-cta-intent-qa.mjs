@@ -75,15 +75,10 @@ const fallbackRoutes = [
 
 const mandatoryStaticPaths = publicRoutes.map((route) => route.route);
 const allowedInternalHrefs = new Set(mandatoryStaticPaths);
-const allowedDuplicateHrefs = new Map([
-  [
-    "/",
-    new Set([
-      "/moon-rocks",
-      "/find-us",
-    ]),
-  ],
-]);
+const globalNavigationHrefs = new Set(mandatoryStaticPaths);
+const allowedDuplicateHrefs = new Map(
+  publicRoutes.map(({ route }) => [route, globalNavigationHrefs]),
+);
 
 const forbiddenHrefPatterns = [
   { label: "external URL", pattern: /^https?:\/\//i },
@@ -287,9 +282,10 @@ function checkAnchor(routePath, index, tag) {
   recordCheck(
     scope,
     "text.routeContext",
-    label.toLowerCase().includes("presidential") ||
+      label.toLowerCase().includes("presidential") ||
       label.toLowerCase().includes("moon") ||
       label.toLowerCase().includes("orbit") ||
+      label.toLowerCase().includes("learn") ||
       label.toLowerCase().includes("find") ||
       label.toLowerCase().includes("contact") ||
       label.toLowerCase().includes("story") ||
@@ -326,7 +322,9 @@ function checkRoute({ route, file }) {
     ([href]) => !allowedDuplicateHrefs.get(route)?.has(href),
   );
   const sameLabelDuplicates = duplicates.filter(
-    ([href]) => (hrefLabels.get(href)?.size ?? 0) < (hrefCounts.get(href) ?? 0),
+    ([href]) =>
+      !allowedDuplicateHrefs.get(route)?.has(href) &&
+      (hrefLabels.get(href)?.size ?? 0) < (hrefCounts.get(href) ?? 0),
   );
   const requiredHrefs = expectedHrefSet(route);
   const renderedHrefs = new Set(anchors.map((anchor) => anchor.href));

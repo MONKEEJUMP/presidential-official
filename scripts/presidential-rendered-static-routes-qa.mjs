@@ -367,6 +367,13 @@ function checkRouteHtml(route) {
       );
     }
   } else if (
+    route.path === "/moon-rocks" &&
+    routeHtml.includes("Inside the Moon Rocks platform") &&
+    routeHtml.includes("A cleaner customer path") &&
+    routeHtml.includes("Explore Presidential")
+  ) {
+    pass(`${route.label}.html.staticRouteVisualFoundationPresent`, "Moon Rocks product-platform route composition rendered");
+  } else if (
     routeHtml.includes("Inside this section") &&
     routeHtml.includes("Explore Presidential")
   ) {
