@@ -139,6 +139,34 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
           </div>
         </Scene>
 
+        <Scene ariaLabelledBy="presidential-official-sections" tone="default">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
+            <SectionHeading
+              as="h2"
+              description="Continue through source-backed Presidential sections as materials are finalized."
+              id="presidential-official-sections"
+              title="Official Presidential sections"
+            />
+            <ul className="grid gap-3 sm:grid-cols-3">
+              <li>
+                <CtaLink href="/our-story" variant="secondary">
+                  Our Story
+                </CtaLink>
+              </li>
+              <li>
+                <CtaLink href="/learn" variant="secondary">
+                  Learn Presidential
+                </CtaLink>
+              </li>
+              <li>
+                <CtaLink href="/contact" variant="secondary">
+                  Contact Presidential
+                </CtaLink>
+              </li>
+            </ul>
+          </div>
+        </Scene>
+
         {homepageFoundationActs.map((act) => (
           <HomepageActShell
             actNumber={act.actNumber}
