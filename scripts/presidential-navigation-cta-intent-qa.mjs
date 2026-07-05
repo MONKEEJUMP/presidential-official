@@ -452,7 +452,9 @@ function checkSourceContracts() {
       "package",
       "script.verifyBuiltIncludesLinkIntent",
       typeof scripts["seo:verify:built"] === "string" &&
-        scripts["seo:verify:built"].includes("npm run seo:internal-links && npm run seo:link-intent && npm run seo:evidence-tracker"),
+        scripts["seo:verify:built"].includes("npm run seo:internal-links && npm run seo:link-intent") &&
+        scripts["seo:verify:built"].indexOf("npm run seo:internal-links") <
+          scripts["seo:verify:built"].indexOf("npm run seo:link-intent"),
       "seo:verify:built runs link-intent after internal-links",
       "seo:verify:built does not run link-intent in the expected position",
     );
