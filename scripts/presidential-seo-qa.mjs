@@ -57,6 +57,27 @@ function getRouteDefinitionText(routesText, routePath) {
   return routesText.slice(start, nextRecordStart === -1 ? undefined : nextRecordStart);
 }
 
+function getRouteRecordTexts(routesText) {
+  const registryStart = routesText.indexOf("export const ROUTE_REGISTRY = [");
+  if (registryStart === -1) return [];
+
+  const registryEnd = routesText.indexOf("] as const", registryStart);
+  const registryText = routesText.slice(
+    registryStart,
+    registryEnd === -1 ? undefined : registryEnd,
+  );
+  const records = [];
+  let cursor = registryText.indexOf("\n  {");
+
+  while (cursor !== -1) {
+    const next = registryText.indexOf("\n  {", cursor + 1);
+    records.push(registryText.slice(cursor, next === -1 ? undefined : next));
+    cursor = next;
+  }
+
+  return records;
+}
+
 function collectTextFiles(paths) {
   const files = [];
 
@@ -197,16 +218,39 @@ function checkForbiddenUrls(sourceFiles) {
   );
 }
 
+const PUBLIC_ACCUSATION_PATTERNS = [
+  { label: "fake", regex: /\bfake\b/i },
+  { label: "imposter", regex: /\bimpost(?:e|o)r\b/i },
+  { label: "stolen", regex: /\bstolen\b/i },
+  { label: "hijacked", regex: /\bhijack(?:ed|ing)?\b/i },
+  { label: "scam", regex: /\bscam\b/i },
+];
+
+const BLOCKED_CLAIM_PATTERNS = [
+  { label: "medical cure/treatment", regex: /\b(cure|cures|treat|treats|treatment|therapeutic)\b/i },
+  { label: "medical condition", regex: /\b(pain|anxiety|sleep|cancer|depression|ptsd|inflammation)\b/i },
+  { label: "shipping/direct commerce", regex: /\b(ship|ships|shipping|delivery|deliver|buy online|order online|checkout|cart)\b/i },
+  { label: "pricing/inventory", regex: /\b(price|pricing|inventory|in stock|available now)\b/i },
+  { label: "youth-coded/giveaway", regex: /\b(candy|cartoon|kids?|minor|teen|giveaway|free product)\b/i },
+  { label: "over-intoxication", regex: /\b(get high|highest high|over[- ]?intoxication)\b/i },
+  { label: "potency superlative", regex: /\b(strongest|most potent|world[''`]?s strongest)\b/i },
+  { label: "superlative: best", regex: /\bbest\b/i },
+  { label: "rank claim (#1/number one/top ranked)", regex: /#1\b|\bnumber[- ]one\b|\btop[- ]?ranked\b/i },
+  { label: "effect-adjacent language", regex: /\b(euphoric|euphoria|relax(?:ing|ed|ation)?|cerebral|uplifting|sedating)\b/i },
+  { label: "founder claim (proof-gated)", regex: /\b(founding father|founders?)\b/i },
+];
+
+const SAFE_NEUTRAL_LANGUAGE = [
+  "official",
+  "source-backed",
+  "licensed retailers",
+  "adults 21+ where legal",
+  "availability varies by licensed retailer",
+];
+
 function checkPublicLanguage(publicCopyFiles) {
-  const accusationPatterns = [
-    { label: "fake", regex: /\bfake\b/i },
-    { label: "imposter", regex: /\bimpost(?:e|o)r\b/i },
-    { label: "stolen", regex: /\bstolen\b/i },
-    { label: "hijacked", regex: /\bhijack(?:ed|ing)?\b/i },
-    { label: "scam", regex: /\bscam\b/i },
-  ];
   const matches = publicCopyFiles.flatMap((file) =>
-    findLineMatches(file, accusationPatterns),
+    findLineMatches(file, PUBLIC_ACCUSATION_PATTERNS),
   );
 
   if (matches.length === 0) {
@@ -228,23 +272,15 @@ function checkPublicLanguage(publicCopyFiles) {
 }
 
 function checkCannabisClaims(publicCopyFiles) {
-  const claimPatterns = [
-    { label: "medical cure/treatment", regex: /\b(cure|cures|treat|treats|treatment|therapeutic)\b/i },
-    { label: "medical condition", regex: /\b(pain|anxiety|sleep|cancer|depression|ptsd|inflammation)\b/i },
-    { label: "shipping/direct commerce", regex: /\b(ship|ships|shipping|delivery|deliver|buy online|order online|checkout|cart)\b/i },
-    { label: "pricing/inventory", regex: /\b(price|pricing|inventory|in stock|available now)\b/i },
-    { label: "youth-coded/giveaway", regex: /\b(candy|cartoon|kids?|minor|teen|giveaway|free product)\b/i },
-    { label: "over-intoxication", regex: /\b(get high|highest high|over[- ]?intoxication)\b/i },
-  ];
   const matches = publicCopyFiles.flatMap((file) =>
-    findLineMatches(file, claimPatterns),
+    findLineMatches(file, BLOCKED_CLAIM_PATTERNS),
   );
 
   if (matches.length === 0) {
     addResult(
       "PASS",
       "language.claims",
-      "No blocked medical, commerce, pricing, inventory, youth-coded, or over-intoxication claims found in app/content source.",
+      "No blocked medical, commerce, pricing, inventory, youth-coded, over-intoxication, superlative, rank, effect-adjacent, or founder claims found in app/content source.",
     );
     return;
   }
@@ -255,6 +291,80 @@ function checkCannabisClaims(publicCopyFiles) {
     "Blocked cannabis claim language was found in public app/content source.",
     matches.map((match) => `${match.file}:${match.line} ${match.label}`),
     "Remove the claim or attach explicit client/legal approval in a future approval system.",
+  );
+}
+
+function checkSafeNeutralLanguage() {
+  const blockedPatterns = [...PUBLIC_ACCUSATION_PATTERNS, ...BLOCKED_CLAIM_PATTERNS];
+  const collisions = [];
+
+  for (const phrase of SAFE_NEUTRAL_LANGUAGE) {
+    for (const pattern of blockedPatterns) {
+      if (pattern.regex.test(phrase)) {
+        collisions.push(`"${phrase}" is blocked by pattern: ${pattern.label}`);
+      }
+    }
+  }
+
+  if (collisions.length === 0) {
+    addResult(
+      "PASS",
+      "language.safeNeutral",
+      "Approved neutral language (official, source-backed, licensed retailers, adults 21+ where legal, availability disclaimers) still passes every blocked-language pattern.",
+    );
+    return;
+  }
+
+  addResult(
+    "FAIL",
+    "language.safeNeutral",
+    "A blocked-language pattern over-blocks approved neutral language.",
+    collisions,
+    "Narrow the blocked-language regex so approved neutral phrasing remains usable.",
+  );
+}
+
+function checkRuntimeLanguageGuard() {
+  const helpersPath = "src/lib/seo/metadata-helpers.ts";
+  if (!projectFileExists(helpersPath)) {
+    addResult("FAIL", "language.runtimeGuard", "Missing metadata text safety helper file.");
+    return;
+  }
+
+  const text = readProjectFile(helpersPath);
+  const requiredFragments = [
+    { label: "therapeutic", fragment: "therapeutic" },
+    { label: "strongest", fragment: "strongest" },
+    { label: "most potent", fragment: "most potent" },
+    { label: "best", fragment: "\\bbest\\b" },
+    { label: "#1", fragment: "#1" },
+    { label: "number one", fragment: "number[- ]one" },
+    { label: "top ranked", fragment: "top[- ]?ranked" },
+    { label: "euphoric", fragment: "euphoric" },
+    { label: "relaxing", fragment: "relax" },
+    { label: "cerebral", fragment: "cerebral" },
+    { label: "founding father", fragment: "founding father" },
+    { label: "founder", fragment: "founders?" },
+  ];
+  const missing = requiredFragments
+    .filter(({ fragment }) => !text.includes(fragment))
+    .map(({ label }) => label);
+
+  if (missing.length === 0) {
+    addResult(
+      "PASS",
+      "language.runtimeGuard",
+      "Runtime metadata text safety patterns cover superlative, rank, effect-adjacent, and founder-claim language.",
+    );
+    return;
+  }
+
+  addResult(
+    "FAIL",
+    "language.runtimeGuard",
+    "Runtime metadata text safety patterns are missing expanded blocked-language coverage.",
+    missing,
+    "Keep UNSAFE_METADATA_TEXT_PATTERNS aligned with the blocked claim/language doctrine.",
   );
 }
 
@@ -659,7 +769,7 @@ function checkSourceRecordContractFoundation() {
   );
   const looseUnionEscapes = requiredStateUnions.filter((name) => {
     const unionMatch = typesText.match(
-      new RegExp(`export type ${name} =[\\\\s\\\\S]*?;`),
+      new RegExp(`export type ${name} =[\\s\\S]*?;`),
     );
     return Boolean(unionMatch?.[0].includes("| string"));
   });
@@ -788,6 +898,7 @@ function checkSourceRecordContractFoundation() {
   const publicSeoHelpers =
     publicationText.includes("isSourceAllowedForPublicSeo") &&
     publicationText.includes('source.allowedUsage === "production"') &&
+    publicationText.includes('source.confidentialityStatus === "public"') &&
     publicationText.includes("isProofApprovedForPublicClaim") &&
     publicationText.includes("official_primary") &&
     publicationText.includes("client_confirmed") &&
@@ -799,7 +910,7 @@ function checkSourceRecordContractFoundation() {
     addResult(
       "PASS",
       "sourceRecords.publicSeoHelpers",
-      "Public SEO helpers enforce production-only sources, approved proof, approved claims, and asset provenance.",
+      "Public SEO helpers enforce production-only public sources, approved proof, approved claims, and asset provenance.",
     );
   } else {
     addResult(
@@ -807,7 +918,39 @@ function checkSourceRecordContractFoundation() {
       "sourceRecords.publicSeoHelpers",
       "Public SEO source/proof/claim/asset helper boundaries are incomplete.",
       [],
-      "Add pure helpers for production sources, approved proof, approved claims, and approved asset provenance.",
+      "Add pure helpers for production public sources, approved proof, approved claims, and approved asset provenance.",
+    );
+  }
+
+  const sourceRecordBlock =
+    typesText.match(/export type SourceRecord = \{[\s\S]*?\};/)?.[0] ?? "";
+  const sourceRecordHasConfidentiality = sourceRecordBlock.includes(
+    "confidentialityStatus: ConfidentialityStatus;",
+  );
+  const sourceGateBlock =
+    publicationText.match(
+      /export function isSourceAllowedForPublicSeo[\s\S]*?\n\}/,
+    )?.[0] ?? "";
+  const sourceGateChecksBoth =
+    sourceGateBlock.includes('source.allowedUsage === "production"') &&
+    sourceGateBlock.includes('source.confidentialityStatus === "public"');
+
+  if (sourceRecordHasConfidentiality && sourceGateChecksBoth) {
+    addResult(
+      "PASS",
+      "sourceRecords.confidentialityFirewall",
+      "SourceRecord carries confidentialityStatus and public SEO source eligibility requires production usage plus public confidentiality.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "sourceRecords.confidentialityFirewall",
+      "Confidential source firewall is incomplete on the SourceRecord contract or gate helper.",
+      [
+        `SourceRecord.confidentialityStatus present: ${sourceRecordHasConfidentiality}`,
+        `isSourceAllowedForPublicSeo checks allowedUsage and confidentialityStatus: ${sourceGateChecksBoth}`,
+      ],
+      "Require confidentialityStatus on SourceRecord and gate public SEO eligibility on production usage plus public confidentiality.",
     );
   }
 }
@@ -908,21 +1051,42 @@ function checkMetadataFoundation() {
     metadataText.includes("isIndexFollow(route)") &&
     metadataText.includes('route.status === "approved"') &&
     metadataText.includes("route.blocks.length === 0") &&
+    metadataText.includes("getRoutePublicationGateBlockReasons(route).length === 0") &&
     metadataText.includes("route.indexability === \"conditional_index\"");
 
   if (robotsDerivedFromIndexability) {
     addResult(
       "PASS",
       "metadata.robots",
-      "Robots metadata is derived from route approval, indexability, and blockers.",
+      "Robots metadata is dual-gated by route approval, indexability, blockers, and source-record route publication approval.",
     );
   } else {
     addResult(
       "FAIL",
       "metadata.robots",
-      "Robots metadata is not clearly derived from route indexability and approval state.",
+      "Robots metadata is not clearly dual-gated by route indexability and source-record publication approval.",
       [],
-      "Derive robots metadata from route status, indexability, and blocker state.",
+      "Derive robots metadata from route status, indexability, blocker state, and getRoutePublicationGateBlockReasons(route).",
+    );
+  }
+
+  const robotsPublicationGateImport =
+    metadataText.includes('from "./source-records"') &&
+    metadataText.includes("getRoutePublicationGateBlockReasons");
+
+  if (robotsPublicationGateImport) {
+    addResult(
+      "PASS",
+      "metadata.robotsPublicationGate",
+      "Metadata robots imports and uses the source-record route-publication gate.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "metadata.robotsPublicationGate",
+      "Metadata robots does not import the source-record route-publication gate.",
+      [],
+      "Import getRoutePublicationGateBlockReasons and require it to pass before robots index:true can emit.",
     );
   }
 
@@ -1334,6 +1498,11 @@ function checkRouteShellFoundation() {
   const componentText = readProjectFile(
     "src/components/seo/presidential-route-shell.tsx",
   );
+  const staticShellText = projectFileExists(
+    "src/components/presidential/modules/static-route-foundation-shell.tsx",
+  )
+    ? readProjectFile("src/components/presidential/modules/static-route-foundation-shell.tsx")
+    : "";
 
   const helperUsesRouteRegistry =
     helperText.includes("getRouteByPath(path)") &&
@@ -1358,10 +1527,14 @@ function checkRouteShellFoundation() {
   }
 
   const componentUsesRouteRecord =
-    componentText.includes("route.h1") &&
-    componentText.includes("route.description") &&
+    componentText.includes("StaticRouteFoundationShell") &&
+    componentText.includes("breadcrumbs={breadcrumbs}") &&
+    componentText.includes("links={links}") &&
+    componentText.includes("route={route}") &&
+    staticShellText.includes("route.h1") &&
+    staticShellText.includes("route.description") &&
     componentText.includes("getStaticRouteShellLinks(route)") &&
-    componentText.includes("For adults 21+ where legal");
+    staticShellText.includes("For adults 21+ where legal");
 
   if (componentUsesRouteRecord) {
     addResult(
@@ -1398,7 +1571,12 @@ function checkRouteShellFoundation() {
       pageRegistryIssues.push(filePath);
     }
 
-    if (!text.includes("<PresidentialRouteShell route={route} />")) {
+    const expectedShell =
+      routePath === "/"
+        ? "<HomeRouteShell route={route} />"
+        : "<PresidentialRouteShell route={route} />";
+
+    if (!text.includes(expectedShell)) {
       pageShellIssues.push(filePath);
     }
   }
@@ -1439,15 +1617,15 @@ function checkRouteShellFoundation() {
     addResult(
       "PASS",
       "routeShells.sharedShell",
-      "Static route shells render through the shared Presidential route shell component.",
+      "Static route shells render through the approved shared route shell components.",
     );
   } else {
     addResult(
       "FAIL",
       "routeShells.sharedShell",
-      "Some route shells may be duplicating shell markup.",
+      "Some route shells may be duplicating shell markup or bypassing approved shell components.",
       pageShellIssues,
-      "Use the shared route shell component until final design is approved.",
+      "Use approved shared route shell components and keep custom visual composition behind guarded shells.",
     );
   }
 
@@ -1502,6 +1680,150 @@ function checkRouteShellFoundation() {
   }
 }
 
+function checkStep9HHomeRouteComposition() {
+  const homePagePath = "src/app/page.tsx";
+  const homeShellPath = "src/components/seo/home-route-shell.tsx";
+
+  if (!projectFileExists(homePagePath) || !projectFileExists(homeShellPath)) {
+    addResult(
+      "FAIL",
+      "step9h.homeRouteCompositionFiles",
+      "Step 9H home route composition files are missing.",
+      [homePagePath, homeShellPath].filter((file) => !projectFileExists(file)),
+      "Create the guarded home route shell and wire it through the home page only.",
+    );
+    return;
+  }
+
+  const homePageText = readProjectFile(homePagePath);
+  const homeShellText = readProjectFile(homeShellPath);
+
+  const pageStillUsesMetadataAndRegistry =
+    homePageText.includes('ROUTE_PATH = "/"') &&
+    homePageText.includes("buildStaticRouteMetadata(ROUTE_PATH)") &&
+    homePageText.includes("getStaticRouteRecord(ROUTE_PATH)") &&
+    homePageText.includes("<HomeRouteShell route={route} />") &&
+    !homePageText.includes("<PresidentialRouteShell route={route} />");
+
+  const shellKeepsSeoAuthorityBoundary =
+    homeShellText.includes("buildRouteShellJsonLd(route)") &&
+    homeShellText.includes("<HomepageFoundationShell route={route} />") &&
+    homeShellText.includes('route.id !== "home"') &&
+    homeShellText.includes('route.path !== "/"') &&
+    !homeShellText.includes("buildRouteMetadata") &&
+    !homeShellText.includes("buildPresidentialSitemap") &&
+    !homeShellText.includes("buildPresidentialRobots");
+
+  const unsafePatterns = [
+    { label: "public unlock true", regex: /publicUnlock:\s*true|data-presidential-public-unlock="true"/i },
+    { label: "public SEO approval", regex: /public\s+seo\s+(unlocked|approved|enabled|live)/i },
+    { label: "indexability promotion", regex: /\b(index_follow|index\/follow|indexable|sitemap eligible)\b/i },
+    { label: "route publication approval", regex: /route[-\s]publication\s+(approved|unlocked|enabled|live)/i },
+    { label: "sitemap unlock", regex: /sitemap\s+(unlocked|enabled|live|inclusion approved)/i },
+    { label: "commerce language", regex: /\b(price|pricing|inventory|shipping|delivery|deliver|buy online|order online|direct order|checkout|cart|reviews?|ratings?)\b/i },
+    { label: "medical or effect language", regex: /\b(euphoric|euphoria|relax(?:ing|ed|ation)?|therapeutic|cerebral|uplifting|sedating|pain|anxiety|sleep|cure|treats?)\b/i },
+    { label: "unsupported superlative", regex: /\b(world'?s strongest|highest form|strongest flavor|most potent|#1\b|number[- ]one|top[- ]?ranked|best)\b/i },
+    { label: "threat-domain/public accusation language", regex: /\b(imposter|scam|hijack(?:ed|ing)?|stolen|counterfeit|knockoff|fraud)\b/i },
+  ];
+  const unsafeMatches = [
+    { path: homePagePath, text: homePageText },
+    { path: homeShellPath, text: homeShellText },
+  ].flatMap((file) => {
+    const lines = file.text.split(/\r?\n/);
+    return lines.flatMap((line, index) =>
+      unsafePatterns
+        .filter((pattern) => pattern.regex.test(line))
+        .map((pattern) => `${file.path}:${index + 1} ${pattern.label}`),
+    );
+  });
+
+  const visibleCopyPaths = [
+    "src/components/presidential/media/media-slot.tsx",
+    "src/components/presidential/modules/homepage-foundation-shell.tsx",
+    "src/components/presidential/modules/homepage-act-shell.tsx",
+    "src/components/presidential/modules/platform-preview-shell.tsx",
+    "src/components/presidential/modules/find-us-cta-shell.tsx",
+  ];
+  const visibleLeakPatterns = [
+    {
+      label: "visible build-state language",
+      regex:
+        /\b(shell|foundation|preview|pending approval|blocked until|locator workflow|workflow|staged|placeholder|internal)\b/i,
+    },
+    {
+      label: "visible SEO workflow language",
+      regex:
+        /\b(metadata|schema|sitemap|route[-\s]publication|public[-\s]unlock|approval[-\s]gated)\b/i,
+    },
+  ];
+  const visibleLinePatterns = [
+    /^\s*(title|purpose|description|mediaLabel|label|note):\s*["`]/,
+    /\b(description|title|label|note|kicker)\s*=\s*["{`]/,
+    /^\s*note\s*=\s*["`]/,
+    /<span[^>]*>/,
+    /<p[^>]*>/,
+    /^\s*[A-Z0-9][^<>{};]+$/,
+  ];
+  const machineOnlyLinePattern =
+    /\b(data-presidential-|ariaLabelledBy|id=|throw new Error|export |import |type |function |readonly |status:|const classNames|const headingId|getPlaceholderPolicy|PlaceholderKind|PublicSurface)\b/;
+  const visibleCopyLeaks = visibleCopyPaths.flatMap((path) => {
+    if (!projectFileExists(path)) return [`${path}: missing visible-copy source file`];
+
+    return readProjectFile(path)
+      .split(/\r?\n/)
+      .flatMap((line, index) => {
+        if (machineOnlyLinePattern.test(line)) return [];
+        if (!visibleLinePatterns.some((pattern) => pattern.test(line))) return [];
+
+        return visibleLeakPatterns
+          .filter((pattern) => pattern.regex.test(line))
+          .map((pattern) => `${path}:${index + 1} ${pattern.label}: ${line.trim()}`);
+      });
+  });
+
+  if (visibleCopyLeaks.length === 0) {
+    addResult(
+      "PASS",
+      "step9h.visibleHomeCopy",
+      "Step 9H guarded home composition avoids visible build-state, workflow, and public-SEO process language.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "step9h.visibleHomeCopy",
+      "Step 9H guarded home composition exposes visible build-state or workflow language.",
+      visibleCopyLeaks,
+      "Keep machine-readable guardrails in policy/source files, but use public-safe visible copy and public-safe attributes.",
+    );
+  }
+
+  if (
+    pageStillUsesMetadataAndRegistry &&
+    shellKeepsSeoAuthorityBoundary &&
+    unsafeMatches.length === 0 &&
+    visibleCopyLeaks.length === 0
+  ) {
+    addResult(
+      "PASS",
+      "step9h.homeRouteComposition",
+      "Step 9H home route composition uses the guarded home shell while preserving metadata, registry, JSON-LD, and no-public-unlock boundaries.",
+    );
+    return;
+  }
+
+  addResult(
+    "FAIL",
+    "step9h.homeRouteComposition",
+    "Step 9H home route composition is incomplete or may bypass approved guarded boundaries.",
+    [
+      `page metadata/registry/shell boundary: ${pageStillUsesMetadataAndRegistry}`,
+      `home shell SEO boundary: ${shellKeepsSeoAuthorityBoundary}`,
+      ...unsafeMatches,
+    ],
+    "Keep app/page.tsx routed through buildStaticRouteMetadata, getStaticRouteRecord, and HomeRouteShell; keep HomeRouteShell limited to JSON-LD plus HomepageFoundationShell.",
+  );
+}
+
 function checkRouteShellSchemaFoundation() {
   const helperPath = "src/lib/seo/schema/routeShell.ts";
   const schemaIndexPath = "src/lib/seo/schema/index.ts";
@@ -1530,6 +1852,11 @@ function checkRouteShellSchemaFoundation() {
   const helperText = readProjectFile(helperPath);
   const schemaIndexText = readProjectFile(schemaIndexPath);
   const componentText = readProjectFile(componentPath);
+  const staticShellText = projectFileExists(
+    "src/components/presidential/modules/static-route-foundation-shell.tsx",
+  )
+    ? readProjectFile("src/components/presidential/modules/static-route-foundation-shell.tsx")
+    : "";
 
   const exported =
     schemaIndexText.includes('export * from "./routeShell"') ||
@@ -1640,8 +1967,9 @@ function checkRouteShellSchemaFoundation() {
 
   const visibleBreadcrumbs =
     componentText.includes("buildRouteShellBreadcrumbItems(route)") &&
-    componentText.includes('aria-label="Breadcrumb"') &&
-    componentText.includes('aria-current="page"');
+    componentText.includes("breadcrumbs={breadcrumbs}") &&
+    staticShellText.includes('aria-label="Breadcrumb"') &&
+    staticShellText.includes('aria-current="page"');
 
   if (visibleBreadcrumbs) {
     addResult(
@@ -1748,9 +2076,10 @@ function checkAgeGateFoundation() {
   }
 
   const overlayContract =
-    ageGateText.includes('data-presidential-age-gate="overlay"') &&
+    ageGateText.includes('role="presentation"') &&
     ageGateText.includes('role="dialog"') &&
     ageGateText.includes('aria-modal="true"') &&
+    ageGateText.includes("fixed inset-0") &&
     ageGateText.includes("Adults 21+ where legal");
 
   if (overlayContract) {
@@ -1765,9 +2094,10 @@ function checkAgeGateFoundation() {
       "agegate.overlay.contract",
       "Age gate component is missing the expected overlay/accessibility contract.",
       [
-        `overlay data attribute present: ${ageGateText.includes('data-presidential-age-gate="overlay"')}`,
+        `presentation overlay role present: ${ageGateText.includes('role="presentation"')}`,
         `dialog role present: ${ageGateText.includes('role="dialog"')}`,
         `aria-modal present: ${ageGateText.includes('aria-modal="true"')}`,
+        `fixed overlay class present: ${ageGateText.includes("fixed inset-0")}`,
         `21+ copy present: ${ageGateText.includes("Adults 21+ where legal")}`,
       ],
       "Keep the foundation as an accessible overlay with safe adult-access language.",
@@ -1987,6 +2317,255 @@ function checkStep8HScopeBoundary() {
   }
 }
 
+function checkReferenceDataQuarantine() {
+  const workspaceRoot = join(projectRoot, "..");
+  const seedDir = join(workspaceRoot, "data", "seed");
+  const candidatesDir = join(workspaceRoot, "data", "reference-candidates");
+  const ingestionMarker = "NOT FOR INGESTION";
+
+  const srcFiles = collectTextFiles(["src"]);
+  const referencePatterns = [
+    { label: "data/seed reference", regex: /data[\\/]+seed/i },
+    { label: "reference-candidates reference", regex: /reference-candidates/i },
+  ];
+  const srcMatches = srcFiles.flatMap((file) =>
+    findLineMatches(file, referencePatterns),
+  );
+
+  if (srcMatches.length === 0) {
+    addResult(
+      "PASS",
+      "quarantine.noSrcReferences",
+      "web/src does not import or reference data/seed or data/reference-candidates.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "quarantine.noSrcReferences",
+      "web/src references quarantined reference-candidate data.",
+      srcMatches.map((match) => `${match.file}:${match.line} ${match.label}`),
+      "Reference-candidate data cannot be imported by web/src. Route facts through the approved source-record intake lane instead.",
+    );
+  }
+
+  if (!existsSync(seedDir)) {
+    addResult(
+      "PASS",
+      "quarantine.seedDirectory",
+      "data/seed no longer exists; candidate data lives in the quarantined reference-candidates path.",
+    );
+  } else {
+    const seedReadmePath = join(seedDir, "README.md");
+    const seedReadmeOk =
+      existsSync(seedReadmePath) &&
+      readFileSync(seedReadmePath, "utf8").includes(ingestionMarker);
+
+    if (seedReadmeOk) {
+      addResult(
+        "PASS",
+        "quarantine.seedDirectory",
+        "data/seed remains for compatibility but its README marks it NOT FOR INGESTION.",
+      );
+    } else {
+      addResult(
+        "FAIL",
+        "quarantine.seedDirectory",
+        "data/seed exists without a README marking it NOT FOR INGESTION.",
+        [relativePath(seedDir)],
+        "Move candidate data to data/reference-candidates or add a README explaining why data/seed remains and marking it NOT FOR INGESTION.",
+      );
+    }
+  }
+
+  if (!existsSync(candidatesDir)) {
+    addResult(
+      "PENDING",
+      "quarantine.referenceCandidates",
+      "data/reference-candidates does not exist yet; quarantine checks for candidate data remain pending.",
+    );
+    return;
+  }
+
+  const candidatesReadmePath = join(candidatesDir, "README.md");
+  const candidatesReadmeOk =
+    existsSync(candidatesReadmePath) &&
+    readFileSync(candidatesReadmePath, "utf8").includes(ingestionMarker);
+
+  if (candidatesReadmeOk) {
+    addResult(
+      "PASS",
+      "quarantine.referenceCandidates",
+      "data/reference-candidates README marks the folder NOT FOR INGESTION.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "quarantine.referenceCandidates",
+      "data/reference-candidates is missing a README that marks it NOT FOR INGESTION.",
+      [relativePath(candidatesDir)],
+      "Add a README declaring the folder candidate/reference-only, unverified, and unable to unlock public SEO.",
+    );
+  }
+
+  const approvalShapedPatterns = [
+    {
+      label: "production usage approval shape",
+      regex: /"allowed_usage"\s*:\s*"production"/i,
+    },
+    {
+      label: "approved/published approval shape",
+      regex: /"(approved_status|approval_status|publication_status)"\s*:\s*"(approved|published|production)"/i,
+    },
+  ];
+  const candidateFiles = [];
+  for (const entry of readdirSync(candidatesDir)) {
+    const fullPath = join(candidatesDir, entry);
+    if (statSync(fullPath).isFile() && textExtensions.has(extname(fullPath))) {
+      candidateFiles.push(fullPath);
+    }
+  }
+  const approvalMatches = candidateFiles.flatMap((file) =>
+    findLineMatches(file, approvalShapedPatterns),
+  );
+
+  if (approvalMatches.length === 0) {
+    addResult(
+      "PASS",
+      "quarantine.noApprovalShapes",
+      "Reference-candidate files carry no production/approved/published approval-shaped values.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "quarantine.noApprovalShapes",
+      "Reference-candidate files contain approval-shaped values that could unlock gates on naive import.",
+      approvalMatches.map((match) => `${match.file}:${match.line} ${match.label}`),
+      "Neutralize approval-shaped fields; candidate data can never look approved without client proof.",
+    );
+  }
+}
+
+function checkBrandDefenseRoutePlanning() {
+  const routesPath = "src/lib/seo/routes.ts";
+  if (!projectFileExists(routesPath)) {
+    addResult("FAIL", "routes.brandDefense", "Route registry file is missing.");
+    return;
+  }
+
+  const routesText = readProjectFile(routesPath);
+  const brandDefensePaths = ["/official-presidential", "/pre-rolls", "/blunts"];
+  const issues = [];
+
+  for (const routePath of brandDefensePaths) {
+    const definition = getRouteDefinitionText(routesText, routePath);
+
+    if (!definition) {
+      issues.push(`${routePath}: missing from route registry`);
+      continue;
+    }
+
+    if (
+      !definition.includes('status: "planned"') &&
+      !definition.includes('status: "conditional"')
+    ) {
+      issues.push(`${routePath}: status must stay planned or conditional`);
+    }
+
+    if (!definition.includes('indexability: "conditional_index"')) {
+      issues.push(`${routePath}: indexability must stay conditional_index`);
+    }
+
+    if (!definition.includes('sitemap: "conditional"')) {
+      issues.push(`${routePath}: sitemap policy must stay conditional`);
+    }
+
+    if (definition.includes("blocks: []") || !definition.includes("blocks: [")) {
+      issues.push(`${routePath}: blocks must stay non-empty`);
+    }
+  }
+
+  if (issues.length === 0) {
+    addResult(
+      "PASS",
+      "routes.brandDefense",
+      "Artifact 17 brand-defense routes are registered as planning-only records with conditional indexability, conditional sitemap, and non-empty blocks.",
+    );
+    return;
+  }
+
+  addResult(
+    "FAIL",
+    "routes.brandDefense",
+    "Brand-defense route planning records are missing or lost their gated posture.",
+    issues,
+    "Keep /official-presidential, /pre-rolls, and /blunts as gated planning-only registry records per artifact 17.",
+  );
+}
+
+function checkRouteRegistryPublicationGateLock() {
+  const routesPath = "src/lib/seo/routes.ts";
+  const publicationPath = "src/lib/seo/source-records/route-publication.ts";
+
+  if (!projectFileExists(routesPath) || !projectFileExists(publicationPath)) {
+    addResult(
+      "FAIL",
+      "routes.publicationGateLock",
+      "Route registry or publication-gate source file is missing.",
+      [routesPath, publicationPath].filter((file) => !projectFileExists(file)),
+      "Keep route registry and route-publication records present before checking indexability unlocks.",
+    );
+    return;
+  }
+
+  const routesText = readProjectFile(routesPath);
+  const publicationText = readProjectFile(publicationPath);
+  const approvedPublicationsEmpty =
+    /APPROVED_ROUTE_PUBLICATIONS\s*=\s*\[\]\s+as\s+const/.test(publicationText);
+
+  if (!approvedPublicationsEmpty) {
+    addResult(
+      "HUMAN",
+      "routes.publicationGateLock",
+      "Approved route-publication records are no longer empty; route publication now requires human/legal verification.",
+      [],
+      "Before accepting any publication records, verify source proof, confidentiality, metadata, schema, content, asset, proof, and compliance fields.",
+    );
+    return;
+  }
+
+  const routeRecords = getRouteRecordTexts(routesText);
+  const unlockShapedRecords = routeRecords.flatMap((record) => {
+    const path = record.match(/path:\s*"([^"]+)"/)?.[1] ?? "unknown";
+    const hits = [
+      { label: "status approved", regex: /status:\s*"approved"/ },
+      { label: "index_follow", regex: /indexability:\s*"index_follow"/ },
+      { label: "sitemap include", regex: /sitemap:\s*"include"/ },
+      { label: "empty blocks", regex: /blocks:\s*\[\s*\]/ },
+    ]
+      .filter((check) => check.regex.test(record))
+      .map((check) => `${path}: ${check.label}`);
+
+    return hits;
+  });
+
+  if (unlockShapedRecords.length === 0) {
+    addResult(
+      "PASS",
+      "routes.publicationGateLock",
+      "No real route record is approved, index_follow, sitemap include, or block-empty while APPROVED_ROUTE_PUBLICATIONS is empty.",
+    );
+    return;
+  }
+
+  addResult(
+    "FAIL",
+    "routes.publicationGateLock",
+    "Route registry contains publication-shaped unlock values without approved route-publication records.",
+    unlockShapedRecords,
+    "Keep route records gated until approved route-publication source records exist and pass every gate.",
+  );
+}
+
 function checkScaffoldSignals(publicCopyFiles) {
   const scaffoldPatterns = [
     { label: "Create Next App title/copy", regex: /Create Next App|create next app/i },
@@ -2009,6 +2588,381 @@ function checkScaffoldSignals(publicCopyFiles) {
     "Starter scaffold copy/assets still exist after Step 8D route shell creation.",
     matches.map((match) => `${match.file}:${match.line} ${match.label}`),
     "Remove starter scaffold copy/assets before Step 8D can remain accepted.",
+  );
+}
+
+function checkStep9FDesignSystemFoundation() {
+  const requiredFiles = [
+    "src/lib/design-system/source-status.ts",
+    "src/lib/design-system/tokens.ts",
+    "src/lib/design-system/placeholder-policy.ts",
+    "src/lib/design-system/index.ts",
+    "src/components/presidential/layout/page-frame.tsx",
+    "src/components/presidential/layout/scene.tsx",
+    "src/components/presidential/layout/scene-stack.tsx",
+    "src/components/presidential/primitives/section-heading.tsx",
+    "src/components/presidential/primitives/cta-link.tsx",
+    "src/components/presidential/media/media-slot.tsx",
+    "src/components/presidential/index.ts",
+  ];
+  const missingFiles = requiredFiles.filter((file) => !projectFileExists(file));
+
+  if (missingFiles.length > 0) {
+    addResult(
+      "FAIL",
+      "step9f.designSystemFiles",
+      "Step 9F foundation design-system files are missing.",
+      missingFiles,
+      "Restore the Step 9F foundation-only design-system files before continuing visual implementation.",
+    );
+    return;
+  }
+
+  const step9fFiles = requiredFiles.map((file) => ({
+    path: file,
+    text: readProjectFile(file),
+  }));
+  const combinedText = step9fFiles.map((file) => file.text).join("\n");
+  const unsafePatterns = [
+    { label: "public unlock true", regex: /publicUnlock:\s*true|data-presidential-public-unlock="true"/i },
+    { label: "route publication approval", regex: /route publication approved|route-publication approved/i },
+    { label: "sitemap unlock", regex: /sitemap unlocked|sitemap inclusion approved/i },
+    { label: "schema image unlock", regex: /schema image approved|schema image unlock/i },
+    { label: "Open Graph image unlock", regex: /open graph image approved|og image approved/i },
+    { label: "fake product or retailer", regex: /fake (product|retailer|store|strain|flavor)/i },
+    { label: "commerce language", regex: /\b(price|pricing|inventory|shipping|order online|direct order|checkout|reviews?|ratings?)\b/i },
+    { label: "unsupported superlative", regex: /\b(world'?s strongest|highest form|strongest flavor|#1\b|number[- ]one|top[- ]?ranked|best)\b/i },
+  ];
+  const unsafeMatches = step9fFiles.flatMap((file) => {
+    const lines = file.text.split(/\r?\n/);
+    return lines.flatMap((line, index) =>
+      unsafePatterns
+        .filter((pattern) => pattern.regex.test(line))
+        .map((pattern) => `${file.path}:${index + 1} ${pattern.label}`),
+    );
+  });
+
+  if (unsafeMatches.length > 0) {
+    addResult(
+      "FAIL",
+      "step9f.designSystemSafety",
+      "Step 9F design-system foundation contains unsafe public-unlock, fake-data, commerce, or claim language.",
+      unsafeMatches,
+      "Keep Step 9F foundation-only and remove unsafe defaults before any design implementation.",
+    );
+    return;
+  }
+
+  const requiredSignals = [
+    "sourceStatus",
+    "publicUseStatus",
+    "publicUnlock: false",
+    "forbiddenPublicSurfaces",
+    "canPlaceholderFeedPublicSurface",
+    "metadata, Open Graph, schema, sitemap, product, retailer, locator",
+  ];
+  const missingSignals = requiredSignals.filter(
+    (signal) => !combinedText.includes(signal),
+  );
+
+  const forbiddenAuthorityImports = step9fFiles.flatMap((file) => {
+    const importMatches = file.text.matchAll(/from\s+["']([^"']+)["']/g);
+    return Array.from(importMatches)
+      .map((match) => match[1])
+      .filter((importPath) =>
+        /@\/lib\/seo\/(metadata|robots|sitemap|schema|source-records|indexability|routes)/.test(
+          importPath,
+        ),
+      )
+      .map((importPath) => `${file.path}: forbidden SEO authority import ${importPath}`);
+  });
+
+  if (missingSignals.length === 0 && forbiddenAuthorityImports.length === 0) {
+    addResult(
+      "PASS",
+      "step9f.designSystemFoundation",
+      "Step 9F design-system foundation exists, is source-aware, keeps placeholders internal, and does not import SEO publication authority.",
+    );
+    return;
+  }
+
+  addResult(
+    "FAIL",
+    "step9f.designSystemFoundation",
+    "Step 9F design-system foundation is incomplete or imports protected SEO authority.",
+    [
+      ...missingSignals.map((signal) => `missing signal: ${signal}`),
+      ...forbiddenAuthorityImports,
+    ],
+    "Keep the design system source-aware, internal-only, and separate from route publication, sitemap, robots, schema, and source-record authority.",
+  );
+}
+
+function checkStep9GRouteShellVisualFoundation() {
+  const requiredFiles = [
+    "src/components/presidential/modules/homepage-act-shell.tsx",
+    "src/components/presidential/modules/platform-preview-shell.tsx",
+    "src/components/presidential/modules/find-us-cta-shell.tsx",
+    "src/components/presidential/modules/homepage-foundation-shell.tsx",
+    "src/components/presidential/modules/index.ts",
+  ];
+  const missingFiles = requiredFiles.filter((file) => !projectFileExists(file));
+
+  if (missingFiles.length > 0) {
+    addResult(
+      "FAIL",
+      "step9g.routeShellVisualFiles",
+      "Step 9G guarded route-shell visual foundation files are missing.",
+      missingFiles,
+      "Restore the Step 9G foundation modules before continuing homepage composition work.",
+    );
+    return;
+  }
+
+  const step9gFiles = requiredFiles.map((file) => ({
+    path: file,
+    text: readProjectFile(file),
+  }));
+  const combinedText = step9gFiles.map((file) => file.text).join("\n");
+  const unsafePatterns = [
+    { label: "public unlock true", regex: /publicUnlock:\s*true|data-presidential-public-unlock="true"/i },
+    { label: "public SEO approval", regex: /public\s+seo\s+(unlocked|approved|enabled|live)/i },
+    { label: "indexability promotion", regex: /\b(index_follow|index\/follow|indexable|sitemap eligible)\b/i },
+    { label: "route publication approval", regex: /route[-\s]publication\s+(approved|unlocked|enabled|live)/i },
+    { label: "sitemap unlock", regex: /sitemap\s+(unlocked|enabled|live|inclusion approved)/i },
+    { label: "schema unlock", regex: /schema\s+(approved|unlocked|enabled|live)/i },
+    { label: "schema image unlock", regex: /schema image\s+(approved|unlocked|enabled|live)/i },
+    { label: "image approval unlock", regex: /image\s+(approved|unlocked|enabled|live)/i },
+    { label: "Open Graph image unlock", regex: /open graph image\s+(approved|unlocked|enabled|live)|og image\s+(approved|unlocked|enabled|live)/i },
+    { label: "fake product or retailer", regex: /fake\s+(product|retailer|store|strain|flavor|location|catalog)/i },
+    { label: "commerce language", regex: /\b(price|pricing|inventory|shipping|delivery|deliver|buy online|order online|direct order|checkout|cart|reviews?|ratings?)\b/i },
+    { label: "medical or effect language", regex: /\b(euphoric|euphoria|relax(?:ing|ed|ation)?|therapeutic|cerebral|uplifting|sedating|pain|anxiety|sleep|cure|treats?)\b/i },
+    { label: "unsupported superlative", regex: /\b(world'?s strongest|highest form|strongest flavor|most potent|#1\b|number[- ]one|top[- ]?ranked|best)\b/i },
+    { label: "threat-domain/public accusation language", regex: /\b(imposter|scam|hijack(?:ed|ing)?|stolen|counterfeit|knockoff|fraud)\b/i },
+  ];
+  const unsafeMatches = step9gFiles.flatMap((file) => {
+    const lines = file.text.split(/\r?\n/);
+    return lines.flatMap((line, index) =>
+      unsafePatterns
+        .filter((pattern) => pattern.regex.test(line))
+        .map((pattern) => `${file.path}:${index + 1} ${pattern.label}`),
+    );
+  });
+
+  if (unsafeMatches.length > 0) {
+    addResult(
+      "FAIL",
+      "step9g.routeShellVisualSafety",
+      "Step 9G route-shell visual foundation contains unsafe public-unlock, commerce, claim, effect, or accusation language.",
+      unsafeMatches,
+      "Keep Step 9G placeholder-only, source-aware, and non-public.",
+    );
+    return;
+  }
+
+  const requiredSignals = [
+    "blocked_pending_copy_approval",
+    "blocked_pending_asset_approval",
+    "blocked_pending_catalog",
+    "blocked_pending_verification",
+    "MediaSlot",
+    "CtaLink",
+    "HomepageActShell",
+    "PlatformPreviewShell",
+    "FindUsCtaShell",
+  ];
+  const missingSignals = requiredSignals.filter(
+    (signal) => !combinedText.includes(signal),
+  );
+
+  const protectedSeoAuthorityImport =
+    /(^|\/|@\/)lib\/seo\/(metadata|robots|sitemap|schema|source-records|indexability|routes)(\/|$)/;
+  const forbiddenAuthorityImports = step9gFiles.flatMap((file) => {
+    const importMatches = file.text.matchAll(
+      /(?:from\s+|import\s*\(\s*|import\s+)["']([^"']+)["']/g,
+    );
+    return Array.from(importMatches)
+      .map((match) => match[1].replaceAll("\\", "/"))
+      .filter((importPath) => protectedSeoAuthorityImport.test(importPath))
+      .map((importPath) => `${file.path}: forbidden SEO authority import ${importPath}`);
+  });
+
+  if (missingSignals.length === 0 && forbiddenAuthorityImports.length === 0) {
+    addResult(
+      "PASS",
+      "step9g.routeShellVisualFoundation",
+      "Step 9G guarded route-shell visual foundation exists, stays placeholder-only, and does not import SEO publication authority.",
+    );
+    return;
+  }
+
+  addResult(
+    "FAIL",
+    "step9g.routeShellVisualFoundation",
+    "Step 9G route-shell visual foundation is incomplete or imports protected SEO authority.",
+    [
+      ...missingSignals.map((signal) => `missing signal: ${signal}`),
+      ...forbiddenAuthorityImports,
+    ],
+    "Keep Step 9G visual foundation separate from route publication, sitemap, robots, schema, source-record, and indexability authority.",
+  );
+}
+
+function checkStep9LStaticRouteVisualFoundation() {
+  const requiredFiles = [
+    "src/components/presidential/modules/static-route-foundation-shell.tsx",
+    "src/components/presidential/modules/index.ts",
+    "src/components/seo/presidential-route-shell.tsx",
+    "src/components/presidential/media/media-slot.tsx",
+    "src/components/presidential/modules/homepage-foundation-shell.tsx",
+    "src/components/presidential/modules/homepage-act-shell.tsx",
+    "src/components/presidential/modules/platform-preview-shell.tsx",
+    "src/components/presidential/modules/find-us-cta-shell.tsx",
+  ];
+  const missingFiles = requiredFiles.filter((file) => !projectFileExists(file));
+
+  if (missingFiles.length > 0) {
+    addResult(
+      "FAIL",
+      "step9l.staticRouteVisualFiles",
+      "Step 9L guarded static-route visual files are missing.",
+      missingFiles,
+      "Create the reusable non-home route visual foundation and keep it wired through the SEO shell.",
+    );
+    return;
+  }
+
+  const moduleIndexText = readProjectFile("src/components/presidential/modules/index.ts");
+  const routeShellText = readProjectFile("src/components/seo/presidential-route-shell.tsx");
+  const staticShellText = readProjectFile(
+    "src/components/presidential/modules/static-route-foundation-shell.tsx",
+  );
+  const publicComponentFiles = requiredFiles.map((file) => ({
+    path: file,
+    text: readProjectFile(file),
+  }));
+
+  const wiredThroughSeoShell =
+    moduleIndexText.includes('export * from "./static-route-foundation-shell"') &&
+    routeShellText.includes("StaticRouteFoundationShell") &&
+    routeShellText.includes("buildRouteShellJsonLd(route)") &&
+    routeShellText.includes("buildRouteShellBreadcrumbItems(route)") &&
+    routeShellText.includes("getStaticRouteShellLinks(route)") &&
+    routeShellText.includes("breadcrumbs={breadcrumbs}") &&
+    routeShellText.includes("links={links}") &&
+    routeShellText.includes("route={route}");
+
+  const visualShellStaysOutOfSeoAuthority =
+    !staticShellText.includes("@/lib/seo/metadata") &&
+    !staticShellText.includes("@/lib/seo/robots") &&
+    !staticShellText.includes("@/lib/seo/sitemap") &&
+    !staticShellText.includes("@/lib/seo/schema") &&
+    !staticShellText.includes("@/lib/seo/source-records") &&
+    !staticShellText.includes("@/lib/seo/indexability") &&
+    !staticShellText.includes("@/lib/seo/routes");
+
+  const publicDomLeakPatterns = [
+    { label: "data-presidential attribute", regex: /data-presidential-[a-z0-9-]+/i },
+    { label: "source status attribute", regex: /source-status/i },
+    { label: "route status attribute", regex: /route-status/i },
+    { label: "locator status attribute", regex: /locator-status/i },
+    { label: "platform status attribute", regex: /platform-status/i },
+    { label: "placeholder status attribute", regex: /placeholder-status/i },
+    { label: "public unlock attribute", regex: /public-unlock|public_unlock/i },
+  ];
+  const publicDomLeakMatches = publicComponentFiles.flatMap((file) => {
+    const lines = file.text.split(/\r?\n/);
+    return lines.flatMap((line, index) =>
+      publicDomLeakPatterns
+        .filter((pattern) => pattern.regex.test(line))
+        .map((pattern) => `${file.path}:${index + 1} ${pattern.label}`),
+    );
+  });
+
+  const visibleCopyPaths = [
+    "src/components/presidential/media/media-slot.tsx",
+    "src/components/presidential/modules/static-route-foundation-shell.tsx",
+    "src/components/presidential/modules/homepage-foundation-shell.tsx",
+    "src/components/presidential/modules/homepage-act-shell.tsx",
+    "src/components/presidential/modules/platform-preview-shell.tsx",
+    "src/components/presidential/modules/find-us-cta-shell.tsx",
+  ];
+  const visibleLeakPatterns = [
+    {
+      label: "visible build-state language",
+      regex:
+        /\b(shell|foundation|preview|pending approval|blocked until|locator workflow|workflow|staged|placeholder|internal)\b/i,
+    },
+    {
+      label: "visible SEO workflow language",
+      regex:
+        /\b(metadata|schema|sitemap|route[-\s]publication|public[-\s]unlock|approval[-\s]gated|approval gates?)\b/i,
+    },
+    {
+      label: "unsafe cannabis/commercial language",
+      regex:
+        /\b(price|pricing|inventory|shipping|delivery|deliver|buy online|order online|direct order|checkout|cart|reviews?|ratings?|euphoric|relax(?:ing|ed|ation)?|therapeutic|cerebral|uplifting|sedating|pain|anxiety|sleep|cure|treats?|best|#1\b|number[- ]one|top[- ]?ranked|strongest|most potent|imposter|scam|hijack(?:ed|ing)?|stolen|counterfeit|knockoff|fraud)\b/i,
+    },
+  ];
+  const visibleLinePatterns = [
+    /^\s*(title|purpose|description|mediaLabel|label|note|body):\s*["`]/,
+    /\b(description|title|label|note|kicker|body)\s*=\s*["{`]/,
+    /^\s*note\s*=\s*["`]/,
+    /<span[^>]*>/,
+    /<p[^>]*>/,
+    /^\s*[A-Z0-9][^<>{};]+$/,
+  ];
+  const machineOnlyLinePattern =
+    /\b(ariaLabelledBy|id=|throw new Error|export |import |type |function |readonly |status:|const classNames|const headingId|getPlaceholderPolicy|PlaceholderKind|PublicSurface|className=|kind=|href=|key=)\b/;
+  const visibleCopyLeaks = visibleCopyPaths.flatMap((path) => {
+    if (!projectFileExists(path)) return [`${path}: missing visible-copy source file`];
+
+    return readProjectFile(path)
+      .split(/\r?\n/)
+      .flatMap((line, index) => {
+        if (machineOnlyLinePattern.test(line)) return [];
+        if (!visibleLinePatterns.some((pattern) => pattern.test(line))) return [];
+
+        return visibleLeakPatterns
+          .filter((pattern) => pattern.regex.test(line))
+          .map((pattern) => `${path}:${index + 1} ${pattern.label}: ${line.trim()}`);
+      });
+  });
+
+  const safePublicSignals =
+    staticShellText.includes("Official route details") &&
+    staticShellText.includes("Explore Presidential") &&
+    staticShellText.includes("For adults 21+ where legal.") &&
+    staticShellText.includes("Product information will appear as materials are finalized.") &&
+    staticShellText.includes("Find authentic Presidential products at licensed retailers");
+
+  if (
+    wiredThroughSeoShell &&
+    visualShellStaysOutOfSeoAuthority &&
+    publicDomLeakMatches.length === 0 &&
+    visibleCopyLeaks.length === 0 &&
+    safePublicSignals
+  ) {
+    addResult(
+      "PASS",
+      "step9l.staticRouteVisualFoundation",
+      "Step 9L guarded static-route visual foundation is wired through the SEO shell, public-DOM clean, source-safe, and no-public-unlock.",
+    );
+    return;
+  }
+
+  addResult(
+    "FAIL",
+    "step9l.staticRouteVisualFoundation",
+    "Step 9L guarded static-route visual foundation is incomplete, leaks public-DOM status, imports protected SEO authority, or exposes unsafe copy.",
+    [
+      `wired through SEO shell: ${wiredThroughSeoShell}`,
+      `visual shell avoids protected SEO authority imports: ${visualShellStaysOutOfSeoAuthority}`,
+      `safe public signal copy present: ${safePublicSignals}`,
+      ...publicDomLeakMatches,
+      ...visibleCopyLeaks,
+    ],
+    "Keep Step 9L visual-only, route-record-driven, public-DOM clean, and separate from SEO publication authority.",
   );
 }
 
@@ -2167,6 +3121,8 @@ checkCanonicalHost();
 checkForbiddenUrls(sourceFiles);
 checkPublicLanguage(publicCopyFiles);
 checkCannabisClaims(publicCopyFiles);
+checkSafeNeutralLanguage();
+checkRuntimeLanguageGuard();
 checkProductSchema();
 checkSameAsWhitelist(sourceFiles);
 checkJsonLdSafety();
@@ -2178,7 +3134,14 @@ checkRouteShellFoundation();
 checkRouteShellSchemaFoundation();
 checkAgeGateFoundation();
 checkStep8HScopeBoundary();
+checkReferenceDataQuarantine();
+checkBrandDefenseRoutePlanning();
+checkRouteRegistryPublicationGateLock();
 checkScaffoldSignals(publicCopyFiles);
+checkStep9FDesignSystemFoundation();
+checkStep9GRouteShellVisualFoundation();
+checkStep9HHomeRouteComposition();
+checkStep9LStaticRouteVisualFoundation();
 checkPendingSystems();
 checkLighthouseStatus();
 checkHumanLegalGates();

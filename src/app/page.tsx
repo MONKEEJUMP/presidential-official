@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { PresidentialRouteShell } from "@/components/seo/presidential-route-shell";
+import { HomeRouteShell } from "@/components/seo/home-route-shell";
 import {
   buildStaticRouteMetadata,
   getStaticRouteRecord,
@@ -15,6 +15,5 @@ export function generateMetadata(): Metadata {
 export default function Home() {
   const route = getStaticRouteRecord(ROUTE_PATH);
 
-  return <PresidentialRouteShell route={route} />;
+  return <HomeRouteShell route={route} />;
 }
-

@@ -113,7 +113,10 @@ export function evaluateRoutePublicationGate(
 }
 
 export function isSourceAllowedForPublicSeo(source: SourceRecord): boolean {
-  return source.allowedUsage === "production";
+  return (
+    source.allowedUsage === "production" &&
+    source.confidentialityStatus === "public"
+  );
 }
 
 export function isProofApprovedForPublicClaim(proof: ProofRecord): boolean {

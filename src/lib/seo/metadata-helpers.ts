@@ -19,6 +19,11 @@ const UNSAFE_METADATA_TEXT_PATTERNS = [
   /\b(price|pricing|inventory|in stock|available now)\b/i,
   /\b(candy|cartoon|kids?|minor|teen|giveaway|free product)\b/i,
   /\b(get high|highest high|over[- ]?intoxication)\b/i,
+  /\b(strongest|most potent|world[''`]?s strongest)\b/i,
+  /\bbest\b/i,
+  /#1\b|\bnumber[- ]one\b|\btop[- ]?ranked\b/i,
+  /\b(euphoric|euphoria|relax(?:ing|ed|ation)?|cerebral|uplifting|sedating)\b/i,
+  /\b(founding father|founders?)\b/i,
 ] as const;
 
 function hasTemplateToken(path: SeoRoutePath): boolean {

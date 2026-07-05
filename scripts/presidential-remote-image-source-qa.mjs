@@ -1,0 +1,289 @@
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import path from "node:path";
+
+const root = path.resolve(process.cwd(), "..");
+const webRoot = process.cwd();
+const nextConfigPath = path.join(webRoot, "next.config.ts");
+const publicRoot = path.join(webRoot, "public");
+const builtAppRoot = path.join(webRoot, ".next", "server", "app");
+const docsResultsPath = path.join(
+  root,
+  "docs",
+  "phase1-seo-artifacts",
+  "255-step10i-remote-image-source-readiness-results.csv",
+);
+const workRoot = path.join(root, "sources", "spud", "work", "step10i-remote-image-source-readiness");
+const statusJsonPath = path.join(workRoot, "step10i-remote-image-source-readiness-status.json");
+const statusMdPath = path.join(workRoot, "step10i-remote-image-source-readiness-status.md");
+
+const sourceRoots = [
+  path.join(webRoot, "src", "app"),
+  path.join(webRoot, "src", "components"),
+  path.join(webRoot, "src", "lib", "design-system"),
+  path.join(webRoot, "src", "lib", "seo"),
+  nextConfigPath,
+  path.join(webRoot, "package.json"),
+];
+
+const textExtensions = new Set([
+  ".css",
+  ".html",
+  ".js",
+  ".json",
+  ".jsx",
+  ".mjs",
+  ".rsc",
+  ".svg",
+  ".ts",
+  ".tsx",
+  ".txt",
+  ".xml",
+]);
+
+const imageExtensions = /\.(?:avif|gif|ico|jpe?g|png|svg|webp)(?:[?#][^\s"'<>)]*)?$/i;
+const remoteImageUrlPattern = /https?:\/\/[^\s"'<>)]*\.(?:avif|gif|ico|jpe?g|png|svg|webp)(?:[?#][^\s"'<>)]*)?/gi;
+const cssRemoteUrlPattern = /url\(\s*["']?https?:\/\/[^)"']+["']?\s*\)/gi;
+const blockedHostPattern =
+  /\b(?:static\.)?wixstatic\.com\b|\bwixsite\.com\b|\bwix\.com\b|\bdrive\.google\.com\b|\bdocs\.google\.com\b|\bgoogleusercontent\.com\b|\bvercel\.app\b|\bvercel\.com\b|\bwww\.presidentialmoonrocks\.com\b|\bpresidentialca\.com\b|\bpresidential\.vip\b|\bpresidential\.rocks\b|\bpresidential\.online\b|\bpresidential\.us\b|\blocalhost\b|\b127\.0\.0\.1\b/i;
+const publicUnlockPattern =
+  /image sitemap approved|schema image approved|og image approved|twitter image approved|asset approved for public|public image unlocked|public seo unlocked|sitemap inclusion approved|route publication approved/i;
+
+function csvEscape(value) {
+  return `"${String(value).replaceAll('"', '""')}"`;
+}
+
+function addCheck(rows, check, passed, details) {
+  rows.push({
+    check,
+    status: passed ? "pass" : "fail",
+    details,
+    public_unlock: "no",
+  });
+  return passed;
+}
+
+function walkTextFiles(targetPath) {
+  if (!existsSync(targetPath)) {
+    return [];
+  }
+
+  const stats = statSync(targetPath);
+  if (stats.isFile()) {
+    return textExtensions.has(path.extname(targetPath).toLowerCase()) ? [targetPath] : [];
+  }
+
+  const files = [];
+  const entries = readdirSync(targetPath, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(targetPath, entry.name);
+    if (entry.isDirectory()) {
+      if (["node_modules", ".next", ".git"].includes(entry.name)) {
+        continue;
+      }
+      files.push(...walkTextFiles(fullPath));
+    } else if (textExtensions.has(path.extname(entry.name).toLowerCase())) {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+
+function collectTextMatches(files, patterns) {
+  const matches = [];
+  for (const file of files) {
+    const text = readFileSync(file, "utf8");
+    for (const pattern of patterns) {
+      pattern.lastIndex = 0;
+      const found = text.match(pattern) ?? [];
+      for (const value of found) {
+        matches.push({
+          file: path.relative(root, file),
+          value,
+        });
+      }
+    }
+  }
+  return matches;
+}
+
+function publicAssetFiles() {
+  if (!existsSync(publicRoot)) {
+    return [];
+  }
+  return walkTextFiles(publicRoot)
+    .map((file) => path.relative(publicRoot, file))
+    .filter((file) => imageExtensions.test(file));
+}
+
+function main() {
+  const rows = [];
+  const nextConfigText = existsSync(nextConfigPath) ? readFileSync(nextConfigPath, "utf8") : "";
+  const sourceFiles = sourceRoots.flatMap(walkTextFiles);
+  const builtFiles = walkTextFiles(builtAppRoot);
+  const publicImages = publicAssetFiles();
+  const sourceText = sourceFiles.map((file) => readFileSync(file, "utf8")).join("\n");
+  const builtText = builtFiles.map((file) => readFileSync(file, "utf8")).join("\n");
+
+  const sourceRemoteImageUrls = collectTextMatches(sourceFiles, [remoteImageUrlPattern, cssRemoteUrlPattern]);
+  const builtRemoteImageUrls = collectTextMatches(builtFiles, [remoteImageUrlPattern, cssRemoteUrlPattern]);
+  const sourceBlockedHostMatches = collectTextMatches(sourceFiles, [blockedHostPattern]);
+  const builtBlockedHostMatches = collectTextMatches(builtFiles, [blockedHostPattern]);
+
+  const hasImagesConfig = /\bimages\s*:/.test(nextConfigText);
+  const hasRemotePatterns = /\bremotePatterns\s*:/.test(nextConfigText);
+  const hasDomains = /\bdomains\s*:/.test(nextConfigText);
+  const hasCustomLoader = /\bloader\s*:|\bloaderFile\s*:/.test(nextConfigText);
+
+  const checks = [
+    addCheck(rows, "nextConfig.exists", existsSync(nextConfigPath), nextConfigPath),
+    addCheck(
+      rows,
+      "nextImage.remotePatternsDeferred",
+      !hasRemotePatterns,
+      "No next/image remotePatterns are configured until approved asset host and path rules exist",
+    ),
+    addCheck(
+      rows,
+      "nextImage.domainsDeprecatedAbsent",
+      !hasDomains,
+      "No legacy images.domains allowlist is configured",
+    ),
+    addCheck(
+      rows,
+      "nextImage.customLoaderDeferred",
+      !hasCustomLoader,
+      "No custom image loader is configured until an approved image pipeline exists",
+    ),
+    addCheck(
+      rows,
+      "nextImage.noImageConfigWithoutApproval",
+      !hasImagesConfig,
+      "No image optimization host config exists before asset host approval",
+    ),
+    addCheck(
+      rows,
+      "source.noRemoteImageUrls",
+      sourceRemoteImageUrls.length === 0,
+      `${sourceRemoteImageUrls.length} remote image URL(s) found in source surfaces`,
+    ),
+    addCheck(
+      rows,
+      "built.noRemoteImageUrls",
+      builtRemoteImageUrls.length === 0,
+      `${builtRemoteImageUrls.length} remote image URL(s) found in built route output`,
+    ),
+    addCheck(
+      rows,
+      "source.noBlockedImageHosts",
+      sourceBlockedHostMatches.length === 0,
+      `${sourceBlockedHostMatches.length} blocked host match(es) found in source surfaces`,
+    ),
+    addCheck(
+      rows,
+      "built.noBlockedImageHosts",
+      builtBlockedHostMatches.length === 0,
+      `${builtBlockedHostMatches.length} blocked host match(es) found in built route output`,
+    ),
+    addCheck(
+      rows,
+      "public.noImageFiles",
+      publicImages.length === 0,
+      `${publicImages.length} image file(s) in public tree`,
+    ),
+    addCheck(
+      rows,
+      "source.noNextImageImport",
+      !/from\s+["']next\/image["']|require\(["']next\/image["']\)/.test(sourceText),
+      "No next/image usage exists before an approved asset pipeline",
+    ),
+    addCheck(
+      rows,
+      "built.noOgOrTwitterImage",
+      !/(?:og:image|twitter:image)/i.test(builtText),
+      "Built output does not emit social image metadata",
+    ),
+    addCheck(
+      rows,
+      "built.noImageSchemaUnlock",
+      !/"(?:image|logo|photo)"\s*:/.test(builtText),
+      "Built output does not emit JSON-LD image, logo, or photo fields",
+    ),
+    addCheck(
+      rows,
+      "noPublicUnlockSignals",
+      !publicUnlockPattern.test([nextConfigText, sourceText, builtText].join("\n")),
+      "Remote image readiness does not approve assets, social images, schema images, sitemap inclusion, route publication, or public SEO",
+    ),
+  ];
+
+  const verdict = checks.every(Boolean)
+    ? "PASS_REMOTE_IMAGE_SOURCE_READINESS_NO_PUBLIC_UNLOCK"
+    : "FAIL_REMOTE_IMAGE_SOURCE_READINESS_REVIEW_REQUIRED";
+
+  mkdirSync(path.dirname(docsResultsPath), { recursive: true });
+  writeFileSync(
+    docsResultsPath,
+    [
+      "check,status,details,public_unlock",
+      ...rows.map((row) =>
+        [row.check, row.status, row.details, row.public_unlock].map(csvEscape).join(","),
+      ),
+    ].join("\n") + "\n",
+  );
+
+  const payload = {
+    verdict,
+    officialSourcePosture: {
+      nextImageRemotePatterns:
+        "Next.js remotePatterns should allow only specific approved external image sources and paths.",
+      googleImageSeo:
+        "Google recommends descriptive filenames, titles, alt text, relevant surrounding text, and high-quality images.",
+    },
+    sourceTextFileCount: sourceFiles.length,
+    builtTextFileCount: builtFiles.length,
+    publicImageFiles: publicImages,
+    sourceRemoteImageUrls,
+    builtRemoteImageUrls,
+    sourceBlockedHostMatches,
+    builtBlockedHostMatches,
+    checks: Object.fromEntries(rows.map((row) => [row.check, row.status === "pass"])),
+    assetApproved: false,
+    remoteImageHostsApproved: false,
+    schemaImageUnlocked: false,
+    openGraphImageUnlocked: false,
+    imageSitemapUnlocked: false,
+    publicSeoUnlocked: false,
+    routePublicationApproved: false,
+    sitemapUnlocked: false,
+    indexabilityUnlocked: false,
+    deploymentApproved: false,
+    guardrail:
+      "Step 10I is remote image/source host readiness only. It keeps remote image hosts, next/image config, public images, social images, schema images, and image sitemap behavior blocked until asset source/proof/approval records exist.",
+  };
+
+  mkdirSync(workRoot, { recursive: true });
+  writeFileSync(statusJsonPath, JSON.stringify(payload, null, 2));
+  writeFileSync(
+    statusMdPath,
+    [
+      "# Step 10I Remote Image Source Readiness Status",
+      "",
+      `Verdict: \`${verdict}\``,
+      "",
+      "## Checks",
+      "",
+      ...rows.map((row) => `- \`${row.check}\`: ${row.status.toUpperCase()} - ${row.details}`),
+      "",
+      "## Guardrail",
+      "",
+      payload.guardrail,
+      "",
+      "Final signal: `STEP_10I_REMOTE_IMAGE_SOURCE_READINESS_COMPLETE_NO_PUBLIC_UNLOCK`",
+    ].join("\n") + "\n",
+  );
+
+  console.log(JSON.stringify(payload, null, 2));
+  process.exitCode = verdict.startsWith("PASS_") ? 0 : 1;
+}
+
+main();

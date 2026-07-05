@@ -5,6 +5,7 @@ import {
   assertMetadataTextSafe,
   buildRouteMetadataUrlFields,
 } from "./metadata-helpers";
+import { getRoutePublicationGateBlockReasons } from "./source-records";
 import type {
   BuildRouteMetadataInput,
   RouteMetadataRobotsPolicy,
@@ -20,7 +21,8 @@ export function isRouteMetadataIndexable(route: SeoRouteRecord): boolean {
   return (
     route.status === "approved" &&
     isIndexFollow(route) &&
-    route.blocks.length === 0
+    route.blocks.length === 0 &&
+    getRoutePublicationGateBlockReasons(route).length === 0
   );
 }
 

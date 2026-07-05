@@ -92,7 +92,6 @@ export function AgeGate() {
   return (
     <div
       className="fixed inset-0 z-50 flex min-h-screen items-center justify-center bg-zinc-950/80 px-6 py-8"
-      data-presidential-age-gate="overlay"
       role="presentation"
     >
       <section

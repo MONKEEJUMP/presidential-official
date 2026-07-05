@@ -129,6 +129,7 @@ export type SourceRecord = {
   sourceType: SourceType;
   sourceLocator: string;
   allowedUsage: AllowedUsage;
+  confidentialityStatus: ConfidentialityStatus;
   publisherOrProvider: string;
   confidenceScore: number;
   verifiedBy?: string;
