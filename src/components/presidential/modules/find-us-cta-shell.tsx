@@ -8,7 +8,7 @@ export function FindUsCtaShell() {
       <div className="mx-auto grid w-full max-w-6xl gap-6 border border-zinc-200 bg-white p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center">
         <SectionHeading
           as="h2"
-          description="Retailer and location experiences will open after store data is verified and cleared for public use."
+          description="Use the official retail path to connect Presidential product interest with licensed retailers. Availability varies by licensed retailer."
           id="presidential-find-us-path"
           title="Find Presidential products"
         />

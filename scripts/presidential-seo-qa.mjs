@@ -2823,15 +2823,14 @@ function checkStep9GRouteShellVisualFoundation() {
   }
 
   const requiredSignals = [
-    "blocked_pending_copy_approval",
-    "blocked_pending_asset_approval",
-    "blocked_pending_catalog",
-    "blocked_pending_verification",
     "MediaSlot",
     "CtaLink",
     "HomepageActShell",
     "PlatformPreviewShell",
     "FindUsCtaShell",
+    "Presidential as the parent brand",
+    "A first-party product ecosystem",
+    "Retail search becomes first-party",
   ];
   const missingSignals = requiredSignals.filter(
     (signal) => !combinedText.includes(signal),
@@ -2853,7 +2852,7 @@ function checkStep9GRouteShellVisualFoundation() {
     addResult(
       "PASS",
       "step9g.routeShellVisualFoundation",
-      "Step 9G guarded route-shell visual foundation exists, stays placeholder-only, and does not import SEO publication authority.",
+      "Step 9G route-shell visual layer exists, uses visitor-facing Presidential copy, and does not import SEO publication authority.",
     );
     return;
   }
@@ -2866,7 +2865,7 @@ function checkStep9GRouteShellVisualFoundation() {
       ...missingSignals.map((signal) => `missing signal: ${signal}`),
       ...forbiddenAuthorityImports,
     ],
-    "Keep Step 9G visual foundation separate from route publication, sitemap, robots, schema, source-record, and indexability authority.",
+    "Keep Step 9G visual work visitor-facing and separate from route publication, sitemap, robots, schema, source-record, and indexability authority.",
   );
 }
 
@@ -2992,11 +2991,11 @@ function checkStep9LStaticRouteVisualFoundation() {
   });
 
   const safePublicSignals =
-    staticShellText.includes("Official route details") &&
+    staticShellText.includes("Inside this section") &&
     staticShellText.includes("Explore Presidential") &&
     staticShellText.includes("For adults 21+ where legal.") &&
-    staticShellText.includes("Product information will appear as materials are finalized.") &&
-    staticShellText.includes("Find authentic Presidential products at licensed retailers");
+    staticShellText.includes("A focused official section inside the Presidential digital") &&
+    staticShellText.includes("Find authentic Presidential products through a first-party retail path");
 
   if (
     wiredThroughSeoShell &&

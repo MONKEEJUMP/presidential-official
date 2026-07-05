@@ -367,14 +367,14 @@ function checkRouteHtml(route) {
       );
     }
   } else if (
-    routeHtml.includes("Official route details") &&
+    routeHtml.includes("Inside this section") &&
     routeHtml.includes("Explore Presidential")
   ) {
-    pass(`${route.label}.html.staticRouteVisualFoundationPresent`, "guarded non-home route composition rendered");
+    pass(`${route.label}.html.staticRouteVisualFoundationPresent`, "non-home route composition rendered");
   } else {
     fail(
       `${route.label}.html.staticRouteVisualFoundationPresent`,
-      "Guarded non-home route composition is missing expected public-safe sections",
+      "Non-home route composition is missing expected visitor-facing sections",
     );
   }
 

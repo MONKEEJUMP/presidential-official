@@ -8,10 +8,6 @@ export type PlatformPreviewShellProps = {
   readonly description: string;
   readonly href: SeoRoutePath;
   readonly ctaLabel?: string;
-  readonly status:
-    | "blocked_pending_product_facts"
-    | "blocked_pending_asset_approval"
-    | "blocked_pending_compliance_review";
 };
 
 export function PlatformPreviewShell({
@@ -21,11 +17,12 @@ export function PlatformPreviewShell({
   ctaLabel,
 }: PlatformPreviewShellProps) {
   return (
-    <article className="grid gap-5 border border-zinc-200 bg-white p-5">
+    <article className="grid gap-5 border border-zinc-200 bg-white p-5 shadow-sm">
       <MediaSlot
         aspectClassName="aspect-[16/10]"
         kind="product_visual_placeholder"
-        label={`${title} visual`}
+        label={`${title} platform`}
+        note="Official Presidential product lane"
       />
       <div className="flex flex-col gap-4">
         <div>
@@ -35,7 +32,7 @@ export function PlatformPreviewShell({
           <p className="mt-3 text-sm leading-6 text-zinc-700">{description}</p>
         </div>
         <p className="text-xs font-medium uppercase tracking-normal text-zinc-500">
-          Product information will appear as materials are finalized.
+          For adults 21+ where legal
         </p>
         <CtaLink href={href} variant="secondary">
           {ctaLabel ?? `Explore ${title}`}

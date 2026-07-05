@@ -30,11 +30,11 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
     return [
       {
         title: "Licensed retail path",
-        body: "Find authentic Presidential products at licensed retailers after store data is verified and cleared for public use.",
+        body: "Find authentic Presidential products through a first-party retail path built for licensed retailer discovery.",
       },
       {
         title: "Local experience",
-        body: "Retailer and location experiences will open only after each source is verified.",
+        body: "State, city, and retailer paths are organized so shoppers can move from product interest to nearby licensed stores.",
       },
     ];
   }
@@ -43,11 +43,11 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
     return [
       {
         title: "Official story",
-        body: "Company story material will appear as executive and brand materials are finalized.",
+        body: "Presidential is presented as the parent brand behind Moon Rocks, pre-rolls, blunts, Moon Pods, and Orbit.",
       },
       {
         title: "Brand context",
-        body: "Presidential background details will stay source-backed and public-safe.",
+        body: "The story connects the company, the products, and the official retail path in one first-party source.",
       },
     ];
   }
@@ -56,11 +56,11 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
     return [
       {
         title: "Education hub",
-        body: "Learning material will appear as guides are finalized and reviewed for public use.",
+        body: "Guides explain Moon Rocks, infused pre-rolls, live resin, live rosin, liquid diamonds, and Orbit in plain language.",
       },
       {
         title: "Product context",
-        body: "Educational paths will connect to official Presidential product platforms without medical or effect claims.",
+        body: "Learning paths connect directly to Presidential product platforms and the retail path.",
       },
     ];
   }
@@ -69,7 +69,7 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
     return [
       {
         title: "Official contact path",
-        body: "Official contact information will appear as company details are finalized.",
+        body: "Customer care, wholesale, press, and brand inquiries move through one official Presidential contact path.",
       },
       {
         title: "Brand inquiries",
@@ -81,11 +81,11 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
   return [
     {
       title: "Product information",
-      body: "Product information will appear as materials are finalized.",
+      body: "Explore the product platform, related education, and retail path from one official Presidential page.",
     },
     {
       title: "Official source path",
-      body: "Public details will stay connected to finalized Presidential materials.",
+      body: "Each product platform connects back to the brand, the learning hub, and licensed retailer discovery.",
     },
   ];
 }
@@ -144,7 +144,8 @@ export function StaticRouteFoundationShell({
                   title={route.h1}
                 />
                 <p className="max-w-2xl text-sm leading-6 text-zinc-600">
-                  Official details are organized here as materials are finalized.
+                  A focused official section inside the Presidential digital
+                  experience for adults 21+ where legal.
                 </p>
               </div>
 
@@ -152,9 +153,8 @@ export function StaticRouteFoundationShell({
                 aspectClassName="aspect-[4/3]"
                 kind="wireframe_media_block"
                 label={`${route.h1} media`}
-              >
-                <span>Materials are being finalized.</span>
-              </MediaSlot>
+                note="Presidential section visual"
+              />
             </div>
           </div>
         </Scene>
@@ -163,9 +163,9 @@ export function StaticRouteFoundationShell({
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
             <SectionHeading
               as="h2"
-              description="Public information will remain source-backed and public-safe."
+              description="A direct route into the Presidential brand, product, education, and retail ecosystem."
               id="presidential-route-details"
-              title="Official route details"
+              title="Inside this section"
             />
             <div className="grid gap-4 md:grid-cols-2">
               {panels.map((panel) => (

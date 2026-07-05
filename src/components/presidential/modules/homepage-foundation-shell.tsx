@@ -13,51 +13,51 @@ import { PlatformPreviewShell } from "./platform-preview-shell";
 const homepageFoundationActs = [
   {
     actNumber: 1,
-    title: "Parent brand opening",
-    purpose: "Official Presidential brand language and hero media will appear here.",
-    status: "blocked_pending_copy_approval",
-    mediaLabel: "Hero media",
+    title: "Presidential as the parent brand",
+    purpose:
+      "The site opens with one clear signal: Presidential is the official home for Moon Rocks, pre-rolls, blunts, Moon Pods, and Orbit.",
+    mediaLabel: "Official brand presence",
   },
   {
     actNumber: 2,
-    title: "Brand expectation",
-    purpose: "Source-backed proof and brand standards will appear here.",
-    status: "blocked_pending_copy_approval",
-    mediaLabel: "Supporting proof",
+    title: "A first-party product ecosystem",
+    purpose:
+      "Every path points back to the official Presidential experience instead of sending visitors through scattered third-party results.",
+    mediaLabel: "Product ecosystem",
   },
   {
     actNumber: 3,
-    title: "Proof path",
-    purpose: "Approved heritage and company facts will appear here.",
-    status: "internal_foundation",
-    mediaLabel: "Proof record",
+    title: "Story, product, and retail working together",
+    purpose:
+      "Brand story, product education, and the retail path move as one connected customer journey.",
+    mediaLabel: "Connected journey",
   },
   {
     actNumber: 4,
-    title: "Moon Rocks platform",
-    purpose: "Moon Rocks product material will appear here.",
-    status: "blocked_pending_asset_approval",
+    title: "Moon Rocks at the center",
+    purpose:
+      "Moon Rocks anchors the flagship product platform with clean navigation into infused pre-rolls, blunts, learning, and retail.",
     mediaLabel: "Moon Rocks media",
   },
   {
     actNumber: 5,
-    title: "Moon Pods platform",
-    purpose: "Moon Pods product material will appear here.",
-    status: "blocked_pending_catalog",
+    title: "Moon Pods get their own lane",
+    purpose:
+      "Moon Pods become a dedicated product pillar inside the official Presidential architecture.",
     mediaLabel: "Moon Pods media",
   },
   {
     actNumber: 6,
-    title: "Orbit support",
-    purpose: "Orbit technology material will appear here.",
-    status: "blocked_pending_copy_approval",
+    title: "Orbit supports the next product story",
+    purpose:
+      "Orbit gives the site a clear technology and product-support lane without confusing the core Moon Rocks story.",
     mediaLabel: "Orbit media",
   },
   {
     actNumber: 7,
-    title: "Retail path",
-    purpose: "Verified location information will appear here.",
-    status: "blocked_pending_verification",
+    title: "Retail search becomes first-party",
+    purpose:
+      "The Find Us path turns product interest into licensed retailer discovery inside the official Presidential site.",
     mediaLabel: "Retail path",
   },
 ] as const;
@@ -85,8 +85,9 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
                 title={route.h1}
               />
               <p className="max-w-2xl text-sm leading-6 text-zinc-600">
-                Official Presidential brand language, product facts, and visual
-                assets will appear as materials are finalized.
+                Presidential now has a first-party digital home for the brand,
+                the product platforms, the learning path, and the retail path.
+                Built for adults 21+ where legal.
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <CtaLink href="/moon-rocks" variant="primary">
@@ -102,9 +103,8 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
               aspectClassName="aspect-[5/4]"
               kind="wireframe_media_block"
               label="Homepage media"
-            >
-              <span>Materials are being finalized.</span>
-            </MediaSlot>
+              note="Official Presidential brand stage"
+            />
           </div>
         </Scene>
 
@@ -112,30 +112,27 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
             <SectionHeading
               as="h2"
-              description="Product information and visuals will appear as materials are finalized."
+              description="Moon Rocks, Moon Pods, and Orbit each get a clean product lane inside one official Presidential experience."
               id="presidential-platforms"
               title="Presidential platforms"
             />
             <div className="grid gap-4 md:grid-cols-3">
               <PlatformPreviewShell
                 ctaLabel="View Moon Rocks platform"
-                description="Product information for Moon Rocks will appear as materials are finalized."
+                description="The flagship Presidential product platform for Moon Rocks, infused pre-rolls, blunts, education, and retail discovery."
                 href="/moon-rocks"
-                status="blocked_pending_asset_approval"
                 title="Moon Rocks"
               />
               <PlatformPreviewShell
                 ctaLabel="View Moon Pods platform"
-                description="Product information for Moon Pods will appear as materials are finalized."
+                description="A dedicated lane for Moon Pods product information, visual storytelling, and connected learning paths."
                 href="/moon-pods"
-                status="blocked_pending_product_facts"
                 title="Moon Pods"
               />
               <PlatformPreviewShell
                 ctaLabel="View Orbit platform"
-                description="Product information for Orbit will appear as materials are finalized."
+                description="A supporting product and technology lane that keeps Orbit connected to the broader Presidential ecosystem."
                 href="/orbit"
-                status="blocked_pending_compliance_review"
                 title="Orbit"
               />
             </div>
@@ -146,7 +143,7 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
             <SectionHeading
               as="h2"
-              description="Continue through source-backed Presidential sections as materials are finalized."
+              description="Move from brand story to product platforms, learning, retail, and contact without leaving the official Presidential experience."
               id="presidential-official-sections"
               title="Official Presidential sections"
             />
@@ -176,7 +173,6 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
             key={act.actNumber}
             mediaLabel={act.mediaLabel}
             purpose={act.purpose}
-            status={act.status}
             title={act.title}
             tone={act.actNumber % 2 === 0 ? "quiet" : "default"}
           />
