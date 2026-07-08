@@ -183,7 +183,7 @@ function collectSourceMatches(files, pattern) {
   return matches;
 }
 
-function checkRenderedRoute(route, rows, summaries, sourceText) {
+function checkRenderedRoute(route, rows, summaries) {
   const htmlPath = path.join(builtAppRoot, route.htmlPath);
   const html = readIfExists(htmlPath);
   const cleanHtml = stripScriptsAndStyles(html);
@@ -299,7 +299,7 @@ function main() {
   const positiveTabIndexMatches = collectSourceMatches(sourceFiles, positiveTabIndexPattern);
   const autoFocusMatches = collectSourceMatches(sourceFiles, autoFocusPattern);
 
-  renderedRoutes.forEach((route) => checkRenderedRoute(route, rows, summaries, sourceText));
+  renderedRoutes.forEach((route) => checkRenderedRoute(route, rows, summaries));
 
   addCheck(rows, "source.noRoleButtonOrLink", roleButtonOrLinkMatches.length === 0, roleButtonOrLinkMatches.slice(0, 8).join(" | ") || "Semantic HTML is used instead of role=button/link");
   addCheck(rows, "source.noPositiveTabIndex", positiveTabIndexMatches.length === 0, positiveTabIndexMatches.slice(0, 8).join(" | ") || "No positive tabIndex in app/components source");
