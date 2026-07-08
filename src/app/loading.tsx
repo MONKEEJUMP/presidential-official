@@ -1,9 +1,10 @@
 export default function Loading() {
   return (
-    <main
+    <div
       aria-busy="true"
       aria-live="polite"
       className="flex min-h-screen items-center justify-center bg-zinc-50 px-6 py-20 text-zinc-950"
+      role="status"
     >
       <section className="w-full max-w-xl border border-zinc-200 bg-white p-8">
         <p className="text-sm font-semibold uppercase text-emerald-800">
@@ -17,6 +18,6 @@ export default function Loading() {
           legal.
         </p>
       </section>
-    </main>
+    </div>
   );
 }

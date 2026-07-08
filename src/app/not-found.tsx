@@ -13,7 +13,18 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <main className="flex min-h-screen items-center bg-zinc-50 px-6 py-20 text-zinc-950">
+    <>
+      <a
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:border focus:border-emerald-900 focus:bg-white focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-emerald-950 focus:shadow-lg"
+        href="#presidential-main"
+      >
+        Skip to main content
+      </a>
+      <main
+        className="flex min-h-screen items-center bg-zinc-50 px-6 py-20 text-zinc-950"
+        id="presidential-main"
+        tabIndex={-1}
+      >
       <section className="mx-auto flex w-full max-w-3xl flex-col gap-6 border border-zinc-200 bg-white p-8">
         <p className="text-sm font-semibold uppercase text-emerald-800">
           Official Presidential
@@ -45,6 +56,7 @@ export default function NotFound() {
           For adults 21+ where legal.
         </p>
       </section>
-    </main>
+      </main>
+    </>
   );
 }

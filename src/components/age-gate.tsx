@@ -35,6 +35,7 @@ function clearAdultConfirmation() {
 export function AgeGate() {
   const [status, setStatus] = useState<AgeGateStatus>("checking");
   const primaryActionRef = useRef<HTMLButtonElement>(null);
+  const shouldFocusMainRef = useRef(false);
   const isGateActive = status !== "accepted";
 
   useEffect(() => {
@@ -65,6 +66,12 @@ export function AgeGate() {
     }
 
     if (!isGateActive) {
+      if (shouldFocusMainRef.current) {
+        shouldFocusMainRef.current = false;
+        window.queueMicrotask(() => {
+          document.getElementById("presidential-main")?.focus();
+        });
+      }
       return;
     }
 
@@ -81,6 +88,7 @@ export function AgeGate() {
   }, [isGateActive]);
 
   function acceptGate() {
+    shouldFocusMainRef.current = true;
     writeAdultConfirmation();
     setStatus("accepted");
   }
@@ -115,6 +123,10 @@ export function AgeGate() {
       event.preventDefault();
       firstControl.focus();
     }
+  }
+
+  if (status === "accepted") {
+    return null;
   }
 
   return (

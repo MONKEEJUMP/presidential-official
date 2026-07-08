@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
 
 type PageFrameProps = {
@@ -18,10 +19,17 @@ export function PageFrame({ children, className = "", ...mainProps }: PageFrameP
 
   return (
     <>
+      <a
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:border focus:border-emerald-900 focus:bg-white focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-emerald-950 focus:shadow-lg"
+        href="#presidential-main"
+      >
+        Skip to main content
+      </a>
       <SiteHeader />
-      <main className={classNames} {...mainProps}>
+      <main {...mainProps} id="presidential-main" tabIndex={-1} className={classNames}>
         {children}
       </main>
+      <SiteFooter />
     </>
   );
 }

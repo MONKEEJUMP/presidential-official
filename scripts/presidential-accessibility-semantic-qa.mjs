@@ -196,6 +196,8 @@ function checkRenderedRoute(route, rows, summaries) {
   const titleTags = getTags(cleanHtml, "title");
   const mainTags = getTags(cleanHtml, "main");
   const h1Tags = getTags(cleanHtml, "h1");
+  const anchorTags = getTags(cleanHtml, "a");
+  const skipLinks = anchorTags.filter((tag) => getAttribute(tag, "href") === "#presidential-main");
   const headingTags = Array.from(cleanHtml.matchAll(/<h([1-6])\b[^>]*>[\s\S]*?<\/h\1>/gi)).map((match) => ({
     level: Number(match[1]),
     text: getTagText(match[0]),
@@ -231,11 +233,20 @@ function checkRenderedRoute(route, rows, summaries) {
   addCheck(rows, `${route.label}.title.exists`, titleTags.length >= 1, `${titleTags.length} title tag(s)`);
   addCheck(
     rows,
-    `${route.label}.main.exists`,
-    mainTags.length >= 1,
-    mainTags.length >= 1
-      ? `${mainTags.length} main landmark(s)`
-      : "route HTML must include its normal main landmark behind the age-gate overlay",
+    `${route.label}.main.single`,
+    mainTags.length === 1,
+    mainTags.length === 1
+      ? `${mainTags.length} main landmark`
+      : `route HTML must include exactly one normal main landmark behind the age-gate overlay; found ${mainTags.length}`,
+  );
+  addCheck(rows, `${route.label}.main.target`, ids.has("presidential-main"), "Route HTML includes the stable skip-link target id");
+  addCheck(
+    rows,
+    `${route.label}.skipLink.targetsMain`,
+    skipLinks.length >= 1 && skipLinks.some((tag) => /skip to main content/i.test(getTagText(tag))),
+    skipLinks.length
+      ? skipLinks.map((tag) => getTagText(tag) || "empty skip-link text").join(" | ")
+      : "Missing skip link to #presidential-main",
   );
   addCheck(
     rows,
@@ -294,6 +305,9 @@ function main() {
     ...walkTextFiles(seoRoot),
   ];
   const sourceText = sourceFiles.map(readIfExists).join("\n");
+  const ageGateSource = readIfExists(path.join(componentsRoot, "age-gate.tsx"));
+  const pageFrameSource = readIfExists(path.join(componentsRoot, "presidential", "layout", "page-frame.tsx"));
+  const loadingSource = readIfExists(path.join(appRoot, "loading.tsx"));
   const packageJson = readIfExists(packageJsonPath);
   const roleButtonOrLinkMatches = collectSourceMatches(sourceFiles, roleButtonOrLinkPattern);
   const positiveTabIndexMatches = collectSourceMatches(sourceFiles, positiveTabIndexPattern);
@@ -304,6 +318,13 @@ function main() {
   addCheck(rows, "source.noRoleButtonOrLink", roleButtonOrLinkMatches.length === 0, roleButtonOrLinkMatches.slice(0, 8).join(" | ") || "Semantic HTML is used instead of role=button/link");
   addCheck(rows, "source.noPositiveTabIndex", positiveTabIndexMatches.length === 0, positiveTabIndexMatches.slice(0, 8).join(" | ") || "No positive tabIndex in app/components source");
   addCheck(rows, "source.noAutoFocusAttribute", autoFocusMatches.length === 0, autoFocusMatches.slice(0, 8).join(" | ") || "No autoFocus/autofocus attribute in app/components source");
+  addCheck(rows, "ageGate.acceptedStateUnmountsOverlay", /status === "accepted"[\s\S]*?return null;/.test(ageGateSource), "Accepted adult-confirmation state removes the modal overlay instead of leaving a blocking full-screen dialog mounted");
+  addCheck(rows, "ageGate.acceptFocusesMain", /shouldFocusMainRef/.test(ageGateSource) && /getElementById\("presidential-main"\)\?\.focus\(\)/.test(ageGateSource), "User-initiated adult confirmation moves keyboard focus to the page main landmark");
+  addCheck(rows, "ageGate.togglesBackgroundInert", /setAttribute\("inert", ""\)/.test(ageGateSource) && /removeAttribute\("inert"\)/.test(ageGateSource) && /setAttribute\("aria-hidden", "true"\)/.test(ageGateSource) && /removeAttribute\("aria-hidden"\)/.test(ageGateSource), "Age gate toggles inert and aria-hidden on the page content wrapper");
+  addCheck(rows, "ageGate.modalHasFocusTrap", /aria-modal="true"/.test(ageGateSource) && /handleDialogKeyDown/.test(ageGateSource) && /event\.key !== "Tab"/.test(ageGateSource), "Age gate dialog declares modal semantics and traps Tab between dialog controls");
+  addCheck(rows, "pageFrame.skipLinkTargetsMain", /href="#presidential-main"/.test(pageFrameSource) && /Skip to main content/.test(pageFrameSource), "Page frame renders a keyboard-visible skip link to main content");
+  addCheck(rows, "pageFrame.mainTargetStable", /id="presidential-main"/.test(pageFrameSource) && /tabIndex=\{-1\}/.test(pageFrameSource), "Page frame gives main content a stable focus target");
+  addCheck(rows, "loading.noMainLandmark", !/<main\b/i.test(loadingSource) && /role="status"/.test(loadingSource), "Loading fallback uses status semantics without adding a second main landmark");
   addCheck(rows, "source.noPublicUnlockSignals", !publicUnlockPattern.test(sourceText), "No public-unlock text in accessibility source surfaces");
   addCheck(rows, "package.verifyHasStep10O", /security:accessibility:verify/.test(packageJson), "npm verify chain includes Step 10O verifier");
 
