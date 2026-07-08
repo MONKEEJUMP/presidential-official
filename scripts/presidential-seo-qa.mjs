@@ -2315,7 +2315,6 @@ function checkStep8HScopeBoundary() {
     "src/app/verify-age",
     "src/app/21-plus",
     "src/lib/db",
-    "src/lib/cms",
     "src/lib/data",
     "src/content/products",
     "src/content/stores",
@@ -2326,7 +2325,7 @@ function checkStep8HScopeBoundary() {
     addResult(
       "PASS",
       "scope.step8h",
-      "Step 8H stayed scoped to source-record contracts and did not create redirect-wall, product/detail, locator data, database, or CMS files.",
+      "Step 8H stayed scoped to source-record contracts and did not create redirect-wall, product/detail, locator data, database, or disallowed CMS files.",
     );
   } else {
     addResult(
@@ -2336,6 +2335,42 @@ function checkStep8HScopeBoundary() {
       present,
       "Keep Step 8H limited to source-record contracts, route publication gates, and QA enforcement.",
     );
+  }
+
+  if (projectFileExists("src/lib/cms")) {
+    const allowedCmsFiles = new Set([
+      "src/lib/cms/index.ts",
+      "src/lib/cms/sanity-read-client.ts",
+    ]);
+    const cmsFiles = collectTextFiles(["src/lib/cms"]).map(relativePath).sort();
+    const unexpectedCmsFiles = cmsFiles.filter((path) => !allowedCmsFiles.has(path));
+    const cmsSource = cmsFiles.map((path) => readProjectFile(path)).join("\n");
+    const cmsReadOnlyBoundary =
+      unexpectedCmsFiles.length === 0 &&
+      cmsSource.includes("server-only") &&
+      cmsSource.includes("4bl3xvem") &&
+      cmsSource.includes("production") &&
+      cmsSource.includes("published") &&
+      cmsSource.includes("publicRouteRenderingEnabled: false") &&
+      !/\b(createIfNotExists|createOrReplace|mutate|mutation|patch|delete|publish|transaction|commit|listen|live)\b/i.test(
+        cmsSource,
+      );
+
+    if (cmsReadOnlyBoundary) {
+      addResult(
+        "PASS",
+        "scope.cmsReadBoundary",
+        "A controlled server-only, read-only Sanity CMS boundary exists without public route rendering or mutation surfaces.",
+      );
+    } else {
+      addResult(
+        "FAIL",
+        "scope.cmsReadBoundary",
+        "CMS files exist outside the approved read-only web boundary.",
+        unexpectedCmsFiles,
+        "Keep web CMS code limited to the server-only read client until route publication gates approve public rendering.",
+      );
+    }
   }
 }
 
