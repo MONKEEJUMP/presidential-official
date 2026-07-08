@@ -42,6 +42,13 @@ function pushMissingRecordReasons(
   }
 }
 
+function routeRequiresClaimEvidence(route: SeoRouteRecord): boolean {
+  return (
+    route.requiredData.includes("claims") ||
+    route.requiredApprovals.some((approval) => /claim/i.test(approval))
+  );
+}
+
 export function getRoutePublicationRecord(
   route: SeoRouteRecord,
   records: readonly RoutePublicationRecord[] = APPROVED_ROUTE_PUBLICATIONS,
@@ -99,6 +106,13 @@ export function getRoutePublicationGateBlockReasons(
     reasons.push(`source_record:metadata:${record.metadataApprovalStatus}`);
   }
 
+  if (
+    record.metadataApprovalStatus === "approved" &&
+    !record.metadataRecordId
+  ) {
+    reasons.push("source_record:metadata_record:required");
+  }
+
   if (record.schemaApprovalStatus !== "approved") {
     reasons.push(`source_record:schema:${record.schemaApprovalStatus}`);
   }
@@ -115,8 +129,22 @@ export function getRoutePublicationGateBlockReasons(
     reasons.push(`source_record:content:${record.contentApprovalStatus}`);
   }
 
+  if (
+    record.contentApprovalStatus === "approved" &&
+    record.contentRecordIds.length === 0
+  ) {
+    reasons.push("source_record:content_record:required");
+  }
+
   if (record.assetApprovalStatus !== "approved") {
     reasons.push(`source_record:asset:${record.assetApprovalStatus}`);
+  }
+
+  if (
+    record.assetApprovalStatus === "approved" &&
+    record.assetRecordIds.length === 0
+  ) {
+    reasons.push("source_record:asset:required");
   }
 
   if (
@@ -126,11 +154,23 @@ export function getRoutePublicationGateBlockReasons(
     reasons.push(`source_record:proof:${record.proofStatus}`);
   }
 
+  if (record.proofStatus === "verified" && record.proofRecordIds.length === 0) {
+    reasons.push("source_record:proof:required");
+  }
+
   if (
     record.complianceStatus !== "approved" &&
     record.complianceStatus !== "not_required"
   ) {
     reasons.push(`source_record:compliance:${record.complianceStatus}`);
+  }
+
+  if (record.sourceRecordIds.length === 0) {
+    reasons.push("source_record:source:required");
+  }
+
+  if (routeRequiresClaimEvidence(route) && record.claimRecordIds.length === 0) {
+    reasons.push("source_record:claim:required");
   }
 
   const metadataById = getRecordsById(context.metadataRecords, (metadata) => metadata.seoId);

@@ -247,7 +247,7 @@ function buildSyntheticRoutePublication(overrides = {}) {
     routePublicationId: "gate-test-route-publication",
     routeId: syntheticRegistryPromotion.id,
     path: syntheticRegistryPromotion.path,
-    contentRecordIds: [],
+    contentRecordIds: ["gate-test-content"],
     metadataRecordId: "gate-test-metadata",
     schemaRecordIds: ["gate-test-schema"],
     assetRecordIds: ["gate-test-asset"],
@@ -371,6 +371,60 @@ const approvedContext = {
     },
   ],
 };
+
+const requiredEvidenceCases = [
+  {
+    label: "content record",
+    overrides: { routePublicationId: "gate-test-empty-content", contentRecordIds: [] },
+    reason: "source_record:content_record:required",
+  },
+  {
+    label: "metadata record",
+    overrides: { routePublicationId: "gate-test-empty-metadata", metadataRecordId: undefined },
+    reason: "source_record:metadata_record:required",
+  },
+  {
+    label: "source record",
+    overrides: { routePublicationId: "gate-test-empty-source", sourceRecordIds: [] },
+    reason: "source_record:source:required",
+  },
+  {
+    label: "proof record",
+    overrides: { routePublicationId: "gate-test-empty-proof", proofRecordIds: [] },
+    reason: "source_record:proof:required",
+  },
+  {
+    label: "asset record",
+    overrides: { routePublicationId: "gate-test-empty-asset", assetRecordIds: [] },
+    reason: "source_record:asset:required",
+  },
+  {
+    label: "claim record",
+    overrides: { routePublicationId: "gate-test-empty-claim", claimRecordIds: [] },
+    reason: "source_record:claim:required",
+  },
+];
+
+for (const { label, overrides, reason } of requiredEvidenceCases) {
+  const publication = buildSyntheticRoutePublication(overrides);
+  assertEqual(
+    isRoutePublicationApprovedForSeo(
+      syntheticRegistryPromotion,
+      [publication],
+      approvedContext,
+    ),
+    false,
+    `A route publication with empty required ${label} evidence became approved.`,
+  );
+  assert(
+    getRoutePublicationGateBlockReasons(
+      syntheticRegistryPromotion,
+      [publication],
+      approvedContext,
+    ).includes(reason),
+    `Empty required ${label} evidence did not produce ${reason}.`,
+  );
+}
 
 assertEqual(
   isRoutePublicationApprovedForSeo(syntheticRegistryPromotion, [
