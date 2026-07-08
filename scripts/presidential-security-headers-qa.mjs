@@ -16,7 +16,21 @@ const statusJsonPath = path.join(workRoot, "step10c-security-headers-status.json
 const statusMdPath = path.join(workRoot, "step10c-security-headers-status.md");
 
 const requiredHeaders = new Map([
-  ["Content-Security-Policy-Report-Only", ["default-src 'self'", "object-src 'none'", "frame-ancestors 'none'"]],
+  [
+    "Content-Security-Policy",
+    [
+      "default-src 'self'",
+      "base-uri 'self'",
+      "script-src 'self'",
+      "style-src 'self'",
+      "connect-src 'self'",
+      "object-src 'none'",
+      "frame-ancestors 'none'",
+      "form-action 'self'",
+      "upgrade-insecure-requests",
+    ],
+  ],
+  ["Strict-Transport-Security", ["max-age=31536000", "includeSubDomains"]],
   ["X-Content-Type-Options", ["nosniff"]],
   ["Referrer-Policy", ["strict-origin-when-cross-origin"]],
   ["Permissions-Policy", ["camera=()", "microphone=()", "geolocation=()"]],
@@ -24,8 +38,7 @@ const requiredHeaders = new Map([
 ]);
 
 const forbiddenHeaders = [
-  "Strict-Transport-Security",
-  "Content-Security-Policy",
+  "Content-Security-Policy-Report-Only",
   "X-XSS-Protection",
   "Public-Key-Pins",
   "Expect-CT",
@@ -64,6 +77,8 @@ function main() {
     ? JSON.parse(readFileSync(routesManifestPath, "utf8"))
     : {};
   const manifestHeaders = headerMapFromManifest(manifest);
+  const enforcedCspValue = manifestHeaders.get("Content-Security-Policy") ?? "";
+  const cspHasUnsafeInline = /'unsafe-inline'/i.test(enforcedCspValue);
 
   const checks = [
     addCheck(rows, "nextConfig.exists", existsSync(nextConfigPath), nextConfigPath),
@@ -99,27 +114,38 @@ function main() {
   checks.push(
     addCheck(
       rows,
-      "csp.reportOnlyNotEnforcing",
-      manifestHeaders.has("Content-Security-Policy-Report-Only") && !manifestHeaders.has("Content-Security-Policy"),
-      "CSP is report-only until final asset/connect domains are approved",
+      "csp.enforcingNotReportOnly",
+      manifestHeaders.has("Content-Security-Policy") && !manifestHeaders.has("Content-Security-Policy-Report-Only"),
+      "CSP is enforced for launch hardening while no publication/indexing unlock is granted",
     ),
   );
   checks.push(
     addCheck(
       rows,
-      "hsts.deferred",
-      !manifestHeaders.has("Strict-Transport-Security") && !nextConfigText.includes("Strict-Transport-Security"),
-      "HSTS deferred until final production HTTPS/domain posture is locked",
+      "csp.unsafeInlineTrackedOrRemoved",
+      !cspHasUnsafeInline ||
+        !/public seo unlocked|route publication approved|deployment approved|production approved/i.test(nextConfigText),
+      cspHasUnsafeInline
+        ? "unsafe-inline is present only as a tracked framework/JSON-LD compatibility blocker before nonce migration"
+        : "unsafe-inline is absent",
+    ),
+  );
+  checks.push(
+    addCheck(
+      rows,
+      "hsts.enforcedNoPreload",
+      manifestHeaders.has("Strict-Transport-Security") &&
+        nextConfigText.includes("Strict-Transport-Security") &&
+        !/preload/i.test(manifestHeaders.get("Strict-Transport-Security") ?? ""),
+      manifestHeaders.get("Strict-Transport-Security") || "missing",
     ),
   );
   checks.push(
     addCheck(
       rows,
       "deprecatedHeaders.absent",
-      forbiddenHeaders
-        .filter((header) => !["Content-Security-Policy", "Strict-Transport-Security"].includes(header))
-        .every((header) => !manifestHeaders.has(header) && !nextConfigText.includes(header)),
-      "deprecated HPKP/Expect-CT/X-XSS-Protection headers are absent",
+      forbiddenHeaders.every((header) => !manifestHeaders.has(header) && !nextConfigText.includes(header)),
+      "report-only CSP and deprecated HPKP/Expect-CT/X-XSS-Protection headers are absent",
     ),
   );
   checks.push(
@@ -134,8 +160,8 @@ function main() {
   );
 
   const verdict = checks.every(Boolean)
-    ? "PASS_SECURITY_HEADERS_FOUNDATION_NO_PUBLIC_UNLOCK"
-    : "FAIL_SECURITY_HEADERS_FOUNDATION_REVIEW_REQUIRED";
+    ? "PASS_SECURITY_HEADERS_HARDENING_NO_PUBLIC_UNLOCK"
+    : "FAIL_SECURITY_HEADERS_HARDENING_REVIEW_REQUIRED";
 
   mkdirSync(path.dirname(docsResultsPath), { recursive: true });
   writeFileSync(
@@ -160,9 +186,11 @@ function main() {
     indexabilityUnlocked: false,
     metadataUnlocked: false,
     schemaUnlocked: false,
-    hstsDeferredUntilFinalDomain: true,
+    hstsEnforcedNoPreload: true,
+    cspUnsafeInlinePresent: cspHasUnsafeInline,
+    cspNonceMigrationRequiredBeforePublicLaunch: cspHasUnsafeInline,
     guardrail:
-      "Step 10C verifies security header foundation only. It does not deploy, index, publish, approve routes, or unlock public SEO.",
+      "Step 10C verifies security header hardening only. unsafe-inline is tracked as a nonce/hash migration blocker when present. It does not deploy, index, publish, approve routes, or unlock public SEO.",
   };
 
   mkdirSync(workRoot, { recursive: true });
@@ -182,7 +210,7 @@ function main() {
       "",
       payload.guardrail,
       "",
-      "Final signal: `STEP_10C_SECURITY_HEADERS_FOUNDATION_COMPLETE_NO_PUBLIC_UNLOCK`",
+      "Final signal: `STEP_10C_SECURITY_HEADERS_HARDENING_COMPLETE_NO_PUBLIC_UNLOCK`",
     ].join("\n") + "\n",
   );
 

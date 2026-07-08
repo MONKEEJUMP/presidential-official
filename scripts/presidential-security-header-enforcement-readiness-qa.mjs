@@ -23,21 +23,21 @@ const workRoot = path.join(
 const statusJsonPath = path.join(workRoot, "step10h-security-header-enforcement-readiness-status.json");
 const statusMdPath = path.join(workRoot, "step10h-security-header-enforcement-readiness-status.md");
 
-const requiredReportOnlyFragments = [
+const requiredEnforcedCspFragments = [
   "default-src 'self'",
   "base-uri 'self'",
+  "script-src 'self'",
+  "style-src 'self'",
+  "connect-src 'self'",
+  "font-src 'self'",
+  "img-src 'self'",
   "object-src 'none'",
   "frame-ancestors 'none'",
   "form-action 'self'",
+  "upgrade-insecure-requests",
 ];
 
-const deferredEnforcementSignals = [
-  "Content-Security-Policy",
-  "Strict-Transport-Security",
-  "Reporting-Endpoints",
-  "Report-To",
-];
-
+const forbiddenHeaderSignals = ["Content-Security-Policy-Report-Only", "Reporting-Endpoints", "Report-To"];
 const deprecatedHeaders = ["X-XSS-Protection", "Public-Key-Pins", "Expect-CT"];
 
 const publicUnlockPattern =
@@ -96,8 +96,10 @@ function main() {
   const vercelJsonText = readText(vercelJsonPath);
   const manifest = readManifest();
   const headerValues = headerValuesFromRoutesManifest(manifest);
-  const reportOnlyValue = getHeaderValue(headerValues, "Content-Security-Policy-Report-Only");
+  const enforcedCspValue = getHeaderValue(headerValues, "Content-Security-Policy");
+  const hstsValue = getHeaderValue(headerValues, "Strict-Transport-Security");
   const combinedConfigText = [nextConfigText, vercelJsonText].join("\n");
+  const cspHasUnsafeInline = /'unsafe-inline'/i.test(enforcedCspValue);
 
   const checks = [
     addCheck(rows, "nextConfig.exists", existsSync(nextConfigPath), nextConfigPath),
@@ -110,27 +112,36 @@ function main() {
     ),
     addCheck(
       rows,
-      "csp.reportOnlyPresent",
-      hasHeader(headerValues, "Content-Security-Policy-Report-Only"),
-      reportOnlyValue || "missing",
+      "csp.enforcingPresent",
+      hasHeader(headerValues, "Content-Security-Policy"),
+      enforcedCspValue || "missing",
     ),
     addCheck(
       rows,
-      "csp.reportOnlyCoreDirectives",
-      requiredReportOnlyFragments.every((fragment) => reportOnlyValue.includes(fragment)),
-      reportOnlyValue || "missing",
+      "csp.enforcingCoreDirectives",
+      requiredEnforcedCspFragments.every((fragment) => enforcedCspValue.includes(fragment)),
+      enforcedCspValue || "missing",
     ),
     addCheck(
       rows,
-      "csp.enforcementDeferred",
-      !hasHeader(headerValues, "Content-Security-Policy") && !/\bContent-Security-Policy\b/.test(vercelJsonText),
-      "Enforcing CSP remains deferred until final assets, scripts, connect domains, and review are approved",
+      "csp.noReportOnlyFallback",
+      !hasHeader(headerValues, "Content-Security-Policy-Report-Only") &&
+        !/\bContent-Security-Policy-Report-Only\b/.test(combinedConfigText),
+      "CSP is enforced rather than report-only for launch hardening",
     ),
     addCheck(
       rows,
-      "csp.noUnsafeEvalOrInline",
-      !/unsafe-eval|unsafe-inline/i.test(reportOnlyValue),
-      "Report-only CSP does not add unsafe-eval or unsafe-inline",
+      "csp.noUnsafeEval",
+      !/unsafe-eval/i.test(enforcedCspValue),
+      "Enforced CSP does not add unsafe-eval; inline bootstrap remains framework-local until nonce migration is approved",
+    ),
+    addCheck(
+      rows,
+      "csp.unsafeInlineTrackedOrRemoved",
+      !cspHasUnsafeInline || !publicUnlockPattern.test([combinedConfigText, packageJsonText].join("\n")),
+      cspHasUnsafeInline
+        ? "unsafe-inline is present only as a tracked framework/JSON-LD compatibility blocker before nonce migration"
+        : "unsafe-inline is absent",
     ),
     addCheck(
       rows,
@@ -142,17 +153,23 @@ function main() {
     ),
     addCheck(
       rows,
-      "hsts.deferred",
-      !hasHeader(headerValues, "Strict-Transport-Security") &&
-        !/Strict-Transport-Security/i.test(combinedConfigText),
-      "HSTS remains deferred until final HTTPS custom-domain posture and redirect behavior are verified",
+      "hsts.enforced",
+      hasHeader(headerValues, "Strict-Transport-Security") &&
+        /max-age=31536000/i.test(hstsValue) &&
+        /includeSubDomains/.test(hstsValue),
+      hstsValue || "missing",
     ),
     addCheck(
       rows,
       "hsts.noPreload",
-      !/preload/i.test(getHeaderValue(headerValues, "Strict-Transport-Security")) &&
-        !/hstspreload|hsts preload/i.test(combinedConfigText),
+      !/preload/i.test(hstsValue) && !/hstspreload|hsts preload/i.test(combinedConfigText),
       "No HSTS preload posture exists before final domain approval",
+    ),
+    addCheck(
+      rows,
+      "forbiddenHeaderSignals.absent",
+      forbiddenHeaderSignals.every((header) => !hasHeader(headerValues, header) && !combinedConfigText.includes(header)),
+      "Report-only CSP and CSP reporting endpoints remain absent until an approved endpoint exists",
     ),
     addCheck(
       rows,
@@ -202,13 +219,13 @@ function main() {
     officialSourcePosture: {
       nextHeaders: "Next.js headers() in next.config can set response headers for matching paths.",
       cspReportOnly:
-        "CSP report-only is the correct pre-enforcement posture while assets, scripts, connect sources, and reporting endpoint are still being finalized.",
+        "CSP report-only is no longer the active posture for launch hardening; enforcing CSP is required while reporting endpoints stay unconfigured until approved.",
       hsts:
-        "HSTS is a browser-persistent HTTPS commitment and remains deferred until final HTTPS/custom-domain and redirect posture are verified.",
+        "HSTS is enforced without preload; preload remains blocked until final custom-domain approval.",
     },
     manifestHeaderKeys: [...headerValues.keys()],
-    reportOnlyCspFragments: requiredReportOnlyFragments,
-    deferredEnforcementSignals,
+    enforcedCspFragments: requiredEnforcedCspFragments,
+    forbiddenHeaderSignals,
     checks: Object.fromEntries(rows.map((row) => [row.check, row.status === "pass"])),
     publicSeoUnlocked: false,
     routePublicationApproved: false,
@@ -217,11 +234,13 @@ function main() {
     metadataUnlocked: false,
     schemaUnlocked: false,
     deploymentApproved: false,
-    hstsDeferredUntilFinalDomain: true,
-    enforcingCspDeferredUntilFinalAssetPolicy: true,
+    hstsEnforcedNoPreload: true,
+    enforcingCspEnabled: true,
+    cspUnsafeInlinePresent: cspHasUnsafeInline,
+    cspNonceMigrationRequiredBeforePublicLaunch: cspHasUnsafeInline,
     cspReportingEndpointDeferredUntilApprovedEndpoint: true,
     guardrail:
-      "Step 10H is security-header enforcement readiness only. It keeps enforcing CSP, CSP reporting endpoints, and HSTS blocked until final assets, services, domains, redirects, and launch approvals exist.",
+      "Step 10H is security-header enforcement readiness only. unsafe-inline is tracked as a nonce/hash migration blocker when present. It enforces CSP and HSTS without deploying, indexing, publishing, adding reporting endpoints, or expanding script/connect sources.",
   };
 
   mkdirSync(workRoot, { recursive: true });
