@@ -390,6 +390,48 @@ assertEqual(
   "A fully approved route publication context failed the gate.",
 );
 
+const missingSchemaRecordPublication = buildSyntheticRoutePublication({
+  routePublicationId: "gate-test-missing-schema-record",
+  schemaRecordIds: [],
+});
+
+assertEqual(
+  isRoutePublicationApprovedForSeo(
+    syntheticRegistryPromotion,
+    [missingSchemaRecordPublication],
+    approvedContext,
+  ),
+  false,
+  "A route publication without schema record evidence became approved.",
+);
+
+assert(
+  getRoutePublicationGateBlockReasons(
+    syntheticRegistryPromotion,
+    [missingSchemaRecordPublication],
+    approvedContext,
+  ).includes("source_record:schema_record:required"),
+  "Missing schema records did not produce the schema_record:required blocker.",
+);
+
+assertEqual(
+  isRoutePublicationApprovedForSeo(
+    syntheticRegistryPromotion,
+    [approvedPublication],
+    {
+      ...approvedContext,
+      schemaRecords: [
+        {
+          ...approvedContext.schemaRecords[0],
+          visibleContentMatch: false,
+        },
+      ],
+    },
+  ),
+  false,
+  "A schema record without visible-content match became approved.",
+);
+
 assert(
   getRoutePublicationGateBlockReasons(
     syntheticRegistryPromotion,

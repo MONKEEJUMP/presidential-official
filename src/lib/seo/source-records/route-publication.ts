@@ -103,6 +103,14 @@ export function getRoutePublicationGateBlockReasons(
     reasons.push(`source_record:schema:${record.schemaApprovalStatus}`);
   }
 
+  if (
+    record.schemaApprovalStatus === "approved" &&
+    route.schema.length > 0 &&
+    record.schemaRecordIds.length === 0
+  ) {
+    reasons.push("source_record:schema_record:required");
+  }
+
   if (record.contentApprovalStatus !== "approved") {
     reasons.push(`source_record:content:${record.contentApprovalStatus}`);
   }
