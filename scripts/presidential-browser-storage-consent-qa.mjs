@@ -17,6 +17,7 @@ const statusJsonPath = path.join(workRoot, "step10k-browser-storage-consent-read
 const statusMdPath = path.join(workRoot, "step10k-browser-storage-consent-readiness-status.md");
 
 const ageGatePath = path.join(webRoot, "src", "components", "age-gate.tsx");
+const layoutPath = path.join(webRoot, "src", "app", "layout.tsx");
 const approvedAgeGateFile = "web/src/components/age-gate.tsx";
 const approvedAgeGateStorageKey = "presidential_adult_confirmed";
 
@@ -150,6 +151,7 @@ function main() {
   const packageJsonText = readIfExists(packageJsonPath);
   const nextConfigText = readIfExists(nextConfigPath);
   const ageGateText = readIfExists(ageGatePath);
+  const layoutText = readIfExists(layoutPath);
   const sourceText = sourceFiles.map(readIfExists).join("\n");
   const builtText = builtFiles.map(readIfExists).join("\n");
   const combinedPublicText = [sourceText, builtText, packageJsonText, nextConfigText].join("\n");
@@ -183,6 +185,20 @@ function main() {
   const ageGateCanClearKey = ageGateText.includes("window.localStorage.removeItem(ADULT_CONFIRMATION_KEY)");
   const ageGateHasStorageTryCatch = /try\s*{[\s\S]*localStorage[\s\S]*}\s*catch\s*{/.test(ageGateText);
   const ageGateNoDob = !sensitiveAgePattern.test(ageGateText);
+  const ageGateIsOverlayController = /export\s+function\s+AgeGate\s*\(\s*\)/.test(ageGateText);
+  const layoutRendersChildrenInServerWrapper =
+    layoutText.includes('id="presidential-age-gated-content"') &&
+    layoutText.includes("{children}") &&
+    layoutText.includes("<AgeGate />");
+  const ageGateDisablesBackgroundUntilAccepted =
+    ageGateText.includes('getElementById(AGE_GATED_CONTENT_ID)') &&
+    ageGateText.includes('setAttribute("aria-hidden", "true")') &&
+    ageGateText.includes('setAttribute("inert", "")') &&
+    ageGateText.includes('removeAttribute("aria-hidden")') &&
+    ageGateText.includes('removeAttribute("inert")');
+  const ageGateLocksScroll =
+    ageGateText.includes("document.documentElement.style.overflow = \"hidden\"") &&
+    ageGateText.includes("document.body.style.overflow = \"hidden\"");
 
   const checks = [
     addCheck(rows, "builtOutput.exists", builtFiles.length > 0, `${builtFiles.length} built text file(s) scanned`),
@@ -197,6 +213,10 @@ function main() {
     addCheck(rows, "ageGate.canClearConfirmation", ageGateCanClearKey, "Age gate can clear the confirmation key on decline"),
     addCheck(rows, "ageGate.storageTryCatch", ageGateHasStorageTryCatch, "Age gate storage access is guarded for restricted browsing modes"),
     addCheck(rows, "ageGate.noDobOrSensitiveAgeData", ageGateNoDob, "Age gate does not collect DOB, birthdate, birthday, or date components"),
+    addCheck(rows, "ageGate.overlayControllerOnly", ageGateIsOverlayController, "Age gate controls overlay state without wrapping route children in a client component"),
+    addCheck(rows, "layout.rendersChildrenInServerWrapper", layoutRendersChildrenInServerWrapper, "Route children remain in the server layout DOM behind the adult confirmation overlay"),
+    addCheck(rows, "ageGate.disablesBackgroundUntilAccepted", ageGateDisablesBackgroundUntilAccepted, "Age gate marks background content inert and aria-hidden while active"),
+    addCheck(rows, "ageGate.scrollLockWhileActive", ageGateLocksScroll, "Age gate locks document and body scroll while active"),
     addCheck(rows, "package.noConsentOrCookieDeps", !hasPackageConsentDependency, "No cookie/consent/analytics helper dependency is installed"),
     addCheck(rows, "source.noConsentModeOrCmp", sourceConsentMatches.length === 0, sourceConsentMatches.length ? sourceConsentMatches.slice(0, 10).join(" | ") : "No consent mode, CMP, cookie banner, or Google consent API usage in public source"),
     addCheck(rows, "built.noConsentModeOrCmp", builtConsentMatches.length === 0, builtConsentMatches.length ? builtConsentMatches.slice(0, 10).join(" | ") : "No consent mode, CMP, or cookie banner usage in built output"),

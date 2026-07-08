@@ -2110,30 +2110,46 @@ function checkAgeGateFoundation() {
     );
   }
 
-  const layoutMountsGate =
+  const layoutMountsGateController =
     layoutText.includes('import { AgeGate } from "@/components/age-gate"') &&
     layoutText.includes("<AgeGate />");
-  const contentBeforeGate =
-    layoutText.indexOf("{children}") !== -1 &&
-    layoutText.indexOf("<AgeGate />") !== -1 &&
-    layoutText.indexOf("{children}") < layoutText.indexOf("<AgeGate />");
+  const childrenRenderedBehindOverlay =
+    layoutText.includes('id="presidential-age-gated-content"') &&
+    layoutText.includes("{children}") &&
+    !ageGateText.includes("return <>{children}</>;");
+  const backgroundDisabledWhileActive =
+    ageGateText.includes('getElementById(AGE_GATED_CONTENT_ID)') &&
+    ageGateText.includes('setAttribute("aria-hidden", "true")') &&
+    ageGateText.includes('setAttribute("inert", "")') &&
+    ageGateText.includes('removeAttribute("aria-hidden")') &&
+    ageGateText.includes('removeAttribute("inert")');
+  const scrollLockWhileActive =
+    ageGateText.includes("document.documentElement.style.overflow = \"hidden\"") &&
+    ageGateText.includes("document.body.style.overflow = \"hidden\"");
 
-  if (layoutMountsGate && contentBeforeGate) {
+  if (
+    layoutMountsGateController &&
+    childrenRenderedBehindOverlay &&
+    backgroundDisabledWhileActive &&
+    scrollLockWhileActive
+  ) {
     addResult(
       "PASS",
       "agegate.mounting",
-      "Age gate is mounted after page content so route content remains server-rendered and crawlable.",
+      "Age gate wraps route content, keeps page-specific HTML present, and disables the background while active.",
     );
   } else {
     addResult(
       "FAIL",
       "agegate.mounting",
-      "Age gate may replace or wrap page content instead of overlaying it.",
+      "Age gate may hide page-specific HTML from the initial route or fail to disable the background while active.",
       [
-        `layout imports/renders AgeGate: ${layoutMountsGate}`,
-        `children appear before AgeGate: ${contentBeforeGate}`,
+        `layout imports/renders AgeGate controller: ${layoutMountsGateController}`,
+        `children rendered behind overlay: ${childrenRenderedBehindOverlay}`,
+        `background disabled while active: ${backgroundDisabledWhileActive}`,
+        `scroll lock while active: ${scrollLockWhileActive}`,
       ],
-      "Render route children first and mount the AgeGate overlay after them in the root layout.",
+      "Wrap route children in the age gate, keep route HTML behind the overlay, mark it inert/aria-hidden while active, and lock background scroll.",
     );
   }
 

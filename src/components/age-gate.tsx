@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 
 const ADULT_CONFIRMATION_KEY = "presidential_adult_confirmed";
+const AGE_GATED_CONTENT_ID = "presidential-age-gated-content";
 
-type AgeGateStatus = "checking" | "accepted" | "blocked";
+type AgeGateStatus = "checking" | "pending" | "accepted" | "blocked";
 
 function readAdultConfirmation() {
   try {
@@ -34,6 +35,7 @@ function clearAdultConfirmation() {
 export function AgeGate() {
   const [status, setStatus] = useState<AgeGateStatus>("checking");
   const primaryActionRef = useRef<HTMLButtonElement>(null);
+  const isGateActive = status !== "accepted";
 
   useEffect(() => {
     const statusCheck = window.setTimeout(() => {
@@ -42,15 +44,41 @@ export function AgeGate() {
         return;
       }
 
+      setStatus("pending");
       primaryActionRef.current?.focus();
     }, 0);
 
     return () => window.clearTimeout(statusCheck);
   }, []);
 
-  if (status === "accepted") {
-    return null;
-  }
+  useEffect(() => {
+    const gatedContent = document.getElementById(AGE_GATED_CONTENT_ID);
+
+    if (gatedContent) {
+      if (isGateActive) {
+        gatedContent.setAttribute("aria-hidden", "true");
+        gatedContent.setAttribute("inert", "");
+      } else {
+        gatedContent.removeAttribute("aria-hidden");
+        gatedContent.removeAttribute("inert");
+      }
+    }
+
+    if (!isGateActive) {
+      return;
+    }
+
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    const previousBodyOverflow = document.body.style.overflow;
+
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.documentElement.style.overflow = previousHtmlOverflow;
+      document.body.style.overflow = previousBodyOverflow;
+    };
+  }, [isGateActive]);
 
   function acceptGate() {
     writeAdultConfirmation();
@@ -120,7 +148,10 @@ export function AgeGate() {
         </p>
 
         {status === "blocked" ? (
-          <p className="mt-4 border-l-4 border-zinc-300 bg-zinc-50 px-4 py-3 text-sm leading-6 text-zinc-700">
+          <p
+            aria-live="polite"
+            className="mt-4 border-l-4 border-zinc-300 bg-zinc-50 px-4 py-3 text-sm leading-6 text-zinc-700"
+          >
             Please exit this site and return only when you meet the adult access
             requirement.
           </p>

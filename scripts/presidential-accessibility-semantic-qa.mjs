@@ -13,6 +13,7 @@ const root = path.resolve(webRoot, "..");
 const builtAppRoot = path.join(webRoot, ".next", "server", "app");
 const appRoot = path.join(webRoot, "src", "app");
 const componentsRoot = path.join(webRoot, "src", "components");
+const seoRoot = path.join(webRoot, "src", "lib", "seo");
 const packageJsonPath = path.join(webRoot, "package.json");
 const resultsPath = path.join(
   root,
@@ -182,7 +183,7 @@ function collectSourceMatches(files, pattern) {
   return matches;
 }
 
-function checkRenderedRoute(route, rows, summaries) {
+function checkRenderedRoute(route, rows, summaries, sourceText) {
   const htmlPath = path.join(builtAppRoot, route.htmlPath);
   const html = readIfExists(htmlPath);
   const cleanHtml = stripScriptsAndStyles(html);
@@ -212,6 +213,9 @@ function checkRenderedRoute(route, rows, summaries) {
     .map((tag) => ({ alt: getAttribute(tag, "alt"), tag }))
     .filter((image) => !/\balt=/.test(image.tag) || image.alt.trim() === "");
   const headingLevelSkips = [];
+  const initialHtmlIsAgeGateOnly =
+    visibleText.includes("Adults 21+ where legal") && !visibleText.includes(route.expectedH1);
+  const initialHtmlWithholdsRouteContent = mainTags.length === 0 && h1Tags.length === 0;
 
   for (let index = 1; index < headingTags.length; index += 1) {
     const previous = headingTags[index - 1].level;
@@ -225,10 +229,36 @@ function checkRenderedRoute(route, rows, summaries) {
   addCheck(rows, `${route.label}.html.lang`, /\blang=["']en["']/i.test(htmlTag), htmlTag || "missing html tag");
   addCheck(rows, `${route.label}.viewport.exists`, /<meta\b[^>]*name=["']viewport["']/i.test(cleanHtml), "viewport meta exists");
   addCheck(rows, `${route.label}.title.exists`, titleTags.length >= 1, `${titleTags.length} title tag(s)`);
-  addCheck(rows, `${route.label}.main.exists`, mainTags.length >= 1, `${mainTags.length} main landmark(s)`);
-  addCheck(rows, `${route.label}.h1.single`, h1Tags.length === 1, `${h1Tags.length} h1 tag(s): ${h1Tags.map(getTagText).join(" | ")}`);
-  addCheck(rows, `${route.label}.h1.expected`, h1Tags.some((tag) => getTagText(tag).includes(route.expectedH1)), route.expectedH1);
-  addCheck(rows, `${route.label}.headings.nonEmpty`, headingTags.length > 0 && headingTags.every((heading) => heading.text.length > 0), headingTags.map((heading) => `h${heading.level}:${heading.text}`).join(" | "));
+  addCheck(
+    rows,
+    `${route.label}.main.exists`,
+    mainTags.length >= 1,
+    mainTags.length >= 1
+      ? `${mainTags.length} main landmark(s)`
+      : "route HTML must include its normal main landmark behind the age-gate overlay",
+  );
+  addCheck(
+    rows,
+    `${route.label}.h1.single`,
+    h1Tags.length === 1,
+    h1Tags.length === 1
+      ? `${h1Tags.length} h1 tag(s): ${h1Tags.map(getTagText).join(" | ")}`
+      : "route HTML must include exactly one page h1 behind the age-gate overlay",
+  );
+  addCheck(
+    rows,
+    `${route.label}.h1.expected`,
+    h1Tags.some((tag) => getTagText(tag).includes(route.expectedH1)),
+    route.expectedH1,
+  );
+  addCheck(
+    rows,
+    `${route.label}.headings.nonEmpty`,
+    headingTags.length > 0 && headingTags.every((heading) => heading.text.length > 0),
+    headingTags.length
+      ? headingTags.map((heading) => `h${heading.level}:${heading.text}`).join(" | ")
+      : "route HTML must include non-empty headings behind the age-gate overlay",
+  );
   addCheck(rows, `${route.label}.headings.noLevelSkips`, headingLevelSkips.length === 0, headingLevelSkips.join(" | ") || "No heading level skips");
   addCheck(rows, `${route.label}.aria.referencesResolve`, missingAriaRefs.length === 0, missingAriaRefs.join(" | ") || "All aria-labelledby/aria-describedby references resolve");
   addCheck(rows, `${route.label}.ids.unique`, duplicateIdList.length === 0, duplicateIdList.join(" | ") || "No duplicate IDs");
@@ -250,20 +280,26 @@ function checkRenderedRoute(route, rows, summaries) {
     buttonCount: buttonTags.length,
     imageCount: imgTags.length,
     visibleTextLength: visibleText.length,
+    initialHtmlIsAgeGateOnly,
+    initialHtmlWithholdsRouteContent,
   });
 }
 
 function main() {
   const rows = [];
   const summaries = [];
-  const sourceFiles = [...walkTextFiles(appRoot), ...walkTextFiles(componentsRoot)];
+  const sourceFiles = [
+    ...walkTextFiles(appRoot),
+    ...walkTextFiles(componentsRoot),
+    ...walkTextFiles(seoRoot),
+  ];
   const sourceText = sourceFiles.map(readIfExists).join("\n");
   const packageJson = readIfExists(packageJsonPath);
   const roleButtonOrLinkMatches = collectSourceMatches(sourceFiles, roleButtonOrLinkPattern);
   const positiveTabIndexMatches = collectSourceMatches(sourceFiles, positiveTabIndexPattern);
   const autoFocusMatches = collectSourceMatches(sourceFiles, autoFocusPattern);
 
-  renderedRoutes.forEach((route) => checkRenderedRoute(route, rows, summaries));
+  renderedRoutes.forEach((route) => checkRenderedRoute(route, rows, summaries, sourceText));
 
   addCheck(rows, "source.noRoleButtonOrLink", roleButtonOrLinkMatches.length === 0, roleButtonOrLinkMatches.slice(0, 8).join(" | ") || "Semantic HTML is used instead of role=button/link");
   addCheck(rows, "source.noPositiveTabIndex", positiveTabIndexMatches.length === 0, positiveTabIndexMatches.slice(0, 8).join(" | ") || "No positive tabIndex in app/components source");
