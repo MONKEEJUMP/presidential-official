@@ -41,7 +41,7 @@ export function MediaSlot({
     .join(" ");
   const backgroundStyle = backgroundImagePath
     ? ({
-        backgroundImage: `linear-gradient(180deg, rgb(9 9 11 / 0.16), rgb(9 9 11 / 0.72)), url("${backgroundImagePath}")`,
+        backgroundImage: `linear-gradient(180deg, color-mix(in srgb, var(--po-color-ink) 16%, transparent), color-mix(in srgb, var(--po-color-ink) 72%, transparent)), url("${backgroundImagePath}")`,
         backgroundPosition,
       } satisfies CSSProperties)
     : undefined;

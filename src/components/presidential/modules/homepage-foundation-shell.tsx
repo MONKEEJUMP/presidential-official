@@ -62,7 +62,7 @@ function HeroStage() {
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage:
-            "linear-gradient(135deg, rgb(2 44 34 / 0.9), rgb(9 9 11 / 0.58)), url('/brand/banner-palms-teal.webp')",
+            "linear-gradient(135deg, color-mix(in srgb, var(--po-color-brand-strong) 90%, transparent), color-mix(in srgb, var(--po-color-ink) 58%, transparent)), url('/brand/banner-palms-teal.webp')",
         }}
       />
       <div className="po-hero-stage-gradient absolute inset-0" />
