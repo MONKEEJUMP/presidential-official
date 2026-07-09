@@ -1,11 +1,17 @@
 import { existsSync, readFileSync } from "node:fs";
+import { spawn } from "node:child_process";
+import { createServer } from "node:net";
 import { join } from "node:path";
 
 const projectRoot = process.cwd();
 const productionOrigin = "https://presidentialmoonrocks.com";
+const nextBin = join(projectRoot, "node_modules", "next", "dist", "bin", "next");
+const runtimeHost = "127.0.0.1";
+const runtimeBasePort = Number(process.env.PRESIDENTIAL_RENDERED_HOME_QA_PORT || "3348");
 
 const paths = {
   homeHtml: join(projectRoot, ".next", "server", "app", "index.html"),
+  homeDynamicArtifact: join(projectRoot, ".next", "server", "app", "page.js"),
   sitemapBody: join(projectRoot, ".next", "server", "app", "sitemap.xml.body"),
   robotsBody: join(projectRoot, ".next", "server", "app", "robots.txt.body"),
 };
@@ -29,6 +35,95 @@ function readRequired(path, label) {
 
   pass(`${label}.exists`, path);
   return readFileSync(path, "utf8");
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function findOpenPort(startPort) {
+  return new Promise((resolve, reject) => {
+    const server = createServer();
+
+    server.once("error", (error) => {
+      if (error.code === "EADDRINUSE" || error.code === "EACCES") {
+        server.close(() => {
+          findOpenPort(startPort + 1).then(resolve, reject);
+        });
+        return;
+      }
+
+      reject(error);
+    });
+
+    server.listen(startPort, runtimeHost, () => {
+      const address = server.address();
+      const port = typeof address === "object" && address ? address.port : startPort;
+      server.close(() => resolve(port));
+    });
+  });
+}
+
+async function waitForRuntimeServer(baseUrl) {
+  let lastError;
+
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    try {
+      const response = await fetch(`${baseUrl}/`);
+      const html = await response.text();
+      if (response.ok && html.trim()) {
+        return html;
+      }
+    } catch (error) {
+      lastError = error;
+    }
+
+    await sleep(400);
+  }
+
+  throw lastError || new Error("Next runtime server did not become ready.");
+}
+
+async function readHomeHtml() {
+  if (existsSync(paths.homeHtml)) {
+    pass("homeHtml.exists", paths.homeHtml);
+    return readFileSync(paths.homeHtml, "utf8");
+  }
+
+  if (!existsSync(paths.homeDynamicArtifact)) {
+    fail("homeHtml.exists", `Missing ${paths.homeHtml} and ${paths.homeDynamicArtifact}. Run npm run build before this QA script.`);
+    return "";
+  }
+
+  const port = await findOpenPort(runtimeBasePort);
+  const baseUrl = `http://${runtimeHost}:${port}`;
+  const server = spawn(process.execPath, [nextBin, "start", "-H", runtimeHost, "-p", String(port)], {
+    cwd: projectRoot,
+    env: {
+      ...process.env,
+      PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED: "false",
+      PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED: "false",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  server.stdout.resume();
+  server.stderr.resume();
+
+  try {
+    const html = await waitForRuntimeServer(baseUrl);
+    pass("homeHtml.exists", `${paths.homeDynamicArtifact} rendered from ${baseUrl}/`);
+    return html;
+  } finally {
+    if (!server.killed) {
+      server.kill();
+    }
+    await sleep(250);
+  }
 }
 
 function decodeHtml(text) {
@@ -115,7 +210,8 @@ function checkNoMatches(check, text, patterns) {
   fail(check, hits.join("; "));
 }
 
-const homeHtml = readRequired(paths.homeHtml, "homeHtml");
+async function main() {
+const homeHtml = await readHomeHtml();
 const sitemapBody = readRequired(paths.sitemapBody, "sitemap");
 const robotsBody = readRequired(paths.robotsBody, "robots");
 
@@ -288,3 +384,9 @@ console.log(JSON.stringify(summary, null, 2));
 if (failures.length > 0) {
   process.exit(1);
 }
+}
+
+main().catch((error) => {
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exit(1);
+});

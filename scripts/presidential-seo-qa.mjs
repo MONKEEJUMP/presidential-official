@@ -2060,6 +2060,7 @@ function checkRouteShellSchemaFoundation() {
 
 function checkAgeGateFoundation() {
   const ageGatePath = "src/components/age-gate.tsx";
+  const ageGateActionPath = "src/app/age-gate-actions.ts";
   const layoutPath = "src/app/layout.tsx";
 
   if (!projectFileExists(ageGatePath)) {
@@ -2074,6 +2075,9 @@ function checkAgeGateFoundation() {
   }
 
   const ageGateText = readProjectFile(ageGatePath);
+  const ageGateActionText = projectFileExists(ageGateActionPath)
+    ? readProjectFile(ageGateActionPath)
+    : "";
   const layoutText = readProjectFile(layoutPath);
 
   const clientComponent =
@@ -2127,7 +2131,7 @@ function checkAgeGateFoundation() {
 
   const layoutMountsGateController =
     layoutText.includes('import { AgeGate } from "@/components/age-gate"') &&
-    layoutText.includes("<AgeGate />");
+    layoutText.includes("<AgeGate initialConfirmed={adultConfirmed} />");
   const childrenRenderedBehindOverlay =
     layoutText.includes('id="presidential-age-gated-content"') &&
     layoutText.includes("{children}") &&
@@ -2249,13 +2253,18 @@ function checkAgeGateFoundation() {
   const confirmationOnly =
     ageGateText.includes("localStorage") &&
     ageGateText.includes("presidential_adult_confirmed") &&
-    !ageGateText.includes("document.cookie");
+    !ageGateText.includes("document.cookie") &&
+    ageGateActionText.includes("cookies()") &&
+    ageGateActionText.includes("ADULT_CONFIRMATION_COOKIE") &&
+    ageGateActionText.includes("httpOnly: true") &&
+    ageGateActionText.includes('sameSite: "lax"') &&
+    !/\b(dateOfBirth|birthdate|birth date|dob)\b/i.test(ageGateActionText);
 
   if (confirmationOnly) {
     addResult(
       "PASS",
       "agegate.confirmationOnly",
-      "Age gate stores only an adult-confirmation flag and does not use cookies.",
+      "Age gate stores only an adult-confirmation flag through localStorage fallback and a scoped server cookie.",
     );
   } else {
     addResult(
@@ -2265,9 +2274,12 @@ function checkAgeGateFoundation() {
       [
         `localStorage used: ${ageGateText.includes("localStorage")}`,
         `adult confirmation key present: ${ageGateText.includes("presidential_adult_confirmed")}`,
-        `cookie used: ${ageGateText.includes("document.cookie")}`,
+        `document.cookie absent: ${!ageGateText.includes("document.cookie")}`,
+        `server cookie action present: ${ageGateActionText.includes("cookies()")}`,
+        `server cookie is httpOnly: ${ageGateActionText.includes("httpOnly: true")}`,
+        `server cookie sameSite lax: ${ageGateActionText.includes('sameSite: "lax"')}`,
       ],
-      "Keep Step 8E to a non-sensitive adult-confirmation flag.",
+      "Keep age-gate persistence to a non-sensitive adult-confirmation flag only.",
     );
   }
 

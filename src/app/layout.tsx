@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { cookies } from "next/headers";
+import { ADULT_CONFIRMATION_COOKIE } from "@/app/age-gate-constants";
 import { AgeGate } from "@/components/age-gate";
 import { METADATA_BASE } from "@/lib/seo/metadata";
 import "./globals.css";
@@ -28,11 +30,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const adultConfirmed =
+    (await cookies()).get(ADULT_CONFIRMATION_COOKIE)?.value === "true";
+
   return (
     <html
       lang="en"
@@ -46,7 +51,7 @@ export default function RootLayout({
         >
           {children}
         </div>
-        <AgeGate />
+        <AgeGate initialConfirmed={adultConfirmed} />
       </body>
     </html>
   );

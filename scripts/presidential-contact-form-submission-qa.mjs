@@ -171,6 +171,7 @@ function main() {
     (file) => !rel(file).includes("web/.next/server/app/_global-error"),
   );
   const directCommercePolicyFiles = new Set(["web/src/lib/seo/metadata-helpers.ts"]);
+  const approvedNonContactServerActionFiles = new Set(["web/src/app/age-gate-actions.ts"]);
   const packageJsonText = readIfExists(packageJsonPath);
   const sourceText = sourceFiles.map(readIfExists).join("\n");
   const builtText = builtFiles.map(readIfExists).join("\n");
@@ -184,7 +185,9 @@ function main() {
   const builtFieldMatches = collectMatches(builtFiles, formFieldPattern);
   const sourceSubmissionMatches = collectMatches(sourceFiles, formSubmissionPattern);
   const builtSubmissionMatches = collectMatches(builtFiles, formSubmissionPattern);
-  const sourceServerActionMatches = collectMatches(sourceFiles, serverActionPattern);
+  const sourceServerActionMatches = collectMatches(sourceFiles, serverActionPattern, {
+    skipFiles: approvedNonContactServerActionFiles,
+  });
   const sourceMailTelMatches = collectMatches(sourceFiles, mailTelPattern);
   const builtMailTelMatches = collectMatches(builtFiles, mailTelPattern);
   const sourcePiiFieldMatches = collectMatches(sourceFiles, piiFieldPattern);

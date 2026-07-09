@@ -6,6 +6,8 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
+import { spawn } from "node:child_process";
+import { createServer } from "node:net";
 import path from "node:path";
 
 const webRoot = process.cwd();
@@ -13,7 +15,10 @@ const root = path.resolve(webRoot, "..");
 const nextRoot = path.join(webRoot, ".next");
 const builtAppRoot = path.join(nextRoot, "server", "app");
 const staticRoot = path.join(nextRoot, "static");
+const nextBin = path.join(webRoot, "node_modules", "next", "dist", "bin", "next");
 const packageJsonPath = path.join(webRoot, "package.json");
+const runtimeHost = "127.0.0.1";
+const runtimeBasePort = Number(process.env.PRESIDENTIAL_PERFORMANCE_QA_PORT || "3347");
 const docsResultsPath = path.join(
   root,
   "docs",
@@ -25,7 +30,7 @@ const statusJsonPath = path.join(workRoot, "step10p-rendered-performance-budget-
 const statusMdPath = path.join(workRoot, "step10p-rendered-performance-budget-status.md");
 
 const routeOutputs = [
-  { label: "home", route: "/", htmlPath: "index.html", htmlBudgetBytes: 90000, rscPath: "index.rsc", rscBudgetBytes: 45000 },
+  { label: "home", route: "/", htmlPath: "index.html", dynamicArtifactPath: "page.js", htmlBudgetBytes: 90000, rscPath: "index.rsc", rscBudgetBytes: 45000 },
   { label: "moonRocks", route: "/moon-rocks", htmlPath: "moon-rocks.html", htmlBudgetBytes: 50000, rscPath: "moon-rocks.rsc", rscBudgetBytes: 30000 },
   { label: "moonPods", route: "/moon-pods", htmlPath: "moon-pods.html", htmlBudgetBytes: 50000, rscPath: "moon-pods.rsc", rscBudgetBytes: 30000 },
   { label: "orbit", route: "/orbit", htmlPath: "orbit.html", htmlBudgetBytes: 50000, rscPath: "orbit.rsc", rscBudgetBytes: 30000 },
@@ -33,9 +38,22 @@ const routeOutputs = [
   { label: "learn", route: "/learn", htmlPath: "learn.html", htmlBudgetBytes: 55000, rscPath: "learn.rsc", rscBudgetBytes: 30000 },
   { label: "findUs", route: "/find-us", htmlPath: "find-us.html", htmlBudgetBytes: 55000, rscPath: "find-us.rsc", rscBudgetBytes: 30000 },
   { label: "contact", route: "/contact", htmlPath: "contact.html", htmlBudgetBytes: 55000, rscPath: "contact.rsc", rscBudgetBytes: 30000 },
-  { label: "notFound", route: "/_not-found", htmlPath: "_not-found.html", htmlBudgetBytes: 30000, rscPath: "_not-found.rsc", rscBudgetBytes: 20000 },
-  { label: "globalError", route: "/_global-error", htmlPath: "_global-error.html", htmlBudgetBytes: 25000, rscPath: "_global-error.rsc", rscBudgetBytes: 15000 },
+  {
+    label: "notFound",
+    route: "/presidential-performance-not-found-probe",
+    htmlPath: "_not-found.html",
+    dynamicArtifactPath: "_not-found/page.js",
+    htmlBudgetBytes: 30000,
+    rscPath: "_not-found.rsc",
+    rscBudgetBytes: 20000,
+    allowNotOk: true,
+  },
+  { label: "globalError", route: "/_global-error", htmlPath: "_global-error.html", htmlBudgetBytes: 25000, rscPath: "_global-error.rsc", rscBudgetBytes: 15000, staticOnly: true },
 ];
+
+for (const route of routeOutputs) {
+  route.dynamicArtifactPath ??= `${route.route.replace(/^\/+/, "")}/page.js`;
+}
 
 const budgets = {
   aggregateRouteHtmlBytes: 500000,
@@ -110,6 +128,104 @@ function addCheck(rows, check, passed, details, actual = "", budget = "") {
   return passed;
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function findOpenPort(startPort) {
+  return new Promise((resolve, reject) => {
+    const server = createServer();
+
+    server.once("error", (error) => {
+      if (error.code === "EADDRINUSE" || error.code === "EACCES") {
+        server.close(() => {
+          findOpenPort(startPort + 1).then(resolve, reject);
+        });
+        return;
+      }
+
+      reject(error);
+    });
+
+    server.listen(startPort, runtimeHost, () => {
+      const address = server.address();
+      const port = typeof address === "object" && address ? address.port : startPort;
+      server.close(() => resolve(port));
+    });
+  });
+}
+
+async function fetchRuntimeHtml(baseUrl, route) {
+  const response = await fetch(`${baseUrl}${route.route}`);
+  const html = await response.text();
+
+  if (!response.ok && !route.allowNotOk) {
+    throw new Error(`${route.route} returned ${response.status}`);
+  }
+
+  if (!html.trim()) {
+    throw new Error(`${route.route} returned empty HTML`);
+  }
+
+  return {
+    html,
+    status: response.status,
+    ok: response.ok,
+  };
+}
+
+async function waitForRuntimeServer(baseUrl) {
+  let lastError;
+
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    try {
+      const response = await fetch(`${baseUrl}/contact`);
+      await response.text();
+      if (response.ok) {
+        return;
+      }
+    } catch (error) {
+      lastError = error;
+    }
+
+    await sleep(400);
+  }
+
+  throw lastError || new Error("Next runtime server did not become ready.");
+}
+
+async function withRuntimeServer(callback) {
+  const port = await findOpenPort(runtimeBasePort);
+  const baseUrl = `http://${runtimeHost}:${port}`;
+  const server = spawn(process.execPath, [nextBin, "start", "-H", runtimeHost, "-p", String(port)], {
+    cwd: webRoot,
+    env: {
+      ...process.env,
+      PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED: "false",
+      PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED: "false",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  server.stdout.resume();
+  server.stderr.resume();
+
+  try {
+    await waitForRuntimeServer(baseUrl);
+    return await callback(baseUrl);
+  } finally {
+    if (!server.killed) {
+      server.kill();
+    }
+
+    await sleep(250);
+  }
+}
+
 function groupStaticFiles(files) {
   const groups = {
     js: [],
@@ -173,7 +289,7 @@ function scanBuiltText(files) {
   return matches;
 }
 
-function main() {
+async function main() {
   const rows = [];
   const routeSummaries = [];
   const staticFiles = walkFiles(staticRoot);
@@ -186,29 +302,47 @@ function main() {
   addCheck(rows, "build.appOutput.exists", existsSync(builtAppRoot), rel(builtAppRoot));
   addCheck(rows, "build.staticOutput.exists", existsSync(staticRoot), rel(staticRoot));
 
+  const runtimeHtmlByRoute = new Map();
+  await withRuntimeServer(async (baseUrl) => {
+    for (const route of routeOutputs.filter((entry) => !entry.staticOnly)) {
+      runtimeHtmlByRoute.set(route.label, await fetchRuntimeHtml(baseUrl, route));
+    }
+  });
+
   for (const route of routeOutputs) {
     const htmlPath = path.join(builtAppRoot, route.htmlPath);
     const rscPath = path.join(builtAppRoot, route.rscPath);
-    const htmlBytes = sizeOf(htmlPath);
-    const rscBytes = sizeOf(rscPath);
-    const html = readIfExists(htmlPath);
+    const dynamicArtifactPath = path.join(builtAppRoot, route.dynamicArtifactPath);
+    const staticHtmlExists = existsSync(htmlPath);
+    const staticRscExists = existsSync(rscPath);
+    const dynamicArtifactExists = existsSync(dynamicArtifactPath);
+    const rendered = runtimeHtmlByRoute.get(route.label);
+    const html = staticHtmlExists ? readIfExists(htmlPath) : (rendered?.html ?? "");
+    const htmlBytes = staticHtmlExists ? sizeOf(htmlPath) : Buffer.byteLength(html, "utf8");
+    const rscBytes = staticRscExists ? sizeOf(rscPath) : sizeOf(dynamicArtifactPath);
+    const htmlDetails = staticHtmlExists
+      ? rel(htmlPath)
+      : `${rel(dynamicArtifactPath)} rendered at ${route.route} with status ${rendered?.status ?? "missing"}`;
+    const rscDetails = staticRscExists ? rel(rscPath) : rel(dynamicArtifactPath);
 
     routeHtmlBytes.push(htmlBytes);
     routeRscBytes.push(rscBytes);
     routeSummaries.push({
       route: route.route,
-      htmlPath: rel(htmlPath),
+      htmlPath: staticHtmlExists ? rel(htmlPath) : rel(dynamicArtifactPath),
       htmlBytes,
       htmlBudgetBytes: route.htmlBudgetBytes,
-      rscPath: rel(rscPath),
+      runtimeStatus: rendered?.status ?? null,
+      runtimeOk: rendered?.ok ?? null,
+      rscPath: staticRscExists ? rel(rscPath) : rel(dynamicArtifactPath),
       rscBytes,
       rscBudgetBytes: route.rscBudgetBytes,
     });
 
-    addCheck(rows, `${route.label}.html.exists`, existsSync(htmlPath), rel(htmlPath), htmlBytes, "required");
-    addCheck(rows, `${route.label}.html.withinBudget`, htmlBytes > 0 && htmlBytes <= route.htmlBudgetBytes, rel(htmlPath), htmlBytes, route.htmlBudgetBytes);
-    addCheck(rows, `${route.label}.rsc.exists`, existsSync(rscPath), rel(rscPath), rscBytes, "required");
-    addCheck(rows, `${route.label}.rsc.withinBudget`, rscBytes > 0 && rscBytes <= route.rscBudgetBytes, rel(rscPath), rscBytes, route.rscBudgetBytes);
+    addCheck(rows, `${route.label}.html.exists`, htmlBytes > 0 && (staticHtmlExists || dynamicArtifactExists), htmlDetails, htmlBytes, "required");
+    addCheck(rows, `${route.label}.html.withinBudget`, htmlBytes > 0 && htmlBytes <= route.htmlBudgetBytes, htmlDetails, htmlBytes, route.htmlBudgetBytes);
+    addCheck(rows, `${route.label}.rscOrDynamicArtifact.exists`, rscBytes > 0 && (staticRscExists || dynamicArtifactExists), rscDetails, rscBytes, "required");
+    addCheck(rows, `${route.label}.rscOrDynamicArtifact.withinBudget`, rscBytes > 0 && rscBytes <= route.rscBudgetBytes, rscDetails, rscBytes, route.rscBudgetBytes);
     addCheck(rows, `${route.label}.html.noPublicUnlockSignals`, !publicUnlockPattern.test(html), "no public-unlock wording", htmlBytes, "no hits");
     addCheck(rows, `${route.label}.html.noNonProductionHostLeakage`, !nonProductionHostPattern.test(html), "no preview/Wix/local/alternate host leakage", htmlBytes, "no hits");
   }
@@ -326,4 +460,7 @@ function main() {
   console.log(`Checks passed: ${passCount}/${rows.length}`);
 }
 
-main();
+main().catch((error) => {
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exit(1);
+});

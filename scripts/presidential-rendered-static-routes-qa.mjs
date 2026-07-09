@@ -1,11 +1,16 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { spawn } from "node:child_process";
+import { createServer } from "node:net";
 import { join } from "node:path";
 
 const projectRoot = process.cwd();
 const productionOrigin = "https://presidentialmoonrocks.com";
+const nextBin = join(projectRoot, "node_modules", "next", "dist", "bin", "next");
+const runtimeHost = "127.0.0.1";
+const runtimeBasePort = Number(process.env.PRESIDENTIAL_RENDERED_STATIC_QA_PORT || "3349");
 
 const staticRoutes = [
-  { path: "/", label: "home", htmlPath: "index.html" },
+  { path: "/", label: "home", htmlPath: "index.html", dynamicArtifactPath: "page.js" },
   { path: "/moon-rocks", label: "moonRocks", htmlPath: "moon-rocks.html" },
   { path: "/moon-pods", label: "moonPods", htmlPath: "moon-pods.html" },
   { path: "/orbit", label: "orbit", htmlPath: "orbit.html" },
@@ -14,6 +19,10 @@ const staticRoutes = [
   { path: "/find-us", label: "findUs", htmlPath: "find-us.html" },
   { path: "/contact", label: "contact", htmlPath: "contact.html" },
 ];
+
+for (const route of staticRoutes) {
+  route.dynamicArtifactPath ??= `${route.path.replace(/^\/+/, "")}/page.js`;
+}
 
 const paths = {
   appOutputRoot: join(projectRoot, ".next", "server", "app"),
@@ -95,6 +104,99 @@ function readRequired(path, label) {
 
   pass(`${label}.exists`, path);
   return readFileSync(path, "utf8");
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function findOpenPort(startPort) {
+  return new Promise((resolve, reject) => {
+    const server = createServer();
+
+    server.once("error", (error) => {
+      if (error.code === "EADDRINUSE" || error.code === "EACCES") {
+        server.close(() => {
+          findOpenPort(startPort + 1).then(resolve, reject);
+        });
+        return;
+      }
+
+      reject(error);
+    });
+
+    server.listen(startPort, runtimeHost, () => {
+      const address = server.address();
+      const port = typeof address === "object" && address ? address.port : startPort;
+      server.close(() => resolve(port));
+    });
+  });
+}
+
+async function fetchRuntimeHtml(baseUrl, route) {
+  const response = await fetch(`${baseUrl}${route.path}`);
+  const html = await response.text();
+
+  if (!response.ok) {
+    throw new Error(`${route.path} returned ${response.status}`);
+  }
+
+  if (!html.trim()) {
+    throw new Error(`${route.path} returned empty HTML`);
+  }
+
+  return html;
+}
+
+async function waitForRuntimeServer(baseUrl) {
+  let lastError;
+
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    try {
+      const response = await fetch(`${baseUrl}/contact`);
+      const html = await response.text();
+      if (response.ok && html.trim()) {
+        return;
+      }
+    } catch (error) {
+      lastError = error;
+    }
+
+    await sleep(400);
+  }
+
+  throw lastError || new Error("Next runtime server did not become ready.");
+}
+
+async function withRuntimeServer(callback) {
+  const port = await findOpenPort(runtimeBasePort);
+  const baseUrl = `http://${runtimeHost}:${port}`;
+  const server = spawn(process.execPath, [nextBin, "start", "-H", runtimeHost, "-p", String(port)], {
+    cwd: projectRoot,
+    env: {
+      ...process.env,
+      PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED: "false",
+      PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED: "false",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  server.stdout.resume();
+  server.stderr.resume();
+
+  try {
+    await waitForRuntimeServer(baseUrl);
+    return await callback(baseUrl);
+  } finally {
+    if (!server.killed) {
+      server.kill();
+    }
+    await sleep(250);
+  }
 }
 
 function decodeHtml(text) {
@@ -323,25 +425,38 @@ function checkRenderedOutputInventory() {
     (entry) => entry.endsWith(".html"),
   );
   const unexpected = htmlOutputs.filter((file) => !allowedHtmlOutputs.has(file));
-  const missing = Array.from(allowedHtmlOutputs).filter(
-    (file) => !htmlOutputs.includes(file),
-  );
+  const routeArtifactMissing = staticRoutes.filter((route) => {
+    const htmlPath = join(paths.appOutputRoot, route.htmlPath);
+    const dynamicArtifactPath = join(paths.appOutputRoot, route.dynamicArtifactPath);
+    return !existsSync(htmlPath) && !existsSync(dynamicArtifactPath);
+  });
+  const notFoundMissing =
+    !existsSync(join(paths.appOutputRoot, "_not-found.html")) &&
+    !existsSync(join(paths.appOutputRoot, "_not-found", "page.js"));
 
-  if (unexpected.length === 0 && missing.length === 0) {
-    pass("routeInventory.expectedHtmlOutputsOnly", `${htmlOutputs.length} expected HTML output file(s) found`);
+  if (unexpected.length === 0 && routeArtifactMissing.length === 0 && !notFoundMissing) {
+    pass("routeInventory.expectedRenderedOutputsOnly", `${htmlOutputs.length} static HTML output(s); dynamic route artifacts accepted`);
   } else {
     fail(
-      "routeInventory.expectedHtmlOutputsOnly",
-      `unexpected=${unexpected.join("|") || "none"}; missing=${missing.join("|") || "none"}`,
+      "routeInventory.expectedRenderedOutputsOnly",
+      `unexpected=${unexpected.join("|") || "none"}; missingRoutes=${routeArtifactMissing.map((route) => route.path).join("|") || "none"}; missingNotFound=${notFoundMissing}`,
     );
   }
 }
 
-function checkRouteHtml(route) {
-  const routeHtml = readRequired(
-    join(paths.appOutputRoot, route.htmlPath),
-    `${route.label}.html`,
-  );
+function checkRouteHtml(route, runtimeHtmlByPath) {
+  const htmlPath = join(paths.appOutputRoot, route.htmlPath);
+  const dynamicArtifactPath = join(paths.appOutputRoot, route.dynamicArtifactPath);
+  const staticHtmlExists = existsSync(htmlPath);
+  const routeHtml = staticHtmlExists
+    ? readRequired(htmlPath, `${route.label}.html`)
+    : (runtimeHtmlByPath.get(route.path) ?? "");
+
+  if (!staticHtmlExists && routeHtml && existsSync(dynamicArtifactPath)) {
+    pass(`${route.label}.html.exists`, `${dynamicArtifactPath} rendered at ${route.path}`);
+  } else if (!staticHtmlExists && !routeHtml) {
+    fail(`${route.label}.html.exists`, `Missing ${htmlPath} and runtime HTML for ${route.path}`);
+  }
 
   if (!routeHtml) {
     return;
@@ -670,9 +785,18 @@ function checkRouteHtml(route) {
   });
 }
 
+async function main() {
 checkSourceRouteInventory();
 checkRenderedOutputInventory();
-staticRoutes.forEach(checkRouteHtml);
+
+const runtimeHtmlByPath = new Map();
+await withRuntimeServer(async (baseUrl) => {
+  for (const route of staticRoutes.filter((entry) => !existsSync(join(paths.appOutputRoot, entry.htmlPath)))) {
+    runtimeHtmlByPath.set(route.path, await fetchRuntimeHtml(baseUrl, route));
+  }
+});
+
+staticRoutes.forEach((route) => checkRouteHtml(route, runtimeHtmlByPath));
 
 const sitemapBody = readRequired(paths.sitemapBody, "sitemap");
 const robotsBody = readRequired(paths.robotsBody, "robots");
@@ -718,3 +842,9 @@ console.log(JSON.stringify(summary, null, 2));
 if (failures.length > 0) {
   process.exit(1);
 }
+}
+
+main().catch((error) => {
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exit(1);
+});

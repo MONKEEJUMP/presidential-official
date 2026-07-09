@@ -6,7 +6,9 @@ import {
   rmSync,
   writeFileSync,
 } from "node:fs";
+import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
+import { createServer } from "node:net";
 import os from "node:os";
 import path from "node:path";
 import ts from "typescript";
@@ -15,6 +17,9 @@ const webRoot = process.cwd();
 const root = path.resolve(webRoot, "..");
 const sourceRoot = path.join(webRoot, "src", "lib", "seo");
 const builtAppRoot = path.join(webRoot, ".next", "server", "app");
+const nextBin = path.join(webRoot, "node_modules", "next", "dist", "bin", "next");
+const runtimeHost = "127.0.0.1";
+const runtimeBasePort = Number(process.env.PRESIDENTIAL_PUBLICATION_INVARIANT_QA_PORT || "3358");
 const outDir = path.join(os.tmpdir(), "presidential-route-publication-invariant-qa");
 const packageJsonPath = path.join(webRoot, "package.json");
 const routePublicationSourcePath = path.join(
@@ -67,14 +72,14 @@ const statusMdPath = path.join(
 
 const productionOrigin = "https://presidentialmoonrocks.com";
 const publicRoutes = [
-  { route: "/", file: "index.html" },
-  { route: "/moon-rocks", file: "moon-rocks.html" },
-  { route: "/moon-pods", file: "moon-pods.html" },
-  { route: "/orbit", file: "orbit.html" },
-  { route: "/our-story", file: "our-story.html" },
-  { route: "/learn", file: "learn.html" },
-  { route: "/find-us", file: "find-us.html" },
-  { route: "/contact", file: "contact.html" },
+  { route: "/", file: "index.html", dynamicFile: "page.js" },
+  { route: "/moon-rocks", file: "moon-rocks.html", dynamicFile: "moon-rocks/page.js" },
+  { route: "/moon-pods", file: "moon-pods.html", dynamicFile: "moon-pods/page.js" },
+  { route: "/orbit", file: "orbit.html", dynamicFile: "orbit/page.js" },
+  { route: "/our-story", file: "our-story.html", dynamicFile: "our-story/page.js" },
+  { route: "/learn", file: "learn.html", dynamicFile: "learn/page.js" },
+  { route: "/find-us", file: "find-us.html", dynamicFile: "find-us/page.js" },
+  { route: "/contact", file: "contact.html", dynamicFile: "contact/page.js" },
 ];
 
 const forbiddenUnlockPattern =
@@ -117,6 +122,132 @@ function readRequired(filePath, scope, check) {
 
   pass(scope, check, filePath);
   return readFileSync(filePath, "utf8");
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function findOpenPort(startPort) {
+  return new Promise((resolve, reject) => {
+    const server = createServer();
+
+    server.once("error", (error) => {
+      if (error.code === "EADDRINUSE" || error.code === "EACCES") {
+        server.close(() => {
+          findOpenPort(startPort + 1).then(resolve, reject);
+        });
+        return;
+      }
+
+      reject(error);
+    });
+
+    server.listen(startPort, runtimeHost, () => {
+      const address = server.address();
+      const port = typeof address === "object" && address ? address.port : startPort;
+      server.close(() => resolve(port));
+    });
+  });
+}
+
+async function waitForRuntimeServer(baseUrl) {
+  let lastError;
+
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    try {
+      const response = await fetch(`${baseUrl}/contact`);
+      const html = await response.text();
+      if (response.ok && html.trim()) {
+        return;
+      }
+    } catch (error) {
+      lastError = error;
+    }
+
+    await sleep(400);
+  }
+
+  throw lastError || new Error("Next runtime server did not become ready.");
+}
+
+async function withRuntimeServer(callback) {
+  const port = await findOpenPort(runtimeBasePort);
+  const baseUrl = `http://${runtimeHost}:${port}`;
+  const server = spawn(process.execPath, [nextBin, "start", "-H", runtimeHost, "-p", String(port)], {
+    cwd: webRoot,
+    env: {
+      ...process.env,
+      PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED: "false",
+      PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED: "false",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  server.stdout.resume();
+  server.stderr.resume();
+
+  try {
+    await waitForRuntimeServer(baseUrl);
+    return await callback(baseUrl);
+  } finally {
+    if (!server.killed) {
+      server.kill();
+    }
+    await sleep(250);
+  }
+}
+
+async function readRenderedRouteHtml(routeConfig, baseUrl) {
+  const scope = `rendered:${routeConfig.route}`;
+  const staticPath = path.join(builtAppRoot, routeConfig.file);
+  if (existsSync(staticPath)) {
+    pass(scope, "html.exists", staticPath);
+    return readFileSync(staticPath, "utf8");
+  }
+
+  const dynamicPath = path.join(builtAppRoot, routeConfig.dynamicFile);
+  if (!existsSync(dynamicPath)) {
+    fail(scope, "html.exists", `Missing ${staticPath} and ${dynamicPath}. Run npm run build first.`);
+    return "";
+  }
+
+  if (!baseUrl) {
+    fail(
+      scope,
+      "html.exists",
+      `Dynamic route ${routeConfig.route} requires runtime HTML, but runtime server was not started.`,
+    );
+    return "";
+  }
+
+  const response = await fetch(`${baseUrl}${routeConfig.route}`);
+  const html = await response.text();
+
+  if (!response.ok) {
+    fail(scope, "html.exists", `${routeConfig.route} returned ${response.status}`);
+    return "";
+  }
+
+  if (!html.trim()) {
+    fail(scope, "html.exists", `${routeConfig.route} returned empty HTML`);
+    return "";
+  }
+
+  pass(scope, "html.exists", `${dynamicPath} rendered from ${baseUrl}${routeConfig.route}`);
+  return html;
+}
+
+function renderedRoutesNeedRuntime() {
+  return publicRoutes.some((routeConfig) => {
+    const staticPath = path.join(builtAppRoot, routeConfig.file);
+    const dynamicPath = path.join(builtAppRoot, routeConfig.dynamicFile);
+    return !existsSync(staticPath) && existsSync(dynamicPath);
+  });
 }
 
 function collectTypeScriptFiles(directory) {
@@ -516,10 +647,11 @@ function checkRuntimeInvariants() {
   );
 }
 
-function checkRenderedPublicRoutes() {
-  for (const { route, file } of publicRoutes) {
+async function checkRenderedPublicRoutes(baseUrl) {
+  for (const routeConfig of publicRoutes) {
+    const { route } = routeConfig;
     const scope = `rendered:${route}`;
-    const html = readRequired(path.join(builtAppRoot, file), scope, "html.exists");
+    const html = await readRenderedRouteHtml(routeConfig, baseUrl);
     if (!html) {
       continue;
     }
@@ -655,76 +787,92 @@ function checkRenderedSitemapRobots() {
   }
 }
 
-checkSourceContracts();
-checkRuntimeInvariants();
-checkRenderedPublicRoutes();
-checkRenderedSitemapRobots();
+function writeStatusAndExit() {
+  const failCount = rows.filter((row) => row.status === "fail").length;
+  const warnCount = rows.filter((row) => row.status === "warn").length;
+  const passCount = rows.filter((row) => row.status === "pass").length;
+  const verdict =
+    failCount === 0
+      ? "PASS_ROUTE_PUBLICATION_INVARIANT_NO_PUBLIC_UNLOCK"
+      : "FAIL_ROUTE_PUBLICATION_INVARIANT_REVIEW_REQUIRED";
 
-const failCount = rows.filter((row) => row.status === "fail").length;
-const warnCount = rows.filter((row) => row.status === "warn").length;
-const passCount = rows.filter((row) => row.status === "pass").length;
-const verdict =
-  failCount === 0
-    ? "PASS_ROUTE_PUBLICATION_INVARIANT_NO_PUBLIC_UNLOCK"
-    : "FAIL_ROUTE_PUBLICATION_INVARIANT_REVIEW_REQUIRED";
+  mkdirSync(path.dirname(resultsPath), { recursive: true });
+  mkdirSync(workRoot, { recursive: true });
 
-mkdirSync(path.dirname(resultsPath), { recursive: true });
-mkdirSync(workRoot, { recursive: true });
-
-writeFileSync(
-  resultsPath,
-  [
-    "scope,check,status,details,public_unlock",
-    ...rows.map((row) =>
-      [row.scope, row.check, row.status, row.details, row.publicUnlock]
-        .map(csvEscape)
-        .join(","),
-    ),
-  ].join("\n") + "\n",
-);
-
-const payload = {
-  step: "10V",
-  verdict,
-  pass_count: passCount,
-  warning_count: warnCount,
-  failure_count: failCount,
-  rendered_route_summaries: summaries,
-  policy: {
-    invariant:
-      "With APPROVED_ROUTE_PUBLICATIONS empty, route registry promotion alone must not unlock robots indexability, sitemap eligibility, JSON-LD, Open Graph, Twitter metadata, rendered public route publication, or public SEO.",
-    no_public_unlock: true,
-  },
-  rows,
-};
-
-writeFileSync(statusJsonPath, JSON.stringify(payload, null, 2) + "\n");
-writeFileSync(
-  statusMdPath,
-  [
-    "# Step 10V Route Publication Invariant QA Status",
-    "",
-    `Verdict: ${verdict}`,
-    "",
-    `Pass: ${passCount}`,
-    `Warn: ${warnCount}`,
-    `Fail: ${failCount}`,
-    "",
-    "Invariant: with approved route-publication records empty, route registry promotion alone cannot unlock robots indexability, sitemap eligibility, JSON-LD, Open Graph, Twitter metadata, rendered public route publication, or public SEO.",
-    "",
-    "No public SEO unlock, route publication, sitemap inclusion, indexability promotion, metadata approval, schema promotion, Open Graph/Twitter promotion, deployment, provider connection, migration apply, client import, product page, locator page, or public asset unlock occurred.",
-    "",
-  ].join("\n"),
-);
-
-console.log(verdict);
-console.log(`Checks passed: ${passCount}; warnings: ${warnCount}; failures: ${failCount}`);
-if (failCount > 0) {
-  console.error(
-    rows
-      .filter((row) => row.status === "fail")
-      .map((row) => `${row.scope} ${row.check}: ${row.details}`)
-      .join("\n"),
+  writeFileSync(
+    resultsPath,
+    [
+      "scope,check,status,details,public_unlock",
+      ...rows.map((row) =>
+        [row.scope, row.check, row.status, row.details, row.publicUnlock]
+          .map(csvEscape)
+          .join(","),
+      ),
+    ].join("\n") + "\n",
   );
-  process.exit(1);
+
+  const payload = {
+    step: "10V",
+    verdict,
+    pass_count: passCount,
+    warning_count: warnCount,
+    failure_count: failCount,
+    rendered_route_summaries: summaries,
+    policy: {
+      invariant:
+        "With APPROVED_ROUTE_PUBLICATIONS empty, route registry promotion alone must not unlock robots indexability, sitemap eligibility, JSON-LD, Open Graph, Twitter metadata, rendered public route publication, or public SEO.",
+      no_public_unlock: true,
+    },
+    rows,
+  };
+
+  writeFileSync(statusJsonPath, JSON.stringify(payload, null, 2) + "\n");
+  writeFileSync(
+    statusMdPath,
+    [
+      "# Step 10V Route Publication Invariant QA Status",
+      "",
+      `Verdict: ${verdict}`,
+      "",
+      `Pass: ${passCount}`,
+      `Warn: ${warnCount}`,
+      `Fail: ${failCount}`,
+      "",
+      "Invariant: with approved route-publication records empty, route registry promotion alone cannot unlock robots indexability, sitemap eligibility, JSON-LD, Open Graph, Twitter metadata, rendered public route publication, or public SEO.",
+      "",
+      "No public SEO unlock, route publication, sitemap inclusion, indexability promotion, metadata approval, schema promotion, Open Graph/Twitter promotion, deployment, provider connection, migration apply, client import, product page, locator page, or public asset unlock occurred.",
+      "",
+    ].join("\n"),
+  );
+
+  console.log(verdict);
+  console.log(`Checks passed: ${passCount}; warnings: ${warnCount}; failures: ${failCount}`);
+  if (failCount > 0) {
+    console.error(
+      rows
+        .filter((row) => row.status === "fail")
+        .map((row) => `${row.scope} ${row.check}: ${row.details}`)
+        .join("\n"),
+    );
+    process.exit(1);
+  }
 }
+
+async function main() {
+  checkSourceContracts();
+  checkRuntimeInvariants();
+
+  if (renderedRoutesNeedRuntime()) {
+    await withRuntimeServer(checkRenderedPublicRoutes);
+  } else {
+    await checkRenderedPublicRoutes();
+  }
+
+  checkRenderedSitemapRobots();
+  writeStatusAndExit();
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

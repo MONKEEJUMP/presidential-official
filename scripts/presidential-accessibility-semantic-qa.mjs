@@ -6,15 +6,20 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
+import { spawn } from "node:child_process";
+import { createServer } from "node:net";
 import path from "node:path";
 
 const webRoot = process.cwd();
 const root = path.resolve(webRoot, "..");
 const builtAppRoot = path.join(webRoot, ".next", "server", "app");
+const nextBin = path.join(webRoot, "node_modules", "next", "dist", "bin", "next");
 const appRoot = path.join(webRoot, "src", "app");
 const componentsRoot = path.join(webRoot, "src", "components");
 const seoRoot = path.join(webRoot, "src", "lib", "seo");
 const packageJsonPath = path.join(webRoot, "package.json");
+const runtimeHost = "127.0.0.1";
+const runtimeBasePort = Number(process.env.PRESIDENTIAL_ACCESSIBILITY_QA_PORT || "3346");
 const resultsPath = path.join(
   root,
   "docs",
@@ -26,7 +31,7 @@ const statusJsonPath = path.join(workRoot, "step10o-accessibility-semantic-readi
 const statusMdPath = path.join(workRoot, "step10o-accessibility-semantic-readiness-status.md");
 
 const renderedRoutes = [
-  { path: "/", label: "home", htmlPath: "index.html", expectedH1: "Official Presidential Cannabis" },
+  { path: "/", label: "home", htmlPath: "index.html", dynamicArtifactPath: "page.js", expectedH1: "Official Presidential Cannabis" },
   { path: "/moon-rocks", label: "moonRocks", htmlPath: "moon-rocks.html", expectedH1: "Presidential Moon Rocks" },
   { path: "/moon-pods", label: "moonPods", htmlPath: "moon-pods.html", expectedH1: "Presidential Moon Pods" },
   { path: "/orbit", label: "orbit", htmlPath: "orbit.html", expectedH1: "Presidential Orbit" },
@@ -34,8 +39,19 @@ const renderedRoutes = [
   { path: "/learn", label: "learn", htmlPath: "learn.html", expectedH1: "Learn Presidential" },
   { path: "/find-us", label: "findUs", htmlPath: "find-us.html", expectedH1: "Find Presidential Near You" },
   { path: "/contact", label: "contact", htmlPath: "contact.html", expectedH1: "Contact Presidential" },
-  { path: "/_not-found", label: "notFound", htmlPath: "_not-found.html", expectedH1: "Page not found" },
+  {
+    path: "/presidential-accessibility-not-found-probe",
+    label: "notFound",
+    htmlPath: "_not-found.html",
+    dynamicArtifactPath: "_not-found/page.js",
+    expectedH1: "Page not found",
+    allowNotOk: true,
+  },
 ];
+
+for (const route of renderedRoutes) {
+  route.dynamicArtifactPath ??= `${route.path.replace(/^\/+/, "")}/page.js`;
+}
 
 const textExtensions = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs"]);
 const publicUnlockPattern =
@@ -169,6 +185,104 @@ function addCheck(rows, check, passed, details) {
   return passed;
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function findOpenPort(startPort) {
+  return new Promise((resolve, reject) => {
+    const server = createServer();
+
+    server.once("error", (error) => {
+      if (error.code === "EADDRINUSE" || error.code === "EACCES") {
+        server.close(() => {
+          findOpenPort(startPort + 1).then(resolve, reject);
+        });
+        return;
+      }
+
+      reject(error);
+    });
+
+    server.listen(startPort, runtimeHost, () => {
+      const address = server.address();
+      const port = typeof address === "object" && address ? address.port : startPort;
+      server.close(() => resolve(port));
+    });
+  });
+}
+
+async function fetchRuntimeHtml(baseUrl, route) {
+  const response = await fetch(`${baseUrl}${route.path}`);
+  const html = await response.text();
+
+  if (!response.ok && !route.allowNotOk) {
+    throw new Error(`${route.path} returned ${response.status}`);
+  }
+
+  if (!html.trim()) {
+    throw new Error(`${route.path} returned empty HTML`);
+  }
+
+  return {
+    html,
+    status: response.status,
+    ok: response.ok,
+  };
+}
+
+async function waitForRuntimeServer(baseUrl) {
+  let lastError;
+
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    try {
+      const response = await fetch(`${baseUrl}/contact`);
+      await response.text();
+      if (response.ok) {
+        return;
+      }
+    } catch (error) {
+      lastError = error;
+    }
+
+    await sleep(400);
+  }
+
+  throw lastError || new Error("Next runtime server did not become ready.");
+}
+
+async function withRuntimeServer(callback) {
+  const port = await findOpenPort(runtimeBasePort);
+  const baseUrl = `http://${runtimeHost}:${port}`;
+  const server = spawn(process.execPath, [nextBin, "start", "-H", runtimeHost, "-p", String(port)], {
+    cwd: webRoot,
+    env: {
+      ...process.env,
+      PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED: "false",
+      PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED: "false",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  server.stdout.resume();
+  server.stderr.resume();
+
+  try {
+    await waitForRuntimeServer(baseUrl);
+    return await callback(baseUrl);
+  } finally {
+    if (!server.killed) {
+      server.kill();
+    }
+
+    await sleep(250);
+  }
+}
+
 function collectSourceMatches(files, pattern) {
   const matches = [];
   for (const file of files) {
@@ -183,9 +297,12 @@ function collectSourceMatches(files, pattern) {
   return matches;
 }
 
-function checkRenderedRoute(route, rows, summaries) {
+function checkRenderedRoute(route, rendered, rows, summaries) {
   const htmlPath = path.join(builtAppRoot, route.htmlPath);
-  const html = readIfExists(htmlPath);
+  const dynamicArtifactPath = path.join(builtAppRoot, route.dynamicArtifactPath);
+  const staticArtifactExists = existsSync(htmlPath);
+  const dynamicArtifactExists = existsSync(dynamicArtifactPath);
+  const html = rendered.html;
   const cleanHtml = stripScriptsAndStyles(html);
   const visibleText = visibleTextFromHtml(html);
   const ids = getIds(cleanHtml);
@@ -227,7 +344,14 @@ function checkRenderedRoute(route, rows, summaries) {
     }
   }
 
-  addCheck(rows, `${route.label}.html.exists`, existsSync(htmlPath), rel(htmlPath));
+  addCheck(
+    rows,
+    `${route.label}.html.exists`,
+    html.trim().length > 0 && (staticArtifactExists || dynamicArtifactExists),
+    staticArtifactExists
+      ? `${rel(htmlPath)} rendered at ${route.path} with status ${rendered.status}`
+      : `${rel(dynamicArtifactPath)} rendered at ${route.path} with status ${rendered.status}`,
+  );
   addCheck(rows, `${route.label}.html.lang`, /\blang=["']en["']/i.test(htmlTag), htmlTag || "missing html tag");
   addCheck(rows, `${route.label}.viewport.exists`, /<meta\b[^>]*name=["']viewport["']/i.test(cleanHtml), "viewport meta exists");
   addCheck(rows, `${route.label}.title.exists`, titleTags.length >= 1, `${titleTags.length} title tag(s)`);
@@ -283,7 +407,9 @@ function checkRenderedRoute(route, rows, summaries) {
 
   summaries.push({
     route: route.path,
-    htmlPath: rel(htmlPath),
+    htmlPath: staticArtifactExists ? rel(htmlPath) : rel(dynamicArtifactPath),
+    runtimeStatus: rendered.status,
+    runtimeOk: rendered.ok,
     mainCount: mainTags.length,
     h1Count: h1Tags.length,
     headingCount: headingTags.length,
@@ -296,7 +422,7 @@ function checkRenderedRoute(route, rows, summaries) {
   });
 }
 
-function main() {
+async function main() {
   const rows = [];
   const summaries = [];
   const sourceFiles = [
@@ -313,7 +439,12 @@ function main() {
   const positiveTabIndexMatches = collectSourceMatches(sourceFiles, positiveTabIndexPattern);
   const autoFocusMatches = collectSourceMatches(sourceFiles, autoFocusPattern);
 
-  renderedRoutes.forEach((route) => checkRenderedRoute(route, rows, summaries));
+  await withRuntimeServer(async (baseUrl) => {
+    for (const route of renderedRoutes) {
+      const rendered = await fetchRuntimeHtml(baseUrl, route);
+      checkRenderedRoute(route, rendered, rows, summaries);
+    }
+  });
 
   addCheck(rows, "source.noRoleButtonOrLink", roleButtonOrLinkMatches.length === 0, roleButtonOrLinkMatches.slice(0, 8).join(" | ") || "Semantic HTML is used instead of role=button/link");
   addCheck(rows, "source.noPositiveTabIndex", positiveTabIndexMatches.length === 0, positiveTabIndexMatches.slice(0, 8).join(" | ") || "No positive tabIndex in app/components source");
@@ -393,4 +524,7 @@ function main() {
   }
 }
 
-main();
+main().catch((error) => {
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exit(1);
+});

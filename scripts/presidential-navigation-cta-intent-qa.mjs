@@ -4,12 +4,17 @@ import {
   readFileSync,
   writeFileSync,
 } from "node:fs";
+import { spawn } from "node:child_process";
+import { createServer } from "node:net";
 import path from "node:path";
 
 const webRoot = process.cwd();
 const root = path.resolve(webRoot, "..");
 const builtAppRoot = path.join(webRoot, ".next", "server", "app");
 const packageJsonPath = path.join(webRoot, "package.json");
+const nextBin = path.join(webRoot, "node_modules", "next", "dist", "bin", "next");
+const runtimeHost = "127.0.0.1";
+const runtimeBasePort = Number(process.env.PRESIDENTIAL_LINK_INTENT_QA_PORT || "3353");
 const ctaLinkSourcePath = path.join(
   webRoot,
   "src",
@@ -75,7 +80,7 @@ const statusMdPath = path.join(
 const productionOrigin = "https://presidentialmoonrocks.com";
 
 const publicRoutes = [
-  { route: "/", label: "home", file: "index.html" },
+  { route: "/", label: "home", file: "index.html", dynamicArtifactPath: "page.js" },
   { route: "/moon-rocks", label: "moonRocks", file: "moon-rocks.html" },
   { route: "/moon-pods", label: "moonPods", file: "moon-pods.html" },
   { route: "/orbit", label: "orbit", file: "orbit.html" },
@@ -86,8 +91,18 @@ const publicRoutes = [
 ];
 
 const fallbackRoutes = [
-  { route: "/_not-found", label: "notFound", file: "_not-found.html" },
+  {
+    route: "/presidential-link-intent-not-found-probe",
+    label: "notFound",
+    file: "_not-found.html",
+    dynamicArtifactPath: "_not-found/page.js",
+    allowNotOk: true,
+  },
 ];
+
+for (const route of [...publicRoutes, ...fallbackRoutes]) {
+  route.dynamicArtifactPath ??= `${route.route.replace(/^\/+/, "")}/page.js`;
+}
 
 const mandatoryStaticPaths = publicRoutes.map((route) => route.route);
 const allowedInternalHrefs = new Set(mandatoryStaticPaths);
@@ -189,6 +204,116 @@ function readRequired(filePath, scope, check) {
 
   pass(scope, check, filePath);
   return readFileSync(filePath, "utf8");
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function findOpenPort(startPort) {
+  return new Promise((resolve, reject) => {
+    const server = createServer();
+
+    server.once("error", (error) => {
+      if (error.code === "EADDRINUSE" || error.code === "EACCES") {
+        server.close(() => {
+          findOpenPort(startPort + 1).then(resolve, reject);
+        });
+        return;
+      }
+
+      reject(error);
+    });
+
+    server.listen(startPort, runtimeHost, () => {
+      const address = server.address();
+      const port = typeof address === "object" && address ? address.port : startPort;
+      server.close(() => resolve(port));
+    });
+  });
+}
+
+async function fetchRuntimeHtml(baseUrl, route) {
+  const response = await fetch(`${baseUrl}${route.route}`);
+  const html = await response.text();
+
+  if (!response.ok && !route.allowNotOk) {
+    throw new Error(`${route.route} returned ${response.status}`);
+  }
+
+  if (!html.trim()) {
+    throw new Error(`${route.route} returned empty HTML`);
+  }
+
+  return html;
+}
+
+async function waitForRuntimeServer(baseUrl) {
+  let lastError;
+
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    try {
+      const response = await fetch(`${baseUrl}/contact`);
+      const html = await response.text();
+      if (response.ok && html.trim()) {
+        return;
+      }
+    } catch (error) {
+      lastError = error;
+    }
+
+    await sleep(400);
+  }
+
+  throw lastError || new Error("Next runtime server did not become ready.");
+}
+
+async function withRuntimeServer(callback) {
+  const port = await findOpenPort(runtimeBasePort);
+  const baseUrl = `http://${runtimeHost}:${port}`;
+  const server = spawn(process.execPath, [nextBin, "start", "-H", runtimeHost, "-p", String(port)], {
+    cwd: webRoot,
+    env: {
+      ...process.env,
+      PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED: "false",
+      PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED: "false",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  server.stdout.resume();
+  server.stderr.resume();
+
+  try {
+    await waitForRuntimeServer(baseUrl);
+    return await callback(baseUrl);
+  } finally {
+    if (!server.killed) {
+      server.kill();
+    }
+    await sleep(250);
+  }
+}
+
+function readRenderedHtml(routeConfig, scope, runtimeHtmlByLabel) {
+  const filePath = path.join(builtAppRoot, routeConfig.file);
+  if (existsSync(filePath)) {
+    return readRequired(filePath, scope, "html.exists");
+  }
+
+  const dynamicArtifactPath = path.join(builtAppRoot, routeConfig.dynamicArtifactPath);
+  const html = runtimeHtmlByLabel.get(routeConfig.label) ?? "";
+  if (html && existsSync(dynamicArtifactPath)) {
+    pass(scope, "html.exists", `${dynamicArtifactPath} rendered at ${routeConfig.route}`);
+    return html;
+  }
+
+  fail(scope, "html.exists", `Missing ${filePath} and runtime HTML for ${routeConfig.route}. Run npm run build first.`);
+  return "";
 }
 
 function decodeHtml(value) {
@@ -321,9 +446,10 @@ function checkAnchor(routePath, index, tag) {
   return { rawHref, href, label };
 }
 
-function checkRoute({ route, file }) {
+function checkRoute(routeConfig, runtimeHtmlByLabel) {
+  const { route } = routeConfig;
   const scope = `public:${route}`;
-  const html = readRequired(path.join(builtAppRoot, file), scope, "html.exists");
+  const html = readRenderedHtml(routeConfig, scope, runtimeHtmlByLabel);
 
   if (!html) {
     return;
@@ -412,9 +538,10 @@ function checkRoute({ route, file }) {
   });
 }
 
-function checkFallbackRoute({ route, file }) {
+function checkFallbackRoute(routeConfig, runtimeHtmlByLabel) {
+  const { route } = routeConfig;
   const scope = `fallback:${route}`;
-  const html = readRequired(path.join(builtAppRoot, file), scope, "html.exists");
+  const html = readRenderedHtml(routeConfig, scope, runtimeHtmlByLabel);
 
   if (!html) {
     return;
@@ -555,8 +682,24 @@ function checkSitemapAndRobots() {
   }
 }
 
-publicRoutes.forEach(checkRoute);
-fallbackRoutes.forEach(checkFallbackRoute);
+async function main() {
+const runtimeHtmlByLabel = new Map();
+const dynamicRoutes = [...publicRoutes, ...fallbackRoutes].filter((routeConfig) => {
+  const filePath = path.join(builtAppRoot, routeConfig.file);
+  const dynamicArtifactPath = path.join(builtAppRoot, routeConfig.dynamicArtifactPath);
+  return !existsSync(filePath) && existsSync(dynamicArtifactPath);
+});
+
+if (dynamicRoutes.length > 0) {
+  await withRuntimeServer(async (baseUrl) => {
+    for (const routeConfig of dynamicRoutes) {
+      runtimeHtmlByLabel.set(routeConfig.label, await fetchRuntimeHtml(baseUrl, routeConfig));
+    }
+  });
+}
+
+publicRoutes.forEach((routeConfig) => checkRoute(routeConfig, runtimeHtmlByLabel));
+fallbackRoutes.forEach((routeConfig) => checkFallbackRoute(routeConfig, runtimeHtmlByLabel));
 checkSourceContracts();
 checkSitemapAndRobots();
 
@@ -625,3 +768,9 @@ console.log(`${finalVerdict}: ${passCount} pass / ${warnings.length} warn / ${fa
 if (failures.length > 0 || publicUnlockRows.length > 0) {
   process.exit(1);
 }
+}
+
+main().catch((error) => {
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exit(1);
+});

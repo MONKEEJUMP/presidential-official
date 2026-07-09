@@ -4,11 +4,18 @@ import {
   readFileSync,
   writeFileSync,
 } from "node:fs";
+import { spawn } from "node:child_process";
+import { createServer } from "node:net";
 import path from "node:path";
 
 const webRoot = process.cwd();
 const root = path.resolve(webRoot, "..");
 const builtAppRoot = path.join(webRoot, ".next", "server", "app");
+const nextBin = path.join(webRoot, "node_modules", "next", "dist", "bin", "next");
+const runtimeHost = "127.0.0.1";
+const runtimeBasePort = Number(
+  process.env.PRESIDENTIAL_RENDERED_STRUCTURED_DATA_QA_PORT || "3357",
+);
 const packageJsonPath = path.join(webRoot, "package.json");
 const routesSourcePath = path.join(webRoot, "src", "lib", "seo", "routes.ts");
 const routeShellSourcePath = path.join(
@@ -75,14 +82,14 @@ const statusMdPath = path.join(
 const productionOrigin = "https://presidentialmoonrocks.com";
 
 const publicRoutes = [
-  { route: "/", label: "home", file: "index.html" },
-  { route: "/moon-rocks", label: "moonRocks", file: "moon-rocks.html" },
-  { route: "/moon-pods", label: "moonPods", file: "moon-pods.html" },
-  { route: "/orbit", label: "orbit", file: "orbit.html" },
-  { route: "/our-story", label: "ourStory", file: "our-story.html" },
-  { route: "/learn", label: "learn", file: "learn.html" },
-  { route: "/find-us", label: "findUs", file: "find-us.html" },
-  { route: "/contact", label: "contact", file: "contact.html" },
+  { route: "/", label: "home", file: "index.html", dynamicFile: "page.js" },
+  { route: "/moon-rocks", label: "moonRocks", file: "moon-rocks.html", dynamicFile: "moon-rocks/page.js" },
+  { route: "/moon-pods", label: "moonPods", file: "moon-pods.html", dynamicFile: "moon-pods/page.js" },
+  { route: "/orbit", label: "orbit", file: "orbit.html", dynamicFile: "orbit/page.js" },
+  { route: "/our-story", label: "ourStory", file: "our-story.html", dynamicFile: "our-story/page.js" },
+  { route: "/learn", label: "learn", file: "learn.html", dynamicFile: "learn/page.js" },
+  { route: "/find-us", label: "findUs", file: "find-us.html", dynamicFile: "find-us/page.js" },
+  { route: "/contact", label: "contact", file: "contact.html", dynamicFile: "contact/page.js" },
 ];
 
 const blockedSchemaKeys = new Set([
@@ -175,6 +182,135 @@ function readRequired(filePath, scope, check) {
 
 function readOptional(filePath) {
   return existsSync(filePath) ? readFileSync(filePath, "utf8") : "";
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function findOpenPort(startPort) {
+  return new Promise((resolve, reject) => {
+    const server = createServer();
+
+    server.once("error", (error) => {
+      if (error.code === "EADDRINUSE" || error.code === "EACCES") {
+        server.close(() => {
+          findOpenPort(startPort + 1).then(resolve, reject);
+        });
+        return;
+      }
+
+      reject(error);
+    });
+
+    server.listen(startPort, runtimeHost, () => {
+      const address = server.address();
+      const port = typeof address === "object" && address ? address.port : startPort;
+      server.close(() => resolve(port));
+    });
+  });
+}
+
+async function waitForRuntimeServer(baseUrl) {
+  let lastError;
+
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    try {
+      const response = await fetch(`${baseUrl}/contact`);
+      const html = await response.text();
+      if (response.ok && html.trim()) {
+        return;
+      }
+    } catch (error) {
+      lastError = error;
+    }
+
+    await sleep(400);
+  }
+
+  throw lastError || new Error("Next runtime server did not become ready.");
+}
+
+async function withRuntimeServer(callback) {
+  const port = await findOpenPort(runtimeBasePort);
+  const baseUrl = `http://${runtimeHost}:${port}`;
+  const server = spawn(process.execPath, [nextBin, "start", "-H", runtimeHost, "-p", String(port)], {
+    cwd: webRoot,
+    env: {
+      ...process.env,
+      PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED: "false",
+      PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED: "false",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  server.stdout.resume();
+  server.stderr.resume();
+
+  try {
+    await waitForRuntimeServer(baseUrl);
+    return await callback(baseUrl);
+  } finally {
+    if (!server.killed) {
+      server.kill();
+    }
+    await sleep(250);
+  }
+}
+
+async function readRenderedRouteHtml(routeConfig, baseUrl) {
+  const staticPath = path.join(builtAppRoot, routeConfig.file);
+  if (existsSync(staticPath)) {
+    pass(routeToScope(routeConfig.route), "html.exists", staticPath);
+    return readFileSync(staticPath, "utf8");
+  }
+
+  const dynamicPath = path.join(builtAppRoot, routeConfig.dynamicFile);
+  if (!existsSync(dynamicPath)) {
+    fail(
+      routeToScope(routeConfig.route),
+      "html.exists",
+      `Missing ${staticPath} and ${dynamicPath}. Run npm run build first.`,
+    );
+    return "";
+  }
+
+  if (!baseUrl) {
+    fail(
+      routeToScope(routeConfig.route),
+      "html.exists",
+      `Dynamic route ${routeConfig.route} requires runtime HTML, but runtime server was not started.`,
+    );
+    return "";
+  }
+
+  const response = await fetch(`${baseUrl}${routeConfig.route}`);
+  const html = await response.text();
+
+  if (!response.ok) {
+    fail(routeToScope(routeConfig.route), "html.exists", `${routeConfig.route} returned ${response.status}`);
+    return "";
+  }
+
+  if (!html.trim()) {
+    fail(routeToScope(routeConfig.route), "html.exists", `${routeConfig.route} returned empty HTML`);
+    return "";
+  }
+
+  pass(routeToScope(routeConfig.route), "html.exists", `${dynamicPath} rendered from ${baseUrl}${routeConfig.route}`);
+  return html;
+}
+
+function renderedRoutesNeedRuntime() {
+  return publicRoutes.some((routeConfig) => {
+    const staticPath = path.join(builtAppRoot, routeConfig.file);
+    const dynamicPath = path.join(builtAppRoot, routeConfig.dynamicFile);
+    return !existsSync(staticPath) && existsSync(dynamicPath);
+  });
 }
 
 function decodeHtml(value) {
@@ -345,9 +481,9 @@ function checkNoForbiddenVisibleText(scope, text) {
   );
 }
 
-function checkRenderedRoute(routeConfig) {
+async function checkRenderedRoute(routeConfig, baseUrl) {
   const scope = routeToScope(routeConfig.route);
-  const html = readRequired(path.join(builtAppRoot, routeConfig.file), scope, "html.exists");
+  const html = await readRenderedRouteHtml(routeConfig, baseUrl);
   if (!html) {
     return;
   }
@@ -641,71 +777,93 @@ function checkSourceContracts() {
   }
 }
 
-publicRoutes.forEach(checkRenderedRoute);
-checkSourceContracts();
+function writeStatusAndExit() {
+  const failures = rows.filter((row) => row.status === "fail");
+  const warnings = rows.filter((row) => row.status === "warn");
+  const passCount = rows.filter((row) => row.status === "pass").length;
+  const publicUnlockRows = rows.filter((row) => row.publicUnlock !== "no");
+  const finalVerdict =
+    failures.length === 0 && publicUnlockRows.length === 0
+      ? "PASS_STRUCTURED_VISIBLE_CONTENT_ALIGNMENT_NO_PUBLIC_UNLOCK"
+      : "FAIL_STRUCTURED_VISIBLE_CONTENT_ALIGNMENT_REVIEW_REQUIRED";
 
-const failures = rows.filter((row) => row.status === "fail");
-const warnings = rows.filter((row) => row.status === "warn");
-const passCount = rows.filter((row) => row.status === "pass").length;
-const publicUnlockRows = rows.filter((row) => row.publicUnlock !== "no");
-const finalVerdict =
-  failures.length === 0 && publicUnlockRows.length === 0
-    ? "PASS_STRUCTURED_VISIBLE_CONTENT_ALIGNMENT_NO_PUBLIC_UNLOCK"
-    : "FAIL_STRUCTURED_VISIBLE_CONTENT_ALIGNMENT_REVIEW_REQUIRED";
+  mkdirSync(path.dirname(resultsPath), { recursive: true });
+  mkdirSync(workRoot, { recursive: true });
 
-mkdirSync(path.dirname(resultsPath), { recursive: true });
-mkdirSync(workRoot, { recursive: true });
+  writeFileSync(
+    resultsPath,
+    [
+      "scope,check,status,details,public_unlock",
+      ...rows.map((row) =>
+        [
+          row.scope,
+          row.check,
+          row.status,
+          row.details,
+          row.publicUnlock,
+        ]
+          .map(csvEscape)
+          .join(","),
+      ),
+    ].join("\n"),
+  );
 
-writeFileSync(
-  resultsPath,
-  [
-    "scope,check,status,details,public_unlock",
-    ...rows.map((row) =>
-      [
-        row.scope,
-        row.check,
-        row.status,
-        row.details,
-        row.publicUnlock,
-      ]
-        .map(csvEscape)
-        .join(","),
-    ),
-  ].join("\n"),
-);
+  const status = {
+    step: "10T",
+    verdict: finalVerdict,
+    passCount,
+    warningCount: warnings.length,
+    failureCount: failures.length,
+    public_unlock_blocked: publicUnlockRows.length === 0 ? "yes" : "no",
+    routeSummaries,
+    warnings,
+    failures,
+    guardrail:
+      "Step 10T verifies rendered structured-data gating, visible breadcrumb alignment, and visible-content safety only. It does not approve schema, metadata, route publication, sitemap inclusion, indexability, deployment, provider connection, migration apply, client import, public assets, product pages, locator pages, or public SEO.",
+  };
 
-const status = {
-  step: "10T",
-  verdict: finalVerdict,
-  passCount,
-  warningCount: warnings.length,
-  failureCount: failures.length,
-  public_unlock_blocked: publicUnlockRows.length === 0 ? "yes" : "no",
-  routeSummaries,
-  warnings,
-  failures,
-  guardrail:
-    "Step 10T verifies rendered structured-data gating, visible breadcrumb alignment, and visible-content safety only. It does not approve schema, metadata, route publication, sitemap inclusion, indexability, deployment, provider connection, migration apply, client import, public assets, product pages, locator pages, or public SEO.",
-};
+  writeFileSync(statusJsonPath, `${JSON.stringify(status, null, 2)}\n`);
+  writeFileSync(
+    statusMdPath,
+    [
+      "# Step 10T Structured Data / Breadcrumb / Visible Content Alignment Status",
+      "",
+      `Verdict: ${finalVerdict}`,
+      `Pass: ${passCount}`,
+      `Warnings: ${warnings.length}`,
+      `Failures: ${failures.length}`,
+      "Public unlock: no",
+      "",
+      "Guardrail: verifier-only; no schema approval, route publication, sitemap inclusion, indexability promotion, deployment, provider connection, client import, public asset unlock, product page, locator page, or public SEO unlock.",
+    ].join("\n"),
+  );
 
-writeFileSync(statusJsonPath, `${JSON.stringify(status, null, 2)}\n`);
-writeFileSync(
-  statusMdPath,
-  [
-    "# Step 10T Structured Data / Breadcrumb / Visible Content Alignment Status",
-    "",
-    `Verdict: ${finalVerdict}`,
-    `Pass: ${passCount}`,
-    `Warnings: ${warnings.length}`,
-    `Failures: ${failures.length}`,
-    "Public unlock: no",
-    "",
-    "Guardrail: verifier-only; no schema approval, route publication, sitemap inclusion, indexability promotion, deployment, provider connection, client import, public asset unlock, product page, locator page, or public SEO unlock.",
-  ].join("\n"),
-);
+  console.log(`${finalVerdict}: ${passCount} pass / ${warnings.length} warn / ${failures.length} fail`);
 
-console.log(`${finalVerdict}: ${passCount} pass / ${warnings.length} warn / ${failures.length} fail`);
-
-if (failures.length > 0 || publicUnlockRows.length > 0) {
-  process.exit(1);
+  if (failures.length > 0 || publicUnlockRows.length > 0) {
+    process.exit(1);
+  }
 }
+
+async function main() {
+  const runChecks = async (baseUrl = "") => {
+    for (const routeConfig of publicRoutes) {
+      await checkRenderedRoute(routeConfig, baseUrl);
+    }
+
+    checkSourceContracts();
+  };
+
+  if (renderedRoutesNeedRuntime()) {
+    await withRuntimeServer(runChecks);
+  } else {
+    await runChecks();
+  }
+
+  writeStatusAndExit();
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

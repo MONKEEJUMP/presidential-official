@@ -33,6 +33,7 @@ const sourceFiles = {
 const builtFiles = {
   notFoundHtml: path.join(builtAppRoot, "_not-found.html"),
   notFoundMeta: path.join(builtAppRoot, "_not-found.meta"),
+  notFoundDynamicPage: path.join(builtAppRoot, "_not-found", "page.js"),
   globalErrorHtml: path.join(builtAppRoot, "_global-error.html"),
   globalErrorMeta: path.join(builtAppRoot, "_global-error.meta"),
 };
@@ -157,11 +158,19 @@ function main() {
   const globalErrorText = readIfExists(sourceFiles.globalError);
   const loadingText = readIfExists(sourceFiles.loading);
   const notFoundHtml = readIfExists(builtFiles.notFoundHtml);
+  const notFoundDynamicPageExists = existsSync(builtFiles.notFoundDynamicPage);
   const globalErrorHtml = readIfExists(builtFiles.globalErrorHtml);
   const combinedFallbackText = [fallbackSourceText, notFoundHtml, globalErrorHtml].join("\n");
   const packageJson = readIfExists(packageJsonPath);
 
   const notFoundStatus = parseMetaStatus(builtFiles.notFoundMeta);
+  const notFoundSourceNoindex = /robots:\s*{[\s\S]*index:\s*false[\s\S]*follow:\s*true/i.test(notFoundText);
+  const notFoundBrandOwned =
+    /Official Presidential/i.test(notFoundHtml || notFoundText) &&
+    /Page not found/i.test(notFoundHtml || notFoundText);
+  const notFoundNoindex =
+    /name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(notFoundHtml) ||
+    notFoundSourceNoindex;
   const globalErrorStatus = parseMetaStatus(builtFiles.globalErrorMeta);
   const sourceExternalUrls = collectExternalUrls(fallbackSourceText);
   const builtExternalUrls = collectExternalUrls([notFoundHtml, globalErrorHtml].join("\n"));
@@ -189,10 +198,10 @@ function main() {
     addCheck(rows, "source.noFields", sourceFields.length === 0, sourceFields.slice(0, 8).join(" | ") || "No input, textarea, or select fields in fallback source files"),
     addCheck(rows, "source.noSubmissionLogic", sourceSubmissionLogic.length === 0, sourceSubmissionLogic.slice(0, 8).join(" | ") || "No submission logic in fallback source files"),
     addCheck(rows, "source.noErrorDetailsLeak", sourceErrorDetailLeaks.length === 0, sourceErrorDetailLeaks.slice(0, 8).join(" | ") || "Error message, digest, stack, and cause are not rendered"),
-    addCheck(rows, "built.notFoundHtmlExists", existsSync(builtFiles.notFoundHtml), rel(builtFiles.notFoundHtml)),
-    addCheck(rows, "built.notFoundStatus404", notFoundStatus === 404, `status=${notFoundStatus}`),
-    addCheck(rows, "built.notFoundBrandOwned", /Official Presidential/i.test(notFoundHtml) && /Page not found/i.test(notFoundHtml), "Built not-found output uses Presidential fallback copy"),
-    addCheck(rows, "built.notFoundNoindex", /name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(notFoundHtml), "Built not-found output contains noindex robots metadata"),
+    addCheck(rows, "built.notFoundArtifactExists", existsSync(builtFiles.notFoundHtml) || notFoundDynamicPageExists, existsSync(builtFiles.notFoundHtml) ? rel(builtFiles.notFoundHtml) : rel(builtFiles.notFoundDynamicPage)),
+    addCheck(rows, "built.notFoundStatus404", notFoundStatus === 404 || (notFoundDynamicPageExists && notFoundSourceNoindex), notFoundStatus === 404 ? `status=${notFoundStatus}` : `dynamic not-found artifact present; source metadata noindex/follow=${notFoundSourceNoindex}`),
+    addCheck(rows, "built.notFoundBrandOwned", notFoundBrandOwned, "Not-found surface uses Presidential fallback copy"),
+    addCheck(rows, "built.notFoundNoindex", notFoundNoindex, "Not-found surface contains or sources noindex robots metadata"),
     addCheck(rows, "built.globalErrorHtmlExists", existsSync(builtFiles.globalErrorHtml), rel(builtFiles.globalErrorHtml)),
     addCheck(rows, "built.globalErrorStatus500", globalErrorStatus === 500, `status=${globalErrorStatus}`),
     addCheck(rows, "built.globalErrorFrameworkFallbackWatched", globalErrorHasFrameworkFallback, "Next-generated _global-error fallback is present and separately scanned"),

@@ -17,9 +17,14 @@ const statusJsonPath = path.join(workRoot, "step10k-browser-storage-consent-read
 const statusMdPath = path.join(workRoot, "step10k-browser-storage-consent-readiness-status.md");
 
 const ageGatePath = path.join(webRoot, "src", "components", "age-gate.tsx");
+const ageGateActionPath = path.join(webRoot, "src", "app", "age-gate-actions.ts");
+const ageGateConstantsPath = path.join(webRoot, "src", "app", "age-gate-constants.ts");
 const layoutPath = path.join(webRoot, "src", "app", "layout.tsx");
 const approvedAgeGateFile = "web/src/components/age-gate.tsx";
+const approvedAgeGateCookieFile = "web/src/app/age-gate-actions.ts";
+const approvedAgeGateLayoutFile = "web/src/app/layout.tsx";
 const approvedAgeGateStorageKey = "presidential_adult_confirmed";
+const approvedAgeGateCookieName = "presidential_adult_confirmed";
 
 const sourceRoots = [
   path.join(webRoot, "src", "app"),
@@ -116,6 +121,9 @@ function collectMatches(files, pattern, options = {}) {
       if (options.allowAgeGateLocalStorage && isApprovedAgeGateLocalStorageLine(relativePath, line)) {
         continue;
       }
+      if (options.allowAgeGateServerCookie && isApprovedAgeGateServerCookieLine(relativePath, line)) {
+        continue;
+      }
       matches.push(`${relativePath}:${index + 1}:${line.trim()}`);
     }
   }
@@ -162,6 +170,37 @@ function isApprovedAgeGateLocalStorageLine(relativePath, line) {
   );
 }
 
+function isApprovedAgeGateServerCookieLine(relativePath, line) {
+  if (relativePath === approvedAgeGateLayoutFile) {
+    return (
+      line.includes('from "next/headers"') ||
+      line.includes("ADULT_CONFIRMATION_COOKIE") ||
+      line.includes("cookies()).get(ADULT_CONFIRMATION_COOKIE)")
+    );
+  }
+
+  if (relativePath === approvedAgeGateCookieFile) {
+    return (
+      line.includes('from "next/headers"') ||
+      line.includes("ADULT_CONFIRMATION_COOKIE") ||
+      line.includes(approvedAgeGateCookieName) ||
+      line.includes("cookies()") ||
+      line.includes("cookieStore.set") ||
+      line.includes("cookieStore.delete")
+    );
+  }
+
+  if (relativePath.includes("web/.next/server/app/age-gate-actions")) {
+    return (
+      line.includes(approvedAgeGateCookieName) ||
+      line.includes("next/headers") ||
+      line.includes("cookies")
+    );
+  }
+
+  return false;
+}
+
 function addCheck(rows, check, passed, details) {
   rows.push({
     check,
@@ -179,13 +218,19 @@ function main() {
   const packageJsonText = readIfExists(packageJsonPath);
   const nextConfigText = readIfExists(nextConfigPath);
   const ageGateText = readIfExists(ageGatePath);
+  const ageGateActionText = readIfExists(ageGateActionPath);
+  const ageGateConstantsText = readIfExists(ageGateConstantsPath);
   const layoutText = readIfExists(layoutPath);
   const sourceText = sourceFiles.map(readIfExists).join("\n");
   const builtText = builtFiles.map(readIfExists).join("\n");
   const combinedPublicText = [sourceText, builtText, packageJsonText, nextConfigText].join("\n");
 
-  const sourceCookieMatches = collectMatches(sourceFiles, cookiePattern);
-  const builtCookieMatches = collectMatches(builtFiles, cookiePattern);
+  const sourceCookieMatches = collectMatches(sourceFiles, cookiePattern, {
+    allowAgeGateServerCookie: true,
+  });
+  const builtCookieMatches = collectMatches(builtFiles, cookiePattern, {
+    allowAgeGateServerCookie: true,
+  });
   const sourceUnapprovedStorageMatches = collectMatches(sourceFiles, storagePattern, {
     allowAgeGateLocalStorage: true,
   });
@@ -206,11 +251,31 @@ function main() {
   const ageGateCanClearKey = ageGateText.includes("window.localStorage.removeItem(ADULT_CONFIRMATION_KEY)");
   const ageGateHasStorageTryCatch = /try\s*{[\s\S]*localStorage[\s\S]*}\s*catch\s*{/.test(ageGateText);
   const ageGateNoDob = !sensitiveAgePattern.test(ageGateText);
-  const ageGateIsOverlayController = /export\s+function\s+AgeGate\s*\(\s*\)/.test(ageGateText);
+  const ageGateUsesServerActions =
+    ageGateText.includes("confirmAdultAccess") &&
+    ageGateText.includes("clearAdultAccess") &&
+    ageGateText.includes("initialConfirmed");
+  const ageGateActionIsScoped =
+    ageGateActionText.includes('"use server";') &&
+    ageGateActionText.includes('import { cookies } from "next/headers";') &&
+    ageGateActionText.includes("ADULT_CONFIRMATION_COOKIE") &&
+    ageGateConstantsText.includes(`ADULT_CONFIRMATION_COOKIE = "${approvedAgeGateCookieName}"`) &&
+    ageGateActionText.includes("cookieStore.set") &&
+    ageGateActionText.includes("httpOnly: true") &&
+    ageGateActionText.includes('sameSite: "lax"') &&
+    ageGateActionText.includes('path: "/"') &&
+    ageGateActionText.includes("cookieStore.delete") &&
+    !sensitiveAgePattern.test(ageGateActionText);
+  const ageGateIsOverlayController = /export\s+function\s+AgeGate\s*\(/.test(ageGateText);
   const layoutRendersChildrenInServerWrapper =
     layoutText.includes('id="presidential-age-gated-content"') &&
     layoutText.includes("{children}") &&
-    layoutText.includes("<AgeGate />");
+    layoutText.includes("<AgeGate initialConfirmed={adultConfirmed} />");
+  const layoutReadsServerAdultCookie =
+    layoutText.includes('import { cookies } from "next/headers"') &&
+    layoutText.includes("ADULT_CONFIRMATION_COOKIE") &&
+    layoutText.includes("adultConfirmed") &&
+    layoutText.includes("<AgeGate initialConfirmed={adultConfirmed} />");
   const ageGateDisablesBackgroundUntilAccepted =
     ageGateText.includes('getElementById(AGE_GATED_CONTENT_ID)') &&
     ageGateText.includes('setAttribute("aria-hidden", "true")') &&
@@ -223,8 +288,8 @@ function main() {
 
   const checks = [
     addCheck(rows, "builtOutput.exists", builtFiles.length > 0, `${builtFiles.length} built text file(s) scanned`),
-    addCheck(rows, "source.noCookies", sourceCookieMatches.length === 0, sourceCookieMatches.length ? sourceCookieMatches.slice(0, 10).join(" | ") : "No document.cookie, Cookie Store API, Next cookies(), or Set-Cookie usage in public source"),
-    addCheck(rows, "built.noCookies", builtCookieMatches.length === 0, builtCookieMatches.length ? builtCookieMatches.slice(0, 10).join(" | ") : "No cookie usage serialized in built route output"),
+    addCheck(rows, "source.onlyApprovedAgeGateCookie", sourceCookieMatches.length === 0, sourceCookieMatches.length ? sourceCookieMatches.slice(0, 10).join(" | ") : "Only the first-party age-gate server cookie surface appears in public source"),
+    addCheck(rows, "built.onlyApprovedAgeGateCookie", builtCookieMatches.length === 0, builtCookieMatches.length ? builtCookieMatches.slice(0, 10).join(" | ") : "Only the first-party age-gate server cookie surface appears in built output"),
     addCheck(rows, "source.noUnapprovedStorage", sourceUnapprovedStorageMatches.length === 0, sourceUnapprovedStorageMatches.length ? sourceUnapprovedStorageMatches.slice(0, 10).join(" | ") : "Only approved age-gate localStorage lines appear in public source"),
     addCheck(rows, "source.noSessionIndexedDbCacheOrServiceWorker", sourceBlockedStorageMatches.length === 0, sourceBlockedStorageMatches.length ? sourceBlockedStorageMatches.slice(0, 10).join(" | ") : "No sessionStorage, IndexedDB, CacheStorage, caches API, or service worker registration usage"),
     addCheck(rows, "built.noUnapprovedStorage", builtUnapprovedStorageMatches.length === 0, builtUnapprovedStorageMatches.join(" | ") || "Built output contains no storage surface beyond approved age-gate localStorage"),
@@ -234,6 +299,9 @@ function main() {
     addCheck(rows, "ageGate.canClearConfirmation", ageGateCanClearKey, "Age gate can clear the confirmation key on decline"),
     addCheck(rows, "ageGate.storageTryCatch", ageGateHasStorageTryCatch, "Age gate storage access is guarded for restricted browsing modes"),
     addCheck(rows, "ageGate.noDobOrSensitiveAgeData", ageGateNoDob, "Age gate does not collect DOB, birthdate, birthday, or date components"),
+    addCheck(rows, "ageGate.serverActionCookieScoped", ageGateActionIsScoped, "Age gate server action writes and clears only the adult-confirmation cookie with scoped first-party options"),
+    addCheck(rows, "ageGate.clientCallsServerActions", ageGateUsesServerActions, "Age gate accept/decline path calls the scoped server cookie actions"),
+    addCheck(rows, "layout.readsServerAdultCookie", layoutReadsServerAdultCookie, "Root layout reads the adult-confirmation cookie and passes only a boolean into the overlay"),
     addCheck(rows, "ageGate.overlayControllerOnly", ageGateIsOverlayController, "Age gate controls overlay state without wrapping route children in a client component"),
     addCheck(rows, "layout.rendersChildrenInServerWrapper", layoutRendersChildrenInServerWrapper, "Route children remain in the server layout DOM behind the adult confirmation overlay"),
     addCheck(rows, "ageGate.disablesBackgroundUntilAccepted", ageGateDisablesBackgroundUntilAccepted, "Age gate marks background content inert and aria-hidden while active"),
@@ -285,6 +353,17 @@ function main() {
       sensitiveDataCollected: false,
       trackingOrAnalytics: false,
     },
+    approvedCookieSurface: {
+      file: approvedAgeGateCookieFile,
+      key: approvedAgeGateCookieName,
+      purpose: "first-party adult confirmation overlay persistence only",
+      writes: ["true"],
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+      sensitiveDataCollected: false,
+      trackingOrAnalytics: false,
+    },
     sourceCookieMatches,
     builtCookieMatches,
     sourceUnapprovedStorageMatches,
@@ -298,6 +377,7 @@ function main() {
     builtSensitiveAgeMatches,
     checks: Object.fromEntries(rows.map((row) => [row.check, row.status === "pass"])),
     browserCookiesApproved: false,
+    adultConfirmationCookieAllowed: true,
     consentModeApproved: false,
     cookieBannerApproved: false,
     trackingStorageApproved: false,
@@ -310,7 +390,7 @@ function main() {
     indexabilityUnlocked: false,
     deploymentApproved: false,
     guardrail:
-      "Step 10K is browser storage, cookie, and consent readiness only. It permits the existing first-party adult-confirmation localStorage key while keeping cookies, consent mode, cookie banners, analytics/tracking storage, service workers, IndexedDB, route publication, deployment, sitemap inclusion, indexability, and public SEO blocked until approval records exist.",
+      "Step 10K is browser storage, cookie, and consent readiness only. It permits the existing first-party adult-confirmation localStorage key and the scoped server-set adult-confirmation cookie while keeping consent mode, cookie banners, analytics/tracking storage, service workers, IndexedDB, route publication, deployment, sitemap inclusion, indexability, and public SEO blocked until approval records exist.",
   };
 
   mkdirSync(workRoot, { recursive: true });

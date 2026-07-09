@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import type { KeyboardEvent } from "react";
+import { clearAdultAccess, confirmAdultAccess } from "@/app/age-gate-actions";
 
 const ADULT_CONFIRMATION_KEY = "presidential_adult_confirmed";
 const AGE_GATED_CONTENT_ID = "presidential-age-gated-content";
@@ -32,8 +33,15 @@ function clearAdultConfirmation() {
   }
 }
 
-export function AgeGate() {
-  const [status, setStatus] = useState<AgeGateStatus>("checking");
+type AgeGateProps = {
+  readonly initialConfirmed?: boolean;
+};
+
+export function AgeGate({ initialConfirmed = false }: AgeGateProps) {
+  const [status, setStatus] = useState<AgeGateStatus>(
+    initialConfirmed ? "accepted" : "checking",
+  );
+  const [, startTransition] = useTransition();
   const primaryActionRef = useRef<HTMLButtonElement>(null);
   const shouldFocusMainRef = useRef(false);
   const isGateActive = status !== "accepted";
@@ -91,11 +99,17 @@ export function AgeGate() {
     shouldFocusMainRef.current = true;
     writeAdultConfirmation();
     setStatus("accepted");
+    startTransition(() => {
+      void confirmAdultAccess();
+    });
   }
 
   function declineGate() {
     clearAdultConfirmation();
     setStatus("blocked");
+    startTransition(() => {
+      void clearAdultAccess();
+    });
   }
 
   function handleDialogKeyDown(event: KeyboardEvent<HTMLElement>) {

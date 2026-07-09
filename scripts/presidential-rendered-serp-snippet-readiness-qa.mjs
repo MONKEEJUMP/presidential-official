@@ -4,6 +4,8 @@ import {
   readFileSync,
   writeFileSync,
 } from "node:fs";
+import { spawn } from "node:child_process";
+import { createServer } from "node:net";
 import path from "node:path";
 
 const webRoot = process.cwd();
@@ -19,6 +21,9 @@ const metadataHelpersSourcePath = path.join(
   "metadata-helpers.ts",
 );
 const routesSourcePath = path.join(webRoot, "src", "lib", "seo", "routes.ts");
+const nextBin = path.join(webRoot, "node_modules", "next", "dist", "bin", "next");
+const runtimeHost = "127.0.0.1";
+const runtimeBasePort = Number(process.env.PRESIDENTIAL_SERP_SNIPPET_QA_PORT || "3351");
 
 const resultsPath = path.join(
   root,
@@ -49,6 +54,7 @@ const publicRoutes = [
     route: "/",
     label: "home",
     file: "index.html",
+    dynamicArtifactPath: "page.js",
     requiredTitleTerms: ["Presidential"],
     requiredDescriptionTerms: ["Presidential", "cannabis"],
   },
@@ -102,6 +108,10 @@ const publicRoutes = [
     requiredDescriptionTerms: ["Contact", "Presidential"],
   },
 ];
+
+for (const route of publicRoutes) {
+  route.dynamicArtifactPath ??= `${route.route.replace(/^\/+/, "")}/page.js`;
+}
 
 const forbiddenSnippetPatterns = [
   {
@@ -195,6 +205,116 @@ function readRequired(filePath, scope, check) {
   return readFileSync(filePath, "utf8");
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function findOpenPort(startPort) {
+  return new Promise((resolve, reject) => {
+    const server = createServer();
+
+    server.once("error", (error) => {
+      if (error.code === "EADDRINUSE" || error.code === "EACCES") {
+        server.close(() => {
+          findOpenPort(startPort + 1).then(resolve, reject);
+        });
+        return;
+      }
+
+      reject(error);
+    });
+
+    server.listen(startPort, runtimeHost, () => {
+      const address = server.address();
+      const port = typeof address === "object" && address ? address.port : startPort;
+      server.close(() => resolve(port));
+    });
+  });
+}
+
+async function fetchRuntimeHtml(baseUrl, route) {
+  const response = await fetch(`${baseUrl}${route.route}`);
+  const html = await response.text();
+
+  if (!response.ok) {
+    throw new Error(`${route.route} returned ${response.status}`);
+  }
+
+  if (!html.trim()) {
+    throw new Error(`${route.route} returned empty HTML`);
+  }
+
+  return html;
+}
+
+async function waitForRuntimeServer(baseUrl) {
+  let lastError;
+
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    try {
+      const response = await fetch(`${baseUrl}/contact`);
+      const html = await response.text();
+      if (response.ok && html.trim()) {
+        return;
+      }
+    } catch (error) {
+      lastError = error;
+    }
+
+    await sleep(400);
+  }
+
+  throw lastError || new Error("Next runtime server did not become ready.");
+}
+
+async function withRuntimeServer(callback) {
+  const port = await findOpenPort(runtimeBasePort);
+  const baseUrl = `http://${runtimeHost}:${port}`;
+  const server = spawn(process.execPath, [nextBin, "start", "-H", runtimeHost, "-p", String(port)], {
+    cwd: webRoot,
+    env: {
+      ...process.env,
+      PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED: "false",
+      PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED: "false",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  server.stdout.resume();
+  server.stderr.resume();
+
+  try {
+    await waitForRuntimeServer(baseUrl);
+    return await callback(baseUrl);
+  } finally {
+    if (!server.killed) {
+      server.kill();
+    }
+    await sleep(250);
+  }
+}
+
+function readRenderedRouteHtml(routeRecord, scope, runtimeHtmlByRoute) {
+  const filePath = path.join(builtAppRoot, routeRecord.file);
+  if (existsSync(filePath)) {
+    return readRequired(filePath, scope, "html.exists");
+  }
+
+  const dynamicArtifactPath = path.join(builtAppRoot, routeRecord.dynamicArtifactPath);
+  const html = runtimeHtmlByRoute.get(routeRecord.route) ?? "";
+  if (html && existsSync(dynamicArtifactPath)) {
+    pass(scope, "html.exists", `${dynamicArtifactPath} rendered at ${routeRecord.route}`);
+    return html;
+  }
+
+  fail(scope, "html.exists", `Missing ${filePath} and runtime HTML for ${routeRecord.route}. Run npm run build first.`);
+  return "";
+}
+
 function decodeHtml(value) {
   return String(value)
     .replace(/&quot;/g, '"')
@@ -282,10 +402,10 @@ function repeatedWords(value) {
     .map(([word, count]) => `${word}:${count}`);
 }
 
-function checkPublicRoute(routeRecord) {
-  const { route, file, requiredTitleTerms, requiredDescriptionTerms } = routeRecord;
+function checkPublicRoute(routeRecord, runtimeHtmlByRoute) {
+  const { route, requiredTitleTerms, requiredDescriptionTerms } = routeRecord;
   const scope = `public:${route}`;
-  const html = readRequired(path.join(builtAppRoot, file), scope, "html.exists");
+  const html = readRenderedRouteHtml(routeRecord, scope, runtimeHtmlByRoute);
   if (!html) {
     return;
   }
@@ -549,7 +669,23 @@ function checkSourceAndPackageWiring() {
   }
 }
 
-publicRoutes.forEach(checkPublicRoute);
+async function main() {
+const runtimeHtmlByRoute = new Map();
+const dynamicRoutes = publicRoutes.filter((route) => {
+  const filePath = path.join(builtAppRoot, route.file);
+  const dynamicArtifactPath = path.join(builtAppRoot, route.dynamicArtifactPath);
+  return !existsSync(filePath) && existsSync(dynamicArtifactPath);
+});
+
+if (dynamicRoutes.length > 0) {
+  await withRuntimeServer(async (baseUrl) => {
+    for (const route of dynamicRoutes) {
+      runtimeHtmlByRoute.set(route.route, await fetchRuntimeHtml(baseUrl, route));
+    }
+  });
+}
+
+publicRoutes.forEach((route) => checkPublicRoute(route, runtimeHtmlByRoute));
 checkUniqueness();
 checkSourceAndPackageWiring();
 
@@ -623,3 +759,9 @@ if (failCount > 0) {
   );
   process.exit(1);
 }
+}
+
+main().catch((error) => {
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exit(1);
+});
