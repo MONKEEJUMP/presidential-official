@@ -22,11 +22,17 @@ const draftReviewRoutes = listDraftSitePageSlugs().filter((slug) => slug !== "ho
 export const dynamic = "force-dynamic";
 
 export function generateMetadata(): Metadata {
-  return buildStaticRouteMetadata(ROUTE_PATH);
+  return {
+    ...buildStaticRouteMetadata(ROUTE_PATH),
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
 }
 
 function isPrivateDraftsRouteEnabled(): boolean {
-  return process.env.NODE_ENV === "development" || process.env[PRIVATE_DRAFTS_ROUTE_ENABLE_ENV] === "true";
+  return process.env[PRIVATE_DRAFTS_ROUTE_ENABLE_ENV] === "true";
 }
 
 function StatusPill({ children, tone }: { readonly children: ReactNode; readonly tone: "ok" | "wait" | "stop" }) {

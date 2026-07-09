@@ -60,7 +60,7 @@ export async function generateMetadata({params}: DraftSitePageProps): Promise<Me
 }
 
 function isPrivateDraftsRouteEnabled(): boolean {
-  return process.env.NODE_ENV === "development" || process.env[PRIVATE_DRAFTS_ROUTE_ENABLE_ENV] === "true";
+  return process.env[PRIVATE_DRAFTS_ROUTE_ENABLE_ENV] === "true";
 }
 
 function uniqueValues(values: readonly (string | undefined)[]): readonly string[] {
