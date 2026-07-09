@@ -8,6 +8,7 @@ const requiredScripts = [
   "production:provider-readiness:verify",
   "production:canonical-host:verify",
   "production:postdeploy-smoke:verify",
+  "production:sitemap-submission:verify",
   "production:launch-readiness:verify",
 ];
 
@@ -49,6 +50,7 @@ function main() {
   const providerText = read("scripts/presidential-production-provider-readiness-qa.mjs");
   const canonicalText = read("scripts/presidential-production-canonical-host-qa.mjs");
   const postdeployText = read("scripts/presidential-production-postdeploy-smoke-qa.mjs");
+  const sitemapSubmissionText = read("scripts/presidential-production-sitemap-submission-qa.mjs");
   const proxyText = read("src/proxy.ts");
   const analyticsText = read("src/components/analytics/google-analytics.tsx");
   const googleText = read("src/lib/analytics/google.ts");
@@ -129,6 +131,15 @@ function main() {
       postdeployText.includes("deploymentExecuted: false") &&
       postdeployText.includes("secretsPrinted: false"),
     "post-deploy smoke is explicit-live only and records no deploy/no secret output posture",
+  );
+  addCheck(
+    rows,
+    "launchReadiness.sitemapSubmission.localGate",
+    sitemapSubmissionText.includes("PASS_PRODUCTION_SITEMAP_SUBMISSION_GATE_LOCAL_NO_PROVIDER_ACTION") &&
+      sitemapSubmissionText.includes("searchProviderSitemapHandoffReady") &&
+      sitemapSubmissionText.includes("providerActionExecuted: false") &&
+      sitemapSubmissionText.includes("sitemapUnlocked: false"),
+    "sitemap handoff remains local-only and false until built sitemap entries plus route records exist",
   );
   addCheck(
     rows,
