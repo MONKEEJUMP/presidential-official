@@ -62,6 +62,7 @@ const allowedSecretFiles = new Set([
   "scripts/presidential-cms-live-draft-smoke-qa.mjs",
   "scripts/presidential-cms-web-read-boundary-qa.mjs",
   "scripts/presidential-production-env-contract-qa.mjs",
+  "scripts/presidential-production-launch-readiness-qa.mjs",
   "scripts/presidential-production-provider-readiness-qa.mjs",
 ]);
 
