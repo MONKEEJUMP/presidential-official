@@ -55,7 +55,7 @@ export function MoonRocksPlatformShell({
       <SceneStack>
         <Scene ariaLabelledBy="presidential-moon-rocks-title" tone="default">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-10">
-            <nav aria-label="Breadcrumb" className="text-sm text-zinc-600">
+            <nav aria-label="Breadcrumb" className="text-sm text-po-muted">
               <ol className="flex flex-wrap items-center gap-2">
                 {breadcrumbs.map((breadcrumb, index) => {
                   const isCurrent = index === breadcrumbs.length - 1;
@@ -63,17 +63,17 @@ export function MoonRocksPlatformShell({
                   return (
                     <li key={breadcrumb.path} className="flex items-center gap-2">
                       {index > 0 ? (
-                        <span aria-hidden="true" className="text-zinc-400">
+                        <span aria-hidden="true" className="text-po-subtle">
                           /
                         </span>
                       ) : null}
                       {isCurrent ? (
-                        <span aria-current="page" className="text-zinc-800">
+                        <span aria-current="page" className="text-po-body">
                           {breadcrumb.name}
                         </span>
                       ) : (
                         <Link
-                          className="font-medium text-emerald-800 hover:text-emerald-900"
+                          className="font-medium text-po-brand hover:text-po-brand"
                           href={breadcrumb.path}
                         >
                           {breadcrumb.name}
@@ -94,7 +94,7 @@ export function MoonRocksPlatformShell({
                   kicker="Presidential product platform"
                   title={route.h1}
                 />
-                <p className="max-w-2xl text-sm leading-6 text-zinc-600">
+                <p className="max-w-2xl text-sm leading-6 text-po-muted">
                   Moon Rocks is the flagship Presidential product platform for
                   pre-rolls, blunts, learning, and licensed retailer discovery.
                 </p>
@@ -129,13 +129,13 @@ export function MoonRocksPlatformShell({
             <div className="grid gap-4 md:grid-cols-3">
               {productLanes.map((lane) => (
                 <article
-                  className="border border-zinc-200 bg-white p-5 shadow-sm"
+                  className="border border-po-line bg-po-canvas p-5 shadow-sm"
                   key={lane.title}
                 >
-                  <h3 className="text-xl font-semibold leading-snug text-zinc-950">
+                  <h3 className="text-xl font-semibold leading-snug text-po-ink">
                     {lane.title}
                   </h3>
-                  <p className="mt-3 text-sm leading-6 text-zinc-700">
+                  <p className="mt-3 text-sm leading-6 text-po-body">
                     {lane.body}
                   </p>
                 </article>
@@ -155,10 +155,10 @@ export function MoonRocksPlatformShell({
               <ol className="grid gap-3">
                 {ecosystemSteps.map((step, index) => (
                   <li
-                    className="flex items-center gap-3 border border-zinc-200 bg-white p-4 text-sm font-semibold text-zinc-900"
+                    className="flex items-center gap-3 border border-po-line bg-po-canvas p-4 text-sm font-semibold text-po-ink"
                     key={step}
                   >
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center bg-emerald-900 text-white">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center bg-po-brand text-white">
                       {index + 1}
                     </span>
                     {step}

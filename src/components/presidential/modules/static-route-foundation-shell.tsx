@@ -103,7 +103,7 @@ export function StaticRouteFoundationShell({
         <Scene ariaLabelledBy="presidential-route-title" tone="default">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-10">
             {breadcrumbs.length > 1 ? (
-              <nav aria-label="Breadcrumb" className="text-sm text-zinc-600">
+              <nav aria-label="Breadcrumb" className="text-sm text-po-muted">
                 <ol className="flex flex-wrap items-center gap-2">
                   {breadcrumbs.map((breadcrumb, index) => {
                     const isCurrent = index === breadcrumbs.length - 1;
@@ -111,18 +111,18 @@ export function StaticRouteFoundationShell({
                     return (
                       <li key={breadcrumb.path} className="flex items-center gap-2">
                         {index > 0 ? (
-                          <span aria-hidden="true" className="text-zinc-400">
+                          <span aria-hidden="true" className="text-po-subtle">
                             /
                           </span>
                         ) : null}
                         {isCurrent ? (
-                          <span aria-current="page" className="text-zinc-800">
+                          <span aria-current="page" className="text-po-body">
                             {breadcrumb.name}
                           </span>
                         ) : (
                           <Link
                             href={breadcrumb.path}
-                            className="font-medium text-emerald-800 hover:text-emerald-900"
+                            className="font-medium text-po-brand hover:text-po-brand"
                           >
                             {breadcrumb.name}
                           </Link>
@@ -143,7 +143,7 @@ export function StaticRouteFoundationShell({
                   kicker="Official Presidential"
                   title={route.h1}
                 />
-                <p className="max-w-2xl text-sm leading-6 text-zinc-600">
+                <p className="max-w-2xl text-sm leading-6 text-po-muted">
                   A focused official section inside the Presidential digital
                   experience for adults 21+ where legal.
                 </p>
@@ -170,19 +170,19 @@ export function StaticRouteFoundationShell({
             <div className="grid gap-4 md:grid-cols-2">
               {panels.map((panel) => (
                 <article
-                  className="border border-zinc-200 bg-white p-5"
+                  className="border border-po-line bg-po-canvas p-5"
                   key={panel.title}
                 >
-                  <h3 className="text-xl font-semibold leading-snug text-zinc-950">
+                  <h3 className="text-xl font-semibold leading-snug text-po-ink">
                     {panel.title}
                   </h3>
-                  <p className="mt-3 text-sm leading-6 text-zinc-700">
+                  <p className="mt-3 text-sm leading-6 text-po-body">
                     {panel.body}
                   </p>
                 </article>
               ))}
             </div>
-            <p className="text-sm font-medium text-zinc-600">
+            <p className="text-sm font-medium text-po-muted">
               For adults 21+ where legal.
             </p>
           </div>

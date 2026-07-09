@@ -127,10 +127,10 @@ function linkedRecordBody(record: SanityLinkedRecord): string {
 
 function StatusPill({ children, tone = "neutral" }: { readonly children: string; readonly tone?: "ok" | "wait" | "neutral" }) {
   const toneClass = tone === "ok"
-    ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+    ? "border-po-brand-line bg-po-brand-soft text-po-brand"
     : tone === "wait"
-      ? "border-amber-300 bg-amber-50 text-amber-800"
-      : "border-zinc-200 bg-zinc-50 text-zinc-600";
+      ? "border-po-gold bg-po-gold-soft text-po-gold-ink"
+      : "border-po-line bg-po-soft text-po-muted";
 
   return (
     <span className={`inline-flex border px-2.5 py-1 text-xs font-semibold uppercase tracking-normal ${toneClass}`}>
@@ -182,7 +182,7 @@ function RouteLabel({ route }: { readonly route?: string }) {
     );
   }
 
-  return <p className="mt-3 text-xs leading-5 text-zinc-600">{route}</p>;
+  return <p className="mt-3 text-xs leading-5 text-po-muted">{route}</p>;
 }
 
 function ReferenceCard({
@@ -197,19 +197,19 @@ function ReferenceCard({
   const isPrivate = isPrivateRenderMode(renderMode);
 
   return (
-    <article className="grid content-start gap-3 border border-zinc-200 bg-white p-5 shadow-sm">
-      <p className="text-xs font-semibold uppercase tracking-normal text-emerald-800">
+    <article className="grid content-start gap-3 border border-po-line bg-po-canvas p-5 shadow-sm">
+      <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
         {label || record._type || (isPrivate ? record.publicStatus : undefined) || "Reference"}
       </p>
-      <h3 className="text-lg font-semibold text-zinc-950">{linkedRecordTitle(record)}</h3>
+      <h3 className="text-lg font-semibold text-po-ink">{linkedRecordTitle(record)}</h3>
       {linkedRecordBody(record) ? (
-        <p className="text-sm leading-6 text-zinc-700">{linkedRecordBody(record)}</p>
+        <p className="text-sm leading-6 text-po-body">{linkedRecordBody(record)}</p>
       ) : null}
       {isPrivate && record.publicStatus ? (
         <StatusPill tone="wait">{record.publicStatus}</StatusPill>
       ) : null}
       {isPrivate && record.slug ? (
-        <p className="text-xs leading-5 text-zinc-600">Slug: {record.slug}</p>
+        <p className="text-xs leading-5 text-po-muted">Slug: {record.slug}</p>
       ) : null}
     </article>
   );
@@ -223,11 +223,11 @@ function KeyValueList({ entries }: { readonly entries: readonly [string, string 
   }
 
   return (
-    <dl className="grid gap-3 border border-zinc-200 bg-zinc-50 p-5 sm:grid-cols-2 lg:grid-cols-3">
+    <dl className="grid gap-3 border border-po-line bg-po-soft p-5 sm:grid-cols-2 lg:grid-cols-3">
       {visibleEntries.map(([label, value]) => (
         <div key={label}>
-          <dt className="text-xs font-semibold uppercase tracking-normal text-zinc-500">{label}</dt>
-          <dd className="mt-1 text-sm font-semibold leading-6 text-zinc-900">{value}</dd>
+          <dt className="text-xs font-semibold uppercase tracking-normal text-po-muted">{label}</dt>
+          <dd className="mt-1 text-sm font-semibold leading-6 text-po-ink">{value}</dd>
         </div>
       ))}
     </dl>
@@ -245,21 +245,21 @@ function CardGrid({ module, renderMode }: { readonly module: SanityHomepageModul
   return (
     <div className="grid gap-4 md:grid-cols-3">
       {cards.map((card, index) => (
-        <article className="grid content-start gap-3 border border-zinc-200 bg-white p-5 shadow-sm" key={`${card.title || card.route || "card"}-${index}`}>
+        <article className="grid content-start gap-3 border border-po-line bg-po-canvas p-5 shadow-sm" key={`${card.title || card.route || "card"}-${index}`}>
           <div className="flex flex-wrap gap-2">
             {isPrivate && card.sourceStatus ? <StatusPill tone="wait">{card.sourceStatus}</StatusPill> : null}
             {isPrivate && card.routeGate ? <StatusPill>{card.routeGate}</StatusPill> : null}
             {(!isPrivate || (!card.sourceStatus && !card.routeGate)) ? <StatusPill>{`Card ${index + 1}`}</StatusPill> : null}
           </div>
-          <h3 className="text-xl font-semibold text-zinc-950">
+          <h3 className="text-xl font-semibold text-po-ink">
             {card.title || (card.contentRef ? linkedRecordTitle(card.contentRef) : "Untitled")}
           </h3>
           {card.contentRef && linkedRecordBody(card.contentRef) ? (
-            <p className="text-sm leading-6 text-zinc-700">{linkedRecordBody(card.contentRef)}</p>
+            <p className="text-sm leading-6 text-po-body">{linkedRecordBody(card.contentRef)}</p>
           ) : null}
           <RouteLabel route={card.route} />
           {card.assetRecord ? (
-            <p className="text-xs font-semibold text-zinc-500">
+            <p className="text-xs font-semibold text-po-muted">
               {card.assetRecord.title || card.assetRecord.assetName || (isPrivate ? card.assetRecord.savedFile : undefined) || "Asset attached"}
             </p>
           ) : null}
@@ -282,23 +282,23 @@ function FeaturedGuides({ guides, renderMode }: { readonly guides?: readonly San
         const guideHref = asSeoRoutePath(guide.slug ? `/learn/${guide.slug}` : undefined);
 
         return (
-          <article className="grid content-start gap-3 border border-zinc-200 bg-white p-5 shadow-sm" key={guide._id || `${guide.slug || "guide"}-${index}`}>
-            <p className="text-xs font-semibold uppercase tracking-normal text-emerald-800">
+          <article className="grid content-start gap-3 border border-po-line bg-po-canvas p-5 shadow-sm" key={guide._id || `${guide.slug || "guide"}-${index}`}>
+            <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
               {guide.guideTopic || "Featured guide"}
             </p>
-            <h3 className="text-lg font-semibold text-zinc-950">{linkedRecordTitle(guide)}</h3>
+            <h3 className="text-lg font-semibold text-po-ink">{linkedRecordTitle(guide)}</h3>
             {linkedRecordBody(guide) ? (
-              <p className="text-sm leading-6 text-zinc-700">{linkedRecordBody(guide)}</p>
+              <p className="text-sm leading-6 text-po-body">{linkedRecordBody(guide)}</p>
             ) : null}
             {isPrivate && guide.publicStatus ? (
               <StatusPill tone="wait">{guide.publicStatus}</StatusPill>
             ) : null}
             {guideHref ? (
-              <Link className="mt-2 w-fit text-sm font-semibold text-emerald-900 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900" href={guideHref}>
+              <Link className="mt-2 w-fit text-sm font-semibold text-po-brand underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand" href={guideHref}>
                 Open guide
               </Link>
             ) : isPrivate && guide.slug ? (
-              <p className="text-xs leading-5 text-zinc-600">Slug: {guide.slug}</p>
+              <p className="text-xs leading-5 text-po-muted">Slug: {guide.slug}</p>
             ) : null}
           </article>
         );
@@ -315,13 +315,13 @@ function TimelineEvents({ events }: { readonly events?: readonly SanityTimelineE
   return (
     <ol className="grid gap-4">
       {events.map((event, index) => (
-        <li className="border-l-4 border-emerald-700 bg-white p-5 shadow-sm" key={`${event.label || "event"}-${index}`}>
-          <p className="text-xs font-semibold uppercase tracking-normal text-emerald-800">
+        <li className="border-l-4 border-po-brand bg-po-canvas p-5 shadow-sm" key={`${event.label || "event"}-${index}`}>
+          <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
             {event.dateOrSequence || `Event ${index + 1}`}
           </p>
-          <h3 className="mt-3 text-lg font-semibold text-zinc-950">{event.label || "Untitled event"}</h3>
+          <h3 className="mt-3 text-lg font-semibold text-po-ink">{event.label || "Untitled event"}</h3>
           {portableTextToPlainText(event.body) ? (
-            <p className="mt-3 text-sm leading-6 text-zinc-700">{portableTextToPlainText(event.body)}</p>
+            <p className="mt-3 text-sm leading-6 text-po-body">{portableTextToPlainText(event.body)}</p>
           ) : null}
         </li>
       ))}
@@ -337,15 +337,15 @@ function FactGrid({ facts }: { readonly facts?: readonly SanityFact[] }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {facts.map((fact, index) => (
-        <article className="border border-zinc-200 bg-white p-5 shadow-sm" key={`${fact.label || "fact"}-${index}`}>
-          <p className="text-xs font-semibold uppercase tracking-normal text-emerald-800">
+        <article className="border border-po-line bg-po-canvas p-5 shadow-sm" key={`${fact.label || "fact"}-${index}`}>
+          <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
             {fact.label || `Fact ${index + 1}`}
           </p>
           {fact.value ? (
-            <p className="mt-3 text-2xl font-semibold leading-tight text-zinc-950">{fact.value}</p>
+            <p className="mt-3 text-2xl font-semibold leading-tight text-po-ink">{fact.value}</p>
           ) : null}
           {fact.publicUseStatus ? (
-            <p className="mt-3 text-xs font-semibold text-zinc-500">{fact.publicUseStatus}</p>
+            <p className="mt-3 text-xs font-semibold text-po-muted">{fact.publicUseStatus}</p>
           ) : null}
         </article>
       ))}
@@ -361,17 +361,17 @@ function ColumnGrid({ columns }: { readonly columns?: readonly SanityColumn[] })
   return (
     <div className="grid gap-4 md:grid-cols-2">
       {columns.map((column, index) => (
-        <article className="border border-zinc-200 bg-white p-5 shadow-sm" key={`${column.title || "column"}-${index}`}>
-          <h3 className="text-xl font-semibold text-zinc-950">{column.title || "Untitled column"}</h3>
+        <article className="border border-po-line bg-po-canvas p-5 shadow-sm" key={`${column.title || "column"}-${index}`}>
+          <h3 className="text-xl font-semibold text-po-ink">{column.title || "Untitled column"}</h3>
           {portableTextToPlainText(column.body) ? (
-            <p className="mt-3 text-sm leading-6 text-zinc-700">{portableTextToPlainText(column.body)}</p>
+            <p className="mt-3 text-sm leading-6 text-po-body">{portableTextToPlainText(column.body)}</p>
           ) : null}
           {column.contentRef ? (
-            <div className="mt-4 border-t border-zinc-200 pt-4">
-              <p className="text-xs font-semibold uppercase tracking-normal text-emerald-800">
+            <div className="mt-4 border-t border-po-line pt-4">
+              <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
                 {column.contentRef._type || "Referenced content"}
               </p>
-              <p className="mt-2 text-sm font-semibold text-zinc-950">{linkedRecordTitle(column.contentRef)}</p>
+              <p className="mt-2 text-sm font-semibold text-po-ink">{linkedRecordTitle(column.contentRef)}</p>
             </div>
           ) : null}
         </article>
@@ -411,17 +411,17 @@ function AssetCards({ assets, renderMode }: { readonly assets: readonly SanityAs
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {assets.map((asset, index) => (
-        <article className="grid content-start gap-3 border border-zinc-200 bg-zinc-50 p-4" key={asset._id || `${asset.title || "asset"}-${index}`}>
-          <div className="aspect-[4/3] border border-zinc-200 bg-white p-4">
-            <div className="flex h-full items-end border border-dashed border-zinc-300 bg-zinc-50 p-4">
-              <p className="text-xs font-semibold uppercase tracking-normal text-zinc-500">
+        <article className="grid content-start gap-3 border border-po-line bg-po-soft p-4" key={asset._id || `${asset.title || "asset"}-${index}`}>
+          <div className="aspect-[4/3] border border-po-line bg-po-canvas p-4">
+            <div className="flex h-full items-end border border-dashed border-po-subtle bg-po-soft p-4">
+              <p className="text-xs font-semibold uppercase tracking-normal text-po-muted">
                 {(isPrivate ? asset.sourceSystem : undefined) || "Asset preview"}
               </p>
             </div>
           </div>
-          <h3 className="text-base font-semibold text-zinc-950">{asset.title || asset.assetName || "Untitled asset"}</h3>
+          <h3 className="text-base font-semibold text-po-ink">{asset.title || asset.assetName || "Untitled asset"}</h3>
           {isPrivate && asset.savedFile ? (
-            <p className="break-words text-xs leading-5 text-zinc-600">{asset.savedFile}</p>
+            <p className="break-words text-xs leading-5 text-po-muted">{asset.savedFile}</p>
           ) : null}
           {isPrivate ? (
             <div className="flex flex-wrap gap-2">
@@ -430,7 +430,7 @@ function AssetCards({ assets, renderMode }: { readonly assets: readonly SanityAs
             </div>
           ) : null}
           {isPrivate && asset.pageUsage?.length ? (
-            <p className="text-xs leading-5 text-zinc-600">{asset.pageUsage.join(", ")}</p>
+            <p className="text-xs leading-5 text-po-muted">{asset.pageUsage.join(", ")}</p>
           ) : null}
         </article>
       ))}
@@ -509,21 +509,21 @@ function LearnHubModule({ module, renderMode }: { readonly module: SanityHomepag
     <Scene ariaLabelledBy={id} tone="default">
       <div className="mx-auto grid w-full max-w-7xl gap-8">
         <ModuleHeading fallback="Learn hub" id={id} kicker="Education" module={module} renderMode={renderMode} />
-        <div className="grid gap-4 border border-emerald-200 bg-emerald-50 p-5 md:grid-cols-[minmax(0,0.8fr)_minmax(260px,0.4fr)] md:items-center">
+        <div className="grid gap-4 border border-po-brand-line bg-po-brand-soft p-5 md:grid-cols-[minmax(0,0.8fr)_minmax(260px,0.4fr)] md:items-center">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-normal text-emerald-800">
+            <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
               Learn CMS path
             </p>
-            <h3 className="mt-2 text-xl font-semibold text-zinc-950">
+            <h3 className="mt-2 text-xl font-semibold text-po-ink">
               Guide cards route into approved Learn URLs
             </h3>
-            <p className="mt-3 text-sm leading-6 text-zinc-700">
+            <p className="mt-3 text-sm leading-6 text-po-body">
               The Learn hub can list Sanity guide references while each guide route keeps its own source, claim, and module review path.
             </p>
           </div>
-          <div className="grid gap-2 border border-emerald-200 bg-white p-4">
-            <p className="text-xs font-semibold uppercase tracking-normal text-zinc-500">Rendered guide candidates</p>
-            <p className="text-3xl font-semibold text-zinc-950">{guideCount}</p>
+          <div className="grid gap-2 border border-po-brand-line bg-po-canvas p-4">
+            <p className="text-xs font-semibold uppercase tracking-normal text-po-muted">Rendered guide candidates</p>
+            <p className="text-3xl font-semibold text-po-ink">{guideCount}</p>
           </div>
         </div>
         <FeaturedGuides guides={module.featuredGuides} renderMode={renderMode} />
@@ -587,8 +587,8 @@ function ModuleMeta({ module, renderMode }: { readonly module: SanityHomepageMod
 
   return (
     <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-normal">
-      <span className="text-emerald-700">{label}</span>
-      {eligibility ? <span className="text-zinc-500">{eligibility}</span> : null}
+      <span className="text-po-brand">{label}</span>
+      {eligibility ? <span className="text-po-muted">{eligibility}</span> : null}
     </div>
   );
 }
@@ -608,7 +608,7 @@ function HeroModule({ module, index, renderMode }: { readonly module: SanityHome
         <div className="grid gap-6">
           <ModuleMeta module={module} renderMode={renderMode} />
           {module.eyebrow ? (
-            <p className="text-sm font-semibold uppercase tracking-normal text-emerald-200">
+            <p className="text-sm font-semibold uppercase tracking-normal text-po-brand-line">
               {module.eyebrow}
             </p>
           ) : null}
@@ -616,7 +616,7 @@ function HeroModule({ module, index, renderMode }: { readonly module: SanityHome
             {moduleTitle(module, "Official Presidential", renderMode)}
           </h2>
           {moduleBody(module) ? (
-            <p className="max-w-2xl text-lg leading-8 text-zinc-300">{moduleBody(module)}</p>
+            <p className="max-w-2xl text-lg leading-8 text-po-on-dark-muted">{moduleBody(module)}</p>
           ) : null}
           {primaryHref || secondaryHref ? (
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -633,14 +633,14 @@ function HeroModule({ module, index, renderMode }: { readonly module: SanityHome
             </div>
           ) : null}
         </div>
-        <div className="min-h-96 border border-white/15 bg-white/10 p-5">
-          <div className="flex h-full min-h-80 items-end border border-emerald-300/30 bg-emerald-300/10 p-5">
+        <div className="min-h-96 border border-white/15 bg-po-canvas/10 p-5">
+          <div className="flex h-full min-h-80 items-end border border-po-brand-line bg-po-brand-soft p-5">
             <div className="grid gap-3">
-              <p className="text-sm font-semibold text-emerald-100">
+              <p className="text-sm font-semibold text-po-brand-line">
                 {assets[0]?.title || assets[0]?.assetName || "CMS-driven hero media slot"}
               </p>
               {isPrivate && assets[0]?.savedFile ? (
-                <p className="text-xs leading-5 text-emerald-50">{assets[0].savedFile}</p>
+                <p className="text-xs leading-5 text-po-brand-soft">{assets[0].savedFile}</p>
               ) : null}
             </div>
           </div>
@@ -661,14 +661,14 @@ function HomepageActModule({ module, index, renderMode }: { readonly module: San
       <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[minmax(0,0.88fr)_minmax(300px,0.58fr)] lg:items-center">
         <div className="grid gap-5">
           <ModuleMeta module={module} renderMode={renderMode} />
-          <p className="text-sm font-black uppercase tracking-normal text-emerald-800">
+          <p className="text-sm font-black uppercase tracking-normal text-po-brand">
             Act {actNumber}
           </p>
-          <h2 className="text-3xl font-semibold leading-tight text-zinc-950 sm:text-4xl" id={id}>
+          <h2 className="text-3xl font-semibold leading-tight text-po-ink sm:text-4xl" id={id}>
             {moduleTitle(module, `Homepage act ${actNumber}`, renderMode)}
           </h2>
           {moduleBody(module) ? (
-            <p className="max-w-2xl text-base leading-7 text-zinc-700">{moduleBody(module)}</p>
+            <p className="max-w-2xl text-base leading-7 text-po-body">{moduleBody(module)}</p>
           ) : null}
           {ctaHref && cta.label ? (
             <div>
@@ -678,9 +678,9 @@ function HomepageActModule({ module, index, renderMode }: { readonly module: San
             </div>
           ) : null}
         </div>
-        <div className="aspect-[4/3] border border-zinc-200 bg-white p-4 shadow-sm">
-          <div className="flex h-full items-end border border-zinc-200 bg-zinc-50 p-4">
-            <p className="text-sm font-semibold text-zinc-700">CMS act media slot</p>
+        <div className="aspect-[4/3] border border-po-line bg-po-canvas p-4 shadow-sm">
+          <div className="flex h-full items-end border border-po-line bg-po-soft p-4">
+            <p className="text-sm font-semibold text-po-body">CMS act media slot</p>
           </div>
         </div>
       </div>
@@ -710,16 +710,16 @@ function ProductOrListModule({
         {items.length ? (
           <div className="grid gap-4 md:grid-cols-3">
             {items.map((item, index) => (
-              <article className="border border-zinc-200 bg-white p-5 shadow-sm" key={`${item._id || item.title || item.name || item.label || "item"}-${index}`}>
-                <p className="text-xs font-semibold uppercase tracking-normal text-emerald-800">
+              <article className="border border-po-line bg-po-canvas p-5 shadow-sm" key={`${item._id || item.title || item.name || item.label || "item"}-${index}`}>
+                <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
                   {item.label || item._type || `Item ${index + 1}`}
                 </p>
-                <h3 className="mt-4 text-xl font-semibold text-zinc-950">{item.title || item.name || "Untitled"}</h3>
+                <h3 className="mt-4 text-xl font-semibold text-po-ink">{item.title || item.name || "Untitled"}</h3>
                 {item.description ? (
-                  <p className="mt-3 text-sm leading-6 text-zinc-700">{item.description}</p>
+                  <p className="mt-3 text-sm leading-6 text-po-body">{item.description}</p>
                 ) : null}
                 {item.slug ? (
-                  <p className="mt-3 text-xs leading-5 text-zinc-600">Slug: {item.slug}</p>
+                  <p className="mt-3 text-xs leading-5 text-po-muted">Slug: {item.slug}</p>
                 ) : null}
               </article>
             ))}
@@ -778,11 +778,11 @@ function ContactDetailPanel({
 
   if (!contactProfile) {
     return (
-      <div className="grid gap-3 border border-white/15 bg-white/10 p-4">
-        <p className="text-sm font-semibold uppercase tracking-normal text-emerald-100">
+      <div className="grid gap-3 border border-white/15 bg-po-canvas/10 p-4">
+        <p className="text-sm font-semibold uppercase tracking-normal text-po-brand-line">
           Official contact details
         </p>
-        <p className="text-sm leading-6 text-zinc-300">
+        <p className="text-sm leading-6 text-po-on-dark-muted">
           Contact details will appear here after the official contact profile is connected.
         </p>
       </div>
@@ -790,8 +790,8 @@ function ContactDetailPanel({
   }
 
   return (
-    <div className="grid gap-3 border border-white/15 bg-white/10 p-4">
-      <p className="text-sm font-semibold uppercase tracking-normal text-emerald-100">
+    <div className="grid gap-3 border border-white/15 bg-po-canvas/10 p-4">
+      <p className="text-sm font-semibold uppercase tracking-normal text-po-brand-line">
         {contactProfile.title || "Official contact details"}
       </p>
       {showContactDetails && contactProfile.phone ? (
@@ -805,7 +805,7 @@ function ContactDetailPanel({
         </p>
       ) : null}
       {!showContactDetails ? (
-        <p className="text-sm leading-6 text-zinc-300">
+        <p className="text-sm leading-6 text-po-on-dark-muted">
           Official contact details are held for client confirmation before public display.
         </p>
       ) : null}
@@ -865,15 +865,15 @@ function ContactRouteCards({
   return (
     <div className="grid gap-4 md:grid-cols-3">
       {panels.map((panel) => (
-        <article className="border border-white/15 bg-white/10 p-4" key={panel.title}>
+        <article className="border border-white/15 bg-po-canvas/10 p-4" key={panel.title}>
           <h3 className="text-lg font-semibold leading-tight text-white">{panel.title}</h3>
-          <p className="mt-3 text-sm leading-6 text-zinc-300">{panel.body}</p>
+          <p className="mt-3 text-sm leading-6 text-po-on-dark-muted">{panel.body}</p>
         </article>
       ))}
       {isPrivate && resolvedVariant === "locator" && module.stateCandidates?.length ? (
-        <article className="border border-white/15 bg-white/10 p-4 md:col-span-3">
+        <article className="border border-white/15 bg-po-canvas/10 p-4 md:col-span-3">
           <h3 className="text-lg font-semibold leading-tight text-white">State candidates</h3>
-          <p className="mt-3 text-sm leading-6 text-zinc-300">{module.stateCandidates.join(", ")}</p>
+          <p className="mt-3 text-sm leading-6 text-po-on-dark-muted">{module.stateCandidates.join(", ")}</p>
         </article>
       ) : null}
     </div>
@@ -916,14 +916,14 @@ function ContactModule({
         <div className="grid gap-5 lg:grid-cols-[minmax(0,0.9fr)_minmax(300px,0.45fr)] lg:items-start">
           <div className="grid gap-5">
             <ModuleMeta module={module} renderMode={renderMode} />
-            <p className="text-sm font-semibold uppercase tracking-normal text-emerald-200">
+            <p className="text-sm font-semibold uppercase tracking-normal text-po-brand-line">
               {resolvedVariant === "locator" ? "Retail discovery" : "Contact routing"}
             </p>
             <h2 className="text-3xl font-semibold leading-tight sm:text-4xl" id={id}>
               {moduleTitle(module, resolvedVariant === "locator" ? "Find Presidential" : "Connect with Presidential", renderMode)}
             </h2>
             {moduleBody(module) ? (
-              <p className="max-w-2xl text-base leading-7 text-zinc-300">{moduleBody(module)}</p>
+              <p className="max-w-2xl text-base leading-7 text-po-on-dark-muted">{moduleBody(module)}</p>
             ) : null}
             {ctaHref && cta.label ? (
               <CtaLink href={ctaHref} variant="primary">
@@ -931,17 +931,17 @@ function ContactModule({
               </CtaLink>
             ) : null}
           </div>
-          <div className="grid gap-4 border border-white/15 bg-white/10 p-5">
-            <p className="text-sm font-semibold uppercase tracking-normal text-emerald-100">
+          <div className="grid gap-4 border border-white/15 bg-po-canvas/10 p-5">
+            <p className="text-sm font-semibold uppercase tracking-normal text-po-brand-line">
               {resolvedVariant === "locator" ? "Locator shell" : "Contact shell"}
             </p>
             <KeyValueList entries={entries} />
             {resolvedVariant === "locator" ? (
-              <p className="text-sm leading-6 text-zinc-300">
+              <p className="text-sm leading-6 text-po-on-dark-muted">
                 Retailer listings appear only after licensed retailer records are verified.
               </p>
             ) : (
-              <p className="text-sm leading-6 text-zinc-300">
+              <p className="text-sm leading-6 text-po-on-dark-muted">
                 Contact routing can be shown without activating a public form.
               </p>
             )}
@@ -961,13 +961,13 @@ function FallbackModule({ module, index, renderMode }: { readonly module: Sanity
 
   return (
     <Scene ariaLabelledBy={id} tone="quiet">
-      <div className="mx-auto max-w-5xl border border-zinc-200 bg-white p-6 shadow-sm">
+      <div className="mx-auto max-w-5xl border border-po-line bg-po-canvas p-6 shadow-sm">
         <ModuleMeta module={module} renderMode={renderMode} />
-        <h2 className="mt-3 text-2xl font-semibold text-zinc-950" id={id}>
+        <h2 className="mt-3 text-2xl font-semibold text-po-ink" id={id}>
           {moduleTitle(module, `CMS module ${index + 1}`, renderMode)}
         </h2>
         {moduleBody(module) ? (
-          <p className="mt-4 text-base leading-7 text-zinc-700">{moduleBody(module)}</p>
+          <p className="mt-4 text-base leading-7 text-po-body">{moduleBody(module)}</p>
         ) : null}
       </div>
     </Scene>
@@ -1027,11 +1027,11 @@ export function CmsHomepageModuleRenderer({
   if (!modules.length) {
     return (
       <Scene ariaLabelledBy="cms-empty-homepage-modules" tone="quiet">
-        <div className="mx-auto max-w-4xl border border-zinc-200 bg-white p-6">
-          <h2 className="text-2xl font-semibold text-zinc-950" id="cms-empty-homepage-modules">
+        <div className="mx-auto max-w-4xl border border-po-line bg-po-canvas p-6">
+          <h2 className="text-2xl font-semibold text-po-ink" id="cms-empty-homepage-modules">
             No homepage modules found
           </h2>
-          <p className="mt-3 text-sm leading-6 text-zinc-700">
+          <p className="mt-3 text-sm leading-6 text-po-body">
             Add modules in Sanity and this route will render them here.
           </p>
         </div>

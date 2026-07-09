@@ -30,7 +30,7 @@ export function HomepageActShell({
             kicker={`Act ${actNumber}`}
             title={title}
           />
-          <p className="max-w-2xl text-sm leading-6 text-zinc-600">
+          <p className="max-w-2xl text-sm leading-6 text-po-muted">
             A direct path into the official Presidential experience for adults
             21+ where legal.
           </p>

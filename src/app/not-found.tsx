@@ -15,44 +15,44 @@ export default function NotFound() {
   return (
     <>
       <a
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:border focus:border-emerald-900 focus:bg-white focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-emerald-950 focus:shadow-lg"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:border focus:border-po-brand focus:bg-po-canvas focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-po-brand-strong focus:shadow-lg"
         href="#presidential-main"
       >
         Skip to main content
       </a>
       <main
-        className="flex min-h-screen items-center bg-zinc-50 px-6 py-20 text-zinc-950"
+        className="flex min-h-screen items-center bg-po-soft px-6 py-20 text-po-ink"
         id="presidential-main"
         tabIndex={-1}
       >
-      <section className="mx-auto flex w-full max-w-3xl flex-col gap-6 border border-zinc-200 bg-white p-8">
-        <p className="text-sm font-semibold uppercase text-emerald-800">
+      <section className="mx-auto flex w-full max-w-3xl flex-col gap-6 border border-po-line bg-po-canvas p-8">
+        <p className="text-sm font-semibold uppercase text-po-brand">
           Official Presidential
         </p>
         <div className="flex flex-col gap-4">
           <h1 className="text-4xl font-semibold leading-tight">
             Page not found
           </h1>
-          <p className="max-w-2xl text-base leading-7 text-zinc-700">
+          <p className="max-w-2xl text-base leading-7 text-po-body">
             This Presidential page is not available. Continue through the
             official home while approved sections are finalized.
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Link
-            className="border border-emerald-900 bg-emerald-900 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-800"
+            className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-po-brand-hover"
             href="/"
           >
             Return to Presidential home
           </Link>
           <Link
-            className="border border-zinc-300 px-4 py-3 text-sm font-semibold text-zinc-800 transition-colors hover:border-zinc-500"
+            className="border border-po-subtle px-4 py-3 text-sm font-semibold text-po-body transition-colors hover:border-po-muted"
             href="/learn"
           >
             Explore Presidential learning
           </Link>
         </div>
-        <p className="text-sm font-medium text-zinc-600">
+        <p className="text-sm font-medium text-po-muted">
           For adults 21+ where legal.
         </p>
       </section>

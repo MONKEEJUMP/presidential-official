@@ -153,14 +153,14 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
                 </CtaLink>
               </div>
             </div>
-            <aside className="border border-zinc-200 bg-zinc-50 p-5">
-              <p className="text-xs font-semibold uppercase tracking-normal text-emerald-800">
+            <aside className="border border-po-line bg-po-soft p-5">
+              <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
                 Topic
               </p>
-              <p className="mt-3 text-xl font-semibold text-zinc-950">
+              <p className="mt-3 text-xl font-semibold text-po-ink">
                 {guide.record?.guideTopic || fallback.topic}
               </p>
-              <p className="mt-4 text-sm leading-6 text-zinc-700">
+              <p className="mt-4 text-sm leading-6 text-po-body">
                 Adults 21+ where legal. Guide content is informational.
               </p>
             </aside>
@@ -172,20 +172,20 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
         ) : (
           <Scene ariaLabelledBy="presidential-learn-guide-foundation" tone="quiet">
             <div className="mx-auto grid w-full max-w-6xl gap-4 md:grid-cols-2">
-              <article className="border border-zinc-200 bg-white p-5">
-                <h2 className="text-2xl font-semibold text-zinc-950" id="presidential-learn-guide-foundation">
+              <article className="border border-po-line bg-po-canvas p-5">
+                <h2 className="text-2xl font-semibold text-po-ink" id="presidential-learn-guide-foundation">
                   Guide foundation
                 </h2>
-                <p className="mt-4 text-sm leading-6 text-zinc-700">
+                <p className="mt-4 text-sm leading-6 text-po-body">
                   This guide route is ready for CMS body modules once the Sanity
                   guide record is promoted into the render path.
                 </p>
               </article>
-              <article className="border border-zinc-200 bg-white p-5">
-                <h2 className="text-2xl font-semibold text-zinc-950">
+              <article className="border border-po-line bg-po-canvas p-5">
+                <h2 className="text-2xl font-semibold text-po-ink">
                   Source path
                 </h2>
-                <p className="mt-4 text-sm leading-6 text-zinc-700">
+                <p className="mt-4 text-sm leading-6 text-po-body">
                   Each guide can connect source records, claim review, related
                   products, and final metadata without changing the route shape.
                 </p>

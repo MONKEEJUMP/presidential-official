@@ -17,7 +17,7 @@ export function PlatformPreviewShell({
   ctaLabel,
 }: PlatformPreviewShellProps) {
   return (
-    <article className="grid gap-5 border border-zinc-200 bg-white p-5 shadow-sm">
+    <article className="grid gap-5 border border-po-line bg-po-canvas p-5 shadow-sm">
       <MediaSlot
         aspectClassName="aspect-[16/10]"
         kind="product_visual_placeholder"
@@ -26,12 +26,12 @@ export function PlatformPreviewShell({
       />
       <div className="flex flex-col gap-4">
         <div>
-          <h3 className="text-xl font-semibold leading-snug text-zinc-950">
+          <h3 className="text-xl font-semibold leading-snug text-po-ink">
             {title}
           </h3>
-          <p className="mt-3 text-sm leading-6 text-zinc-700">{description}</p>
+          <p className="mt-3 text-sm leading-6 text-po-body">{description}</p>
         </div>
-        <p className="text-xs font-medium uppercase tracking-normal text-zinc-500">
+        <p className="text-xs font-medium uppercase tracking-normal text-po-muted">
           For adults 21+ where legal
         </p>
         <CtaLink href={href} variant="secondary">

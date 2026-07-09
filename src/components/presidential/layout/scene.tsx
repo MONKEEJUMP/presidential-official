@@ -12,10 +12,10 @@ type SceneProps = {
 };
 
 const toneClasses = {
-  default: "bg-white text-zinc-950",
-  quiet: "bg-zinc-50 text-zinc-950",
-  contrast: "bg-zinc-950 text-white",
-  internal: "bg-white text-zinc-950 outline outline-1 outline-dashed outline-zinc-300",
+  default: "bg-po-canvas text-po-ink",
+  quiet: "bg-po-soft text-po-ink",
+  contrast: "bg-po-ink text-white",
+  internal: "bg-po-canvas text-po-ink outline outline-1 outline-dashed outline-po-subtle",
 } as const satisfies Record<SceneTone, string>;
 
 export function Scene({

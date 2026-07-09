@@ -213,10 +213,10 @@ function StatusPill({
   readonly tone?: "ok" | "wait" | "neutral";
 }) {
   const toneClass = tone === "ok"
-    ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+    ? "border-po-brand-line bg-po-brand-soft text-po-brand"
     : tone === "wait"
-      ? "border-amber-300 bg-amber-50 text-amber-800"
-      : "border-zinc-200 bg-zinc-50 text-zinc-700";
+      ? "border-po-gold bg-po-gold-soft text-po-gold-ink"
+      : "border-po-line bg-po-soft text-po-body";
 
   return (
     <span className={`inline-flex border px-2.5 py-1 text-xs font-semibold uppercase tracking-normal ${toneClass}`}>
@@ -233,7 +233,7 @@ function ProductRouteLink({ route }: { readonly route?: string }) {
   if (PRODUCT_ROUTE_HREFS.has(route)) {
     return (
       <Link
-        className="mt-2 w-fit text-sm font-semibold text-emerald-900 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900"
+        className="mt-2 w-fit text-sm font-semibold text-po-brand underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
         href={route as `/${CmsProductRouteSlug}`}
       >
         Open route
@@ -241,7 +241,7 @@ function ProductRouteLink({ route }: { readonly route?: string }) {
     );
   }
 
-  return <p className="mt-2 break-words text-xs leading-5 text-zinc-500">{route}</p>;
+  return <p className="mt-2 break-words text-xs leading-5 text-po-muted">{route}</p>;
 }
 
 export function CmsProductAssetCard({
@@ -257,11 +257,11 @@ export function CmsProductAssetCard({
   const title = asset.title || asset.assetName || `Product asset ${typeof index === "number" ? index + 1 : ""}`.trim();
 
   return (
-    <article className="grid content-start gap-3 border border-zinc-200 bg-zinc-50 p-4">
+    <article className="grid content-start gap-3 border border-po-line bg-po-soft p-4">
       {asset.assetUrl ? (
         <figure
           aria-label={asset.altText || title}
-          className="aspect-[4/3] overflow-hidden border border-zinc-200 bg-white bg-contain bg-center bg-no-repeat"
+          className="aspect-[4/3] overflow-hidden border border-po-line bg-po-canvas bg-contain bg-center bg-no-repeat"
           role="img"
           style={{ backgroundImage: `url(${asset.assetUrl})` }}
         />
@@ -274,9 +274,9 @@ export function CmsProductAssetCard({
         />
       )}
       <div className="grid gap-2">
-        <h3 className="text-base font-semibold leading-tight text-zinc-950">{title}</h3>
+        <h3 className="text-base font-semibold leading-tight text-po-ink">{title}</h3>
         {isPrivate && asset.savedFile ? (
-          <p className="break-words text-xs leading-5 text-zinc-600">{asset.savedFile}</p>
+          <p className="break-words text-xs leading-5 text-po-muted">{asset.savedFile}</p>
         ) : null}
         {isPrivate ? (
           <div className="flex flex-wrap gap-2">
@@ -299,19 +299,19 @@ export function CmsProductCard({
   const isPrivate = isPrivateMode(renderMode);
 
   return (
-    <article className="grid content-start gap-3 border border-zinc-200 bg-white p-5 shadow-sm">
+    <article className="grid content-start gap-3 border border-po-line bg-po-canvas p-5 shadow-sm">
       <div className="flex flex-wrap gap-2">
         {isPrivate && card.sourceStatus ? <StatusPill tone="wait">{card.sourceStatus}</StatusPill> : null}
         {isPrivate && card.routeGate ? <StatusPill>{card.routeGate}</StatusPill> : null}
         {(!isPrivate || (!card.sourceStatus && !card.routeGate)) ? <StatusPill>Product</StatusPill> : null}
       </div>
-      <h3 className="text-lg font-semibold leading-tight text-zinc-950">{card.title}</h3>
+      <h3 className="text-lg font-semibold leading-tight text-po-ink">{card.title}</h3>
       {card.description ? (
-        <p className="text-sm leading-6 text-zinc-700">{card.description}</p>
+        <p className="text-sm leading-6 text-po-body">{card.description}</p>
       ) : null}
       <ProductRouteLink route={card.route} />
       {card.asset ? (
-        <p className="text-xs font-semibold text-zinc-500">
+        <p className="text-xs font-semibold text-po-muted">
           {card.asset.title || card.asset.assetName || "Asset attached"}
         </p>
       ) : null}
@@ -333,19 +333,19 @@ export function CmsProductRoutePanel({
   }
 
   return (
-    <aside className="grid gap-4 border border-emerald-200 bg-emerald-50 p-5">
+    <aside className="grid gap-4 border border-po-brand-line bg-po-brand-soft p-5">
       <div className="flex flex-wrap gap-2">
         <StatusPill tone="ok">{profile.laneLabel}</StatusPill>
         <StatusPill>{profile.route}</StatusPill>
       </div>
       <div>
-        <h3 className="text-xl font-semibold leading-tight text-zinc-950">{profile.title} CMS product path</h3>
-        <p className="mt-3 text-sm leading-6 text-zinc-700">{profile.role}</p>
+        <h3 className="text-xl font-semibold leading-tight text-po-ink">{profile.title} CMS product path</h3>
+        <p className="mt-3 text-sm leading-6 text-po-body">{profile.role}</p>
       </div>
       <ol className="grid gap-2">
         {profile.nextSteps.map((step, index) => (
-          <li className="flex items-center gap-3 border border-emerald-200 bg-white p-3 text-sm font-semibold text-zinc-900" key={step}>
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center bg-emerald-900 text-white">
+          <li className="flex items-center gap-3 border border-po-brand-line bg-po-canvas p-3 text-sm font-semibold text-po-ink" key={step}>
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center bg-po-brand text-white">
               {index + 1}
             </span>
             {step}
@@ -379,16 +379,16 @@ export function CmsProductModuleComponents({
             ))}
           </div>
         ) : (
-          <div className="border border-zinc-200 bg-white p-5">
-            <p className="text-sm leading-6 text-zinc-700">
+          <div className="border border-po-line bg-po-canvas p-5">
+            <p className="text-sm leading-6 text-po-body">
               Product cards can render here once Sanity modules provide platform, format, related product, or card references.
             </p>
           </div>
         )}
         <CmsProductRoutePanel module={module} productRoute={productRoute} />
       </div>
-      <div className="grid content-start gap-4 border border-zinc-200 bg-zinc-50 p-5">
-        <p className="text-sm font-semibold uppercase tracking-normal text-emerald-800">
+      <div className="grid content-start gap-4 border border-po-line bg-po-soft p-5">
+        <p className="text-sm font-semibold uppercase tracking-normal text-po-brand">
           {profile?.mediaLabel || "Product media"}
         </p>
         {assets.length ? (
@@ -398,7 +398,7 @@ export function CmsProductModuleComponents({
             ))}
           </div>
         ) : (
-          <p className="text-sm leading-6 text-zinc-700">
+          <p className="text-sm leading-6 text-po-body">
             Product media cards will appear here when Sanity asset records are attached to the module.
           </p>
         )}

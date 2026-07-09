@@ -10,8 +10,8 @@ type PageFrameProps = {
 
 export function PageFrame({ children, className = "", ...mainProps }: PageFrameProps) {
   const classNames = [
-    "min-h-screen bg-white text-zinc-950",
-    "selection:bg-emerald-900 selection:text-white",
+    "min-h-screen bg-po-canvas text-po-ink",
+    "selection:bg-po-brand selection:text-white",
     className,
   ]
     .filter(Boolean)
@@ -20,7 +20,7 @@ export function PageFrame({ children, className = "", ...mainProps }: PageFrameP
   return (
     <>
       <a
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:border focus:border-emerald-900 focus:bg-white focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-emerald-950 focus:shadow-lg"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:border focus:border-po-brand focus:bg-po-canvas focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-po-brand-strong focus:shadow-lg"
         href="#presidential-main"
       >
         Skip to main content

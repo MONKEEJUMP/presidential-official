@@ -23,19 +23,19 @@ export function FindUsCtaShell() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden border border-zinc-200 bg-white p-5 shadow-sm">
+        <div className="relative overflow-hidden border border-po-line bg-po-canvas p-5 shadow-sm">
           <div
             aria-hidden="true"
-            className="grid min-h-72 grid-cols-5 gap-2 border border-zinc-100 bg-zinc-50 p-4"
+            className="grid min-h-72 grid-cols-5 gap-2 border border-po-line bg-po-soft p-4"
           >
             {Array.from({ length: 25 }).map((_, index) => (
               <span
                 className={[
-                  "min-h-10 border border-zinc-200 bg-white",
+                  "min-h-10 border border-po-line bg-po-canvas",
                   index === 6 || index === 12 || index === 18
-                    ? "bg-emerald-900"
+                    ? "bg-po-brand"
                     : "",
-                  index === 8 || index === 16 ? "bg-amber-300" : "",
+                  index === 8 || index === 16 ? "bg-po-gold" : "",
                 ]
                   .filter(Boolean)
                   .join(" ")}
@@ -43,11 +43,11 @@ export function FindUsCtaShell() {
               />
             ))}
           </div>
-          <div className="absolute inset-x-8 bottom-8 border border-zinc-200 bg-white p-4 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-normal text-emerald-800">
+          <div className="absolute inset-x-8 bottom-8 border border-po-line bg-po-canvas p-4 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
               Retail path
             </p>
-            <p className="mt-2 text-sm leading-6 text-zinc-700">
+            <p className="mt-2 text-sm leading-6 text-po-body">
               Retail discovery will use verified licensed retailer records.
               Availability varies by licensed retailer.
             </p>

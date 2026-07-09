@@ -27,6 +27,73 @@ export type DesignTokenRecord = {
   readonly publicUnlock: false;
 };
 
+export type RuntimeDesignTokenBinding = {
+  readonly tokenName: string;
+  readonly cssVariable: `--${string}`;
+  readonly themeVariable: `--${string}`;
+  readonly scaffoldValue: string;
+  readonly finalApprovalRequired: true;
+};
+
+export const PRESIDENTIAL_RUNTIME_TOKEN_BINDINGS = [
+  {
+    tokenName: "color.brand.presidential_teal",
+    cssVariable: "--po-color-brand",
+    themeVariable: "--color-po-brand",
+    scaffoldValue: "#064e3b",
+    finalApprovalRequired: true,
+  },
+  {
+    tokenName: "color.base.black",
+    cssVariable: "--po-color-ink",
+    themeVariable: "--color-po-ink",
+    scaffoldValue: "#09090b",
+    finalApprovalRequired: true,
+  },
+  {
+    tokenName: "color.base.white",
+    cssVariable: "--po-color-canvas",
+    themeVariable: "--color-po-canvas",
+    scaffoldValue: "#ffffff",
+    finalApprovalRequired: true,
+  },
+  {
+    tokenName: "color.series.silver",
+    cssVariable: "--po-color-silver",
+    themeVariable: "--color-po-silver",
+    scaffoldValue: "#e5e7eb",
+    finalApprovalRequired: true,
+  },
+  {
+    tokenName: "color.series.gold",
+    cssVariable: "--po-color-gold",
+    themeVariable: "--color-po-gold",
+    scaffoldValue: "#fbbf24",
+    finalApprovalRequired: true,
+  },
+  {
+    tokenName: "color.series.rose_gold",
+    cssVariable: "--po-color-rose-gold",
+    themeVariable: "--color-po-rose-gold",
+    scaffoldValue: "#f4c7b8",
+    finalApprovalRequired: true,
+  },
+  {
+    tokenName: "type.display",
+    cssVariable: "--po-font-display",
+    themeVariable: "--font-display",
+    scaffoldValue: "Arial, Helvetica, sans-serif",
+    finalApprovalRequired: true,
+  },
+  {
+    tokenName: "type.body",
+    cssVariable: "--po-font-body",
+    themeVariable: "--font-sans",
+    scaffoldValue: "Arial, Helvetica, sans-serif",
+    finalApprovalRequired: true,
+  },
+] as const satisfies readonly RuntimeDesignTokenBinding[];
+
 export const PRESIDENTIAL_DESIGN_TOKENS = [
   {
     family: "color",

@@ -12,7 +12,7 @@ const footerLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-zinc-200 bg-zinc-950 px-6 py-12 text-white sm:px-10 lg:px-16">
+    <footer className="border-t border-po-line bg-po-ink px-6 py-12 text-white sm:px-10 lg:px-16">
       <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(320px,1fr)]">
         <div className="flex max-w-xl flex-col gap-4">
           <Link
@@ -21,18 +21,18 @@ export function SiteFooter() {
           >
             PRESIDENTIAL
           </Link>
-          <p className="text-sm leading-6 text-zinc-300">
+          <p className="text-sm leading-6 text-po-on-dark-muted">
             Official home of Presidential cannabis products. Availability varies
             by licensed retailer. For adults 21+ where legal.
           </p>
         </div>
 
         <nav aria-label="Footer navigation">
-          <ul className="grid gap-3 text-sm font-semibold text-zinc-300 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-3 text-sm font-semibold text-po-on-dark-muted sm:grid-cols-2 lg:grid-cols-3">
             {footerLinks.map((link) => (
               <li key={link.href}>
                 <Link
-                  className="transition-colors hover:text-amber-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-200"
+                  className="transition-colors hover:text-po-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-gold"
                   href={link.href}
                 >
                   {link.label}

@@ -16,12 +16,12 @@ type CtaLinkProps = {
 
 const variantClasses = {
   primary:
-    "border border-emerald-900 bg-emerald-900 text-white hover:bg-emerald-800",
+    "border border-po-brand bg-po-brand text-white hover:bg-po-brand-hover",
   secondary:
-    "border border-zinc-300 text-zinc-900 hover:border-emerald-900 hover:text-emerald-900",
+    "border border-po-subtle text-po-ink hover:border-po-brand hover:text-po-brand",
   contrast:
-    "border border-white/30 text-white hover:border-amber-200 hover:text-amber-200",
-  text: "text-emerald-900 underline-offset-4 hover:underline",
+    "border border-white/30 text-white hover:border-po-gold hover:text-po-gold",
+  text: "text-po-brand underline-offset-4 hover:underline",
 } as const satisfies Record<CtaLinkVariant, string>;
 
 export function CtaLink({
@@ -38,7 +38,7 @@ export function CtaLink({
   }
 
   const classNames = [
-    "inline-flex items-center justify-center text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900",
+    "inline-flex items-center justify-center text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand",
     variant === "text" ? "px-0 py-0" : "px-4 py-3",
     variantClasses[variant],
     className,

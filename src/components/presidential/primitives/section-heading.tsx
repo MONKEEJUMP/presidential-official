@@ -33,7 +33,7 @@ export function SectionHeading<THeading extends HeadingLevel = "h2">({
   return (
     <header className={["max-w-3xl", className].filter(Boolean).join(" ")}>
       {kicker ? (
-        <p className="mb-4 text-sm font-semibold uppercase tracking-normal text-emerald-800">
+        <p className="mb-4 text-sm font-semibold uppercase tracking-normal text-po-brand">
           {kicker}
         </p>
       ) : null}
@@ -45,7 +45,7 @@ export function SectionHeading<THeading extends HeadingLevel = "h2">({
         {title}
       </Heading>
       {description ? (
-        <p className="mt-5 max-w-2xl text-base leading-7 text-zinc-700 sm:text-lg sm:leading-8">
+        <p className="mt-5 max-w-2xl text-base leading-7 text-po-body sm:text-lg sm:leading-8">
           {description}
         </p>
       ) : null}

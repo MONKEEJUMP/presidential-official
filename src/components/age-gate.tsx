@@ -131,18 +131,18 @@ export function AgeGate() {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex min-h-screen items-center justify-center bg-zinc-950/80 px-6 py-8"
+      className="fixed inset-0 z-50 flex min-h-screen items-center justify-center bg-po-ink/80 px-6 py-8"
       role="presentation"
     >
       <section
         aria-describedby="presidential-age-gate-description"
         aria-labelledby="presidential-age-gate-title"
         aria-modal="true"
-        className="w-full max-w-md border border-zinc-200 bg-white p-6 text-zinc-950 shadow-2xl"
+        className="w-full max-w-md border border-po-line bg-po-canvas p-6 text-po-ink shadow-2xl"
         onKeyDown={handleDialogKeyDown}
         role="dialog"
       >
-        <p className="text-sm font-semibold uppercase text-emerald-800">
+        <p className="text-sm font-semibold uppercase text-po-brand">
           Official Presidential
         </p>
         <h2
@@ -152,7 +152,7 @@ export function AgeGate() {
           Adults 21+ where legal
         </h2>
         <p
-          className="mt-4 text-base leading-7 text-zinc-700"
+          className="mt-4 text-base leading-7 text-po-body"
           id="presidential-age-gate-description"
         >
           This site is intended for adults 21 or older in places where cannabis
@@ -162,7 +162,7 @@ export function AgeGate() {
         {status === "blocked" ? (
           <p
             aria-live="polite"
-            className="mt-4 border-l-4 border-zinc-300 bg-zinc-50 px-4 py-3 text-sm leading-6 text-zinc-700"
+            className="mt-4 border-l-4 border-po-subtle bg-po-soft px-4 py-3 text-sm leading-6 text-po-body"
           >
             Please exit this site and return only when you meet the adult access
             requirement.
@@ -171,7 +171,7 @@ export function AgeGate() {
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <button
-            className="border border-emerald-900 bg-emerald-900 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-800"
+            className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-po-brand-hover"
             onClick={acceptGate}
             ref={primaryActionRef}
             type="button"
@@ -179,7 +179,7 @@ export function AgeGate() {
             I am 21 or older
           </button>
           <button
-            className="border border-zinc-300 px-4 py-3 text-sm font-semibold text-zinc-800 transition-colors hover:border-zinc-500"
+            className="border border-po-subtle px-4 py-3 text-sm font-semibold text-po-body transition-colors hover:border-po-muted"
             onClick={declineGate}
             type="button"
           >

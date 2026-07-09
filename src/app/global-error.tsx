@@ -12,9 +12,9 @@ const styles: Record<string, CSSProperties> = {
   body: {
     margin: 0,
     minHeight: "100vh",
-    background: "#fafafa",
-    color: "#09090b",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    background: "var(--po-color-soft)",
+    color: "var(--po-color-ink)",
+    fontFamily: "var(--po-font-body)",
   },
   main: {
     minHeight: "100vh",
@@ -27,14 +27,14 @@ const styles: Record<string, CSSProperties> = {
   section: {
     width: "100%",
     maxWidth: "720px",
-    border: "1px solid #e4e4e7",
-    background: "#ffffff",
+    border: "1px solid var(--po-color-line)",
+    background: "var(--po-color-canvas)",
     padding: "32px",
     boxSizing: "border-box",
   },
   eyebrow: {
     margin: "0 0 24px 0",
-    color: "#065f46",
+    color: "var(--po-color-brand)",
     fontSize: "14px",
     fontWeight: 700,
     letterSpacing: 0,
@@ -42,7 +42,7 @@ const styles: Record<string, CSSProperties> = {
   },
   h1: {
     margin: 0,
-    color: "#09090b",
+    color: "var(--po-color-ink)",
     fontSize: "36px",
     lineHeight: 1.12,
     fontWeight: 700,
@@ -50,7 +50,7 @@ const styles: Record<string, CSSProperties> = {
   },
   p: {
     margin: "16px 0 0 0",
-    color: "#3f3f46",
+    color: "var(--po-color-body)",
     fontSize: "16px",
     lineHeight: 1.7,
   },
@@ -61,9 +61,9 @@ const styles: Record<string, CSSProperties> = {
     marginTop: "28px",
   },
   primary: {
-    border: "1px solid #064e3b",
-    background: "#064e3b",
-    color: "#ffffff",
+    border: "1px solid var(--po-color-brand)",
+    background: "var(--po-color-brand)",
+    color: "var(--po-color-canvas)",
     padding: "12px 16px",
     fontSize: "14px",
     fontWeight: 700,
@@ -72,8 +72,8 @@ const styles: Record<string, CSSProperties> = {
   secondary: {
     display: "inline-flex",
     alignItems: "center",
-    border: "1px solid #d4d4d8",
-    color: "#27272a",
+    border: "1px solid var(--po-color-subtle)",
+    color: "var(--po-color-body)",
     padding: "12px 16px",
     fontSize: "14px",
     fontWeight: 700,
@@ -81,7 +81,7 @@ const styles: Record<string, CSSProperties> = {
   },
   footnote: {
     marginTop: "28px",
-    color: "#52525b",
+    color: "var(--po-color-muted)",
     fontSize: "14px",
     fontWeight: 600,
   },

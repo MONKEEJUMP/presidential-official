@@ -87,13 +87,13 @@ function RelatedProductLinks({ records }: { readonly records?: readonly SanityLi
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       {records.map((record, index) => (
-        <article className="border border-zinc-200 bg-white p-4" key={record._id || `${record.slug || "related"}-${index}`}>
-          <p className="text-xs font-semibold uppercase tracking-normal text-emerald-800">
+        <article className="border border-po-line bg-po-canvas p-4" key={record._id || `${record.slug || "related"}-${index}`}>
+          <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
             {record._type === "productPlatform" ? "Related platform" : "Related format"}
           </p>
-          <h3 className="mt-2 text-base font-semibold text-zinc-950">{linkedRecordLabel(record)}</h3>
+          <h3 className="mt-2 text-base font-semibold text-po-ink">{linkedRecordLabel(record)}</h3>
           {record.positioningLine || record.shortDescription ? (
-            <p className="mt-2 text-sm leading-6 text-zinc-700">{record.positioningLine || record.shortDescription}</p>
+            <p className="mt-2 text-sm leading-6 text-po-body">{record.positioningLine || record.shortDescription}</p>
           ) : null}
         </article>
       ))}
@@ -115,7 +115,7 @@ function LearnGuideBodyModule({ module, index }: LearnGuideBodyModuleProps) {
           title={module.heading || module.headline || module.title || `Guide section ${index + 1}`}
         />
         {module.callout ? (
-          <div className="border-l-4 border-emerald-700 bg-emerald-50 p-5 text-sm font-semibold leading-6 text-emerald-950">
+          <div className="border-l-4 border-po-brand bg-po-brand-soft p-5 text-sm font-semibold leading-6 text-po-brand-strong">
             {module.callout}
           </div>
         ) : null}

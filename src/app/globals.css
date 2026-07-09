@@ -1,26 +1,75 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Scaffold values only: final Presidential Teal/font still require owner approval. */
+  --po-color-canvas: #ffffff;
+  --po-color-soft: #f8fafc;
+  --po-color-ink: #09090b;
+  --po-color-body: #3f3f46;
+  --po-color-muted: #52525b;
+  --po-color-subtle: #a1a1aa;
+  --po-color-line: #e4e4e7;
+  --po-color-brand: #064e3b;
+  --po-color-brand-hover: #065f46;
+  --po-color-brand-strong: #022c22;
+  --po-color-brand-soft: #ecfdf5;
+  --po-color-brand-line: #a7f3d0;
+  --po-color-gold: #fbbf24;
+  --po-color-gold-soft: #fef3c7;
+  --po-color-gold-ink: #78350f;
+  --po-color-silver: #e5e7eb;
+  --po-color-rose-gold: #f4c7b8;
+  --po-color-on-dark: #ffffff;
+  --po-color-on-dark-muted: #d4d4d8;
+  --po-font-display: Arial, Helvetica, sans-serif;
+  --po-font-body: Arial, Helvetica, sans-serif;
+  --background: var(--po-color-canvas);
+  --foreground: var(--po-color-ink);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-po-canvas: var(--po-color-canvas);
+  --color-po-soft: var(--po-color-soft);
+  --color-po-ink: var(--po-color-ink);
+  --color-po-body: var(--po-color-body);
+  --color-po-muted: var(--po-color-muted);
+  --color-po-subtle: var(--po-color-subtle);
+  --color-po-line: var(--po-color-line);
+  --color-po-brand: var(--po-color-brand);
+  --color-po-brand-hover: var(--po-color-brand-hover);
+  --color-po-brand-strong: var(--po-color-brand-strong);
+  --color-po-brand-soft: var(--po-color-brand-soft);
+  --color-po-brand-line: var(--po-color-brand-line);
+  --color-po-gold: var(--po-color-gold);
+  --color-po-gold-soft: var(--po-color-gold-soft);
+  --color-po-gold-ink: var(--po-color-gold-ink);
+  --color-po-silver: var(--po-color-silver);
+  --color-po-rose-gold: var(--po-color-rose-gold);
+  --color-po-on-dark: var(--po-color-on-dark);
+  --color-po-on-dark-muted: var(--po-color-on-dark-muted);
+  --font-sans: var(--po-font-body);
+  --font-display: var(--po-font-display);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--po-font-body);
+}
+
+.po-hero-stage-gradient {
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--po-color-brand) 22%, transparent),
+      transparent 42%
+    ),
+    linear-gradient(
+      315deg,
+      color-mix(in srgb, var(--po-color-gold) 22%, transparent),
+      transparent 38%
+    );
 }
