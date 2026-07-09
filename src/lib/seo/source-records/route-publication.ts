@@ -7,6 +7,8 @@ import type {
   ClaimRecord,
   ProofRecord,
   RoutePublicationRecord,
+  SchemaRecord,
+  SeoMetadataRecord,
   SourceRecord,
   SourceRecordGateResult,
 } from "./types";
@@ -22,14 +24,31 @@ export const ROUTE_PUBLICATION_APPROVAL_SEQUENCE = [
 ] as const;
 
 export type RoutePublicationGateContext = {
-  readonly metadataRecords?: readonly import("./types").SeoMetadataRecord[];
-  readonly schemaRecords?: readonly import("./types").SchemaRecord[];
+  readonly metadataRecords?: readonly SeoMetadataRecord[];
+  readonly schemaRecords?: readonly SchemaRecord[];
   readonly sourceRecords?: readonly SourceRecord[];
   readonly proofRecords?: readonly ProofRecord[];
   readonly claimRecords?: readonly ClaimRecord[];
   readonly assetRecords?: readonly AssetRecord[];
   readonly assetProvenanceRecords?: readonly AssetProvenanceRecord[];
 };
+
+export const APPROVED_SEO_METADATA_RECORDS = [] as const satisfies readonly SeoMetadataRecord[];
+export const APPROVED_SCHEMA_RECORDS = [] as const satisfies readonly SchemaRecord[];
+export const APPROVED_SOURCE_RECORDS = [] as const satisfies readonly SourceRecord[];
+export const APPROVED_PROOF_RECORDS = [] as const satisfies readonly ProofRecord[];
+export const APPROVED_CLAIM_RECORDS = [] as const satisfies readonly ClaimRecord[];
+export const APPROVED_ASSET_RECORDS = [] as const satisfies readonly AssetRecord[];
+export const APPROVED_ASSET_PROVENANCE_RECORDS = [] as const satisfies readonly AssetProvenanceRecord[];
+export const APPROVED_ROUTE_PUBLICATION_CONTEXT = {
+  metadataRecords: APPROVED_SEO_METADATA_RECORDS,
+  schemaRecords: APPROVED_SCHEMA_RECORDS,
+  sourceRecords: APPROVED_SOURCE_RECORDS,
+  proofRecords: APPROVED_PROOF_RECORDS,
+  claimRecords: APPROVED_CLAIM_RECORDS,
+  assetRecords: APPROVED_ASSET_RECORDS,
+  assetProvenanceRecords: APPROVED_ASSET_PROVENANCE_RECORDS,
+} as const satisfies RoutePublicationGateContext;
 
 function getRecordsById<T>(
   records: readonly T[] | undefined,
@@ -96,7 +115,7 @@ export function getRoutePublicationRecord(
 export function getRoutePublicationGateBlockReasons(
   route: SeoRouteRecord,
   records: readonly RoutePublicationRecord[] = APPROVED_ROUTE_PUBLICATIONS,
-  context: RoutePublicationGateContext = {},
+  context: RoutePublicationGateContext = APPROVED_ROUTE_PUBLICATION_CONTEXT,
   options: { readonly skipSequence?: boolean } = {},
 ): readonly string[] {
   const matchingRecords = records.filter(
@@ -371,7 +390,7 @@ export function getRoutePublicationGateBlockReasons(
 export function isRoutePublicationApprovedForSeo(
   route: SeoRouteRecord,
   records: readonly RoutePublicationRecord[] = APPROVED_ROUTE_PUBLICATIONS,
-  context: RoutePublicationGateContext = {},
+  context: RoutePublicationGateContext = APPROVED_ROUTE_PUBLICATION_CONTEXT,
 ): boolean {
   return getRoutePublicationGateBlockReasons(route, records, context).length === 0;
 }
@@ -379,7 +398,7 @@ export function isRoutePublicationApprovedForSeo(
 export function evaluateRoutePublicationGate(
   route: SeoRouteRecord,
   records: readonly RoutePublicationRecord[] = APPROVED_ROUTE_PUBLICATIONS,
-  context: RoutePublicationGateContext = {},
+  context: RoutePublicationGateContext = APPROVED_ROUTE_PUBLICATION_CONTEXT,
 ): SourceRecordGateResult {
   const blockReasons = getRoutePublicationGateBlockReasons(route, records, context);
 

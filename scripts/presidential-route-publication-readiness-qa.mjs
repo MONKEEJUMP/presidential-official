@@ -98,7 +98,15 @@ function main() {
   const {ROUTE_REGISTRY} = require(routesPath);
   const {getSitemapBlockReasons, isSitemapEligible} = require(indexabilityPath);
   const {
+    APPROVED_ASSET_PROVENANCE_RECORDS,
+    APPROVED_ASSET_RECORDS,
+    APPROVED_CLAIM_RECORDS,
+    APPROVED_PROOF_RECORDS,
     APPROVED_ROUTE_PUBLICATIONS,
+    APPROVED_ROUTE_PUBLICATION_CONTEXT,
+    APPROVED_SCHEMA_RECORDS,
+    APPROVED_SEO_METADATA_RECORDS,
+    APPROVED_SOURCE_RECORDS,
     ROUTE_PUBLICATION_APPROVAL_SEQUENCE,
     getRoutePublicationGateBlockReasons,
     isRoutePublicationApprovedForSeo,
@@ -147,6 +155,27 @@ function main() {
     "routePublicationReadiness.approvedRecords.empty",
     APPROVED_ROUTE_PUBLICATIONS.length === 0,
     `approved route-publication record count: ${APPROVED_ROUTE_PUBLICATIONS.length}`,
+  );
+  check(
+    rows,
+    "routePublicationReadiness.approvedEvidenceContext.empty",
+    [
+      APPROVED_SEO_METADATA_RECORDS,
+      APPROVED_SCHEMA_RECORDS,
+      APPROVED_SOURCE_RECORDS,
+      APPROVED_PROOF_RECORDS,
+      APPROVED_CLAIM_RECORDS,
+      APPROVED_ASSET_RECORDS,
+      APPROVED_ASSET_PROVENANCE_RECORDS,
+    ].every((records) => records.length === 0) &&
+      APPROVED_ROUTE_PUBLICATION_CONTEXT.metadataRecords === APPROVED_SEO_METADATA_RECORDS &&
+      APPROVED_ROUTE_PUBLICATION_CONTEXT.schemaRecords === APPROVED_SCHEMA_RECORDS &&
+      APPROVED_ROUTE_PUBLICATION_CONTEXT.sourceRecords === APPROVED_SOURCE_RECORDS &&
+      APPROVED_ROUTE_PUBLICATION_CONTEXT.proofRecords === APPROVED_PROOF_RECORDS &&
+      APPROVED_ROUTE_PUBLICATION_CONTEXT.claimRecords === APPROVED_CLAIM_RECORDS &&
+      APPROVED_ROUTE_PUBLICATION_CONTEXT.assetRecords === APPROVED_ASSET_RECORDS &&
+      APPROVED_ROUTE_PUBLICATION_CONTEXT.assetProvenanceRecords === APPROVED_ASSET_PROVENANCE_RECORDS,
+    "approved route-publication evidence registries are wired and empty until per-route evidence is approved",
   );
   check(
     rows,
