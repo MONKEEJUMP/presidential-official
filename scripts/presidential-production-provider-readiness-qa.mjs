@@ -79,6 +79,18 @@ function runVercelCommand(args) {
   };
 }
 
+function checkVercelAuthentication(vercelCliAvailable) {
+  if (!vercelCliAvailable) {
+    return { checked: false, authenticated: false };
+  }
+
+  const result = runVercelCommand(["whoami"]);
+  return {
+    checked: true,
+    authenticated: result.status === 0,
+  };
+}
+
 function parseProjectJson() {
   if (!existsSync(projectJsonPath)) return null;
 
@@ -111,6 +123,7 @@ function main() {
   const packageJsonText = readIfExists(packageJsonPath);
   const projectJson = parseProjectJson();
   const vercelCliAvailable = commandExists("vercel");
+  const vercelAuthentication = checkVercelAuthentication(vercelCliAvailable);
   const deployCommandFound = deployCommandPatterns.some((pattern) => pattern.test(packageJsonText));
   const projectLinked = projectJson !== null && !projectJson.parseError;
   const projectIdValid = projectLinked && isProjectId(projectJson.projectId);
@@ -121,6 +134,14 @@ function main() {
     "provider.vercelCli.available",
     vercelCliAvailable ? "pass" : "pending",
     vercelCliAvailable ? "Vercel CLI command is available locally" : "Vercel CLI command is not available locally",
+  );
+  addCheck(
+    rows,
+    "provider.vercelCli.authenticated",
+    vercelAuthentication.authenticated ? "pass" : "pending",
+    vercelAuthentication.authenticated
+      ? "Vercel CLI has local credentials; username/account details were not stored"
+      : "Vercel CLI has no local credentials; run vercel login or use a token outside the repo before live provider checks",
   );
   addCheck(
     rows,
@@ -165,6 +186,9 @@ function main() {
   if (liveProviderCheck) {
     if (!vercelCliAvailable) {
       addCheck(rows, "provider.live.cliReady", "fail", "live provider check requested but Vercel CLI is unavailable");
+      liveCheckStatus = "failed";
+    } else if (!vercelAuthentication.authenticated) {
+      addCheck(rows, "provider.live.cliAuthenticated", "fail", "live provider check requested but Vercel CLI is not authenticated");
       liveCheckStatus = "failed";
     } else {
       const envResult = runVercelCommand(["env", "ls", "production"]);
@@ -231,6 +255,7 @@ function main() {
     },
     liveProviderCheck,
     liveCheckStatus,
+    vercelCliAuthenticated: vercelAuthentication.authenticated,
     projectLinked,
     projectIdShapeValid: Boolean(projectIdValid),
     orgIdShapeValid: Boolean(orgIdValid),
