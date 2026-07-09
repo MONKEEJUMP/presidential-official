@@ -1,12 +1,14 @@
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { execFileSync, spawn } from "node:child_process";
+import { execFileSync, spawn, spawnSync } from "node:child_process";
 
 const webRoot = process.cwd();
 const repoRoot = resolve(webRoot, "..");
 const nextBin = join(webRoot, "node_modules", "next", "dist", "bin", "next");
+const buildScriptPath = join(webRoot, "scripts", "run-next-build.mjs");
 const buildDir = join(webRoot, ".next");
 const sanityFailureMockPath = join(webRoot, "scripts", "mock-sanity-fetch-failure.cjs");
+const sanityApprovedMockPath = join(webRoot, "scripts", "mock-sanity-fetch-approved-cms.cjs");
 const workRoot = join(repoRoot, "sources", "spud", "work", "cms-private-preview-smoke");
 const resultsJsonPath = join(workRoot, "cms-runtime-smoke-results.json");
 const resultsMdPath = join(workRoot, "cms-runtime-smoke-results.md");
@@ -246,6 +248,45 @@ function hasPortListener(targetPort) {
   }
 }
 
+function buildNodeOptions(preload = "") {
+  return [process.env.NODE_OPTIONS, preload ? `--require=${preload}` : ""]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function rebuildForScenario({
+  name,
+  env = {},
+  preload = "",
+} = {}) {
+  if (!existsSync(buildScriptPath)) {
+    throw new Error("Build script not found. Cannot rebuild CMS runtime smoke scenario.");
+  }
+
+  const nodeOptions = buildNodeOptions(preload);
+  const build = spawnSync(process.execPath, [buildScriptPath], {
+    cwd: webRoot,
+    env: {
+      ...process.env,
+      ...env,
+      ...(nodeOptions ? { NODE_OPTIONS: nodeOptions } : {}),
+    },
+    stdio: "inherit",
+  });
+
+  addCheck(
+    `${name} production build completed`,
+    build.status === 0,
+    build.status === 0
+      ? "Next production build completed for CMS runtime smoke scenario"
+      : `Next production build exited ${build.status ?? 1}`,
+  );
+
+  if (build.status !== 0) {
+    throw new Error(`${name} production build failed.`);
+  }
+}
+
 function startServer({
   port,
   env = {},
@@ -267,9 +308,7 @@ function startServer({
   activeBaseUrl = `http://${host}:${activePort}`;
   killPortListeners(activePort);
   serverErrorChunks = [];
-  const nodeOptions = [process.env.NODE_OPTIONS, preload ? `--require=${preload}` : ""]
-    .filter(Boolean)
-    .join(" ");
+  const nodeOptions = buildNodeOptions(preload);
 
   server = spawn(process.execPath, [nextBin, "start", "--hostname", host, "--port", String(activePort)], {
     cwd: webRoot,
@@ -380,6 +419,13 @@ async function assertPublicFallbackScenario(scenarioName) {
   }
 }
 
+async function assertPublicLeakOnlyScenario(scenarioName) {
+  for (const path of publicPaths) {
+    const html = await fetchText(path);
+    addPublicLeakChecks(scenarioName, path, html);
+  }
+}
+
 async function assertPrivatePreviewChecks(scenarioName) {
   for (const route of privateChecks) {
     const html = await fetchText(route.path);
@@ -387,6 +433,22 @@ async function assertPrivatePreviewChecks(scenarioName) {
       addCheck(`${scenarioName} ${name}`, html.includes(needle), `${needle} visible`);
     }
   }
+}
+
+async function assertApprovedCmsRenderScenario(scenarioName) {
+  const homeHtml = await fetchText("/");
+  const moonRocksHtml = await fetchText("/moon-rocks");
+
+  addCheck(
+    `${scenarioName} public home renders approved CMS module`,
+    homeHtml.includes("CMS Smoke Home Module"),
+    "approved public homepage module fixture rendered behind flags",
+  );
+  addCheck(
+    `${scenarioName} public moon-rocks renders approved CMS module`,
+    moonRocksHtml.includes("CMS Smoke Moon Rocks Module"),
+    "approved public Moon Rocks module fixture rendered behind flags",
+  );
 }
 
 async function assertCleanServerLog(scenarioName) {
@@ -401,11 +463,30 @@ async function assertCleanServerLog(scenarioName) {
   );
 }
 
-async function runServerScenario({name, port, env, preload = "", privatePreview = false}) {
+async function runServerScenario({
+  name,
+  port,
+  env,
+  preload = "",
+  rebuild = false,
+  privatePreview = false,
+  fallbackExpected = true,
+  afterPublicChecks,
+}) {
   try {
+    if (rebuild) {
+      rebuildForScenario({name, env, preload});
+    }
     startServer({port, env, preload});
     await waitForServer();
-    await assertPublicFallbackScenario(name);
+    if (fallbackExpected) {
+      await assertPublicFallbackScenario(name);
+    } else {
+      await assertPublicLeakOnlyScenario(name);
+    }
+    if (afterPublicChecks) {
+      await afterPublicChecks(name);
+    }
     if (privatePreview) {
       await assertPrivatePreviewChecks(name);
     }
@@ -437,13 +518,28 @@ async function runSmoke() {
     name: "enabled-cms",
     port: basePort + 1,
     env: publicCmsSmokeEnv,
+    rebuild: true,
     privatePreview: true,
   });
   await runServerScenario({
-    name: "sanity-failure",
+    name: "approved-cms",
     port: basePort + 2,
     env: publicCmsSmokeEnv,
+    preload: sanityApprovedMockPath,
+    rebuild: true,
+    fallbackExpected: false,
+    afterPublicChecks: assertApprovedCmsRenderScenario,
+  });
+  await runServerScenario({
+    name: "sanity-failure",
+    port: basePort + 3,
+    env: publicCmsSmokeEnv,
     preload: sanityFailureMockPath,
+    rebuild: true,
+  });
+  rebuildForScenario({
+    name: "restore-disabled-cms",
+    env: disabledPublicCmsSmokeEnv,
   });
 }
 
@@ -457,7 +553,8 @@ function writeResults() {
     scenarioPorts: {
       "disabled-cms": basePort,
       "enabled-cms": basePort + 1,
-      "sanity-failure": basePort + 2,
+      "approved-cms": basePort + 2,
+      "sanity-failure": basePort + 3,
     },
     generatedAt: new Date().toISOString(),
     checksPassed: results.length - failed.length,
