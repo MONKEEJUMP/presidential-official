@@ -73,9 +73,14 @@ function hasVercelToken() {
 }
 
 function runVercelCommand(args) {
-  const result = spawnSync("vercel", args, {
+  const command = process.platform === "win32" ? "cmd.exe" : "vercel";
+  const commandArgs = process.platform === "win32"
+    ? ["/d", "/s", "/c", ["vercel", ...args].join(" ")]
+    : args;
+  const result = spawnSync(command, commandArgs, {
     cwd: webRoot,
     encoding: "utf8",
+    shell: false,
     windowsHide: true,
     timeout: 20000,
   });
