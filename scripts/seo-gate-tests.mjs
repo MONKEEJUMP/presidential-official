@@ -426,6 +426,36 @@ for (const { label, overrides, reason } of requiredEvidenceCases) {
   );
 }
 
+const zeroEvidencePublication = buildSyntheticRoutePublication({
+  routePublicationId: "gate-test-zero-evidence",
+  contentRecordIds: [],
+  metadataRecordId: undefined,
+  schemaRecordIds: [],
+  assetRecordIds: [],
+  claimRecordIds: [],
+  sourceRecordIds: [],
+  proofRecordIds: [],
+});
+
+assertEqual(
+  isRoutePublicationApprovedForSeo(
+    syntheticRegistryPromotion,
+    [zeroEvidencePublication],
+    approvedContext,
+  ),
+  false,
+  "A self-asserted route publication with zero evidence became approved.",
+);
+
+assert(
+  getRoutePublicationGateBlockReasons(
+    syntheticRegistryPromotion,
+    [zeroEvidencePublication],
+    approvedContext,
+  ).includes("source_record:evidence:required"),
+  "A zero-evidence route publication did not produce source_record:evidence:required.",
+);
+
 assertEqual(
   isRoutePublicationApprovedForSeo(syntheticRegistryPromotion, [
     approvedPublication,

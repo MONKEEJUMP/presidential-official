@@ -370,11 +370,13 @@ function main() {
     "client.learnGuidePublicRenderingApprovalGated",
     /approvalGate\{[\s\S]*contentApprovalStatus[\s\S]*sourceProofStatus[\s\S]*legalReviewStatus[\s\S]*\}/.test(learnGuideClientSource) &&
       /isLearnGuideApprovedForPublicRendering/.test(learnGuideClientSource) &&
+      /PUBLIC_RENDERABLE_ROUTE_PHASES\s*=\s*new Set\(\["approved_public"\]\)/.test(learnGuideClientSource) &&
+      /PUBLIC_RENDERABLE_ROUTE_PHASES\.has\(record\.routePhase \|\| ""\)/.test(learnGuideClientSource) &&
       /contentApprovalStatus\s*===\s*PUBLIC_LEARN_GUIDE_APPROVAL/.test(learnGuideClientSource) &&
       /sourceProofStatus\s*===\s*PUBLIC_LEARN_GUIDE_APPROVAL/.test(learnGuideClientSource) &&
       /legalReviewStatus\s*===\s*PUBLIC_LEARN_GUIDE_APPROVAL/.test(learnGuideClientSource) &&
       /record:\s*approvedRecord/.test(learnGuideClientSource),
-    "learn guide public CMS rendering requires guide-level content, source, and legal approval before title/body are used",
+    "learn guide public CMS rendering requires approved route phase plus guide-level content, source, and legal approval before title/body are used",
   );
   addCheck(
     "client.learnGuideModulesEligibilityFiltered",
