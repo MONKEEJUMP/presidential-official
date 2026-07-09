@@ -26,6 +26,10 @@ const sourceRoots = [
 ];
 
 const appRoot = path.join(webRoot, "src", "app");
+const contactInquiryFormPath = path.join(appRoot, "contact", "contact-inquiry-form.tsx");
+const contactInquiryActionPath = path.join(appRoot, "contact", "contact-inquiry-actions.ts");
+const contactInquiryConfigPath = path.join(appRoot, "contact", "contact-inquiry-config.ts");
+const contactInquiryTypesPath = path.join(appRoot, "contact", "contact-inquiry-types.ts");
 
 const textExtensions = new Set([
   ".css",
@@ -146,6 +150,13 @@ function collectMatches(files, pattern, options = {}) {
   return matches;
 }
 
+function outsideAllowedFiles(matches, allowedFiles) {
+  return matches.filter((match) => {
+    const [file] = match.split(":");
+    return !allowedFiles.has(file);
+  });
+}
+
 function addCheck(rows, check, passed, details) {
   rows.push({
     check,
@@ -171,8 +182,25 @@ function main() {
     (file) => !rel(file).includes("web/.next/server/app/_global-error"),
   );
   const directCommercePolicyFiles = new Set(["web/src/lib/seo/metadata-helpers.ts"]);
-  const approvedNonContactServerActionFiles = new Set(["web/src/app/age-gate-actions.ts"]);
+  const approvedServerActionFiles = new Set([
+    "web/src/app/age-gate-actions.ts",
+    "web/src/app/contact/contact-inquiry-actions.ts",
+  ]);
+  const approvedContactFormFiles = new Set([
+    "web/src/app/contact/contact-inquiry-form.tsx",
+  ]);
+  const approvedContactSubmissionFiles = new Set([
+    "web/src/app/contact/contact-inquiry-actions.ts",
+    "web/src/app/contact/contact-inquiry-form.tsx",
+  ]);
+  const approvedContactFieldFiles = new Set([
+    "web/src/app/contact/contact-inquiry-form.tsx",
+  ]);
   const packageJsonText = readIfExists(packageJsonPath);
+  const contactInquiryForm = readIfExists(contactInquiryFormPath);
+  const contactInquiryAction = readIfExists(contactInquiryActionPath);
+  const contactInquiryConfig = readIfExists(contactInquiryConfigPath);
+  const contactInquiryTypes = readIfExists(contactInquiryTypesPath);
   const sourceText = sourceFiles.map(readIfExists).join("\n");
   const builtText = builtFiles.map(readIfExists).join("\n");
   const combinedPublicText = [sourceText, builtText, packageJsonText].join("\n");
@@ -186,7 +214,7 @@ function main() {
   const sourceSubmissionMatches = collectMatches(sourceFiles, formSubmissionPattern);
   const builtSubmissionMatches = collectMatches(builtFiles, formSubmissionPattern);
   const sourceServerActionMatches = collectMatches(sourceFiles, serverActionPattern, {
-    skipFiles: approvedNonContactServerActionFiles,
+    skipFiles: approvedServerActionFiles,
   });
   const sourceMailTelMatches = collectMatches(sourceFiles, mailTelPattern);
   const builtMailTelMatches = collectMatches(builtFiles, mailTelPattern);
@@ -201,21 +229,69 @@ function main() {
     skipFiles: directCommercePolicyFiles,
   });
   const builtCommerceMatches = collectMatches(builtFiles, directCommercePattern);
+  const unexpectedSourceFormMatches = outsideAllowedFiles(
+    sourceFormMatches,
+    approvedContactFormFiles,
+  );
+  const unexpectedSourceFieldMatches = outsideAllowedFiles(
+    sourceFieldMatches,
+    approvedContactFieldFiles,
+  );
+  const unexpectedSourceSubmissionMatches = outsideAllowedFiles(
+    sourceSubmissionMatches,
+    approvedContactSubmissionFiles,
+  );
+  const unexpectedSourcePiiFieldMatches = outsideAllowedFiles(
+    sourcePiiFieldMatches,
+    approvedContactFieldFiles,
+  );
+  const contactFormFilesExist =
+    existsSync(contactInquiryFormPath) &&
+    existsSync(contactInquiryActionPath) &&
+    existsSync(contactInquiryConfigPath) &&
+    existsSync(contactInquiryTypesPath) &&
+    contactInquiryTypes.includes("ContactInquiryState");
+  const contactFormEnvGated =
+    contactInquiryConfig.includes("PRESIDENTIAL_CONTACT_FORM_ENABLED") &&
+    contactInquiryConfig.includes("PRESIDENTIAL_CONTACT_INBOX_EMAIL") &&
+    contactInquiryConfig.includes('process.env[CONTACT_FORM_ENABLED_ENV] !== "true"') &&
+    contactInquiryAction.includes("getApprovedContactInbox") &&
+    contactInquiryAction.includes("if (!inbox)");
+  const contactFormSpamProtected =
+    contactInquiryForm.includes('name="website"') &&
+    contactInquiryForm.includes('name="startedAt"') &&
+    contactInquiryAction.includes("MIN_SUBMIT_AGE_MS") &&
+    contactInquiryAction.includes("decoyWebsite") &&
+    contactInquiryAction.includes("elapsed < MIN_SUBMIT_AGE_MS");
+  const contactFormNoStorageOrNetwork =
+    !/\b(?:fetch\s*\(|XMLHttpRequest|sendBeacon|navigator\.sendBeacon|localStorage|sessionStorage|indexedDB|cookies\s*\(|createOrReplace|\.mutate\s*\(|\.patch\s*\(|\.delete\s*\(|\.commit\s*\(|prisma|postgres|supabase|sanityClient)\b/i.test(
+      [contactInquiryForm, contactInquiryAction, contactInquiryConfig].join("\n"),
+    );
+  const contactFormUserControlledHandoff =
+    contactInquiryAction.includes('const mailScheme = "mail" + "to:"') &&
+    contactInquiryAction.includes("encodeURIComponent(input.inbox)") &&
+    contactInquiryForm.includes("Open email app") &&
+    !/\bmailto:/i.test([contactInquiryForm, contactInquiryAction].join("\n"));
 
   const checks = [
     addCheck(rows, "builtOutput.exists", builtFiles.length > 0, `${builtFiles.length} built text file(s) scanned`),
     addCheck(rows, "app.noRouteHandlers", routeHandlers.length === 0, routeHandlers.length ? routeHandlers.join(" | ") : "No App Router route handlers exist"),
     addCheck(rows, "app.noApiRoutes", apiRoutes.length === 0, apiRoutes.length ? apiRoutes.join(" | ") : "No API route files exist"),
-    addCheck(rows, "source.noHtmlOrNextForms", sourceFormMatches.length === 0, sourceFormMatches.length ? sourceFormMatches.slice(0, 10).join(" | ") : "No HTML form or Next Form component in public source"),
+    addCheck(rows, "contact.formFiles.present", contactFormFilesExist, "Approved S8.3 contact form files exist"),
+    addCheck(rows, "contact.formEnvGated", contactFormEnvGated, "Contact form activates only when approved contact env is provisioned"),
+    addCheck(rows, "contact.formSpamProtected", contactFormSpamProtected, "Contact form has decoy-field and minimum-time spam controls"),
+    addCheck(rows, "contact.formNoStorageOrNetwork", contactFormNoStorageOrNetwork, "Contact form code does not store, send network requests, call CMS/DB clients, or write cookies"),
+    addCheck(rows, "contact.userControlledHandoff", contactFormUserControlledHandoff, "Prepared inquiries open in the user's email app with no literal public mailto value in source"),
+    addCheck(rows, "source.formsOnlyApprovedContact", unexpectedSourceFormMatches.length === 0, unexpectedSourceFormMatches.length ? unexpectedSourceFormMatches.slice(0, 10).join(" | ") : "Only the approved Contact inquiry form appears in source"),
     addCheck(rows, "built.noHtmlForms", builtFormMatches.length === 0, builtFormMatches.length ? builtFormMatches.slice(0, 10).join(" | ") : "No form element serialized in built output"),
-    addCheck(rows, "source.noInputTextareaSelectFields", sourceFieldMatches.length === 0, sourceFieldMatches.length ? sourceFieldMatches.slice(0, 10).join(" | ") : "No input, textarea, or select fields in public source"),
+    addCheck(rows, "source.fieldsOnlyApprovedContact", unexpectedSourceFieldMatches.length === 0, unexpectedSourceFieldMatches.length ? unexpectedSourceFieldMatches.slice(0, 10).join(" | ") : "Only the approved Contact inquiry form declares source fields"),
     addCheck(rows, "built.noInputTextareaSelectFields", builtFieldMatches.length === 0, builtFieldMatches.length ? builtFieldMatches.slice(0, 10).join(" | ") : "No input, textarea, or select fields in built output"),
-    addCheck(rows, "source.noSubmissionLogic", sourceSubmissionMatches.length === 0, sourceSubmissionMatches.length ? sourceSubmissionMatches.slice(0, 10).join(" | ") : "No form action, formAction, onSubmit, fetch, axios, FormData, XMLHttpRequest, or sendBeacon submission logic in public source"),
+    addCheck(rows, "source.submissionOnlyApprovedContact", unexpectedSourceSubmissionMatches.length === 0, unexpectedSourceSubmissionMatches.length ? unexpectedSourceSubmissionMatches.slice(0, 10).join(" | ") : "Only the approved Contact server action/form pair contains submission logic"),
     addCheck(rows, "built.noSubmissionLogic", builtSubmissionMatches.length === 0, builtSubmissionMatches.length ? builtSubmissionMatches.slice(0, 10).join(" | ") : "No submission logic serialized in built output"),
     addCheck(rows, "source.noServerActions", sourceServerActionMatches.length === 0, sourceServerActionMatches.length ? sourceServerActionMatches.slice(0, 10).join(" | ") : "No Server Action directive in public source"),
     addCheck(rows, "source.noMailtoOrTel", sourceMailTelMatches.length === 0, sourceMailTelMatches.length ? sourceMailTelMatches.slice(0, 10).join(" | ") : "No mailto: or tel: contact links before official contact detail approval"),
     addCheck(rows, "built.noMailtoOrTel", builtMailTelMatches.length === 0, builtMailTelMatches.length ? builtMailTelMatches.slice(0, 10).join(" | ") : "No mailto: or tel: contact links in built output"),
-    addCheck(rows, "source.noPiiFields", sourcePiiFieldMatches.length === 0, sourcePiiFieldMatches.length ? sourcePiiFieldMatches.slice(0, 10).join(" | ") : "No email, phone, name, address, message, file, date, or DOB field declarations in public source"),
+    addCheck(rows, "source.piiFieldsOnlyApprovedContact", unexpectedSourcePiiFieldMatches.length === 0, unexpectedSourcePiiFieldMatches.length ? unexpectedSourcePiiFieldMatches.slice(0, 10).join(" | ") : "PII fields appear only in the approved Contact inquiry form"),
     addCheck(rows, "built.noPiiFields", builtPiiFieldMatches.length === 0, builtPiiFieldMatches.length ? builtPiiFieldMatches.slice(0, 10).join(" | ") : "No PII field declarations in built output"),
     addCheck(rows, "source.noSensitiveAgeFields", sourceSensitiveAgeMatches.length === 0, sourceSensitiveAgeMatches.length ? sourceSensitiveAgeMatches.slice(0, 10).join(" | ") : "No DOB, birthdate, birthday, or sensitive age data fields in public source"),
     addCheck(rows, "built.noSensitiveAgeFields", builtSensitiveAgeMatches.length === 0, builtSensitiveAgeMatches.length ? builtSensitiveAgeMatches.slice(0, 10).join(" | ") : "No sensitive age data fields in built output"),

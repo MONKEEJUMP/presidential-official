@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { isContactInquiryConfigured } from "@/app/contact/contact-inquiry-config";
+import { ContactInquiryForm } from "@/app/contact/contact-inquiry-form";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 import { PageFrame } from "../layout/page-frame";
@@ -82,8 +84,8 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
         body: "Customer care, wholesale, press, and brand inquiries stay organized under one official Presidential route.",
       },
       {
-        title: "No public intake yet",
-        body: "No public form, CRM, newsletter, phone, or email detail is active until official contact handling is confirmed.",
+        title: "Approved-inbox gated intake",
+        body: "The inquiry path stays inactive until the approved inbox is provisioned, and the website does not store inquiry details.",
       },
       {
         title: "Adult-use boundary",
@@ -121,10 +123,10 @@ function getRouteSupportCallout(route: SeoRouteRecord): StaticRouteCallout | nul
   if (route.kind === "contact") {
     return {
       title: "Contact readiness",
-      body: "This page establishes the official contact destination without collecting inquiry details before final routing is confirmed.",
+      body: "This page establishes the official contact destination with a first-party inquiry path that activates only after approved inbox provisioning.",
       items: [
-        "No active form fields",
-        "No mail or phone link",
+        "Approved inbox required",
+        "Spam controls included",
         "No CRM or newsletter embed",
         "No stored submission data",
       ],
@@ -141,6 +143,8 @@ export function StaticRouteFoundationShell({
 }: StaticRouteFoundationShellProps) {
   const panels = getRoutePanels(route);
   const supportCallout = getRouteSupportCallout(route);
+  const contactInquiryConfigured =
+    route.kind === "contact" ? isContactInquiryConfigured() : false;
 
   return (
     <PageFrame>
@@ -254,6 +258,20 @@ export function StaticRouteFoundationShell({
                   </li>
                 ))}
               </ul>
+            </div>
+          </Scene>
+        ) : null}
+
+        {route.kind === "contact" ? (
+          <Scene ariaLabelledBy="presidential-contact-inquiry" tone="quiet">
+            <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
+              <SectionHeading
+                as="h2"
+                description="Prepare an official inquiry without storing the message in this website. The path activates only after the approved inbox is provisioned."
+                id="presidential-contact-inquiry"
+                title="Official inquiry path"
+              />
+              <ContactInquiryForm configured={contactInquiryConfigured} />
             </div>
           </Scene>
         ) : null}
