@@ -40,6 +40,7 @@
     "production:launch-readiness:verify": "node scripts/presidential-production-launch-readiness-qa.mjs",
     "production:owner-gates:verify": "node scripts/presidential-owner-decision-gates-qa.mjs",
     "cms:verify": "node scripts/presidential-cms-verify.mjs",
+    "cms:module-renderer:verify": "node scripts/presidential-cms-module-renderer-coverage-qa.mjs",
     "cms:web-read:verify": "node scripts/presidential-cms-web-read-boundary-qa.mjs",
     "cms:runtime-smoke:verify": "node scripts/presidential-cms-runtime-smoke-qa.mjs",
     "cms:live-draft:verify": "node scripts/presidential-cms-live-draft-smoke-qa.mjs",

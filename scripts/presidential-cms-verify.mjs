@@ -26,6 +26,18 @@ const runtimeSmokeStatusPath = join(
 
 const commands = [
   {
+    name: "cms:module-renderer:verify",
+    script: join(webRoot, "scripts", "presidential-cms-module-renderer-coverage-qa.mjs"),
+    statusPath: join(
+      repoRoot,
+      "sources",
+      "spud",
+      "work",
+      "cms-module-renderer-coverage",
+      "cms-module-renderer-coverage-status.json",
+    ),
+  },
+  {
     name: "cms:web-read:verify",
     script: join(webRoot, "scripts", "presidential-cms-web-read-boundary-qa.mjs"),
     statusPath: readBoundaryStatusPath,
