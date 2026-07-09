@@ -95,9 +95,15 @@ export async function generateMetadata({ params }: LearnGuidePageProps): Promise
     return {};
   }
 
+  const guide = await readPublicRenderableLearnGuide(slug, {
+    next: { tags: [`sanity-learn-guide-${slug}`] },
+  });
+  const title = guide.record?.title || fallback.title;
+  const description = guide.record?.intro || fallback.intro;
+
   return {
-    title: `${fallback.title} | Presidential Learn`,
-    description: fallback.intro,
+    title: `${title} | Presidential Learn`,
+    description,
     robots: {
       index: false,
       follow: true,

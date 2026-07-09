@@ -194,6 +194,7 @@ function main() {
   const draftHomepageClientSource = readIfExists(draftHomepageClientPath);
   const draftSitePageClientSource = readIfExists(draftSitePageClientPath);
   const draftLearnGuideClientSource = readIfExists(draftLearnGuideClientPath);
+  const homepageClientSource = readIfExists(path.join(cmsRoot, "homepage.ts"));
   const sitePageClientSource = readIfExists(path.join(cmsRoot, "site-page.ts"));
   const learnGuideClientSource = readIfExists(path.join(cmsRoot, "learn-guide.ts"));
 
@@ -319,6 +320,18 @@ function main() {
     "homepage CMS render adapter requires explicit env gate, route phase, and module eligibility",
   );
   addCheck(
+    "client.homepagePublicRenderingApprovalGated",
+    /approvalGate\{[\s\S]*contentApprovalStatus[\s\S]*sourceProofStatus[\s\S]*legalReviewStatus[\s\S]*\}/.test(homepageClientSource) &&
+      /isHomepageApprovedForPublicRendering/.test(homepageClientSource) &&
+      /PUBLIC_RENDERABLE_ROUTE_PHASES\s*=\s*new Set\(\["approved_public"\]\)/.test(homepageClientSource) &&
+      /PUBLIC_RENDERABLE_ROUTE_PHASES\.has\(record\.routePhase \|\| ""\)/.test(homepageClientSource) &&
+      /contentApprovalStatus\s*===\s*PUBLIC_HOMEPAGE_APPROVAL/.test(homepageClientSource) &&
+      /sourceProofStatus\s*===\s*PUBLIC_HOMEPAGE_APPROVAL/.test(homepageClientSource) &&
+      /legalReviewStatus\s*===\s*PUBLIC_HOMEPAGE_APPROVAL/.test(homepageClientSource) &&
+      /record:\s*approvedRecord/.test(homepageClientSource),
+    "homepage public CMS rendering requires approved route phase plus page-level content, source, and legal approval before modules are used",
+  );
+  addCheck(
     "client.siteRoutesCmsReadFallsBackStatic",
     /readPublicRenderableSitePage/.test(presidentialRouteShellSource) &&
       /MoonRocksPlatformShell/.test(presidentialRouteShellSource) &&
@@ -358,6 +371,18 @@ function main() {
     "generic sitePage CMS render adapter requires explicit env gate, route phase, and module eligibility",
   );
   addCheck(
+    "client.sitePagePublicRenderingApprovalGated",
+    /approvalGate\{[\s\S]*contentApprovalStatus[\s\S]*sourceProofStatus[\s\S]*legalReviewStatus[\s\S]*\}/.test(sitePageClientSource) &&
+      /isSitePageApprovedForPublicRendering/.test(sitePageClientSource) &&
+      /PUBLIC_RENDERABLE_ROUTE_PHASES\s*=\s*new Set\(\["approved_public"\]\)/.test(sitePageClientSource) &&
+      /PUBLIC_RENDERABLE_ROUTE_PHASES\.has\(record\.routePhase \|\| ""\)/.test(sitePageClientSource) &&
+      /contentApprovalStatus\s*===\s*PUBLIC_SITE_PAGE_APPROVAL/.test(sitePageClientSource) &&
+      /sourceProofStatus\s*===\s*PUBLIC_SITE_PAGE_APPROVAL/.test(sitePageClientSource) &&
+      /legalReviewStatus\s*===\s*PUBLIC_SITE_PAGE_APPROVAL/.test(sitePageClientSource) &&
+      /record:\s*approvedRecord/.test(sitePageClientSource),
+    "generic sitePage public CMS rendering requires approved route phase plus page-level content, source, and legal approval before modules are used",
+  );
+  addCheck(
     "client.learnGuideCmsRenderEnvGated",
     /PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED/.test(learnGuideClientSource) &&
       /PRESIDENTIAL_LEARN_GUIDE_DRAFT_RENDERING_ENABLED/.test(learnGuideRouteSource) &&
@@ -365,6 +390,15 @@ function main() {
       /readDraftLearnGuide/.test(learnGuideRouteSource) &&
       /robots:\s*\{[\s\S]*index:\s*false/.test(learnGuideRouteSource),
     "learn guide routes have env-gated CMS/draft rendering and noindex fallback metadata",
+  );
+  addCheck(
+    "client.learnGuideMetadataUsesApprovedPublicCms",
+    /export\s+async\s+function\s+generateMetadata/.test(learnGuideRouteSource) &&
+      /readPublicRenderableLearnGuide\(slug/.test(learnGuideRouteSource) &&
+      /guide\.record\?\.title\s*\|\|\s*fallback\.title/.test(learnGuideRouteSource) &&
+      /guide\.record\?\.intro\s*\|\|\s*fallback\.intro/.test(learnGuideRouteSource) &&
+      /robots:\s*\{[\s\S]*index:\s*false/.test(learnGuideRouteSource),
+    "learn guide metadata uses approved public CMS title/intro when available and remains noindex while publication is locked",
   );
   addCheck(
     "client.learnGuidePublicRenderingApprovalGated",

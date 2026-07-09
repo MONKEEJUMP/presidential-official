@@ -3,8 +3,15 @@ import "server-only";
 import { readPublishedSanity, type SanityReadResult } from "./sanity-read-client";
 
 const HOMEPAGE_CMS_RENDER_ENABLE_ENV = "PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED";
+const PUBLIC_HOMEPAGE_APPROVAL = "approved_public";
 const PUBLIC_RENDERABLE_ROUTE_PHASES = new Set(["approved_public"]);
 const RENDERABLE_MODULE_ELIGIBILITY = "ready_for_implementation_candidate";
+
+type SanityApprovalGate = {
+  readonly contentApprovalStatus?: string;
+  readonly sourceProofStatus?: string;
+  readonly legalReviewStatus?: string;
+};
 
 export type SanityHomepageModule = {
   readonly _key?: string;
@@ -170,6 +177,7 @@ export type SanityHomepageRecord = {
   readonly slug?: string;
   readonly routePhase?: string;
   readonly summary?: string;
+  readonly approvalGate?: SanityApprovalGate;
   readonly modules?: readonly SanityHomepageModule[];
 };
 
@@ -273,6 +281,11 @@ const HOMEPAGE_QUERY = `*[_type == "sitePage" && slug.current == $slug][0]{
   "slug": slug.current,
   routePhase,
   summary,
+  approvalGate{
+    contentApprovalStatus,
+    sourceProofStatus,
+    legalReviewStatus
+  },
   modules[]{
 ${SITE_PAGE_MODULE_PROJECTION}
   }
@@ -292,10 +305,22 @@ function isHomepageCmsRenderingEnabled(): boolean {
   return process.env[HOMEPAGE_CMS_RENDER_ENABLE_ENV] === "true";
 }
 
+function isHomepageApprovedForPublicRendering(
+  record: SanityHomepageRecord | null,
+): record is SanityHomepageRecord {
+  return Boolean(
+    record &&
+      PUBLIC_RENDERABLE_ROUTE_PHASES.has(record.routePhase || "") &&
+      record.approvalGate?.contentApprovalStatus === PUBLIC_HOMEPAGE_APPROVAL &&
+      record.approvalGate.sourceProofStatus === PUBLIC_HOMEPAGE_APPROVAL &&
+      record.approvalGate.legalReviewStatus === PUBLIC_HOMEPAGE_APPROVAL,
+  );
+}
+
 function getRenderableHomepageModules(
   record: SanityHomepageRecord | null,
 ): readonly SanityHomepageModule[] {
-  if (!record || !PUBLIC_RENDERABLE_ROUTE_PHASES.has(record.routePhase || "")) {
+  if (!isHomepageApprovedForPublicRendering(record)) {
     return [];
   }
 
@@ -318,10 +343,11 @@ export async function readPublicRenderableHomepage(
   try {
     const homepage = await readPublishedHomepage(init);
     const record = homepage.ok ? homepage.result : null;
+    const approvedRecord = isHomepageApprovedForPublicRendering(record) ? record : null;
 
     return {
       enabled: true,
-      record,
+      record: approvedRecord,
       modules: getRenderableHomepageModules(record),
     };
   } catch {

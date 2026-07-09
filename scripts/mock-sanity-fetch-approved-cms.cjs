@@ -44,6 +44,11 @@ function pageResult(slug) {
     slug: routeSlug,
     routePhase: "approved_public",
     summary: "CMS runtime smoke fixture.",
+    approvalGate: {
+      contentApprovalStatus: "approved_public",
+      sourceProofStatus: "approved_public",
+      legalReviewStatus: "approved_public",
+    },
     modules: [
       {
         _key: `${routeSlug}-hero`,

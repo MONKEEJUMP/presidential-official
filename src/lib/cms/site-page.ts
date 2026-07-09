@@ -10,8 +10,15 @@ import {
 } from "./homepage";
 
 const SITE_PAGE_CMS_RENDER_ENABLE_ENV = "PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED";
+const PUBLIC_SITE_PAGE_APPROVAL = "approved_public";
 const PUBLIC_RENDERABLE_ROUTE_PHASES = new Set(["approved_public"]);
 const RENDERABLE_MODULE_ELIGIBILITY = "ready_for_implementation_candidate";
+
+type SanityApprovalGate = {
+  readonly contentApprovalStatus?: string;
+  readonly sourceProofStatus?: string;
+  readonly legalReviewStatus?: string;
+};
 
 export type SanitySitePageRecord = {
   readonly _id: string;
@@ -20,6 +27,7 @@ export type SanitySitePageRecord = {
   readonly slug?: string;
   readonly routePhase?: string;
   readonly summary?: string;
+  readonly approvalGate?: SanityApprovalGate;
   readonly modules?: readonly SanityHomepageModule[];
 };
 
@@ -36,6 +44,11 @@ const SITE_PAGE_QUERY = `*[_type == "sitePage" && slug.current == $slug][0]{
   "slug": slug.current,
   routePhase,
   summary,
+  approvalGate{
+    contentApprovalStatus,
+    sourceProofStatus,
+    legalReviewStatus
+  },
   modules[]{
 ${SITE_PAGE_MODULE_PROJECTION}
   }
@@ -45,10 +58,22 @@ function isSitePageCmsRenderingEnabled(): boolean {
   return process.env[SITE_PAGE_CMS_RENDER_ENABLE_ENV] === "true";
 }
 
+function isSitePageApprovedForPublicRendering(
+  record: SanitySitePageRecord | null,
+): record is SanitySitePageRecord {
+  return Boolean(
+    record &&
+      PUBLIC_RENDERABLE_ROUTE_PHASES.has(record.routePhase || "") &&
+      record.approvalGate?.contentApprovalStatus === PUBLIC_SITE_PAGE_APPROVAL &&
+      record.approvalGate.sourceProofStatus === PUBLIC_SITE_PAGE_APPROVAL &&
+      record.approvalGate.legalReviewStatus === PUBLIC_SITE_PAGE_APPROVAL,
+  );
+}
+
 function getRenderableSitePageModules(
   record: SanitySitePageRecord | null,
 ): readonly SanityHomepageModule[] {
-  if (!record || !PUBLIC_RENDERABLE_ROUTE_PHASES.has(record.routePhase || "")) {
+  if (!isSitePageApprovedForPublicRendering(record)) {
     return [];
   }
 
@@ -83,10 +108,11 @@ export async function readPublicRenderableSitePage(
   try {
     const page = await readPublishedSitePage(slug, init);
     const record = page.ok ? page.result : null;
+    const approvedRecord = isSitePageApprovedForPublicRendering(record) ? record : null;
 
     return {
       enabled: true,
-      record,
+      record: approvedRecord,
       modules: getRenderableSitePageModules(record),
     };
   } catch {
