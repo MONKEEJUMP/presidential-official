@@ -16,6 +16,16 @@ function read(relativePath) {
   return existsSync(filePath) ? readFileSync(filePath, "utf8") : "";
 }
 
+function ownerGateBlock(source, id) {
+  const match = source.match(new RegExp(`\\{\\s*id:\\s*"${id}"[\\s\\S]*?\\n\\s*\\}`));
+  return match?.[0] ?? "";
+}
+
+function ownerGateMatches(source, id, expected) {
+  const block = ownerGateBlock(source, id);
+  return Object.entries(expected).every(([key, value]) => block.includes(`${key}: "${value}"`));
+}
+
 function addCheck(rows, check, passed, details) {
   rows.push({
     check,
@@ -124,11 +134,15 @@ function main() {
   addCheck(
     rows,
     "liveAction.ownerDeployGates.present",
-    ownerGateText.includes('id: "canonical-host"') &&
-      ownerGateText.includes('requiredBefore: "production_deploy"') &&
-      ownerGateText.includes('id: "age-gate-policy"') &&
-      ownerGateText.includes('status: "blocked_pending_owner_or_legal_review"'),
-    "production deployment remains gated by canonical host confirmation and age-gate policy",
+    ownerGateMatches(ownerGateText, "canonical-host", {
+      status: "implemented_pending_live_confirmation",
+      requiredBefore: "production_deploy",
+    }) &&
+      ownerGateMatches(ownerGateText, "age-gate-policy", {
+        status: "blocked_pending_owner_or_legal_review",
+        requiredBefore: "production_deploy",
+      }),
+    "production deployment remains gated by exact canonical-host and age-gate-policy owner records",
   );
   addCheck(
     rows,
