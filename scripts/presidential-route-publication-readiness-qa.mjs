@@ -109,6 +109,7 @@ function main() {
     APPROVED_SOURCE_RECORDS,
     ROUTE_PUBLICATION_APPROVAL_SEQUENCE,
     getRoutePublicationGateBlockReasons,
+    getNextRoutePublicationCandidate,
     isRoutePublicationApprovedForSeo,
   } = require(publicationPath);
 
@@ -135,6 +136,7 @@ function main() {
         sitemapBlockReasons,
       };
     });
+  const nextRoutePublicationCandidate = getNextRoutePublicationCandidate();
 
   check(
     rows,
@@ -199,6 +201,17 @@ function main() {
     routeReports.length === expectedLaunchSequence.length,
     `route reports: ${routeReports.length}`,
   );
+  check(
+    rows,
+    "routePublicationReadiness.nextCandidate.home",
+    nextRoutePublicationCandidate?.route.id === "home" &&
+      nextRoutePublicationCandidate.publicationBlockReasons.includes("source_record:route_publication_missing") &&
+      nextRoutePublicationCandidate.sitemapBlockReasons.includes("block:canonical_host_lock") &&
+      nextRoutePublicationCandidate.sitemapBlockReasons.includes("block:content_approval"),
+    nextRoutePublicationCandidate
+      ? `next route: ${nextRoutePublicationCandidate.route.id}; blockers: ${nextRoutePublicationCandidate.sitemapBlockReasons.join("|")}`
+      : "no next route candidate found",
+  );
 
   const failCount = rows.filter((row) => row.status === "fail").length;
   const verdict =
@@ -212,6 +225,14 @@ function main() {
     failCount,
     launchSequence: expectedLaunchSequence,
     approvedRoutePublicationCount: APPROVED_ROUTE_PUBLICATIONS.length,
+    nextRoutePublicationCandidate: nextRoutePublicationCandidate
+      ? {
+          routeId: nextRoutePublicationCandidate.route.id,
+          path: nextRoutePublicationCandidate.route.path,
+          publicationBlockReasons: nextRoutePublicationCandidate.publicationBlockReasons,
+          sitemapBlockReasons: nextRoutePublicationCandidate.sitemapBlockReasons,
+        }
+      : null,
     routeReports,
     checks: rows,
     routePublicationApproved: false,

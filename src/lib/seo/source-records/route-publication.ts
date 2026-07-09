@@ -23,6 +23,12 @@ export const ROUTE_PUBLICATION_APPROVAL_SEQUENCE = [
   "contact",
 ] as const;
 
+export type NextRoutePublicationCandidate = {
+  readonly route: SeoRouteRecord;
+  readonly publicationBlockReasons: readonly string[];
+  readonly sitemapBlockReasons: readonly string[];
+};
+
 export type RoutePublicationGateContext = {
   readonly metadataRecords?: readonly SeoMetadataRecord[];
   readonly schemaRecords?: readonly SchemaRecord[];
@@ -110,6 +116,46 @@ export function getRoutePublicationRecord(
   return records.find(
     (record) => record.routeId === route.id && record.path === route.path,
   );
+}
+
+export function getNextRoutePublicationCandidate(
+  records: readonly RoutePublicationRecord[] = APPROVED_ROUTE_PUBLICATIONS,
+  context: RoutePublicationGateContext = APPROVED_ROUTE_PUBLICATION_CONTEXT,
+): NextRoutePublicationCandidate | undefined {
+  for (const routeId of ROUTE_PUBLICATION_APPROVAL_SEQUENCE) {
+    const route = ROUTE_REGISTRY.find(
+      (candidate) => candidate.id === routeId,
+    ) as SeoRouteRecord | undefined;
+
+    if (!route) {
+      continue;
+    }
+
+    const publicationBlockReasons = getRoutePublicationGateBlockReasons(
+      route,
+      records,
+      context,
+    );
+    const sitemapBlockReasons = [
+      ...(route.status !== "approved" ? [`status:${route.status}`] : []),
+      ...(route.indexability !== "index_follow"
+        ? [`indexability:${route.indexability}`]
+        : []),
+      ...(route.sitemap !== "include" ? [`sitemap:${route.sitemap}`] : []),
+      ...route.blocks.map((block) => `block:${block}`),
+      ...publicationBlockReasons,
+    ];
+
+    if (publicationBlockReasons.length > 0 || sitemapBlockReasons.length > 0) {
+      return {
+        route,
+        publicationBlockReasons,
+        sitemapBlockReasons,
+      };
+    }
+  }
+
+  return undefined;
 }
 
 export function getRoutePublicationGateBlockReasons(
