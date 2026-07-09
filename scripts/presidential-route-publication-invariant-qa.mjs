@@ -384,6 +384,29 @@ function checkSourceContracts() {
       "approved route-publication records are empty",
       "approved route-publication records are no longer empty",
     );
+    recordCheck(
+      "source:route-publication",
+      "approvalSequenceEncoded",
+      /ROUTE_PUBLICATION_APPROVAL_SEQUENCE\s*=\s*\[[\s\S]*?"home"[\s\S]*?"moon-rocks"[\s\S]*?"our-story"[\s\S]*?"learn"[\s\S]*?"find-us"[\s\S]*?"contact"[\s\S]*?\]\s+as\s+const/.test(routePublicationSource),
+      "route-publication approval sequence is encoded",
+      "route-publication approval sequence is missing or drifted",
+    );
+    recordCheck(
+      "source:route-publication",
+      "complianceEvidenceRequired",
+      routePublicationSource.includes("source_record:compliance_record:required") &&
+        routePublicationSource.includes("complianceRecordIds"),
+      "approved compliance status requires compliance proof evidence",
+      "approved compliance status may pass without compliance proof evidence",
+    );
+    recordCheck(
+      "source:route-publication",
+      "previousRoutesEnforced",
+      routePublicationSource.includes("source_record:publication_sequence:previous_not_approved") &&
+        routePublicationSource.includes("previousRoutePublicationIds(route)"),
+      "later route publication requires earlier sequence routes to be approved first",
+      "later route publication may bypass the required sequence",
+    );
   }
 
   if (metadataSource) {
@@ -495,6 +518,7 @@ function checkRuntimeInvariants() {
   const { buildRouteShellJsonLd } = routeShell;
   const {
     APPROVED_ROUTE_PUBLICATIONS,
+    ROUTE_PUBLICATION_APPROVAL_SEQUENCE,
     getRoutePublicationGateBlockReasons,
     isRoutePublicationApprovedForSeo,
   } = publication;
@@ -505,6 +529,14 @@ function checkRuntimeInvariants() {
     APPROVED_ROUTE_PUBLICATIONS.length === 0,
     "0 approved route-publication records",
     `${APPROVED_ROUTE_PUBLICATIONS.length} approved route-publication records found`,
+  );
+  recordCheck(
+    "runtime:route-publication",
+    "approvalSequence.exact",
+    ROUTE_PUBLICATION_APPROVAL_SEQUENCE.join(" > ") ===
+      "home > moon-rocks > our-story > learn > find-us > contact",
+    "route-publication sequence is Home > Moon Rocks > Our Story > Learn > Find Us > Contact",
+    `sequence=${ROUTE_PUBLICATION_APPROVAL_SEQUENCE.join(" > ")}`,
   );
 
   const sitemapRoutes = getPresidentialSitemapRoutes();
@@ -664,6 +696,7 @@ function checkRuntimeInvariants() {
     claimRecordIds: ["candidate-home-claim"],
     sourceRecordIds: ["candidate-home-source"],
     proofRecordIds: ["candidate-home-proof"],
+    complianceRecordIds: ["candidate-home-proof"],
     publicationStatus: "published",
     approvalStatus: "approved",
     confidentialityStatus: "public",
@@ -805,12 +838,30 @@ function checkRuntimeInvariants() {
           claimRecordIds: [],
           sourceRecordIds: [],
           proofRecordIds: [],
+          complianceRecordIds: [],
         },
       ],
       syntheticPublicationContext,
     ) === false,
     "empty-evidence synthetic publication candidate remains blocked",
     "empty-evidence synthetic publication candidate passed the gate",
+  );
+  recordCheck(
+    "runtime:synthetic-publication-candidate",
+    "missingComplianceCandidate.blocked",
+    isRoutePublicationApprovedForSeo(
+      syntheticRegistryPromotion,
+      [
+        {
+          ...syntheticPublication,
+          routePublicationId: "candidate-home-missing-compliance-evidence",
+          complianceRecordIds: [],
+        },
+      ],
+      syntheticPublicationContext,
+    ) === false,
+    "approved compliance without compliance proof remains blocked",
+    "approved compliance without compliance proof passed the gate",
   );
   recordCheck(
     "runtime:synthetic-publication-candidate",
@@ -846,6 +897,27 @@ function checkRuntimeInvariants() {
     ) === false,
     "Home publication candidate does not unlock another route",
     "Home publication candidate unlocked a different route",
+  );
+
+  const moonRocksRoute = ROUTE_REGISTRY.find((route) => route.id === "moon-rocks");
+  recordCheck(
+    "runtime:synthetic-publication-candidate",
+    "moonRocksRequiresHomeFirst",
+    Boolean(moonRocksRoute) &&
+      getRoutePublicationGateBlockReasons(
+        moonRocksRoute,
+        [
+          {
+            ...syntheticPublication,
+            routePublicationId: "candidate-moon-rocks-before-home",
+            routeId: "moon-rocks",
+            path: "/moon-rocks",
+          },
+        ],
+        syntheticPublicationContext,
+      ).includes("source_record:publication_sequence:previous_not_approved:home"),
+    "Moon Rocks publication is blocked until Home has an approved publication record",
+    "Moon Rocks publication did not enforce Home-first sequence",
   );
 }
 

@@ -246,6 +246,7 @@ export type RoutePublicationRecord = {
   claimRecordIds: readonly ClaimRecord["claimId"][];
   sourceRecordIds: readonly SourceRecord["sourceId"][];
   proofRecordIds: readonly ProofRecord["proofId"][];
+  complianceRecordIds?: readonly ProofRecord["proofId"][];
   publicationStatus: PublicationStatus;
   approvalStatus: ApprovalStatus;
   confidentialityStatus: ConfidentialityStatus;
@@ -266,4 +267,3 @@ export type SourceRecordGateResult = {
   allowed: boolean;
   blockReasons: readonly string[];
 };
-

@@ -1,5 +1,6 @@
 import type { SeoRouteRecord } from "../route-types";
 import { buildRouteCanonicalUrl } from "../route-helpers";
+import { ROUTE_REGISTRY } from "../routes";
 import type {
   AssetProvenanceRecord,
   AssetRecord,
@@ -11,6 +12,14 @@ import type {
 } from "./types";
 
 export const APPROVED_ROUTE_PUBLICATIONS = [] as const satisfies readonly RoutePublicationRecord[];
+export const ROUTE_PUBLICATION_APPROVAL_SEQUENCE = [
+  "home",
+  "moon-rocks",
+  "our-story",
+  "learn",
+  "find-us",
+  "contact",
+] as const;
 
 export type RoutePublicationGateContext = {
   readonly metadataRecords?: readonly import("./types").SeoMetadataRecord[];
@@ -59,7 +68,20 @@ function routePublicationEvidenceCount(record: RoutePublicationRecord): number {
     ...record.claimRecordIds,
     ...record.sourceRecordIds,
     ...record.proofRecordIds,
+    ...(record.complianceRecordIds ?? []),
   ].filter(Boolean).length;
+}
+
+function previousRoutePublicationIds(route: SeoRouteRecord): readonly string[] {
+  const routeIndex = ROUTE_PUBLICATION_APPROVAL_SEQUENCE.findIndex(
+    (routeId) => routeId === route.id,
+  );
+
+  if (routeIndex <= 0) {
+    return [];
+  }
+
+  return ROUTE_PUBLICATION_APPROVAL_SEQUENCE.slice(0, routeIndex);
 }
 
 export function getRoutePublicationRecord(
@@ -75,6 +97,7 @@ export function getRoutePublicationGateBlockReasons(
   route: SeoRouteRecord,
   records: readonly RoutePublicationRecord[] = APPROVED_ROUTE_PUBLICATIONS,
   context: RoutePublicationGateContext = {},
+  options: { readonly skipSequence?: boolean } = {},
 ): readonly string[] {
   const matchingRecords = records.filter(
     (candidate) => candidate.routeId === route.id && candidate.path === route.path,
@@ -182,6 +205,40 @@ export function getRoutePublicationGateBlockReasons(
     reasons.push(`source_record:compliance:${record.complianceStatus}`);
   }
 
+  if (
+    record.complianceStatus === "approved" &&
+    (record.complianceRecordIds?.length ?? 0) === 0
+  ) {
+    reasons.push("source_record:compliance_record:required");
+  }
+
+  for (const complianceRecordId of record.complianceRecordIds ?? []) {
+    if (!record.proofRecordIds.includes(complianceRecordId)) {
+      reasons.push(`source_record:compliance_record:not_in_proof_evidence:${complianceRecordId}`);
+    }
+  }
+
+  if (!options.skipSequence) {
+    for (const previousRouteId of previousRoutePublicationIds(route)) {
+      const previousRoute = ROUTE_REGISTRY.find(
+        (candidate) => candidate.id === previousRouteId,
+      );
+
+      if (!previousRoute) {
+        reasons.push(`source_record:publication_sequence:route_missing:${previousRouteId}`);
+        continue;
+      }
+
+      if (
+        getRoutePublicationGateBlockReasons(previousRoute, records, context, {
+          skipSequence: true,
+        }).length > 0
+      ) {
+        reasons.push(`source_record:publication_sequence:previous_not_approved:${previousRouteId}`);
+      }
+    }
+  }
+
   if (record.sourceRecordIds.length === 0) {
     reasons.push("source_record:source:required");
   }
@@ -261,6 +318,19 @@ export function getRoutePublicationGateBlockReasons(
     const proof = proofById.get(proofId);
     if (proof && !isProofApprovedForPublicClaim(proof)) {
       reasons.push(`source_record:proof:not_approved:${proof.proofId}`);
+    }
+  }
+
+  pushMissingRecordReasons(
+    reasons,
+    "compliance_record",
+    record.complianceRecordIds ?? [],
+    proofById,
+  );
+  for (const complianceRecordId of record.complianceRecordIds ?? []) {
+    const complianceProof = proofById.get(complianceRecordId);
+    if (complianceProof && !isProofApprovedForPublicClaim(complianceProof)) {
+      reasons.push(`source_record:compliance_record:not_approved:${complianceProof.proofId}`);
     }
   }
 

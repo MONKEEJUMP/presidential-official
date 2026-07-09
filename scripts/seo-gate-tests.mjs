@@ -108,6 +108,7 @@ const { PRODUCTION_ORIGIN, canonicalUrl } = require(schemaConstantsPath);
 const { buildRouteShellJsonLd } = require(routeShellSchemaPath);
 const {
   APPROVED_ROUTE_PUBLICATIONS,
+  ROUTE_PUBLICATION_APPROVAL_SEQUENCE,
   getRoutePublicationGateBlockReasons,
   isRoutePublicationApprovedForSeo,
   isSourceAllowedForPublicSeo,
@@ -257,6 +258,7 @@ function buildSyntheticRoutePublication(overrides = {}) {
     claimRecordIds: ["gate-test-claim"],
     sourceRecordIds: ["gate-test-source"],
     proofRecordIds: ["gate-test-proof"],
+    complianceRecordIds: ["gate-test-proof"],
     publicationStatus: "published",
     approvalStatus: "approved",
     confidentialityStatus: "public",
@@ -406,6 +408,11 @@ const requiredEvidenceCases = [
     overrides: { routePublicationId: "gate-test-empty-claim", claimRecordIds: [] },
     reason: "source_record:claim:required",
   },
+  {
+    label: "compliance record",
+    overrides: { routePublicationId: "gate-test-empty-compliance", complianceRecordIds: [] },
+    reason: "source_record:compliance_record:required",
+  },
 ];
 
 for (const { label, overrides, reason } of requiredEvidenceCases) {
@@ -438,6 +445,7 @@ const zeroEvidencePublication = buildSyntheticRoutePublication({
   claimRecordIds: [],
   sourceRecordIds: [],
   proofRecordIds: [],
+  complianceRecordIds: [],
 });
 
 assertEqual(
@@ -541,6 +549,29 @@ assert(
     approvedPublicationGateInput,
   ).length > 0,
   "A fully approved route publication did not emit route-shell JSON-LD for the synthetic route.",
+);
+
+assertEqual(
+  ROUTE_PUBLICATION_APPROVAL_SEQUENCE.join(" > "),
+  "home > moon-rocks > our-story > learn > find-us > contact",
+  "Route-publication approval sequence drifted.",
+);
+
+const moonRocksRoute = ROUTE_REGISTRY.find((route) => route.id === "moon-rocks");
+assert(moonRocksRoute, "Moon Rocks route missing from ROUTE_REGISTRY.");
+assert(
+  getRoutePublicationGateBlockReasons(
+    moonRocksRoute,
+    [
+      buildSyntheticRoutePublication({
+        routePublicationId: "gate-test-moon-rocks-without-home",
+        routeId: moonRocksRoute.id,
+        path: moonRocksRoute.path,
+      }),
+    ],
+    approvedContext,
+  ).includes("source_record:publication_sequence:previous_not_approved:home"),
+  "Moon Rocks route publication did not require the Home route to publish first.",
 );
 
 const routePublicationStatusBlockers = [
