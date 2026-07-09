@@ -683,7 +683,11 @@ function checkSourceContracts() {
     recordCheck(
       "source:route-shell-schema",
       "publicationGateBeforeSchema",
-      /getRoutePublicationGateBlockReasons\(route\)\.length > 0[\s\S]*?return \[\];/.test(routeShellSource),
+      routeShellSource.includes("getRoutePublicationGateBlockReasons(") &&
+        routeShellSource.includes("gateInput.routePublicationRecords") &&
+        routeShellSource.includes("gateInput.routePublicationContext") &&
+        routeShellSource.includes("getSitemapBlockReasons(route, gateInput).length > 0") &&
+        routeShellSource.includes("return [];"),
       "route shell schema returns empty while publication gate has blockers",
       "route shell schema gate missing or moved",
     );

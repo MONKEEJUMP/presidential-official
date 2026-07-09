@@ -591,7 +591,9 @@ function checkSourceAndPackageWiring() {
     recordCheck(
       "source:metadata",
       "socialPreviewStillPublicationGated",
-      metadataSource.includes("const socialPreviewApproved = isRouteMetadataIndexable(route)") &&
+      metadataSource.includes("const socialPreviewApproved = isRouteMetadataIndexable(route, gateInput)") &&
+        metadataSource.includes("routePublicationRecords: input.routePublicationRecords") &&
+        metadataSource.includes("routePublicationContext: input.routePublicationContext") &&
         metadataSource.includes("socialPreviewApproved"),
       "social preview output remains publication-gated",
       "social preview gate missing",

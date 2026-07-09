@@ -1,5 +1,6 @@
 import type { SeoRouteRecord } from "./route-types";
 import { getRoutePublicationGateBlockReasons } from "./source-records";
+import type { RoutePublicationGateInput } from "./metadata-types";
 
 export function isIndexFollow(route: SeoRouteRecord): boolean {
   return route.indexability === "index_follow";
@@ -17,7 +18,10 @@ export function isPrivateOrFutureRoute(route: SeoRouteRecord): boolean {
   );
 }
 
-export function getSitemapBlockReasons(route: SeoRouteRecord): readonly string[] {
+export function getSitemapBlockReasons(
+  route: SeoRouteRecord,
+  gateInput: RoutePublicationGateInput = {},
+): readonly string[] {
   const reasons: string[] = [];
 
   if (route.status !== "approved") {
@@ -36,18 +40,31 @@ export function getSitemapBlockReasons(route: SeoRouteRecord): readonly string[]
     reasons.push(`block:${block}`);
   }
 
-  reasons.push(...getRoutePublicationGateBlockReasons(route));
+  reasons.push(
+    ...getRoutePublicationGateBlockReasons(
+      route,
+      gateInput.routePublicationRecords,
+      gateInput.routePublicationContext,
+    ),
+  );
 
   return reasons;
 }
 
-export function isSitemapEligible(route: SeoRouteRecord): boolean {
+export function isSitemapEligible(
+  route: SeoRouteRecord,
+  gateInput: RoutePublicationGateInput = {},
+): boolean {
   return (
     route.status === "approved" &&
     route.indexability === "index_follow" &&
     route.sitemap === "include" &&
     route.blocks.length === 0 &&
-    getRoutePublicationGateBlockReasons(route).length === 0
+    getRoutePublicationGateBlockReasons(
+      route,
+      gateInput.routePublicationRecords,
+      gateInput.routePublicationContext,
+    ).length === 0
   );
 }
 

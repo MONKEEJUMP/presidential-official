@@ -8,6 +8,7 @@ import {
 import { getRoutePublicationGateBlockReasons } from "./source-records";
 import type {
   BuildRouteMetadataInput,
+  RoutePublicationGateInput,
   RouteMetadataRobotsPolicy,
 } from "./metadata-types";
 import { PRESIDENTIAL_NAME, PRODUCTION_ORIGIN } from "./schema/constants";
@@ -17,19 +18,27 @@ export const METADATA_BASE = new URL(PRODUCTION_ORIGIN);
 export const OPEN_GRAPH_SITE_NAME = PRESIDENTIAL_NAME;
 export const TWITTER_CARD_TYPE = "summary" as const;
 
-export function isRouteMetadataIndexable(route: SeoRouteRecord): boolean {
+export function isRouteMetadataIndexable(
+  route: SeoRouteRecord,
+  gateInput: RoutePublicationGateInput = {},
+): boolean {
   return (
     route.status === "approved" &&
     isIndexFollow(route) &&
     route.blocks.length === 0 &&
-    getRoutePublicationGateBlockReasons(route).length === 0
+    getRoutePublicationGateBlockReasons(
+      route,
+      gateInput.routePublicationRecords,
+      gateInput.routePublicationContext,
+    ).length === 0
   );
 }
 
 export function buildRouteRobots(
   route: SeoRouteRecord,
+  gateInput: RoutePublicationGateInput = {},
 ): RouteMetadataRobotsPolicy {
-  const index = isRouteMetadataIndexable(route);
+  const index = isRouteMetadataIndexable(route, gateInput);
   const follow =
     index ||
     (route.indexability === "conditional_index" && !isPrivateOrFutureRoute(route));
@@ -56,7 +65,11 @@ export function buildRouteMetadata(input: BuildRouteMetadataInput): Metadata {
     "description",
   );
   const { canonical, openGraphUrl } = buildRouteMetadataUrlFields(input);
-  const socialPreviewApproved = isRouteMetadataIndexable(route);
+  const gateInput = {
+    routePublicationRecords: input.routePublicationRecords,
+    routePublicationContext: input.routePublicationContext,
+  };
+  const socialPreviewApproved = isRouteMetadataIndexable(route, gateInput);
 
   return {
     metadataBase: METADATA_BASE,
@@ -65,7 +78,7 @@ export function buildRouteMetadata(input: BuildRouteMetadataInput): Metadata {
     alternates: {
       canonical,
     },
-    robots: buildRouteRobots(route),
+    robots: buildRouteRobots(route, gateInput),
     ...(socialPreviewApproved
       ? {
           openGraph: {

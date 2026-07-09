@@ -9,6 +9,7 @@ import type {
 import { assertMetadataTextSafe } from "../metadata-helpers";
 import { getSitemapBlockReasons } from "../indexability";
 import { buildRouteCanonicalUrl, isRouteTemplate } from "../route-helpers";
+import type { RoutePublicationGateInput } from "../metadata-types";
 import type { SeoRouteRecord, SeoSchemaType } from "../route-types";
 import { getRoutePublicationGateBlockReasons } from "../source-records";
 import { buildBreadcrumbSchema } from "./breadcrumb";
@@ -84,12 +85,17 @@ export function buildRouteShellBreadcrumbItems(
 
 export function buildRouteShellJsonLd(
   route: SeoRouteRecord,
+  gateInput: RoutePublicationGateInput = {},
 ): readonly RouteShellJsonLdEntry[] {
   assertConcreteRouteShell(route);
 
   if (
-    getRoutePublicationGateBlockReasons(route).length > 0 ||
-    getSitemapBlockReasons(route).length > 0
+    getRoutePublicationGateBlockReasons(
+      route,
+      gateInput.routePublicationRecords,
+      gateInput.routePublicationContext,
+    ).length > 0 ||
+    getSitemapBlockReasons(route, gateInput).length > 0
   ) {
     return [];
   }

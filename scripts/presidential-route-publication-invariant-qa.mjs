@@ -390,14 +390,17 @@ function checkSourceContracts() {
     recordCheck(
       "source:metadata",
       "robotsUsesPublicationGate",
-      metadataSource.includes("getRoutePublicationGateBlockReasons(route).length === 0"),
-      "metadata indexability requires route-publication gate",
+      metadataSource.includes("getRoutePublicationGateBlockReasons(") &&
+        metadataSource.includes("gateInput.routePublicationRecords") &&
+        metadataSource.includes("gateInput.routePublicationContext") &&
+        metadataSource.includes(").length === 0"),
+      "metadata indexability requires route-publication gate with injectable records/context",
       "metadata indexability no longer requires route-publication gate",
     );
     recordCheck(
       "source:metadata",
       "socialPreviewUsesMetadataIndexability",
-      metadataSource.includes("const socialPreviewApproved = isRouteMetadataIndexable(route)") &&
+      metadataSource.includes("const socialPreviewApproved = isRouteMetadataIndexable(route, gateInput)") &&
         metadataSource.includes("socialPreviewApproved"),
       "Open Graph/Twitter are gated through route metadata indexability",
       "Open Graph/Twitter may bypass route metadata indexability",
@@ -408,8 +411,10 @@ function checkSourceContracts() {
     recordCheck(
       "source:indexability",
       "sitemapUsesPublicationGate",
-      indexabilitySource.includes("getRoutePublicationGateBlockReasons(route).length === 0") &&
-        indexabilitySource.includes("reasons.push(...getRoutePublicationGateBlockReasons(route))"),
+      indexabilitySource.includes("getRoutePublicationGateBlockReasons(") &&
+        indexabilitySource.includes("gateInput.routePublicationRecords") &&
+        indexabilitySource.includes("gateInput.routePublicationContext") &&
+        indexabilitySource.includes("reasons.push("),
       "sitemap eligibility and block reasons include route-publication gate",
       "sitemap gate no longer includes route-publication gate",
     );
@@ -430,7 +435,7 @@ function checkSourceContracts() {
     recordCheck(
       "source:route-shell-schema",
       "jsonLdUsesPublicationGate",
-      /getRoutePublicationGateBlockReasons\(route\)\.length > 0[\s\S]*?return \[\];/.test(
+      /getRoutePublicationGateBlockReasons\([\s\S]*?gateInput\.routePublicationRecords[\s\S]*?gateInput\.routePublicationContext[\s\S]*?\)\.length > 0[\s\S]*?return \[\];/.test(
         routeShellSource,
       ),
       "route-shell JSON-LD returns empty while publication gate has blockers",
@@ -491,6 +496,7 @@ function checkRuntimeInvariants() {
   const {
     APPROVED_ROUTE_PUBLICATIONS,
     getRoutePublicationGateBlockReasons,
+    isRoutePublicationApprovedForSeo,
   } = publication;
 
   recordCheck(
@@ -644,6 +650,202 @@ function checkRuntimeInvariants() {
     buildRouteShellJsonLd(syntheticRegistryPromotion).length === 0,
     "registry-only promotion cannot emit route-shell JSON-LD",
     "registry-only promotion emitted route-shell JSON-LD",
+  );
+
+  const syntheticPublication = {
+    routePublicationId: "candidate-home-publication",
+    routeId: syntheticRegistryPromotion.id,
+    path: syntheticRegistryPromotion.path,
+    primaryEntityRecordId: "candidate-company-entity",
+    contentRecordIds: ["candidate-home-content"],
+    metadataRecordId: "candidate-home-metadata",
+    schemaRecordIds: ["candidate-home-webpage-schema"],
+    assetRecordIds: ["candidate-home-asset"],
+    claimRecordIds: ["candidate-home-claim"],
+    sourceRecordIds: ["candidate-home-source"],
+    proofRecordIds: ["candidate-home-proof"],
+    publicationStatus: "published",
+    approvalStatus: "approved",
+    confidentialityStatus: "public",
+    indexability: "index_follow",
+    sitemapPolicy: "include",
+    canonicalStatus: "production",
+    metadataApprovalStatus: "approved",
+    schemaApprovalStatus: "approved",
+    contentApprovalStatus: "approved",
+    assetApprovalStatus: "approved",
+    proofStatus: "verified",
+    complianceStatus: "approved",
+    launchBlockers: [],
+  };
+  const syntheticPublicationContext = {
+    metadataRecords: [
+      {
+        seoId: "candidate-home-metadata",
+        routeId: syntheticRegistryPromotion.id,
+        h1: syntheticRegistryPromotion.h1,
+        metaTitle: syntheticRegistryPromotion.title,
+        metaDescription: syntheticRegistryPromotion.description,
+        canonicalUrl: expectedCanonical(syntheticRegistryPromotion.path),
+        robotsDirective: "index_follow",
+        ogTitle: syntheticRegistryPromotion.title,
+        ogDescription: syntheticRegistryPromotion.description,
+        primaryKeyword: "presidential cannabis",
+        secondaryKeywords: [],
+        approvalStatus: "approved",
+      },
+    ],
+    schemaRecords: [
+      {
+        schemaId: "candidate-home-webpage-schema",
+        routeId: syntheticRegistryPromotion.id,
+        schemaType: "WebPage",
+        sourceFieldMap: { name: "candidate-home-content" },
+        claimsUsed: ["candidate-home-claim"],
+        visibleContentMatch: true,
+        validationStatus: "approved",
+        approvalStatus: "approved",
+      },
+    ],
+    sourceRecords: [
+      {
+        sourceId: "candidate-home-source",
+        sourceName: "Candidate Home Source",
+        sourceType: "client_provided",
+        sourceLocator: "candidate://home-source",
+        allowedUsage: "production",
+        confidentialityStatus: "public",
+        publisherOrProvider: "candidate-fixture",
+        confidenceScore: 1,
+      },
+    ],
+    proofRecords: [
+      {
+        proofId: "candidate-home-proof",
+        sourceId: "candidate-home-source",
+        relatedRecordType: "route_publication",
+        relatedRecordId: "candidate-home-publication",
+        evidenceType: "client_confirmation",
+        evidenceLocator: "candidate://home-proof",
+        proofSummary: "Synthetic candidate proof for route-publication readiness.",
+        proofLevel: "client_confirmed",
+        confidenceScore: 1,
+        approvalStatus: "approved",
+      },
+    ],
+    claimRecords: [
+      {
+        claimId: "candidate-home-claim",
+        claimText: "Presidential is the official brand site.",
+        normalizedClaim: "presidential is the official brand site",
+        claimType: "brand_positioning",
+        relatedEntityType: "route_publication",
+        relatedEntityId: "candidate-home-publication",
+        proofRequired: true,
+        proofStatus: "verified",
+        allowedUses: ["route_publication"],
+        disallowedUses: [],
+        complianceRiskScore: 0,
+        clientConfirmationNeeded: false,
+        legalReviewRequired: false,
+        approvalStatus: "approved",
+      },
+    ],
+    assetRecords: [
+      {
+        assetId: "candidate-home-asset",
+        filename: "candidate-home.webp",
+        storageUrl: "candidate://home-asset",
+        assetType: "image",
+        altText: "Presidential product packaging.",
+        usageTier: "public",
+        relatedEntityIds: ["candidate-home-publication"],
+        rightsStatus: "approved",
+        approvalStatus: "approved",
+      },
+    ],
+    assetProvenanceRecords: [
+      {
+        provenanceId: "candidate-home-asset-provenance",
+        assetId: "candidate-home-asset",
+        sourceId: "candidate-home-source",
+        intakeMethod: "client_drop",
+        originalLocator: "candidate://home-asset",
+        capturedAt: "2026-07-09T00:00:00.000Z",
+        blacklistCheckStatus: "passed",
+        verificationStatus: "approved",
+      },
+    ],
+  };
+
+  recordCheck(
+    "runtime:synthetic-publication-candidate",
+    "completeCandidate.passesFullGate",
+    isRoutePublicationApprovedForSeo(
+      syntheticRegistryPromotion,
+      [syntheticPublication],
+      syntheticPublicationContext,
+    ) === true,
+    "complete synthetic Home publication candidate passes the full route-publication gate",
+    "complete synthetic Home publication candidate failed the full route-publication gate",
+  );
+  recordCheck(
+    "runtime:synthetic-publication-candidate",
+    "missingEvidenceCandidate.blocked",
+    isRoutePublicationApprovedForSeo(
+      syntheticRegistryPromotion,
+      [
+        {
+          ...syntheticPublication,
+          routePublicationId: "candidate-home-missing-evidence",
+          contentRecordIds: [],
+          metadataRecordId: undefined,
+          schemaRecordIds: [],
+          assetRecordIds: [],
+          claimRecordIds: [],
+          sourceRecordIds: [],
+          proofRecordIds: [],
+        },
+      ],
+      syntheticPublicationContext,
+    ) === false,
+    "empty-evidence synthetic publication candidate remains blocked",
+    "empty-evidence synthetic publication candidate passed the gate",
+  );
+  recordCheck(
+    "runtime:synthetic-publication-candidate",
+    "canonicalMismatchCandidate.blocked",
+    isRoutePublicationApprovedForSeo(
+      syntheticRegistryPromotion,
+      [syntheticPublication],
+      {
+        ...syntheticPublicationContext,
+        metadataRecords: [
+          {
+            ...syntheticPublicationContext.metadataRecords[0],
+            canonicalUrl: `${productionOrigin}/wrong-path`,
+          },
+        ],
+      },
+    ) === false,
+    "canonical-mismatch synthetic publication candidate remains blocked",
+    "canonical-mismatch synthetic publication candidate passed the gate",
+  );
+  recordCheck(
+    "runtime:synthetic-publication-candidate",
+    "routeMismatchCandidate.blocked",
+    isRoutePublicationApprovedForSeo(
+      {
+        ...syntheticRegistryPromotion,
+        id: "moon-rocks",
+        path: "/moon-rocks",
+        canonicalPath: "/moon-rocks",
+      },
+      [syntheticPublication],
+      syntheticPublicationContext,
+    ) === false,
+    "Home publication candidate does not unlock another route",
+    "Home publication candidate unlocked a different route",
   );
 }
 

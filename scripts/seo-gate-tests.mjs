@@ -81,6 +81,7 @@ const require = createRequire(import.meta.url);
 const distRoot = path.join(outDir, "lib", "seo");
 const metadataPath = path.join(distRoot, "metadata.js");
 const metadataHelpersPath = path.join(distRoot, "metadata-helpers.js");
+const indexabilityPath = path.join(distRoot, "indexability.js");
 const routesPath = path.join(distRoot, "routes.js");
 const schemaConstantsPath = path.join(distRoot, "schema", "constants.js");
 const routeShellSchemaPath = path.join(distRoot, "schema", "routeShell.js");
@@ -89,6 +90,7 @@ const publicationPath = path.join(distRoot, "source-records", "route-publication
 for (const requiredPath of [
   metadataPath,
   metadataHelpersPath,
+  indexabilityPath,
   routesPath,
   schemaConstantsPath,
   routeShellSchemaPath,
@@ -100,6 +102,7 @@ for (const requiredPath of [
 const { buildRouteMetadata, buildRouteRobots, isRouteMetadataIndexable } =
   require(metadataPath);
 const { assertMetadataTextSafe } = require(metadataHelpersPath);
+const { getSitemapBlockReasons, isSitemapEligible } = require(indexabilityPath);
 const { ROUTE_REGISTRY } = require(routesPath);
 const { PRODUCTION_ORIGIN, canonicalUrl } = require(schemaConstantsPath);
 const { buildRouteShellJsonLd } = require(routeShellSchemaPath);
@@ -473,6 +476,287 @@ assertEqual(
   true,
   "A fully approved route publication context failed the gate.",
 );
+
+const approvedPublicationGateInput = {
+  routePublicationRecords: [approvedPublication],
+  routePublicationContext: approvedContext,
+};
+
+assertEqual(
+  isRouteMetadataIndexable(
+    syntheticRegistryPromotion,
+    approvedPublicationGateInput,
+  ),
+  true,
+  "A fully approved route publication did not make the synthetic route metadata-indexable.",
+);
+
+const approvedRobots = buildRouteRobots(
+  syntheticRegistryPromotion,
+  approvedPublicationGateInput,
+);
+assertEqual(
+  approvedRobots.index,
+  true,
+  "A fully approved route publication did not emit robots.index=true for the synthetic route.",
+);
+assertEqual(
+  approvedRobots.googleBot.index,
+  true,
+  "A fully approved route publication did not emit googleBot.index=true for the synthetic route.",
+);
+
+const approvedMetadata = buildRouteMetadata({
+  route: syntheticRegistryPromotion,
+  ...approvedPublicationGateInput,
+});
+assertEqual(
+  "openGraph" in approvedMetadata,
+  true,
+  "A fully approved route publication did not emit Open Graph metadata for the synthetic route.",
+);
+assertEqual(
+  "twitter" in approvedMetadata,
+  true,
+  "A fully approved route publication did not emit Twitter metadata for the synthetic route.",
+);
+
+assertEqual(
+  isSitemapEligible(syntheticRegistryPromotion, approvedPublicationGateInput),
+  true,
+  "A fully approved route publication did not make the synthetic route sitemap-eligible.",
+);
+assertEqual(
+  getSitemapBlockReasons(
+    syntheticRegistryPromotion,
+    approvedPublicationGateInput,
+  ).length,
+  0,
+  "A fully approved route publication still had sitemap blockers.",
+);
+
+assert(
+  buildRouteShellJsonLd(
+    syntheticRegistryPromotion,
+    approvedPublicationGateInput,
+  ).length > 0,
+  "A fully approved route publication did not emit route-shell JSON-LD for the synthetic route.",
+);
+
+const routePublicationStatusBlockers = [
+  {
+    label: "publicationStatus",
+    overrides: { publicationStatus: "draft" },
+    reason: "source_record:publication:draft",
+  },
+  {
+    label: "approvalStatus",
+    overrides: { approvalStatus: "in_review" },
+    reason: "source_record:approval:in_review",
+  },
+  {
+    label: "confidentialityStatus",
+    overrides: { confidentialityStatus: "internal" },
+    reason: "source_record:confidentiality:internal",
+  },
+  {
+    label: "indexability",
+    overrides: { indexability: "noindex_follow" },
+    reason: "source_record:indexability:noindex_follow",
+  },
+  {
+    label: "sitemapPolicy",
+    overrides: { sitemapPolicy: "exclude" },
+    reason: "source_record:sitemap:exclude",
+  },
+  {
+    label: "canonicalStatus",
+    overrides: { canonicalStatus: "unknown" },
+    reason: "source_record:canonical:unknown",
+  },
+  {
+    label: "metadataApprovalStatus",
+    overrides: { metadataApprovalStatus: "draft" },
+    reason: "source_record:metadata:draft",
+  },
+  {
+    label: "schemaApprovalStatus",
+    overrides: { schemaApprovalStatus: "needs_validation" },
+    reason: "source_record:schema:needs_validation",
+  },
+  {
+    label: "contentApprovalStatus",
+    overrides: { contentApprovalStatus: "blocked" },
+    reason: "source_record:content:blocked",
+  },
+  {
+    label: "assetApprovalStatus",
+    overrides: { assetApprovalStatus: "needs_alt_text" },
+    reason: "source_record:asset:needs_alt_text",
+  },
+  {
+    label: "proofStatus",
+    overrides: { proofStatus: "missing" },
+    reason: "source_record:proof:missing",
+  },
+  {
+    label: "complianceStatus",
+    overrides: { complianceStatus: "needs_review" },
+    reason: "source_record:compliance:needs_review",
+  },
+  {
+    label: "launchBlockers",
+    overrides: { launchBlockers: ["final-review"] },
+    reason: "source_record:block:final-review",
+  },
+];
+
+for (const { label, overrides, reason } of routePublicationStatusBlockers) {
+  const publication = buildSyntheticRoutePublication({
+    routePublicationId: `gate-test-status-${label}`,
+    ...overrides,
+  });
+  const reasons = getRoutePublicationGateBlockReasons(
+    syntheticRegistryPromotion,
+    [publication],
+    approvedContext,
+  );
+  assertEqual(
+    isRoutePublicationApprovedForSeo(
+      syntheticRegistryPromotion,
+      [publication],
+      approvedContext,
+    ),
+    false,
+    `Route publication blocker ${label} passed the gate.`,
+  );
+  assert(
+    reasons.includes(reason),
+    `Route publication blocker ${label} did not produce ${reason}.`,
+  );
+}
+
+const referencedRecordBlockers = [
+  {
+    label: "metadata route mismatch",
+    context: {
+      ...approvedContext,
+      metadataRecords: [
+        { ...approvedContext.metadataRecords[0], routeId: "wrong-route" },
+      ],
+    },
+    reason: "source_record:metadata_record:route_mismatch:gate-test-metadata",
+  },
+  {
+    label: "metadata robots noindex",
+    context: {
+      ...approvedContext,
+      metadataRecords: [
+        { ...approvedContext.metadataRecords[0], robotsDirective: "noindex_follow" },
+      ],
+    },
+    reason: "source_record:metadata_record:robots:noindex_follow",
+  },
+  {
+    label: "schema route mismatch",
+    context: {
+      ...approvedContext,
+      schemaRecords: [
+        { ...approvedContext.schemaRecords[0], routeId: "wrong-route" },
+      ],
+    },
+    reason: "source_record:schema_record:route_mismatch:gate-test-schema",
+  },
+  {
+    label: "schema validation failure",
+    context: {
+      ...approvedContext,
+      schemaRecords: [
+        { ...approvedContext.schemaRecords[0], validationStatus: "needs_validation" },
+      ],
+    },
+    reason: "source_record:schema_record:validation:needs_validation",
+  },
+  {
+    label: "schema visible content mismatch",
+    context: {
+      ...approvedContext,
+      schemaRecords: [
+        { ...approvedContext.schemaRecords[0], visibleContentMatch: false },
+      ],
+    },
+    reason: "source_record:schema_record:visible_content_missing:gate-test-schema",
+  },
+  {
+    label: "proof unapproved",
+    context: {
+      ...approvedContext,
+      proofRecords: [
+        { ...approvedContext.proofRecords[0], approvalStatus: "blocked" },
+      ],
+    },
+    reason: "source_record:proof:not_approved:gate-test-proof",
+  },
+  {
+    label: "claim legal review",
+    context: {
+      ...approvedContext,
+      claimRecords: [
+        { ...approvedContext.claimRecords[0], legalReviewRequired: true },
+      ],
+    },
+    reason: "source_record:claim:not_approved:gate-test-claim",
+  },
+  {
+    label: "missing asset provenance",
+    context: {
+      ...approvedContext,
+      assetProvenanceRecords: [],
+    },
+    reason: "source_record:asset_provenance:missing:gate-test-asset",
+  },
+  {
+    label: "asset missing alt",
+    context: {
+      ...approvedContext,
+      assetRecords: [
+        { ...approvedContext.assetRecords[0], altText: "" },
+      ],
+    },
+    reason: "source_record:asset:not_approved:gate-test-asset",
+  },
+  {
+    label: "asset blacklist failed",
+    context: {
+      ...approvedContext,
+      assetProvenanceRecords: [
+        { ...approvedContext.assetProvenanceRecords[0], blacklistCheckStatus: "failed" },
+      ],
+    },
+    reason: "source_record:asset:not_approved:gate-test-asset",
+  },
+];
+
+for (const { label, context, reason } of referencedRecordBlockers) {
+  const reasons = getRoutePublicationGateBlockReasons(
+    syntheticRegistryPromotion,
+    [approvedPublication],
+    context,
+  );
+  assertEqual(
+    isRoutePublicationApprovedForSeo(
+      syntheticRegistryPromotion,
+      [approvedPublication],
+      context,
+    ),
+    false,
+    `Referenced-record blocker ${label} passed the gate.`,
+  );
+  assert(
+    reasons.includes(reason),
+    `Referenced-record blocker ${label} did not produce ${reason}.`,
+  );
+}
 
 const missingSchemaRecordPublication = buildSyntheticRoutePublication({
   routePublicationId: "gate-test-missing-schema-record",

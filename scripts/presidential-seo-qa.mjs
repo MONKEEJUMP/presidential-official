@@ -865,8 +865,11 @@ function checkSourceRecordContractFoundation() {
 
   const indexabilityUsesSourceRecords =
     indexabilityText.includes("getRoutePublicationGateBlockReasons") &&
-    indexabilityText.includes("reasons.push(...getRoutePublicationGateBlockReasons(route))") &&
-    indexabilityText.includes("getRoutePublicationGateBlockReasons(route).length === 0");
+    indexabilityText.includes("reasons.push(") &&
+    indexabilityText.includes("...getRoutePublicationGateBlockReasons(") &&
+    indexabilityText.includes("gateInput.routePublicationRecords") &&
+    indexabilityText.includes("gateInput.routePublicationContext") &&
+    indexabilityText.includes(").length === 0");
 
   if (indexabilityUsesSourceRecords) {
     addResult(
@@ -880,7 +883,7 @@ function checkSourceRecordContractFoundation() {
       "sourceRecords.indexabilityGate",
       "Indexability/sitemap helpers can still bypass the source-record approval gate.",
       [],
-      "Call getRoutePublicationGateBlockReasons(route) inside sitemap eligibility and block reasons.",
+      "Call getRoutePublicationGateBlockReasons(route, records, context) inside sitemap eligibility and block reasons.",
     );
   }
 
@@ -1061,7 +1064,10 @@ function checkMetadataFoundation() {
     metadataText.includes("isIndexFollow(route)") &&
     metadataText.includes('route.status === "approved"') &&
     metadataText.includes("route.blocks.length === 0") &&
-    metadataText.includes("getRoutePublicationGateBlockReasons(route).length === 0") &&
+    metadataText.includes("getRoutePublicationGateBlockReasons(") &&
+    metadataText.includes("gateInput.routePublicationRecords") &&
+    metadataText.includes("gateInput.routePublicationContext") &&
+    metadataText.includes(").length === 0") &&
     metadataText.includes("route.indexability === \"conditional_index\"");
 
   if (robotsDerivedFromIndexability) {
@@ -1076,7 +1082,7 @@ function checkMetadataFoundation() {
       "metadata.robots",
       "Robots metadata is not clearly dual-gated by route indexability and source-record publication approval.",
       [],
-      "Derive robots metadata from route status, indexability, blocker state, and getRoutePublicationGateBlockReasons(route).",
+      "Derive robots metadata from route status, indexability, blocker state, and getRoutePublicationGateBlockReasons(route, records, context).",
     );
   }
 

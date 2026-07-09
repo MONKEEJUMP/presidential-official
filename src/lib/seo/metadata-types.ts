@@ -1,6 +1,15 @@
 import type { SeoRoutePath, SeoRouteRecord } from "./route-types";
+import type {
+  RoutePublicationGateContext,
+  RoutePublicationRecord,
+} from "./source-records";
 
-export type BuildRouteMetadataInput = {
+export type RoutePublicationGateInput = {
+  routePublicationRecords?: readonly RoutePublicationRecord[];
+  routePublicationContext?: RoutePublicationGateContext;
+};
+
+export type BuildRouteMetadataInput = RoutePublicationGateInput & {
   route: SeoRouteRecord;
   title?: string;
   description?: string;
