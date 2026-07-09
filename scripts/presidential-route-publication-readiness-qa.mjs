@@ -108,8 +108,10 @@ function main() {
     APPROVED_SEO_METADATA_RECORDS,
     APPROVED_SOURCE_RECORDS,
     ROUTE_PUBLICATION_APPROVAL_SEQUENCE,
+    HOME_ROUTE_PUBLICATION_EVIDENCE_SCAFFOLD,
     getRoutePublicationGateBlockReasons,
     getNextRoutePublicationCandidate,
+    getRoutePublicationEvidenceScaffold,
     isRoutePublicationApprovedForSeo,
   } = require(publicationPath);
 
@@ -137,6 +139,20 @@ function main() {
       };
     });
   const nextRoutePublicationCandidate = getNextRoutePublicationCandidate();
+  const homeRoute = ROUTE_REGISTRY.find((route) => route.id === "home");
+  const homeEvidenceScaffold = homeRoute
+    ? getRoutePublicationEvidenceScaffold(homeRoute)
+    : null;
+  const requiredHomeEvidenceCategories = [
+    "source",
+    "proof",
+    "claim",
+    "asset",
+    "metadata",
+    "schema",
+    "content",
+    "compliance",
+  ];
 
   check(
     rows,
@@ -212,6 +228,39 @@ function main() {
       ? `next route: ${nextRoutePublicationCandidate.route.id}; blockers: ${nextRoutePublicationCandidate.sitemapBlockReasons.join("|")}`
       : "no next route candidate found",
   );
+  check(
+    rows,
+    "routePublicationReadiness.homeEvidenceScaffold.complete",
+    homeEvidenceScaffold?.routeId === "home" &&
+      homeEvidenceScaffold.path === "/" &&
+      JSON.stringify(HOME_ROUTE_PUBLICATION_EVIDENCE_SCAFFOLD) ===
+        JSON.stringify(homeEvidenceScaffold) &&
+      requiredHomeEvidenceCategories.every((category) =>
+        homeEvidenceScaffold.requirements.some(
+          (requirement) =>
+            requirement.category === category &&
+            requirement.required &&
+            requirement.status === "blocked" &&
+            requirement.reasons.includes("source_record:route_publication_missing"),
+        ),
+      ),
+    homeEvidenceScaffold
+      ? `home scaffold categories: ${homeEvidenceScaffold.requirements
+          .filter((requirement) => requirement.required)
+          .map((requirement) => `${requirement.category}:${requirement.status}`)
+          .join("|")}`
+      : "home route evidence scaffold missing",
+  );
+  check(
+    rows,
+    "routePublicationReadiness.homeEvidenceScaffold.noUnlock",
+    homeEvidenceScaffold?.canUnlock === false &&
+      !isRoutePublicationApprovedForSeo(homeRoute) &&
+      APPROVED_ROUTE_PUBLICATIONS.length === 0,
+    homeEvidenceScaffold
+      ? "home evidence scaffold is advisory only; no approved route-publication record exists"
+      : "home route evidence scaffold missing",
+  );
 
   const failCount = rows.filter((row) => row.status === "fail").length;
   const verdict =
@@ -225,6 +274,7 @@ function main() {
     failCount,
     launchSequence: expectedLaunchSequence,
     approvedRoutePublicationCount: APPROVED_ROUTE_PUBLICATIONS.length,
+    homeEvidenceScaffold,
     nextRoutePublicationCandidate: nextRoutePublicationCandidate
       ? {
           routeId: nextRoutePublicationCandidate.route.id,

@@ -29,6 +29,32 @@ export type NextRoutePublicationCandidate = {
   readonly sitemapBlockReasons: readonly string[];
 };
 
+export type RoutePublicationEvidenceCategory =
+  | "source"
+  | "proof"
+  | "claim"
+  | "asset"
+  | "metadata"
+  | "schema"
+  | "content"
+  | "compliance";
+
+export type RoutePublicationEvidenceRequirement = {
+  readonly category: RoutePublicationEvidenceCategory;
+  readonly required: boolean;
+  readonly status: "blocked" | "not_required";
+  readonly reasons: readonly string[];
+};
+
+export type RoutePublicationEvidenceScaffold = {
+  readonly routeId: string;
+  readonly path: SeoRouteRecord["path"];
+  readonly requirements: readonly RoutePublicationEvidenceRequirement[];
+  readonly publicationBlockReasons: readonly string[];
+  readonly sitemapBlockReasons: readonly string[];
+  readonly canUnlock: false;
+};
+
 export type RoutePublicationGateContext = {
   readonly metadataRecords?: readonly SeoMetadataRecord[];
   readonly schemaRecords?: readonly SchemaRecord[];
@@ -81,6 +107,41 @@ function routeRequiresClaimEvidence(route: SeoRouteRecord): boolean {
     route.requiredData.includes("claims") ||
     route.requiredApprovals.some((approval) => /claim/i.test(approval))
   );
+}
+
+function routeRequiresAssetEvidence(route: SeoRouteRecord): boolean {
+  return (
+    route.requiredData.some((data) => /asset|product|platform|series/i.test(data)) ||
+    route.requiredApprovals.some((approval) => /asset|product/i.test(approval)) ||
+    route.blocks.some((block) => /asset|catalog/i.test(block))
+  );
+}
+
+function routeRequiresContentEvidence(route: SeoRouteRecord): boolean {
+  return (
+    route.requiredApprovals.some((approval) => /content|article/i.test(approval)) ||
+    route.blocks.some((block) => /content|scaffold|learn/i.test(block))
+  );
+}
+
+function routeRequiresComplianceEvidence(route: SeoRouteRecord): boolean {
+  return (
+    route.requiredApprovals.some((approval) => /compliance|legal/i.test(approval)) ||
+    route.blocks.some((block) => /compliance|legal|age_gate/i.test(block))
+  );
+}
+
+function buildEvidenceRequirement(
+  category: RoutePublicationEvidenceCategory,
+  required: boolean,
+  reasons: readonly string[],
+): RoutePublicationEvidenceRequirement {
+  return {
+    category,
+    required,
+    status: required ? "blocked" : "not_required",
+    reasons: required ? reasons : [],
+  };
 }
 
 function routePublicationEvidenceCount(record: RoutePublicationRecord): number {
@@ -157,6 +218,80 @@ export function getNextRoutePublicationCandidate(
 
   return undefined;
 }
+
+export function getRoutePublicationEvidenceScaffold(
+  route: SeoRouteRecord,
+  records: readonly RoutePublicationRecord[] = APPROVED_ROUTE_PUBLICATIONS,
+  context: RoutePublicationGateContext = APPROVED_ROUTE_PUBLICATION_CONTEXT,
+): RoutePublicationEvidenceScaffold {
+  const publicationBlockReasons = getRoutePublicationGateBlockReasons(
+    route,
+    records,
+    context,
+  );
+  const sitemapBlockReasons = [
+    ...(route.status !== "approved" ? [`status:${route.status}`] : []),
+    ...(route.indexability !== "index_follow"
+      ? [`indexability:${route.indexability}`]
+      : []),
+    ...(route.sitemap !== "include" ? [`sitemap:${route.sitemap}`] : []),
+    ...route.blocks.map((block) => `block:${block}`),
+    ...publicationBlockReasons,
+  ];
+  const defaultReasons =
+    publicationBlockReasons.length > 0
+      ? publicationBlockReasons
+      : ["source_record:route_publication_missing"];
+
+  return {
+    routeId: route.id,
+    path: route.path,
+    requirements: [
+      buildEvidenceRequirement("source", true, defaultReasons),
+      buildEvidenceRequirement("proof", true, defaultReasons),
+      buildEvidenceRequirement(
+        "claim",
+        routeRequiresClaimEvidence(route),
+        defaultReasons,
+      ),
+      buildEvidenceRequirement(
+        "asset",
+        routeRequiresAssetEvidence(route),
+        defaultReasons,
+      ),
+      buildEvidenceRequirement(
+        "metadata",
+        route.requiredData.includes("seo_metadata") ||
+          route.requiredApprovals.some((approval) => /metadata/i.test(approval)) ||
+          route.blocks.includes("metadata_approval"),
+        defaultReasons,
+      ),
+      buildEvidenceRequirement("schema", route.schema.length > 0, defaultReasons),
+      buildEvidenceRequirement(
+        "content",
+        routeRequiresContentEvidence(route),
+        defaultReasons,
+      ),
+      buildEvidenceRequirement(
+        "compliance",
+        routeRequiresComplianceEvidence(route),
+        defaultReasons,
+      ),
+    ],
+    publicationBlockReasons,
+    sitemapBlockReasons,
+    canUnlock: false,
+  };
+}
+
+const homeRoute = ROUTE_REGISTRY.find((route) => route.id === "home");
+
+if (!homeRoute) {
+  throw new Error("Home route is required for route-publication readiness.");
+}
+
+export const HOME_ROUTE_PUBLICATION_EVIDENCE_SCAFFOLD =
+  getRoutePublicationEvidenceScaffold(homeRoute);
 
 export function getRoutePublicationGateBlockReasons(
   route: SeoRouteRecord,
