@@ -438,6 +438,8 @@ async function assertPrivatePreviewChecks(scenarioName) {
 async function assertApprovedCmsRenderScenario(scenarioName) {
   const homeHtml = await fetchText("/");
   const moonRocksHtml = await fetchText("/moon-rocks");
+  const ourStoryHtml = await fetchText("/our-story");
+  const learnGuideHtml = await fetchText("/learn/what-are-moon-rocks");
 
   addCheck(
     `${scenarioName} public home renders approved CMS module`,
@@ -448,6 +450,16 @@ async function assertApprovedCmsRenderScenario(scenarioName) {
     `${scenarioName} public moon-rocks renders approved CMS module`,
     moonRocksHtml.includes("CMS Smoke Moon Rocks Module"),
     "approved public Moon Rocks module fixture rendered behind flags",
+  );
+  addCheck(
+    `${scenarioName} public our-story renders approved CMS module`,
+    ourStoryHtml.includes("CMS Smoke Our Story Module"),
+    "approved public Our Story module fixture rendered behind flags",
+  );
+  addCheck(
+    `${scenarioName} public learn guide renders approved CMS body`,
+    learnGuideHtml.includes("CMS Smoke Learn Guide Body"),
+    "approved public Learn guide fixture rendered behind flags",
   );
 }
 

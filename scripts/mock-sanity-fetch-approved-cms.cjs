@@ -17,9 +17,18 @@ function parseJsonParam(value) {
   }
 }
 
+function queryText(url) {
+  return queryParam(url, "query") || "";
+}
+
 function pageResult(slug) {
-  const routeSlug = slug === "home" ? "home" : "moon-rocks";
-  const title = routeSlug === "home" ? "CMS Smoke Home Module" : "CMS Smoke Moon Rocks Module";
+  const titles = {
+    home: "CMS Smoke Home Module",
+    "moon-rocks": "CMS Smoke Moon Rocks Module",
+    "our-story": "CMS Smoke Our Story Module",
+  };
+  const routeSlug = titles[slug] ? slug : "moon-rocks";
+  const title = titles[routeSlug];
 
   return {
     _id: `sitePage.${routeSlug}`,
@@ -46,6 +55,48 @@ function pageResult(slug) {
   };
 }
 
+function learnGuideResult(slug) {
+  if (slug !== "what-are-moon-rocks") {
+    return null;
+  }
+
+  return {
+    _id: "learnGuide.what-are-moon-rocks",
+    _type: "learnGuide",
+    title: "CMS Smoke Learn Guide",
+    slug,
+    routePhase: "approved_public",
+    guideTopic: "Moon Rocks",
+    topicTaxonomy: ["moon-rocks"],
+    intro: "CMS smoke guide intro rendered from public module data.",
+    sourceProofList: ["cms-smoke-fixture"],
+    approvalGate: {
+      contentApprovalStatus: "approved_public",
+      sourceProofStatus: "approved_public",
+      legalReviewStatus: "approved_public",
+      assetApprovalStatus: "approved_public",
+      seoApprovalStatus: "approved_public",
+      routePublicationStatus: "blocked_prelaunch",
+    },
+    bodyModules: [
+      {
+        _key: "learn-moon-rocks-body",
+        _type: "learnGuideBlock",
+        heading: "CMS Smoke Learn Guide Body",
+        description: "CMS smoke guide body rendered from public module data.",
+        callout: "CMS smoke guide callout",
+        moduleControl: {
+          moduleKey: "learn-moon-rocks-smoke-body",
+          internalLabel: "CMS Smoke Learn Guide Body",
+          componentKey: "learnGuideBlock",
+          renderEligibility: "ready_for_implementation_candidate",
+          sortIntent: 1,
+        },
+      },
+    ],
+  };
+}
+
 globalThis.fetch = async function mockedSanityFetch(input, init) {
   const url = typeof input === "string"
     ? input
@@ -55,7 +106,12 @@ globalThis.fetch = async function mockedSanityFetch(input, init) {
 
   if (/\.apicdn\.sanity\.io\/v\d{4}-\d{2}-\d{2}\/data\/query\//.test(url)) {
     const slug = parseJsonParam(queryParam(url, "$slug"));
-    const result = slug === "home" || slug === "moon-rocks" ? pageResult(slug) : null;
+    const query = queryText(url);
+    const result = query.includes('_type == "learnGuide"')
+      ? learnGuideResult(slug)
+      : ["home", "moon-rocks", "our-story"].includes(slug)
+        ? pageResult(slug)
+        : null;
 
     return new Response(JSON.stringify({result}), {
       status: 200,
