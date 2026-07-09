@@ -13,6 +13,7 @@ const requiredScripts = [
   "production:measurement-rendering:verify",
   "production:lockfile-reproducibility:verify",
   "production:launch-readiness:verify",
+  "production:owner-gates:verify",
 ];
 
 const expectedProductionEnvNames = [
@@ -57,6 +58,7 @@ function main() {
   const liveActionBoundaryText = read("scripts/presidential-production-live-action-boundary-qa.mjs");
   const measurementRenderingText = read("scripts/presidential-production-measurement-rendering-qa.mjs");
   const lockfileReproducibilityText = read("scripts/presidential-production-lockfile-reproducibility-qa.mjs");
+  const ownerGateText = read("src/lib/launch/owner-decision-gates.ts");
   const proxyText = read("src/proxy.ts");
   const analyticsText = read("src/components/analytics/google-analytics.tsx");
   const googleText = read("src/lib/analytics/google.ts");
@@ -179,6 +181,16 @@ function main() {
     "launchReadiness.routePublication.closed",
     /APPROVED_ROUTE_PUBLICATIONS\s*=\s*\[\]/.test(routePublicationText),
     "route publication stays empty until per-route approval records are added",
+  );
+  addCheck(
+    rows,
+    "launchReadiness.ownerDecisionGates.enforced",
+    ownerGateText.includes('id: "canonical-host"') &&
+      ownerGateText.includes('requiredBefore: "production_deploy"') &&
+      ownerGateText.includes('id: "age-gate-policy"') &&
+      ownerGateText.includes('status: "blocked_pending_owner_or_legal_review"') &&
+      ownerGateText.includes('requiredBefore: "public_route_unlock"'),
+    "production deploy and public route unlock remain represented by explicit owner decision gates",
   );
 
   const failCount = rows.filter((row) => row.status === "fail").length;
