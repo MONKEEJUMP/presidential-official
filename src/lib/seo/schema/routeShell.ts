@@ -7,6 +7,7 @@ import type {
 } from "schema-dts";
 
 import { assertMetadataTextSafe } from "../metadata-helpers";
+import { getSitemapBlockReasons } from "../indexability";
 import { buildRouteCanonicalUrl, isRouteTemplate } from "../route-helpers";
 import type { SeoRouteRecord, SeoSchemaType } from "../route-types";
 import { getRoutePublicationGateBlockReasons } from "../source-records";
@@ -86,7 +87,10 @@ export function buildRouteShellJsonLd(
 ): readonly RouteShellJsonLdEntry[] {
   assertConcreteRouteShell(route);
 
-  if (getRoutePublicationGateBlockReasons(route).length > 0) {
+  if (
+    getRoutePublicationGateBlockReasons(route).length > 0 ||
+    getSitemapBlockReasons(route).length > 0
+  ) {
     return [];
   }
 

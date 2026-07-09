@@ -49,6 +49,19 @@ function routeRequiresClaimEvidence(route: SeoRouteRecord): boolean {
   );
 }
 
+function routePublicationEvidenceCount(record: RoutePublicationRecord): number {
+  return [
+    record.primaryEntityRecordId,
+    record.metadataRecordId,
+    ...record.contentRecordIds,
+    ...record.schemaRecordIds,
+    ...record.assetRecordIds,
+    ...record.claimRecordIds,
+    ...record.sourceRecordIds,
+    ...record.proofRecordIds,
+  ].filter(Boolean).length;
+}
+
 export function getRoutePublicationRecord(
   route: SeoRouteRecord,
   records: readonly RoutePublicationRecord[] = APPROVED_ROUTE_PUBLICATIONS,
@@ -100,6 +113,10 @@ export function getRoutePublicationGateBlockReasons(
 
   if (record.canonicalStatus !== "production") {
     reasons.push(`source_record:canonical:${record.canonicalStatus}`);
+  }
+
+  if (routePublicationEvidenceCount(record) === 0) {
+    reasons.push("source_record:evidence:required");
   }
 
   if (record.metadataApprovalStatus !== "approved") {
