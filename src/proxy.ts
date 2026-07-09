@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const canonicalHostname = "presidentialmoonrocks.com";
+const nonCanonicalHostnames = new Set(["www.presidentialmoonrocks.com"]);
 const gaMeasurementIdPattern = /^G-[A-Z0-9]{6,}$/;
 
 function isGoogleAnalyticsEnabled(): boolean {
@@ -52,7 +54,36 @@ function buildContentSecurityPolicy(nonce: string): string {
   ].join("; ");
 }
 
+function buildCanonicalHostRedirect(request: NextRequest): NextResponse | null {
+  const hostHeader = request.headers.get("host") ?? request.nextUrl.host;
+  const hostname = hostHeader.split(":")[0]?.toLowerCase() ?? "";
+  const forwardedProto = (
+    request.headers.get("x-forwarded-proto") ??
+    request.nextUrl.protocol.replace(":", "")
+  ).toLowerCase();
+  const usesNonCanonicalHost = nonCanonicalHostnames.has(hostname);
+  const usesHttpCanonicalHost =
+    hostname === canonicalHostname && forwardedProto === "http";
+
+  if (!usesNonCanonicalHost && !usesHttpCanonicalHost) {
+    return null;
+  }
+
+  const url = request.nextUrl.clone();
+  url.protocol = "https:";
+  url.hostname = canonicalHostname;
+  url.port = "";
+
+  return NextResponse.redirect(url, 308);
+}
+
 export function proxy(request: NextRequest) {
+  const canonicalRedirect = buildCanonicalHostRedirect(request);
+
+  if (canonicalRedirect) {
+    return canonicalRedirect;
+  }
+
   const nonce = btoa(crypto.randomUUID());
   const csp = buildContentSecurityPolicy(nonce);
   const requestHeaders = new Headers(request.headers);
