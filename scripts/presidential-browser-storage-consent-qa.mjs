@@ -122,6 +122,34 @@ function collectMatches(files, pattern, options = {}) {
   return matches;
 }
 
+function collectBuiltUnapprovedStorageMatches(files) {
+  const matches = [];
+
+  for (const file of files) {
+    const relativePath = rel(file);
+    const text = readIfExists(file);
+    const lines = text.split(/\r?\n/);
+
+    for (const [index, line] of lines.entries()) {
+      storagePattern.lastIndex = 0;
+      unapprovedStoragePattern.lastIndex = 0;
+
+      if (!storagePattern.test(line)) {
+        continue;
+      }
+
+      const usesApprovedAgeGateLocalStorage =
+        /\blocalStorage\b/.test(line) && line.includes(approvedAgeGateStorageKey);
+
+      if (unapprovedStoragePattern.test(line) || !usesApprovedAgeGateLocalStorage) {
+        matches.push(`${relativePath}:${index + 1}:${line.trim()}`);
+      }
+    }
+  }
+
+  return matches;
+}
+
 function isApprovedAgeGateLocalStorageLine(relativePath, line) {
   if (relativePath !== approvedAgeGateFile) {
     return false;
@@ -163,14 +191,7 @@ function main() {
   });
   const sourceBlockedStorageMatches = collectMatches(sourceFiles, unapprovedStoragePattern);
   const builtUnapprovedStorageMatches =
-    storagePattern.test(builtText) &&
-    !(
-      builtText.includes("localStorage") &&
-      builtText.includes(approvedAgeGateStorageKey) &&
-      !unapprovedStoragePattern.test(builtText)
-    )
-      ? ["built output contains storage surfaces outside the approved age-gate localStorage key"]
-      : [];
+    collectBuiltUnapprovedStorageMatches(builtFiles);
   const sourceConsentMatches = collectMatches(sourceFiles, consentTrackingPattern);
   const builtConsentMatches = collectMatches(builtFiles, consentTrackingPattern);
   const sourceTrackingStorageMatches = collectMatches(sourceFiles, trackingStoragePattern);
