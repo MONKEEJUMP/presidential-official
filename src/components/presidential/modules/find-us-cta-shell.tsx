@@ -2,10 +2,21 @@ import { CtaLink } from "../primitives/cta-link";
 import { Scene } from "../layout/scene";
 import { SectionHeading } from "../primitives/section-heading";
 
-export function FindUsCtaShell() {
+type FindUsCtaShellProps = {
+  readonly compact?: boolean;
+};
+
+export function FindUsCtaShell({ compact = false }: FindUsCtaShellProps) {
   return (
     <Scene ariaLabelledBy="presidential-find-us-path" tone="quiet">
-      <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(360px,1fr)] lg:items-center">
+      <div
+        className={[
+          "mx-auto grid w-full max-w-6xl gap-8 lg:items-center",
+          compact ? "" : "lg:grid-cols-[minmax(0,0.9fr)_minmax(360px,1fr)]",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
         <div className="flex flex-col gap-6">
           <SectionHeading
             as="h2"
@@ -23,7 +34,8 @@ export function FindUsCtaShell() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden border border-po-line bg-po-canvas p-5 shadow-sm">
+        {compact ? null : (
+          <div className="relative overflow-hidden border border-po-line bg-po-canvas p-5 shadow-sm">
           <div
             aria-hidden="true"
             className="grid min-h-72 grid-cols-5 gap-2 border border-po-line bg-po-soft p-4"
@@ -52,7 +64,8 @@ export function FindUsCtaShell() {
               Availability varies by licensed retailer.
             </p>
           </div>
-        </div>
+          </div>
+        )}
       </div>
     </Scene>
   );

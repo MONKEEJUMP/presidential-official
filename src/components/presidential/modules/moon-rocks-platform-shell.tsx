@@ -176,7 +176,7 @@ export function MoonRocksPlatformShell({
           </div>
         </Scene>
 
-        <FindUsCtaShell />
+        <FindUsCtaShell compact />
       </SceneStack>
     </PageFrame>
   );

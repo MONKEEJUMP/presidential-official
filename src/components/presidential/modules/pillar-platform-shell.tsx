@@ -237,7 +237,7 @@ export function PillarPlatformShell({
           </div>
         </Scene>
 
-        <FindUsCtaShell />
+        <FindUsCtaShell compact />
       </SceneStack>
     </PageFrame>
   );

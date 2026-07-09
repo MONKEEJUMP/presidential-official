@@ -1,12 +1,16 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { spawn } from "node:child_process";
+import { createServer } from "node:net";
 import path from "node:path";
 
 const root = path.resolve(process.cwd(), "..");
 const webRoot = process.cwd();
 const nextConfigPath = path.join(webRoot, "next.config.ts");
+const proxyPath = path.join(webRoot, "src", "proxy.ts");
 const packageJsonPath = path.join(webRoot, "package.json");
 const vercelJsonPath = path.join(webRoot, "vercel.json");
 const routesManifestPath = path.join(webRoot, ".next", "routes-manifest.json");
+const nextBin = path.join(webRoot, "node_modules", "next", "dist", "bin", "next");
 const docsResultsPath = path.join(
   root,
   "docs",
@@ -22,11 +26,14 @@ const workRoot = path.join(
 );
 const statusJsonPath = path.join(workRoot, "step10h-security-header-enforcement-readiness-status.json");
 const statusMdPath = path.join(workRoot, "step10h-security-header-enforcement-readiness-status.md");
+const runtimeHost = "127.0.0.1";
+const runtimeBasePort = Number(process.env.PRESIDENTIAL_SECURITY_HEADER_READINESS_QA_PORT || "3363");
 
 const requiredEnforcedCspFragments = [
   "default-src 'self'",
   "base-uri 'self'",
   "script-src 'self'",
+  "'strict-dynamic'",
   "style-src 'self'",
   "connect-src 'self'",
   "font-src 'self'",
@@ -85,24 +92,100 @@ function hasHeader(headerValues, key) {
   return headerValues.has(key);
 }
 
-function getHeaderValue(headerValues, key) {
-  return (headerValues.get(key) ?? []).join("\n");
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
 
-function main() {
+function findOpenPort(startPort) {
+  return new Promise((resolve, reject) => {
+    const server = createServer();
+
+    server.once("error", (error) => {
+      if (error.code === "EADDRINUSE" || error.code === "EACCES") {
+        server.close(() => {
+          findOpenPort(startPort + 1).then(resolve, reject);
+        });
+        return;
+      }
+
+      reject(error);
+    });
+
+    server.listen(startPort, runtimeHost, () => {
+      const address = server.address();
+      const port = typeof address === "object" && address ? address.port : startPort;
+      server.close(() => resolve(port));
+    });
+  });
+}
+
+async function waitForRuntimeServer(baseUrl) {
+  let lastError;
+
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    try {
+      const response = await fetch(`${baseUrl}/`);
+      if (response.ok) {
+        return response;
+      }
+    } catch (error) {
+      lastError = error;
+    }
+
+    await sleep(400);
+  }
+
+  throw lastError || new Error("Next runtime server did not become ready.");
+}
+
+async function readRuntimeHeaders() {
+  const port = await findOpenPort(runtimeBasePort);
+  const baseUrl = `http://${runtimeHost}:${port}`;
+  const server = spawn(process.execPath, [nextBin, "start", "-H", runtimeHost, "-p", String(port)], {
+    cwd: webRoot,
+    env: {
+      ...process.env,
+      PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED: "false",
+      PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED: "false",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  server.stdout.resume();
+  server.stderr.resume();
+
+  try {
+    return await waitForRuntimeServer(baseUrl);
+  } finally {
+    if (!server.killed) {
+      server.kill();
+    }
+    await sleep(250);
+  }
+}
+
+async function main() {
   const rows = [];
   const nextConfigText = readText(nextConfigPath);
+  const proxyText = readText(proxyPath);
   const packageJsonText = readText(packageJsonPath);
   const vercelJsonText = readText(vercelJsonPath);
   const manifest = readManifest();
   const headerValues = headerValuesFromRoutesManifest(manifest);
-  const enforcedCspValue = getHeaderValue(headerValues, "Content-Security-Policy");
-  const hstsValue = getHeaderValue(headerValues, "Strict-Transport-Security");
-  const combinedConfigText = [nextConfigText, vercelJsonText].join("\n");
-  const cspHasUnsafeInline = /'unsafe-inline'/i.test(enforcedCspValue);
+  const runtimeResponse = await readRuntimeHeaders();
+  const runtimeCspValue = runtimeResponse.headers.get("Content-Security-Policy") ?? "";
+  const runtimeHstsValue = runtimeResponse.headers.get("Strict-Transport-Security") ?? "";
+  const combinedConfigText = [nextConfigText, proxyText, vercelJsonText].join("\n");
+  const cspHasUnsafeInline = /'unsafe-inline'/i.test(runtimeCspValue);
+  const cspNonceMatch = runtimeCspValue.match(/'nonce-([^']+)'/);
 
   const checks = [
     addCheck(rows, "nextConfig.exists", existsSync(nextConfigPath), nextConfigPath),
+    addCheck(rows, "proxy.exists", existsSync(proxyPath), proxyPath),
     addCheck(rows, "routesManifest.exists", existsSync(routesManifestPath), routesManifestPath),
     addCheck(
       rows,
@@ -112,41 +195,48 @@ function main() {
     ),
     addCheck(
       rows,
-      "csp.enforcingPresent",
-      hasHeader(headerValues, "Content-Security-Policy"),
-      enforcedCspValue || "missing",
+      "csp.runtimeEnforcingPresent",
+      runtimeResponse.headers.has("Content-Security-Policy"),
+      runtimeCspValue || "missing",
     ),
     addCheck(
       rows,
-      "csp.enforcingCoreDirectives",
-      requiredEnforcedCspFragments.every((fragment) => enforcedCspValue.includes(fragment)),
-      enforcedCspValue || "missing",
+      "csp.runtimeCoreDirectives",
+      requiredEnforcedCspFragments.every((fragment) => runtimeCspValue.includes(fragment)),
+      runtimeCspValue || "missing",
+    ),
+    addCheck(
+      rows,
+      "csp.noncePresent",
+      Boolean(cspNonceMatch?.[1]),
+      cspNonceMatch?.[0] ?? "missing nonce",
+    ),
+    addCheck(
+      rows,
+      "csp.noStaticUnsafeInline",
+      !combinedConfigText.includes("unsafe-inline") && !cspHasUnsafeInline,
+      cspHasUnsafeInline ? runtimeCspValue : "unsafe-inline absent from config and runtime CSP",
     ),
     addCheck(
       rows,
       "csp.noReportOnlyFallback",
-      !hasHeader(headerValues, "Content-Security-Policy-Report-Only") &&
+      !runtimeResponse.headers.has("Content-Security-Policy-Report-Only") &&
+        !hasHeader(headerValues, "Content-Security-Policy-Report-Only") &&
         !/\bContent-Security-Policy-Report-Only\b/.test(combinedConfigText),
       "CSP is enforced rather than report-only for launch hardening",
     ),
     addCheck(
       rows,
-      "csp.noUnsafeEval",
-      !/unsafe-eval/i.test(enforcedCspValue),
-      "Enforced CSP does not add unsafe-eval; inline bootstrap remains framework-local until nonce migration is approved",
-    ),
-    addCheck(
-      rows,
-      "csp.unsafeInlineTrackedOrRemoved",
-      !cspHasUnsafeInline || !publicUnlockPattern.test([combinedConfigText, packageJsonText].join("\n")),
-      cspHasUnsafeInline
-        ? "unsafe-inline is present only as a tracked framework/JSON-LD compatibility blocker before nonce migration"
-        : "unsafe-inline is absent",
+      "csp.noUnsafeEvalInRuntime",
+      !/unsafe-eval/i.test(runtimeCspValue),
+      "Runtime CSP does not include unsafe-eval in production build",
     ),
     addCheck(
       rows,
       "csp.reportingEndpointDeferred",
-      !hasHeader(headerValues, "Reporting-Endpoints") &&
+      !runtimeResponse.headers.has("Reporting-Endpoints") &&
+        !runtimeResponse.headers.has("Report-To") &&
+        !hasHeader(headerValues, "Reporting-Endpoints") &&
         !hasHeader(headerValues, "Report-To") &&
         !/report-to\s+|report-uri\s+|Reporting-Endpoints|Report-To/i.test(combinedConfigText),
       "No CSP reporting endpoint is configured until an approved endpoint exists",
@@ -154,27 +244,37 @@ function main() {
     addCheck(
       rows,
       "hsts.enforced",
-      hasHeader(headerValues, "Strict-Transport-Security") &&
-        /max-age=31536000/i.test(hstsValue) &&
-        /includeSubDomains/.test(hstsValue),
-      hstsValue || "missing",
+      runtimeResponse.headers.has("Strict-Transport-Security") &&
+        /max-age=31536000/i.test(runtimeHstsValue) &&
+        /includeSubDomains/.test(runtimeHstsValue),
+      runtimeHstsValue || "missing",
     ),
     addCheck(
       rows,
       "hsts.noPreload",
-      !/preload/i.test(hstsValue) && !/hstspreload|hsts preload/i.test(combinedConfigText),
+      !/preload/i.test(runtimeHstsValue) && !/hstspreload|hsts preload/i.test(combinedConfigText),
       "No HSTS preload posture exists before final domain approval",
     ),
     addCheck(
       rows,
       "forbiddenHeaderSignals.absent",
-      forbiddenHeaderSignals.every((header) => !hasHeader(headerValues, header) && !combinedConfigText.includes(header)),
+      forbiddenHeaderSignals.every(
+        (header) =>
+          !runtimeResponse.headers.has(header) &&
+          !hasHeader(headerValues, header) &&
+          !combinedConfigText.includes(header),
+      ),
       "Report-only CSP and CSP reporting endpoints remain absent until an approved endpoint exists",
     ),
     addCheck(
       rows,
       "deprecatedHeaders.absent",
-      deprecatedHeaders.every((header) => !hasHeader(headerValues, header) && !combinedConfigText.includes(header)),
+      deprecatedHeaders.every(
+        (header) =>
+          !runtimeResponse.headers.has(header) &&
+          !hasHeader(headerValues, header) &&
+          !combinedConfigText.includes(header),
+      ),
       "Deprecated security headers remain absent",
     ),
     addCheck(
@@ -217,9 +317,10 @@ function main() {
   const payload = {
     verdict,
     officialSourcePosture: {
-      nextHeaders: "Next.js headers() in next.config can set response headers for matching paths.",
-      cspReportOnly:
-        "CSP report-only is no longer the active posture for launch hardening; enforcing CSP is required while reporting endpoints stay unconfigured until approved.",
+      nextProxyNonce:
+        "Next.js nonce CSP uses proxy.ts to set a fresh Content-Security-Policy and x-nonce request header before rendering.",
+      cspRuntime:
+        "Runtime CSP is nonce-based, enforced, and does not include unsafe-inline in production responses.",
       hsts:
         "HSTS is enforced without preload; preload remains blocked until final custom-domain approval.",
     },
@@ -237,10 +338,11 @@ function main() {
     hstsEnforcedNoPreload: true,
     enforcingCspEnabled: true,
     cspUnsafeInlinePresent: cspHasUnsafeInline,
-    cspNonceMigrationRequiredBeforePublicLaunch: cspHasUnsafeInline,
+    cspNoncePresent: Boolean(cspNonceMatch?.[1]),
+    cspNonceMigrationRequiredBeforePublicLaunch: false,
     cspReportingEndpointDeferredUntilApprovedEndpoint: true,
     guardrail:
-      "Step 10H is security-header enforcement readiness only. unsafe-inline is tracked as a nonce/hash migration blocker when present. It enforces CSP and HSTS without deploying, indexing, publishing, adding reporting endpoints, or expanding script/connect sources.",
+      "Step 10H is security-header enforcement readiness only. Runtime CSP is nonce-based and unsafe-inline is removed. It does not deploy, index, publish, add reporting endpoints, or expand external script/connect sources.",
   };
 
   mkdirSync(workRoot, { recursive: true });
@@ -268,4 +370,7 @@ function main() {
   process.exitCode = verdict.startsWith("PASS_") ? 0 : 1;
 }
 
-main();
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

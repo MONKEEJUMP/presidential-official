@@ -1,12 +1,18 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { spawn } from "node:child_process";
+import { createServer } from "node:net";
 import path from "node:path";
 
 const webRoot = process.cwd();
 const root = path.resolve(webRoot, "..");
 const nextConfigPath = path.join(webRoot, "next.config.ts");
+const proxyPath = path.join(webRoot, "src", "proxy.ts");
 const packageJsonPath = path.join(webRoot, "package.json");
 const routesManifestPath = path.join(webRoot, ".next", "routes-manifest.json");
 const builtAppRoot = path.join(webRoot, ".next", "server", "app");
+const nextBin = path.join(webRoot, "node_modules", "next", "dist", "bin", "next");
+const runtimeHost = "127.0.0.1";
+const runtimeBasePort = Number(process.env.PRESIDENTIAL_THIRD_PARTY_QA_PORT || "3364");
 const docsResultsPath = path.join(
   root,
   "docs",
@@ -22,6 +28,7 @@ const sourceRoots = [
   path.join(webRoot, "src", "components"),
   path.join(webRoot, "src", "lib", "design-system"),
   path.join(webRoot, "src", "lib", "seo"),
+  proxyPath,
   nextConfigPath,
   packageJsonPath,
 ];
@@ -166,20 +173,99 @@ function addCheck(rows, check, passed, details) {
   return passed;
 }
 
-function main() {
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function findOpenPort(startPort) {
+  return new Promise((resolve, reject) => {
+    const server = createServer();
+
+    server.once("error", (error) => {
+      if (error.code === "EADDRINUSE" || error.code === "EACCES") {
+        server.close(() => {
+          findOpenPort(startPort + 1).then(resolve, reject);
+        });
+        return;
+      }
+
+      reject(error);
+    });
+
+    server.listen(startPort, runtimeHost, () => {
+      const address = server.address();
+      const port = typeof address === "object" && address ? address.port : startPort;
+      server.close(() => resolve(port));
+    });
+  });
+}
+
+async function waitForRuntimeServer(baseUrl) {
+  let lastError;
+
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    try {
+      const response = await fetch(`${baseUrl}/`);
+      if (response.ok) {
+        return response;
+      }
+    } catch (error) {
+      lastError = error;
+    }
+
+    await sleep(400);
+  }
+
+  throw lastError || new Error("Next runtime server did not become ready.");
+}
+
+async function readRuntimeHeaders() {
+  const port = await findOpenPort(runtimeBasePort);
+  const baseUrl = `http://${runtimeHost}:${port}`;
+  const server = spawn(process.execPath, [nextBin, "start", "-H", runtimeHost, "-p", String(port)], {
+    cwd: webRoot,
+    env: {
+      ...process.env,
+      PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED: "false",
+      PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED: "false",
+      PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED: "false",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  server.stdout.resume();
+  server.stderr.resume();
+
+  try {
+    return await waitForRuntimeServer(baseUrl);
+  } finally {
+    if (!server.killed) {
+      server.kill();
+    }
+    await sleep(250);
+  }
+}
+
+async function main() {
   const rows = [];
   const sourceFiles = sourceRoots.flatMap(walkTextFiles);
   const builtFiles = walkTextFiles(builtAppRoot);
   const packageJsonText = readIfExists(packageJsonPath);
   const nextConfigText = readIfExists(nextConfigPath);
+  const proxyText = readIfExists(proxyPath);
   const manifest = readRoutesManifest();
   const headerValues = headerValuesFromRoutesManifest(manifest);
+  const runtimeResponse = await readRuntimeHeaders();
   const reportOnlyCsp = (headerValues.get("Content-Security-Policy-Report-Only") ?? []).join("\n");
   const enforcingCsp = (headerValues.get("Content-Security-Policy") ?? []).join("\n");
-  const effectiveCsp = enforcingCsp || reportOnlyCsp;
+  const runtimeCsp = runtimeResponse.headers.get("Content-Security-Policy") ?? "";
+  const effectiveCsp = runtimeCsp || enforcingCsp || reportOnlyCsp;
   const sourceText = sourceFiles.map(readIfExists).join("\n");
   const builtText = builtFiles.map(readIfExists).join("\n");
-  const combinedPublicText = [sourceText, builtText, packageJsonText, nextConfigText, reportOnlyCsp, enforcingCsp].join("\n");
+  const combinedPublicText = [sourceText, builtText, packageJsonText, nextConfigText, proxyText, reportOnlyCsp, enforcingCsp, runtimeCsp].join("\n");
 
   const nextScriptMatches = collectMatches(sourceFiles, nextScriptPattern);
   const nextThirdPartyMatches = collectMatches(sourceFiles, nextThirdPartiesPattern);
@@ -200,7 +286,9 @@ function main() {
   const sourcePublicAnalyticsEnvNames = collectMatches(sourceFiles, publicAnalyticsEnvPattern);
 
   const cspHasNoThirdPartySource =
-    !forbiddenCspSourcePattern.test(reportOnlyCsp) && !forbiddenCspSourcePattern.test(enforcingCsp);
+    !forbiddenCspSourcePattern.test(reportOnlyCsp) &&
+    !forbiddenCspSourcePattern.test(enforcingCsp) &&
+    !forbiddenCspSourcePattern.test(runtimeCsp);
   const cspHasSafeFormAction = effectiveCsp.includes("form-action 'self'");
   const cspHasSafeObjectSrc = effectiveCsp.includes("object-src 'none'");
   const cspHasSafeFrameAncestors = effectiveCsp.includes("frame-ancestors 'none'");
@@ -226,9 +314,9 @@ function main() {
     addCheck(rows, "source.noThirdPartyResourceHints", sourceResourceHints.length === 0, sourceResourceHints.length ? sourceResourceHints.slice(0, 10).join(" | ") : "No third-party preconnect or dns-prefetch hints in public source"),
     addCheck(rows, "built.noThirdPartyResourceHints", builtResourceHints.length === 0, builtResourceHints.length ? builtResourceHints.slice(0, 10).join(" | ") : "No third-party preconnect or dns-prefetch hints in built output"),
     addCheck(rows, "source.noPublicAnalyticsEnvNames", sourcePublicAnalyticsEnvNames.length === 0, sourcePublicAnalyticsEnvNames.length ? sourcePublicAnalyticsEnvNames.slice(0, 10).join(" | ") : "No public analytics/tracking environment variable names in scanned public source"),
-    addCheck(rows, "csp.enforced", Boolean(enforcingCsp), enforcingCsp || "missing enforced CSP"),
+    addCheck(rows, "csp.enforced", Boolean(effectiveCsp), effectiveCsp || "missing enforced CSP"),
     addCheck(rows, "csp.noThirdPartySources", cspHasNoThirdPartySource, effectiveCsp || "missing CSP"),
-    addCheck(rows, "csp.noReportingEndpoint", !cspReportingEndpointPattern.test(reportOnlyCsp + "\n" + enforcingCsp + "\n" + nextConfigText), "No CSP reporting endpoint is configured before an approved endpoint exists"),
+    addCheck(rows, "csp.noReportingEndpoint", !cspReportingEndpointPattern.test(reportOnlyCsp + "\n" + enforcingCsp + "\n" + runtimeCsp + "\n" + nextConfigText + "\n" + proxyText), "No CSP reporting endpoint is configured before an approved endpoint exists"),
     addCheck(rows, "csp.formActionSelf", cspHasSafeFormAction, effectiveCsp || "missing CSP"),
     addCheck(rows, "csp.objectSrcNone", cspHasSafeObjectSrc, effectiveCsp || "missing CSP"),
     addCheck(rows, "csp.frameAncestorsNone", cspHasSafeFrameAncestors, effectiveCsp || "missing CSP"),
@@ -285,6 +373,7 @@ function main() {
     builtResourceHints,
     sourcePublicAnalyticsEnvNames,
     reportOnlyCsp,
+    runtimeCsp,
     checks: Object.fromEntries(rows.map((row) => [row.check, row.status === "pass"])),
     analyticsApproved: false,
     trackingApproved: false,
@@ -329,4 +418,7 @@ function main() {
   process.exitCode = verdict.startsWith("PASS_") ? 0 : 1;
 }
 
-main();
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
