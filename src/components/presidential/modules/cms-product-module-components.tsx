@@ -75,9 +75,19 @@ const PRODUCT_ROUTE_PROFILES: readonly CmsProductRouteProfile[] = [
 ];
 
 const PRODUCT_ROUTE_HREFS = new Set<string>(PRODUCT_ROUTE_PROFILES.map((profile) => profile.route));
+const PUBLIC_ASSET_APPROVAL_STATUS = "approved_public";
 
 function isPrivateMode(renderMode: CmsProductRenderMode): boolean {
   return renderMode === "private";
+}
+
+function canRenderPublicAssetMedia(asset: SanityAssetRecord): boolean {
+  return Boolean(
+    asset.assetUrl &&
+    asset.altText &&
+    asset.approvalStatus === PUBLIC_ASSET_APPROVAL_STATUS &&
+    asset.provenanceStatus === PUBLIC_ASSET_APPROVAL_STATUS,
+  );
 }
 
 function recordTitle(record?: SanityLinkedRecord): string {
@@ -255,10 +265,11 @@ export function CmsProductAssetCard({
 }) {
   const isPrivate = isPrivateMode(renderMode);
   const title = asset.title || asset.assetName || `Product asset ${typeof index === "number" ? index + 1 : ""}`.trim();
+  const canShowAssetMedia = isPrivate || canRenderPublicAssetMedia(asset);
 
   return (
     <article className="grid content-start gap-3 border border-po-line bg-po-soft p-4">
-      {asset.assetUrl ? (
+      {canShowAssetMedia && asset.assetUrl ? (
         <figure
           aria-label={asset.altText || title}
           className="aspect-[4/3] overflow-hidden border border-po-line bg-po-canvas bg-contain bg-center bg-no-repeat"

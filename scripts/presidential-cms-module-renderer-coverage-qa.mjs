@@ -12,6 +12,14 @@ const rendererPath = join(
   "modules",
   "cms-homepage-module-renderer.tsx",
 );
+const productRendererPath = join(
+  webRoot,
+  "src",
+  "components",
+  "presidential",
+  "modules",
+  "cms-product-module-components.tsx",
+);
 const cmsVerifyPath = join(webRoot, "scripts", "presidential-cms-verify.mjs");
 const cmsProjectionPath = join(webRoot, "src", "lib", "cms", "homepage.ts");
 const packageJsonPath = join(webRoot, "package.json");
@@ -80,6 +88,7 @@ function addCheck(checks, check, passed, details) {
 
 const studioObjectsSource = read(studioObjectsPath);
 const rendererSource = read(rendererPath);
+const productRendererSource = read(productRendererPath);
 const cmsVerifySource = read(cmsVerifyPath);
 const cmsProjectionSource = read(cmsProjectionPath);
 const packageJson = JSON.parse(read(packageJsonPath));
@@ -133,6 +142,18 @@ addCheck(
     cmsProjectionSource.includes("renderEligibility") &&
     cmsProjectionSource.includes("sortIntent"),
   "Sanity projection includes moduleControl component and render-eligibility fields.",
+);
+addCheck(
+  checks,
+  "web.productAssetMediaFailsClosed",
+  productRendererSource.includes("function canRenderPublicAssetMedia(asset: SanityAssetRecord): boolean") &&
+    productRendererSource.includes('const PUBLIC_ASSET_APPROVAL_STATUS = "approved_public"') &&
+    productRendererSource.includes("asset.approvalStatus === PUBLIC_ASSET_APPROVAL_STATUS") &&
+    productRendererSource.includes("asset.provenanceStatus === PUBLIC_ASSET_APPROVAL_STATUS") &&
+    productRendererSource.includes("asset.altText") &&
+    productRendererSource.includes("const canShowAssetMedia = isPrivate || canRenderPublicAssetMedia(asset)") &&
+    productRendererSource.includes("canShowAssetMedia && asset.assetUrl"),
+  "Public product media only renders CMS asset URLs after approved_public approval, approved_public provenance, and alt text.",
 );
 addCheck(
   checks,
