@@ -40,7 +40,7 @@ export default function NotFound() {
         </div>
         <div className="flex flex-wrap gap-3">
           <Link
-            className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-po-brand-hover"
+            className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-po-on-dark transition-colors hover:bg-po-brand-hover"
             href="/"
           >
             Return to Presidential home

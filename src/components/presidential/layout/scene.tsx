@@ -14,7 +14,7 @@ type SceneProps = {
 const toneClasses = {
   default: "bg-po-canvas text-po-ink",
   quiet: "bg-po-soft text-po-ink",
-  contrast: "bg-po-ink text-white",
+  contrast: "bg-po-ink text-po-on-dark",
   internal: "bg-po-canvas text-po-ink outline outline-1 outline-dashed outline-po-subtle",
 } as const satisfies Record<SceneTone, string>;
 

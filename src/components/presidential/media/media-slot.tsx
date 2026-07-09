@@ -33,7 +33,7 @@ export function MediaSlot({
   }
 
   const classNames = [
-    "relative overflow-hidden border border-po-line bg-po-ink text-white",
+    "relative overflow-hidden border border-po-line bg-po-ink text-po-on-dark",
     aspectClassName,
     className,
   ]
@@ -73,7 +73,7 @@ export function MediaSlot({
           <span className="block text-xs font-semibold uppercase tracking-normal text-po-gold">
             {label}
           </span>
-          <span className="mt-2 block text-base font-semibold text-white">
+          <span className="mt-2 block text-base font-semibold text-po-on-dark">
             {note}
           </span>
           {children ? <span className="mt-3 block text-po-on-dark-muted">{children}</span> : null}

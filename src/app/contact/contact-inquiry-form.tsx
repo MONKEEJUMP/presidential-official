@@ -51,7 +51,7 @@ export function ContactInquiryForm({ configured }: ContactInquiryFormProps) {
             Inquiry type
           </label>
           <select
-            className="border border-po-line bg-white px-3 py-3 text-sm text-po-ink"
+            className="border border-po-line bg-po-canvas px-3 py-3 text-sm text-po-ink"
             disabled={disabled}
             id="inquiryType"
             name="inquiryType"
@@ -71,7 +71,7 @@ export function ContactInquiryForm({ configured }: ContactInquiryFormProps) {
           <input
             aria-invalid={Boolean(nameError)}
             autoComplete="name"
-            className="border border-po-line bg-white px-3 py-3 text-sm text-po-ink"
+            className="border border-po-line bg-po-canvas px-3 py-3 text-sm text-po-ink"
             disabled={disabled}
             id="contactName"
             maxLength={90}
@@ -89,7 +89,7 @@ export function ContactInquiryForm({ configured }: ContactInquiryFormProps) {
           <input
             aria-invalid={Boolean(emailError)}
             autoComplete="email"
-            className="border border-po-line bg-white px-3 py-3 text-sm text-po-ink"
+            className="border border-po-line bg-po-canvas px-3 py-3 text-sm text-po-ink"
             disabled={disabled}
             id="contactEmail"
             maxLength={254}
@@ -106,7 +106,7 @@ export function ContactInquiryForm({ configured }: ContactInquiryFormProps) {
           </label>
           <textarea
             aria-invalid={Boolean(messageError)}
-            className="min-h-36 border border-po-line bg-white px-3 py-3 text-sm text-po-ink"
+            className="min-h-36 border border-po-line bg-po-canvas px-3 py-3 text-sm text-po-ink"
             disabled={disabled}
             id="contactMessage"
             maxLength={1200}
@@ -117,7 +117,7 @@ export function ContactInquiryForm({ configured }: ContactInquiryFormProps) {
         </div>
 
         <button
-          className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-po-brand-hover disabled:cursor-not-allowed disabled:border-po-subtle disabled:bg-po-subtle disabled:text-po-muted"
+          className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-po-on-dark transition-colors hover:bg-po-brand-hover disabled:cursor-not-allowed disabled:border-po-subtle disabled:bg-po-subtle disabled:text-po-muted"
           disabled={submitDisabled}
           type="submit"
         >
@@ -138,7 +138,7 @@ export function ContactInquiryForm({ configured }: ContactInquiryFormProps) {
         </p>
         {state.mailtoHref && configured ? (
           <a
-            className="mt-5 inline-flex border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-white hover:bg-po-brand-hover"
+            className="mt-5 inline-flex border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-po-on-dark hover:bg-po-brand-hover"
             href={state.mailtoHref}
             rel="nofollow"
           >

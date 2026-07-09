@@ -12,11 +12,11 @@ const footerLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-po-line bg-po-ink px-6 py-12 text-white sm:px-10 lg:px-16">
+    <footer className="border-t border-po-line bg-po-ink px-6 py-12 text-po-on-dark sm:px-10 lg:px-16">
       <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(320px,1fr)]">
         <div className="flex max-w-xl flex-col gap-4">
           <Link
-            className="text-sm font-black uppercase tracking-normal text-white"
+            className="text-sm font-black uppercase tracking-normal text-po-on-dark"
             href="/"
           >
             PRESIDENTIAL

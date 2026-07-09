@@ -56,7 +56,7 @@ const proofPoints = [
 
 function HeroStage() {
   return (
-    <div className="relative min-h-[32rem] overflow-hidden border border-white/15 bg-po-ink p-5 shadow-2xl">
+    <div className="relative min-h-[32rem] overflow-hidden border border-po-on-dark/15 bg-po-ink p-5 shadow-2xl">
       <div
         aria-hidden="true"
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -67,8 +67,8 @@ function HeroStage() {
       />
       <div className="po-hero-stage-gradient absolute inset-0" />
       <div className="relative z-10 flex h-full flex-col justify-between gap-10">
-        <div className="flex items-center justify-between gap-4 border-b border-white/15 pb-5">
-          <p className="text-xs font-black uppercase tracking-normal text-white">
+        <div className="flex items-center justify-between gap-4 border-b border-po-on-dark/15 pb-5">
+          <p className="text-xs font-black uppercase tracking-normal text-po-on-dark">
             PRESIDENTIAL
           </p>
           <p className="text-xs font-semibold uppercase tracking-normal text-po-gold">
@@ -79,14 +79,14 @@ function HeroStage() {
         <div className="grid gap-3">
           {productPillars.map((pillar, index) => (
             <div
-              className="grid gap-3 border border-white/15 bg-po-canvas/10 p-4 sm:grid-cols-[auto_1fr] sm:items-center"
+              className="grid gap-3 border border-po-on-dark/15 bg-po-canvas/10 p-4 sm:grid-cols-[auto_1fr] sm:items-center"
               key={pillar.title}
             >
               <span className="flex h-12 w-12 items-center justify-center border border-po-gold text-sm font-black text-po-gold">
                 0{index + 1}
               </span>
               <div>
-                <p className="text-lg font-semibold text-white">{pillar.title}</p>
+                <p className="text-lg font-semibold text-po-on-dark">{pillar.title}</p>
                 <p className="mt-1 text-sm leading-6 text-po-on-dark-muted">
                   {pillar.label}
                 </p>
@@ -96,7 +96,7 @@ function HeroStage() {
         </div>
 
         <div className="grid gap-3 border border-po-brand-line bg-po-brand-soft p-4">
-          <p className="text-sm font-semibold text-white">
+          <p className="text-sm font-semibold text-po-on-dark">
             Official retail path
           </p>
           <div className="grid grid-cols-5 gap-2" aria-hidden="true">
@@ -131,7 +131,7 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
             <div className="flex max-w-3xl flex-col gap-8">
               <div className="flex flex-col gap-6">
                 <h1
-                  className="text-5xl font-semibold leading-[0.96] text-white sm:text-6xl lg:text-7xl"
+                  className="text-5xl font-semibold leading-[0.96] text-po-on-dark sm:text-6xl lg:text-7xl"
                   id="presidential-homepage-primary"
                 >
                   {route.h1}

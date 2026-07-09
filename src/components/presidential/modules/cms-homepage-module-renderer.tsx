@@ -633,7 +633,7 @@ function HeroModule({ module, index, renderMode }: { readonly module: SanityHome
             </div>
           ) : null}
         </div>
-        <div className="min-h-96 border border-white/15 bg-po-canvas/10 p-5">
+        <div className="min-h-96 border border-po-on-dark/15 bg-po-canvas/10 p-5">
           <div className="flex h-full min-h-80 items-end border border-po-brand-line bg-po-brand-soft p-5">
             <div className="grid gap-3">
               <p className="text-sm font-semibold text-po-brand-line">
@@ -778,7 +778,7 @@ function ContactDetailPanel({
 
   if (!contactProfile) {
     return (
-      <div className="grid gap-3 border border-white/15 bg-po-canvas/10 p-4">
+      <div className="grid gap-3 border border-po-on-dark/15 bg-po-canvas/10 p-4">
         <p className="text-sm font-semibold uppercase tracking-normal text-po-brand-line">
           Official contact details
         </p>
@@ -790,17 +790,17 @@ function ContactDetailPanel({
   }
 
   return (
-    <div className="grid gap-3 border border-white/15 bg-po-canvas/10 p-4">
+    <div className="grid gap-3 border border-po-on-dark/15 bg-po-canvas/10 p-4">
       <p className="text-sm font-semibold uppercase tracking-normal text-po-brand-line">
         {contactProfile.title || "Official contact details"}
       </p>
       {showContactDetails && contactProfile.phone ? (
-        <p className="text-base font-semibold text-white">
+        <p className="text-base font-semibold text-po-on-dark">
           {contactProfile.phone}
         </p>
       ) : null}
       {showContactDetails && displayEmail ? (
-        <p className="break-words text-base font-semibold text-white">
+        <p className="break-words text-base font-semibold text-po-on-dark">
           {displayEmail}
         </p>
       ) : null}
@@ -865,14 +865,14 @@ function ContactRouteCards({
   return (
     <div className="grid gap-4 md:grid-cols-3">
       {panels.map((panel) => (
-        <article className="border border-white/15 bg-po-canvas/10 p-4" key={panel.title}>
-          <h3 className="text-lg font-semibold leading-tight text-white">{panel.title}</h3>
+        <article className="border border-po-on-dark/15 bg-po-canvas/10 p-4" key={panel.title}>
+          <h3 className="text-lg font-semibold leading-tight text-po-on-dark">{panel.title}</h3>
           <p className="mt-3 text-sm leading-6 text-po-on-dark-muted">{panel.body}</p>
         </article>
       ))}
       {isPrivate && resolvedVariant === "locator" && module.stateCandidates?.length ? (
-        <article className="border border-white/15 bg-po-canvas/10 p-4 md:col-span-3">
-          <h3 className="text-lg font-semibold leading-tight text-white">State candidates</h3>
+        <article className="border border-po-on-dark/15 bg-po-canvas/10 p-4 md:col-span-3">
+          <h3 className="text-lg font-semibold leading-tight text-po-on-dark">State candidates</h3>
           <p className="mt-3 text-sm leading-6 text-po-on-dark-muted">{module.stateCandidates.join(", ")}</p>
         </article>
       ) : null}
@@ -931,7 +931,7 @@ function ContactModule({
               </CtaLink>
             ) : null}
           </div>
-          <div className="grid gap-4 border border-white/15 bg-po-canvas/10 p-5">
+          <div className="grid gap-4 border border-po-on-dark/15 bg-po-canvas/10 p-5">
             <p className="text-sm font-semibold uppercase tracking-normal text-po-brand-line">
               {resolvedVariant === "locator" ? "Locator shell" : "Contact shell"}
             </p>

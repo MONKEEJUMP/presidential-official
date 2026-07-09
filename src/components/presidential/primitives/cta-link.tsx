@@ -16,11 +16,11 @@ type CtaLinkProps = {
 
 const variantClasses = {
   primary:
-    "border border-po-brand bg-po-brand text-white hover:bg-po-brand-hover",
+    "border border-po-brand bg-po-brand text-po-on-dark hover:bg-po-brand-hover",
   secondary:
     "border border-po-subtle text-po-ink hover:border-po-brand hover:text-po-brand",
   contrast:
-    "border border-white/30 text-white hover:border-po-gold hover:text-po-gold",
+    "border border-po-on-dark/30 text-po-on-dark hover:border-po-gold hover:text-po-gold",
   text: "text-po-brand underline-offset-4 hover:underline",
 } as const satisfies Record<CtaLinkVariant, string>;
 
