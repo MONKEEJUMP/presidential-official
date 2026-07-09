@@ -8,7 +8,10 @@ import {
 } from "@/components/presidential";
 import { CtaLink } from "@/components/presidential/primitives/cta-link";
 import { SectionHeading } from "@/components/presidential/primitives/section-heading";
-import { readPublicRenderableLearnGuide } from "@/lib/cms";
+import {
+  readPublicRenderableLearnGuide,
+  readPublicRenderableLearnGuideSlugs,
+} from "@/lib/cms";
 import { readDraftLearnGuide } from "@/lib/cms/learn-guide-drafts";
 
 import { LearnGuideCmsBody } from "./learn-guide-cms-body";
@@ -83,8 +86,12 @@ function isLearnGuideDraftRenderingEnabled(): boolean {
 
 export const dynamicParams = false;
 
-export function generateStaticParams() {
-  return learnGuideFallbacks.map((guide) => ({ guide: guide.slug }));
+export async function generateStaticParams() {
+  const slugs = await readPublicRenderableLearnGuideSlugs({
+    next: { tags: ["sanity-learn-guide-slugs"] },
+  });
+
+  return slugs.map((guide) => ({ guide }));
 }
 
 export async function generateMetadata({ params }: LearnGuidePageProps): Promise<Metadata> {

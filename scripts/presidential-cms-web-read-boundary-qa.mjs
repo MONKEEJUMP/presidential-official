@@ -401,6 +401,19 @@ function main() {
     "learn guide metadata uses approved public CMS title/intro when available and remains noindex while publication is locked",
   );
   addCheck(
+    "client.learnGuideStaticParamsUseApprovedCmsSlugs",
+    /export\s+async\s+function\s+generateStaticParams/.test(learnGuideRouteSource) &&
+      /readPublicRenderableLearnGuideSlugs/.test(learnGuideRouteSource) &&
+      !/generateStaticParams[\s\S]{0,500}learnGuideFallbacks\.map/.test(learnGuideRouteSource) &&
+      /PUBLIC_LEARN_GUIDE_SLUGS_QUERY/.test(learnGuideClientSource) &&
+      /defined\(slug\.current\)/.test(learnGuideClientSource) &&
+      /routePhase == ["']approved_public["']/.test(learnGuideClientSource) &&
+      /approvalGate\.contentApprovalStatus == ["']approved_public["']/.test(learnGuideClientSource) &&
+      /approvalGate\.sourceProofStatus == ["']approved_public["']/.test(learnGuideClientSource) &&
+      /approvalGate\.legalReviewStatus == ["']approved_public["']/.test(learnGuideClientSource),
+    "learn guide static params are generated from approved CMS slugs instead of hardcoded fixture slugs",
+  );
+  addCheck(
     "client.learnGuidePublicRenderingApprovalGated",
     /approvalGate\{[\s\S]*contentApprovalStatus[\s\S]*sourceProofStatus[\s\S]*legalReviewStatus[\s\S]*\}/.test(learnGuideClientSource) &&
       /isLearnGuideApprovedForPublicRendering/.test(learnGuideClientSource) &&

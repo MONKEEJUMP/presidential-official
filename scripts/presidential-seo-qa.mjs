@@ -1643,13 +1643,22 @@ function checkRouteShellFoundation() {
   const learnGuideText = projectFileExists(learnGuidePath)
     ? readProjectFile(learnGuidePath)
     : "";
+  const learnGuideCmsText = projectFileExists("src/lib/cms/learn-guide.ts")
+    ? readProjectFile("src/lib/cms/learn-guide.ts")
+    : "";
   const learnGuideSafe =
     learnGuideText.includes("dynamicParams = false") &&
     learnGuideText.includes("generateStaticParams") &&
-    learnGuideText.includes("learnGuideFallbacks.map") &&
+    learnGuideText.includes("readPublicRenderableLearnGuideSlugs") &&
+    !/generateStaticParams[\s\S]{0,500}learnGuideFallbacks\.map/.test(learnGuideText) &&
     learnGuideText.includes("notFound()") &&
     learnGuideText.includes("robots:") &&
     learnGuideText.includes("index: false") &&
+    learnGuideCmsText.includes("PUBLIC_LEARN_GUIDE_SLUGS_QUERY") &&
+    learnGuideCmsText.includes('routePhase == "approved_public"') &&
+    learnGuideCmsText.includes('approvalGate.contentApprovalStatus == "approved_public"') &&
+    learnGuideCmsText.includes('approvalGate.sourceProofStatus == "approved_public"') &&
+    learnGuideCmsText.includes('approvalGate.legalReviewStatus == "approved_public"') &&
     !learnGuideText.includes("buildRouteMetadata") &&
     !learnGuideText.includes("buildStaticRouteMetadata") &&
     !learnGuideText.includes("buildRouteCanonicalUrl") &&
@@ -1659,15 +1668,15 @@ function checkRouteShellFoundation() {
     addResult(
       "PASS",
       "routeShells.learnGuide",
-      "Learn guide dynamic route renders controlled noindex CMS/fallback guide shells without unresolved canonicals.",
+      "Learn guide dynamic route renders only approved-CMS static params, stays noindex, and avoids unresolved canonicals.",
     );
   } else {
     addResult(
       "FAIL",
       "routeShells.learnGuide",
-      "Learn guide route may emit indexable fake pages or unresolved template metadata.",
+      "Learn guide route may emit fixture pages, indexable fake pages, or unresolved template metadata.",
       [],
-      "Keep dynamicParams false, unknown slugs notFound, generated guide shells noindex, and canonicals delegated away from unresolved templates.",
+      "Keep dynamicParams false, generate static params from approved CMS slugs only, unknown slugs notFound, generated guide shells noindex, and canonicals delegated away from unresolved templates.",
     );
   }
 

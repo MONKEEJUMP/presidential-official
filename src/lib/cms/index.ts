@@ -5,7 +5,11 @@ export {
   SANITY_READ_CLIENT_CONFIG,
 } from "./sanity-read-client";
 export { readPublicRenderableHomepage, readPublishedHomepage } from "./homepage";
-export { readPublicRenderableLearnGuide, readPublishedLearnGuide } from "./learn-guide";
+export {
+  readPublicRenderableLearnGuide,
+  readPublicRenderableLearnGuideSlugs,
+  readPublishedLearnGuide,
+} from "./learn-guide";
 export { readPublicRenderableSitePage, readPublishedSitePage } from "./site-page";
 export type { SanityAssetRecord, SanityHomepageModule, SanityHomepageRecord } from "./homepage";
 export type { SanityLearnGuideRecord } from "./learn-guide";

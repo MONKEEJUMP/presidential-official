@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { execFileSync, spawn, spawnSync } from "node:child_process";
 
@@ -42,7 +42,6 @@ const publicPaths = [
   "/orbit",
   "/our-story",
   "/learn",
-  ...learnGuideSlugs.map((slug) => `/learn/${slug}`),
   "/contact",
   "/find-us",
 ];
@@ -93,34 +92,6 @@ const fallbackExpectations = [
   {
     path: "/learn",
     markers: ["Learn Presidential"],
-  },
-  {
-    path: "/learn/what-are-moon-rocks",
-    markers: ["What Are Moon Rocks", "Guide foundation"],
-  },
-  {
-    path: "/learn/what-is-live-resin",
-    markers: ["What Is Live Resin", "Guide foundation"],
-  },
-  {
-    path: "/learn/what-is-live-rosin",
-    markers: ["What Is Live Rosin", "Guide foundation"],
-  },
-  {
-    path: "/learn/what-are-liquid-diamonds",
-    markers: ["What Are Liquid Diamonds", "Guide foundation"],
-  },
-  {
-    path: "/learn/flavor-science",
-    markers: ["Flavor Science", "Guide foundation"],
-  },
-  {
-    path: "/learn/infusion-science",
-    markers: ["Infusion Science", "Guide foundation"],
-  },
-  {
-    path: "/learn/different-extracts-need-different-heat",
-    markers: ["Different Extracts Need Different Heat", "Guide foundation"],
   },
   {
     path: "/contact",
@@ -205,6 +176,18 @@ async function waitForServer() {
   }
 
   throw lastError || new Error("Next server did not become ready.");
+}
+
+function getPrerenderedRoutes() {
+  const manifestPath = join(buildDir, "prerender-manifest.json");
+
+  if (!existsSync(manifestPath)) {
+    return new Set();
+  }
+
+  const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+
+  return new Set(Object.keys(manifest.routes || {}));
 }
 
 function killPortListeners(targetPort) {
@@ -415,6 +398,16 @@ async function assertPublicFallbackScenario(scenarioName) {
       missingMarkers.length
         ? `missing markers: ${missingMarkers.join(", ")}`
         : `rendered markers: ${route.markers.join(", ")}`,
+    );
+  }
+
+  for (const slug of learnGuideSlugs) {
+    const routePath = `/learn/${slug}`;
+    const prerenderedRoutes = getPrerenderedRoutes();
+    addCheck(
+      `${scenarioName} public ${routePath} fixture guide not prerendered`,
+      !prerenderedRoutes.has(routePath),
+      `approved-CMS-only Learn guide route generation excludes ${routePath}`,
     );
   }
 }

@@ -43,6 +43,10 @@ type PublicLearnGuideReadResult = {
   readonly modules: readonly SanityHomepageModule[];
 };
 
+type SanityLearnGuideSlugRecord = {
+  readonly slug?: string;
+};
+
 const LEARN_GUIDE_QUERY = `*[_type == "learnGuide" && slug.current == $slug][0]{
   _id,
   _type,
@@ -64,6 +68,17 @@ const LEARN_GUIDE_QUERY = `*[_type == "learnGuide" && slug.current == $slug][0]{
   bodyModules[]{
 ${SITE_PAGE_MODULE_PROJECTION}
   }
+}`;
+
+const PUBLIC_LEARN_GUIDE_SLUGS_QUERY = `*[
+  _type == "learnGuide" &&
+  defined(slug.current) &&
+  routePhase == "approved_public" &&
+  approvalGate.contentApprovalStatus == "approved_public" &&
+  approvalGate.sourceProofStatus == "approved_public" &&
+  approvalGate.legalReviewStatus == "approved_public"
+]{
+  "slug": slug.current
 }`;
 
 function isLearnGuideCmsRenderingEnabled(): boolean {
@@ -103,6 +118,32 @@ function getRenderableLearnGuideModules(
   return (record.bodyModules || []).filter(
     (module) => module.moduleControl?.renderEligibility === RENDERABLE_MODULE_ELIGIBILITY,
   );
+}
+
+function isPublicRouteSlug(value?: string): value is string {
+  return Boolean(value && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value));
+}
+
+export async function readPublicRenderableLearnGuideSlugs(
+  init: Pick<RequestInit, "signal" | "next"> = {},
+): Promise<readonly string[]> {
+  if (!isLearnGuideCmsRenderingEnabled()) {
+    return [];
+  }
+
+  try {
+    const slugs = await readPublishedSanity<readonly SanityLearnGuideSlugRecord[]>(
+      PUBLIC_LEARN_GUIDE_SLUGS_QUERY,
+      {},
+      init,
+    );
+
+    return slugs.ok
+      ? Array.from(new Set(slugs.result.map((record) => record.slug).filter(isPublicRouteSlug))).sort()
+      : [];
+  } catch {
+    return [];
+  }
 }
 
 export async function readPublicRenderableLearnGuide(

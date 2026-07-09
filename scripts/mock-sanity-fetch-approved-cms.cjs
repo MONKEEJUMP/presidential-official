@@ -112,6 +112,13 @@ function learnGuideResult(slug) {
   };
 }
 
+function learnGuideSlugResults() {
+  return [
+    {slug: "what-are-moon-rocks"},
+    {slug: "cms-smoke-extra-guide"},
+  ];
+}
+
 globalThis.fetch = async function mockedSanityFetch(input, init) {
   const url = typeof input === "string"
     ? input
@@ -123,7 +130,9 @@ globalThis.fetch = async function mockedSanityFetch(input, init) {
     const slug = parseJsonParam(queryParam(url, "$slug"));
     const query = queryText(url);
     const result = query.includes('_type == "learnGuide"')
-      ? learnGuideResult(slug)
+      ? query.includes("defined(slug.current)") && !slug
+        ? learnGuideSlugResults()
+        : learnGuideResult(slug)
       : ["home", "moon-rocks", "our-story", "find-us", "contact"].includes(slug)
         ? pageResult(slug)
         : null;
