@@ -108,10 +108,13 @@ function main() {
     APPROVED_SEO_METADATA_RECORDS,
     APPROVED_SOURCE_RECORDS,
     ROUTE_PUBLICATION_APPROVAL_SEQUENCE,
+    ROUTE_PUBLICATION_EVIDENCE_CATEGORIES,
+    ROUTE_PUBLICATION_EVIDENCE_SCAFFOLDS,
     HOME_ROUTE_PUBLICATION_EVIDENCE_SCAFFOLD,
     getRoutePublicationGateBlockReasons,
     getNextRoutePublicationCandidate,
     getRoutePublicationEvidenceScaffold,
+    getRoutePublicationEvidenceScaffolds,
     isRoutePublicationApprovedForSeo,
   } = require(publicationPath);
 
@@ -143,16 +146,19 @@ function main() {
   const homeEvidenceScaffold = homeRoute
     ? getRoutePublicationEvidenceScaffold(homeRoute)
     : null;
-  const requiredHomeEvidenceCategories = [
-    "source",
-    "proof",
-    "claim",
-    "asset",
-    "metadata",
-    "schema",
-    "content",
-    "compliance",
-  ];
+  const launchEvidenceScaffolds = getRoutePublicationEvidenceScaffolds();
+
+  function scaffoldHasAllBlockedCategories(scaffold) {
+    return ROUTE_PUBLICATION_EVIDENCE_CATEGORIES.every((category) =>
+      scaffold.requirements.some(
+        (requirement) =>
+          requirement.category === category &&
+          requirement.required &&
+          requirement.status === "blocked" &&
+          requirement.reasons.includes("source_record:route_publication_missing"),
+      ),
+    );
+  }
 
   check(
     rows,
@@ -235,15 +241,7 @@ function main() {
       homeEvidenceScaffold.path === "/" &&
       JSON.stringify(HOME_ROUTE_PUBLICATION_EVIDENCE_SCAFFOLD) ===
         JSON.stringify(homeEvidenceScaffold) &&
-      requiredHomeEvidenceCategories.every((category) =>
-        homeEvidenceScaffold.requirements.some(
-          (requirement) =>
-            requirement.category === category &&
-            requirement.required &&
-            requirement.status === "blocked" &&
-            requirement.reasons.includes("source_record:route_publication_missing"),
-        ),
-      ),
+      scaffoldHasAllBlockedCategories(homeEvidenceScaffold),
     homeEvidenceScaffold
       ? `home scaffold categories: ${homeEvidenceScaffold.requirements
           .filter((requirement) => requirement.required)
@@ -261,6 +259,37 @@ function main() {
       ? "home evidence scaffold is advisory only; no approved route-publication record exists"
       : "home route evidence scaffold missing",
   );
+  check(
+    rows,
+    "routePublicationReadiness.launchEvidenceScaffolds.sequence",
+    JSON.stringify(ROUTE_PUBLICATION_EVIDENCE_SCAFFOLDS) ===
+      JSON.stringify(launchEvidenceScaffolds) &&
+      JSON.stringify(launchEvidenceScaffolds.map((scaffold) => scaffold.routeId)) ===
+        JSON.stringify(expectedLaunchSequence),
+    `scaffold sequence: ${launchEvidenceScaffolds
+      .map((scaffold) => scaffold.routeId)
+      .join(" -> ")}`,
+  );
+  check(
+    rows,
+    "routePublicationReadiness.launchEvidenceScaffolds.complete",
+    launchEvidenceScaffolds.length === expectedLaunchSequence.length &&
+      launchEvidenceScaffolds.every(scaffoldHasAllBlockedCategories),
+    `launch scaffold categories: ${launchEvidenceScaffolds
+      .map((scaffold) => `${scaffold.routeId}:${scaffold.requirements.length}`)
+      .join("|")}`,
+  );
+  check(
+    rows,
+    "routePublicationReadiness.launchEvidenceScaffolds.noUnlock",
+    launchEvidenceScaffolds.every(
+      (scaffold) =>
+        scaffold.canUnlock === false &&
+        scaffold.publicationBlockReasons.includes("source_record:route_publication_missing") &&
+        scaffold.sitemapBlockReasons.includes("source_record:route_publication_missing"),
+    ) && APPROVED_ROUTE_PUBLICATIONS.length === 0,
+    "all launch route evidence scaffolds are advisory only and remain blocked by missing route-publication records",
+  );
 
   const failCount = rows.filter((row) => row.status === "fail").length;
   const verdict =
@@ -275,6 +304,7 @@ function main() {
     launchSequence: expectedLaunchSequence,
     approvedRoutePublicationCount: APPROVED_ROUTE_PUBLICATIONS.length,
     homeEvidenceScaffold,
+    launchEvidenceScaffolds,
     nextRoutePublicationCandidate: nextRoutePublicationCandidate
       ? {
           routeId: nextRoutePublicationCandidate.route.id,

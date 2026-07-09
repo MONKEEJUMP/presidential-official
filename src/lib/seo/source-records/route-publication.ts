@@ -22,6 +22,16 @@ export const ROUTE_PUBLICATION_APPROVAL_SEQUENCE = [
   "find-us",
   "contact",
 ] as const;
+export const ROUTE_PUBLICATION_EVIDENCE_CATEGORIES = [
+  "source",
+  "proof",
+  "claim",
+  "asset",
+  "metadata",
+  "schema",
+  "content",
+  "compliance",
+] as const;
 
 export type NextRoutePublicationCandidate = {
   readonly route: SeoRouteRecord;
@@ -30,14 +40,7 @@ export type NextRoutePublicationCandidate = {
 };
 
 export type RoutePublicationEvidenceCategory =
-  | "source"
-  | "proof"
-  | "claim"
-  | "asset"
-  | "metadata"
-  | "schema"
-  | "content"
-  | "compliance";
+  (typeof ROUTE_PUBLICATION_EVIDENCE_CATEGORIES)[number];
 
 export type RoutePublicationEvidenceRequirement = {
   readonly category: RoutePublicationEvidenceCategory;
@@ -109,25 +112,9 @@ function routeRequiresClaimEvidence(route: SeoRouteRecord): boolean {
   );
 }
 
-function routeRequiresAssetEvidence(route: SeoRouteRecord): boolean {
-  return (
-    route.requiredData.some((data) => /asset|product|platform|series/i.test(data)) ||
-    route.requiredApprovals.some((approval) => /asset|product/i.test(approval)) ||
-    route.blocks.some((block) => /asset|catalog/i.test(block))
-  );
-}
-
-function routeRequiresContentEvidence(route: SeoRouteRecord): boolean {
-  return (
-    route.requiredApprovals.some((approval) => /content|article/i.test(approval)) ||
-    route.blocks.some((block) => /content|scaffold|learn/i.test(block))
-  );
-}
-
-function routeRequiresComplianceEvidence(route: SeoRouteRecord): boolean {
-  return (
-    route.requiredApprovals.some((approval) => /compliance|legal/i.test(approval)) ||
-    route.blocks.some((block) => /compliance|legal|age_gate/i.test(block))
+function routeIsInPublicationSequence(route: SeoRouteRecord): boolean {
+  return ROUTE_PUBLICATION_APPROVAL_SEQUENCE.some(
+    (routeId) => routeId === route.id,
   );
 }
 
@@ -246,42 +233,42 @@ export function getRoutePublicationEvidenceScaffold(
   return {
     routeId: route.id,
     path: route.path,
-    requirements: [
-      buildEvidenceRequirement("source", true, defaultReasons),
-      buildEvidenceRequirement("proof", true, defaultReasons),
+    requirements: ROUTE_PUBLICATION_EVIDENCE_CATEGORIES.map((category) =>
       buildEvidenceRequirement(
-        "claim",
-        routeRequiresClaimEvidence(route),
+        category,
+        routeIsInPublicationSequence(route),
         defaultReasons,
       ),
-      buildEvidenceRequirement(
-        "asset",
-        routeRequiresAssetEvidence(route),
-        defaultReasons,
-      ),
-      buildEvidenceRequirement(
-        "metadata",
-        route.requiredData.includes("seo_metadata") ||
-          route.requiredApprovals.some((approval) => /metadata/i.test(approval)) ||
-          route.blocks.includes("metadata_approval"),
-        defaultReasons,
-      ),
-      buildEvidenceRequirement("schema", route.schema.length > 0, defaultReasons),
-      buildEvidenceRequirement(
-        "content",
-        routeRequiresContentEvidence(route),
-        defaultReasons,
-      ),
-      buildEvidenceRequirement(
-        "compliance",
-        routeRequiresComplianceEvidence(route),
-        defaultReasons,
-      ),
-    ],
+    ),
     publicationBlockReasons,
     sitemapBlockReasons,
     canUnlock: false,
   };
+}
+
+function getPublicationSequenceRoute(routeId: string): SeoRouteRecord {
+  const route = ROUTE_REGISTRY.find(
+    (candidate) => candidate.id === routeId,
+  ) as SeoRouteRecord | undefined;
+
+  if (!route) {
+    throw new Error(`Route publication sequence route missing: ${routeId}`);
+  }
+
+  return route;
+}
+
+export function getRoutePublicationEvidenceScaffolds(
+  records: readonly RoutePublicationRecord[] = APPROVED_ROUTE_PUBLICATIONS,
+  context: RoutePublicationGateContext = APPROVED_ROUTE_PUBLICATION_CONTEXT,
+): readonly RoutePublicationEvidenceScaffold[] {
+  return ROUTE_PUBLICATION_APPROVAL_SEQUENCE.map((routeId) =>
+    getRoutePublicationEvidenceScaffold(
+      getPublicationSequenceRoute(routeId),
+      records,
+      context,
+    ),
+  );
 }
 
 const homeRoute = ROUTE_REGISTRY.find((route) => route.id === "home");
@@ -292,6 +279,8 @@ if (!homeRoute) {
 
 export const HOME_ROUTE_PUBLICATION_EVIDENCE_SCAFFOLD =
   getRoutePublicationEvidenceScaffold(homeRoute);
+export const ROUTE_PUBLICATION_EVIDENCE_SCAFFOLDS =
+  getRoutePublicationEvidenceScaffolds();
 
 export function getRoutePublicationGateBlockReasons(
   route: SeoRouteRecord,
