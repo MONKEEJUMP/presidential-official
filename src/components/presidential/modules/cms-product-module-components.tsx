@@ -88,7 +88,7 @@ function recordDescription(record?: SanityLinkedRecord): string {
   return record?.intro || record?.positioningLine || record?.shortDescription || "";
 }
 
-function moduleFingerprint(module: SanityHomepageModule): string {
+function moduleTextSignature(module: SanityHomepageModule): string {
   return [
     module._key,
     module._type,
@@ -122,9 +122,9 @@ export function getCmsProductRouteProfile(
     return PRODUCT_ROUTE_PROFILES.find((profile) => profile.slug === productRoute) || null;
   }
 
-  const fingerprint = moduleFingerprint(module);
+  const signature = moduleTextSignature(module);
   return PRODUCT_ROUTE_PROFILES.find(
-    (profile) => fingerprint.includes(profile.slug) || fingerprint.includes(profile.title.toLowerCase()),
+    (profile) => signature.includes(profile.slug) || signature.includes(profile.title.toLowerCase()),
   ) || null;
 }
 

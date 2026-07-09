@@ -916,7 +916,6 @@ function ContactDetailPanel({
   const canShowPublic = canShowPublicContactProfile(contactProfile);
   const showContactDetails = isPrivate || canShowPublic;
   const displayEmail = contactProfile?.displayEmail;
-  const mailtoEmail = contactProfile?.mailtoEmail || displayEmail;
 
   if (!contactProfile) {
     return (
@@ -937,14 +936,14 @@ function ContactDetailPanel({
         {contactProfile.title || "Official contact details"}
       </p>
       {showContactDetails && contactProfile.phone ? (
-        <a className="text-base font-semibold text-white underline-offset-4 hover:underline" href={`tel:${contactProfile.phone.replace(/[^\d+]/g, "")}`}>
+        <p className="text-base font-semibold text-white">
           {contactProfile.phone}
-        </a>
+        </p>
       ) : null}
       {showContactDetails && displayEmail ? (
-        <a className="break-words text-base font-semibold text-white underline-offset-4 hover:underline" href={`mailto:${mailtoEmail}`}>
+        <p className="break-words text-base font-semibold text-white">
           {displayEmail}
-        </a>
+        </p>
       ) : null}
       {!showContactDetails ? (
         <p className="text-sm leading-6 text-zinc-300">

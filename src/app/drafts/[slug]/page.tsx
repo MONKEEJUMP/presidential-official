@@ -660,7 +660,7 @@ function DraftContactLocatorReadiness({
               Private form/submission boundary
             </h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-300">
-              This panel confirms whether the Contact route has approved form, submission, CRM, official contact detail, and public route gates.
+              This panel confirms whether the Contact route has cleared form, submission, CRM, official contact detail, and public route gates.
             </p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -670,10 +670,10 @@ function DraftContactLocatorReadiness({
             <ReadinessMetric label="Form fields" tone={contactSubmission?.sourceFieldMatches?.length ? "stop" : "ok"} value={contactSubmission?.sourceFieldMatches?.length || 0} />
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <ReadinessMetric label="Contact form approved" tone={contactSubmission?.contactFormApproved ? "ok" : "wait"} value={String(contactSubmission?.contactFormApproved ?? false)} />
-            <ReadinessMetric label="Submission approved" tone={contactSubmission?.formSubmissionApproved ? "ok" : "wait"} value={String(contactSubmission?.formSubmissionApproved ?? false)} />
-            <ReadinessMetric label="CRM approved" tone={contactSubmission?.crmApproved ? "ok" : "wait"} value={String(contactSubmission?.crmApproved ?? false)} />
-            <ReadinessMetric label="Official details approved" tone={contactSubmission?.officialContactDetailsApproved ? "ok" : "wait"} value={String(contactSubmission?.officialContactDetailsApproved ?? false)} />
+            <ReadinessMetric label="Contact form cleared" tone={contactSubmission?.contactFormApproved ? "ok" : "wait"} value={String(contactSubmission?.contactFormApproved ?? false)} />
+            <ReadinessMetric label="Submission cleared" tone={contactSubmission?.formSubmissionApproved ? "ok" : "wait"} value={String(contactSubmission?.formSubmissionApproved ?? false)} />
+            <ReadinessMetric label="CRM cleared" tone={contactSubmission?.crmApproved ? "ok" : "wait"} value={String(contactSubmission?.crmApproved ?? false)} />
+            <ReadinessMetric label="Official details cleared" tone={contactSubmission?.officialContactDetailsApproved ? "ok" : "wait"} value={String(contactSubmission?.officialContactDetailsApproved ?? false)} />
           </div>
           <div className="border border-white/15 bg-white/5 p-4">
             <p className="text-xs font-semibold uppercase tracking-normal text-zinc-400">

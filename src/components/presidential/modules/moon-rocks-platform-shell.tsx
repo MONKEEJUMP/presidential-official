@@ -45,7 +45,6 @@ const ecosystemSteps = [
 export function MoonRocksPlatformShell({
   route,
   breadcrumbs,
-  links,
 }: MoonRocksPlatformShellProps) {
   if (route.id !== "moon-rocks") {
     throw new Error("MoonRocksPlatformShell requires the Moon Rocks route record.");
@@ -96,9 +95,8 @@ export function MoonRocksPlatformShell({
                   title={route.h1}
                 />
                 <p className="max-w-2xl text-sm leading-6 text-zinc-600">
-                  Moon Rocks is the flagship Presidential product platform,
-                  connecting infused pre-rolls, blunts, learning, and licensed
-                  retailer discovery in one official place.
+                  Moon Rocks is the flagship Presidential product platform for
+                  pre-rolls, blunts, learning, and licensed retailer discovery.
                 </p>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <CtaLink href="/find-us" variant="primary">
@@ -124,7 +122,7 @@ export function MoonRocksPlatformShell({
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
             <SectionHeading
               as="h2"
-              description="The Moon Rocks page is built to hold product education, format clarity, related platforms, and retail discovery without becoming a transaction page."
+              description="Product education, format clarity, related platforms, and retail discovery live here without turning the page into a transaction surface."
               id="presidential-moon-rocks-lanes"
               title="Inside the Moon Rocks platform"
             />
@@ -151,7 +149,6 @@ export function MoonRocksPlatformShell({
             <div className="flex flex-col gap-6">
               <SectionHeading
                 as="h2"
-                description="The page moves visitors from product interest into learning and licensed retailer discovery."
                 id="presidential-moon-rocks-journey"
                 title="A cleaner customer path"
               />
@@ -174,34 +171,10 @@ export function MoonRocksPlatformShell({
               aspectClassName="aspect-[4/3]"
               kind="wireframe_media_block"
               label="Moon Rocks journey"
-              note="Product, education, and retail path"
+              note="Product path"
             />
           </div>
         </Scene>
-
-        {links.length > 0 ? (
-          <Scene ariaLabelledBy="presidential-moon-rocks-related" tone="quiet">
-            <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
-              <SectionHeading
-                as="h2"
-                description="Continue through the official Presidential product and retail ecosystem."
-                id="presidential-moon-rocks-related"
-                title="Explore Presidential"
-              />
-              <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {links
-                  .filter((link) => !link.path.includes("["))
-                  .map((link) => (
-                    <li key={link.id}>
-                      <CtaLink href={link.path} variant="secondary">
-                        {link.h1}
-                      </CtaLink>
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          </Scene>
-        ) : null}
 
         <FindUsCtaShell />
       </SceneStack>

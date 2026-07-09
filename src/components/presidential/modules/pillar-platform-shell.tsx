@@ -41,12 +41,12 @@ const pillarContent: Record<PillarRouteId, PillarContent> = {
   "moon-pods": {
     kicker: "Presidential product pillar",
     intro:
-      "Moon Pods now has an official first-party section for product context, education paths, and licensed retailer discovery while final catalog records stay under source confirmation.",
+      "Moon Pods now has an official section for product context, education paths, and licensed retailer discovery while catalog records stay under source confirmation.",
     mediaLabel: "Moon Pods platform",
     mediaNote: "Official product pillar stage",
     lanesTitle: "Moon Pods platform structure",
     lanesDescription:
-      "This page gives Moon Pods a real home in the Presidential ecosystem without publishing unsupported product claims.",
+      "This page gives Moon Pods a real home without publishing unsupported product claims.",
     lanes: [
       {
         title: "Product context",
@@ -70,12 +70,12 @@ const pillarContent: Record<PillarRouteId, PillarContent> = {
   orbit: {
     kicker: "Presidential technology platform",
     intro:
-      "Orbit now has an official platform section for technology context, education paths, and future source-backed product details.",
+      "Orbit now has an official section for technology context, education paths, and future source-backed product details.",
     mediaLabel: "Orbit platform",
     mediaNote: "Official technology platform stage",
     lanesTitle: "Orbit platform structure",
     lanesDescription:
-      "This page separates Orbit from generic product content so technology facts can be added only after source and compliance approval.",
+      "This page keeps Orbit facts controlled until source and compliance approval.",
     lanes: [
       {
         title: "Technology context",
@@ -109,10 +109,8 @@ function getPillarContent(route: SeoRouteRecord): PillarContent {
 export function PillarPlatformShell({
   route,
   breadcrumbs,
-  links,
 }: PillarPlatformShellProps) {
   const content = getPillarContent(route);
-  const relatedLinks = links.filter((link) => !link.path.includes("["));
 
   return (
     <PageFrame>
@@ -212,7 +210,6 @@ export function PillarPlatformShell({
             <div className="flex flex-col gap-6">
               <SectionHeading
                 as="h2"
-                description="The section can grow only as approved facts, assets, and compliance checks allow."
                 id={`${route.id}-platform-rollout`}
                 title="Source-confirmed rollout"
               />
@@ -235,32 +232,10 @@ export function PillarPlatformShell({
               aspectClassName="aspect-[4/3]"
               kind="wireframe_media_block"
               label={`${route.h1} source path`}
-              note="Facts, assets, education, and retail discovery"
+              note="Source path"
             />
           </div>
         </Scene>
-
-        {relatedLinks.length > 0 ? (
-          <Scene ariaLabelledBy={`${route.id}-platform-related`} tone="quiet">
-            <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
-              <SectionHeading
-                as="h2"
-                description="Continue through the official Presidential product and retail ecosystem."
-                id={`${route.id}-platform-related`}
-                title="Explore Presidential"
-              />
-              <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {relatedLinks.map((link) => (
-                  <li key={link.id}>
-                    <CtaLink href={link.path} variant="secondary">
-                      {link.h1}
-                    </CtaLink>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Scene>
-        ) : null}
 
         <FindUsCtaShell />
       </SceneStack>
