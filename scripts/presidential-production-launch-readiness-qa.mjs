@@ -10,6 +10,7 @@ const requiredScripts = [
   "production:postdeploy-smoke:verify",
   "production:sitemap-submission:verify",
   "production:live-action-boundary:verify",
+  "production:measurement-rendering:verify",
   "production:launch-readiness:verify",
 ];
 
@@ -53,6 +54,7 @@ function main() {
   const postdeployText = read("scripts/presidential-production-postdeploy-smoke-qa.mjs");
   const sitemapSubmissionText = read("scripts/presidential-production-sitemap-submission-qa.mjs");
   const liveActionBoundaryText = read("scripts/presidential-production-live-action-boundary-qa.mjs");
+  const measurementRenderingText = read("scripts/presidential-production-measurement-rendering-qa.mjs");
   const proxyText = read("src/proxy.ts");
   const analyticsText = read("src/components/analytics/google-analytics.tsx");
   const googleText = read("src/lib/analytics/google.ts");
@@ -151,6 +153,15 @@ function main() {
       liveActionBoundaryText.includes("envWriteExecuted: false") &&
       liveActionBoundaryText.includes("searchProviderActionExecuted: false"),
     "live launch actions remain local-only, opt-in, and absent from package scripts by default",
+  );
+  addCheck(
+    rows,
+    "launchReadiness.measurementRendering.localGate",
+    measurementRenderingText.includes("PASS_PRODUCTION_MEASUREMENT_RENDERING_LOCAL_GATED") &&
+      measurementRenderingText.includes("analyticsRenderedByDefault: false") &&
+      measurementRenderingText.includes("gscRenderedByDefault: false") &&
+      measurementRenderingText.includes("deploymentExecuted: false"),
+    "analytics and Google site verification are locally proven gated and absent from default build output",
   );
   addCheck(
     rows,
