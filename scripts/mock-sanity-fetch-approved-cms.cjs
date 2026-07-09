@@ -26,9 +26,16 @@ function pageResult(slug) {
     home: "CMS Smoke Home Module",
     "moon-rocks": "CMS Smoke Moon Rocks Module",
     "our-story": "CMS Smoke Our Story Module",
+    "find-us": "CMS Smoke Find Us Module",
+    contact: "CMS Smoke Contact Module",
   };
   const routeSlug = titles[slug] ? slug : "moon-rocks";
   const title = titles[routeSlug];
+  const moduleTypes = {
+    "find-us": "locatorShellBlock",
+    contact: "contactBlock",
+  };
+  const moduleType = moduleTypes[routeSlug] || "heroBlock";
 
   return {
     _id: `sitePage.${routeSlug}`,
@@ -40,13 +47,16 @@ function pageResult(slug) {
     modules: [
       {
         _key: `${routeSlug}-hero`,
-        _type: "heroBlock",
+        _type: moduleType,
         headline: title,
         description: "CMS runtime smoke fixture rendered from approved public module data.",
+        formIntent: routeSlug === "contact" ? "official_contact_routing" : undefined,
+        retailerDataStatus: routeSlug === "find-us" ? "verified_records_required" : undefined,
+        legalGateStatus: "blocked_prelaunch",
         moduleControl: {
           moduleKey: `${routeSlug}-smoke-hero`,
           internalLabel: title,
-          componentKey: "heroBlock",
+          componentKey: moduleType,
           renderEligibility: "ready_for_implementation_candidate",
           sortIntent: 1,
         },
@@ -109,7 +119,7 @@ globalThis.fetch = async function mockedSanityFetch(input, init) {
     const query = queryText(url);
     const result = query.includes('_type == "learnGuide"')
       ? learnGuideResult(slug)
-      : ["home", "moon-rocks", "our-story"].includes(slug)
+      : ["home", "moon-rocks", "our-story", "find-us", "contact"].includes(slug)
         ? pageResult(slug)
         : null;
 

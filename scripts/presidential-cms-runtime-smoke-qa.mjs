@@ -440,6 +440,8 @@ async function assertApprovedCmsRenderScenario(scenarioName) {
   const moonRocksHtml = await fetchText("/moon-rocks");
   const ourStoryHtml = await fetchText("/our-story");
   const learnGuideHtml = await fetchText("/learn/what-are-moon-rocks");
+  const findUsHtml = await fetchText("/find-us");
+  const contactHtml = await fetchText("/contact");
 
   addCheck(
     `${scenarioName} public home renders approved CMS module`,
@@ -460,6 +462,16 @@ async function assertApprovedCmsRenderScenario(scenarioName) {
     `${scenarioName} public learn guide renders approved CMS body`,
     learnGuideHtml.includes("CMS Smoke Learn Guide Body"),
     "approved public Learn guide fixture rendered behind flags",
+  );
+  addCheck(
+    `${scenarioName} public find-us renders approved CMS shell`,
+    findUsHtml.includes("CMS Smoke Find Us Module"),
+    "approved public Find Us shell fixture rendered behind flags",
+  );
+  addCheck(
+    `${scenarioName} public contact renders approved CMS shell`,
+    contactHtml.includes("CMS Smoke Contact Module"),
+    "approved public Contact shell fixture rendered behind flags",
   );
 }
 
