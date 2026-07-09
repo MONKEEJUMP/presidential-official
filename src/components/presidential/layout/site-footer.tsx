@@ -16,10 +16,15 @@ export function SiteFooter() {
       <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(320px,1fr)]">
         <div className="flex max-w-xl flex-col gap-4">
           <Link
-            className="text-sm font-black uppercase tracking-normal text-po-on-dark"
+            className="inline-flex w-fit items-center"
             href="/"
           >
-            PRESIDENTIAL
+            <span
+              aria-hidden="true"
+              className="block h-10 w-40 bg-contain bg-left bg-no-repeat"
+              style={{ backgroundImage: "url('/brand/presidential-logo.webp')" }}
+            />
+            <span className="sr-only">Presidential</span>
           </Link>
           <p className="text-sm leading-6 text-po-on-dark-muted">
             Official home of Presidential cannabis products. Availability varies
