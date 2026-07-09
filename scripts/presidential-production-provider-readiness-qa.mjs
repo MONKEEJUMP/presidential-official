@@ -18,6 +18,9 @@ const projectJsonPath = path.join(webRoot, ".vercel", "project.json");
 const gitignorePath = path.join(webRoot, ".gitignore");
 const packageJsonPath = path.join(webRoot, "package.json");
 const vercelTokenEnv = "VERCEL_TOKEN";
+const vercelProjectIdEnv = "VERCEL_PROJECT_ID";
+const vercelProjectNameEnv = "VERCEL_PROJECT_NAME";
+const vercelTeamIdEnv = "VERCEL_TEAM_ID";
 
 const expectedProductionEnvNames = [
   "PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED",
@@ -69,14 +72,8 @@ function hasVercelToken() {
   return (process.env[vercelTokenEnv]?.trim() ?? "").length > 0;
 }
 
-function withVercelToken(args) {
-  const token = process.env[vercelTokenEnv]?.trim();
-  return token ? [...args, "--token", token] : args;
-}
-
-function runVercelCommand(args, options = {}) {
-  const commandArgs = options.withToken ? withVercelToken(args) : args;
-  const result = spawnSync("vercel", commandArgs, {
+function runVercelCommand(args) {
+  const result = spawnSync("vercel", args, {
     cwd: webRoot,
     encoding: "utf8",
     windowsHide: true,
@@ -96,7 +93,7 @@ function checkVercelAuthentication(vercelCliAvailable) {
   }
 
   const tokenAvailable = hasVercelToken();
-  const result = runVercelCommand(["whoami"], { withToken: tokenAvailable });
+  const result = runVercelCommand(["whoami"]);
   return {
     checked: true,
     authenticated: result.status === 0,
@@ -123,6 +120,37 @@ function isOrgId(value) {
   return typeof value === "string" && /^(team_[A-Za-z0-9]+|[A-Za-z0-9_-]+)$/.test(value);
 }
 
+function getRestProjectIdentifier(projectJson) {
+  if (projectJson && !projectJson.parseError && isProjectId(projectJson.projectId)) {
+    return { source: "project_json", value: projectJson.projectId };
+  }
+
+  const projectId = process.env[vercelProjectIdEnv]?.trim();
+  if (projectId && isProjectId(projectId)) {
+    return { source: vercelProjectIdEnv, value: projectId };
+  }
+
+  const projectName = process.env[vercelProjectNameEnv]?.trim();
+  if (projectName && /^[a-z0-9][a-z0-9-]{0,99}$/i.test(projectName)) {
+    return { source: vercelProjectNameEnv, value: projectName };
+  }
+
+  return { source: "none", value: "" };
+}
+
+function getRestTeamIdentifier(projectJson) {
+  const envTeamId = process.env[vercelTeamIdEnv]?.trim();
+  if (envTeamId && isOrgId(envTeamId)) {
+    return { source: vercelTeamIdEnv, value: envTeamId };
+  }
+
+  if (projectJson && !projectJson.parseError && isOrgId(projectJson.orgId)) {
+    return { source: "project_json", value: projectJson.orgId };
+  }
+
+  return { source: "none", value: "" };
+}
+
 function summarizeEnvNamePresence(output) {
   return expectedProductionEnvNames.reduce((summary, name) => {
     summary[name] = output.includes(name);
@@ -130,12 +158,63 @@ function summarizeEnvNamePresence(output) {
   }, {});
 }
 
-function main() {
+function envRecordTargetsProduction(record) {
+  if (!record || typeof record !== "object") return false;
+  const target = record.target;
+  if (Array.isArray(target)) return target.includes("production");
+  if (typeof target === "string") return target === "production";
+  if (record.environment === "production") return true;
+  return false;
+}
+
+async function fetchVercelProductionEnvNamePresence(projectIdentifier, teamIdentifier) {
+  const token = process.env[vercelTokenEnv]?.trim();
+  if (!token) {
+    return { status: 0, ok: false, presence: null };
+  }
+
+  const url = new URL(
+    `https://api.vercel.com/v10/projects/${encodeURIComponent(projectIdentifier)}/env`,
+  );
+  url.searchParams.set("decrypt", "false");
+  if (teamIdentifier) {
+    url.searchParams.set("teamId", teamIdentifier);
+  }
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+  const body = await response.json().catch(() => ({}));
+  const records = Array.isArray(body.envs) ? body.envs : [];
+  const productionNames = new Set(
+    records
+      .filter(envRecordTargetsProduction)
+      .map((record) => record.key)
+      .filter((key) => typeof key === "string"),
+  );
+
+  return {
+    status: response.status,
+    ok: response.ok,
+    presence: expectedProductionEnvNames.reduce((summary, name) => {
+      summary[name] = productionNames.has(name);
+      return summary;
+    }, {}),
+  };
+}
+
+async function main() {
   const rows = [];
   const liveProviderCheck = process.env.PRESIDENTIAL_VERCEL_PROVIDER_READINESS_LIVE === "true";
   const gitignoreText = readIfExists(gitignorePath);
   const packageJsonText = readIfExists(packageJsonPath);
   const projectJson = parseProjectJson();
+  const restProjectIdentifier = getRestProjectIdentifier(projectJson);
+  const restTeamIdentifier = getRestTeamIdentifier(projectJson);
   const vercelCliAvailable = commandExists("vercel");
   const vercelAuthentication = checkVercelAuthentication(vercelCliAvailable);
   const deployCommandFound = deployCommandPatterns.some((pattern) => pattern.test(packageJsonText));
@@ -191,6 +270,22 @@ function main() {
   );
   addCheck(
     rows,
+    "provider.rest.projectIdentifierAvailable",
+    restProjectIdentifier.value ? "pass" : "pending",
+    restProjectIdentifier.value
+      ? `Vercel REST project identifier available from ${restProjectIdentifier.source}; value was not stored`
+      : "provide VERCEL_PROJECT_ID or VERCEL_PROJECT_NAME outside the repo, or link .vercel/project.json",
+  );
+  addCheck(
+    rows,
+    "provider.rest.teamIdentifierAvailable",
+    restTeamIdentifier.value ? "pass" : "pending",
+    restTeamIdentifier.value
+      ? `Vercel REST team identifier available from ${restTeamIdentifier.source}; value was not stored`
+      : "team identifier is optional for personal projects; use VERCEL_TEAM_ID for team-owned projects",
+  );
+  addCheck(
+    rows,
     "provider.package.noDeployCommands",
     deployCommandFound ? "fail" : "pass",
     deployCommandFound ? "production deploy/promote/alias command found" : "no production deploy/promote/alias command in package scripts",
@@ -212,10 +307,33 @@ function main() {
     } else if (!vercelAuthentication.authenticated) {
       addCheck(rows, "provider.live.cliAuthenticated", "fail", "live provider check requested but Vercel CLI is not authenticated");
       liveCheckStatus = "failed";
+    } else if (vercelAuthentication.tokenAvailable && restProjectIdentifier.value) {
+      const envResult = await fetchVercelProductionEnvNamePresence(
+        restProjectIdentifier.value,
+        restTeamIdentifier.value,
+      );
+      liveCheckStatus = envResult.ok ? "completed" : "failed";
+      liveEnvNamePresence = envResult.ok ? envResult.presence : null;
+      addCheck(
+        rows,
+        "provider.live.productionEnvNameList",
+        envResult.ok ? "pass" : "fail",
+        envResult.ok
+          ? "Vercel REST env list completed; only expected production name presence booleans were stored"
+          : `Vercel REST env list failed with status ${envResult.status}; no secret values stored`,
+      );
+      if (liveEnvNamePresence) {
+        for (const [name, present] of Object.entries(liveEnvNamePresence)) {
+          addCheck(
+            rows,
+            `provider.live.envName.${name}`,
+            present ? "pass" : "fail",
+            present ? "present" : "missing",
+          );
+        }
+      }
     } else {
-      const envResult = runVercelCommand(["env", "ls", "production"], {
-        withToken: vercelAuthentication.tokenAvailable,
-      });
+      const envResult = runVercelCommand(["env", "ls", "production"]);
       liveCheckStatus = envResult.status === 0 ? "completed" : "failed";
       liveEnvNamePresence = envResult.status === 0
         ? summarizeEnvNamePresence(`${envResult.stdout}\n${envResult.stderr}`)
@@ -274,6 +392,7 @@ function main() {
     verdict,
     officialVercelPosture: {
       envLs: "Vercel CLI can list project environment variable names without exposing secret values.",
+      restEnvLs: "Vercel REST API can retrieve project environment variable metadata by project id or name with bearer-token authentication.",
       projectLink: "Local .vercel/project.json, when present, links a directory to a Vercel project and organization.",
       deployBoundary: "This verifier never runs deploy, promote, alias, env pull, or env add commands.",
     },
@@ -282,6 +401,10 @@ function main() {
     vercelCliAuthenticated: vercelAuthentication.authenticated,
     vercelCliAuthMethod: vercelAuthentication.method,
     vercelTokenAvailable: vercelAuthentication.tokenAvailable,
+    restProjectIdentifierSource: restProjectIdentifier.source,
+    restProjectIdentifierAvailable: Boolean(restProjectIdentifier.value),
+    restTeamIdentifierSource: restTeamIdentifier.source,
+    restTeamIdentifierAvailable: Boolean(restTeamIdentifier.value),
     projectLinked,
     projectIdShapeValid: Boolean(projectIdValid),
     orgIdShapeValid: Boolean(orgIdValid),
@@ -328,4 +451,8 @@ function main() {
   console.log(`Pass: ${passCount}; pending: ${pendingCount}; fail: ${failCount}`);
 }
 
-main();
+main().catch((error) => {
+  console.error("FAIL_PRODUCTION_PROVIDER_READINESS_EXCEPTION");
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exit(1);
+});
