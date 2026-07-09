@@ -6,6 +6,10 @@ const appRoot = path.join(webRoot, "src", "app");
 const findUsAppRoot = path.join(appRoot, "find-us");
 const contactPagePath = path.join(appRoot, "contact", "page.tsx");
 const findUsPagePath = path.join(findUsAppRoot, "page.tsx");
+const locatorTemplateShellPath = path.join(
+  findUsAppRoot,
+  "locator-template-shell.tsx",
+);
 const staticShellPath = path.join(
   webRoot,
   "src",
@@ -68,6 +72,7 @@ function addCheck(checks, check, passed, details) {
 const packageJson = JSON.parse(read(packageJsonPath));
 const contactPage = read(contactPagePath);
 const findUsPage = read(findUsPagePath);
+const locatorTemplateShell = read(locatorTemplateShellPath);
 const staticShell = read(staticShellPath);
 const cmsRenderer = read(cmsRendererPath);
 const routes = read(routesPath);
@@ -78,7 +83,25 @@ const cityLocatorRecord = routeRecordBlock(routes, "find-us-city");
 const retailerLocatorRecord = routeRecordBlock(routes, "find-us-retailer-detail");
 const findUsFiles = walk(findUsAppRoot).map((file) => path.relative(findUsAppRoot, file).replace(/\\/g, "/"));
 const findUsDynamicFiles = findUsFiles.filter((file) => file.includes("[") || file.includes("]"));
-const contactAndFindUsSource = [contactPage, findUsPage, staticShell, cmsRenderer].join("\n");
+const expectedDynamicLocatorFiles = [
+  "[state]/page.tsx",
+  "[state]/[city]/page.tsx",
+  "[state]/[city]/[retailer]/page.tsx",
+];
+const dynamicLocatorFilesMatch =
+  findUsDynamicFiles.length === expectedDynamicLocatorFiles.length &&
+  expectedDynamicLocatorFiles.every((file) => findUsDynamicFiles.includes(file));
+const dynamicLocatorSource = expectedDynamicLocatorFiles
+  .map((file) => read(path.join(findUsAppRoot, ...file.split("/"))))
+  .join("\n");
+const contactAndFindUsSource = [
+  contactPage,
+  findUsPage,
+  locatorTemplateShell,
+  dynamicLocatorSource,
+  staticShell,
+  cmsRenderer,
+].join("\n");
 
 const checks = [];
 
@@ -98,11 +121,21 @@ addCheck(
 );
 addCheck(
   checks,
-  "findUs.noDynamicPublicLocatorRoutes",
-  findUsDynamicFiles.length === 0,
-  findUsDynamicFiles.length
-    ? `Unexpected dynamic Find Us app files: ${findUsDynamicFiles.join(", ")}`
-    : "No /find-us/[state]/[city]/[retailer] app route exists before verified retailer records.",
+  "findUs.dynamicLocatorShells.failClosed",
+  dynamicLocatorFilesMatch &&
+    locatorTemplateShell.includes("Verified retailer records are required") &&
+    locatorTemplateShell.includes("No customer rows") &&
+    dynamicLocatorSource.includes('getRouteById("find-us-state")') &&
+    dynamicLocatorSource.includes('getRouteById("find-us-city")') &&
+    dynamicLocatorSource.includes('getRouteById("find-us-retailer-detail")') &&
+    dynamicLocatorSource.includes("buildRouteMetadata") &&
+    dynamicLocatorSource.includes("notFound()") &&
+    !/\bLocalBusiness\b|readPublishedSanity|readDraft|fetch\s*\(|createOrReplace|\.mutate\s*\(|\.patch\s*\(|\.delete\s*\(|\.commit\s*\(|APPROVED_ROUTE_PUBLICATIONS|index_follow|sitemap:\s*["']include["']/i.test(
+      [locatorTemplateShell, dynamicLocatorSource].join("\n"),
+    ),
+  dynamicLocatorFilesMatch
+    ? "Dynamic locator route shells exist only as noindex, verified-data-deferred shells."
+    : `Unexpected dynamic Find Us app files: ${findUsDynamicFiles.join(", ") || "none"}`,
 );
 addCheck(
   checks,

@@ -2342,7 +2342,6 @@ function checkStep8HScopeBoundary() {
     "src/app/moon-rocks/gold",
     "src/app/moon-rocks/rose-gold",
     "src/app/moon-rocks/[product-or-strain]",
-    "src/app/find-us/[state]",
     "src/app/age-gate",
     "src/app/age",
     "src/app/verify-age",
@@ -2367,6 +2366,81 @@ function checkStep8HScopeBoundary() {
       "Step 8H out-of-scope files or folders exist.",
       present,
       "Keep Step 8H limited to source-record contracts, route publication gates, and QA enforcement.",
+    );
+  }
+
+  const locatorShellFiles = [
+    "src/app/find-us/locator-template-shell.tsx",
+    "src/app/find-us/[state]/page.tsx",
+    "src/app/find-us/[state]/[city]/page.tsx",
+    "src/app/find-us/[state]/[city]/[retailer]/page.tsx",
+  ];
+  const missingLocatorShellFiles = locatorShellFiles.filter(
+    (path) => !projectFileExists(path),
+  );
+
+  if (missingLocatorShellFiles.length === 0) {
+    const locatorShellSource = locatorShellFiles
+      .map((path) => readProjectFile(path))
+      .join("\n");
+    const requiredLocatorShellMarkers = [
+      "buildRouteMetadata",
+      'getRouteById("find-us-state")',
+      'getRouteById("find-us-city")',
+      'getRouteById("find-us-retailer-detail")',
+      "notFound()",
+      "Verified retailer records are required",
+      "No customer rows",
+    ];
+    const missingLocatorShellMarkers = requiredLocatorShellMarkers.filter(
+      (marker) => !locatorShellSource.includes(marker),
+    );
+    const blockedLocatorShellPatterns = [
+      /\bLocalBusiness\b/,
+      /\breadPublishedSanity\b/,
+      /\breadDraft\b/,
+      /\bfetch\s*\(/,
+      /\bcreateOrReplace\b/,
+      /\.mutate\s*\(/,
+      /\.patch\s*\(/,
+      /\.delete\s*\(/,
+      /\.commit\s*\(/,
+      /\bAPPROVED_ROUTE_PUBLICATIONS\b/,
+      /\bindex_follow\b/,
+      /sitemap:\s*["']include["']/,
+    ];
+    const blockedLocatorShellHits = blockedLocatorShellPatterns
+      .filter((pattern) => pattern.test(locatorShellSource))
+      .map((pattern) => pattern.source);
+
+    if (
+      missingLocatorShellMarkers.length === 0 &&
+      blockedLocatorShellHits.length === 0
+    ) {
+      addResult(
+        "PASS",
+        "routeShells.locatorDynamicShells",
+        "S8.2 locator URL shells exist without retailer data reads, LocalBusiness schema, publication records, or public unlock signals.",
+      );
+    } else {
+      addResult(
+        "FAIL",
+        "routeShells.locatorDynamicShells",
+        "S8.2 locator shell routes are present but no longer prove fail-closed behavior.",
+        [
+          `missingMarkers=${missingLocatorShellMarkers.join("|") || "none"}`,
+          `blockedHits=${blockedLocatorShellHits.join("|") || "none"}`,
+        ],
+        "Keep locator dynamic routes as noindex shells until verified retailer records are approved.",
+      );
+    }
+  } else {
+    addResult(
+      "FAIL",
+      "routeShells.locatorDynamicShells",
+      "S8.2 locator URL shell files are missing.",
+      missingLocatorShellFiles,
+      "Create only fail-closed locator route shells for state/city/retailer paths.",
     );
   }
 
