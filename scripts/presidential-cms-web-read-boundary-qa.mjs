@@ -437,9 +437,9 @@ function main() {
   );
   addCheck(
     "client.publicRoutesDoNotImportPrivateDraftHelpers",
-    !/product-media-worklist|contact-locator-readiness|src\/app\/drafts|@\/app\/drafts/.test(homepageRouteShellSource) &&
-      !/product-media-worklist|contact-locator-readiness|src\/app\/drafts|@\/app\/drafts/.test(presidentialRouteShellSource),
-    "public route shells do not import private drafts helpers or readiness worklists",
+    !/homepage-drafts|site-page-drafts|readDraftHomepage|readDraftSitePage|product-media-worklist|contact-locator-readiness|src\/app\/drafts|@\/app\/drafts/.test(homepageRouteShellSource) &&
+      !/homepage-drafts|site-page-drafts|readDraftHomepage|readDraftSitePage|product-media-worklist|contact-locator-readiness|src\/app\/drafts|@\/app\/drafts/.test(presidentialRouteShellSource),
+    "public route shells do not import private draft readers, private drafts helpers, or readiness worklists",
   );
   addCheck("client.publicRenderingDisabled", /publicRouteRenderingEnabled:\s*false/.test(clientSource), "public route rendering remains disabled");
   addCheck("client.routeApprovalsEmpty", /APPROVED_ROUTE_PUBLICATIONS\s*=\s*\[\]\s+as\s+const/.test(routePublicationSource), "route publication approvals remain empty");

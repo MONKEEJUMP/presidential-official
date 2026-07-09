@@ -7,7 +7,6 @@ import {
   StaticRouteFoundationShell,
 } from "@/components/presidential";
 import { readPublicRenderableSitePage } from "@/lib/cms";
-import { readDraftSitePage } from "@/lib/cms/site-page-drafts";
 import {
   buildRouteShellBreadcrumbItems,
   buildRouteShellJsonLd,
@@ -23,8 +22,6 @@ type PresidentialRouteShellProps = {
 type CmsProductRoute = "moon-rocks" | "moon-pods" | "orbit";
 type CmsSupportRoute = "contact" | "find-us";
 
-const SITE_PAGE_DRAFT_RENDER_ENABLE_ENV = "PRESIDENTIAL_SITE_PAGE_DRAFT_RENDERING_ENABLED";
-
 const cmsSiteRouteIds = new Set([
   "moon-rocks",
   "moon-pods",
@@ -37,10 +34,6 @@ const cmsSiteRouteIds = new Set([
 
 function routeToSanitySlug(route: SeoRouteRecord): string {
   return route.path.replace(/^\//, "");
-}
-
-function isSitePageDraftRenderingEnabled(): boolean {
-  return process.env[SITE_PAGE_DRAFT_RENDER_ENABLE_ENV] === "true";
 }
 
 function routeToCmsProductRoute(route: SeoRouteRecord): CmsProductRoute | undefined {
@@ -62,22 +55,11 @@ export async function PresidentialRouteShell({ route }: PresidentialRouteShellPr
   const usesPillarPlatformShell =
     route.id === "moon-pods" || route.id === "orbit";
   const sanitySlug = routeToSanitySlug(route);
-  const draftPage = cmsSiteRouteIds.has(route.id) && isSitePageDraftRenderingEnabled()
-    ? await readDraftSitePage(sanitySlug, {
-        next: { tags: [`sanity-draft-site-page-${route.id}`] },
-      })
-    : null;
-  const cmsPage = draftPage?.ok && draftPage.result
-    ? {
-        enabled: true,
-        record: draftPage.result,
-        modules: draftPage.result.modules || [],
-      }
-    : cmsSiteRouteIds.has(route.id)
-      ? await readPublicRenderableSitePage(sanitySlug, {
+  const cmsPage = cmsSiteRouteIds.has(route.id)
+    ? await readPublicRenderableSitePage(sanitySlug, {
         next: { tags: [`sanity-site-page-${route.id}`] },
       })
-      : null;
+    : null;
   const cmsModules = cmsPage?.modules.length ? cmsPage.modules : null;
 
   return (
