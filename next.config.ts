@@ -10,7 +10,7 @@ const presidentialSecurityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "connect-src 'self'",
       "font-src 'self'",
-      "img-src 'self'",
+      "img-src 'self' https://cdn.sanity.io data: blob:",
       "object-src 'none'",
       "frame-ancestors 'none'",
       "form-action 'self'",

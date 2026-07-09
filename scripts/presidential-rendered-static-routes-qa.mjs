@@ -25,6 +25,8 @@ const paths = {
 const expectedPageFiles = new Set([
   "page.tsx",
   "contact/page.tsx",
+  "drafts/page.tsx",
+  "drafts/[slug]/page.tsx",
   "find-us/page.tsx",
   "learn/page.tsx",
   "learn/[guide]/page.tsx",
@@ -41,6 +43,13 @@ const allowedHtmlOutputs = new Set([
   "find-us.html",
   "index.html",
   "learn.html",
+  "learn/different-extracts-need-different-heat.html",
+  "learn/flavor-science.html",
+  "learn/infusion-science.html",
+  "learn/what-are-liquid-diamonds.html",
+  "learn/what-are-moon-rocks.html",
+  "learn/what-is-live-resin.html",
+  "learn/what-is-live-rosin.html",
   "moon-pods.html",
   "moon-rocks.html",
   "orbit.html",
@@ -373,6 +382,13 @@ function checkRouteHtml(route) {
     routeHtml.includes("Explore Presidential")
   ) {
     pass(`${route.label}.html.staticRouteVisualFoundationPresent`, "Moon Rocks product-platform route composition rendered");
+  } else if (
+    (route.path === "/moon-pods" || route.path === "/orbit") &&
+    routeHtml.includes("platform structure") &&
+    routeHtml.includes("Source-confirmed rollout") &&
+    routeHtml.includes("Explore Presidential")
+  ) {
+    pass(`${route.label}.html.staticRouteVisualFoundationPresent`, "product-pillar platform route composition rendered");
   } else if (
     routeHtml.includes("Inside this section") &&
     routeHtml.includes("Explore Presidential")

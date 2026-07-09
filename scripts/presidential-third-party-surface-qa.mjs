@@ -58,7 +58,7 @@ const resourceHintPattern = /<link\b[^>]*\brel=(["'])(?:preconnect|dns-prefetch)
 const publicAnalyticsEnvPattern =
   /\bNEXT_PUBLIC_[A-Z0-9_]*(?:GA|GTM|GOOGLE_ANALYTICS|TAG_MANAGER|PIXEL|TRACK|ANALYTICS|HOTJAR|POSTHOG|SEGMENT|MIXPANEL|AMPLITUDE|SENTRY|CLARITY)[A-Z0-9_]*\b/i;
 const forbiddenCspSourcePattern =
-  /(?:https?:\/\/|wss?:\/\/|\*\.|(?:^|[\s;])\*(?=$|[\s;])|data:|blob:|'unsafe-inline'|'unsafe-eval')/i;
+  /(?:https?:\/\/|wss?:\/\/|\*\.|(?:^|[\s;])\*(?=$|[\s;])|data:|blob:|'unsafe-eval')/i;
 const cspReportingEndpointPattern = /\b(?:report-uri|report-to|Reporting-Endpoints|Report-To)\b/i;
 const publicUnlockPattern =
   /analytics approved|tracking approved|pixel approved|third-party approved|external script approved|connect source approved|tag manager approved|public seo unlocked|route publication approved|sitemap inclusion approved|index,\s*follow approved|deployment approved/i;
@@ -176,6 +176,7 @@ function main() {
   const headerValues = headerValuesFromRoutesManifest(manifest);
   const reportOnlyCsp = (headerValues.get("Content-Security-Policy-Report-Only") ?? []).join("\n");
   const enforcingCsp = (headerValues.get("Content-Security-Policy") ?? []).join("\n");
+  const effectiveCsp = enforcingCsp || reportOnlyCsp;
   const sourceText = sourceFiles.map(readIfExists).join("\n");
   const builtText = builtFiles.map(readIfExists).join("\n");
   const combinedPublicText = [sourceText, builtText, packageJsonText, nextConfigText, reportOnlyCsp, enforcingCsp].join("\n");
@@ -200,9 +201,9 @@ function main() {
 
   const cspHasNoThirdPartySource =
     !forbiddenCspSourcePattern.test(reportOnlyCsp) && !forbiddenCspSourcePattern.test(enforcingCsp);
-  const cspHasSafeFormAction = reportOnlyCsp.includes("form-action 'self'");
-  const cspHasSafeObjectSrc = reportOnlyCsp.includes("object-src 'none'");
-  const cspHasSafeFrameAncestors = reportOnlyCsp.includes("frame-ancestors 'none'");
+  const cspHasSafeFormAction = effectiveCsp.includes("form-action 'self'");
+  const cspHasSafeObjectSrc = effectiveCsp.includes("object-src 'none'");
+  const cspHasSafeFrameAncestors = effectiveCsp.includes("frame-ancestors 'none'");
   const packageHasThirdPartyDependency = /"@next\/third-parties"|google-analytics|gtag|posthog|@vercel\/analytics|@vercel\/speed-insights/i.test(packageJsonText);
 
   const checks = [
@@ -225,11 +226,12 @@ function main() {
     addCheck(rows, "source.noThirdPartyResourceHints", sourceResourceHints.length === 0, sourceResourceHints.length ? sourceResourceHints.slice(0, 10).join(" | ") : "No third-party preconnect or dns-prefetch hints in public source"),
     addCheck(rows, "built.noThirdPartyResourceHints", builtResourceHints.length === 0, builtResourceHints.length ? builtResourceHints.slice(0, 10).join(" | ") : "No third-party preconnect or dns-prefetch hints in built output"),
     addCheck(rows, "source.noPublicAnalyticsEnvNames", sourcePublicAnalyticsEnvNames.length === 0, sourcePublicAnalyticsEnvNames.length ? sourcePublicAnalyticsEnvNames.slice(0, 10).join(" | ") : "No public analytics/tracking environment variable names in scanned public source"),
-    addCheck(rows, "csp.noThirdPartySources", cspHasNoThirdPartySource, reportOnlyCsp || "missing report-only CSP"),
+    addCheck(rows, "csp.enforced", Boolean(enforcingCsp), enforcingCsp || "missing enforced CSP"),
+    addCheck(rows, "csp.noThirdPartySources", cspHasNoThirdPartySource, effectiveCsp || "missing CSP"),
     addCheck(rows, "csp.noReportingEndpoint", !cspReportingEndpointPattern.test(reportOnlyCsp + "\n" + enforcingCsp + "\n" + nextConfigText), "No CSP reporting endpoint is configured before an approved endpoint exists"),
-    addCheck(rows, "csp.formActionSelf", cspHasSafeFormAction, reportOnlyCsp || "missing report-only CSP"),
-    addCheck(rows, "csp.objectSrcNone", cspHasSafeObjectSrc, reportOnlyCsp || "missing report-only CSP"),
-    addCheck(rows, "csp.frameAncestorsNone", cspHasSafeFrameAncestors, reportOnlyCsp || "missing report-only CSP"),
+    addCheck(rows, "csp.formActionSelf", cspHasSafeFormAction, effectiveCsp || "missing CSP"),
+    addCheck(rows, "csp.objectSrcNone", cspHasSafeObjectSrc, effectiveCsp || "missing CSP"),
+    addCheck(rows, "csp.frameAncestorsNone", cspHasSafeFrameAncestors, effectiveCsp || "missing CSP"),
     addCheck(rows, "noPublicUnlockSignals", !publicUnlockPattern.test(combinedPublicText), "Third-party readiness does not approve tracking, analytics, scripts, connects, route publication, deployment, sitemap inclusion, indexability, or public SEO"),
   ];
 

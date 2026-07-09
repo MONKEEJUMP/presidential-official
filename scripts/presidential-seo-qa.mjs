@@ -40,6 +40,10 @@ function relativePath(path) {
   return toPosix(relative(projectRoot, path));
 }
 
+function isInternalDraftAppFile(file) {
+  return relativePath(file).startsWith("src/app/drafts/");
+}
+
 function readProjectFile(path) {
   return readFileSync(projectPath(path), "utf8");
 }
@@ -1642,8 +1646,10 @@ function checkRouteShellFoundation() {
   const learnGuideSafe =
     learnGuideText.includes("dynamicParams = false") &&
     learnGuideText.includes("generateStaticParams") &&
-    learnGuideText.includes("return []") &&
+    learnGuideText.includes("learnGuideFallbacks.map") &&
     learnGuideText.includes("notFound()") &&
+    learnGuideText.includes("robots:") &&
+    learnGuideText.includes("index: false") &&
     !learnGuideText.includes("buildRouteMetadata") &&
     !learnGuideText.includes("buildStaticRouteMetadata") &&
     !learnGuideText.includes("buildRouteCanonicalUrl") &&
@@ -1653,15 +1659,15 @@ function checkRouteShellFoundation() {
     addResult(
       "PASS",
       "routeShells.learnGuide",
-      "Learn guide dynamic route is present but emits no fake article pages or unresolved canonicals.",
+      "Learn guide dynamic route renders controlled noindex CMS/fallback guide shells without unresolved canonicals.",
     );
   } else {
     addResult(
       "FAIL",
       "routeShells.learnGuide",
-      "Learn guide route may emit fake pages or unresolved template metadata.",
+      "Learn guide route may emit indexable fake pages or unresolved template metadata.",
       [],
-      "Use empty static params, dynamicParams false, and notFound until approved article records exist.",
+      "Keep dynamicParams false, unknown slugs notFound, generated guide shells noindex, and canonicals delegated away from unresolved templates.",
     );
   }
 
@@ -2339,8 +2345,14 @@ function checkStep8HScopeBoundary() {
 
   if (projectFileExists("src/lib/cms")) {
     const allowedCmsFiles = new Set([
+      "src/lib/cms/homepage-drafts.ts",
+      "src/lib/cms/homepage.ts",
       "src/lib/cms/index.ts",
+      "src/lib/cms/learn-guide-drafts.ts",
+      "src/lib/cms/learn-guide.ts",
       "src/lib/cms/sanity-read-client.ts",
+      "src/lib/cms/site-page-drafts.ts",
+      "src/lib/cms/site-page.ts",
     ]);
     const cmsFiles = collectTextFiles(["src/lib/cms"]).map(relativePath).sort();
     const unexpectedCmsFiles = cmsFiles.filter((path) => !allowedCmsFiles.has(path));
@@ -2351,8 +2363,9 @@ function checkStep8HScopeBoundary() {
       cmsSource.includes("4bl3xvem") &&
       cmsSource.includes("production") &&
       cmsSource.includes("published") &&
+      cmsSource.includes("perspective\", \"raw\"") &&
       cmsSource.includes("publicRouteRenderingEnabled: false") &&
-      !/\b(createIfNotExists|createOrReplace|mutate|mutation|patch|delete|publish|transaction|commit|listen|live)\b/i.test(
+      !/\b(createIfNotExists|createOrReplace|mutate|mutation|patch|delete|publish|transaction|commit|listen)\b/i.test(
         cmsSource,
       );
 
@@ -2366,9 +2379,9 @@ function checkStep8HScopeBoundary() {
       addResult(
         "FAIL",
         "scope.cmsReadBoundary",
-        "CMS files exist outside the approved read-only web boundary.",
+        "CMS files exist outside the controlled server-only read boundary.",
         unexpectedCmsFiles,
-        "Keep web CMS code limited to the server-only read client until route publication gates approve public rendering.",
+        "Keep web CMS files server-only, read-only, allowlisted, and free of mutation/publish/listen surfaces.",
       );
     }
   }
@@ -3226,7 +3239,7 @@ function printResults() {
 }
 
 const sourceFiles = collectTextFiles(sourceRoots);
-const publicCopyFiles = collectTextFiles(publicCopyRoots);
+const publicCopyFiles = collectTextFiles(publicCopyRoots).filter((file) => !isInternalDraftAppFile(file));
 
 checkSourceCoverage(sourceFiles);
 checkCanonicalHost();

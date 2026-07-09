@@ -186,7 +186,7 @@ export const ROUTE_REGISTRY = [
     canonicalPath: "/orbit",
     title: "Presidential Orbit",
     description:
-      "Explore Presidential Orbit as a public-approved Presidential technology platform. Public copy remains source-backed and compliance-reviewed.",
+      "Explore Presidential Orbit as a public-approved Presidential technology platform. Public copy remains source-backed and compliance checked.",
     h1: "Presidential Orbit",
     keywords: [
       "presidential orbit",

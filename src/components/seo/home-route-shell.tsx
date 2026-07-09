@@ -1,4 +1,11 @@
-import { HomepageFoundationShell } from "@/components/presidential";
+import {
+  CmsHomepageModuleRenderer,
+  HomepageFoundationShell,
+  PageFrame,
+  SceneStack,
+} from "@/components/presidential";
+import { readPublicRenderableHomepage } from "@/lib/cms";
+import { readDraftHomepage } from "@/lib/cms/homepage-drafts";
 import {
   buildRouteShellJsonLd,
   JsonLd,
@@ -9,12 +16,29 @@ type HomeRouteShellProps = {
   readonly route: SeoRouteRecord;
 };
 
-export function HomeRouteShell({ route }: HomeRouteShellProps) {
+const HOMEPAGE_DRAFT_RENDER_ENABLE_ENV = "PRESIDENTIAL_HOMEPAGE_DRAFT_RENDERING_ENABLED";
+
+function isHomepageDraftRenderingEnabled(): boolean {
+  return process.env[HOMEPAGE_DRAFT_RENDER_ENABLE_ENV] === "true";
+}
+
+export async function HomeRouteShell({ route }: HomeRouteShellProps) {
   if (route.id !== "home" || route.path !== "/") {
     throw new Error("HomeRouteShell requires the home route record.");
   }
 
+  const draftHomepage = isHomepageDraftRenderingEnabled()
+    ? await readDraftHomepage({ next: { tags: ["sanity-draft-homepage"] } })
+    : null;
+  const homepage = draftHomepage?.ok && draftHomepage.result
+    ? {
+        enabled: true,
+        record: draftHomepage.result,
+        modules: draftHomepage.result.modules || [],
+      }
+    : await readPublicRenderableHomepage({ next: { tags: ["sanity-homepage"] } });
   const jsonLdEntries = buildRouteShellJsonLd(route);
+  const cmsModules = homepage.modules.length ? homepage.modules : null;
 
   return (
     <>
@@ -22,7 +46,15 @@ export function HomeRouteShell({ route }: HomeRouteShellProps) {
         <JsonLd key={`${route.id}-${entry.id}`} data={entry.data} />
       ))}
 
-      <HomepageFoundationShell route={route} />
+      {cmsModules ? (
+        <PageFrame>
+          <SceneStack>
+            <CmsHomepageModuleRenderer modules={cmsModules} />
+          </SceneStack>
+        </PageFrame>
+      ) : (
+        <HomepageFoundationShell route={route} />
+      )}
     </>
   );
 }

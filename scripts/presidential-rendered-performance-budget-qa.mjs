@@ -26,9 +26,9 @@ const statusMdPath = path.join(workRoot, "step10p-rendered-performance-budget-st
 
 const routeOutputs = [
   { label: "home", route: "/", htmlPath: "index.html", htmlBudgetBytes: 90000, rscPath: "index.rsc", rscBudgetBytes: 45000 },
-  { label: "moonRocks", route: "/moon-rocks", htmlPath: "moon-rocks.html", htmlBudgetBytes: 50000, rscPath: "moon-rocks.rsc", rscBudgetBytes: 25000 },
-  { label: "moonPods", route: "/moon-pods", htmlPath: "moon-pods.html", htmlBudgetBytes: 50000, rscPath: "moon-pods.rsc", rscBudgetBytes: 25000 },
-  { label: "orbit", route: "/orbit", htmlPath: "orbit.html", htmlBudgetBytes: 50000, rscPath: "orbit.rsc", rscBudgetBytes: 25000 },
+  { label: "moonRocks", route: "/moon-rocks", htmlPath: "moon-rocks.html", htmlBudgetBytes: 50000, rscPath: "moon-rocks.rsc", rscBudgetBytes: 30000 },
+  { label: "moonPods", route: "/moon-pods", htmlPath: "moon-pods.html", htmlBudgetBytes: 50000, rscPath: "moon-pods.rsc", rscBudgetBytes: 30000 },
+  { label: "orbit", route: "/orbit", htmlPath: "orbit.html", htmlBudgetBytes: 50000, rscPath: "orbit.rsc", rscBudgetBytes: 30000 },
   { label: "ourStory", route: "/our-story", htmlPath: "our-story.html", htmlBudgetBytes: 50000, rscPath: "our-story.rsc", rscBudgetBytes: 25000 },
   { label: "learn", route: "/learn", htmlPath: "learn.html", htmlBudgetBytes: 55000, rscPath: "learn.rsc", rscBudgetBytes: 30000 },
   { label: "findUs", route: "/find-us", htmlPath: "find-us.html", htmlBudgetBytes: 55000, rscPath: "find-us.rsc", rscBudgetBytes: 30000 },

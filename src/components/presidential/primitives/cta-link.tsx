@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { getRouteByPath } from "@/lib/seo/route-helpers";
 import type { SeoRoutePath } from "@/lib/seo/route-types";
 
-type CtaLinkVariant = "primary" | "secondary" | "text";
+type CtaLinkVariant = "primary" | "secondary" | "contrast" | "text";
 
 type CtaLinkProps = {
   readonly href: SeoRoutePath;
@@ -19,6 +19,8 @@ const variantClasses = {
     "border border-emerald-900 bg-emerald-900 text-white hover:bg-emerald-800",
   secondary:
     "border border-zinc-300 text-zinc-900 hover:border-emerald-900 hover:text-emerald-900",
+  contrast:
+    "border border-white/30 text-white hover:border-amber-200 hover:text-amber-200",
   text: "text-emerald-900 underline-offset-4 hover:underline",
 } as const satisfies Record<CtaLinkVariant, string>;
 
