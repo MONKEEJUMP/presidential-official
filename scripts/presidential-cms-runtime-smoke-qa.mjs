@@ -102,6 +102,28 @@ const fallbackExpectations = [
     markers: ["Find Presidential Near You"],
   },
 ];
+const approvedCmsVisibleHomeBlockMarkers = [
+  "CMS Smoke Home Module",
+  "CMS Smoke Homepage Act Module",
+  "CMS Smoke Product Platform Module",
+  "CMS Smoke Product Format Module",
+  "CMS Smoke Product Rail Module",
+  "CMS Smoke Learn Guide Block Module",
+  "CMS Smoke Locator Shell Module",
+  "CMS Smoke Contact Block Module",
+  "CMS Smoke FAQ Module",
+  "CMS Smoke Guide Hub Module",
+  "CMS Smoke Product Facts Module",
+  "CMS Smoke Media Gallery Module",
+  "CMS Smoke Comparison Module",
+  "CMS Smoke Timeline Module",
+  "CMS Smoke Related Content Module",
+];
+const approvedCmsPrivateOnlyHomeBlockMarkers = [
+  "CMS Smoke Story Proof Module",
+  "CMS Smoke Legal Utility Module",
+  "CMS Smoke Asset Proof Module",
+];
 const privateChecks = [
   {
     path: "/drafts",
@@ -443,6 +465,20 @@ async function assertApprovedCmsRenderScenario(scenarioName) {
     homeHtml.includes("CMS Smoke Home Module"),
     "approved public homepage module fixture rendered behind flags",
   );
+  for (const marker of approvedCmsVisibleHomeBlockMarkers) {
+    addCheck(
+      `${scenarioName} public home renders ${marker}`,
+      homeHtml.includes(marker),
+      `approved public homepage block fixture rendered: ${marker}`,
+    );
+  }
+  for (const marker of approvedCmsPrivateOnlyHomeBlockMarkers) {
+    addCheck(
+      `${scenarioName} public home suppresses private ${marker}`,
+      !homeHtml.includes(marker),
+      `private-only proof block fixture suppressed from public rendering: ${marker}`,
+    );
+  }
   addCheck(
     `${scenarioName} public moon-rocks renders approved CMS module`,
     moonRocksHtml.includes("CMS Smoke Moon Rocks Module"),

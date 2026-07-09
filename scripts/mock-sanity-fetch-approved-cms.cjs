@@ -21,6 +21,88 @@ function queryText(url) {
   return queryParam(url, "query") || "";
 }
 
+const allHomeModuleTypes = [
+  "heroBlock",
+  "homepageActBlock",
+  "productPlatformBlock",
+  "productFormatBlock",
+  "productRailBlock",
+  "learnGuideBlock",
+  "storyProofBlock",
+  "locatorShellBlock",
+  "legalUtilityBlock",
+  "assetProofBlock",
+  "contactBlock",
+  "faqBlock",
+  "guideHubBlock",
+  "productFactsBlock",
+  "mediaGalleryBlock",
+  "comparisonBlock",
+  "timelineBlock",
+  "relatedContentBlock",
+];
+
+const moduleTitleByType = {
+  heroBlock: "CMS Smoke Home Module",
+  homepageActBlock: "CMS Smoke Homepage Act Module",
+  productPlatformBlock: "CMS Smoke Product Platform Module",
+  productFormatBlock: "CMS Smoke Product Format Module",
+  productRailBlock: "CMS Smoke Product Rail Module",
+  learnGuideBlock: "CMS Smoke Learn Guide Block Module",
+  storyProofBlock: "CMS Smoke Story Proof Module",
+  locatorShellBlock: "CMS Smoke Locator Shell Module",
+  legalUtilityBlock: "CMS Smoke Legal Utility Module",
+  assetProofBlock: "CMS Smoke Asset Proof Module",
+  contactBlock: "CMS Smoke Contact Block Module",
+  faqBlock: "CMS Smoke FAQ Module",
+  guideHubBlock: "CMS Smoke Guide Hub Module",
+  productFactsBlock: "CMS Smoke Product Facts Module",
+  mediaGalleryBlock: "CMS Smoke Media Gallery Module",
+  comparisonBlock: "CMS Smoke Comparison Module",
+  timelineBlock: "CMS Smoke Timeline Module",
+  relatedContentBlock: "CMS Smoke Related Content Module",
+};
+
+function moduleFixture(routeSlug, moduleType, index, titleOverride) {
+  const title = titleOverride || moduleTitleByType[moduleType] || `CMS Smoke ${moduleType} Module`;
+
+  return {
+    _key: `${routeSlug}-${moduleType}-${index}`,
+    _type: moduleType,
+    headline: title,
+    heading: title,
+    title,
+    description: "CMS runtime smoke fixture rendered from approved public module data.",
+    actNumber: moduleType === "homepageActBlock" ? 1 : undefined,
+    actTitle: moduleType === "homepageActBlock" ? title : undefined,
+    beliefStatement: moduleType === "homepageActBlock" ? "CMS smoke act belief." : undefined,
+    formIntent: moduleType === "contactBlock" ? "official_contact_routing" : undefined,
+    retailerDataStatus: moduleType === "locatorShellBlock" ? "verified_records_required" : undefined,
+    legalGateStatus: "blocked_prelaunch",
+    question: moduleType === "faqBlock" ? title : undefined,
+    answer: moduleType === "faqBlock" ? "CMS smoke answer." : undefined,
+    events: moduleType === "timelineBlock"
+      ? [{ label: "CMS smoke timeline event", dateOrSequence: "Act 1" }]
+      : undefined,
+    facts: moduleType === "productFactsBlock"
+      ? [{ label: "CMS smoke fact", value: "18 blocks", publicUseStatus: "approved_public" }]
+      : undefined,
+    columns: moduleType === "comparisonBlock"
+      ? [{ title: "CMS smoke comparison column" }]
+      : undefined,
+    items: ["mediaGalleryBlock", "relatedContentBlock"].includes(moduleType)
+      ? [{ title: "CMS smoke related item", description: "CMS smoke item body." }]
+      : undefined,
+    moduleControl: {
+      moduleKey: `${routeSlug}-${moduleType}-smoke`,
+      internalLabel: title,
+      componentKey: moduleType,
+      renderEligibility: "ready_for_implementation_candidate",
+      sortIntent: index + 1,
+    },
+  };
+}
+
 function pageResult(slug) {
   const titles = {
     home: "CMS Smoke Home Module",
@@ -38,6 +120,9 @@ function pageResult(slug) {
     contact: "contactBlock",
   };
   const moduleType = moduleTypes[routeSlug] || "heroBlock";
+  const modules = routeSlug === "home"
+    ? allHomeModuleTypes.map((type, index) => moduleFixture(routeSlug, type, index))
+    : [moduleFixture(routeSlug, moduleType, 0, title)];
 
   return {
     _id: `sitePage.${routeSlug}`,
@@ -51,24 +136,7 @@ function pageResult(slug) {
       sourceProofStatus: "approved_public",
       legalReviewStatus: "approved_public",
     },
-    modules: [
-      {
-        _key: `${routeSlug}-hero`,
-        _type: moduleType,
-        headline: title,
-        description: "CMS runtime smoke fixture rendered from approved public module data.",
-        formIntent: routeSlug === "contact" ? "official_contact_routing" : undefined,
-        retailerDataStatus: routeSlug === "find-us" ? "verified_records_required" : undefined,
-        legalGateStatus: "blocked_prelaunch",
-        moduleControl: {
-          moduleKey: `${routeSlug}-smoke-hero`,
-          internalLabel: title,
-          componentKey: moduleType,
-          renderEligibility: "ready_for_implementation_candidate",
-          sortIntent: 1,
-        },
-      },
-    ],
+    modules,
   };
 }
 
