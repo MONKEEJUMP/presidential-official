@@ -17,6 +17,7 @@ const statusMdPath = path.join(workRoot, "step11-production-provider-readiness-s
 const projectJsonPath = path.join(webRoot, ".vercel", "project.json");
 const gitignorePath = path.join(webRoot, ".gitignore");
 const packageJsonPath = path.join(webRoot, "package.json");
+const vercelTokenEnv = "VERCEL_TOKEN";
 
 const expectedProductionEnvNames = [
   "PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED",
@@ -64,8 +65,18 @@ function commandExists(command) {
   return result.status === 0 && result.stdout.trim().length > 0;
 }
 
-function runVercelCommand(args) {
-  const result = spawnSync("vercel", args, {
+function hasVercelToken() {
+  return (process.env[vercelTokenEnv]?.trim() ?? "").length > 0;
+}
+
+function withVercelToken(args) {
+  const token = process.env[vercelTokenEnv]?.trim();
+  return token ? [...args, "--token", token] : args;
+}
+
+function runVercelCommand(args, options = {}) {
+  const commandArgs = options.withToken ? withVercelToken(args) : args;
+  const result = spawnSync("vercel", commandArgs, {
     cwd: webRoot,
     encoding: "utf8",
     windowsHide: true,
@@ -81,13 +92,16 @@ function runVercelCommand(args) {
 
 function checkVercelAuthentication(vercelCliAvailable) {
   if (!vercelCliAvailable) {
-    return { checked: false, authenticated: false };
+    return { checked: false, authenticated: false, tokenAvailable: false, method: "none" };
   }
 
-  const result = runVercelCommand(["whoami"]);
+  const tokenAvailable = hasVercelToken();
+  const result = runVercelCommand(["whoami"], { withToken: tokenAvailable });
   return {
     checked: true,
     authenticated: result.status === 0,
+    tokenAvailable,
+    method: result.status === 0 ? (tokenAvailable ? "token" : "local") : "none",
   };
 }
 
@@ -140,8 +154,16 @@ function main() {
     "provider.vercelCli.authenticated",
     vercelAuthentication.authenticated ? "pass" : "pending",
     vercelAuthentication.authenticated
-      ? "Vercel CLI has local credentials; username/account details were not stored"
-      : "Vercel CLI has no local credentials; run vercel login or use a token outside the repo before live provider checks",
+      ? `Vercel CLI authentication succeeded via ${vercelAuthentication.method}; account details were not stored`
+      : "Vercel CLI has no local credentials or token; run vercel login or provide VERCEL_TOKEN outside the repo before live provider checks",
+  );
+  addCheck(
+    rows,
+    "provider.vercelCli.tokenAvailable",
+    vercelAuthentication.tokenAvailable ? "pass" : "pending",
+    vercelAuthentication.tokenAvailable
+      ? "VERCEL_TOKEN is present in process env; value was not stored or printed"
+      : "VERCEL_TOKEN is not present in process env; local login is still acceptable",
   );
   addCheck(
     rows,
@@ -191,7 +213,9 @@ function main() {
       addCheck(rows, "provider.live.cliAuthenticated", "fail", "live provider check requested but Vercel CLI is not authenticated");
       liveCheckStatus = "failed";
     } else {
-      const envResult = runVercelCommand(["env", "ls", "production"]);
+      const envResult = runVercelCommand(["env", "ls", "production"], {
+        withToken: vercelAuthentication.tokenAvailable,
+      });
       liveCheckStatus = envResult.status === 0 ? "completed" : "failed";
       liveEnvNamePresence = envResult.status === 0
         ? summarizeEnvNamePresence(`${envResult.stdout}\n${envResult.stderr}`)
@@ -256,6 +280,8 @@ function main() {
     liveProviderCheck,
     liveCheckStatus,
     vercelCliAuthenticated: vercelAuthentication.authenticated,
+    vercelCliAuthMethod: vercelAuthentication.method,
+    vercelTokenAvailable: vercelAuthentication.tokenAvailable,
     projectLinked,
     projectIdShapeValid: Boolean(projectIdValid),
     orgIdShapeValid: Boolean(orgIdValid),
