@@ -25,6 +25,8 @@ function pageResult(slug) {
   const titles = {
     home: "CMS Smoke Home Module",
     "moon-rocks": "CMS Smoke Moon Rocks Module",
+    "moon-pods": "CMS Smoke Moon Pods Module",
+    orbit: "CMS Smoke Orbit Module",
     "our-story": "CMS Smoke Our Story Module",
     "find-us": "CMS Smoke Find Us Module",
     contact: "CMS Smoke Contact Module",
@@ -133,7 +135,7 @@ globalThis.fetch = async function mockedSanityFetch(input, init) {
       ? query.includes("defined(slug.current)") && !slug
         ? learnGuideSlugResults()
         : learnGuideResult(slug)
-      : ["home", "moon-rocks", "our-story", "find-us", "contact"].includes(slug)
+      : ["home", "moon-rocks", "moon-pods", "orbit", "our-story", "find-us", "contact"].includes(slug)
         ? pageResult(slug)
         : null;
 
