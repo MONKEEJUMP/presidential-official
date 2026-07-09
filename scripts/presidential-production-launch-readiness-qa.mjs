@@ -47,6 +47,8 @@ function main() {
   const measurementRenderingText = read("scripts/presidential-production-measurement-rendering-qa.mjs");
   const lockfileReproducibilityText = read("scripts/presidential-production-lockfile-reproducibility-qa.mjs");
   const ownerGateText = read("src/lib/launch/owner-decision-gates.ts");
+  const contactConfigText = read("src/app/contact/contact-inquiry-config.ts");
+  const contactFormText = read("src/app/contact/contact-inquiry-form.tsx");
   const proxyText = read("src/proxy.ts");
   const analyticsText = read("src/components/analytics/google-analytics.tsx");
   const googleText = read("src/lib/analytics/google.ts");
@@ -129,6 +131,20 @@ function main() {
       postdeployText.includes("deploymentExecuted: false") &&
       postdeployText.includes("secretsPrinted: false"),
     "post-deploy smoke is explicit-live only and records no deploy/no secret output posture",
+  );
+  addCheck(
+    rows,
+    "launchReadiness.contactPostdeploySmoke.gated",
+    contactConfigText.includes("PRESIDENTIAL_CONTACT_FORM_ENABLED") &&
+      contactConfigText.includes("PRESIDENTIAL_CONTACT_INBOX_EMAIL") &&
+      contactFormText.includes("presidential-contact-form-status") &&
+      contactFormText.includes("The approved inbox is not provisioned yet.") &&
+      postdeployText.includes("PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_CONTACT_FORM_READY") &&
+      postdeployText.includes("postdeploy.live.contact.formShell") &&
+      postdeployText.includes("postdeploy.live.contact.expectedEnvValid") &&
+      postdeployText.includes("postdeploy.live.contact.noThirdPartyProvider") &&
+      liveActionBoundaryText.includes("PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_CONTACT_FORM_READY"),
+    "Contact launch handling is env-gated, disabled by default, and covered by explicit post-deploy smoke expectations",
   );
   addCheck(
     rows,
