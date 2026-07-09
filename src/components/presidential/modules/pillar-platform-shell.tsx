@@ -171,6 +171,7 @@ export function PillarPlatformShell({
 
               <MediaSlot
                 aspectClassName="aspect-[5/4]"
+                backgroundImagePath="/brand/banner-palms-teal.webp"
                 kind="product_visual_placeholder"
                 label={content.mediaLabel}
                 note={content.mediaNote}
@@ -230,6 +231,7 @@ export function PillarPlatformShell({
 
             <MediaSlot
               aspectClassName="aspect-[4/3]"
+              backgroundImagePath="/brand/banner-palms-teal.webp"
               kind="wireframe_media_block"
               label={`${route.h1} source path`}
               note="Source path"

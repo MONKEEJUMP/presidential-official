@@ -57,6 +57,14 @@ const proofPoints = [
 function HeroStage() {
   return (
     <div className="relative min-h-[32rem] overflow-hidden border border-white/15 bg-po-ink p-5 shadow-2xl">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage:
+            "linear-gradient(135deg, rgb(2 44 34 / 0.9), rgb(9 9 11 / 0.58)), url('/brand/banner-palms-teal.webp')",
+        }}
+      />
       <div className="po-hero-stage-gradient absolute inset-0" />
       <div className="relative z-10 flex h-full flex-col justify-between gap-10">
         <div className="flex items-center justify-between gap-4 border-b border-white/15 pb-5">

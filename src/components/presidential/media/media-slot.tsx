@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import {
   getPlaceholderPolicy,
@@ -11,6 +11,8 @@ type MediaSlotProps = {
   readonly children?: ReactNode;
   readonly aspectClassName?: string;
   readonly className?: string;
+  readonly backgroundImagePath?: `/${string}`;
+  readonly backgroundPosition?: string;
   readonly note?: string;
 };
 
@@ -20,6 +22,8 @@ export function MediaSlot({
   children,
   aspectClassName = "aspect-video",
   className = "",
+  backgroundImagePath,
+  backgroundPosition = "center",
   note = "Presidential product and campaign media.",
 }: MediaSlotProps) {
   const policy = getPlaceholderPolicy(kind);
@@ -35,15 +39,34 @@ export function MediaSlot({
   ]
     .filter(Boolean)
     .join(" ");
+  const backgroundStyle = backgroundImagePath
+    ? ({
+        backgroundImage: `linear-gradient(180deg, rgb(9 9 11 / 0.16), rgb(9 9 11 / 0.72)), url("${backgroundImagePath}")`,
+        backgroundPosition,
+      } satisfies CSSProperties)
+    : undefined;
 
   return (
     <figure className={classNames}>
-      <div aria-hidden="true" className="absolute inset-0">
-        <div className="absolute inset-x-0 top-0 h-1 bg-po-gold" />
-        <div className="absolute left-8 top-8 h-28 w-20 border border-po-gold bg-po-canvas/10" />
-        <div className="absolute bottom-8 right-8 h-32 w-24 border border-po-brand-line bg-po-brand-soft" />
-        <div className="absolute left-1/3 top-1/4 h-40 w-px rotate-12 bg-po-canvas/20" />
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-po-canvas/10" />
+      <div
+        aria-hidden="true"
+        className={[
+          "absolute inset-0",
+          backgroundImagePath ? "bg-cover bg-no-repeat" : "",
+        ].filter(Boolean).join(" ")}
+        style={backgroundStyle}
+      >
+        {backgroundImagePath ? (
+          <div className="absolute inset-0 bg-po-brand-strong/20" />
+        ) : (
+          <>
+            <div className="absolute inset-x-0 top-0 h-1 bg-po-gold" />
+            <div className="absolute left-8 top-8 h-28 w-20 border border-po-gold bg-po-canvas/10" />
+            <div className="absolute bottom-8 right-8 h-32 w-24 border border-po-brand-line bg-po-brand-soft" />
+            <div className="absolute left-1/3 top-1/4 h-40 w-px rotate-12 bg-po-canvas/20" />
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-po-canvas/10" />
+          </>
+        )}
       </div>
       <div className="relative z-10 flex h-full min-h-48 items-end p-6 text-left">
         <figcaption className="max-w-sm text-sm leading-6">

@@ -33,6 +33,12 @@ type StaticRouteCallout = {
   readonly items: readonly string[];
 };
 
+function getRouteBackgroundImagePath(route: SeoRouteRecord): "/brand/banner-about-us-contact-header.webp" | "/brand/banner-palms-teal.webp" {
+  return route.kind === "brand_story" || route.kind === "contact"
+    ? "/brand/banner-about-us-contact-header.webp"
+    : "/brand/banner-palms-teal.webp";
+}
+
 function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
   if (route.kind === "store_locator") {
     return [
@@ -200,6 +206,7 @@ export function StaticRouteFoundationShell({
 
               <MediaSlot
                 aspectClassName="aspect-[4/3]"
+                backgroundImagePath={getRouteBackgroundImagePath(route)}
                 kind="wireframe_media_block"
                 label={`${route.h1} media`}
                 note="Presidential section visual"
