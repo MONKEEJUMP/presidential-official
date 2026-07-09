@@ -11,6 +11,7 @@ const requiredScripts = [
   "production:sitemap-submission:verify",
   "production:live-action-boundary:verify",
   "production:measurement-rendering:verify",
+  "production:lockfile-reproducibility:verify",
   "production:launch-readiness:verify",
 ];
 
@@ -55,6 +56,7 @@ function main() {
   const sitemapSubmissionText = read("scripts/presidential-production-sitemap-submission-qa.mjs");
   const liveActionBoundaryText = read("scripts/presidential-production-live-action-boundary-qa.mjs");
   const measurementRenderingText = read("scripts/presidential-production-measurement-rendering-qa.mjs");
+  const lockfileReproducibilityText = read("scripts/presidential-production-lockfile-reproducibility-qa.mjs");
   const proxyText = read("src/proxy.ts");
   const analyticsText = read("src/components/analytics/google-analytics.tsx");
   const googleText = read("src/lib/analytics/google.ts");
@@ -162,6 +164,15 @@ function main() {
       measurementRenderingText.includes("gscRenderedByDefault: false") &&
       measurementRenderingText.includes("deploymentExecuted: false"),
     "analytics and Google site verification are locally proven gated and absent from default build output",
+  );
+  addCheck(
+    rows,
+    "launchReadiness.lockfileReproducibility.localGate",
+    lockfileReproducibilityText.includes('["ci", "--dry-run", "--ignore-scripts"]') &&
+      lockfileReproducibilityText.includes("packageLockChanged: false") &&
+      lockfileReproducibilityText.includes("dependencyVersionsChanged: false") &&
+      lockfileReproducibilityText.includes("deploymentExecuted: false"),
+    "lockfile reproducibility is locally proven with npm ci dry-run and no dependency upgrades or deploy action",
   );
   addCheck(
     rows,
