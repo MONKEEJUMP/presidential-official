@@ -15,6 +15,12 @@ const statusMdPath = path.join(workRoot, "step10g-public-surface-boundary-status
 
 const productionOrigin = "https://presidentialmoonrocks.com";
 const allowedUrlOrigins = new Set([productionOrigin, "https://schema.org"]);
+const approvedGatedAnalyticsUrlFiles = new Set([
+  "web/src/components/analytics/google-analytics.tsx",
+]);
+const approvedGatedAnalyticsUrlOrigins = new Set([
+  "https://www.googletagmanager.com",
+]);
 const approvedPublicAssetFiles = new Set([]);
 const forbiddenStarterAssets = new Set([
   "file.svg",
@@ -137,15 +143,22 @@ function findLineMatches(files, patterns) {
 function findUrlOriginViolations(files, { allowW3cSvg = false } = {}) {
   const violations = [];
   for (const file of files) {
+    const relativePath = rel(file);
     const text = readIfExists(file);
     for (const url of extractHttpUrls(text)) {
       try {
         const parsed = new URL(url);
         if (allowedUrlOrigins.has(parsed.origin)) continue;
+        if (
+          approvedGatedAnalyticsUrlFiles.has(relativePath) &&
+          approvedGatedAnalyticsUrlOrigins.has(parsed.origin)
+        ) {
+          continue;
+        }
         if (allowW3cSvg && parsed.origin === "http://www.w3.org") continue;
-        violations.push(`${rel(file)}:${url}`);
+        violations.push(`${relativePath}:${url}`);
       } catch {
-        violations.push(`${rel(file)}:${url}`);
+        violations.push(`${relativePath}:${url}`);
       }
     }
   }

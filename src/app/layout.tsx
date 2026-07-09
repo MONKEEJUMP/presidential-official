@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { ADULT_CONFIRMATION_COOKIE } from "@/app/age-gate-constants";
 import { AgeGate } from "@/components/age-gate";
+import { GoogleAnalytics } from "@/components/analytics/google-analytics";
+import { getGoogleSiteVerification } from "@/lib/analytics/google";
 import { METADATA_BASE } from "@/lib/seo/metadata";
 import "./globals.css";
 
@@ -28,6 +30,9 @@ export const metadata: Metadata = {
     index: false,
     follow: true,
   },
+  ...(getGoogleSiteVerification()
+    ? { verification: { google: getGoogleSiteVerification() } }
+    : {}),
 };
 
 export default async function RootLayout({
@@ -37,6 +42,7 @@ export default async function RootLayout({
 }>) {
   const adultConfirmed =
     (await cookies()).get(ADULT_CONFIRMATION_COOKIE)?.value === "true";
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   return (
     <html
@@ -52,6 +58,7 @@ export default async function RootLayout({
           {children}
         </div>
         <AgeGate initialConfirmed={adultConfirmed} />
+        <GoogleAnalytics nonce={nonce} />
       </body>
     </html>
   );

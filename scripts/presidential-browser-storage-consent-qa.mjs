@@ -23,6 +23,11 @@ const layoutPath = path.join(webRoot, "src", "app", "layout.tsx");
 const approvedAgeGateFile = "web/src/components/age-gate.tsx";
 const approvedAgeGateCookieFile = "web/src/app/age-gate-actions.ts";
 const approvedAgeGateLayoutFile = "web/src/app/layout.tsx";
+const approvedGatedAnalyticsFiles = new Set([
+  "web/src/app/layout.tsx",
+  "web/src/components/analytics/google-analytics.tsx",
+  "web/src/lib/analytics/google.ts",
+]);
 const approvedAgeGateStorageKey = "presidential_adult_confirmed";
 const approvedAgeGateCookieName = "presidential_adult_confirmed";
 
@@ -122,6 +127,9 @@ function collectMatches(files, pattern, options = {}) {
         continue;
       }
       if (options.allowAgeGateServerCookie && isApprovedAgeGateServerCookieLine(relativePath, line)) {
+        continue;
+      }
+      if (options.allowGatedAnalytics && approvedGatedAnalyticsFiles.has(relativePath)) {
         continue;
       }
       matches.push(`${relativePath}:${index + 1}:${line.trim()}`);
@@ -240,6 +248,9 @@ function main() {
   const sourceConsentMatches = collectMatches(sourceFiles, consentTrackingPattern);
   const builtConsentMatches = collectMatches(builtFiles, consentTrackingPattern);
   const sourceTrackingStorageMatches = collectMatches(sourceFiles, trackingStoragePattern);
+  const sourceUnapprovedTrackingStorageMatches = collectMatches(sourceFiles, trackingStoragePattern, {
+    allowGatedAnalytics: true,
+  });
   const builtTrackingStorageMatches = collectMatches(builtFiles, trackingStoragePattern);
   const sourceSensitiveAgeMatches = collectMatches(sourceFiles, sensitiveAgePattern);
   const builtSensitiveAgeMatches = collectMatches(builtFiles, sensitiveAgePattern);
@@ -272,7 +283,8 @@ function main() {
     layoutText.includes("{children}") &&
     layoutText.includes("<AgeGate initialConfirmed={adultConfirmed} />");
   const layoutReadsServerAdultCookie =
-    layoutText.includes('import { cookies } from "next/headers"') &&
+    layoutText.includes('from "next/headers"') &&
+    layoutText.includes("cookies") &&
     layoutText.includes("ADULT_CONFIRMATION_COOKIE") &&
     layoutText.includes("adultConfirmed") &&
     layoutText.includes("<AgeGate initialConfirmed={adultConfirmed} />");
@@ -309,7 +321,7 @@ function main() {
     addCheck(rows, "package.noConsentOrCookieDeps", !hasPackageConsentDependency, "No cookie/consent/analytics helper dependency is installed"),
     addCheck(rows, "source.noConsentModeOrCmp", sourceConsentMatches.length === 0, sourceConsentMatches.length ? sourceConsentMatches.slice(0, 10).join(" | ") : "No consent mode, CMP, cookie banner, or Google consent API usage in public source"),
     addCheck(rows, "built.noConsentModeOrCmp", builtConsentMatches.length === 0, builtConsentMatches.length ? builtConsentMatches.slice(0, 10).join(" | ") : "No consent mode, CMP, or cookie banner usage in built output"),
-    addCheck(rows, "source.noTrackingStorageKeys", sourceTrackingStorageMatches.length === 0, sourceTrackingStorageMatches.length ? sourceTrackingStorageMatches.slice(0, 10).join(" | ") : "No tracking, analytics, pixel, visitor, session, or UTM storage key signals in public source"),
+    addCheck(rows, "source.gatedAnalyticsTrackingOnly", sourceUnapprovedTrackingStorageMatches.length === 0, sourceUnapprovedTrackingStorageMatches.length ? sourceUnapprovedTrackingStorageMatches.slice(0, 10).join(" | ") : "Only approved env-gated GA4/GSC source contains analytics wording; no unapproved tracking storage signals in public source"),
     addCheck(rows, "built.noTrackingStorageKeys", builtTrackingStorageMatches.length === 0, builtTrackingStorageMatches.length ? builtTrackingStorageMatches.slice(0, 10).join(" | ") : "No tracking, analytics, pixel, visitor, session, or UTM storage key signals in built output"),
     addCheck(rows, "source.noSensitiveAgeData", sourceSensitiveAgeMatches.length === 0, sourceSensitiveAgeMatches.length ? sourceSensitiveAgeMatches.slice(0, 10).join(" | ") : "No DOB/birthdate/sensitive age data fields in public source"),
     addCheck(rows, "built.noSensitiveAgeData", builtSensitiveAgeMatches.length === 0, builtSensitiveAgeMatches.length ? builtSensitiveAgeMatches.slice(0, 10).join(" | ") : "No DOB/birthdate/sensitive age data fields in built output"),
@@ -372,6 +384,7 @@ function main() {
     sourceConsentMatches,
     builtConsentMatches,
     sourceTrackingStorageMatches,
+    sourceUnapprovedTrackingStorageMatches,
     builtTrackingStorageMatches,
     sourceSensitiveAgeMatches,
     builtSensitiveAgeMatches,

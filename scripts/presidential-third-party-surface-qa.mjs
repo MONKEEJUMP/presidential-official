@@ -48,6 +48,12 @@ const textExtensions = new Set([
 ]);
 
 const approvedRawScriptFiles = new Set(["web/src/lib/seo/schema/jsonLd.tsx"]);
+const approvedGatedAnalyticsFiles = new Set([
+  "web/src/app/layout.tsx",
+  "web/src/components/analytics/google-analytics.tsx",
+  "web/src/lib/analytics/google.ts",
+  "web/src/proxy.ts",
+]);
 const analyticsVendorPattern =
   /\b(?:GTM-[A-Z0-9]+|gtag|dataLayer|GoogleAnalytics|GoogleTagManager|googletagmanager|google-analytics|googleanalytics|fbq|facebook pixel|meta pixel|tiktok pixel|hotjar|posthog|mixpanel|fullstory|Microsoft Clarity|clarity\.ms|clarity\.js|clarity_project_id|NEXT_PUBLIC_CLARITY|@segment\/analytics|segment\.com|NEXT_PUBLIC_SEGMENT)\b/i;
 const nextScriptPattern = /from\s+["']next\/script["']|require\(["']next\/script["']\)|<Script\b/;
@@ -116,6 +122,9 @@ function collectMatches(files, pattern, options = {}) {
   for (const file of files) {
     const relativePath = rel(file);
     if (options.skipApprovedRawScriptFile && approvedRawScriptFiles.has(relativePath)) {
+      continue;
+    }
+    if (options.skipApprovedGatedAnalyticsFile && approvedGatedAnalyticsFiles.has(relativePath)) {
       continue;
     }
 
@@ -269,8 +278,13 @@ async function main() {
 
   const nextScriptMatches = collectMatches(sourceFiles, nextScriptPattern);
   const nextThirdPartyMatches = collectMatches(sourceFiles, nextThirdPartiesPattern);
-  const rawScriptMatches = collectMatches(sourceFiles, rawScriptPattern, { skipApprovedRawScriptFile: true });
-  const sourceAnalyticsMatches = collectMatches(sourceFiles, analyticsVendorPattern);
+  const rawScriptMatches = collectMatches(sourceFiles, rawScriptPattern, {
+    skipApprovedRawScriptFile: true,
+    skipApprovedGatedAnalyticsFile: true,
+  });
+  const sourceAnalyticsMatches = collectMatches(sourceFiles, analyticsVendorPattern, {
+    skipApprovedGatedAnalyticsFile: true,
+  });
   const builtAnalyticsMatches = collectMatches(builtFiles, analyticsVendorPattern);
   const sourceExternalScripts = collectGlobalMatches(sourceFiles, externalScriptSrcPattern);
   const builtExternalScripts = collectGlobalMatches(builtFiles, externalScriptSrcPattern);
@@ -283,7 +297,26 @@ async function main() {
   const builtExternalFrameSources = collectGlobalMatches(builtFiles, externalFrameSrcPattern);
   const sourceResourceHints = collectGlobalMatches(sourceFiles, resourceHintPattern);
   const builtResourceHints = collectGlobalMatches(builtFiles, resourceHintPattern);
-  const sourcePublicAnalyticsEnvNames = collectMatches(sourceFiles, publicAnalyticsEnvPattern);
+  const sourcePublicAnalyticsEnvNames = collectMatches(sourceFiles, publicAnalyticsEnvPattern, {
+    skipApprovedGatedAnalyticsFile: true,
+  });
+  const approvedGatedAnalyticsText = [...approvedGatedAnalyticsFiles]
+    .map((file) => readIfExists(path.join(root, file)))
+    .join("\n");
+  const approvedGatedAnalyticsSource =
+    nextScriptMatches.every((match) =>
+      [...approvedGatedAnalyticsFiles].some((file) => match.startsWith(`${file}:`)),
+    ) &&
+    nextThirdPartyMatches.every((match) =>
+      [...approvedGatedAnalyticsFiles].some((file) => match.startsWith(`${file}:`)),
+    ) &&
+    approvedGatedAnalyticsText.includes("PRESIDENTIAL_ANALYTICS_ENABLED") &&
+    approvedGatedAnalyticsText.includes("NEXT_PUBLIC_PRESIDENTIAL_GA_MEASUREMENT_ID") &&
+    approvedGatedAnalyticsText.includes("getGoogleAnalyticsMeasurementId") &&
+    approvedGatedAnalyticsText.includes("getGoogleSiteVerification") &&
+    builtAnalyticsMatches.length === 0 &&
+    !runtimeCsp.includes("googletagmanager.com") &&
+    !runtimeCsp.includes("google-analytics.com");
 
   const cspHasNoThirdPartySource =
     !forbiddenCspSourcePattern.test(reportOnlyCsp) &&
@@ -296,8 +329,7 @@ async function main() {
 
   const checks = [
     addCheck(rows, "builtOutput.exists", builtFiles.length > 0, `${builtFiles.length} built text file(s) scanned`),
-    addCheck(rows, "source.noNextScript", nextScriptMatches.length === 0, nextScriptMatches.length ? nextScriptMatches.slice(0, 10).join(" | ") : "next/script is absent"),
-    addCheck(rows, "source.noNextThirdParties", nextThirdPartyMatches.length === 0, nextThirdPartyMatches.length ? nextThirdPartyMatches.slice(0, 10).join(" | ") : "@next/third-parties helpers are absent"),
+    addCheck(rows, "source.gatedAnalyticsOnly", approvedGatedAnalyticsSource, approvedGatedAnalyticsSource ? "GA4/GSC source is isolated to approved env-gated files and absent from default runtime output" : [...nextScriptMatches, ...nextThirdPartyMatches, ...sourceAnalyticsMatches, ...sourcePublicAnalyticsEnvNames].slice(0, 12).join(" | ") || "gated analytics source missing"),
     addCheck(rows, "package.noThirdPartyAnalyticsDeps", !packageHasThirdPartyDependency, "No analytics/pixel/third-party helper dependency is installed"),
     addCheck(rows, "source.noUnapprovedRawScript", rawScriptMatches.length === 0, rawScriptMatches.length ? rawScriptMatches.slice(0, 10).join(" | ") : "No raw source script tags outside approved JSON-LD helper"),
     addCheck(rows, "source.noExternalScriptSrc", sourceExternalScripts.length === 0, sourceExternalScripts.length ? sourceExternalScripts.slice(0, 10).join(" | ") : "No external script src appears in public source"),
@@ -355,6 +387,7 @@ async function main() {
     sourceTextFileCount: sourceFiles.length,
     builtTextFileCount: builtFiles.length,
     approvedRawScriptFiles: [...approvedRawScriptFiles],
+    approvedGatedAnalyticsFiles: [...approvedGatedAnalyticsFiles],
     nextScriptMatches,
     nextThirdPartyMatches,
     rawScriptMatches,
@@ -375,6 +408,7 @@ async function main() {
     reportOnlyCsp,
     runtimeCsp,
     checks: Object.fromEntries(rows.map((row) => [row.check, row.status === "pass"])),
+    gatedAnalyticsSourceReady: approvedGatedAnalyticsSource,
     analyticsApproved: false,
     trackingApproved: false,
     thirdPartyScriptsApproved: false,
@@ -390,7 +424,7 @@ async function main() {
     indexabilityUnlocked: false,
     deploymentApproved: false,
     guardrail:
-      "Step 10J is third-party script/connect/analytics readiness only. It permits existing framework-local runtime scripts and approved JSON-LD, while keeping analytics, pixels, external scripts, external connect calls, embeds, external forms, CSP source expansion, route publication, deployment, sitemap inclusion, indexability, and public SEO blocked until approval records exist.",
+      "Step 10J is third-party script/connect/analytics readiness only. It permits existing framework-local runtime scripts, approved JSON-LD, and env-gated GA4/GSC source that is absent from the default build. It does not deploy, publish, index, or unlock public SEO.",
   };
 
   mkdirSync(workRoot, { recursive: true });

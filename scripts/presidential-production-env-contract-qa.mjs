@@ -25,6 +25,13 @@ const privatePreviewFlags = [
   "PRESIDENTIAL_SANITY_DRAFT_READ_ENABLED",
 ];
 
+const analyticsFlags = [
+  "PRESIDENTIAL_ANALYTICS_ENABLED",
+  "NEXT_PUBLIC_PRESIDENTIAL_GA_MEASUREMENT_ID",
+  "PRESIDENTIAL_GOOGLE_SITE_VERIFICATION_ENABLED",
+  "PRESIDENTIAL_GOOGLE_SITE_VERIFICATION",
+];
+
 const trackedDraftOnlyFlags = [
   "PRESIDENTIAL_LEARN_GUIDE_DRAFT_RENDERING_ENABLED",
 ];
@@ -33,13 +40,17 @@ const serverOnlySecretNames = ["SANITY_AUTH_TOKEN"];
 const expectedProductionEnvNames = [
   ...publicCmsFlags,
   ...privatePreviewFlags,
+  ...analyticsFlags,
   ...serverOnlySecretNames,
 ];
 
 const textExtensions = new Set([".css", ".js", ".json", ".mjs", ".ts", ".tsx"]);
 const sourceRoots = [
   path.join(webRoot, "src", "app"),
+  path.join(webRoot, "src", "components", "analytics"),
+  path.join(webRoot, "src", "lib", "analytics"),
   path.join(webRoot, "src", "lib", "cms"),
+  path.join(webRoot, "src", "proxy.ts"),
   path.join(webRoot, "scripts"),
 ];
 
@@ -176,8 +187,14 @@ function main() {
   addCheck(
     rows,
     "productionEnv.expectedNames.tracked",
-    expectedProductionEnvNames.length === 7,
+    expectedProductionEnvNames.length === 11,
     expectedProductionEnvNames.join(", "),
+  );
+  addCheck(
+    rows,
+    "productionEnv.analyticsFlags.present",
+    analyticsFlags.every((flag) => filesContaining(sourceFiles, flag).length > 0),
+    analyticsFlags.map((flag) => `${flag}:${filesContaining(sourceFiles, flag).join("|") || "missing"}`).join(" ; "),
   );
   addCheck(
     rows,
