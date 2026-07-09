@@ -51,6 +51,7 @@ function main() {
   const analyticsText = read("src/components/analytics/google-analytics.tsx");
   const googleText = read("src/lib/analytics/google.ts");
   const routePublicationText = read("src/lib/seo/source-records/route-publication.ts");
+  const routeEvidenceTrackerText = read("scripts/presidential-route-evidence-tracker-qa.mjs");
 
   addCheck(
     rows,
@@ -170,6 +171,25 @@ function main() {
     "launchReadiness.routePublication.closed",
     /APPROVED_ROUTE_PUBLICATIONS\s*=\s*\[\]/.test(routePublicationText),
     "route publication stays empty until per-route approval records are added",
+  );
+  addCheck(
+    rows,
+    "launchReadiness.routePublication.scaffoldsWired",
+    routePublicationText.includes("ROUTE_PUBLICATION_EVIDENCE_CATEGORIES") &&
+      routePublicationText.includes("getRoutePublicationEvidenceScaffolds") &&
+      routePublicationText.includes("ROUTE_PUBLICATION_EVIDENCE_SCAFFOLDS") &&
+      routePublicationText.includes("canUnlock: false"),
+    "launch route publication evidence scaffolds are wired but cannot unlock routes",
+  );
+  addCheck(
+    rows,
+    "launchReadiness.routeEvidenceTracker.scaffoldGate",
+    routeEvidenceTrackerText.includes("expectedRoutePublicationEvidenceCategories") &&
+      routeEvidenceTrackerText.includes("tracker.routePublicationScaffolds.categoriesExact") &&
+      routeEvidenceTrackerText.includes("tracker.routePublicationScaffolds.noUnlock") &&
+      routeEvidenceTrackerText.includes("tracker.routePublicationScaffolds.trackerRoutesCovered") &&
+      routeEvidenceTrackerText.includes("presidential-route-evidence-tracker-${process.pid}"),
+    "route evidence tracker proves exact S10 categories, no-unlock state, tracker coverage, and process-scoped compile output",
   );
   addCheck(
     rows,
