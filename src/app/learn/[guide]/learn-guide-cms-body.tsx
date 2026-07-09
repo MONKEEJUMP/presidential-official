@@ -1,38 +1,10 @@
 import { CmsHomepageModuleRenderer, Scene } from "@/components/presidential";
 import { SectionHeading } from "@/components/presidential/primitives/section-heading";
-
-type SanityHomepageModule = {
-  readonly _key?: string;
-  readonly _type?: string;
-  readonly heading?: string;
-  readonly headline?: string;
-  readonly title?: string;
-  readonly body?: string | readonly SanityPortableTextBlock[];
-  readonly description?: string;
-  readonly shortExplanation?: string;
-  readonly intro?: string;
-  readonly callout?: string;
-  readonly relatedProductLinks?: readonly SanityLinkedRecord[];
-  readonly moduleControl?: {
-    readonly moduleKey?: string;
-  };
-};
-
-type SanityPortableTextBlock = {
-  readonly children?: readonly {
-    readonly text?: string;
-  }[];
-};
-
-type SanityLinkedRecord = {
-  readonly _id?: string;
-  readonly _type?: string;
-  readonly title?: string;
-  readonly name?: string;
-  readonly slug?: string;
-  readonly positioningLine?: string;
-  readonly shortDescription?: string;
-};
+import type {
+  SanityHomepageModule,
+  SanityLinkedRecord,
+  SanityPortableTextBlock,
+} from "@/lib/cms/homepage";
 
 type LearnGuideCmsBodyProps = {
   readonly modules: readonly SanityHomepageModule[];
@@ -43,7 +15,7 @@ type LearnGuideBodyModuleProps = {
   readonly index: number;
 };
 
-function portableTextToPlainText(value?: string | readonly { readonly children?: readonly { readonly text?: string }[] }[]): string {
+function portableTextToPlainText(value?: string | readonly SanityPortableTextBlock[]): string {
   if (!value) {
     return "";
   }
