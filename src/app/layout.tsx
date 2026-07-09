@@ -26,6 +26,10 @@ export const metadata: Metadata = {
   },
   description:
     "Official home of Presidential cannabis products for adults 21+ where legal.",
+  icons: {
+    icon: "/favicon.png",
+    apple: "/apple-touch-icon.png",
+  },
   robots: {
     index: false,
     follow: true,

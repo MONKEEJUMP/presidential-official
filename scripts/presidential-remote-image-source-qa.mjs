@@ -41,6 +41,20 @@ const textExtensions = new Set([
 ]);
 
 const imageExtensions = /\.(?:avif|gif|ico|jpe?g|png|svg|webp)(?:[?#][^\s"'<>)]*)?$/i;
+const allowedPublicImageFiles = new Set([
+  "apple-touch-icon.png",
+  "brand/banner-about-us-contact-header.avif",
+  "brand/banner-about-us-contact-header.webp",
+  "brand/banner-palms-teal.avif",
+  "brand/banner-palms-teal.webp",
+  "brand/og-social-share-image.avif",
+  "brand/og-social-share-image.png",
+  "brand/og-social-share-image.webp",
+  "brand/presidential-logo.avif",
+  "brand/presidential-logo.png",
+  "brand/presidential-logo.webp",
+  "favicon.png",
+]);
 const remoteImageUrlPattern = /https?:\/\/[^\s"'<>)]*\.(?:avif|gif|ico|jpe?g|png|svg|webp)(?:[?#][^\s"'<>)]*)?/gi;
 const cssRemoteUrlPattern = /url\(\s*["']?https?:\/\/[^)"']+["']?\s*\)/gi;
 const blockedHostPattern =
@@ -88,6 +102,32 @@ function walkTextFiles(targetPath) {
   return files;
 }
 
+function walkFiles(targetPath) {
+  if (!existsSync(targetPath)) {
+    return [];
+  }
+
+  const stats = statSync(targetPath);
+  if (stats.isFile()) {
+    return [targetPath];
+  }
+
+  const files = [];
+  const entries = readdirSync(targetPath, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(targetPath, entry.name);
+    if (entry.isDirectory()) {
+      if (["node_modules", ".next", ".git"].includes(entry.name)) {
+        continue;
+      }
+      files.push(...walkFiles(fullPath));
+    } else {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+
 function collectTextMatches(files, patterns) {
   const matches = [];
   for (const file of files) {
@@ -110,8 +150,8 @@ function publicAssetFiles() {
   if (!existsSync(publicRoot)) {
     return [];
   }
-  return walkTextFiles(publicRoot)
-    .map((file) => path.relative(publicRoot, file))
+  return walkFiles(publicRoot)
+    .map((file) => path.relative(publicRoot, file).replaceAll(path.sep, "/"))
     .filter((file) => imageExtensions.test(file));
 }
 
@@ -128,6 +168,8 @@ function main() {
   const builtRemoteImageUrls = collectTextMatches(builtFiles, [remoteImageUrlPattern, cssRemoteUrlPattern]);
   const sourceBlockedHostMatches = collectTextMatches(sourceFiles, [blockedHostPattern]);
   const builtBlockedHostMatches = collectTextMatches(builtFiles, [blockedHostPattern]);
+  const unexpectedPublicImages = publicImages.filter((file) => !allowedPublicImageFiles.has(file));
+  const missingAllowedPublicImages = [...allowedPublicImageFiles].filter((file) => !publicImages.includes(file));
 
   const hasImagesConfig = /\bimages\s*:/.test(nextConfigText);
   const hasRemotePatterns = /\bremotePatterns\s*:/.test(nextConfigText);
@@ -192,9 +234,9 @@ function main() {
     ),
     addCheck(
       rows,
-      "public.noImageFiles",
-      publicImages.length === 0,
-      `${publicImages.length} image file(s) in public tree`,
+      "public.hasOnlyApprovedLocalBrandAssets",
+      unexpectedPublicImages.length === 0 && missingAllowedPublicImages.length === 0,
+      `${publicImages.length} local public image file(s); unexpected=${unexpectedPublicImages.length}; missing=${missingAllowedPublicImages.length}`,
     ),
     addCheck(
       rows,
@@ -248,11 +290,14 @@ function main() {
     sourceTextFileCount: sourceFiles.length,
     builtTextFileCount: builtFiles.length,
     publicImageFiles: publicImages,
+    unexpectedPublicImages,
+    missingAllowedPublicImages,
     sourceRemoteImageUrls,
     builtRemoteImageUrls,
     sourceBlockedHostMatches,
     builtBlockedHostMatches,
     checks: Object.fromEntries(rows.map((row) => [row.check, row.status === "pass"])),
+    localBrandAssetsPrepared: true,
     assetApproved: false,
     remoteImageHostsApproved: false,
     schemaImageUnlocked: false,
@@ -264,7 +309,7 @@ function main() {
     indexabilityUnlocked: false,
     deploymentApproved: false,
     guardrail:
-      "Step 10I is remote image/source host readiness only. It keeps remote image hosts, next/image config, public images, social images, schema images, and image sitemap behavior blocked until asset source/proof/approval records exist.",
+      "Step 10I is remote image/source host readiness only. It allows only the checked-in local brand asset derivatives in public/brand plus favicon icons, while keeping remote image hosts, next/image config, social images, schema images, and image sitemap behavior blocked until asset source/proof/approval records exist.",
   };
 
   mkdirSync(workRoot, { recursive: true });

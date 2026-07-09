@@ -21,7 +21,20 @@ const approvedGatedAnalyticsUrlFiles = new Set([
 const approvedGatedAnalyticsUrlOrigins = new Set([
   "https://www.googletagmanager.com",
 ]);
-const approvedPublicAssetFiles = new Set([]);
+const approvedPublicAssetFiles = new Set([
+  "apple-touch-icon.png",
+  "brand/banner-about-us-contact-header.avif",
+  "brand/banner-about-us-contact-header.webp",
+  "brand/banner-palms-teal.avif",
+  "brand/banner-palms-teal.webp",
+  "brand/og-social-share-image.avif",
+  "brand/og-social-share-image.png",
+  "brand/og-social-share-image.webp",
+  "brand/presidential-logo.avif",
+  "brand/presidential-logo.png",
+  "brand/presidential-logo.webp",
+  "favicon.png",
+]);
 const forbiddenStarterAssets = new Set([
   "file.svg",
   "globe.svg",
