@@ -18,7 +18,10 @@ const smokeBaseUrl = process.env.PRESIDENTIAL_PRODUCTION_SMOKE_BASE_URL ?? canon
 const liveSmokeEnabled = process.env.PRESIDENTIAL_PRODUCTION_POSTDEPLOY_SMOKE_LIVE === "true";
 const expectAnalytics = process.env.PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_ANALYTICS === "true";
 const expectGsc = process.env.PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_GSC === "true";
+const gaMeasurementIdEnv = "NEXT_PUBLIC_PRESIDENTIAL_GA_MEASUREMENT_ID";
+const gscVerificationTokenEnv = "PRESIDENTIAL_GOOGLE_SITE_VERIFICATION";
 const gaMeasurementIdPattern = /^G-[A-Z0-9]{6,}$/;
+const googleSiteVerificationPattern = /^[A-Za-z0-9_-]{16,256}$/;
 
 const launchRoutes = [
   "/",
@@ -61,13 +64,47 @@ function hasRobotsNoindex(html) {
   return /<meta\s+[^>]*name=["']robots["'][^>]*content=["'][^"']*\bnoindex\b/i.test(html);
 }
 
-function hasAnalyticsTag(html) {
-  return /https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-[A-Z0-9]{6,}/.test(html) &&
-    /gtag\(['"]config['"],\s*['"]G-[A-Z0-9]{6,}['"]/.test(html);
+function getExpectedGaMeasurementId() {
+  if (!expectAnalytics) return "";
+  const measurementId = process.env[gaMeasurementIdEnv]?.trim() ?? "";
+  return gaMeasurementIdPattern.test(measurementId) ? measurementId : "";
+}
+
+function getExpectedGscVerificationToken() {
+  if (!expectGsc) return "";
+  const verificationToken = process.env[gscVerificationTokenEnv]?.trim() ?? "";
+  return googleSiteVerificationPattern.test(verificationToken) ? verificationToken : "";
+}
+
+function extractAnalyticsMeasurementIds(html) {
+  const loaderMatch = html.match(/https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=([^"'&<\s]+)/);
+  const configMatch = html.match(/gtag\(['"]config['"],\s*['"]([^'"]+)['"]/);
+  return {
+    loader: loaderMatch ? decodeURIComponent(loaderMatch[1]) : "",
+    config: configMatch?.[1] ?? "",
+  };
+}
+
+function hasAnyAnalyticsTag(html) {
+  const ids = extractAnalyticsMeasurementIds(html);
+  return Boolean(ids.loader || ids.config);
+}
+
+function hasExpectedAnalyticsTag(html, expectedMeasurementId) {
+  const ids = extractAnalyticsMeasurementIds(html);
+  return ids.loader === expectedMeasurementId && ids.config === expectedMeasurementId;
+}
+
+function extractGscVerificationToken(html) {
+  return html.match(/<meta\s+[^>]*name=["']google-site-verification["'][^>]*content=["']([^"']+)["']/i)?.[1] ?? "";
 }
 
 function hasGscVerificationMeta(html) {
-  return /<meta\s+[^>]*name=["']google-site-verification["'][^>]*content=["'][^"']+["']/i.test(html);
+  return Boolean(extractGscVerificationToken(html));
+}
+
+function hasExpectedGscVerificationMeta(html, expectedToken) {
+  return extractGscVerificationToken(html) === expectedToken;
 }
 
 async function fetchText(url) {
@@ -136,20 +173,42 @@ async function runLiveSmoke(rows, baseUrl) {
   }
 
   const homeHtml = routeBodies.get("/") ?? "";
+  const expectedGaMeasurementId = getExpectedGaMeasurementId();
+  const expectedGscVerificationToken = getExpectedGscVerificationToken();
+  addCheck(
+    rows,
+    "postdeploy.live.analytics.expectedEnvValid",
+    expectAnalytics ? (expectedGaMeasurementId ? "pass" : "fail") : "pass",
+    expectAnalytics
+      ? "GA4 expectation requires a valid measurement id in the live smoke environment"
+      : "analytics was not expected, so no GA4 env value is required",
+  );
   addCheck(
     rows,
     "postdeploy.live.analytics.state",
-    expectAnalytics ? (hasAnalyticsTag(homeHtml) ? "pass" : "fail") : (!hasAnalyticsTag(homeHtml) ? "pass" : "fail"),
     expectAnalytics
-      ? "analytics was expected and GA4 tag was present"
+      ? (expectedGaMeasurementId && hasExpectedAnalyticsTag(homeHtml, expectedGaMeasurementId) ? "pass" : "fail")
+      : (!hasAnyAnalyticsTag(homeHtml) ? "pass" : "fail"),
+    expectAnalytics
+      ? "analytics was expected and the rendered GA4 loader/config matched the expected env id"
       : "analytics was not expected and GA4 tag was absent",
   );
   addCheck(
     rows,
-    "postdeploy.live.gsc.state",
-    expectGsc ? (hasGscVerificationMeta(homeHtml) ? "pass" : "fail") : (!hasGscVerificationMeta(homeHtml) ? "pass" : "fail"),
+    "postdeploy.live.gsc.expectedEnvValid",
+    expectGsc ? (expectedGscVerificationToken ? "pass" : "fail") : "pass",
     expectGsc
-      ? "GSC verification meta was expected and present"
+      ? "GSC expectation requires a valid verification token in the live smoke environment"
+      : "GSC verification was not expected, so no token env value is required",
+  );
+  addCheck(
+    rows,
+    "postdeploy.live.gsc.state",
+    expectGsc
+      ? (expectedGscVerificationToken && hasExpectedGscVerificationMeta(homeHtml, expectedGscVerificationToken) ? "pass" : "fail")
+      : (!hasGscVerificationMeta(homeHtml) ? "pass" : "fail"),
+    expectGsc
+      ? "GSC verification meta was expected and matched the expected env token"
       : "GSC verification meta was not expected and absent",
   );
 }

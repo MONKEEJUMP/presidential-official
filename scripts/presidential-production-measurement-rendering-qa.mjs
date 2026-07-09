@@ -138,9 +138,11 @@ function main() {
     "analyticsRendering.postdeployCanAssertLiveOptIn",
     postdeploySource.includes("PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_ANALYTICS") &&
       postdeploySource.includes("PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_GSC") &&
-      postdeploySource.includes("hasAnalyticsTag") &&
-      postdeploySource.includes("hasGscVerificationMeta"),
-    "post-deploy smoke can assert GA4/GSC only when explicit expectation flags are enabled",
+      postdeploySource.includes("getExpectedGaMeasurementId") &&
+      postdeploySource.includes("hasExpectedAnalyticsTag") &&
+      postdeploySource.includes("getExpectedGscVerificationToken") &&
+      postdeploySource.includes("hasExpectedGscVerificationMeta"),
+    "post-deploy smoke asserts exact GA4/GSC env-value matches only when explicit expectation flags are enabled",
   );
   addCheck(
     rows,
