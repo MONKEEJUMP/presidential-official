@@ -1,7 +1,12 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync } from "node:fs";
+import { createRequire } from "node:module";
+import os from "node:os";
 import { join } from "node:path";
+import ts from "typescript";
 
 const projectRoot = process.cwd();
+const seoSourceRoot = join(projectRoot, "src", "lib", "seo");
+const seoOutDir = join(os.tmpdir(), `presidential-route-evidence-tracker-${process.pid}`);
 const trackerPath = join(
   projectRoot,
   "..",
@@ -29,6 +34,24 @@ const expectedRoutes = new Set([
   "/find-us",
   "/contact",
 ]);
+const expectedLaunchSequence = [
+  "home",
+  "moon-rocks",
+  "our-story",
+  "learn",
+  "find-us",
+  "contact",
+];
+const expectedRoutePublicationEvidenceCategories = [
+  "source",
+  "proof",
+  "claim",
+  "asset",
+  "metadata",
+  "schema",
+  "content",
+  "compliance",
+];
 
 const expectedOwnerLanes = new Set([
   "executive",
@@ -217,6 +240,116 @@ function assertEvery(records, check, predicate) {
   }
 }
 
+function collectTypeScriptFiles(directory) {
+  const files = [];
+
+  function walk(current) {
+    for (const entry of readdirSync(current, { withFileTypes: true })) {
+      const fullPath = join(current, entry.name);
+      if (entry.isDirectory()) {
+        walk(fullPath);
+        continue;
+      }
+
+      if (entry.isFile() && entry.name.endsWith(".ts")) {
+        files.push(fullPath);
+      }
+    }
+  }
+
+  walk(directory);
+  return files;
+}
+
+function compileSeoLibrary() {
+  rmSync(seoOutDir, { recursive: true, force: true });
+  mkdirSync(seoOutDir, { recursive: true });
+
+  const program = ts.createProgram(collectTypeScriptFiles(seoSourceRoot), {
+    allowSyntheticDefaultImports: true,
+    esModuleInterop: true,
+    jsx: ts.JsxEmit.ReactJSX,
+    module: ts.ModuleKind.CommonJS,
+    moduleResolution: ts.ModuleResolutionKind.Node10,
+    noEmitOnError: true,
+    outDir: seoOutDir,
+    rootDir: join(projectRoot, "src"),
+    skipLibCheck: true,
+    strict: true,
+    target: ts.ScriptTarget.ES2022,
+  });
+
+  const emitResult = program.emit();
+  const diagnostics = ts
+    .getPreEmitDiagnostics(program)
+    .concat(emitResult.diagnostics)
+    .filter((diagnostic) => diagnostic.category === ts.DiagnosticCategory.Error);
+
+  if (diagnostics.length > 0) {
+    const formatted = ts.formatDiagnosticsWithColorAndContext(diagnostics, {
+      getCanonicalFileName: (fileName) => fileName,
+      getCurrentDirectory: () => projectRoot,
+      getNewLine: () => "\n",
+    });
+    throw new Error(`Route evidence tracker compile failed:\n${formatted}`);
+  }
+}
+
+function readRoutePublicationScaffoldState() {
+  compileSeoLibrary();
+
+  const require = createRequire(import.meta.url);
+  const publicationPath = join(
+    seoOutDir,
+    "lib",
+    "seo",
+    "source-records",
+    "route-publication.js",
+  );
+
+  if (!existsSync(publicationPath)) {
+    throw new Error(`Compiled route publication module missing: ${publicationPath}`);
+  }
+
+  const {
+    APPROVED_ROUTE_PUBLICATIONS,
+    ROUTE_PUBLICATION_APPROVAL_SEQUENCE,
+    ROUTE_PUBLICATION_EVIDENCE_CATEGORIES,
+    ROUTE_PUBLICATION_EVIDENCE_SCAFFOLDS,
+    getNextRoutePublicationCandidate,
+    getRoutePublicationEvidenceScaffolds,
+  } = require(publicationPath);
+
+  return {
+    approvedRoutePublicationCount: APPROVED_ROUTE_PUBLICATIONS.length,
+    categories: [...ROUTE_PUBLICATION_EVIDENCE_CATEGORIES],
+    sequence: [...ROUTE_PUBLICATION_APPROVAL_SEQUENCE],
+    staticScaffolds: ROUTE_PUBLICATION_EVIDENCE_SCAFFOLDS,
+    scaffolds: getRoutePublicationEvidenceScaffolds(),
+    nextCandidate: getNextRoutePublicationCandidate(),
+  };
+}
+
+function scaffoldHasAllBlockedCategories(scaffold, categories) {
+  return categories.every((category) =>
+    scaffold.requirements.some(
+      (requirement) =>
+        requirement.category === category &&
+        requirement.required &&
+        requirement.status === "blocked" &&
+        requirement.reasons.includes("source_record:route_publication_missing"),
+    ),
+  );
+}
+
+let scaffoldState = null;
+
+try {
+  scaffoldState = readRoutePublicationScaffoldState();
+} catch (error) {
+  fail("tracker.routePublicationScaffolds.readable", error.message);
+}
+
 if (!existsSync(trackerPath)) {
   fail("tracker.exists", `Missing tracker: ${trackerPath}`);
 } else {
@@ -323,6 +456,80 @@ if (badNonGuideRows.length > 0) {
   pass("tracker.nonGuideFieldsNotApplicable", "Non-guide rows do not carry guide-only approvals");
 }
 
+if (scaffoldState) {
+  const scaffoldRoutes = new Set(scaffoldState.scaffolds.map((scaffold) => scaffold.path));
+
+  if (JSON.stringify(scaffoldState.sequence) === JSON.stringify(expectedLaunchSequence)) {
+    pass("tracker.routePublicationScaffolds.sequence", scaffoldState.sequence.join(" -> "));
+  } else {
+    fail(
+      "tracker.routePublicationScaffolds.sequence",
+      `Expected ${expectedLaunchSequence.join(" -> ")}, got ${scaffoldState.sequence.join(" -> ")}`,
+    );
+  }
+
+  if (JSON.stringify(scaffoldState.staticScaffolds) === JSON.stringify(scaffoldState.scaffolds)) {
+    pass("tracker.routePublicationScaffolds.staticMatchesRuntime", "static scaffold export matches runtime helper");
+  } else {
+    fail("tracker.routePublicationScaffolds.staticMatchesRuntime", "static scaffold export drifted from runtime helper");
+  }
+
+  if (
+    JSON.stringify(scaffoldState.categories) ===
+    JSON.stringify(expectedRoutePublicationEvidenceCategories)
+  ) {
+    pass(
+      "tracker.routePublicationScaffolds.categoriesExact",
+      scaffoldState.categories.join(", "),
+    );
+  } else {
+    fail(
+      "tracker.routePublicationScaffolds.categoriesExact",
+      `Expected ${expectedRoutePublicationEvidenceCategories.join(", ")}, got ${scaffoldState.categories.join(", ")}`,
+    );
+  }
+
+  if (
+    scaffoldState.scaffolds.length === expectedLaunchSequence.length &&
+    scaffoldState.scaffolds.every((scaffold) =>
+      scaffoldHasAllBlockedCategories(scaffold, scaffoldState.categories),
+    )
+  ) {
+    pass(
+      "tracker.routePublicationScaffolds.blockedCategories",
+      `${scaffoldState.scaffolds.length} launch routes carry ${scaffoldState.categories.length} blocked evidence categories`,
+    );
+  } else {
+    fail(
+      "tracker.routePublicationScaffolds.blockedCategories",
+      "One or more launch route evidence scaffolds is missing blocked categories",
+    );
+  }
+
+  if (
+    scaffoldState.approvedRoutePublicationCount === 0 &&
+    scaffoldState.scaffolds.every((scaffold) => scaffold.canUnlock === false) &&
+    scaffoldState.nextCandidate?.route.id === "home"
+  ) {
+    pass("tracker.routePublicationScaffolds.noUnlock", "0 approved records; scaffolds cannot unlock; next candidate remains home");
+  } else {
+    fail(
+      "tracker.routePublicationScaffolds.noUnlock",
+      `approved records=${scaffoldState.approvedRoutePublicationCount}; next=${scaffoldState.nextCandidate?.route.id ?? "none"}`,
+    );
+  }
+
+  const missingScaffoldRoutes = [...scaffoldRoutes].filter((route) => !routeSet.has(route));
+  if (missingScaffoldRoutes.length === 0) {
+    pass("tracker.routePublicationScaffolds.trackerRoutesCovered", "Every launch scaffold route exists in the evidence tracker");
+  } else {
+    fail(
+      "tracker.routePublicationScaffolds.trackerRoutesCovered",
+      `Tracker missing scaffold routes: ${missingScaffoldRoutes.join(", ")}`,
+    );
+  }
+}
+
 const artifactText = artifactPaths
   .filter((path) => existsSync(path))
   .map((path) => readFileSync(path, "utf8"))
@@ -354,6 +561,8 @@ const summary = {
   owner_lane_count: ownerLaneSet.size,
   row_count: records.length,
   column_count: headers.length,
+  launch_scaffold_count: scaffoldState?.scaffolds.length ?? 0,
+  launch_scaffold_categories: scaffoldState?.categories ?? [],
   passes: passes.length,
   failures: failures.length,
   failed_checks: failures,
