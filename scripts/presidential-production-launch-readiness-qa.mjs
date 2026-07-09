@@ -9,6 +9,7 @@ const requiredScripts = [
   "production:canonical-host:verify",
   "production:postdeploy-smoke:verify",
   "production:sitemap-submission:verify",
+  "production:live-action-boundary:verify",
   "production:launch-readiness:verify",
 ];
 
@@ -51,6 +52,7 @@ function main() {
   const canonicalText = read("scripts/presidential-production-canonical-host-qa.mjs");
   const postdeployText = read("scripts/presidential-production-postdeploy-smoke-qa.mjs");
   const sitemapSubmissionText = read("scripts/presidential-production-sitemap-submission-qa.mjs");
+  const liveActionBoundaryText = read("scripts/presidential-production-live-action-boundary-qa.mjs");
   const proxyText = read("src/proxy.ts");
   const analyticsText = read("src/components/analytics/google-analytics.tsx");
   const googleText = read("src/lib/analytics/google.ts");
@@ -140,6 +142,15 @@ function main() {
       sitemapSubmissionText.includes("providerActionExecuted: false") &&
       sitemapSubmissionText.includes("sitemapUnlocked: false"),
     "sitemap handoff remains local-only and false until built sitemap entries plus route records exist",
+  );
+  addCheck(
+    rows,
+    "launchReadiness.liveActionBoundary.localOnly",
+    liveActionBoundaryText.includes("PASS_PRODUCTION_LIVE_ACTION_BOUNDARY_LOCAL_ONLY") &&
+      liveActionBoundaryText.includes("liveProviderActionsExecuted: false") &&
+      liveActionBoundaryText.includes("envWriteExecuted: false") &&
+      liveActionBoundaryText.includes("searchProviderActionExecuted: false"),
+    "live launch actions remain local-only, opt-in, and absent from package scripts by default",
   );
   addCheck(
     rows,
