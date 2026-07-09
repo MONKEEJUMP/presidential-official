@@ -288,6 +288,9 @@ function main() {
     layoutText.includes("ADULT_CONFIRMATION_COOKIE") &&
     layoutText.includes("adultConfirmed") &&
     layoutText.includes("<AgeGate initialConfirmed={adultConfirmed} />");
+  const layoutMatchesServerAdultCookieState =
+    layoutText.includes('aria-hidden={adultConfirmed ? undefined : "true"}') &&
+    layoutText.includes("inert={adultConfirmed ? undefined : true}");
   const ageGateDisablesBackgroundUntilAccepted =
     ageGateText.includes('getElementById(AGE_GATED_CONTENT_ID)') &&
     ageGateText.includes('setAttribute("aria-hidden", "true")') &&
@@ -314,6 +317,7 @@ function main() {
     addCheck(rows, "ageGate.serverActionCookieScoped", ageGateActionIsScoped, "Age gate server action writes and clears only the adult-confirmation cookie with scoped first-party options"),
     addCheck(rows, "ageGate.clientCallsServerActions", ageGateUsesServerActions, "Age gate accept/decline path calls the scoped server cookie actions"),
     addCheck(rows, "layout.readsServerAdultCookie", layoutReadsServerAdultCookie, "Root layout reads the adult-confirmation cookie and passes only a boolean into the overlay"),
+    addCheck(rows, "layout.matchesServerAdultCookieState", layoutMatchesServerAdultCookieState, "Root layout omits inert and aria-hidden from the server-rendered content wrapper when the httpOnly adult-confirmation cookie is already present"),
     addCheck(rows, "ageGate.overlayControllerOnly", ageGateIsOverlayController, "Age gate controls overlay state without wrapping route children in a client component"),
     addCheck(rows, "layout.rendersChildrenInServerWrapper", layoutRendersChildrenInServerWrapper, "Route children remain in the server layout DOM behind the adult confirmation overlay"),
     addCheck(rows, "ageGate.disablesBackgroundUntilAccepted", ageGateDisablesBackgroundUntilAccepted, "Age gate marks background content inert and aria-hidden while active"),

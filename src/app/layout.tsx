@@ -51,9 +51,9 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <div
-          aria-hidden="true"
+          aria-hidden={adultConfirmed ? undefined : "true"}
           id="presidential-age-gated-content"
-          inert
+          inert={adultConfirmed ? undefined : true}
         >
           {children}
         </div>
