@@ -25,16 +25,26 @@ type StaticRoutePanel = {
   readonly body: string;
 };
 
+type StaticRouteCallout = {
+  readonly title: string;
+  readonly body: string;
+  readonly items: readonly string[];
+};
+
 function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
   if (route.kind === "store_locator") {
     return [
       {
-        title: "Licensed retail path",
-        body: "Find authentic Presidential products through a first-party retail path built for licensed retailer discovery.",
+        title: "Verified retailer records",
+        body: "Retailer listings appear only after the source records are verified for licensed retail use.",
       },
       {
-        title: "Local experience",
-        body: "State, city, and retailer paths are organized so shoppers can move from product interest to nearby licensed stores.",
+        title: "Local route structure",
+        body: "State, city, and retailer detail routes are planned for verified records, not customer-account rows.",
+      },
+      {
+        title: "Availability boundary",
+        body: "Product availability stays framed as retailer-dependent until approved retailer data is connected.",
       },
     ];
   }
@@ -69,11 +79,15 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
     return [
       {
         title: "Official contact path",
-        body: "Customer care, wholesale, press, and brand inquiries move through one official Presidential contact path.",
+        body: "Customer care, wholesale, press, and brand inquiries stay organized under one official Presidential route.",
       },
       {
-        title: "Brand inquiries",
-        body: "The contact experience will support adults 21+ where legal.",
+        title: "No public intake yet",
+        body: "No public form, CRM, newsletter, phone, or email detail is active until official contact handling is confirmed.",
+      },
+      {
+        title: "Adult-use boundary",
+        body: "The contact experience remains informational for adults 21+ where legal while final routing is confirmed.",
       },
     ];
   }
@@ -81,7 +95,7 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
   return [
     {
       title: "Product information",
-      body: "Explore the product platform, related education, and retail path from one official Presidential page.",
+      body: "Explore Presidential product platforms, related education, and the retail path from one official page.",
     },
     {
       title: "Official source path",
@@ -90,12 +104,43 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
   ];
 }
 
+function getRouteSupportCallout(route: SeoRouteRecord): StaticRouteCallout | null {
+  if (route.kind === "store_locator") {
+    return {
+      title: "Locator readiness",
+      body: "Find authentic Presidential products through a first-party retail path once verified retailer records are ready. This page does not expose unverified retailer rows or generate local listing pages.",
+      items: [
+        "Verified retailer source required",
+        "State and city pages stay gated",
+        "Retailer detail pages stay gated",
+        "Local listing markup stays off",
+      ],
+    };
+  }
+
+  if (route.kind === "contact") {
+    return {
+      title: "Contact readiness",
+      body: "This page establishes the official contact destination without collecting inquiry details before final routing is confirmed.",
+      items: [
+        "No active form fields",
+        "No mail or phone link",
+        "No CRM or newsletter embed",
+        "No stored submission data",
+      ],
+    };
+  }
+
+  return null;
+}
+
 export function StaticRouteFoundationShell({
   route,
   breadcrumbs,
   links,
 }: StaticRouteFoundationShellProps) {
   const panels = getRoutePanels(route);
+  const supportCallout = getRouteSupportCallout(route);
 
   return (
     <PageFrame>
@@ -167,7 +212,7 @@ export function StaticRouteFoundationShell({
               id="presidential-route-details"
               title="Inside this section"
             />
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-3">
               {panels.map((panel) => (
                 <article
                   className="border border-po-line bg-po-canvas p-5"
@@ -187,6 +232,31 @@ export function StaticRouteFoundationShell({
             </p>
           </div>
         </Scene>
+
+        {supportCallout ? (
+          <Scene ariaLabelledBy="presidential-support-readiness" tone="default">
+            <div className="mx-auto grid w-full max-w-6xl gap-6 lg:grid-cols-[minmax(0,0.86fr)_minmax(320px,0.58fr)] lg:items-start">
+              <div className="border border-po-brand-line bg-po-brand-soft p-6">
+                <SectionHeading
+                  as="h2"
+                  description={supportCallout.body}
+                  id="presidential-support-readiness"
+                  title={supportCallout.title}
+                />
+              </div>
+              <ul className="grid gap-3">
+                {supportCallout.items.map((item) => (
+                  <li
+                    className="border border-po-line bg-po-canvas px-4 py-3 text-sm font-semibold text-po-ink"
+                    key={item}
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Scene>
+        ) : null}
 
         {links.length > 0 ? (
           <Scene ariaLabelledBy="presidential-related-sections" tone="default">
