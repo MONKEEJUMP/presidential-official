@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSy
 import path from "node:path";
 import {
   analyticsFlags,
+  contactFlags,
   expectedProductionEnvNames,
   privatePreviewFlags,
   publicCmsFlags,
@@ -167,7 +168,7 @@ function main() {
   addCheck(
     rows,
     "productionEnv.expectedNames.tracked",
-    expectedProductionEnvNames.length === 11,
+    expectedProductionEnvNames.length === 13,
     expectedProductionEnvNames.join(", "),
   );
   addCheck(
@@ -175,6 +176,12 @@ function main() {
     "productionEnv.analyticsFlags.present",
     analyticsFlags.every((flag) => filesContaining(sourceFiles, flag).length > 0),
     analyticsFlags.map((flag) => `${flag}:${filesContaining(sourceFiles, flag).join("|") || "missing"}`).join(" ; "),
+  );
+  addCheck(
+    rows,
+    "productionEnv.contactFlags.present",
+    contactFlags.every((flag) => filesContaining(sourceFiles, flag).length > 0),
+    contactFlags.map((flag) => `${flag}:${filesContaining(sourceFiles, flag).join("|") || "missing"}`).join(" ; "),
   );
   addCheck(
     rows,
@@ -263,6 +270,7 @@ function main() {
     expectedProductionEnvNames,
     publicCmsFlags,
     privatePreviewFlags,
+    contactFlags,
     trackedDraftOnlyFlags,
     serverOnlySecretNames,
     passCount,

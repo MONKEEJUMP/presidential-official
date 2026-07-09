@@ -160,8 +160,8 @@ function envRecordTargetsProduction(record) {
 }
 
 async function fetchVercelProductionEnvNamePresence(projectIdentifier, teamIdentifier) {
-  const token = process.env[vercelTokenEnv]?.trim();
-  if (!token) {
+  const vercelBearer = process.env[vercelTokenEnv]?.trim();
+  if (!vercelBearer) {
     return { status: 0, ok: false, presence: null };
   }
 
@@ -176,7 +176,7 @@ async function fetchVercelProductionEnvNamePresence(projectIdentifier, teamIdent
   const response = await fetch(url, {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${vercelBearer}`,
       "Content-Type": "application/json",
     },
   });
@@ -285,7 +285,7 @@ async function main() {
   addCheck(
     rows,
     "provider.expectedProductionEnvNames.tracked",
-    expectedProductionEnvNames.length === 11 ? "pass" : "fail",
+    expectedProductionEnvNames.length === 13 ? "pass" : "fail",
     expectedProductionEnvNames.join(", "),
   );
 

@@ -17,6 +17,11 @@ export const analyticsFlags = [
   "PRESIDENTIAL_GOOGLE_SITE_VERIFICATION",
 ];
 
+export const contactFlags = [
+  "PRESIDENTIAL_CONTACT_FORM_ENABLED",
+  "PRESIDENTIAL_CONTACT_INBOX_EMAIL",
+];
+
 export const trackedDraftOnlyFlags = [
   "PRESIDENTIAL_LEARN_GUIDE_DRAFT_RENDERING_ENABLED",
 ];
@@ -27,5 +32,6 @@ export const expectedProductionEnvNames = [
   ...publicCmsFlags,
   ...privatePreviewFlags,
   ...analyticsFlags,
+  ...contactFlags,
   ...serverOnlySecretNames,
 ];
