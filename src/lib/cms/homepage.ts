@@ -114,6 +114,7 @@ export type SanityLinkedRecord = {
   readonly intro?: string;
   readonly positioningLine?: string;
   readonly shortDescription?: string;
+  readonly description?: string;
   readonly publicStatus?: string;
 };
 

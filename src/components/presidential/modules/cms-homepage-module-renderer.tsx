@@ -1,5 +1,16 @@
 import Link from "next/link";
 
+import type {
+  SanityAssetRecord,
+  SanityColumn,
+  SanityContactProfile,
+  SanityCta,
+  SanityFact,
+  SanityHomepageModule,
+  SanityLinkedRecord,
+  SanityPortableTextBlock,
+  SanityTimelineEvent,
+} from "@/lib/cms/homepage";
 import { getRouteByPath } from "@/lib/seo/route-helpers";
 import type { SeoRoutePath } from "@/lib/seo/route-types";
 
@@ -19,158 +30,6 @@ type CmsRenderMode = "public" | "private";
 type ProductRouteSlug = "moon-rocks" | "moon-pods" | "orbit";
 type SupportRouteSlug = "contact" | "find-us";
 type ContactModuleVariant = "contact" | "locator";
-
-type SanityHomepageModule = {
-  readonly _key?: string;
-  readonly _type?: string;
-  readonly eyebrow?: string;
-  readonly headline?: string;
-  readonly heading?: string;
-  readonly subheading?: string;
-  readonly subheadline?: string;
-  readonly actTitle?: string;
-  readonly actNumber?: number;
-  readonly beliefStatement?: string;
-  readonly positioningLine?: string;
-  readonly shortExplanation?: string;
-  readonly description?: string;
-  readonly legalTitle?: string;
-  readonly intro?: string;
-  readonly body?: string | readonly SanityPortableTextBlock[];
-  readonly supportingCopy?: readonly SanityPortableTextBlock[];
-  readonly storyCopy?: readonly SanityPortableTextBlock[];
-  readonly callout?: string;
-  readonly sourceNote?: string;
-  readonly title?: string;
-  readonly proofType?: string;
-  readonly proofSource?: string;
-  readonly sourceSystem?: string;
-  readonly originalPathOrRoute?: string;
-  readonly assetCategory?: string;
-  readonly provenanceStatus?: string;
-  readonly approvalStatus?: string;
-  readonly allowedUsage?: string;
-  readonly blockedUsage?: string;
-  readonly fallbackLanguage?: string;
-  readonly formIntent?: string;
-  readonly stateCandidates?: readonly string[];
-  readonly retailerDataStatus?: string;
-  readonly legalGateStatus?: string;
-  readonly ctaLabel?: string;
-  readonly ctaHref?: string;
-  readonly primaryCta?: SanityCta;
-  readonly secondaryCta?: SanityCta;
-  readonly cta?: SanityCta;
-  readonly visibleCta?: SanityCta;
-  readonly heroAssetRecord?: SanityAssetRecord;
-  readonly assetRecord?: SanityAssetRecord;
-  readonly assetRecords?: readonly SanityAssetRecord[];
-  readonly assetRecordRefs?: readonly SanityAssetRecord[];
-  readonly platform?: SanityLinkedRecord;
-  readonly format?: SanityLinkedRecord;
-  readonly contactProfile?: SanityContactProfile;
-  readonly linkedLocatorRegion?: SanityLinkedRecord;
-  readonly cards?: readonly SanityCard[];
-  readonly featuredGuides?: readonly SanityLinkedRecord[];
-  readonly relatedPlatforms?: readonly SanityLinkedRecord[];
-  readonly relatedProductLinks?: readonly SanityLinkedRecord[];
-  readonly events?: readonly SanityTimelineEvent[];
-  readonly facts?: readonly SanityFact[];
-  readonly columns?: readonly SanityColumn[];
-  readonly question?: string;
-  readonly answer?: string;
-  readonly items?: readonly {
-    readonly _id?: string;
-    readonly _type?: string;
-    readonly title?: string;
-    readonly name?: string;
-    readonly label?: string;
-    readonly description?: string;
-    readonly slug?: string;
-  }[];
-  readonly moduleControl?: {
-    readonly moduleKey?: string;
-    readonly internalLabel?: string;
-    readonly componentKey?: string;
-    readonly renderEligibility?: string;
-    readonly sortIntent?: number;
-  };
-};
-
-type SanityCta = {
-  readonly label?: string;
-  readonly href?: string;
-  readonly intent?: string;
-};
-
-type SanityAssetRecord = {
-  readonly _id?: string;
-  readonly title?: string;
-  readonly assetName?: string;
-  readonly savedFile?: string;
-  readonly sourceSystem?: string;
-  readonly approvalStatus?: string;
-  readonly provenanceStatus?: string;
-  readonly pageUsage?: readonly string[];
-};
-
-type SanityLinkedRecord = {
-  readonly _id?: string;
-  readonly _type?: string;
-  readonly title?: string;
-  readonly name?: string;
-  readonly slug?: string;
-  readonly guideTopic?: string;
-  readonly intro?: string;
-  readonly positioningLine?: string;
-  readonly shortDescription?: string;
-  readonly description?: string;
-  readonly publicStatus?: string;
-};
-
-type SanityContactProfile = {
-  readonly _id?: string;
-  readonly _type?: "contactProfile";
-  readonly title?: string;
-  readonly phone?: string;
-  readonly displayEmail?: string;
-  readonly mailtoEmail?: string;
-  readonly emailConflictStatus?: string;
-  readonly publicUseStatus?: string;
-};
-
-type SanityCard = {
-  readonly title?: string;
-  readonly route?: string;
-  readonly sourceStatus?: string;
-  readonly routeGate?: string;
-  readonly assetRecord?: SanityAssetRecord;
-  readonly contentRef?: SanityLinkedRecord;
-};
-
-type SanityTimelineEvent = {
-  readonly label?: string;
-  readonly dateOrSequence?: string;
-  readonly body?: readonly SanityPortableTextBlock[];
-};
-
-type SanityFact = {
-  readonly label?: string;
-  readonly value?: string;
-  readonly publicUseStatus?: string;
-};
-
-type SanityColumn = {
-  readonly title?: string;
-  readonly body?: readonly SanityPortableTextBlock[];
-  readonly contentRef?: SanityLinkedRecord;
-};
-
-type SanityPortableTextBlock = {
-  readonly children?: readonly {
-    readonly text?: string;
-  }[];
-};
 
 function asSeoRoutePath(href?: string): SeoRoutePath | null {
   if (!href?.startsWith("/")) {

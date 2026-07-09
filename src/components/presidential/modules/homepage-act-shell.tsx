@@ -1,6 +1,6 @@
+import { Scene, type SceneTone } from "../layout/scene";
 import { MediaSlot } from "../media/media-slot";
 import { SectionHeading } from "../primitives/section-heading";
-import { Scene, type SceneTone } from "../layout/scene";
 
 export type HomepageActShellProps = {
   readonly actNumber: 1 | 2 | 3 | 4 | 5 | 6 | 7;
