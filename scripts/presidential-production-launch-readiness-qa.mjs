@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { expectedProductionEnvNames } from "./presidential-production-env-contract.mjs";
 
 const webRoot = process.cwd();
 
@@ -14,20 +15,6 @@ const requiredScripts = [
   "production:lockfile-reproducibility:verify",
   "production:launch-readiness:verify",
   "production:owner-gates:verify",
-];
-
-const expectedProductionEnvNames = [
-  "PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED",
-  "PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED",
-  "PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED",
-  "PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED",
-  "PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED",
-  "PRESIDENTIAL_SANITY_DRAFT_READ_ENABLED",
-  "PRESIDENTIAL_ANALYTICS_ENABLED",
-  "NEXT_PUBLIC_PRESIDENTIAL_GA_MEASUREMENT_ID",
-  "PRESIDENTIAL_GOOGLE_SITE_VERIFICATION_ENABLED",
-  "PRESIDENTIAL_GOOGLE_SITE_VERIFICATION",
-  "SANITY_AUTH_TOKEN",
 ];
 
 function read(relativePath) {
@@ -51,6 +38,7 @@ function main() {
   const scripts = packageJson.scripts ?? {};
   const scriptCommands = Object.values(scripts).join("\n");
   const envContractText = read("scripts/presidential-production-env-contract-qa.mjs");
+  const envContractSourceText = read("scripts/presidential-production-env-contract.mjs");
   const providerText = read("scripts/presidential-production-provider-readiness-qa.mjs");
   const canonicalText = read("scripts/presidential-production-canonical-host-qa.mjs");
   const postdeployText = read("scripts/presidential-production-postdeploy-smoke-qa.mjs");
@@ -91,7 +79,8 @@ function main() {
   addCheck(
     rows,
     "launchReadiness.envContract.tracksExpectedNames",
-    expectedProductionEnvNames.every((name) => envContractText.includes(`"${name}"`)),
+    expectedProductionEnvNames.every((name) => envContractSourceText.includes(`"${name}"`)) &&
+      envContractText.includes("expectedProductionEnvNames"),
     expectedProductionEnvNames.join(", "),
   );
   addCheck(

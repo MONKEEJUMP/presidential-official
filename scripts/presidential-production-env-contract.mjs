@@ -1,0 +1,31 @@
+export const publicCmsFlags = [
+  "PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED",
+  "PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED",
+  "PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED",
+  "PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED",
+];
+
+export const privatePreviewFlags = [
+  "PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED",
+  "PRESIDENTIAL_SANITY_DRAFT_READ_ENABLED",
+];
+
+export const analyticsFlags = [
+  "PRESIDENTIAL_ANALYTICS_ENABLED",
+  "NEXT_PUBLIC_PRESIDENTIAL_GA_MEASUREMENT_ID",
+  "PRESIDENTIAL_GOOGLE_SITE_VERIFICATION_ENABLED",
+  "PRESIDENTIAL_GOOGLE_SITE_VERIFICATION",
+];
+
+export const trackedDraftOnlyFlags = [
+  "PRESIDENTIAL_LEARN_GUIDE_DRAFT_RENDERING_ENABLED",
+];
+
+export const serverOnlySecretNames = ["SANITY_AUTH_TOKEN"];
+
+export const expectedProductionEnvNames = [
+  ...publicCmsFlags,
+  ...privatePreviewFlags,
+  ...analyticsFlags,
+  ...serverOnlySecretNames,
+];

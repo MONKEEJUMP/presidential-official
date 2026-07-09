@@ -1,5 +1,13 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import {
+  analyticsFlags,
+  expectedProductionEnvNames,
+  privatePreviewFlags,
+  publicCmsFlags,
+  serverOnlySecretNames,
+  trackedDraftOnlyFlags,
+} from "./presidential-production-env-contract.mjs";
 
 const webRoot = process.cwd();
 const root = path.resolve(webRoot, "..");
@@ -12,37 +20,6 @@ const docsResultsPath = path.join(
 const workRoot = path.join(root, "sources", "spud", "work", "step11-production-env-contract");
 const statusJsonPath = path.join(workRoot, "step11-production-env-contract-status.json");
 const statusMdPath = path.join(workRoot, "step11-production-env-contract-status.md");
-
-const publicCmsFlags = [
-  "PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED",
-  "PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED",
-  "PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED",
-  "PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED",
-];
-
-const privatePreviewFlags = [
-  "PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED",
-  "PRESIDENTIAL_SANITY_DRAFT_READ_ENABLED",
-];
-
-const analyticsFlags = [
-  "PRESIDENTIAL_ANALYTICS_ENABLED",
-  "NEXT_PUBLIC_PRESIDENTIAL_GA_MEASUREMENT_ID",
-  "PRESIDENTIAL_GOOGLE_SITE_VERIFICATION_ENABLED",
-  "PRESIDENTIAL_GOOGLE_SITE_VERIFICATION",
-];
-
-const trackedDraftOnlyFlags = [
-  "PRESIDENTIAL_LEARN_GUIDE_DRAFT_RENDERING_ENABLED",
-];
-
-const serverOnlySecretNames = ["SANITY_AUTH_TOKEN"];
-const expectedProductionEnvNames = [
-  ...publicCmsFlags,
-  ...privatePreviewFlags,
-  ...analyticsFlags,
-  ...serverOnlySecretNames,
-];
 
 const textExtensions = new Set([".css", ".js", ".json", ".mjs", ".ts", ".tsx"]);
 const sourceRoots = [
@@ -61,6 +38,7 @@ const allowedSecretFiles = new Set([
   "src/lib/cms/learn-guide-drafts.ts",
   "scripts/presidential-cms-live-draft-smoke-qa.mjs",
   "scripts/presidential-cms-web-read-boundary-qa.mjs",
+  "scripts/presidential-production-env-contract.mjs",
   "scripts/presidential-production-env-contract-qa.mjs",
   "scripts/presidential-production-launch-readiness-qa.mjs",
   "scripts/presidential-production-provider-readiness-qa.mjs",

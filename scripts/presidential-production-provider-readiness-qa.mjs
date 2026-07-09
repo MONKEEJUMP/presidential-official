@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
+import { expectedProductionEnvNames } from "./presidential-production-env-contract.mjs";
 
 const webRoot = process.cwd();
 const root = path.resolve(webRoot, "..");
@@ -21,20 +22,6 @@ const vercelTokenEnv = "VERCEL_TOKEN";
 const vercelProjectIdEnv = "VERCEL_PROJECT_ID";
 const vercelProjectNameEnv = "VERCEL_PROJECT_NAME";
 const vercelTeamIdEnv = "VERCEL_TEAM_ID";
-
-const expectedProductionEnvNames = [
-  "PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED",
-  "PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED",
-  "PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED",
-  "PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED",
-  "PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED",
-  "PRESIDENTIAL_SANITY_DRAFT_READ_ENABLED",
-  "PRESIDENTIAL_ANALYTICS_ENABLED",
-  "NEXT_PUBLIC_PRESIDENTIAL_GA_MEASUREMENT_ID",
-  "PRESIDENTIAL_GOOGLE_SITE_VERIFICATION_ENABLED",
-  "PRESIDENTIAL_GOOGLE_SITE_VERIFICATION",
-  "SANITY_AUTH_TOKEN",
-];
 
 const deployCommandPatterns = [
   /\bvercel\s+--prod\b/i,
