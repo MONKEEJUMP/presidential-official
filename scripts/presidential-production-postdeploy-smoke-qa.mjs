@@ -18,10 +18,14 @@ const smokeBaseUrl = process.env.PRESIDENTIAL_PRODUCTION_SMOKE_BASE_URL ?? canon
 const liveSmokeEnabled = process.env.PRESIDENTIAL_PRODUCTION_POSTDEPLOY_SMOKE_LIVE === "true";
 const expectAnalytics = process.env.PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_ANALYTICS === "true";
 const expectGsc = process.env.PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_GSC === "true";
+const expectContactFormReady = process.env.PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_CONTACT_FORM_READY === "true";
 const gaMeasurementIdEnv = "NEXT_PUBLIC_PRESIDENTIAL_GA_MEASUREMENT_ID";
 const gscVerificationTokenEnv = "PRESIDENTIAL_GOOGLE_SITE_VERIFICATION";
+const contactFormEnabledEnv = "PRESIDENTIAL_CONTACT_FORM_ENABLED";
+const contactInboxEnv = "PRESIDENTIAL_CONTACT_INBOX_EMAIL";
 const gaMeasurementIdPattern = /^G-[A-Z0-9]{6,}$/;
 const googleSiteVerificationPattern = /^[A-Za-z0-9_-]{16,256}$/;
+const contactInboxPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const launchRoutes = [
   "/",
@@ -76,6 +80,12 @@ function getExpectedGscVerificationToken() {
   return googleSiteVerificationPattern.test(verificationToken) ? verificationToken : "";
 }
 
+function hasExpectedContactInbox() {
+  if (!expectContactFormReady) return true;
+  const inbox = process.env[contactInboxEnv]?.trim() ?? "";
+  return process.env[contactFormEnabledEnv] === "true" && contactInboxPattern.test(inbox);
+}
+
 function extractAnalyticsMeasurementIds(html) {
   const loaderMatch = html.match(/https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=([^"'&<\s]+)/);
   const configMatch = html.match(/gtag\(['"]config['"],\s*['"]([^'"]+)['"]/);
@@ -105,6 +115,18 @@ function hasGscVerificationMeta(html) {
 
 function hasExpectedGscVerificationMeta(html, expectedToken) {
   return extractGscVerificationToken(html) === expectedToken;
+}
+
+function hasContactFormShell(html) {
+  return html.includes("presidential-contact-form-status") && /<form\b/i.test(html);
+}
+
+function hasThirdPartyContactProviderSignal(html) {
+  return /\b(?:hubspot|mailchimp|klaviyo|salesforce|typeform|jotform|formspree|recaptcha|hcaptcha|turnstile)\b/i.test(html);
+}
+
+function hasDisabledContactFormCopy(html) {
+  return html.includes("The approved inbox is not provisioned yet.");
 }
 
 async function fetchText(url) {
@@ -211,6 +233,38 @@ async function runLiveSmoke(rows, baseUrl) {
       ? "GSC verification meta was expected and matched the expected env token"
       : "GSC verification meta was not expected and absent",
   );
+
+  const contactHtml = routeBodies.get("/contact") ?? "";
+  addCheck(
+    rows,
+    "postdeploy.live.contact.formShell",
+    hasContactFormShell(contactHtml) ? "pass" : "fail",
+    "Contact route renders the first-party inquiry form shell",
+  );
+  addCheck(
+    rows,
+    "postdeploy.live.contact.expectedEnvValid",
+    hasExpectedContactInbox() ? "pass" : "fail",
+    expectContactFormReady
+      ? "Contact form readiness expectation requires enabled flag plus a valid approved inbox in the smoke environment"
+      : "Contact form readiness was not expected, so no approved inbox env value is required",
+  );
+  addCheck(
+    rows,
+    "postdeploy.live.contact.state",
+    expectContactFormReady
+      ? (!hasDisabledContactFormCopy(contactHtml) ? "pass" : "fail")
+      : (hasDisabledContactFormCopy(contactHtml) ? "pass" : "fail"),
+    expectContactFormReady
+      ? "Contact form was expected to be active and did not show the disabled-inbox copy"
+      : "Contact form was expected to stay disabled until approved inbox provisioning",
+  );
+  addCheck(
+    rows,
+    "postdeploy.live.contact.noThirdPartyProvider",
+    !hasThirdPartyContactProviderSignal(contactHtml) ? "pass" : "fail",
+    "Contact route contains no third-party form, CRM, or captcha provider signal",
+  );
 }
 
 async function main() {
@@ -221,6 +275,8 @@ async function main() {
   const routePublicationText = readSource("src/lib/seo/source-records/route-publication.ts");
   const analyticsText = readSource("src/components/analytics/google-analytics.tsx");
   const layoutText = readSource("src/app/layout.tsx");
+  const contactFormText = readSource("src/app/contact/contact-inquiry-form.tsx");
+  const contactConfigText = readSource("src/app/contact/contact-inquiry-config.ts");
 
   addCheck(
     rows,
@@ -271,6 +327,15 @@ async function main() {
       layoutText.includes("getGoogleSiteVerification") &&
       gaMeasurementIdPattern.test("G-ABC1234"),
     "GA4 render path is present and gated by env/ID validation",
+  );
+  addCheck(
+    rows,
+    "postdeploy.contact.gated",
+    contactFormText.includes("presidential-contact-form-status") &&
+      contactFormText.includes("configured") &&
+      contactConfigText.includes("PRESIDENTIAL_CONTACT_FORM_ENABLED") &&
+      contactConfigText.includes("PRESIDENTIAL_CONTACT_INBOX_EMAIL"),
+    "Contact form render path is present and gated by approved inbox env values",
   );
   addCheck(
     rows,
