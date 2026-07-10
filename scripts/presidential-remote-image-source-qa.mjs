@@ -156,6 +156,41 @@ function publicAssetFiles() {
     .filter((file) => imageExtensions.test(file));
 }
 
+function collectLocalImageUsage(files) {
+  const nextImageSources = [];
+  const staticImageImports = [];
+  let nextImageComponentCount = 0;
+
+  for (const file of files) {
+    const text = readFileSync(file, "utf8");
+    const relativeFile = path.relative(root, file);
+    const importsNextImage = /from\s+["']next\/image["']|require\(["']next\/image["']\)/.test(text);
+
+    for (const pattern of [
+      /\bfrom\s+["']([^"']+\.(?:avif|gif|ico|jpe?g|png|svg|webp))["']/gi,
+      /\brequire\(\s*["']([^"']+\.(?:avif|gif|ico|jpe?g|png|svg|webp))["']\s*\)/gi,
+      /\bimport\s+["']([^"']+\.(?:avif|gif|ico|jpe?g|png|svg|webp))["']/gi,
+    ]) {
+      for (const match of text.matchAll(pattern)) {
+        staticImageImports.push({ file: relativeFile, value: match[1] });
+      }
+    }
+
+    if (!importsNextImage) {
+      continue;
+    }
+
+    nextImageComponentCount += (text.match(/<Image\b/g) ?? []).length;
+    for (const match of text.matchAll(
+      /<Image\b[\s\S]*?\bsrc\s*=\s*["']([^"']+)["'][\s\S]*?>/g,
+    )) {
+      nextImageSources.push({ file: relativeFile, value: match[1] });
+    }
+  }
+
+  return { nextImageComponentCount, nextImageSources, staticImageImports };
+}
+
 function main() {
   const rows = [];
   const nextConfigText = existsSync(nextConfigPath) ? readFileSync(nextConfigPath, "utf8") : "";
@@ -174,6 +209,16 @@ function main() {
   const builtBlockedHostMatches = collectTextMatches(builtFiles, [blockedHostPattern]);
   const unexpectedPublicImages = publicImages.filter((file) => !allowedPublicImageFiles.has(file));
   const missingAllowedPublicImages = [...allowedPublicImageFiles].filter((file) => !publicImages.includes(file));
+  const { nextImageComponentCount, nextImageSources, staticImageImports } =
+    collectLocalImageUsage(sourceFiles);
+  const invalidNextImageSources = nextImageSources.filter(({ value }) => {
+    if (!value.startsWith("/")) {
+      return true;
+    }
+    const publicPath = value.slice(1).split(/[?#]/, 1)[0];
+    return !allowedPublicImageFiles.has(publicPath) || !publicImages.includes(publicPath);
+  });
+  const unresolvedNextImageComponents = nextImageComponentCount - nextImageSources.length;
 
   const hasImagesConfig = /\bimages\s*:/.test(nextConfigText);
   const hasRemotePatterns = /\bremotePatterns\s*:/.test(nextConfigText);
@@ -244,9 +289,21 @@ function main() {
     ),
     addCheck(
       rows,
+      "source.noStaticImageImports",
+      staticImageImports.length === 0,
+      `${staticImageImports.length} static image import(s) found outside the approved public asset path boundary`,
+    ),
+    addCheck(
+      rows,
       "source.nextImageLocalAssetBoundary",
-      sourceRemoteImageUrls.length === 0 && !hasRemotePatterns && !hasDomains && !hasCustomLoader,
-      `${nextImageImportCount} next/image import(s) restricted to checked-in local assets; remote hosts and loaders remain disabled`,
+      sourceRemoteImageUrls.length === 0 &&
+        !hasRemotePatterns &&
+        !hasDomains &&
+        !hasCustomLoader &&
+        staticImageImports.length === 0 &&
+        invalidNextImageSources.length === 0 &&
+        unresolvedNextImageComponents === 0,
+      `${nextImageImportCount} next/image import(s), ${nextImageComponentCount} component use(s), ${nextImageSources.length} approved local literal source(s), ${invalidNextImageSources.length} invalid source(s), ${unresolvedNextImageComponents} unresolved component source(s)`,
     ),
     addCheck(
       rows,
@@ -297,6 +354,11 @@ function main() {
     publicImageFiles: publicImages,
     unexpectedPublicImages,
     missingAllowedPublicImages,
+    nextImageComponentCount,
+    nextImageSources,
+    invalidNextImageSources,
+    unresolvedNextImageComponents,
+    staticImageImports,
     sourceRemoteImageUrls,
     builtRemoteImageUrls,
     sourceBlockedHostMatches,

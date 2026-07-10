@@ -32,7 +32,7 @@ export function SiteHeader() {
           type="checkbox"
         />
         <label
-          className="flex h-11 w-11 cursor-pointer items-center justify-center border border-po-on-dark/25 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-po-brand md:hidden"
+          className="flex h-11 w-11 cursor-pointer items-center justify-center border border-po-on-dark/25 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-po-brand lg:hidden"
           htmlFor="presidential-navigation-toggle"
         >
           <span className="sr-only">Toggle navigation</span>
@@ -45,9 +45,9 @@ export function SiteHeader() {
 
         <nav
           aria-label="Primary navigation"
-          className="absolute inset-x-5 top-[calc(100%+0.01rem)] hidden border border-po-on-dark/15 bg-po-ink p-3 shadow-2xl peer-checked:block sm:inset-x-8 md:static md:block md:min-w-0 md:flex-1 md:border-0 md:bg-transparent md:p-0 md:shadow-none"
+          className="absolute inset-x-5 top-[calc(100%+0.01rem)] hidden border border-po-on-dark/15 bg-po-ink p-3 shadow-2xl peer-checked:block sm:inset-x-8 lg:static lg:block lg:min-w-0 lg:flex-1 lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none"
         >
-          <ul className="grid md:flex md:items-center md:justify-end md:gap-1 md:whitespace-nowrap">
+          <ul className="grid lg:flex lg:items-center lg:justify-end lg:gap-1 lg:whitespace-nowrap">
             {primaryNavItems.map((item) => (
               <li
                 className="po-primary-nav-item"
