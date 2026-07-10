@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { isContactInquiryConfigured } from "@/app/contact/contact-inquiry-config";
-import { ContactInquiryForm } from "@/app/contact/contact-inquiry-form";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 import { PageFrame } from "../layout/page-frame";
@@ -10,6 +9,7 @@ import { SceneStack } from "../layout/scene-stack";
 import { MediaSlot } from "../media/media-slot";
 import { CtaLink } from "../primitives/cta-link";
 import { SectionHeading } from "../primitives/section-heading";
+import { SupportRouteFoundationShell } from "./support-route-foundation-shell";
 
 type StaticRouteBreadcrumb = {
   readonly name: string;
@@ -317,6 +317,19 @@ export function StaticRouteFoundationShell({
     );
   }
 
+  if (route.kind === "contact" || route.kind === "store_locator") {
+    return (
+      <SupportRouteFoundationShell
+        breadcrumbs={breadcrumbs}
+        contactInquiryConfigured={contactInquiryConfigured}
+        links={links}
+        panels={panels}
+        route={route}
+        supportCallout={supportCallout}
+      />
+    );
+  }
+
   return (
     <PageFrame>
       <SceneStack>
@@ -408,45 +421,6 @@ export function StaticRouteFoundationShell({
             </p>
           </div>
         </Scene>
-
-        {supportCallout ? (
-          <Scene ariaLabelledBy="presidential-support-readiness" tone="default">
-            <div className="mx-auto grid w-full max-w-6xl gap-6 lg:grid-cols-[minmax(0,0.86fr)_minmax(320px,0.58fr)] lg:items-start">
-              <div className="border border-po-brand-line bg-po-brand-soft p-6">
-                <SectionHeading
-                  as="h2"
-                  description={supportCallout.body}
-                  id="presidential-support-readiness"
-                  title={supportCallout.title}
-                />
-              </div>
-              <ul className="grid gap-3">
-                {supportCallout.items.map((item) => (
-                  <li
-                    className="border border-po-line bg-po-canvas px-4 py-3 text-sm font-semibold text-po-ink"
-                    key={item}
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Scene>
-        ) : null}
-
-        {route.kind === "contact" && contactInquiryConfigured ? (
-          <Scene ariaLabelledBy="presidential-contact-inquiry" tone="quiet">
-            <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
-              <SectionHeading
-                as="h2"
-                description="Email Presidential directly. Your message is handled by your email provider and is not stored by this website."
-                id="presidential-contact-inquiry"
-                title="Official inquiry path"
-              />
-              <ContactInquiryForm configured={contactInquiryConfigured} />
-            </div>
-          </Scene>
-        ) : null}
 
         {links.length > 0 ? (
           <Scene ariaLabelledBy="presidential-related-sections" tone="default">

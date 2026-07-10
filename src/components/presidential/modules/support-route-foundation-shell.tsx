@@ -1,0 +1,274 @@
+import Link from "next/link";
+
+import { ContactInquiryForm } from "@/app/contact/contact-inquiry-form";
+import type { SeoRouteRecord } from "@/lib/seo/route-types";
+
+import { PageFrame } from "../layout/page-frame";
+import { Scene } from "../layout/scene";
+import { SceneStack } from "../layout/scene-stack";
+import { CtaLink } from "../primitives/cta-link";
+
+type SupportBreadcrumb = {
+  readonly name: string;
+  readonly path: string;
+};
+
+type SupportPanel = {
+  readonly title: string;
+  readonly body: string;
+};
+
+type SupportCallout = {
+  readonly title: string;
+  readonly body: string;
+  readonly items: readonly string[];
+};
+
+type SupportRouteFoundationShellProps = {
+  readonly route: SeoRouteRecord;
+  readonly breadcrumbs: readonly SupportBreadcrumb[];
+  readonly links: readonly SeoRouteRecord[];
+  readonly panels: readonly SupportPanel[];
+  readonly supportCallout: SupportCallout | null;
+  readonly contactInquiryConfigured: boolean;
+};
+
+export function SupportRouteFoundationShell({
+  route,
+  breadcrumbs,
+  links,
+  panels,
+  supportCallout,
+  contactInquiryConfigured,
+}: SupportRouteFoundationShellProps) {
+  if (route.kind !== "contact" && route.kind !== "store_locator") {
+    throw new Error(
+      "SupportRouteFoundationShell requires a contact or store-locator route record.",
+    );
+  }
+
+  return (
+    <PageFrame>
+      <SceneStack>
+        <section
+          aria-labelledby="presidential-route-title"
+          className="grid overflow-hidden bg-po-ink text-po-on-dark lg:min-h-[calc(100svh-7rem)] lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.62fr)]"
+        >
+          <div className="flex flex-col justify-between gap-14 px-6 py-12 sm:px-10 lg:px-16 lg:py-16">
+            <nav aria-label="Breadcrumb" className="text-sm text-po-on-dark-muted">
+              <ol className="flex flex-wrap items-center gap-2">
+                {breadcrumbs.map((breadcrumb, index) => {
+                  const isCurrent = index === breadcrumbs.length - 1;
+
+                  return (
+                    <li className="flex items-center gap-2" key={breadcrumb.path}>
+                      {index > 0 ? (
+                        <span aria-hidden="true" className="text-po-brand">
+                          /
+                        </span>
+                      ) : null}
+                      {isCurrent ? (
+                        <span aria-current="page" className="text-po-on-dark">
+                          {breadcrumb.name}
+                        </span>
+                      ) : (
+                        <Link
+                          className="font-semibold text-po-brand underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
+                          href={breadcrumb.path}
+                        >
+                          {breadcrumb.name}
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
+              </ol>
+            </nav>
+
+            <div className="max-w-4xl">
+              <p className="text-xs font-black uppercase text-po-brand">
+                Official Presidential
+              </p>
+              <h1
+                className="mt-5 font-display text-4xl uppercase leading-[0.9] text-po-on-dark sm:text-6xl lg:text-7xl"
+                id="presidential-route-title"
+              >
+                {route.h1}
+              </h1>
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-po-on-dark-muted">
+                {route.description}
+              </p>
+              <p className="mt-6 max-w-xl text-sm leading-6 text-po-on-dark-muted">
+                A focused official section inside the Presidential digital
+                experience for adults 21+ where legal.
+              </p>
+            </div>
+          </div>
+
+          <figure className="relative min-h-64 overflow-hidden bg-po-brand lg:min-h-full">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[url('/brand/banner-palms-teal.webp')] bg-[length:auto_190%] bg-left bg-no-repeat opacity-55"
+            />
+            <div
+              aria-hidden="true"
+              className="po-brand-mark absolute inset-10 bg-contain bg-center bg-no-repeat"
+            />
+            <figcaption className="absolute inset-x-6 bottom-6 border-t border-po-ink pt-4 text-po-ink sm:inset-x-10">
+              <span className="block text-xs font-black uppercase">
+                {route.h1} media
+              </span>
+              <span className="mt-1 block text-sm">Presidential section visual</span>
+            </figcaption>
+          </figure>
+        </section>
+
+        <Scene
+          ariaLabelledBy="presidential-route-details"
+          className="py-24 lg:py-32"
+          tone="default"
+        >
+          <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">
+            <div>
+              <p className="text-xs font-black uppercase text-po-brand-ink">
+                Official path
+              </p>
+              <h2
+                className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-6xl"
+                id="presidential-route-details"
+              >
+                Inside this section
+              </h2>
+              <p className="mt-6 max-w-md text-base leading-7 text-po-body">
+                A direct route into the Presidential brand, product, education,
+                and retail ecosystem.
+              </p>
+              <p className="mt-6 text-sm font-medium text-po-muted">
+                For adults 21+ where legal.
+              </p>
+            </div>
+
+            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+              {panels.map((panel, index) => (
+                <article className="border-t border-po-ink pt-5" key={panel.title}>
+                  <p className="text-xs font-black text-po-brand-ink">
+                    0{index + 1}
+                  </p>
+                  <h3 className="mt-10 text-xl font-semibold leading-snug text-po-ink">
+                    {panel.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-6 text-po-body">
+                    {panel.body}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </Scene>
+
+        {supportCallout ? (
+          <Scene
+            ariaLabelledBy="presidential-support-readiness"
+            className="py-24 lg:py-32"
+            tone="contrast"
+          >
+            <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(0,0.85fr)_minmax(360px,0.65fr)] lg:gap-24">
+              <div>
+                <p className="text-xs font-black uppercase text-po-brand">
+                  First-party retail path
+                </p>
+                <h2
+                  className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl"
+                  id="presidential-support-readiness"
+                >
+                  {supportCallout.title}
+                </h2>
+                <p className="mt-6 max-w-xl text-base leading-7 text-po-on-dark-muted">
+                  {supportCallout.body}
+                </p>
+              </div>
+              <ul className="border-t border-po-on-dark/20">
+                {supportCallout.items.map((item, index) => (
+                  <li
+                    className="flex gap-5 border-b border-po-on-dark/20 py-6 text-sm font-semibold text-po-on-dark"
+                    key={item}
+                  >
+                    <span aria-hidden="true" className="text-xs font-black text-po-brand">
+                      0{index + 1}
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Scene>
+        ) : null}
+
+        {route.kind === "contact" && contactInquiryConfigured ? (
+          <section
+            aria-labelledby="presidential-contact-inquiry"
+            className="bg-po-brand px-6 py-24 text-po-ink sm:px-10 lg:px-16 lg:py-32"
+          >
+            <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">
+              <div>
+                <h2
+                  className="font-display text-4xl uppercase leading-[0.92] sm:text-6xl"
+                  id="presidential-contact-inquiry"
+                >
+                  Official inquiry path
+                </h2>
+              </div>
+              <div className="border-t border-po-ink pt-6">
+                <p className="max-w-xl text-base leading-7 text-po-brand-ink">
+                  Email Presidential directly. Your message is handled by your
+                  email provider and is not stored by this website.
+                </p>
+                <div className="mt-8">
+                  <ContactInquiryForm configured={contactInquiryConfigured} />
+                </div>
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        {links.length > 0 ? (
+          <Scene
+            ariaLabelledBy="presidential-related-sections"
+            className="py-24 lg:py-32"
+            tone="quiet"
+          >
+            <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">
+              <div>
+                <h2
+                  className="font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-6xl"
+                  id="presidential-related-sections"
+                >
+                  Explore Presidential
+                </h2>
+                <p className="mt-6 max-w-md text-base leading-7 text-po-body">
+                  Continue through official Presidential sections.
+                </p>
+              </div>
+              <ul className="border-t border-po-line">
+                {links.map((link) => (
+                  <li className="border-b border-po-line py-5" key={link.id}>
+                    <CtaLink
+                      className="flex w-full justify-between text-po-ink hover:text-po-brand-ink"
+                      href={link.path}
+                      variant="text"
+                    >
+                      <span>{link.h1}</span>
+                      <span aria-hidden="true" className="text-po-brand-ink">
+                        /
+                      </span>
+                    </CtaLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Scene>
+        ) : null}
+      </SceneStack>
+    </PageFrame>
+  );
+}

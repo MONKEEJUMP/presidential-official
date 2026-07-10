@@ -20,6 +20,14 @@ const staticShellPath = path.join(
   "modules",
   "static-route-foundation-shell.tsx",
 );
+const supportShellPath = path.join(
+  webRoot,
+  "src",
+  "components",
+  "presidential",
+  "modules",
+  "support-route-foundation-shell.tsx",
+);
 const cmsRendererPath = path.join(
   webRoot,
   "src",
@@ -78,6 +86,7 @@ const contactInquiryConfig = read(contactInquiryConfigPath);
 const findUsPage = read(findUsPagePath);
 const locatorTemplateShell = read(locatorTemplateShellPath);
 const staticShell = read(staticShellPath);
+const supportShell = read(supportShellPath);
 const cmsRenderer = read(cmsRendererPath);
 const routes = read(routesPath);
 const findUsRecord = routeRecordBlock(routes, "find-us");
@@ -114,6 +123,7 @@ const contactAndFindUsSource = [
   locatorTemplateShell,
   dynamicLocatorSource,
   staticShell,
+  supportShell,
   cmsRenderer,
 ].join("\n");
 
@@ -160,10 +170,12 @@ addCheck(
 addCheck(
   checks,
   "contact.staticShell.noPublicCapture",
-  staticShell.includes('route.kind === "contact" && contactInquiryConfigured') &&
-    !staticShell.includes("Approved inbox") &&
-    !staticShell.includes("provisioned") &&
-    !staticShell.includes("provisioning"),
+  staticShell.includes("<SupportRouteFoundationShell") &&
+    staticShell.includes('route.kind === "contact" || route.kind === "store_locator"') &&
+    supportShell.includes('route.kind === "contact" && contactInquiryConfigured') &&
+    !supportShell.includes("Approved inbox") &&
+    !supportShell.includes("provisioned") &&
+    !supportShell.includes("provisioning"),
   "Contact public shell hides the inquiry path until configured and exposes no internal provisioning copy.",
 );
 addCheck(
