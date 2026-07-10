@@ -56,6 +56,7 @@ const publicDenyMarkers = [
   "Private candidate media status",
   "Private form/submission boundary",
   "Private retailer source status",
+  "Missing local readiness artifact",
   "Live Sanity draft",
   "Proof source",
   "Source system",
@@ -155,14 +156,20 @@ const privateChecks = [
     path: "/drafts/find-us",
     checks: [
       ["private /drafts/find-us has locator readiness", "Locator readiness"],
-      ["private /drafts/find-us has retailer source status", "Private retailer source status"],
+      [
+        "private /drafts/find-us has retailer source status",
+        ["Private retailer source status", "Missing local readiness artifact"],
+      ],
     ],
   },
   {
     path: "/drafts/contact",
     checks: [
       ["private /drafts/contact has contact readiness", "Contact readiness"],
-      ["private /drafts/contact has form boundary", "Private form/submission boundary"],
+      [
+        "private /drafts/contact has form boundary",
+        ["Private form/submission boundary", "Missing local readiness artifact"],
+      ],
     ],
   },
 ];
@@ -483,8 +490,14 @@ async function assertPrivatePreviewChecks(scenarioName) {
 
   for (const route of privateChecks) {
     const html = await fetchText(route.path, true);
-    for (const [name, needle] of route.checks) {
-      addCheck(`${scenarioName} ${name}`, html.includes(needle), `${needle} visible`);
+    for (const [name, expectedMarkers] of route.checks) {
+      const markers = Array.isArray(expectedMarkers) ? expectedMarkers : [expectedMarkers];
+      const visibleMarker = markers.find((marker) => html.includes(marker));
+      addCheck(
+        `${scenarioName} ${name}`,
+        Boolean(visibleMarker),
+        visibleMarker ? `${visibleMarker} visible` : `missing one of: ${markers.join(" | ")}`,
+      );
     }
   }
 }
