@@ -350,6 +350,7 @@ function loadCompiledModules() {
     indexability: require(path.join(distRoot, "indexability.js")),
     sitemap: require(path.join(distRoot, "sitemap.js")),
     routeShell: require(path.join(distRoot, "schema", "routeShell.js")),
+    routeContract: require(path.join(distRoot, "schema", "route-contract.js")),
     publication: require(
       path.join(distRoot, "source-records", "route-publication.js"),
     ),
@@ -505,6 +506,7 @@ function checkRuntimeInvariants() {
     indexability,
     sitemap,
     routeShell,
+    routeContract,
     publication,
   } = loadCompiledModules();
   const { ROUTE_REGISTRY } = routes;
@@ -516,6 +518,7 @@ function checkRuntimeInvariants() {
   const { getSitemapBlockReasons, isSitemapEligible } = indexability;
   const { buildPresidentialSitemap, getPresidentialSitemapRoutes } = sitemap;
   const { buildRouteShellJsonLd } = routeShell;
+  const { getExpectedRouteShellSchemaSourceFieldMap } = routeContract;
   const {
     APPROVED_ROUTE_PUBLICATIONS,
     ROUTE_PUBLICATION_APPROVAL_SEQUENCE,
@@ -691,7 +694,11 @@ function checkRuntimeInvariants() {
     primaryEntityRecordId: "candidate-company-entity",
     contentRecordIds: ["candidate-home-content"],
     metadataRecordId: "candidate-home-metadata",
-    schemaRecordIds: ["candidate-home-webpage-schema"],
+    schemaRecordIds: [
+      "candidate-home-organization-schema",
+      "candidate-home-website-schema",
+      "candidate-home-webpage-schema",
+    ],
     assetRecordIds: ["candidate-home-asset"],
     claimRecordIds: ["candidate-home-claim"],
     sourceRecordIds: ["candidate-home-source"],
@@ -712,6 +719,20 @@ function checkRuntimeInvariants() {
     launchBlockers: [],
   };
   const syntheticPublicationContext = {
+    entityRecords: [
+      {
+        entityId: "candidate-company-entity",
+        routeId: syntheticRegistryPromotion.id,
+        approvalStatus: "approved",
+      },
+    ],
+    contentRecords: [
+      {
+        contentId: "candidate-home-content",
+        routeId: syntheticRegistryPromotion.id,
+        approvalStatus: "approved",
+      },
+    ],
     metadataRecords: [
       {
         seoId: "candidate-home-metadata",
@@ -729,17 +750,22 @@ function checkRuntimeInvariants() {
       },
     ],
     schemaRecords: [
-      {
-        schemaId: "candidate-home-webpage-schema",
+      ["candidate-home-organization-schema", "Organization"],
+      ["candidate-home-website-schema", "WebSite"],
+      ["candidate-home-webpage-schema", "WebPage"],
+    ].map(([schemaId, schemaType]) => ({
         routeId: syntheticRegistryPromotion.id,
-        schemaType: "WebPage",
-        sourceFieldMap: { name: "candidate-home-content" },
-        claimsUsed: ["candidate-home-claim"],
+        schemaId,
+        schemaType,
+        sourceFieldMap: getExpectedRouteShellSchemaSourceFieldMap(
+          syntheticRegistryPromotion,
+          schemaType,
+        ),
+        claimsUsed: [],
         visibleContentMatch: true,
         validationStatus: "approved",
         approvalStatus: "approved",
-      },
-    ],
+      })),
     sourceRecords: [
       {
         sourceId: "candidate-home-source",
@@ -824,6 +850,25 @@ function checkRuntimeInvariants() {
   );
   recordCheck(
     "runtime:synthetic-publication-candidate",
+    "mixedCandidate.blocked",
+    isRoutePublicationApprovedForSeo(
+      syntheticRegistryPromotion,
+      [syntheticPublication],
+      {
+        ...syntheticPublicationContext,
+        contentRecords: [
+          {
+            ...syntheticPublicationContext.contentRecords[0],
+            approvalStatus: "in_review",
+          },
+        ],
+      },
+    ) === false,
+    "mixed approved/in-review synthetic candidate remains blocked",
+    "mixed approved/in-review synthetic candidate passed the gate",
+  );
+  recordCheck(
+    "runtime:synthetic-publication-candidate",
     "missingEvidenceCandidate.blocked",
     isRoutePublicationApprovedForSeo(
       syntheticRegistryPromotion,
@@ -831,6 +876,7 @@ function checkRuntimeInvariants() {
         {
           ...syntheticPublication,
           routePublicationId: "candidate-home-missing-evidence",
+          primaryEntityRecordId: undefined,
           contentRecordIds: [],
           metadataRecordId: undefined,
           schemaRecordIds: [],

@@ -85,6 +85,7 @@ const indexabilityPath = path.join(distRoot, "indexability.js");
 const routesPath = path.join(distRoot, "routes.js");
 const schemaConstantsPath = path.join(distRoot, "schema", "constants.js");
 const routeShellSchemaPath = path.join(distRoot, "schema", "routeShell.js");
+const routeSchemaContractPath = path.join(distRoot, "schema", "route-contract.js");
 const publicationPath = path.join(distRoot, "source-records", "route-publication.js");
 
 for (const requiredPath of [
@@ -94,6 +95,7 @@ for (const requiredPath of [
   routesPath,
   schemaConstantsPath,
   routeShellSchemaPath,
+  routeSchemaContractPath,
   publicationPath,
 ]) {
   assert(existsSync(requiredPath), `Compiled SEO gate test module missing: ${requiredPath}`);
@@ -106,6 +108,9 @@ const { getSitemapBlockReasons, isSitemapEligible } = require(indexabilityPath);
 const { ROUTE_REGISTRY } = require(routesPath);
 const { PRODUCTION_ORIGIN, canonicalUrl } = require(schemaConstantsPath);
 const { buildRouteShellJsonLd } = require(routeShellSchemaPath);
+const { getExpectedRouteShellSchemaSourceFieldMap } = require(
+  routeSchemaContractPath,
+);
 const {
   APPROVED_ROUTE_PUBLICATIONS,
   ROUTE_PUBLICATION_APPROVAL_SEQUENCE,
@@ -251,9 +256,14 @@ function buildSyntheticRoutePublication(overrides = {}) {
     routePublicationId: "gate-test-route-publication",
     routeId: syntheticRegistryPromotion.id,
     path: syntheticRegistryPromotion.path,
+    primaryEntityRecordId: "gate-test-entity",
     contentRecordIds: ["gate-test-content"],
     metadataRecordId: "gate-test-metadata",
-    schemaRecordIds: ["gate-test-schema"],
+    schemaRecordIds: [
+      "gate-test-schema-organization",
+      "gate-test-schema-website",
+      "gate-test-schema-webpage",
+    ],
     assetRecordIds: ["gate-test-asset"],
     claimRecordIds: ["gate-test-claim"],
     sourceRecordIds: ["gate-test-source"],
@@ -278,6 +288,20 @@ function buildSyntheticRoutePublication(overrides = {}) {
 
 const approvedPublication = buildSyntheticRoutePublication();
 const approvedContext = {
+  entityRecords: [
+    {
+      entityId: "gate-test-entity",
+      routeId: syntheticRegistryPromotion.id,
+      approvalStatus: "approved",
+    },
+  ],
+  contentRecords: [
+    {
+      contentId: "gate-test-content",
+      routeId: syntheticRegistryPromotion.id,
+      approvalStatus: "approved",
+    },
+  ],
   metadataRecords: [
     {
       seoId: "gate-test-metadata",
@@ -295,17 +319,22 @@ const approvedContext = {
     },
   ],
   schemaRecords: [
-    {
-      schemaId: "gate-test-schema",
+    ["gate-test-schema-organization", "Organization"],
+    ["gate-test-schema-website", "WebSite"],
+    ["gate-test-schema-webpage", "WebPage"],
+  ].map(([schemaId, schemaType]) => ({
       routeId: syntheticRegistryPromotion.id,
-      schemaType: "WebPage",
-      sourceFieldMap: {},
-      claimsUsed: ["gate-test-claim"],
+      schemaId,
+      schemaType,
+      sourceFieldMap: getExpectedRouteShellSchemaSourceFieldMap(
+        syntheticRegistryPromotion,
+        schemaType,
+      ),
+      claimsUsed: [],
       visibleContentMatch: true,
       validationStatus: "approved",
       approvalStatus: "approved",
-    },
-  ],
+    })),
   sourceRecords: [
     {
       sourceId: "gate-test-source",
@@ -379,6 +408,14 @@ const approvedContext = {
 
 const requiredEvidenceCases = [
   {
+    label: "entity record",
+    overrides: {
+      routePublicationId: "gate-test-empty-entity",
+      primaryEntityRecordId: undefined,
+    },
+    reason: "source_record:entity_record:required",
+  },
+  {
     label: "content record",
     overrides: { routePublicationId: "gate-test-empty-content", contentRecordIds: [] },
     reason: "source_record:content_record:required",
@@ -438,6 +475,7 @@ for (const { label, overrides, reason } of requiredEvidenceCases) {
 
 const zeroEvidencePublication = buildSyntheticRoutePublication({
   routePublicationId: "gate-test-zero-evidence",
+  primaryEntityRecordId: undefined,
   contentRecordIds: [],
   metadataRecordId: undefined,
   schemaRecordIds: [],
@@ -490,6 +528,63 @@ const approvedPublicationGateInput = {
   routePublicationContext: approvedContext,
 };
 
+const expectedStateFixtures = [
+  {
+    label: "closed",
+    records: [],
+    context: approvedContext,
+    expectedApproved: false,
+  },
+  {
+    label: "mixed",
+    records: [approvedPublication],
+    context: {
+      ...approvedContext,
+      contentRecords: [
+        { ...approvedContext.contentRecords[0], approvalStatus: "in_review" },
+      ],
+    },
+    expectedApproved: false,
+  },
+  {
+    label: "approved",
+    records: [approvedPublication],
+    context: approvedContext,
+    expectedApproved: true,
+  },
+];
+
+for (const fixture of expectedStateFixtures) {
+  const gateInput = {
+    routePublicationRecords: fixture.records,
+    routePublicationContext: fixture.context,
+  };
+  assertEqual(
+    isRoutePublicationApprovedForSeo(
+      syntheticRegistryPromotion,
+      fixture.records,
+      fixture.context,
+    ),
+    fixture.expectedApproved,
+    `${fixture.label} expected-state fixture returned the wrong publication result.`,
+  );
+  assertEqual(
+    isRouteMetadataIndexable(syntheticRegistryPromotion, gateInput),
+    fixture.expectedApproved,
+    `${fixture.label} expected-state fixture returned the wrong metadata result.`,
+  );
+  assertEqual(
+    isSitemapEligible(syntheticRegistryPromotion, gateInput),
+    fixture.expectedApproved,
+    `${fixture.label} expected-state fixture returned the wrong sitemap result.`,
+  );
+  assertEqual(
+    buildRouteShellJsonLd(syntheticRegistryPromotion, gateInput).length > 0,
+    fixture.expectedApproved,
+    `${fixture.label} expected-state fixture returned the wrong schema result.`,
+  );
+}
+
 assertEqual(
   isRouteMetadataIndexable(
     syntheticRegistryPromotion,
@@ -519,6 +614,52 @@ const approvedMetadata = buildRouteMetadata({
   ...approvedPublicationGateInput,
 });
 assertEqual(
+  approvedMetadata.title,
+  approvedContext.metadataRecords[0].metaTitle,
+  "Approved metadata title did not match the bound record.",
+);
+assertEqual(
+  approvedMetadata.description,
+  approvedContext.metadataRecords[0].metaDescription,
+  "Approved metadata description did not match the bound record.",
+);
+assertEqual(
+  approvedMetadata.alternates.canonical,
+  approvedContext.metadataRecords[0].canonicalUrl,
+  "Approved metadata canonical did not match the bound record.",
+);
+assertEqual(
+  approvedMetadata.robots.index,
+  true,
+  "Approved metadata robots did not match index_follow.",
+);
+assertEqual(
+  approvedMetadata.openGraph.title,
+  approvedContext.metadataRecords[0].ogTitle,
+  "Approved Open Graph title did not match the bound record.",
+);
+assertEqual(
+  approvedMetadata.openGraph.description,
+  approvedContext.metadataRecords[0].ogDescription,
+  "Approved Open Graph description did not match the bound record.",
+);
+
+let mismatchedApprovedMetadataEmissionBlocked = false;
+try {
+  buildRouteMetadata({
+    route: syntheticRegistryPromotion,
+    title: "Different approved title",
+    ...approvedPublicationGateInput,
+  });
+} catch {
+  mismatchedApprovedMetadataEmissionBlocked = true;
+}
+assertEqual(
+  mismatchedApprovedMetadataEmissionBlocked,
+  true,
+  "Approved metadata allowed an emitted title that differed from its bound record.",
+);
+assertEqual(
   "openGraph" in approvedMetadata,
   true,
   "A fully approved route publication did not emit Open Graph metadata for the synthetic route.",
@@ -543,12 +684,100 @@ assertEqual(
   "A fully approved route publication still had sitemap blockers.",
 );
 
-assert(
-  buildRouteShellJsonLd(
-    syntheticRegistryPromotion,
-    approvedPublicationGateInput,
-  ).length > 0,
-  "A fully approved route publication did not emit route-shell JSON-LD for the synthetic route.",
+const approvedJsonLd = buildRouteShellJsonLd(
+  syntheticRegistryPromotion,
+  approvedPublicationGateInput,
+);
+assertEqual(
+  approvedJsonLd.map((entry) => entry.data["@type"]).join("|"),
+  "Organization|WebSite|WebPage",
+  "Approved route emitted a missing or extra schema type.",
+);
+const approvedWebPageSchema = approvedJsonLd.find(
+  (entry) => entry.data["@type"] === "WebPage",
+)?.data;
+assertEqual(
+  approvedWebPageSchema.name,
+  syntheticRegistryPromotion.h1,
+  "Approved WebPage schema name did not match the emitted H1 contract.",
+);
+assertEqual(
+  approvedWebPageSchema.description,
+  syntheticRegistryPromotion.description,
+  "Approved WebPage schema description did not match the bound metadata contract.",
+);
+assertEqual(
+  approvedWebPageSchema.url,
+  approvedContext.metadataRecords[0].canonicalUrl,
+  "Approved WebPage schema URL did not match the emitted canonical.",
+);
+
+const breadcrumbRouteSource = ROUTE_REGISTRY.find(
+  (route) => route.id === "moon-rocks",
+);
+assert(breadcrumbRouteSource, "Moon Rocks route missing for BreadcrumbList fixture.");
+const syntheticBreadcrumbRoute = {
+  ...breadcrumbRouteSource,
+  id: "home",
+  status: "approved",
+  indexability: "index_follow",
+  sitemap: "include",
+  blocks: [],
+};
+const breadcrumbSchemaRecords = [
+  ["gate-test-nonhome-webpage", "WebPage"],
+  ["gate-test-nonhome-breadcrumb", "BreadcrumbList"],
+].map(([schemaId, schemaType]) => ({
+  schemaId,
+  routeId: syntheticBreadcrumbRoute.id,
+  schemaType,
+  sourceFieldMap: getExpectedRouteShellSchemaSourceFieldMap(
+    syntheticBreadcrumbRoute,
+    schemaType,
+  ),
+  claimsUsed: [],
+  visibleContentMatch: true,
+  validationStatus: "approved",
+  approvalStatus: "approved",
+}));
+const breadcrumbPublication = buildSyntheticRoutePublication({
+  path: syntheticBreadcrumbRoute.path,
+  schemaRecordIds: breadcrumbSchemaRecords.map((schema) => schema.schemaId),
+});
+const breadcrumbContext = {
+  ...approvedContext,
+  metadataRecords: [
+    {
+      ...approvedContext.metadataRecords[0],
+      h1: syntheticBreadcrumbRoute.h1,
+      metaTitle: syntheticBreadcrumbRoute.title,
+      metaDescription: syntheticBreadcrumbRoute.description,
+      canonicalUrl: canonicalUrl(syntheticBreadcrumbRoute.canonicalPath),
+      ogTitle: syntheticBreadcrumbRoute.title,
+      ogDescription: syntheticBreadcrumbRoute.description,
+    },
+  ],
+  schemaRecords: breadcrumbSchemaRecords,
+};
+const breadcrumbGateInput = {
+  routePublicationRecords: [breadcrumbPublication],
+  routePublicationContext: breadcrumbContext,
+};
+assertEqual(
+  isRoutePublicationApprovedForSeo(
+    syntheticBreadcrumbRoute,
+    [breadcrumbPublication],
+    breadcrumbContext,
+  ),
+  true,
+  "Approved non-home schema fixture failed its exact source-map contract.",
+);
+assertEqual(
+  buildRouteShellJsonLd(syntheticBreadcrumbRoute, breadcrumbGateInput)
+    .map((entry) => entry.data["@type"])
+    .join("|"),
+  "WebPage|BreadcrumbList",
+  "Approved non-home route emitted a missing or extra schema type.",
 );
 
 assertEqual(
@@ -696,7 +925,7 @@ const referencedRecordBlockers = [
         { ...approvedContext.schemaRecords[0], routeId: "wrong-route" },
       ],
     },
-    reason: "source_record:schema_record:route_mismatch:gate-test-schema",
+    reason: "source_record:schema_record:route_mismatch:gate-test-schema-organization",
   },
   {
     label: "schema validation failure",
@@ -716,7 +945,7 @@ const referencedRecordBlockers = [
         { ...approvedContext.schemaRecords[0], visibleContentMatch: false },
       ],
     },
-    reason: "source_record:schema_record:visible_content_missing:gate-test-schema",
+    reason: "source_record:schema_record:visible_content_missing:gate-test-schema-organization",
   },
   {
     label: "proof unapproved",
@@ -788,6 +1017,228 @@ for (const { label, context, reason } of referencedRecordBlockers) {
     `Referenced-record blocker ${label} did not produce ${reason}.`,
   );
 }
+
+const entityContentIntegrityBlockers = [
+  {
+    label: "dangling entity id",
+    publication: buildSyntheticRoutePublication({
+      primaryEntityRecordId: "missing-entity",
+    }),
+    context: approvedContext,
+    reason: "source_record:entity_record:missing:missing-entity",
+  },
+  {
+    label: "dangling content id",
+    publication: buildSyntheticRoutePublication({
+      contentRecordIds: ["missing-content"],
+    }),
+    context: approvedContext,
+    reason: "source_record:content_record:missing:missing-content",
+  },
+  {
+    label: "wrong-route entity id",
+    publication: approvedPublication,
+    context: {
+      ...approvedContext,
+      entityRecords: [
+        { ...approvedContext.entityRecords[0], routeId: "wrong-route" },
+      ],
+    },
+    reason: "source_record:entity_record:route_mismatch:gate-test-entity",
+  },
+  {
+    label: "wrong-route content id",
+    publication: approvedPublication,
+    context: {
+      ...approvedContext,
+      contentRecords: [
+        { ...approvedContext.contentRecords[0], routeId: "wrong-route" },
+      ],
+    },
+    reason: "source_record:content_record:route_mismatch:gate-test-content",
+  },
+  {
+    label: "duplicate entity id",
+    publication: approvedPublication,
+    context: {
+      ...approvedContext,
+      entityRecords: [
+        approvedContext.entityRecords[0],
+        { ...approvedContext.entityRecords[0] },
+      ],
+    },
+    reason: "source_record:entity_record:duplicate_id:gate-test-entity",
+  },
+  {
+    label: "duplicate content reference",
+    publication: buildSyntheticRoutePublication({
+      contentRecordIds: ["gate-test-content", "gate-test-content"],
+    }),
+    context: approvedContext,
+    reason: "source_record:content_record:duplicate_reference:gate-test-content",
+  },
+  {
+    label: "duplicate content id",
+    publication: approvedPublication,
+    context: {
+      ...approvedContext,
+      contentRecords: [
+        approvedContext.contentRecords[0],
+        { ...approvedContext.contentRecords[0] },
+      ],
+    },
+    reason: "source_record:content_record:duplicate_id:gate-test-content",
+  },
+  {
+    label: "unapproved entity id",
+    publication: approvedPublication,
+    context: {
+      ...approvedContext,
+      entityRecords: [
+        { ...approvedContext.entityRecords[0], approvalStatus: "in_review" },
+      ],
+    },
+    reason: "source_record:entity_record:approval:in_review",
+  },
+  {
+    label: "unapproved content id",
+    publication: approvedPublication,
+    context: {
+      ...approvedContext,
+      contentRecords: [
+        { ...approvedContext.contentRecords[0], approvalStatus: "blocked" },
+      ],
+    },
+    reason: "source_record:content_record:approval:blocked",
+  },
+];
+
+for (const { label, publication, context, reason } of entityContentIntegrityBlockers) {
+  const reasons = getRoutePublicationGateBlockReasons(
+    syntheticRegistryPromotion,
+    [publication],
+    context,
+  );
+  assertEqual(
+    isRoutePublicationApprovedForSeo(
+      syntheticRegistryPromotion,
+      [publication],
+      context,
+    ),
+    false,
+    `Entity/content integrity fixture ${label} passed the gate.`,
+  );
+  assert(
+    reasons.includes(reason),
+    `Entity/content integrity fixture ${label} did not produce ${reason}.`,
+  );
+}
+
+const metadataBindingBlockers = [
+  ["metaTitle", "Different title", "title_mismatch"],
+  ["metaDescription", "Different description", "description_mismatch"],
+  ["h1", "Different heading", "h1_mismatch"],
+  ["ogTitle", "Different Open Graph title", "og_title_mismatch"],
+  ["ogDescription", "Different Open Graph description", "og_description_mismatch"],
+];
+
+for (const [field, value, reasonSuffix] of metadataBindingBlockers) {
+  const context = {
+    ...approvedContext,
+    metadataRecords: [
+      { ...approvedContext.metadataRecords[0], [field]: value },
+    ],
+  };
+  const reasons = getRoutePublicationGateBlockReasons(
+    syntheticRegistryPromotion,
+    [approvedPublication],
+    context,
+  );
+  assert(
+    reasons.includes(
+      `source_record:metadata_record:${reasonSuffix}:gate-test-metadata`,
+    ),
+    `Metadata binding mismatch ${field} did not fail closed.`,
+  );
+}
+
+const schemaSourceMapMismatchContext = {
+  ...approvedContext,
+  schemaRecords: approvedContext.schemaRecords.map((schema, index) =>
+    index === 0
+      ? { ...schema, sourceFieldMap: { name: "wrong.source" } }
+      : schema,
+  ),
+};
+assert(
+  getRoutePublicationGateBlockReasons(
+    syntheticRegistryPromotion,
+    [approvedPublication],
+    schemaSourceMapMismatchContext,
+  ).includes(
+    "source_record:schema_record:source_map_mismatch:gate-test-schema-organization",
+  ),
+  "Schema source-map mismatch did not fail closed.",
+);
+
+const missingSchemaTypePublication = buildSyntheticRoutePublication({
+  schemaRecordIds: [
+    "gate-test-schema-organization",
+    "gate-test-schema-webpage",
+  ],
+});
+assert(
+  getRoutePublicationGateBlockReasons(
+    syntheticRegistryPromotion,
+    [missingSchemaTypePublication],
+    approvedContext,
+  ).includes("source_record:schema_type:missing:WebSite"),
+  "Missing emitted schema type did not fail closed.",
+);
+
+const extraSchemaRecord = {
+  ...approvedContext.schemaRecords[2],
+  schemaId: "gate-test-schema-product",
+  schemaType: "Product",
+  sourceFieldMap: {},
+};
+const extraSchemaTypePublication = buildSyntheticRoutePublication({
+  schemaRecordIds: [
+    ...approvedPublication.schemaRecordIds,
+    extraSchemaRecord.schemaId,
+  ],
+});
+assert(
+  getRoutePublicationGateBlockReasons(
+    syntheticRegistryPromotion,
+    [extraSchemaTypePublication],
+    {
+      ...approvedContext,
+      schemaRecords: [...approvedContext.schemaRecords, extraSchemaRecord],
+    },
+  ).includes(
+    "source_record:schema_type:extra:Product:gate-test-schema-product",
+  ),
+  "Extra non-emitted schema type did not fail closed.",
+);
+
+const duplicateSchemaIdContext = {
+  ...approvedContext,
+  schemaRecords: [
+    ...approvedContext.schemaRecords,
+    { ...approvedContext.schemaRecords[0] },
+  ],
+};
+assert(
+  getRoutePublicationGateBlockReasons(
+    syntheticRegistryPromotion,
+    [approvedPublication],
+    duplicateSchemaIdContext,
+  ).includes(
+    "source_record:schema_record:duplicate_id:gate-test-schema-organization",
+  ),
+  "Duplicate schema record id did not fail closed.",
+);
 
 const missingSchemaRecordPublication = buildSyntheticRoutePublication({
   routePublicationId: "gate-test-missing-schema-record",
@@ -920,9 +1371,12 @@ for (const routePath of brandDefensePaths) {
 // AUTH-2 (5521-FABL) approved-visible-claims registry regression tests.
 // Default stays DENY: only exact registry strings pass, only in VISIBLE copy.
 
-const {APPROVED_VISIBLE_CLAIMS, stripApprovedVisibleClaims} = await import(
-  "./lib/approved-visible-claims-qa.mjs"
-);
+const {
+  APPROVED_VISIBLE_CLAIMS,
+  normalizeVisibleClaimNode,
+  stripApprovedVisibleClaims,
+  stripApprovedVisibleClaimsFromHtml,
+} = await import("./lib/approved-visible-claims-qa.mjs");
 
 // The typed TS registry and the JSON copy consumed by QA scripts must be
 // byte-equivalent; drift here is a red build.
@@ -937,15 +1391,73 @@ assertEqual(
 const visibleSuperlativePattern =
   /\b(world'?s strongest|highest form|strongest flavor|most potent|#1\b|number[- ]one|top[- ]?ranked|best)\b/gi;
 
-// (a) Every registry-listed mark passes the visible-copy scan after stripping.
+function claimPlacementHtml(placement, text) {
+  const elementId = placement.elementId ? ` id="${placement.elementId}"` : "";
+  const node = `<${placement.element}${elementId}>${text}</${placement.element}>`;
+  return placement.ancestorId
+    ? `<section id="${placement.ancestorId}">${node}</section>`
+    : node;
+}
+
+// (a) Every registry-listed mark passes only as a complete node in a listed placement.
 for (const entry of APPROVED_VISIBLE_CLAIMS.entries) {
-  const visibleSample = `Presidential presents ${entry.claim} on the official brand site.`;
-  const stripped = stripApprovedVisibleClaims(visibleSample);
-  visibleSuperlativePattern.lastIndex = 0;
+  for (const placement of entry.placements) {
+    const visibleSample = claimPlacementHtml(placement, entry.claim);
+    const stripped = stripApprovedVisibleClaimsFromHtml(
+      visibleSample,
+      placement.route,
+    );
+    assertEqual(
+      normalizeVisibleClaimNode(stripped.replace(/<[^>]+>/g, " ")).includes(
+        normalizeVisibleClaimNode(entry.claim),
+      ),
+      false,
+      `Registry-approved mark was not removed from its exact placement: ${entry.claim}`,
+    );
+    visibleSuperlativePattern.lastIndex = 0;
+    assertEqual(
+      visibleSuperlativePattern.test(stripped.replace(/<[^>]+>/g, " ")),
+      false,
+      `Registry-approved mark should pass its exact visible-copy placement: ${entry.claim}`,
+    );
+
+    for (const variant of [
+      `Prefix ${entry.claim}`,
+      `${entry.claim} suffix`,
+    ]) {
+      const variantHtml = claimPlacementHtml(placement, variant);
+      assertEqual(
+        stripApprovedVisibleClaimsFromHtml(variantHtml, placement.route),
+        variantHtml,
+        `Claim prefix/suffix variant was incorrectly exempted: ${variant}`,
+      );
+    }
+
+    assertEqual(
+      stripApprovedVisibleClaimsFromHtml(visibleSample, "/wrong-route"),
+      visibleSample,
+      `Registry claim was incorrectly exempted on the wrong route: ${entry.claim}`,
+    );
+
+    const wrongElement = placement.element === "p" ? "h2" : "p";
+    const wrongPlacementHtml = claimPlacementHtml(
+      { ...placement, element: wrongElement },
+      entry.claim,
+    );
+    assertEqual(
+      stripApprovedVisibleClaimsFromHtml(
+        wrongPlacementHtml,
+        placement.route,
+      ),
+      wrongPlacementHtml,
+      `Registry claim was incorrectly exempted in the wrong element: ${entry.claim}`,
+    );
+  }
+
   assertEqual(
-    visibleSuperlativePattern.test(stripped),
-    false,
-    `Registry-approved mark should pass the visible-copy scan: ${entry.claim}`,
+    stripApprovedVisibleClaims(entry.claim),
+    entry.claim,
+    `Registry claim was exempted without placement context: ${entry.claim}`,
   );
 }
 

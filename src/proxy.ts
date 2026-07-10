@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { ADULT_CONFIRMATION_COOKIE } from "@/app/age-gate-constants";
+import { hasPrivateDraftRouteAccess } from "@/lib/cms/draft-route-access";
+
 const canonicalHostname = "presidentialmoonrocks.com";
 const nonCanonicalHostnames = new Set(["www.presidentialmoonrocks.com"]);
 const gaMeasurementIdPattern = /^G-[A-Z0-9]{6,}$/;
@@ -13,28 +16,30 @@ function isGoogleAnalyticsEnabled(): boolean {
   );
 }
 
-function buildContentSecurityPolicy(nonce: string): string {
+function buildContentSecurityPolicy(
+  nonce: string,
+  analyticsAllowed: boolean,
+): string {
   const isDev = process.env.NODE_ENV === "development";
-  const analyticsEnabled = isGoogleAnalyticsEnabled();
   const scriptSrc = [
     "script-src 'self'",
     `'nonce-${nonce}'`,
     "'strict-dynamic'",
-    analyticsEnabled ? "https://www.googletagmanager.com" : "",
+    analyticsAllowed ? "https://www.googletagmanager.com" : "",
     isDev ? "'unsafe-eval'" : "",
   ]
     .filter(Boolean)
     .join(" ");
   const connectSrc = [
     "connect-src 'self'",
-    analyticsEnabled ? "https://www.google-analytics.com" : "",
-    analyticsEnabled ? "https://analytics.google.com" : "",
+    analyticsAllowed ? "https://www.google-analytics.com" : "",
+    analyticsAllowed ? "https://analytics.google.com" : "",
   ]
     .filter(Boolean)
     .join(" ");
   const imgSrc = [
     "img-src 'self'",
-    analyticsEnabled ? "https://www.google-analytics.com" : "",
+    analyticsAllowed ? "https://www.google-analytics.com" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -85,11 +90,29 @@ export function proxy(request: NextRequest) {
   }
 
   const nonce = btoa(crypto.randomUUID());
-  const csp = buildContentSecurityPolicy(nonce);
+  const adultConfirmed =
+    request.cookies.get(ADULT_CONFIRMATION_COOKIE)?.value === "true";
+  const csp = buildContentSecurityPolicy(
+    nonce,
+    adultConfirmed && isGoogleAnalyticsEnabled(),
+  );
   const requestHeaders = new Headers(request.headers);
 
   requestHeaders.set("x-nonce", nonce);
   requestHeaders.set("Content-Security-Policy", csp);
+
+  if (
+    (request.nextUrl.pathname === "/drafts" ||
+      request.nextUrl.pathname.startsWith("/drafts/")) &&
+    !hasPrivateDraftRouteAccess(request.headers)
+  ) {
+    const response = new NextResponse("Not Found", {
+      status: 404,
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
+    response.headers.set("Content-Security-Policy", csp);
+    return response;
+  }
 
   const response = NextResponse.next({
     request: {

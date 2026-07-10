@@ -18,7 +18,7 @@ export const analyticsFlags = [
 ];
 
 export const contactFlags = [
-  "PRESIDENTIAL_CONTACT_FORM_ENABLED",
+  "PRESIDENTIAL_CONTACT_MAILTO_ENABLED",
   "PRESIDENTIAL_CONTACT_INBOX_EMAIL",
 ];
 
@@ -26,7 +26,10 @@ export const trackedDraftOnlyFlags = [
   "PRESIDENTIAL_LEARN_GUIDE_DRAFT_RENDERING_ENABLED",
 ];
 
-export const serverOnlySecretNames = ["SANITY_AUTH_TOKEN"];
+export const serverOnlySecretNames = [
+  "SANITY_AUTH_TOKEN",
+  "PRESIDENTIAL_PRIVATE_DRAFTS_ACCESS_TOKEN",
+];
 
 export const expectedProductionEnvNames = [
   ...publicCmsFlags,

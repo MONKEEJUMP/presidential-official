@@ -1,11 +1,18 @@
 import type { SeoRouteRecord } from "../route-types";
 import { buildRouteCanonicalUrl } from "../route-helpers";
 import { ROUTE_REGISTRY } from "../routes";
+import {
+  getEmittedRouteShellSchemaTypes,
+  getExpectedRouteShellSchemaSourceFieldMap,
+  type RouteShellSchemaType,
+} from "../schema/route-contract";
 import type {
   AssetProvenanceRecord,
   AssetRecord,
   ClaimRecord,
   ProofRecord,
+  RouteContentRecord,
+  RouteEntityRecord,
   RoutePublicationRecord,
   SchemaRecord,
   SeoMetadataRecord,
@@ -23,6 +30,7 @@ export const ROUTE_PUBLICATION_APPROVAL_SEQUENCE = [
   "contact",
 ] as const;
 export const ROUTE_PUBLICATION_EVIDENCE_CATEGORIES = [
+  "entity",
   "source",
   "proof",
   "claim",
@@ -59,6 +67,8 @@ export type RoutePublicationEvidenceScaffold = {
 };
 
 export type RoutePublicationGateContext = {
+  readonly entityRecords?: readonly RouteEntityRecord[];
+  readonly contentRecords?: readonly RouteContentRecord[];
   readonly metadataRecords?: readonly SeoMetadataRecord[];
   readonly schemaRecords?: readonly SchemaRecord[];
   readonly sourceRecords?: readonly SourceRecord[];
@@ -68,6 +78,18 @@ export type RoutePublicationGateContext = {
   readonly assetProvenanceRecords?: readonly AssetProvenanceRecord[];
 };
 
+export type RouteMetadataEmission = {
+  readonly title: string;
+  readonly description: string;
+  readonly canonicalUrl: string;
+  readonly robotsDirective: SeoMetadataRecord["robotsDirective"];
+  readonly h1: string;
+  readonly ogTitle: string;
+  readonly ogDescription: string;
+};
+
+export const APPROVED_ROUTE_ENTITY_RECORDS = [] as const satisfies readonly RouteEntityRecord[];
+export const APPROVED_ROUTE_CONTENT_RECORDS = [] as const satisfies readonly RouteContentRecord[];
 export const APPROVED_SEO_METADATA_RECORDS = [] as const satisfies readonly SeoMetadataRecord[];
 export const APPROVED_SCHEMA_RECORDS = [] as const satisfies readonly SchemaRecord[];
 export const APPROVED_SOURCE_RECORDS = [] as const satisfies readonly SourceRecord[];
@@ -76,6 +98,8 @@ export const APPROVED_CLAIM_RECORDS = [] as const satisfies readonly ClaimRecord
 export const APPROVED_ASSET_RECORDS = [] as const satisfies readonly AssetRecord[];
 export const APPROVED_ASSET_PROVENANCE_RECORDS = [] as const satisfies readonly AssetProvenanceRecord[];
 export const APPROVED_ROUTE_PUBLICATION_CONTEXT = {
+  entityRecords: APPROVED_ROUTE_ENTITY_RECORDS,
+  contentRecords: APPROVED_ROUTE_CONTENT_RECORDS,
   metadataRecords: APPROVED_SEO_METADATA_RECORDS,
   schemaRecords: APPROVED_SCHEMA_RECORDS,
   sourceRecords: APPROVED_SOURCE_RECORDS,
@@ -90,6 +114,62 @@ function getRecordsById<T>(
   getId: (record: T) => string,
 ): Map<string, T> {
   return new Map((records ?? []).map((record) => [getId(record), record]));
+}
+
+function getDuplicateIds<T>(
+  records: readonly T[] | undefined,
+  getId: (record: T) => string,
+): readonly string[] {
+  const seen = new Set<string>();
+  const duplicates = new Set<string>();
+
+  for (const record of records ?? []) {
+    const id = getId(record);
+    if (seen.has(id)) {
+      duplicates.add(id);
+    }
+    seen.add(id);
+  }
+
+  return [...duplicates];
+}
+
+function pushDuplicateRecordIdReasons<T>(
+  reasons: string[],
+  prefix: string,
+  records: readonly T[] | undefined,
+  getId: (record: T) => string,
+): void {
+  for (const id of getDuplicateIds(records, getId)) {
+    reasons.push(`source_record:${prefix}:duplicate_id:${id}`);
+  }
+}
+
+function pushDuplicateReferenceReasons(
+  reasons: string[],
+  prefix: string,
+  ids: readonly string[],
+): void {
+  const seen = new Set<string>();
+
+  for (const id of ids) {
+    if (seen.has(id)) {
+      reasons.push(`source_record:${prefix}:duplicate_reference:${id}`);
+    }
+    seen.add(id);
+  }
+}
+
+function sourceFieldMapsMatch(
+  actual: Readonly<Record<string, string>>,
+  expected: Readonly<Record<string, string>>,
+): boolean {
+  const normalize = (value: Readonly<Record<string, string>>) =>
+    JSON.stringify(
+      Object.entries(value).sort(([left], [right]) => left.localeCompare(right)),
+    );
+
+  return normalize(actual) === normalize(expected);
 }
 
 function pushMissingRecordReasons(
@@ -348,7 +428,7 @@ export function getRoutePublicationGateBlockReasons(
 
   if (
     record.schemaApprovalStatus === "approved" &&
-    route.schema.length > 0 &&
+    getEmittedRouteShellSchemaTypes(route).length > 0 &&
     record.schemaRecordIds.length === 0
   ) {
     reasons.push("source_record:schema_record:required");
@@ -363,6 +443,10 @@ export function getRoutePublicationGateBlockReasons(
     record.contentRecordIds.length === 0
   ) {
     reasons.push("source_record:content_record:required");
+  }
+
+  if (!record.primaryEntityRecordId) {
+    reasons.push("source_record:entity_record:required");
   }
 
   if (record.assetApprovalStatus !== "approved") {
@@ -436,6 +520,8 @@ export function getRoutePublicationGateBlockReasons(
     reasons.push("source_record:claim:required");
   }
 
+  const entityById = getRecordsById(context.entityRecords, (entity) => entity.entityId);
+  const contentById = getRecordsById(context.contentRecords, (content) => content.contentId);
   const metadataById = getRecordsById(context.metadataRecords, (metadata) => metadata.seoId);
   const schemaById = getRecordsById(context.schemaRecords, (schema) => schema.schemaId);
   const sourceById = getRecordsById(context.sourceRecords, (source) => source.sourceId);
@@ -446,6 +532,88 @@ export function getRoutePublicationGateBlockReasons(
     context.assetProvenanceRecords,
     (provenance) => provenance.assetId,
   );
+
+  pushDuplicateRecordIdReasons(
+    reasons,
+    "entity_record",
+    context.entityRecords,
+    (entity) => entity.entityId,
+  );
+  pushDuplicateRecordIdReasons(
+    reasons,
+    "content_record",
+    context.contentRecords,
+    (content) => content.contentId,
+  );
+  pushDuplicateRecordIdReasons(
+    reasons,
+    "metadata_record",
+    context.metadataRecords,
+    (metadata) => metadata.seoId,
+  );
+  pushDuplicateRecordIdReasons(
+    reasons,
+    "schema_record",
+    context.schemaRecords,
+    (schema) => schema.schemaId,
+  );
+
+  pushDuplicateReferenceReasons(
+    reasons,
+    "content_record",
+    record.contentRecordIds,
+  );
+  pushDuplicateReferenceReasons(
+    reasons,
+    "schema_record",
+    record.schemaRecordIds,
+  );
+
+  if (record.primaryEntityRecordId) {
+    const entity = entityById.get(record.primaryEntityRecordId);
+    if (!entity) {
+      reasons.push(
+        `source_record:entity_record:missing:${record.primaryEntityRecordId}`,
+      );
+    } else {
+      if (entity.routeId !== route.id) {
+        reasons.push(
+          `source_record:entity_record:route_mismatch:${entity.entityId}`,
+        );
+      }
+
+      if (entity.approvalStatus !== "approved") {
+        reasons.push(
+          `source_record:entity_record:approval:${entity.approvalStatus}`,
+        );
+      }
+    }
+  }
+
+  pushMissingRecordReasons(
+    reasons,
+    "content_record",
+    record.contentRecordIds,
+    contentById,
+  );
+  for (const contentId of record.contentRecordIds) {
+    const content = contentById.get(contentId);
+    if (!content) {
+      continue;
+    }
+
+    if (content.routeId !== route.id) {
+      reasons.push(
+        `source_record:content_record:route_mismatch:${content.contentId}`,
+      );
+    }
+
+    if (content.approvalStatus !== "approved") {
+      reasons.push(
+        `source_record:content_record:approval:${content.approvalStatus}`,
+      );
+    }
+  }
 
   if (record.metadataRecordId) {
     const metadata = metadataById.get(record.metadataRecordId);
@@ -467,10 +635,59 @@ export function getRoutePublicationGateBlockReasons(
       if (metadata.canonicalUrl !== buildRouteCanonicalUrl(route)) {
         reasons.push(`source_record:metadata_record:canonical_mismatch:${metadata.seoId}`);
       }
+
+      if (metadata.metaTitle !== route.title) {
+        reasons.push(`source_record:metadata_record:title_mismatch:${metadata.seoId}`);
+      }
+
+      if (metadata.metaDescription !== route.description) {
+        reasons.push(
+          `source_record:metadata_record:description_mismatch:${metadata.seoId}`,
+        );
+      }
+
+      if (metadata.h1 !== route.h1) {
+        reasons.push(`source_record:metadata_record:h1_mismatch:${metadata.seoId}`);
+      }
+
+      if (metadata.ogTitle !== route.title) {
+        reasons.push(
+          `source_record:metadata_record:og_title_mismatch:${metadata.seoId}`,
+        );
+      }
+
+      if (metadata.ogDescription !== route.description) {
+        reasons.push(
+          `source_record:metadata_record:og_description_mismatch:${metadata.seoId}`,
+        );
+      }
+
+      if (metadata.ogImageId) {
+        reasons.push(
+          `source_record:metadata_record:og_image_unemitted:${metadata.seoId}`,
+        );
+      }
     }
   }
 
   pushMissingRecordReasons(reasons, "schema_record", record.schemaRecordIds, schemaById);
+  const expectedSchemaTypes = getEmittedRouteShellSchemaTypes(route);
+  const referencedSchemas = record.schemaRecordIds
+    .map((schemaId) => schemaById.get(schemaId))
+    .filter((schema): schema is SchemaRecord => Boolean(schema));
+
+  for (const expectedType of expectedSchemaTypes) {
+    const matchingSchemas = referencedSchemas.filter(
+      (schema) => schema.schemaType === expectedType,
+    );
+
+    if (matchingSchemas.length === 0) {
+      reasons.push(`source_record:schema_type:missing:${expectedType}`);
+    } else if (matchingSchemas.length > 1) {
+      reasons.push(`source_record:schema_type:duplicate:${expectedType}`);
+    }
+  }
+
   for (const schemaId of record.schemaRecordIds) {
     const schema = schemaById.get(schemaId);
     if (!schema) {
@@ -491,6 +708,31 @@ export function getRoutePublicationGateBlockReasons(
 
     if (!schema.visibleContentMatch) {
       reasons.push(`source_record:schema_record:visible_content_missing:${schema.schemaId}`);
+    }
+
+    if (!expectedSchemaTypes.includes(schema.schemaType as RouteShellSchemaType)) {
+      reasons.push(
+        `source_record:schema_type:extra:${schema.schemaType}:${schema.schemaId}`,
+      );
+      continue;
+    }
+
+    const expectedSourceFieldMap = getExpectedRouteShellSchemaSourceFieldMap(
+      route,
+      schema.schemaType as RouteShellSchemaType,
+    );
+    if (!sourceFieldMapsMatch(schema.sourceFieldMap, expectedSourceFieldMap)) {
+      reasons.push(
+        `source_record:schema_record:source_map_mismatch:${schema.schemaId}`,
+      );
+    }
+
+    for (const claimId of schema.claimsUsed) {
+      if (!record.claimRecordIds.includes(claimId)) {
+        reasons.push(
+          `source_record:schema_record:claim_not_referenced:${schema.schemaId}:${claimId}`,
+        );
+      }
     }
   }
 
@@ -563,6 +805,46 @@ export function isRoutePublicationApprovedForSeo(
   context: RoutePublicationGateContext = APPROVED_ROUTE_PUBLICATION_CONTEXT,
 ): boolean {
   return getRoutePublicationGateBlockReasons(route, records, context).length === 0;
+}
+
+export function getApprovedRouteMetadataEmissionBlockReasons(
+  route: SeoRouteRecord,
+  emission: RouteMetadataEmission,
+  records: readonly RoutePublicationRecord[] = APPROVED_ROUTE_PUBLICATIONS,
+  context: RoutePublicationGateContext = APPROVED_ROUTE_PUBLICATION_CONTEXT,
+): readonly string[] {
+  if (getRoutePublicationGateBlockReasons(route, records, context).length > 0) {
+    return [];
+  }
+
+  const publication = getRoutePublicationRecord(route, records);
+  const metadata = context.metadataRecords?.filter(
+    (candidate) => candidate.seoId === publication?.metadataRecordId,
+  );
+
+  if (!publication || !metadata || metadata.length !== 1) {
+    return ["source_record:metadata_emission:approved_record_missing"];
+  }
+
+  const approved = metadata[0];
+  const reasons: string[] = [];
+  const expectedFields = [
+    ["title", emission.title, approved.metaTitle],
+    ["description", emission.description, approved.metaDescription],
+    ["canonical", emission.canonicalUrl, approved.canonicalUrl],
+    ["robots", emission.robotsDirective, approved.robotsDirective],
+    ["h1", emission.h1, approved.h1],
+    ["og_title", emission.ogTitle, approved.ogTitle],
+    ["og_description", emission.ogDescription, approved.ogDescription],
+  ] as const;
+
+  for (const [field, actual, expected] of expectedFields) {
+    if (actual !== expected) {
+      reasons.push(`source_record:metadata_emission:${field}_mismatch`);
+    }
+  }
+
+  return reasons;
 }
 
 export function evaluateRoutePublicationGate(

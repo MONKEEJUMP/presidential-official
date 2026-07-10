@@ -1,5 +1,10 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import {
+  expectedRouteIsPublic,
+  getRoutePublicationRuntimeState,
+  routeStateMatchesMode,
+} from "./lib/route-publication-runtime-state.mjs";
 
 const webRoot = process.cwd();
 const root = path.resolve(webRoot, "..");
@@ -16,12 +21,13 @@ const statusMdPath = path.join(workRoot, "step11-production-postdeploy-smoke-sta
 const canonicalOrigin = "https://presidentialmoonrocks.com";
 const smokeBaseUrl = process.env.PRESIDENTIAL_PRODUCTION_SMOKE_BASE_URL ?? canonicalOrigin;
 const liveSmokeEnabled = process.env.PRESIDENTIAL_PRODUCTION_POSTDEPLOY_SMOKE_LIVE === "true";
+const strictReleaseMode = process.env.PRESIDENTIAL_RELEASE_VERIFY_MODE === "strict-release";
 const expectAnalytics = process.env.PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_ANALYTICS === "true";
 const expectGsc = process.env.PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_GSC === "true";
-const expectContactFormReady = process.env.PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_CONTACT_FORM_READY === "true";
+const expectContactMailtoReady = process.env.PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_CONTACT_MAILTO_READY === "true";
 const gaMeasurementIdEnv = "NEXT_PUBLIC_PRESIDENTIAL_GA_MEASUREMENT_ID";
 const gscVerificationTokenEnv = "PRESIDENTIAL_GOOGLE_SITE_VERIFICATION";
-const contactFormEnabledEnv = "PRESIDENTIAL_CONTACT_FORM_ENABLED";
+const contactMailtoEnabledEnv = "PRESIDENTIAL_CONTACT_MAILTO_ENABLED";
 const contactInboxEnv = "PRESIDENTIAL_CONTACT_INBOX_EMAIL";
 const gaMeasurementIdPattern = /^G-[A-Z0-9]{6,}$/;
 const googleSiteVerificationPattern = /^[A-Za-z0-9_-]{16,256}$/;
@@ -68,6 +74,12 @@ function hasRobotsNoindex(html) {
   return /<meta\s+[^>]*name=["']robots["'][^>]*content=["'][^"']*\bnoindex\b/i.test(html);
 }
 
+function parseSitemapUrls(body) {
+  return new Set(
+    [...body.matchAll(/<loc>([^<]+)<\/loc>/gi)].map((match) => match[1]),
+  );
+}
+
 function getExpectedGaMeasurementId() {
   if (!expectAnalytics) return "";
   const measurementId = process.env[gaMeasurementIdEnv]?.trim() ?? "";
@@ -81,9 +93,9 @@ function getExpectedGscVerificationToken() {
 }
 
 function hasExpectedContactInbox() {
-  if (!expectContactFormReady) return true;
+  if (!expectContactMailtoReady) return true;
   const inbox = process.env[contactInboxEnv]?.trim() ?? "";
-  return process.env[contactFormEnabledEnv] === "true" && contactInboxPattern.test(inbox);
+  return process.env[contactMailtoEnabledEnv] === "true" && contactInboxPattern.test(inbox);
 }
 
 function extractAnalyticsMeasurementIds(html) {
@@ -117,24 +129,29 @@ function hasExpectedGscVerificationMeta(html, expectedToken) {
   return extractGscVerificationToken(html) === expectedToken;
 }
 
-function hasContactFormShell(html) {
-  return html.includes("presidential-contact-form-status") && /<form\b/i.test(html);
+function hasContactMailto(html) {
+  return html.includes('id="presidential-contact-mailto"') && /href=["']mailto:/i.test(html);
 }
 
 function hasThirdPartyContactProviderSignal(html) {
   return /\b(?:hubspot|mailchimp|klaviyo|salesforce|typeform|jotform|formspree|recaptcha|hcaptcha|turnstile)\b/i.test(html);
 }
 
-function hasDisabledContactFormCopy(html) {
-  return html.includes("The approved inbox is not provisioned yet.");
+function hasInternalContactProvisioningCopy(html) {
+  return /approved inbox|provision(?:ed|ing)?|contact status/i.test(html);
 }
 
-async function fetchText(url) {
+async function fetchText(url, adultConfirmed = false) {
+  const requestHeaders = {
+    "user-agent": "presidential-postdeploy-smoke/1.0",
+  };
+  if (adultConfirmed) {
+    requestHeaders.cookie = "presidential_adult_confirmed=true";
+  }
+
   const response = await fetch(url, {
     redirect: "manual",
-    headers: {
-      "user-agent": "presidential-postdeploy-smoke/1.0",
-    },
+    headers: requestHeaders,
   });
 
   return {
@@ -144,11 +161,12 @@ async function fetchText(url) {
   };
 }
 
-async function runLiveSmoke(rows, baseUrl) {
+async function runLiveSmoke(rows, baseUrl, routeState) {
   const sitemapUrl = `${baseUrl}/sitemap.xml`;
   const robotsUrl = `${baseUrl}/robots.txt`;
   const sitemap = await fetchText(sitemapUrl);
   const robots = await fetchText(robotsUrl);
+  const sitemapUrls = parseSitemapUrls(sitemap.body);
 
   addCheck(
     rows,
@@ -174,6 +192,11 @@ async function runLiveSmoke(rows, baseUrl) {
     const routeUrl = `${baseUrl}${routePath === "/" ? "" : routePath}`;
     const response = await fetchText(routeUrl || baseUrl);
     routeBodies.set(routePath, response.body);
+    const expectedPublished = expectedRouteIsPublic(routeState, routePath);
+    const canonicalRouteUrl = `${canonicalOrigin}${routePath === "/" ? "" : routePath}`;
+    const sitemapContainsRoute =
+      sitemapUrls.has(canonicalRouteUrl) ||
+      (routePath === "/" && sitemapUrls.has(`${canonicalOrigin}/`));
     addCheck(
       rows,
       `postdeploy.live.route.${routePath}.fetch`,
@@ -183,18 +206,25 @@ async function runLiveSmoke(rows, baseUrl) {
     addCheck(
       rows,
       `postdeploy.live.route.${routePath}.noindex`,
-      hasRobotsNoindex(response.body) ? "pass" : "fail",
-      "route emits robots noindex until route publication gate is opened",
+      hasRobotsNoindex(response.body) !== expectedPublished ? "pass" : "fail",
+      expectedPublished
+        ? "approved route must not emit robots noindex"
+        : "unapproved route must emit robots noindex",
     );
     addCheck(
       rows,
-      `postdeploy.live.route.${routePath}.notInSitemap`,
-      !sitemap.body.includes(`${canonicalOrigin}${routePath === "/" ? "" : routePath}`) ? "pass" : "fail",
-      "route remains absent from sitemap until approved publication",
+      `postdeploy.live.route.${routePath}.sitemapState`,
+      sitemapContainsRoute === expectedPublished ? "pass" : "fail",
+      expectedPublished
+        ? "approved route must appear exactly in the canonical sitemap"
+        : "unapproved route must remain absent from the sitemap",
     );
   }
 
   const homeHtml = routeBodies.get("/") ?? "";
+  const adultConfirmedHomeHtml = expectAnalytics
+    ? (await fetchText(baseUrl, true)).body
+    : homeHtml;
   const expectedGaMeasurementId = getExpectedGaMeasurementId();
   const expectedGscVerificationToken = getExpectedGscVerificationToken();
   addCheck(
@@ -209,11 +239,11 @@ async function runLiveSmoke(rows, baseUrl) {
     rows,
     "postdeploy.live.analytics.state",
     expectAnalytics
-      ? (expectedGaMeasurementId && hasExpectedAnalyticsTag(homeHtml, expectedGaMeasurementId) ? "pass" : "fail")
+      ? (expectedGaMeasurementId && hasExpectedAnalyticsTag(adultConfirmedHomeHtml, expectedGaMeasurementId) ? "pass" : "fail")
       : (!hasAnyAnalyticsTag(homeHtml) ? "pass" : "fail"),
     expectAnalytics
-      ? "analytics was expected and the rendered GA4 loader/config matched the expected env id"
-      : "analytics was not expected and GA4 tag was absent",
+      ? "analytics was expected and matched the env id only on an adult-cookie request"
+      : "analytics was not expected and GA4 was absent from the unconfirmed request",
   );
   addCheck(
     rows,
@@ -237,27 +267,33 @@ async function runLiveSmoke(rows, baseUrl) {
   const contactHtml = routeBodies.get("/contact") ?? "";
   addCheck(
     rows,
-    "postdeploy.live.contact.formShell",
-    hasContactFormShell(contactHtml) ? "pass" : "fail",
-    "Contact route renders the first-party inquiry form shell",
+    "postdeploy.live.contact.noServerForm",
+    !/<form\b/i.test(contactHtml) ? "pass" : "fail",
+    "Contact route exposes no server-submitted form",
   );
   addCheck(
     rows,
     "postdeploy.live.contact.expectedEnvValid",
     hasExpectedContactInbox() ? "pass" : "fail",
-    expectContactFormReady
-      ? "Contact form readiness expectation requires enabled flag plus a valid approved inbox in the smoke environment"
-      : "Contact form readiness was not expected, so no approved inbox env value is required",
+    expectContactMailtoReady
+      ? "Contact mailto readiness requires an enabled flag plus a valid approved inbox"
+      : "Contact mailto readiness was not expected, so no approved inbox env value is required",
   );
   addCheck(
     rows,
     "postdeploy.live.contact.state",
-    expectContactFormReady
-      ? (!hasDisabledContactFormCopy(contactHtml) ? "pass" : "fail")
-      : (hasDisabledContactFormCopy(contactHtml) ? "pass" : "fail"),
-    expectContactFormReady
-      ? "Contact form was expected to be active and did not show the disabled-inbox copy"
-      : "Contact form was expected to stay disabled until approved inbox provisioning",
+    expectContactMailtoReady
+      ? (hasContactMailto(contactHtml) ? "pass" : "fail")
+      : (!hasContactMailto(contactHtml) ? "pass" : "fail"),
+    expectContactMailtoReady
+      ? "Contact mailto link was expected and rendered"
+      : "Contact mailto link was expected to remain absent",
+  );
+  addCheck(
+    rows,
+    "postdeploy.live.contact.noInternalProvisioningCopy",
+    !hasInternalContactProvisioningCopy(contactHtml) ? "pass" : "fail",
+    "Contact route does not expose disabled-form or internal provisioning copy",
   );
   addCheck(
     rows,
@@ -272,7 +308,7 @@ async function main() {
   const baseUrl = normalizeBaseUrl(smokeBaseUrl);
   const packageJsonText = readSource("package.json");
   const providerReadinessText = readSource("scripts/presidential-production-provider-readiness-qa.mjs");
-  const routePublicationText = readSource("src/lib/seo/source-records/route-publication.ts");
+  const routeState = getRoutePublicationRuntimeState();
   const analyticsText = readSource("src/components/analytics/google-analytics.tsx");
   const layoutText = readSource("src/app/layout.tsx");
   const contactFormText = readSource("src/app/contact/contact-inquiry-form.tsx");
@@ -301,8 +337,8 @@ async function main() {
   addCheck(
     rows,
     "postdeploy.verifyChain.wired",
-    packageJsonText.includes("production:canonical-host:verify && npm run production:postdeploy-smoke:verify") ? "pass" : "fail",
-    "full verify runs the post-deploy smoke readiness gate after canonical-host readiness",
+    packageJsonText.includes("production:postdeploy-smoke:verify") ? "pass" : "fail",
+    "strict release verification wires the post-deploy smoke gate",
   );
   addCheck(
     rows,
@@ -313,9 +349,11 @@ async function main() {
   );
   addCheck(
     rows,
-    "postdeploy.routePublication.closedByDefault",
-    /APPROVED_ROUTE_PUBLICATIONS\s*=\s*\[\]/.test(routePublicationText) ? "pass" : "fail",
-    "route publication list remains empty until per-route approval records are added",
+    "postdeploy.routePublication.matchesMode",
+    routeStateMatchesMode(routeState, strictReleaseMode) ? "pass" : "fail",
+    strictReleaseMode
+      ? "strict release requires one or more fully approved, sitemap-eligible routes"
+      : "default verification requires the route-publication lock to remain closed",
   );
   addCheck(
     rows,
@@ -323,7 +361,7 @@ async function main() {
     analyticsText.includes("getGoogleAnalyticsMeasurementId") &&
       analyticsText.includes("presidential-ga4-loader") &&
       analyticsText.includes("presidential-ga4-init") &&
-      layoutText.includes("<GoogleAnalytics nonce={nonce} />") &&
+      layoutText.includes("adultConfirmed ? <GoogleAnalytics nonce={nonce} /> : null") &&
       layoutText.includes("getGoogleSiteVerification") &&
       gaMeasurementIdPattern.test("G-ABC1234"),
     "GA4 render path is present and gated by env/ID validation",
@@ -331,11 +369,12 @@ async function main() {
   addCheck(
     rows,
     "postdeploy.contact.gated",
-    contactFormText.includes("presidential-contact-form-status") &&
+    contactFormText.includes("presidential-contact-mailto") &&
       contactFormText.includes("configured") &&
-      contactConfigText.includes("PRESIDENTIAL_CONTACT_FORM_ENABLED") &&
+      !contactFormText.includes("<form") &&
+      contactConfigText.includes("PRESIDENTIAL_CONTACT_MAILTO_ENABLED") &&
       contactConfigText.includes("PRESIDENTIAL_CONTACT_INBOX_EMAIL"),
-    "Contact form render path is present and gated by approved inbox env values",
+    "Contact mailto path is form-free and gated by approved inbox env values",
   );
   addCheck(
     rows,
@@ -347,18 +386,17 @@ async function main() {
   );
 
   if (liveSmokeEnabled) {
-    await runLiveSmoke(rows, baseUrl);
+    await runLiveSmoke(rows, baseUrl, routeState);
   }
 
   const failCount = rows.filter((row) => row.status === "fail").length;
   const pendingCount = rows.filter((row) => row.status === "pending").length;
   const passCount = rows.filter((row) => row.status === "pass").length;
-  const verdict =
-    failCount === 0
-      ? pendingCount === 0
-        ? "PASS_PRODUCTION_POSTDEPLOY_SMOKE_VERIFIED_NO_PUBLIC_UNLOCK"
-        : "PASS_PRODUCTION_POSTDEPLOY_SMOKE_READY_PENDING_LIVE_RUN_NO_PUBLIC_UNLOCK"
-      : "FAIL_PRODUCTION_POSTDEPLOY_SMOKE_REVIEW_REQUIRED";
+  const verdict = failCount === 0
+    ? pendingCount === 0
+      ? "PASS_PRODUCTION_POSTDEPLOY_SMOKE_VERIFIED"
+      : "PASS_PRODUCTION_POSTDEPLOY_SMOKE_READY_PENDING_LIVE_RUN"
+    : "FAIL_PRODUCTION_POSTDEPLOY_SMOKE_REVIEW_REQUIRED";
 
   mkdirSync(path.dirname(docsResultsPath), { recursive: true });
   mkdirSync(workRoot, { recursive: true });
@@ -375,6 +413,7 @@ async function main() {
   const payload = {
     verdict,
     liveSmokeEnabled,
+    strictReleaseMode,
     baseUrl,
     smokeRoutes,
     passCount,
@@ -382,10 +421,10 @@ async function main() {
     failCount,
     deploymentExecuted: false,
     secretsPrinted: false,
-    publicSeoUnlocked: false,
-    routePublicationApproved: false,
-    sitemapUnlocked: false,
-    indexabilityUnlocked: false,
+    publicSeoUnlocked: strictReleaseMode && routeState.approvedRoutes.length > 0,
+    routePublicationApproved: routeState.approvedRoutes.length > 0,
+    sitemapUnlocked: strictReleaseMode && routeState.sitemapEligibleRoutes.length > 0,
+    indexabilityUnlocked: strictReleaseMode && routeState.approvedRoutes.length > 0,
     rows,
   };
 

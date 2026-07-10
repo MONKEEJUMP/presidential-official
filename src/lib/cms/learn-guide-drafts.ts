@@ -2,6 +2,7 @@ import "server-only";
 
 import type { SanityLearnGuideRecord } from "./learn-guide";
 import { SITE_PAGE_MODULE_PROJECTION } from "./homepage";
+import { fetchSanityJsonWithTimeout } from "./sanity-read-client";
 
 const SANITY_PROJECT_ID = "4bl3xvem";
 const SANITY_DATASET = "production";
@@ -118,15 +119,18 @@ export async function readDraftLearnGuide(
     };
   }
 
-  const response = await fetch(buildDraftLearnGuideQueryUrl(slug), {
-    ...init,
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`,
+  const { payload, response } = await fetchSanityJsonWithTimeout<SanityLearnGuideRecord | null>(
+    buildDraftLearnGuideQueryUrl(slug),
+    {
+      ...init,
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
     },
-    cache: "no-store",
-  });
+  );
 
   if (!response.ok) {
     return {
@@ -138,11 +142,9 @@ export async function readDraftLearnGuide(
     };
   }
 
-  const payload = (await response.json()) as { result: SanityLearnGuideRecord | null };
-
   return {
     ok: true,
     skipped: false,
-    result: payload.result,
+    result: payload?.result || null,
   };
 }

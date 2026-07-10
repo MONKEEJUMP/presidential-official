@@ -22,6 +22,8 @@ const vercelTokenEnv = "VERCEL_TOKEN";
 const vercelProjectIdEnv = "VERCEL_PROJECT_ID";
 const vercelProjectNameEnv = "VERCEL_PROJECT_NAME";
 const vercelTeamIdEnv = "VERCEL_TEAM_ID";
+const liveReadEnv = "PRESIDENTIAL_VERCEL_PROVIDER_READINESS_LIVE_READ";
+let providerReadOperationCount = 0;
 
 const deployCommandPatterns = [
   /\bvercel\s+--prod\b/i,
@@ -60,6 +62,7 @@ function hasVercelToken() {
 }
 
 function runVercelCommand(args) {
+  providerReadOperationCount += 1;
   const command = process.platform === "win32" ? "cmd.exe" : "vercel";
   const commandArgs = process.platform === "win32"
     ? ["/d", "/s", "/c", ["vercel", ...args].join(" ")]
@@ -173,6 +176,7 @@ async function fetchVercelProductionEnvNamePresence(projectIdentifier, teamIdent
     url.searchParams.set("teamId", teamIdentifier);
   }
 
+  providerReadOperationCount += 1;
   const response = await fetch(url, {
     method: "GET",
     headers: {
@@ -201,14 +205,22 @@ async function fetchVercelProductionEnvNamePresence(projectIdentifier, teamIdent
 
 async function main() {
   const rows = [];
-  const liveProviderCheck = process.env.PRESIDENTIAL_VERCEL_PROVIDER_READINESS_LIVE === "true";
+  const liveProviderCheck = process.env[liveReadEnv] === "true";
+  const noArtifactMode = process.env.PRESIDENTIAL_QA_NO_ARTIFACTS === "true";
   const gitignoreText = readIfExists(gitignorePath);
   const packageJsonText = readIfExists(packageJsonPath);
   const projectJson = parseProjectJson();
   const restProjectIdentifier = getRestProjectIdentifier(projectJson);
   const restTeamIdentifier = getRestTeamIdentifier(projectJson);
   const vercelCliAvailable = commandExists("vercel");
-  const vercelAuthentication = checkVercelAuthentication(vercelCliAvailable);
+  const vercelAuthentication = liveProviderCheck
+    ? checkVercelAuthentication(vercelCliAvailable)
+    : {
+        checked: false,
+        authenticated: false,
+        tokenAvailable: hasVercelToken(),
+        method: "not_checked",
+      };
   const deployCommandFound = deployCommandPatterns.some((pattern) => pattern.test(packageJsonText));
   const projectLinked = projectJson !== null && !projectJson.parseError;
   const projectIdValid = projectLinked && isProjectId(projectJson.projectId);
@@ -226,7 +238,9 @@ async function main() {
     vercelAuthentication.authenticated ? "pass" : "pending",
     vercelAuthentication.authenticated
       ? `Vercel CLI authentication succeeded via ${vercelAuthentication.method}; account details were not stored`
-      : "Vercel CLI has no local credentials or token; run vercel login or provide VERCEL_TOKEN outside the repo before live provider checks",
+      : liveProviderCheck
+        ? "Vercel CLI authentication was requested but did not succeed"
+        : `Vercel authentication was not attempted; set ${liveReadEnv}=true for an explicit read-only provider check`,
   );
   addCheck(
     rows,
@@ -285,7 +299,10 @@ async function main() {
   addCheck(
     rows,
     "provider.expectedProductionEnvNames.tracked",
-    expectedProductionEnvNames.length === 13 ? "pass" : "fail",
+    expectedProductionEnvNames.length === 14 &&
+      new Set(expectedProductionEnvNames).size === expectedProductionEnvNames.length
+      ? "pass"
+      : "fail",
     expectedProductionEnvNames.join(", "),
   );
 
@@ -354,7 +371,7 @@ async function main() {
       rows,
       "provider.liveProductionCheck",
       "pending",
-      "set PRESIDENTIAL_VERCEL_PROVIDER_READINESS_LIVE=true to run sanitized live env-name presence checks",
+      `set ${liveReadEnv}=true to run sanitized live env-name presence checks`,
     );
   }
 
@@ -367,18 +384,19 @@ async function main() {
       : "PASS_PRODUCTION_PROVIDER_READINESS_LOCAL_PENDING_NO_DEPLOY_NO_PUBLIC_UNLOCK"
     : "FAIL_PRODUCTION_PROVIDER_READINESS_REVIEW_REQUIRED";
 
-  mkdirSync(path.dirname(docsResultsPath), { recursive: true });
-  mkdirSync(workRoot, { recursive: true });
-
-  writeFileSync(
-    docsResultsPath,
-    [
-      "check,status,details,public_unlock",
-      ...rows.map((row) =>
-        [row.check, row.status, row.details, row.public_unlock].map(csvEscape).join(","),
-      ),
-    ].join("\n") + "\n",
-  );
+  if (!noArtifactMode) {
+    mkdirSync(path.dirname(docsResultsPath), { recursive: true });
+    mkdirSync(workRoot, { recursive: true });
+    writeFileSync(
+      docsResultsPath,
+      [
+        "check,status,details,public_unlock",
+        ...rows.map((row) =>
+          [row.check, row.status, row.details, row.public_unlock].map(csvEscape).join(","),
+        ),
+      ].join("\n") + "\n",
+    );
+  }
 
   const payload = {
     verdict,
@@ -390,6 +408,11 @@ async function main() {
     },
     liveProviderCheck,
     liveCheckStatus,
+    liveReadEnv,
+    providerReadOperationCount,
+    zeroProviderCallsByDefault:
+      liveProviderCheck || providerReadOperationCount === 0,
+    artifactWritesExecuted: !noArtifactMode,
     vercelCliAuthenticated: vercelAuthentication.authenticated,
     vercelCliAuthMethod: vercelAuthentication.method,
     vercelTokenAvailable: vercelAuthentication.tokenAvailable,
@@ -417,21 +440,23 @@ async function main() {
     rows,
   };
 
-  writeFileSync(statusJsonPath, `${JSON.stringify(payload, null, 2)}\n`);
-  writeFileSync(
-    statusMdPath,
-    [
-      "# Step 11 Production Provider Readiness Status",
-      "",
-      `Verdict: ${verdict}`,
-      `Pass: ${passCount}`,
-      `Pending: ${pendingCount}`,
-      `Fail: ${failCount}`,
-      "",
-      "This verifier checks provider readiness state only. It does not deploy, promote, alias, pull env files, create env values, print secrets, publish routes, or unlock public SEO.",
-      "",
-    ].join("\n"),
-  );
+  if (!noArtifactMode) {
+    writeFileSync(statusJsonPath, `${JSON.stringify(payload, null, 2)}\n`);
+    writeFileSync(
+      statusMdPath,
+      [
+        "# Step 11 Production Provider Readiness Status",
+        "",
+        `Verdict: ${verdict}`,
+        `Pass: ${passCount}`,
+        `Pending: ${pendingCount}`,
+        `Fail: ${failCount}`,
+        "",
+        "This verifier checks provider readiness state only. It does not deploy, promote, alias, pull env files, create env values, print secrets, publish routes, or unlock public SEO.",
+        "",
+      ].join("\n"),
+    );
+  }
 
   if (failCount > 0) {
     console.error(verdict);
@@ -441,6 +466,9 @@ async function main() {
 
   console.log(verdict);
   console.log(`Pass: ${passCount}; pending: ${pendingCount}; fail: ${failCount}`);
+  console.log(
+    `Provider read operations: ${providerReadOperationCount}; artifact writes: ${noArtifactMode ? 0 : 1}`,
+  );
 }
 
 main().catch((error) => {

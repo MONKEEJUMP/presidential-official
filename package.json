@@ -3,13 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=22.12"
+    "node": ">=24.13.0 <25"
   },
+  "packageManager": "npm@11.6.2",
   "scripts": {
     "dev": "next dev",
     "build": "node scripts/run-next-build.mjs",
     "start": "next start",
     "lint": "eslint --max-warnings 0",
+    "typecheck": "tsc --noEmit",
     "lhci": "node scripts/run-lhci.mjs",
     "lhci:health": "lhci healthcheck --fatal",
     "lhci:collect": "lhci collect",
@@ -40,6 +42,8 @@
     "production:measurement-rendering:verify": "node scripts/presidential-production-measurement-rendering-qa.mjs",
     "production:lockfile-reproducibility:verify": "node scripts/presidential-production-lockfile-reproducibility-qa.mjs",
     "production:launch-readiness:verify": "node scripts/presidential-production-launch-readiness-qa.mjs",
+    "production:release-readiness:verify": "node scripts/presidential-production-release-readiness-qa.mjs",
+    "production:release-mode:verify": "node scripts/presidential-strict-release-mode-qa.mjs",
     "production:owner-gates:verify": "node scripts/presidential-owner-decision-gates-qa.mjs",
     "cms:verify": "node scripts/presidential-cms-verify.mjs",
     "cms:module-renderer:verify": "node scripts/presidential-cms-module-renderer-coverage-qa.mjs",
@@ -66,6 +70,7 @@
     "db:provider:readiness": "node scripts/run-python.mjs ../tools/database/verify_step10a_provider_credential_readiness.py",
     "db:live:preflight": "node scripts/run-python.mjs ../tools/database/verify_step8p_live_apply.py preflight",
     "db:live:verify": "node scripts/run-python.mjs ../tools/database/verify_step8p_live_apply.py verify-live",
+    "db:live:strict-release": "node scripts/run-python.mjs ../tools/database/verify_step8p_live_apply.py verify-live --proof-mode strict-release",
     "source:intake:dry-run": "node scripts/run-python.mjs ../tools/source-intake/dry_run_candidate_import.py",
     "source:intake:import:status": "node scripts/run-python.mjs ../tools/source-intake/candidate_import_command.py status",
     "source:intake:import:plan": "node scripts/run-python.mjs ../tools/source-intake/candidate_import_command.py plan",
@@ -82,7 +87,12 @@
     "source:response-drop:live-gate": "node scripts/run-python.mjs ../tools/source-intake/verify_step9z_live_file_waiting_gate.py",
     "source:response-drop:fixture-sim": "node scripts/run-python.mjs ../tools/source-intake/verify_step9y_owner_response_fixture_simulation.py",
     "source:response-drop:verify": "node scripts/run-python.mjs ../tools/source-intake/verify_step9u_owner_response_drop_scaffold.py",
-    "verify": "npm run lint && npm run build && npm run security:headers:verify && npm run security:headers:readiness && npm run security:environment:verify && npm run security:deployment:verify && npm run production:env-contract:verify && npm run production:provider-readiness:verify && npm run production:canonical-host:verify && npm run production:postdeploy-smoke:verify && npm run production:sitemap-submission:verify && npm run production:live-action-boundary:verify && npm run production:measurement-rendering:verify && npm run production:lockfile-reproducibility:verify && npm run production:launch-readiness:verify && npm run production:owner-gates:verify && npm run security:dependencies:verify && npm run security:public-surface:verify && npm run design:tokens:verify && npm run security:remote-images:verify && npm run security:third-party:verify && npm run security:browser-storage:verify && npm run security:outbound-links:verify && npm run security:contact-forms:verify && npm run security:contact-find-us:verify && npm run security:error-fallbacks:verify && npm run security:accessibility:verify && npm run security:performance-budget:verify && npm run cms:verify && npm run seo:verify:built && npm run db:schema:verify && npm run db:migrations:verify && npm run db:provider:readiness && npm run source:intake:import:verify-disabled && npm run source:assets:verify && npm run source:retailers:verify && npm run source:products:verify && npm run source:responses:verify && npm run source:response-drop:triage && npm run source:response-drop:triage-report && npm run source:response-drop:live-gate && npm run source:response-drop:fixture-sim && npm run source:response-drop:verify"
+    "test:launch-controls": "node scripts/presidential-launch-controls-qa.mjs",
+    "verify:app": "npm run lint && npm run typecheck && npm run build && npm run security:browser-storage:verify && npm run security:contact-forms:verify && npm run security:contact-find-us:verify && npm run production:measurement-rendering:verify && npm run production:live-action-boundary:verify && npm run production:launch-readiness:verify && npm run production:owner-gates:verify && npm run test:launch-controls",
+    "verify:web": "npm run lint && npm run typecheck && npm run build && npm run security:headers:verify && npm run security:headers:readiness && npm run security:environment:verify && npm run security:deployment:verify && npm run security:dependencies:verify && npm run security:public-surface:verify && npm run design:tokens:verify && npm run security:remote-images:verify && npm run security:third-party:verify && npm run security:browser-storage:verify && npm run security:outbound-links:verify && npm run security:contact-forms:verify && npm run security:contact-find-us:verify && npm run security:error-fallbacks:verify && npm run security:accessibility:verify && npm run security:performance-budget:verify && npm run cms:verify && npm run seo:verify:built && npm run production:env-contract:verify && npm run production:provider-readiness:verify && npm run production:canonical-host:verify && npm run production:postdeploy-smoke:verify && npm run production:sitemap-submission:verify && npm run production:release-mode:verify && npm run production:live-action-boundary:verify && npm run production:measurement-rendering:verify && npm run production:lockfile-reproducibility:verify && npm run production:launch-readiness:verify && npm run production:owner-gates:verify && npm run test:launch-controls",
+    "verify:workspace": "npm run db:schema:verify && npm run db:migrations:verify && npm run db:provider:readiness && npm run source:intake:dry-run && npm run source:intake:import:verify-disabled && npm run source:assets:verify && npm run source:retailers:verify && npm run source:products:verify && npm run source:responses:verify && npm run source:response-drop:triage && npm run source:response-drop:triage-report && npm run source:response-drop:live-gate && npm run source:response-drop:fixture-sim && npm run source:response-drop:verify",
+    "verify": "npm run verify:web",
+    "release:verify": "node scripts/run-presidential-strict-release-verify.mjs"
   },
   "dependencies": {
     "next": "16.2.9",

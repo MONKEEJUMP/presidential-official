@@ -5,7 +5,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { spawn } from "node:child_process";
-import { stripApprovedVisibleClaims } from "./lib/approved-visible-claims-qa.mjs";
+import { stripApprovedVisibleClaimsFromHtml } from "./lib/approved-visible-claims-qa.mjs";
 import { createServer } from "node:net";
 import path from "node:path";
 
@@ -468,8 +468,10 @@ function routeToScope(route) {
   return `public:${route}`;
 }
 
-function checkNoForbiddenVisibleText(scope, text) {
-  const strippedText = stripApprovedVisibleClaims(text);
+function checkNoForbiddenVisibleText(scope, html, route) {
+  const strippedText = visibleTextFromHtml(
+    stripApprovedVisibleClaimsFromHtml(html, route),
+  );
   const hits = forbiddenVisiblePatterns
     .filter(({ pattern }) => pattern.test(strippedText))
     .map(({ label }) => label);
@@ -492,7 +494,6 @@ async function checkRenderedRoute(routeConfig, baseUrl) {
 
   const canonicalHref = getAttribute(findCanonical(html), "href");
   const h1 = extractH1(html);
-  const visibleText = visibleTextFromHtml(html);
   const ageGateWithheldVisibleContent =
     h1.length === 0 &&
     /presidential-age-gate|presidential_adult_confirmed|Adults 21\+/i.test(html);
@@ -533,7 +534,7 @@ async function checkRenderedRoute(routeConfig, baseUrl) {
     h1 || "age-gated initial HTML; h1 verified through route registry source",
     "missing h1",
   );
-  checkNoForbiddenVisibleText(scope, visibleText);
+  checkNoForbiddenVisibleText(scope, html, routeConfig.route);
   recordCheck(
     scope,
     "visible.noBadHostLeakage",

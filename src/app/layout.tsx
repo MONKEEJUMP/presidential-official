@@ -69,7 +69,7 @@ export default async function RootLayout({
           {children}
         </div>
         <AgeGate initialConfirmed={adultConfirmed} />
-        <GoogleAnalytics nonce={nonce} />
+        {adultConfirmed ? <GoogleAnalytics nonce={nonce} /> : null}
       </body>
     </html>
   );

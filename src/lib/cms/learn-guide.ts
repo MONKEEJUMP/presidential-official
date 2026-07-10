@@ -6,22 +6,15 @@ import {
 } from "./sanity-read-client";
 import {
   SITE_PAGE_MODULE_PROJECTION,
+  type SanityApprovalGate,
   type SanityHomepageModule,
 } from "./homepage";
+import {
+  hasPublicCmsApprovalGate,
+  PUBLIC_MODULE_RENDER_ELIGIBILITY,
+} from "./public-content";
 
 const LEARN_GUIDE_CMS_RENDER_ENABLE_ENV = "PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED";
-const PUBLIC_LEARN_GUIDE_APPROVAL = "approved_public";
-const PUBLIC_RENDERABLE_ROUTE_PHASES = new Set(["approved_public"]);
-const RENDERABLE_MODULE_ELIGIBILITY = "ready_for_implementation_candidate";
-
-type SanityApprovalGate = {
-  readonly contentApprovalStatus?: string;
-  readonly sourceProofStatus?: string;
-  readonly legalReviewStatus?: string;
-  readonly assetApprovalStatus?: string;
-  readonly seoApprovalStatus?: string;
-  readonly routePublicationStatus?: string;
-};
 
 export type SanityLearnGuideRecord = {
   readonly _id: string;
@@ -52,7 +45,6 @@ const LEARN_GUIDE_QUERY = `*[_type == "learnGuide" && slug.current == $slug][0]{
   _type,
   title,
   "slug": slug.current,
-  routePhase,
   guideTopic,
   topicTaxonomy,
   intro,
@@ -76,7 +68,11 @@ const PUBLIC_LEARN_GUIDE_SLUGS_QUERY = `*[
   routePhase == "approved_public" &&
   approvalGate.contentApprovalStatus == "approved_public" &&
   approvalGate.sourceProofStatus == "approved_public" &&
-  approvalGate.legalReviewStatus == "approved_public"
+  approvalGate.legalReviewStatus == "approved_public" &&
+  approvalGate.assetApprovalStatus == "approved_public" &&
+  approvalGate.seoApprovalStatus == "approved_public" &&
+  approvalGate.routePublicationStatus == "index_follow_approved" &&
+  count(bodyModules[moduleControl.renderEligibility == "approved_public"]) > 0
 ]{
   "slug": slug.current
 }`;
@@ -101,10 +97,11 @@ function isLearnGuideApprovedForPublicRendering(
 ): record is SanityLearnGuideRecord {
   return Boolean(
     record &&
-      PUBLIC_RENDERABLE_ROUTE_PHASES.has(record.routePhase || "") &&
-      record.approvalGate?.contentApprovalStatus === PUBLIC_LEARN_GUIDE_APPROVAL &&
-      record.approvalGate.sourceProofStatus === PUBLIC_LEARN_GUIDE_APPROVAL &&
-      record.approvalGate.legalReviewStatus === PUBLIC_LEARN_GUIDE_APPROVAL,
+      isPublicRouteSlug(record.slug) &&
+      record.title?.trim() &&
+      record.intro?.trim() &&
+      record.guideTopic?.trim() &&
+      hasPublicCmsApprovalGate(record.approvalGate),
   );
 }
 
@@ -116,7 +113,7 @@ function getRenderableLearnGuideModules(
   }
 
   return (record.bodyModules || []).filter(
-    (module) => module.moduleControl?.renderEligibility === RENDERABLE_MODULE_ELIGIBILITY,
+    (module) => module.moduleControl?.renderEligibility === PUBLIC_MODULE_RENDER_ELIGIBILITY,
   );
 }
 
@@ -161,12 +158,15 @@ export async function readPublicRenderableLearnGuide(
   try {
     const guide = await readPublishedLearnGuide(slug, init);
     const record = guide.ok ? guide.result : null;
-    const approvedRecord = isLearnGuideApprovedForPublicRendering(record) ? record : null;
+    const modules = getRenderableLearnGuideModules(record);
+    const approvedRecord = isLearnGuideApprovedForPublicRendering(record) && modules.length
+      ? record
+      : null;
 
     return {
       enabled: true,
       record: approvedRecord,
-      modules: getRenderableLearnGuideModules(record),
+      modules: approvedRecord ? modules : [],
     };
   } catch {
     return {

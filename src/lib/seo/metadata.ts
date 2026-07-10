@@ -5,7 +5,10 @@ import {
   assertMetadataTextSafe,
   buildRouteMetadataUrlFields,
 } from "./metadata-helpers";
-import { getRoutePublicationGateBlockReasons } from "./source-records";
+import {
+  getApprovedRouteMetadataEmissionBlockReasons,
+  getRoutePublicationGateBlockReasons,
+} from "./source-records";
 import type {
   BuildRouteMetadataInput,
   RoutePublicationGateInput,
@@ -70,6 +73,29 @@ export function buildRouteMetadata(input: BuildRouteMetadataInput): Metadata {
     routePublicationContext: input.routePublicationContext,
   };
   const socialPreviewApproved = isRouteMetadataIndexable(route, gateInput);
+  const robots = buildRouteRobots(route, gateInput);
+  const metadataEmissionBlockReasons =
+    getApprovedRouteMetadataEmissionBlockReasons(
+      route,
+      {
+        title,
+        description,
+        canonicalUrl: canonical,
+        robotsDirective:
+          robots.index && robots.follow ? "index_follow" : "noindex_follow",
+        h1: route.h1,
+        ogTitle: title,
+        ogDescription: description,
+      },
+      input.routePublicationRecords,
+      input.routePublicationContext,
+    );
+
+  if (socialPreviewApproved && metadataEmissionBlockReasons.length > 0) {
+    throw new Error(
+      `Approved route metadata emission mismatch: ${metadataEmissionBlockReasons.join(", ")}`,
+    );
+  }
 
   return {
     metadataBase: METADATA_BASE,
@@ -78,7 +104,7 @@ export function buildRouteMetadata(input: BuildRouteMetadataInput): Metadata {
     alternates: {
       canonical,
     },
-    robots: buildRouteRobots(route, gateInput),
+    robots,
     ...(socialPreviewApproved
       ? {
           openGraph: {

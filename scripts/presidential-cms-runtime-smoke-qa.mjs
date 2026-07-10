@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { execFileSync, spawn, spawnSync } from "node:child_process";
+import { createServer } from "node:net";
 
 const webRoot = process.cwd();
 const repoRoot = resolve(webRoot, "..");
@@ -13,9 +14,12 @@ const workRoot = join(repoRoot, "sources", "spud", "work", "cms-private-preview-
 const resultsJsonPath = join(workRoot, "cms-runtime-smoke-results.json");
 const resultsMdPath = join(workRoot, "cms-runtime-smoke-results.md");
 const host = "127.0.0.1";
+const basePortWasExplicit = Boolean(process.env.PRESIDENTIAL_CMS_RUNTIME_SMOKE_PORT);
 const basePort = Number(process.env.PRESIDENTIAL_CMS_RUNTIME_SMOKE_PORT || "3334");
 let activePort = basePort;
 let activeBaseUrl = `http://${host}:${activePort}`;
+const scenarioPorts = {};
+const previewAccessToken = "cms-runtime-smoke-preview-access";
 
 const publicCmsSmokeEnv = {
   PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED: "true",
@@ -124,6 +128,14 @@ const approvedCmsPrivateOnlyHomeBlockMarkers = [
   "CMS Smoke Legal Utility Module",
   "CMS Smoke Asset Proof Module",
 ];
+const publicEditorOnlyMarkers = [
+  "Learn CMS path",
+  "Rendered guide candidates",
+  "CMS product path",
+  "Product cards can render here once Sanity modules provide",
+  "Product media cards will appear here when Sanity asset records are attached",
+  "CMS act media slot",
+];
 const privateChecks = [
   {
     path: "/drafts",
@@ -173,8 +185,16 @@ function sleep(ms) {
   });
 }
 
-async function fetchText(path) {
-  const response = await fetch(`${activeBaseUrl}${path}`);
+async function fetchResponse(path, authenticated = false) {
+  return fetch(`${activeBaseUrl}${path}`, {
+    headers: authenticated
+      ? { Authorization: `Bearer ${previewAccessToken}` }
+      : undefined,
+  });
+}
+
+async function fetchText(path, authenticated = false) {
+  const response = await fetchResponse(path, authenticated);
   const text = await response.text();
 
   if (!response.ok) {
@@ -182,6 +202,37 @@ async function fetchText(path) {
   }
 
   return text;
+}
+
+function isPortAvailable(targetPort) {
+  return new Promise((resolveAvailability) => {
+    const probe = createServer();
+
+    probe.once("error", () => resolveAvailability(false));
+    probe.once("listening", () => {
+      probe.close(() => resolveAvailability(true));
+    });
+    probe.listen(targetPort, host);
+  });
+}
+
+async function chooseScenarioPort(preferredPort) {
+  if (await isPortAvailable(preferredPort)) {
+    return preferredPort;
+  }
+
+  if (basePortWasExplicit) {
+    throw new Error(`Refusing occupied explicitly configured smoke port ${preferredPort}.`);
+  }
+
+  for (let offset = 1; offset <= 40; offset += 1) {
+    const candidatePort = preferredPort + offset;
+    if (await isPortAvailable(candidatePort)) {
+      return candidatePort;
+    }
+  }
+
+  throw new Error(`No available CMS runtime smoke port found after ${preferredPort}.`);
 }
 
 async function waitForServer() {
@@ -210,25 +261,6 @@ function getPrerenderedRoutes() {
   const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
 
   return new Set(Object.keys(manifest.routes || {}));
-}
-
-function killPortListeners(targetPort) {
-  if (process.platform !== "win32") {
-    return;
-  }
-
-  const command = [
-    `$connections = @(Get-NetTCPConnection -LocalPort ${targetPort} -State Listen -ErrorAction SilentlyContinue)`,
-    "foreach ($connection in $connections) {",
-    "  Stop-Process -Id $connection.OwningProcess -Force -ErrorAction SilentlyContinue",
-    "}",
-  ].join("; ");
-
-  try {
-    execFileSync("powershell.exe", ["-NoProfile", "-Command", command], {stdio: "ignore"});
-  } catch {
-    // Best-effort cleanup before the smoke starts its own local Next server.
-  }
 }
 
 function hasPortListener(targetPort) {
@@ -311,7 +343,6 @@ function startServer({
 
   activePort = port || basePort;
   activeBaseUrl = `http://${host}:${activePort}`;
-  killPortListeners(activePort);
   serverErrorChunks = [];
   const nodeOptions = buildNodeOptions(preload);
 
@@ -321,6 +352,7 @@ function startServer({
       ...process.env,
       ...env,
       PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED: "true",
+      PRESIDENTIAL_PRIVATE_DRAFTS_ACCESS_TOKEN: previewAccessToken,
       ...(nodeOptions ? { NODE_OPTIONS: nodeOptions } : {}),
     },
     stdio: ["ignore", "pipe", "pipe"],
@@ -442,8 +474,15 @@ async function assertPublicLeakOnlyScenario(scenarioName) {
 }
 
 async function assertPrivatePreviewChecks(scenarioName) {
+  const unauthenticatedResponse = await fetchResponse("/drafts");
+  addCheck(
+    `${scenarioName} private drafts rejects missing bearer access`,
+    unauthenticatedResponse.status === 404,
+    `unauthenticated /drafts returned ${unauthenticatedResponse.status}`,
+  );
+
   for (const route of privateChecks) {
-    const html = await fetchText(route.path);
+    const html = await fetchText(route.path, true);
     for (const [name, needle] of route.checks) {
       addCheck(`${scenarioName} ${name}`, html.includes(needle), `${needle} visible`);
     }
@@ -457,6 +496,7 @@ async function assertApprovedCmsRenderScenario(scenarioName) {
   const orbitHtml = await fetchText("/orbit");
   const ourStoryHtml = await fetchText("/our-story");
   const learnGuideHtml = await fetchText("/learn/what-are-moon-rocks");
+  const cmsOnlyLearnGuideHtml = await fetchText("/learn/cms-smoke-extra-guide");
   const findUsHtml = await fetchText("/find-us");
   const contactHtml = await fetchText("/contact");
 
@@ -465,6 +505,33 @@ async function assertApprovedCmsRenderScenario(scenarioName) {
     homeHtml.includes("CMS Smoke Home Module"),
     "approved public homepage module fixture rendered behind flags",
   );
+  addCheck(
+    `${scenarioName} public home has exactly one CMS H1`,
+    (homeHtml.match(/<h1\b/g) || []).length === 1,
+    `home H1 count=${(homeHtml.match(/<h1\b/g) || []).length}`,
+  );
+  addCheck(
+    `${scenarioName} public home renders approved hero media`,
+    homeHtml.includes("home-heroBlock-0.jpg") && homeHtml.includes('role="img"'),
+    "approved hero asset URL and image role rendered",
+  );
+  addCheck(
+    `${scenarioName} public home renders schema-shaped FAQ`,
+    homeHtml.includes("CMS Smoke FAQ Question?") && homeHtml.includes("CMS Smoke FAQ Answer."),
+    "nested FAQ question and Portable Text answer rendered",
+  );
+  addCheck(
+    `${scenarioName} public home renders approved related link`,
+    homeHtml.includes('href="/learn/cms-smoke-extra-guide"'),
+    "approved related Learn record rendered as an internal link",
+  );
+  for (const marker of publicEditorOnlyMarkers) {
+    addCheck(
+      `${scenarioName} public home suppresses editor copy ${marker}`,
+      !homeHtml.includes(marker),
+      `editor-only marker absent: ${marker}`,
+    );
+  }
   for (const marker of approvedCmsVisibleHomeBlockMarkers) {
     addCheck(
       `${scenarioName} public home renders ${marker}`,
@@ -505,6 +572,11 @@ async function assertApprovedCmsRenderScenario(scenarioName) {
     "approved public Learn guide fixture rendered behind flags",
   );
   addCheck(
+    `${scenarioName} CMS-only Learn slug renders without hardcoded fallback`,
+    cmsOnlyLearnGuideHtml.includes("CMS Smoke Extra Guide"),
+    "approved CMS slug outside the former fallback list rendered",
+  );
+  addCheck(
     `${scenarioName} public find-us renders approved CMS shell`,
     findUsHtml.includes("CMS Smoke Find Us Module"),
     "approved public Find Us shell fixture rendered behind flags",
@@ -542,7 +614,9 @@ async function runServerScenario({
     if (rebuild) {
       rebuildForScenario({name, env, preload});
     }
-    startServer({port, env, preload});
+    const selectedPort = await chooseScenarioPort(port);
+    scenarioPorts[name] = selectedPort;
+    startServer({port: selectedPort, env, preload});
     await waitForServer();
     if (fallbackExpected) {
       await assertPublicFallbackScenario(name);
@@ -615,12 +689,7 @@ function writeResults() {
   const payload = {
     verdict: failed.length ? "FAIL_CMS_RUNTIME_SMOKE_REVIEW_REQUIRED" : "PASS_CMS_RUNTIME_SMOKE_PUBLIC_PRIVATE_BOUNDARY",
     baseUrl: `http://${host}:${basePort}`,
-    scenarioPorts: {
-      "disabled-cms": basePort,
-      "enabled-cms": basePort + 1,
-      "approved-cms": basePort + 2,
-      "sanity-failure": basePort + 3,
-    },
+    scenarioPorts,
     generatedAt: new Date().toISOString(),
     checksPassed: results.length - failed.length,
     checksTotal: results.length,
@@ -628,6 +697,7 @@ function writeResults() {
     disabledPublicCmsSmokeEnv,
     publicPaths,
     publicDenyMarkers,
+    publicEditorOnlyMarkers,
     results,
   };
 

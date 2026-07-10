@@ -6,19 +6,17 @@ import {
 } from "./sanity-read-client";
 import {
   SITE_PAGE_MODULE_PROJECTION,
+  type SanityApprovalGate,
   type SanityHomepageModule,
 } from "./homepage";
+import {
+  hasPublicCmsApprovalGate,
+  isPublicCmsAsset,
+  PUBLIC_MODULE_RENDER_ELIGIBILITY,
+} from "./public-content";
 
 const SITE_PAGE_CMS_RENDER_ENABLE_ENV = "PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED";
-const PUBLIC_SITE_PAGE_APPROVAL = "approved_public";
 const PUBLIC_RENDERABLE_ROUTE_PHASES = new Set(["approved_public"]);
-const RENDERABLE_MODULE_ELIGIBILITY = "ready_for_implementation_candidate";
-
-type SanityApprovalGate = {
-  readonly contentApprovalStatus?: string;
-  readonly sourceProofStatus?: string;
-  readonly legalReviewStatus?: string;
-};
 
 export type SanitySitePageRecord = {
   readonly _id: string;
@@ -47,7 +45,10 @@ const SITE_PAGE_QUERY = `*[_type == "sitePage" && slug.current == $slug][0]{
   approvalGate{
     contentApprovalStatus,
     sourceProofStatus,
-    legalReviewStatus
+    legalReviewStatus,
+    assetApprovalStatus,
+    seoApprovalStatus,
+    routePublicationStatus
   },
   modules[]{
 ${SITE_PAGE_MODULE_PROJECTION}
@@ -61,12 +62,18 @@ function isSitePageCmsRenderingEnabled(): boolean {
 function isSitePageApprovedForPublicRendering(
   record: SanitySitePageRecord | null,
 ): record is SanitySitePageRecord {
+  const eligibleModules = (record?.modules || []).filter(
+    (module) => module.moduleControl?.renderEligibility === PUBLIC_MODULE_RENDER_ELIGIBILITY,
+  );
+  const publicHeroes = eligibleModules.filter((module) => module._type === "heroBlock");
+
   return Boolean(
     record &&
       PUBLIC_RENDERABLE_ROUTE_PHASES.has(record.routePhase || "") &&
-      record.approvalGate?.contentApprovalStatus === PUBLIC_SITE_PAGE_APPROVAL &&
-      record.approvalGate.sourceProofStatus === PUBLIC_SITE_PAGE_APPROVAL &&
-      record.approvalGate.legalReviewStatus === PUBLIC_SITE_PAGE_APPROVAL,
+      hasPublicCmsApprovalGate(record.approvalGate) &&
+      eligibleModules.length > 0 &&
+      publicHeroes.length === 1 &&
+      isPublicCmsAsset(publicHeroes[0].heroAssetRecord),
   );
 }
 
@@ -78,7 +85,7 @@ function getRenderableSitePageModules(
   }
 
   return (record.modules || []).filter(
-    (module) => module.moduleControl?.renderEligibility === RENDERABLE_MODULE_ELIGIBILITY,
+    (module) => module.moduleControl?.renderEligibility === PUBLIC_MODULE_RENDER_ELIGIBILITY,
   );
 }
 

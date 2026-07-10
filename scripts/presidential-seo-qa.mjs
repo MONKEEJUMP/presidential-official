@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { stripApprovedVisibleClaims } from "./lib/approved-visible-claims-qa.mjs";
+import { stripApprovedVisibleClaimsFromHtml } from "./lib/approved-visible-claims-qa.mjs";
 import { extname, join, relative } from "node:path";
 
 const projectRoot = process.cwd();
@@ -39,6 +39,16 @@ function projectPath(path) {
 
 function relativePath(path) {
   return toPosix(relative(projectRoot, path));
+}
+
+const APPROVED_VISIBLE_CLAIM_SOURCE_ROUTES = new Map([
+  ["src/components/presidential/modules/homepage-foundation-shell.tsx", "/"],
+  ["src/components/presidential/modules/moon-rocks-platform-shell.tsx", "/moon-rocks"],
+]);
+
+function stripApprovedVisibleClaimsFromSource(path, text) {
+  const route = APPROVED_VISIBLE_CLAIM_SOURCE_ROUTES.get(toPosix(path));
+  return route ? stripApprovedVisibleClaimsFromHtml(text, route) : text;
 }
 
 function isInternalDraftAppFile(file) {
@@ -280,7 +290,8 @@ function checkPublicLanguage(publicCopyFiles) {
 }
 
 function findStrippedLineMatches(file, patterns) {
-  const text = stripApprovedVisibleClaims(readFileSync(file, "utf8"));
+  const path = relativePath(file);
+  const text = stripApprovedVisibleClaimsFromSource(path, readFileSync(file, "utf8"));
   const lines = text.split(/\r?\n/);
   const matches = [];
 
@@ -1778,7 +1789,7 @@ function checkStep9HHomeRouteComposition() {
     { path: homePagePath, text: homePageText },
     { path: homeShellPath, text: homeShellText },
   ].flatMap((file) => {
-    const lines = stripApprovedVisibleClaims(file.text).split(/\r?\n/);
+    const lines = stripApprovedVisibleClaimsFromSource(file.path, file.text).split(/\r?\n/);
     return lines.flatMap((line, index) =>
       unsafePatterns
         .filter((pattern) => pattern.regex.test(line))
@@ -1818,7 +1829,7 @@ function checkStep9HHomeRouteComposition() {
   const visibleCopyLeaks = visibleCopyPaths.flatMap((path) => {
     if (!projectFileExists(path)) return [`${path}: missing visible-copy source file`];
 
-    return stripApprovedVisibleClaims(readProjectFile(path))
+    return stripApprovedVisibleClaimsFromSource(path, readProjectFile(path))
       .split(/\r?\n/)
       .flatMap((line, index) => {
         if (machineOnlyLinePattern.test(line)) return [];
@@ -2279,8 +2290,8 @@ function checkAgeGateFoundation() {
   }
 
   const confirmationOnly =
-    ageGateText.includes("localStorage") &&
-    ageGateText.includes("presidential_adult_confirmed") &&
+    !ageGateText.includes("localStorage") &&
+    !ageGateText.includes("sessionStorage") &&
     !ageGateText.includes("document.cookie") &&
     ageGateActionText.includes("cookies()") &&
     ageGateActionText.includes("ADULT_CONFIRMATION_COOKIE") &&
@@ -2292,7 +2303,7 @@ function checkAgeGateFoundation() {
     addResult(
       "PASS",
       "agegate.confirmationOnly",
-      "Age gate stores only an adult-confirmation flag through localStorage fallback and a scoped server cookie.",
+      "Age gate stores only a non-sensitive adult-confirmation flag in a scoped HTTP-only server cookie.",
     );
   } else {
     addResult(
@@ -2300,8 +2311,8 @@ function checkAgeGateFoundation() {
       "agegate.confirmationOnly",
       "Age gate persistence is not limited to the approved adult-confirmation flag.",
       [
-        `localStorage used: ${ageGateText.includes("localStorage")}`,
-        `adult confirmation key present: ${ageGateText.includes("presidential_adult_confirmed")}`,
+        `localStorage absent: ${!ageGateText.includes("localStorage")}`,
+        `sessionStorage absent: ${!ageGateText.includes("sessionStorage")}`,
         `document.cookie absent: ${!ageGateText.includes("document.cookie")}`,
         `server cookie action present: ${ageGateActionText.includes("cookies()")}`,
         `server cookie is httpOnly: ${ageGateActionText.includes("httpOnly: true")}`,
@@ -2312,25 +2323,27 @@ function checkAgeGateFoundation() {
   }
 
   const storageToleratesFailure =
-    ageGateText.includes("function readAdultConfirmation") &&
-    ageGateText.includes("function writeAdultConfirmation") &&
-    ageGateText.includes("function clearAdultConfirmation") &&
+    !ageGateText.includes("localStorage") &&
+    !ageGateText.includes("sessionStorage") &&
+    !ageGateText.includes("document.cookie") &&
+    ageGateText.includes("await confirmAdultAccess()") &&
     ageGateText.includes("try {") &&
-    ageGateText.includes("catch {");
+    ageGateText.includes("catch {") &&
+    ageGateText.includes('setStatus("pending")');
 
   if (storageToleratesFailure) {
     addResult(
       "PASS",
       "agegate.storageTolerance",
-      "Age gate localStorage access is isolated behind helpers that tolerate restricted storage failures.",
+      "Age gate has no browser-storage dependency and safely retains the overlay when the server cookie action fails.",
     );
   } else {
     addResult(
       "FAIL",
       "agegate.storageTolerance",
-      "Age gate storage access may crash in restricted/private browsing modes.",
+      "Age gate browser-storage or server-action failure handling is unsafe.",
       [],
-      "Wrap localStorage reads/writes/removals so storage failures keep the overlay safe instead of crashing the app.",
+      "Keep browser storage absent and retain the overlay when the server cookie action fails.",
     );
   }
 
@@ -2405,17 +2418,11 @@ function checkStep8HScopeBoundary() {
     const locatorShellSource = locatorShellFiles
       .map((path) => readProjectFile(path))
       .join("\n");
-    const requiredLocatorShellMarkers = [
-      "buildRouteMetadata",
-      'getRouteById("find-us-state")',
-      'getRouteById("find-us-city")',
-      'getRouteById("find-us-retailer-detail")',
-      "notFound()",
-      "Verified retailer records are required",
-      "No customer rows",
-    ];
-    const missingLocatorShellMarkers = requiredLocatorShellMarkers.filter(
-      (marker) => !locatorShellSource.includes(marker),
+    const dynamicLocatorSources = locatorShellFiles.slice(1).map((path) => readProjectFile(path));
+    const missingLocatorShellMarkers = dynamicLocatorSources.flatMap((source, index) =>
+      ["dynamicParams = false", "generateStaticParams", "return [];", "notFound()"]
+        .filter((marker) => !source.includes(marker))
+        .map((marker) => `${locatorShellFiles[index + 1]}:${marker}`),
     );
     const blockedLocatorShellPatterns = [
       /\bLocalBusiness\b/,
@@ -2442,7 +2449,7 @@ function checkStep8HScopeBoundary() {
       addResult(
         "PASS",
         "routeShells.locatorDynamicShells",
-        "S8.2 locator URL shells exist without retailer data reads, LocalBusiness schema, publication records, or public unlock signals.",
+        "S8.2 locator URL templates generate no params and always fail closed without retailer data reads, schema, publication records, or public unlock signals.",
       );
     } else {
       addResult(
@@ -2473,6 +2480,8 @@ function checkStep8HScopeBoundary() {
       "src/lib/cms/index.ts",
       "src/lib/cms/learn-guide-drafts.ts",
       "src/lib/cms/learn-guide.ts",
+      "src/lib/cms/draft-route-access.ts",
+      "src/lib/cms/public-content.ts",
       "src/lib/cms/sanity-read-client.ts",
       "src/lib/cms/site-page-drafts.ts",
       "src/lib/cms/site-page.ts",
@@ -2883,7 +2892,7 @@ function checkStep9FDesignSystemFoundation() {
     { label: "unsupported superlative", regex: /\b(world'?s strongest|highest form|strongest flavor|#1\b|number[- ]one|top[- ]?ranked|best)\b/i },
   ];
   const unsafeMatches = step9fFiles.flatMap((file) => {
-    const lines = stripApprovedVisibleClaims(file.text).split(/\r?\n/);
+    const lines = stripApprovedVisibleClaimsFromSource(file.path, file.text).split(/\r?\n/);
     return lines.flatMap((line, index) =>
       unsafePatterns
         .filter((pattern) => pattern.regex.test(line))
@@ -2990,7 +2999,7 @@ function checkStep9GRouteShellVisualFoundation() {
     { label: "threat-domain/public accusation language", regex: /\b(imposter|scam|hijack(?:ed|ing)?|stolen|counterfeit|knockoff|fraud)\b/i },
   ];
   const unsafeMatches = step9gFiles.flatMap((file) => {
-    const lines = stripApprovedVisibleClaims(file.text).split(/\r?\n/);
+    const lines = stripApprovedVisibleClaimsFromSource(file.path, file.text).split(/\r?\n/);
     return lines.flatMap((line, index) =>
       unsafePatterns
         .filter((pattern) => pattern.regex.test(line))
@@ -3165,7 +3174,7 @@ function checkStep9LStaticRouteVisualFoundation() {
   const visibleCopyLeaks = visibleCopyPaths.flatMap((path) => {
     if (!projectFileExists(path)) return [`${path}: missing visible-copy source file`];
 
-    return stripApprovedVisibleClaims(readProjectFile(path))
+    return stripApprovedVisibleClaimsFromSource(path, readProjectFile(path))
       .split(/\r?\n/)
       .flatMap((line, index) => {
         if (machineOnlyLinePattern.test(line)) return [];

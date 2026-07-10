@@ -8,6 +8,7 @@ import {
   SceneStack,
 } from "@/components/presidential";
 import type { SanityAssetRecord, SanityHomepageModule, SanitySitePageRecord } from "@/lib/cms";
+import { hasAuthenticatedPrivateDraftRouteAccess } from "@/lib/cms/draft-route-access";
 import {
   isDraftSitePageSlug,
   listDraftSitePageSlugs,
@@ -24,9 +25,8 @@ type DraftSitePageProps = {
   }>;
 };
 
-const PRIVATE_DRAFTS_ROUTE_ENABLE_ENV = "PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED";
 const PUBLIC_ROUTE_PHASE = "approved_public";
-const PUBLIC_MODULE_ELIGIBILITY = "ready_for_implementation_candidate";
+const PUBLIC_MODULE_ELIGIBILITY = "approved_public";
 const MODULE_TYPES_EXPECTING_ASSETS = new Set([
   "heroBlock",
   "productPlatformBlock",
@@ -57,10 +57,6 @@ export async function generateMetadata({params}: DraftSitePageProps): Promise<Me
       follow: false,
     },
   };
-}
-
-function isPrivateDraftsRouteEnabled(): boolean {
-  return process.env[PRIVATE_DRAFTS_ROUTE_ENABLE_ENV] === "true";
 }
 
 function uniqueValues(values: readonly (string | undefined)[]): readonly string[] {
@@ -168,7 +164,7 @@ function getPromotionBlockers(
   }
 
   if (readyModuleCount === 0) {
-    blockers.push("No modules are marked ready for implementation candidate rendering.");
+    blockers.push("No modules are approved for public rendering.");
   }
 
   if (modules.some((module) => module._type?.includes("asset") || module.assetRecord || module.assetRecords?.length || module.assetRecordRefs?.length)) {
@@ -769,7 +765,7 @@ function DraftContactLocatorReadiness({
 }
 
 export default async function DraftSitePage({params}: DraftSitePageProps) {
-  if (!isPrivateDraftsRouteEnabled()) {
+  if (!(await hasAuthenticatedPrivateDraftRouteAccess())) {
     notFound();
   }
 
@@ -823,6 +819,7 @@ export default async function DraftSitePage({params}: DraftSitePageProps) {
         </Scene>
 
         <CmsHomepageModuleRenderer
+          heroHeadingLevel="h2"
           modules={modules}
           productRoute={PRODUCT_ROUTE_SLUGS.has(slug) ? slug as "moon-rocks" | "moon-pods" | "orbit" : undefined}
           supportRoute={SUPPORT_ROUTE_SLUGS.has(slug) ? slug as "contact" | "find-us" : undefined}

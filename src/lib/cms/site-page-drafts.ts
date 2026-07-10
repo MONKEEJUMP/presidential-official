@@ -2,6 +2,7 @@ import "server-only";
 
 import { SITE_PAGE_MODULE_PROJECTION } from "./homepage";
 import type { SanitySitePageRecord } from "./site-page";
+import { fetchSanityJsonWithTimeout } from "./sanity-read-client";
 
 const SANITY_PROJECT_ID = "4bl3xvem";
 const SANITY_DATASET = "production";
@@ -49,6 +50,14 @@ const DRAFT_SITE_PAGE_QUERY = `*[_type == "sitePage" && _id == $id][0]{
   "slug": slug.current,
   routePhase,
   summary,
+  approvalGate{
+    contentApprovalStatus,
+    sourceProofStatus,
+    legalReviewStatus,
+    assetApprovalStatus,
+    seoApprovalStatus,
+    routePublicationStatus
+  },
   modules[]{
 ${SITE_PAGE_MODULE_PROJECTION}
   }
@@ -119,15 +128,18 @@ export async function readDraftSitePage(
     };
   }
 
-  const response = await fetch(buildDraftReadQueryUrl(DRAFT_SITE_PAGE_QUERY, DRAFT_SITE_PAGE_IDS[slug]), {
-    ...init,
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`,
+  const { payload, response } = await fetchSanityJsonWithTimeout<SanitySitePageRecord | null>(
+    buildDraftReadQueryUrl(DRAFT_SITE_PAGE_QUERY, DRAFT_SITE_PAGE_IDS[slug]),
+    {
+      ...init,
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
     },
-    cache: "no-store",
-  });
+  );
 
   if (!response.ok) {
     return {
@@ -139,11 +151,9 @@ export async function readDraftSitePage(
     };
   }
 
-  const payload = (await response.json()) as { result: SanitySitePageRecord | null };
-
   return {
     ok: true,
     skipped: false,
-    result: payload.result,
+    result: payload?.result || null,
   };
 }

@@ -4,11 +4,11 @@ import path from "node:path";
 const webRoot = process.cwd();
 
 const liveActionEnvFlags = [
-  "PRESIDENTIAL_VERCEL_PROVIDER_READINESS_LIVE",
+  "PRESIDENTIAL_VERCEL_PROVIDER_READINESS_LIVE_READ",
   "PRESIDENTIAL_PRODUCTION_POSTDEPLOY_SMOKE_LIVE",
   "PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_ANALYTICS",
   "PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_GSC",
-  "PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_CONTACT_FORM_READY",
+  "PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_CONTACT_MAILTO_READY",
 ];
 
 function read(relativePath) {
@@ -73,9 +73,9 @@ function main() {
   addCheck(
     rows,
     "liveAction.verifyChain.includesGate",
-    typeof scripts.verify === "string" &&
-      scripts.verify.includes("npm run production:live-action-boundary:verify"),
-    "full verify runs the live-action boundary gate",
+    typeof scripts["verify:app"] === "string" &&
+      scripts["verify:app"].includes("npm run production:live-action-boundary:verify"),
+    "self-contained app verification runs the live-action boundary gate",
   );
   addCheck(
     rows,
@@ -99,7 +99,8 @@ function main() {
   addCheck(
     rows,
     "liveAction.providerReadiness.readOnlyDefault",
-    providerText.includes("PRESIDENTIAL_VERCEL_PROVIDER_READINESS_LIVE") &&
+    providerText.includes("PRESIDENTIAL_VERCEL_PROVIDER_READINESS_LIVE_READ") &&
+      providerText.includes("providerReadOperationCount") &&
       providerText.includes("providerMutated: false") &&
       providerText.includes("deploymentExecuted: false") &&
       providerText.includes('method: "GET"'),
@@ -118,8 +119,10 @@ function main() {
     "liveAction.sitemapSubmission.notReadyByDefault",
     sitemapSubmissionText.includes("searchProviderSitemapHandoffReady") &&
       sitemapSubmissionText.includes("providerActionExecuted: false") &&
-      sitemapSubmissionText.includes("builtSitemapUrlEntries === 0"),
-    "sitemap handoff stays false until sitemap entries and route records exist",
+      sitemapSubmissionText.includes("strictReleaseMode") &&
+      sitemapSubmissionText.includes("evaluateSitemapStateMode") &&
+      sitemapSubmissionText.includes("strictReleaseMode && routeStateMatchesMode"),
+    "sitemap handoff is false by default and becomes ready only for an exact strict-release approved route set",
   );
   addCheck(
     rows,

@@ -22,6 +22,7 @@ const productRendererPath = join(
 );
 const cmsVerifyPath = join(webRoot, "scripts", "presidential-cms-verify.mjs");
 const cmsProjectionPath = join(webRoot, "src", "lib", "cms", "homepage.ts");
+const approvedFixturePath = join(webRoot, "scripts", "mock-sanity-fetch-approved-cms.cjs");
 const packageJsonPath = join(webRoot, "package.json");
 const workRoot = join(repoRoot, "sources", "spud", "work", "cms-module-renderer-coverage");
 const statusJsonPath = join(workRoot, "cms-module-renderer-coverage-status.json");
@@ -91,6 +92,7 @@ const rendererSource = read(rendererPath);
 const productRendererSource = read(productRendererPath);
 const cmsVerifySource = read(cmsVerifyPath);
 const cmsProjectionSource = read(cmsProjectionPath);
+const approvedFixtureSource = read(approvedFixturePath);
 const packageJson = JSON.parse(read(packageJsonPath));
 
 const studioDefineTypes = extractStudioDefineTypeNames(studioObjectsSource);
@@ -131,8 +133,9 @@ addCheck(
 addCheck(
   checks,
   "web.rendererHasFallback",
-  rendererSource.includes("function FallbackModule") && /default:\s*return <FallbackModule/.test(rendererSource),
-  "Unknown CMS modules still fall back without crashing.",
+  rendererSource.includes("function FallbackModule") &&
+    /default:\s*return isPrivateRenderMode\(renderMode\)[\s\S]{0,200}<FallbackModule[\s\S]{0,200}: null;/.test(rendererSource),
+  "Unknown CMS modules remain inspectable in private preview and fail closed on public routes.",
 );
 addCheck(
   checks,
@@ -147,13 +150,46 @@ addCheck(
   checks,
   "web.productAssetMediaFailsClosed",
   productRendererSource.includes("function canRenderPublicAssetMedia(asset: SanityAssetRecord): boolean") &&
-    productRendererSource.includes('const PUBLIC_ASSET_APPROVAL_STATUS = "approved_public"') &&
-    productRendererSource.includes("asset.approvalStatus === PUBLIC_ASSET_APPROVAL_STATUS") &&
-    productRendererSource.includes("asset.provenanceStatus === PUBLIC_ASSET_APPROVAL_STATUS") &&
-    productRendererSource.includes("asset.altText") &&
+    productRendererSource.includes("return isPublicCmsAsset(asset)") &&
+    productRendererSource.includes("sanitizePublicCmsModule(module)") &&
     productRendererSource.includes("const canShowAssetMedia = isPrivate || canRenderPublicAssetMedia(asset)") &&
     productRendererSource.includes("canShowAssetMedia && asset.assetUrl"),
   "Public product media only renders CMS asset URLs after approved_public approval, approved_public provenance, and alt text.",
+);
+addCheck(
+  checks,
+  "web.projectionUsesSchemaShapedFaqAndRelatedItems",
+  cmsProjectionSource.includes("items[]{") &&
+    cmsProjectionSource.includes("question") &&
+    cmsProjectionSource.includes("answer") &&
+    cmsProjectionSource.includes('_type == "reference" => @->{') &&
+    cmsProjectionSource.includes("routePublicationStatus"),
+  "Shared projection preserves nested FAQ objects and dereferences related-content records with approval fields.",
+);
+addCheck(
+  checks,
+  "fixture.coversExactly18SchemaShapedBlocks",
+  /const allHomeModuleTypes = \[[\s\S]*?\];/.test(approvedFixtureSource) &&
+    expectedPageBuilderBlocks.every((blockType) => approvedFixtureSource.includes(`"${blockType}"`)) &&
+    approvedFixtureSource.includes('renderEligibility: "approved_public"') &&
+    approvedFixtureSource.includes("approvedRecordGate") &&
+    approvedFixtureSource.includes('routePublicationStatus: "index_follow_approved"') &&
+    approvedFixtureSource.includes('question: "CMS Smoke FAQ Question?"') &&
+    approvedFixtureSource.includes('answer: [{_type: "block"') &&
+    approvedFixtureSource.includes("heroAssetRecord") &&
+    approvedFixtureSource.includes("assetUrl"),
+  "Approved runtime fixture covers all 18 block names with schema-shaped FAQ, related records, full gates, and approved hero media.",
+);
+addCheck(
+  checks,
+  "web.rendererHasDedicatedFaqAndRelatedLinks",
+  rendererSource.includes("function FaqModule") &&
+    rendererSource.includes("function FaqItems") &&
+    rendererSource.includes("function RelatedContentModule") &&
+    rendererSource.includes("function RelatedItemLinks") &&
+    /case "faqBlock":\s*return <FaqModule/.test(rendererSource) &&
+    /case "relatedContentBlock":\s*return <RelatedContentModule/.test(rendererSource),
+  "FAQ and related-content blocks use dedicated schema-shaped renderers.",
 );
 addCheck(
   checks,

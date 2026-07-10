@@ -59,6 +59,7 @@ function main() {
   const googleSource = read("src/lib/analytics/google.ts");
   const analyticsComponentSource = read("src/components/analytics/google-analytics.tsx");
   const layoutSource = read("src/app/layout.tsx");
+  const proxySource = read("src/proxy.ts");
   const postdeploySource = read("scripts/presidential-production-postdeploy-smoke-qa.mjs");
   const launchReadinessSource = read("scripts/presidential-production-launch-readiness-qa.mjs");
   const builtFiles = walkBuiltFiles(builtAppRoot);
@@ -80,9 +81,9 @@ function main() {
   addCheck(
     rows,
     "measurementRendering.verifyChain.includesGate",
-    typeof scripts.verify === "string" &&
-      scripts.verify.includes("npm run production:measurement-rendering:verify"),
-    "full verify runs the measurement rendering gate",
+    typeof scripts["verify:app"] === "string" &&
+      scripts["verify:app"].includes("npm run production:measurement-rendering:verify"),
+    "self-contained app verification runs the measurement rendering gate",
   );
   addCheck(
     rows,
@@ -110,6 +111,14 @@ function main() {
     layoutSource.includes("getGoogleSiteVerification()") &&
       layoutSource.includes("verification: { google: getGoogleSiteVerification() }"),
     "Google site verification metadata is only emitted through the gated helper",
+  );
+  addCheck(
+    rows,
+    "analyticsRendering.adultCookieRequired",
+    layoutSource.includes("adultConfirmed ? <GoogleAnalytics nonce={nonce} /> : null") &&
+      proxySource.includes("request.cookies.get(ADULT_CONFIRMATION_COOKIE)") &&
+      proxySource.includes("adultConfirmed && isGoogleAnalyticsEnabled()"),
+    "GA4 markup and CSP hosts require the HTTP-only adult-confirmation cookie",
   );
   addCheck(
     rows,

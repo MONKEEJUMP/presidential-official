@@ -63,6 +63,10 @@ export function assertProductionMetadataUrl(url: string): string {
     throw new Error(`Non-production metadata URL is blocked: ${url}`);
   }
 
+  if (parsed.pathname === "/" && !parsed.search && !parsed.hash) {
+    return PRODUCTION_ORIGIN;
+  }
+
   return parsed.toString();
 }
 

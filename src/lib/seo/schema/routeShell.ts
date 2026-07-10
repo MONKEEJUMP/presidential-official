@@ -14,6 +14,7 @@ import type { SeoRouteRecord, SeoSchemaType } from "../route-types";
 import { getRoutePublicationGateBlockReasons } from "../source-records";
 import { buildBreadcrumbSchema } from "./breadcrumb";
 import { buildOrganizationSchema } from "./organization";
+import { getEmittedRouteShellSchemaTypes } from "./route-contract";
 import { buildWebPageSchema } from "./webpage";
 import { buildWebsiteSchema } from "./website";
 
@@ -102,15 +103,20 @@ export function buildRouteShellJsonLd(
 
   const canonical = buildRouteCanonicalUrl(route);
   const entries: RouteShellJsonLdEntry[] = [];
+  const emittedSchemaTypes = getEmittedRouteShellSchemaTypes(route);
 
-  if (route.path === "/") {
+  if (
+    route.path === "/" &&
+    emittedSchemaTypes.includes("Organization") &&
+    emittedSchemaTypes.includes("WebSite")
+  ) {
     entries.push(
       { id: "organization", data: buildOrganizationSchema() },
       { id: "website", data: buildWebsiteSchema() },
     );
   }
 
-  if (route.schema.includes("WebPage")) {
+  if (emittedSchemaTypes.includes("WebPage")) {
     const webPageSchema = buildWebPageSchema({
       path: route.canonicalPath,
       name: getSafeRouteShellName(route),
@@ -124,7 +130,7 @@ export function buildRouteShellJsonLd(
     entries.push({ id: "webpage", data: webPageSchema });
   }
 
-  if (route.schema.includes("BreadcrumbList")) {
+  if (emittedSchemaTypes.includes("BreadcrumbList")) {
     entries.push({
       id: "breadcrumb",
       data: buildBreadcrumbSchema(buildRouteShellBreadcrumbItems(route)),

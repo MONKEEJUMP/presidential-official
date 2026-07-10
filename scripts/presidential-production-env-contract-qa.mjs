@@ -38,11 +38,14 @@ const allowedSecretFiles = new Set([
   "src/lib/cms/site-page-drafts.ts",
   "src/lib/cms/learn-guide-drafts.ts",
   "scripts/presidential-cms-live-draft-smoke-qa.mjs",
+  "scripts/presidential-cms-runtime-smoke-qa.mjs",
+  "scripts/presidential-cms-runtime-repair-qa.mjs",
   "scripts/presidential-cms-web-read-boundary-qa.mjs",
   "scripts/presidential-production-env-contract.mjs",
   "scripts/presidential-production-env-contract-qa.mjs",
   "scripts/presidential-production-launch-readiness-qa.mjs",
   "scripts/presidential-production-provider-readiness-qa.mjs",
+  "src/lib/cms/draft-route-access.ts",
 ]);
 
 const deploymentCommandPatterns = [
@@ -145,8 +148,13 @@ function main() {
   const gitignoreText = readIfExists(gitignorePath);
   const publicSecretPattern = /\bNEXT_PUBLIC_[A-Z0-9_]*(?:SECRET|TOKEN|PASSWORD|CREDENTIAL|PRIVATE|AUTH|KEY)[A-Z0-9_]*\b/;
   const allSourceText = sourceFiles.map(readIfExists).join("\n");
-  const secretMatches = filesContaining(sourceFiles, "SANITY_AUTH_TOKEN");
-  const unexpectedSecretMatches = secretMatches.filter((file) => !allowedSecretFiles.has(file));
+  const secretMatchesByName = Object.fromEntries(
+    serverOnlySecretNames.map((name) => [name, filesContaining(sourceFiles, name)]),
+  );
+  const secretMatches = [...new Set(Object.values(secretMatchesByName).flat())];
+  const unexpectedSecretMatches = secretMatches.filter(
+    (file) => !allowedSecretFiles.has(file),
+  );
   const deployScanFiles = [
     packageJsonPath,
     ...sourceFiles.filter((file) => !path.basename(file).startsWith("presidential-")),
@@ -168,7 +176,8 @@ function main() {
   addCheck(
     rows,
     "productionEnv.expectedNames.tracked",
-    expectedProductionEnvNames.length === 13,
+    expectedProductionEnvNames.length === 14 &&
+      new Set(expectedProductionEnvNames).size === expectedProductionEnvNames.length,
     expectedProductionEnvNames.join(", "),
   );
   addCheck(
@@ -191,11 +200,13 @@ function main() {
   );
   addCheck(
     rows,
-    "secrets.sanityAuthToken.serverOnly",
-    secretMatches.length > 0 && unexpectedSecretMatches.length === 0,
+    "secrets.serverOnlyNames.restricted",
+    serverOnlySecretNames.every(
+      (name) => secretMatchesByName[name]?.length > 0,
+    ) && unexpectedSecretMatches.length === 0,
     unexpectedSecretMatches.length
       ? unexpectedSecretMatches.join(" | ")
-      : `allowed references: ${secretMatches.join(" | ")}`,
+      : `allowed references: ${serverOnlySecretNames.map((name) => `${name}=${secretMatchesByName[name].join("|")}`).join(" ; ")}`,
   );
   addCheck(
     rows,
@@ -205,12 +216,17 @@ function main() {
   );
   addCheck(
     rows,
-    "draftRoutes.envGatedNotFound",
-    readIfExists(path.join(webRoot, "src", "app", "drafts", "page.tsx")).includes("PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED") &&
+    "draftRoutes.envAndBearerGatedNotFound",
+    readIfExists(path.join(webRoot, "src", "lib", "cms", "draft-route-access.ts")).includes("PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED") &&
+      readIfExists(path.join(webRoot, "src", "lib", "cms", "draft-route-access.ts")).includes("PRESIDENTIAL_PRIVATE_DRAFTS_ACCESS_TOKEN") &&
+      readIfExists(path.join(webRoot, "src", "lib", "cms", "draft-route-access.ts")).includes("timingSafeEqual") &&
+      readIfExists(path.join(webRoot, "src", "proxy.ts")).includes("hasPrivateDraftRouteAccess") &&
+      readIfExists(path.join(webRoot, "src", "proxy.ts")).includes("status: 404") &&
+      readIfExists(path.join(webRoot, "src", "app", "drafts", "page.tsx")).includes("hasAuthenticatedPrivateDraftRouteAccess") &&
       readIfExists(path.join(webRoot, "src", "app", "drafts", "page.tsx")).includes("notFound()") &&
-      readIfExists(path.join(webRoot, "src", "app", "drafts", "[slug]", "page.tsx")).includes("PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED") &&
+      readIfExists(path.join(webRoot, "src", "app", "drafts", "[slug]", "page.tsx")).includes("hasAuthenticatedPrivateDraftRouteAccess") &&
       readIfExists(path.join(webRoot, "src", "app", "drafts", "[slug]", "page.tsx")).includes("notFound()"),
-    "private draft routes remain env-gated and return notFound when disabled",
+    "private draft routes require both the enable flag and a timing-safe Bearer token, with proxy and page-level 404 enforcement",
   );
   addCheck(
     rows,

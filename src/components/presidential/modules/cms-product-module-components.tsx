@@ -8,6 +8,10 @@ import type {
   SanityHomepageModule,
   SanityLinkedRecord,
 } from "@/lib/cms/homepage";
+import {
+  isPublicCmsAsset,
+  sanitizePublicCmsModule,
+} from "@/lib/cms/public-content";
 
 export type CmsProductRouteSlug = "moon-rocks" | "moon-pods" | "orbit";
 export type CmsProductRenderMode = "public" | "private";
@@ -75,19 +79,12 @@ const PRODUCT_ROUTE_PROFILES: readonly CmsProductRouteProfile[] = [
 ];
 
 const PRODUCT_ROUTE_HREFS = new Set<string>(PRODUCT_ROUTE_PROFILES.map((profile) => profile.route));
-const PUBLIC_ASSET_APPROVAL_STATUS = "approved_public";
-
 function isPrivateMode(renderMode: CmsProductRenderMode): boolean {
   return renderMode === "private";
 }
 
 function canRenderPublicAssetMedia(asset: SanityAssetRecord): boolean {
-  return Boolean(
-    asset.assetUrl &&
-    asset.altText &&
-    asset.approvalStatus === PUBLIC_ASSET_APPROVAL_STATUS &&
-    asset.provenanceStatus === PUBLIC_ASSET_APPROVAL_STATUS,
-  );
+  return isPublicCmsAsset(asset);
 }
 
 function recordTitle(record?: SanityLinkedRecord): string {
@@ -184,10 +181,11 @@ function sanityCardToCard(card: SanityCard, index: number): CmsProductCardModel 
 export function collectCmsProductCards(
   module: SanityHomepageModule,
   productRoute?: CmsProductRouteSlug,
+  renderMode: CmsProductRenderMode = "private",
 ): readonly CmsProductCardModel[] {
   const profile = getCmsProductRouteProfile(module, productRoute);
   const cards = [
-    ...(profile
+    ...(profile && isPrivateMode(renderMode)
       ? [{
           key: profile.slug,
           title: profile.title,
@@ -235,7 +233,13 @@ function StatusPill({
   );
 }
 
-function ProductRouteLink({ route }: { readonly route?: string }) {
+function ProductRouteLink({
+  renderMode,
+  route,
+}: {
+  readonly renderMode: CmsProductRenderMode;
+  readonly route?: string;
+}) {
   if (!route) {
     return null;
   }
@@ -251,7 +255,9 @@ function ProductRouteLink({ route }: { readonly route?: string }) {
     );
   }
 
-  return <p className="mt-2 break-words text-xs leading-5 text-po-muted">{route}</p>;
+  return isPrivateMode(renderMode)
+    ? <p className="mt-2 break-words text-xs leading-5 text-po-muted">{route}</p>
+    : null;
 }
 
 export function CmsProductAssetCard({
@@ -266,6 +272,10 @@ export function CmsProductAssetCard({
   const isPrivate = isPrivateMode(renderMode);
   const title = asset.title || asset.assetName || `Product asset ${typeof index === "number" ? index + 1 : ""}`.trim();
   const canShowAssetMedia = isPrivate || canRenderPublicAssetMedia(asset);
+
+  if (!canShowAssetMedia) {
+    return null;
+  }
 
   return (
     <article className="grid content-start gap-3 border border-po-line bg-po-soft p-4">
@@ -320,7 +330,7 @@ export function CmsProductCard({
       {card.description ? (
         <p className="text-sm leading-6 text-po-body">{card.description}</p>
       ) : null}
-      <ProductRouteLink route={card.route} />
+      <ProductRouteLink renderMode={renderMode} route={card.route} />
       {card.asset ? (
         <p className="text-xs font-semibold text-po-muted">
           {card.asset.title || card.asset.assetName || "Asset attached"}
@@ -379,9 +389,13 @@ export function CmsProductModuleComponents({
   readonly productRoute?: CmsProductRouteSlug;
   readonly renderMode?: CmsProductRenderMode;
 }) {
-  const profile = getCmsProductRouteProfile(module, productRoute);
-  const cards = collectCmsProductCards(module, productRoute);
-  const assets = collectCmsProductAssets(module);
+  const isPrivate = isPrivateMode(renderMode);
+  const renderableModule = isPrivate ? module : sanitizePublicCmsModule(module);
+  const profile = getCmsProductRouteProfile(renderableModule, productRoute);
+  const cards = collectCmsProductCards(renderableModule, productRoute, renderMode);
+  const assets = collectCmsProductAssets(renderableModule).filter(
+    (asset) => isPrivate || canRenderPublicAssetMedia(asset),
+  );
 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,0.95fr)_minmax(280px,0.45fr)]">
@@ -392,16 +406,17 @@ export function CmsProductModuleComponents({
               <CmsProductCard card={card} key={card.key} renderMode={renderMode} />
             ))}
           </div>
-        ) : (
+        ) : isPrivate ? (
           <div className="border border-po-line bg-po-canvas p-5">
             <p className="text-sm leading-6 text-po-body">
               Product cards can render here once Sanity modules provide platform, format, related product, or card references.
             </p>
           </div>
-        )}
-        <CmsProductRoutePanel module={module} productRoute={productRoute} />
+        ) : null}
+        {isPrivate ? <CmsProductRoutePanel module={renderableModule} productRoute={productRoute} /> : null}
       </div>
-      <div className="grid content-start gap-4 border border-po-line bg-po-soft p-5">
+      {assets.length || isPrivate ? (
+        <div className="grid content-start gap-4 border border-po-line bg-po-soft p-5">
         <p className="text-sm font-semibold uppercase tracking-normal text-po-brand-ink">
           {profile?.mediaLabel || "Product media"}
         </p>
@@ -411,12 +426,13 @@ export function CmsProductModuleComponents({
               <CmsProductAssetCard asset={asset} index={index} key={asset._id || asset.savedFile || asset.assetName || `${profile?.slug || "asset"}-${index}`} renderMode={renderMode} />
             ))}
           </div>
-        ) : (
+        ) : isPrivate ? (
           <p className="text-sm leading-6 text-po-body">
             Product media cards will appear here when Sanity asset records are attached to the module.
           </p>
-        )}
-      </div>
+        ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

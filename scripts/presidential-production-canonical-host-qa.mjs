@@ -1,5 +1,15 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { createRequire } from "node:module";
+import os from "node:os";
 import path from "node:path";
+import ts from "typescript";
 
 const webRoot = process.cwd();
 const root = path.resolve(webRoot, "..");
@@ -17,6 +27,9 @@ const proxyPath = path.join(webRoot, "src", "proxy.ts");
 const schemaConstantsPath = path.join(webRoot, "src", "lib", "seo", "schema", "constants.ts");
 const deploymentProtectionPath = path.join(webRoot, "scripts", "presidential-deployment-protection-qa.mjs");
 const packageJsonPath = path.join(webRoot, "package.json");
+const sourceRoot = path.join(webRoot, "src", "lib", "seo");
+const compiledSeoRoot = path.join(os.tmpdir(), "presidential-canonical-host-gate-model");
+const noWrite = process.env.PRESIDENTIAL_QA_NO_WRITE === "true";
 
 function readIfExists(filePath) {
   return existsSync(filePath) ? readFileSync(filePath, "utf8") : "";
@@ -35,12 +48,74 @@ function addCheck(rows, check, passed, details) {
   });
 }
 
+function collectTypeScriptFiles(directory) {
+  const files = [];
+
+  function walk(current) {
+    for (const entry of readdirSync(current, { withFileTypes: true })) {
+      const fullPath = path.join(current, entry.name);
+      if (entry.isDirectory()) {
+        walk(fullPath);
+      } else if (entry.isFile() && entry.name.endsWith(".ts")) {
+        files.push(fullPath);
+      }
+    }
+  }
+
+  walk(directory);
+  return files;
+}
+
+function loadCompiledGateModel() {
+  rmSync(compiledSeoRoot, { recursive: true, force: true });
+  mkdirSync(compiledSeoRoot, { recursive: true });
+
+  const program = ts.createProgram(collectTypeScriptFiles(sourceRoot), {
+    allowSyntheticDefaultImports: true,
+    esModuleInterop: true,
+    jsx: ts.JsxEmit.ReactJSX,
+    module: ts.ModuleKind.CommonJS,
+    moduleResolution: ts.ModuleResolutionKind.Node10,
+    noEmitOnError: true,
+    outDir: compiledSeoRoot,
+    rootDir: path.join(webRoot, "src"),
+    skipLibCheck: true,
+    strict: true,
+    target: ts.ScriptTarget.ES2022,
+  });
+  const emitResult = program.emit();
+  const diagnostics = ts
+    .getPreEmitDiagnostics(program)
+    .concat(emitResult.diagnostics)
+    .filter((diagnostic) => diagnostic.category === ts.DiagnosticCategory.Error);
+
+  if (diagnostics.length > 0) {
+    throw new Error(
+      ts.formatDiagnosticsWithColorAndContext(diagnostics, {
+        getCanonicalFileName: (fileName) => fileName,
+        getCurrentDirectory: () => webRoot,
+        getNewLine: () => "\n",
+      }),
+    );
+  }
+
+  const require = createRequire(import.meta.url);
+  const distRoot = path.join(compiledSeoRoot, "lib", "seo");
+  return {
+    publication: require(
+      path.join(distRoot, "source-records", "route-publication.js"),
+    ),
+    routes: require(path.join(distRoot, "routes.js")),
+  };
+}
+
 function main() {
   const rows = [];
   const proxyText = readIfExists(proxyPath);
   const schemaConstantsText = readIfExists(schemaConstantsPath);
   const deploymentProtectionText = readIfExists(deploymentProtectionPath);
   const packageJsonText = readIfExists(packageJsonPath);
+  const { publication, routes } = loadCompiledGateModel();
 
   addCheck(
     rows,
@@ -89,11 +164,16 @@ function main() {
   );
   addCheck(
     rows,
-    "canonical.noPublicUnlockSignals",
-    !/APPROVED_ROUTE_PUBLICATIONS\s*=\s*\[[\s\S]*routePublicationStatus:\s*"approved_public"/.test(
-      readIfExists(path.join(webRoot, "src", "lib", "seo", "source-records", "route-publication.ts")),
-    ),
-    "canonical-host redirect work does not add approved route publications",
+    "canonical.routePublicationGate.closed",
+    publication.APPROVED_ROUTE_PUBLICATIONS.length === 0 &&
+      routes.ROUTE_REGISTRY.every(
+        (route) =>
+          !publication.isRoutePublicationApprovedForSeo(route) &&
+          publication
+            .getRoutePublicationGateBlockReasons(route)
+            .includes("source_record:route_publication_missing"),
+      ),
+    "compiled route-publication gate has zero approved records and blocks every registered route",
   );
 
   const passCount = rows.filter((row) => row.status === "pass").length;
@@ -102,19 +182,6 @@ function main() {
     failCount === 0
       ? "PASS_PRODUCTION_CANONICAL_HOST_NO_DEPLOY_NO_PUBLIC_UNLOCK"
       : "FAIL_PRODUCTION_CANONICAL_HOST_REVIEW_REQUIRED";
-
-  mkdirSync(path.dirname(docsResultsPath), { recursive: true });
-  mkdirSync(workRoot, { recursive: true });
-
-  writeFileSync(
-    docsResultsPath,
-    [
-      "check,status,details,public_unlock",
-      ...rows.map((row) =>
-        [row.check, row.status, row.details, row.public_unlock].map(csvEscape).join(","),
-      ),
-    ].join("\n") + "\n",
-  );
 
   const payload = {
     verdict,
@@ -127,22 +194,37 @@ function main() {
     routePublicationApproved: false,
     sitemapUnlocked: false,
     indexabilityUnlocked: false,
+    reportFilesWritten: !noWrite,
     rows,
   };
 
-  writeFileSync(statusJsonPath, `${JSON.stringify(payload, null, 2)}\n`);
-  writeFileSync(
-    statusMdPath,
-    [
-      "# Step 11 Production Canonical Host Status",
-      "",
-      `Verdict: ${verdict}`,
-      `Checks: ${passCount}/${rows.length}`,
-      "",
-      "This verifier proves canonical host redirect readiness only. It does not deploy, publish routes, submit a sitemap, or unlock public SEO.",
-      "",
-    ].join("\n"),
-  );
+  if (!noWrite) {
+    mkdirSync(path.dirname(docsResultsPath), { recursive: true });
+    mkdirSync(workRoot, { recursive: true });
+
+    writeFileSync(
+      docsResultsPath,
+      [
+        "check,status,details,public_unlock",
+        ...rows.map((row) =>
+          [row.check, row.status, row.details, row.public_unlock].map(csvEscape).join(","),
+        ),
+      ].join("\n") + "\n",
+    );
+    writeFileSync(statusJsonPath, `${JSON.stringify(payload, null, 2)}\n`);
+    writeFileSync(
+      statusMdPath,
+      [
+        "# Step 11 Production Canonical Host Status",
+        "",
+        `Verdict: ${verdict}`,
+        `Checks: ${passCount}/${rows.length}`,
+        "",
+        "This verifier proves canonical host redirect readiness only. It does not deploy, publish routes, submit a sitemap, or unlock public SEO.",
+        "",
+      ].join("\n"),
+    );
+  }
 
   if (failCount > 0) {
     console.error(verdict);

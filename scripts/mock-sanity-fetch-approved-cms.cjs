@@ -63,8 +63,57 @@ const moduleTitleByType = {
   relatedContentBlock: "CMS Smoke Related Content Module",
 };
 
+const approvedRecordGate = {
+  contentApprovalStatus: "approved_public",
+  sourceProofStatus: "approved_public",
+  legalReviewStatus: "approved_public",
+  assetApprovalStatus: "approved_public",
+  seoApprovalStatus: "approved_public",
+  routePublicationStatus: "index_follow_approved",
+};
+
+const approvedNestedGate = {
+  contentApprovalStatus: "approved_public",
+  sourceProofStatus: "approved_public",
+  legalReviewStatus: "approved_public",
+};
+
+function approvedAsset(routeSlug, moduleType, index) {
+  return {
+    _id: `assetRecord.${routeSlug}.${moduleType}.${index}`,
+    title: `${moduleTitleByType[moduleType] || moduleType} approved media`,
+    altText: `${moduleTitleByType[moduleType] || moduleType} approved media`,
+    assetName: `${routeSlug}-${moduleType}-${index}`,
+    assetUrl: `https://cdn.sanity.io/images/4bl3xvem/production/${routeSlug}-${moduleType}-${index}.jpg`,
+    assetWidth: 1600,
+    assetHeight: 1200,
+    approvalStatus: "approved_public",
+    provenanceStatus: "approved_public",
+    pageUsage: [routeSlug],
+  };
+}
+
+function approvedLinkedRecord(type, slug, title) {
+  return {
+    _id: `${type}.${slug}`,
+    _type: type,
+    title,
+    name: title,
+    slug,
+    intro: `${title} approved summary.`,
+    positioningLine: `${title} approved positioning.`,
+    shortDescription: `${title} approved description.`,
+    publicStatus: "approved_public",
+    legalReviewStatus: "approved_public",
+    approvalGate: approvedRecordGate,
+  };
+}
+
 function moduleFixture(routeSlug, moduleType, index, titleOverride) {
   const title = titleOverride || moduleTitleByType[moduleType] || `CMS Smoke ${moduleType} Module`;
+  const asset = approvedAsset(routeSlug, moduleType, index);
+  const productRecord = approvedLinkedRecord("productPlatform", "moon-rocks", "Moon Rocks");
+  const guideRecord = approvedLinkedRecord("learnGuide", "cms-smoke-extra-guide", "CMS Smoke Extra Guide");
 
   return {
     _key: `${routeSlug}-${moduleType}-${index}`,
@@ -73,31 +122,86 @@ function moduleFixture(routeSlug, moduleType, index, titleOverride) {
     heading: title,
     title,
     description: "CMS runtime smoke fixture rendered from approved public module data.",
+    body: moduleType === "learnGuideBlock"
+      ? [{_type: "block", children: [{text: "CMS smoke guide block body."}]}]
+      : undefined,
+    callout: moduleType === "learnGuideBlock" ? "CMS smoke guide callout." : undefined,
     actNumber: moduleType === "homepageActBlock" ? 1 : undefined,
     actTitle: moduleType === "homepageActBlock" ? title : undefined,
     beliefStatement: moduleType === "homepageActBlock" ? "CMS smoke act belief." : undefined,
     formIntent: moduleType === "contactBlock" ? "official_contact_routing" : undefined,
     retailerDataStatus: moduleType === "locatorShellBlock" ? "verified_records_required" : undefined,
-    legalGateStatus: "blocked_prelaunch",
-    question: moduleType === "faqBlock" ? title : undefined,
-    answer: moduleType === "faqBlock" ? "CMS smoke answer." : undefined,
+    legalGateStatus: "approved_public",
+    heroAssetRecord: moduleType === "heroBlock" ? asset : undefined,
+    assetRecords: moduleType === "mediaGalleryBlock" ? [asset] : undefined,
+    assetRecordRefs: ["homepageActBlock", "productPlatformBlock", "productFormatBlock", "productRailBlock"].includes(moduleType)
+      ? [asset]
+      : undefined,
+    primaryCta: moduleType === "heroBlock"
+      ? {label: "Explore Moon Rocks", href: "/moon-rocks", intent: "explore_moon_rocks", visibilityStatus: "approved_public"}
+      : undefined,
+    visibleCta: ["contactBlock", "locatorShellBlock"].includes(moduleType)
+      ? {label: "Contact Presidential", href: "/contact", intent: "contact", visibilityStatus: "approved_public"}
+      : undefined,
+    contactProfile: moduleType === "contactBlock"
+      ? {
+          _id: "contactProfile.cms-smoke",
+          _type: "contactProfile",
+          title: "Official Presidential contact",
+          displayEmail: "contact@example.invalid",
+          emailConflictStatus: "approved_public",
+          publicUseStatus: "approved_public",
+        }
+      : undefined,
     events: moduleType === "timelineBlock"
-      ? [{ label: "CMS smoke timeline event", dateOrSequence: "Act 1" }]
+      ? [{
+          label: "CMS smoke timeline event",
+          dateOrSequence: "Act 1",
+          body: [{_type: "block", children: [{text: "CMS smoke timeline body."}]}],
+        }]
       : undefined,
     facts: moduleType === "productFactsBlock"
       ? [{ label: "CMS smoke fact", value: "18 blocks", publicUseStatus: "approved_public" }]
       : undefined,
     columns: moduleType === "comparisonBlock"
-      ? [{ title: "CMS smoke comparison column" }]
+      ? [{
+          title: "CMS smoke comparison column",
+          body: [{_type: "block", children: [{text: "CMS smoke comparison body."}]}],
+          contentRef: productRecord,
+        }]
       : undefined,
-    items: ["mediaGalleryBlock", "relatedContentBlock"].includes(moduleType)
-      ? [{ title: "CMS smoke related item", description: "CMS smoke item body." }]
+    items: moduleType === "faqBlock"
+      ? [{
+          _key: "cms-smoke-faq-item",
+          question: "CMS Smoke FAQ Question?",
+          answer: [{_type: "block", children: [{text: "CMS Smoke FAQ Answer."}]}],
+          approvalGate: approvedNestedGate,
+        }]
+      : moduleType === "relatedContentBlock"
+        ? [guideRecord]
+      : undefined,
+    cards: moduleType === "productRailBlock"
+      ? [{
+          title: "CMS Smoke Approved Product Card",
+          route: "/moon-rocks",
+          sourceStatus: "approved_public",
+          routeGate: "index_follow_approved",
+          assetRecord: asset,
+          contentRef: productRecord,
+        }]
+      : undefined,
+    featuredGuides: moduleType === "guideHubBlock" ? [guideRecord] : undefined,
+    relatedPlatforms: ["guideHubBlock", "productPlatformBlock"].includes(moduleType) ? [productRecord] : undefined,
+    relatedProductLinks: moduleType === "learnGuideBlock" ? [productRecord] : undefined,
+    platform: moduleType === "productPlatformBlock" ? productRecord : undefined,
+    format: moduleType === "productFormatBlock"
+      ? approvedLinkedRecord("productFormat", "moon-rocks", "Moon Rocks Format")
       : undefined,
     moduleControl: {
       moduleKey: `${routeSlug}-${moduleType}-smoke`,
       internalLabel: title,
       componentKey: moduleType,
-      renderEligibility: "ready_for_implementation_candidate",
+      renderEligibility: "approved_public",
       sortIntent: index + 1,
     },
   };
@@ -122,7 +226,12 @@ function pageResult(slug) {
   const moduleType = moduleTypes[routeSlug] || "heroBlock";
   const modules = routeSlug === "home"
     ? allHomeModuleTypes.map((type, index) => moduleFixture(routeSlug, type, index))
-    : [moduleFixture(routeSlug, moduleType, 0, title)];
+    : moduleType === "heroBlock"
+      ? [moduleFixture(routeSlug, "heroBlock", 0, title)]
+      : [
+          moduleFixture(routeSlug, "heroBlock", 0, title),
+          moduleFixture(routeSlug, moduleType, 1),
+        ];
 
   return {
     _id: `sitePage.${routeSlug}`,
@@ -131,38 +240,26 @@ function pageResult(slug) {
     slug: routeSlug,
     routePhase: "approved_public",
     summary: "CMS runtime smoke fixture.",
-    approvalGate: {
-      contentApprovalStatus: "approved_public",
-      sourceProofStatus: "approved_public",
-      legalReviewStatus: "approved_public",
-    },
+    approvalGate: approvedRecordGate,
     modules,
   };
 }
 
 function learnGuideResult(slug) {
-  if (slug !== "what-are-moon-rocks") {
+  if (!["what-are-moon-rocks", "cms-smoke-extra-guide"].includes(slug)) {
     return null;
   }
 
   return {
     _id: "learnGuide.what-are-moon-rocks",
     _type: "learnGuide",
-    title: "CMS Smoke Learn Guide",
+    title: slug === "cms-smoke-extra-guide" ? "CMS Smoke Extra Guide" : "CMS Smoke Learn Guide",
     slug,
-    routePhase: "approved_public",
     guideTopic: "Moon Rocks",
     topicTaxonomy: ["moon-rocks"],
     intro: "CMS smoke guide intro rendered from public module data.",
     sourceProofList: ["cms-smoke-fixture"],
-    approvalGate: {
-      contentApprovalStatus: "approved_public",
-      sourceProofStatus: "approved_public",
-      legalReviewStatus: "approved_public",
-      assetApprovalStatus: "approved_public",
-      seoApprovalStatus: "approved_public",
-      routePublicationStatus: "blocked_prelaunch",
-    },
+    approvalGate: approvedRecordGate,
     bodyModules: [
       {
         _key: "learn-moon-rocks-body",
@@ -174,10 +271,13 @@ function learnGuideResult(slug) {
           moduleKey: "learn-moon-rocks-smoke-body",
           internalLabel: "CMS Smoke Learn Guide Body",
           componentKey: "learnGuideBlock",
-          renderEligibility: "ready_for_implementation_candidate",
+          renderEligibility: "approved_public",
           sortIntent: 1,
         },
       },
+      moduleFixture(slug, "faqBlock", 1),
+      moduleFixture(slug, "productFactsBlock", 2),
+      moduleFixture(slug, "relatedContentBlock", 3),
     ],
   };
 }

@@ -5,12 +5,19 @@ import type {
   SanityColumn,
   SanityContactProfile,
   SanityCta,
+  SanityFaqItem,
   SanityFact,
   SanityHomepageModule,
   SanityLinkedRecord,
+  SanityModuleItem,
   SanityPortableTextBlock,
   SanityTimelineEvent,
 } from "@/lib/cms/homepage";
+import {
+  isPublicCmsAsset,
+  PUBLIC_MODULE_RENDER_ELIGIBILITY,
+  sanitizePublicCmsModule,
+} from "@/lib/cms/public-content";
 import { getRouteByPath } from "@/lib/seo/route-helpers";
 import type { SeoRoutePath } from "@/lib/seo/route-types";
 
@@ -21,6 +28,7 @@ import { CmsProductModuleComponents } from "./cms-product-module-components";
 
 type CmsHomepageModuleRendererProps = {
   readonly modules: readonly SanityHomepageModule[];
+  readonly heroHeadingLevel?: "h1" | "h2";
   readonly productRoute?: ProductRouteSlug;
   readonly renderMode?: CmsRenderMode;
   readonly supportRoute?: SupportRouteSlug;
@@ -167,7 +175,7 @@ function ModuleHeading({
   );
 }
 
-function RouteLabel({ route }: { readonly route?: string }) {
+function RouteLabel({ route, renderMode }: { readonly route?: string; readonly renderMode: CmsRenderMode }) {
   const href = asSeoRoutePath(route);
 
   if (!route) {
@@ -182,7 +190,21 @@ function RouteLabel({ route }: { readonly route?: string }) {
     );
   }
 
-  return <p className="mt-3 text-xs leading-5 text-po-muted">{route}</p>;
+  return isPrivateRenderMode(renderMode)
+    ? <p className="mt-3 text-xs leading-5 text-po-muted">{route}</p>
+    : null;
+}
+
+function linkedRecordHref(record: SanityLinkedRecord): string | null {
+  if (!record.slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(record.slug)) {
+    return null;
+  }
+
+  if (record._type === "learnGuide") {
+    return `/learn/${record.slug}`;
+  }
+
+  return asSeoRoutePath(`/${record.slug}`);
 }
 
 function ReferenceCard({
@@ -199,7 +221,7 @@ function ReferenceCard({
   return (
     <article className="grid content-start gap-3 border border-po-line bg-po-canvas p-5 shadow-sm">
       <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
-        {label || record._type || (isPrivate ? record.publicStatus : undefined) || "Reference"}
+        {label || (isPrivate ? record._type || record.publicStatus : undefined) || "Related"}
       </p>
       <h3 className="text-lg font-semibold text-po-ink">{linkedRecordTitle(record)}</h3>
       {linkedRecordBody(record) ? (
@@ -257,7 +279,7 @@ function CardGrid({ module, renderMode }: { readonly module: SanityHomepageModul
           {card.contentRef && linkedRecordBody(card.contentRef) ? (
             <p className="text-sm leading-6 text-po-body">{linkedRecordBody(card.contentRef)}</p>
           ) : null}
-          <RouteLabel route={card.route} />
+          <RouteLabel renderMode={renderMode} route={card.route} />
           {card.assetRecord ? (
             <p className="text-xs font-semibold text-po-muted">
               {card.assetRecord.title || card.assetRecord.assetName || (isPrivate ? card.assetRecord.savedFile : undefined) || "Asset attached"}
@@ -279,7 +301,7 @@ function FeaturedGuides({ guides, renderMode }: { readonly guides?: readonly San
   return (
     <div className="grid gap-4 md:grid-cols-3">
       {guides.map((guide, index) => {
-        const guideHref = asSeoRoutePath(guide.slug ? `/learn/${guide.slug}` : undefined);
+        const guideHref = linkedRecordHref(guide);
 
         return (
           <article className="grid content-start gap-3 border border-po-line bg-po-canvas p-5 shadow-sm" key={guide._id || `${guide.slug || "guide"}-${index}`}>
@@ -307,6 +329,68 @@ function FeaturedGuides({ guides, renderMode }: { readonly guides?: readonly San
   );
 }
 
+function RelatedItemLinks({
+  items,
+  renderMode,
+}: {
+  readonly items?: readonly SanityModuleItem[];
+  readonly renderMode: CmsRenderMode;
+}) {
+  if (!items?.length) {
+    return null;
+  }
+
+  return (
+    <div className="grid gap-4 md:grid-cols-3">
+      {items.map((item, index) => {
+        const href = linkedRecordHref(item);
+
+        return (
+          <article className="border border-po-line bg-po-canvas p-5 shadow-sm" key={item._id || item._key || `${item.slug || "related"}-${index}`}>
+            <h3 className="text-xl font-semibold text-po-ink">
+              {linkedRecordTitle(item)}
+            </h3>
+            {linkedRecordBody(item) ? (
+              <p className="mt-3 text-sm leading-6 text-po-body">{linkedRecordBody(item)}</p>
+            ) : null}
+            {href ? (
+              <Link
+                className="mt-4 inline-flex text-sm font-semibold text-po-brand-ink underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
+                href={href}
+              >
+                Learn more
+              </Link>
+            ) : isPrivateRenderMode(renderMode) && item.slug ? (
+              <p className="mt-3 text-xs leading-5 text-po-muted">Slug: {item.slug}</p>
+            ) : null}
+          </article>
+        );
+      })}
+    </div>
+  );
+}
+
+function FaqItems({ items }: { readonly items?: readonly SanityFaqItem[] }) {
+  if (!items?.length) {
+    return null;
+  }
+
+  return (
+    <dl className="grid gap-4">
+      {items.map((item, index) => {
+        const answer = portableTextToPlainText(item.answer);
+
+        return (
+          <div className="border border-po-line bg-po-canvas p-5 shadow-sm" key={item._key || item.question || `faq-${index}`}>
+            <dt className="text-xl font-semibold text-po-ink">{item.question || `Question ${index + 1}`}</dt>
+            {answer ? <dd className="mt-3 text-sm leading-6 text-po-body">{answer}</dd> : null}
+          </div>
+        );
+      })}
+    </dl>
+  );
+}
+
 function TimelineEvents({ events }: { readonly events?: readonly SanityTimelineEvent[] }) {
   if (!events?.length) {
     return null;
@@ -329,7 +413,7 @@ function TimelineEvents({ events }: { readonly events?: readonly SanityTimelineE
   );
 }
 
-function FactGrid({ facts }: { readonly facts?: readonly SanityFact[] }) {
+function FactGrid({ facts, renderMode }: { readonly facts?: readonly SanityFact[]; readonly renderMode: CmsRenderMode }) {
   if (!facts?.length) {
     return null;
   }
@@ -344,7 +428,7 @@ function FactGrid({ facts }: { readonly facts?: readonly SanityFact[] }) {
           {fact.value ? (
             <p className="mt-3 text-2xl font-semibold leading-tight text-po-ink">{fact.value}</p>
           ) : null}
-          {fact.publicUseStatus ? (
+          {isPrivateRenderMode(renderMode) && fact.publicUseStatus ? (
             <p className="mt-3 text-xs font-semibold text-po-muted">{fact.publicUseStatus}</p>
           ) : null}
         </article>
@@ -353,7 +437,7 @@ function FactGrid({ facts }: { readonly facts?: readonly SanityFact[] }) {
   );
 }
 
-function ColumnGrid({ columns }: { readonly columns?: readonly SanityColumn[] }) {
+function ColumnGrid({ columns, renderMode }: { readonly columns?: readonly SanityColumn[]; readonly renderMode: CmsRenderMode }) {
   if (!columns?.length) {
     return null;
   }
@@ -369,7 +453,7 @@ function ColumnGrid({ columns }: { readonly columns?: readonly SanityColumn[] })
           {column.contentRef ? (
             <div className="mt-4 border-t border-po-line pt-4">
               <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
-                {column.contentRef._type || "Referenced content"}
+                {isPrivateRenderMode(renderMode) ? column.contentRef._type || "Referenced content" : "Related"}
               </p>
               <p className="mt-2 text-sm font-semibold text-po-ink">{linkedRecordTitle(column.contentRef)}</p>
             </div>
@@ -412,13 +496,22 @@ function AssetCards({ assets, renderMode }: { readonly assets: readonly SanityAs
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {assets.map((asset, index) => (
         <article className="grid content-start gap-3 border border-po-line bg-po-soft p-4" key={asset._id || `${asset.title || "asset"}-${index}`}>
-          <div className="aspect-[4/3] border border-po-line bg-po-canvas p-4">
-            <div className="flex h-full items-end border border-dashed border-po-subtle bg-po-soft p-4">
+          {asset.assetUrl && (isPrivate || isPublicCmsAsset(asset)) ? (
+            <figure
+              aria-label={asset.altText || asset.title || "Presidential media"}
+              className="aspect-[4/3] border border-po-line bg-po-canvas bg-contain bg-center bg-no-repeat"
+              role="img"
+              style={{ backgroundImage: `url(${JSON.stringify(asset.assetUrl)})` }}
+            />
+          ) : isPrivate ? (
+            <div className="aspect-[4/3] border border-po-line bg-po-canvas p-4">
+              <div className="flex h-full items-end border border-dashed border-po-subtle bg-po-soft p-4">
               <p className="text-xs font-semibold uppercase tracking-normal text-po-muted">
-                {(isPrivate ? asset.sourceSystem : undefined) || "Asset preview"}
+                  {asset.sourceSystem || "Asset preview"}
               </p>
+              </div>
             </div>
-          </div>
+          ) : null}
           <h3 className="text-base font-semibold text-po-ink">{asset.title || asset.assetName || "Untitled asset"}</h3>
           {isPrivate && asset.savedFile ? (
             <p className="break-words text-xs leading-5 text-po-muted">{asset.savedFile}</p>
@@ -471,7 +564,7 @@ function ProductPlatformModule({
         <ModuleHeading fallback="Product platform" id={id} kicker="Product platform" module={module} renderMode={renderMode} />
         <CmsProductModuleComponents module={module} productRoute={productRoute} renderMode={renderMode} />
         <PlatformSummary module={module} renderMode={renderMode} />
-        <FactGrid facts={module.facts} />
+        <FactGrid facts={module.facts} renderMode={renderMode} />
         <RelatedContent module={module} renderMode={renderMode} />
       </div>
     </Scene>
@@ -504,28 +597,31 @@ function ProductRailModule({
 function LearnHubModule({ module, renderMode }: { readonly module: SanityHomepageModule; readonly renderMode: CmsRenderMode }) {
   const id = moduleDomId(module, "learn-hub");
   const guideCount = module.featuredGuides?.length || module.cards?.length || module.items?.length || 0;
+  const isPrivate = isPrivateRenderMode(renderMode);
 
   return (
     <Scene ariaLabelledBy={id} tone="default">
       <div className="mx-auto grid w-full max-w-7xl gap-8">
         <ModuleHeading fallback="Learn hub" id={id} kicker="Education" module={module} renderMode={renderMode} />
-        <div className="grid gap-4 border border-po-brand-line bg-po-brand-soft p-5 md:grid-cols-[minmax(0,0.8fr)_minmax(260px,0.4fr)] md:items-center">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
-              Learn CMS path
-            </p>
-            <h3 className="mt-2 text-xl font-semibold text-po-ink">
-              Guide cards route into approved Learn URLs
-            </h3>
-            <p className="mt-3 text-sm leading-6 text-po-body">
-              The Learn hub can list Sanity guide references while each guide route keeps its own source, claim, and module review path.
-            </p>
+        {isPrivate ? (
+          <div className="grid gap-4 border border-po-brand-line bg-po-brand-soft p-5 md:grid-cols-[minmax(0,0.8fr)_minmax(260px,0.4fr)] md:items-center">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
+                Learn CMS path
+              </p>
+              <h3 className="mt-2 text-xl font-semibold text-po-ink">
+                Guide cards route into approved Learn URLs
+              </h3>
+              <p className="mt-3 text-sm leading-6 text-po-body">
+                The Learn hub can list guide references while each guide route keeps its own review path.
+              </p>
+            </div>
+            <div className="grid gap-2 border border-po-brand-line bg-po-canvas p-4">
+              <p className="text-xs font-semibold uppercase tracking-normal text-po-muted">Rendered guide candidates</p>
+              <p className="text-3xl font-semibold text-po-ink">{guideCount}</p>
+            </div>
           </div>
-          <div className="grid gap-2 border border-po-brand-line bg-po-canvas p-4">
-            <p className="text-xs font-semibold uppercase tracking-normal text-po-muted">Rendered guide candidates</p>
-            <p className="text-3xl font-semibold text-po-ink">{guideCount}</p>
-          </div>
-        </div>
+        ) : null}
         <FeaturedGuides guides={module.featuredGuides} renderMode={renderMode} />
         <CardGrid module={module} renderMode={renderMode} />
       </div>
@@ -593,14 +689,30 @@ function ModuleMeta({ module, renderMode }: { readonly module: SanityHomepageMod
   );
 }
 
-function HeroModule({ module, index, renderMode }: { readonly module: SanityHomepageModule; readonly index: number; readonly renderMode: CmsRenderMode }) {
+function HeroModule({
+  headingLevel,
+  module,
+  index,
+  renderMode,
+}: {
+  readonly headingLevel: "h1" | "h2";
+  readonly module: SanityHomepageModule;
+  readonly index: number;
+  readonly renderMode: CmsRenderMode;
+}) {
   const isPrivate = isPrivateRenderMode(renderMode);
   const primaryCta = firstCta(module);
   const secondaryCta = secondCta(module);
   const primaryHref = asSeoRoutePath(primaryCta.href);
   const secondaryHref = asSeoRoutePath(secondaryCta.href);
   const assets = moduleAssets(module);
+  const heroAsset = assets[0];
   const id = moduleDomId(module, `hero-${index + 1}`);
+  const HeroHeading = headingLevel;
+
+  if (!isPrivate && !isPublicCmsAsset(heroAsset)) {
+    return null;
+  }
 
   return (
     <Scene ariaLabelledBy={id} className="py-20" tone="contrast">
@@ -612,9 +724,9 @@ function HeroModule({ module, index, renderMode }: { readonly module: SanityHome
               {module.eyebrow}
             </p>
           ) : null}
-          <h2 className="text-5xl font-semibold leading-none sm:text-6xl" id={id}>
+          <HeroHeading className="text-5xl font-semibold leading-none sm:text-6xl" id={id}>
             {moduleTitle(module, "Official Presidential", renderMode)}
-          </h2>
+          </HeroHeading>
           {moduleBody(module) ? (
             <p className="max-w-2xl text-lg leading-8 text-po-on-dark-muted">{moduleBody(module)}</p>
           ) : null}
@@ -633,18 +745,29 @@ function HeroModule({ module, index, renderMode }: { readonly module: SanityHome
             </div>
           ) : null}
         </div>
-        <div className="min-h-96 border border-po-on-dark/15 bg-po-canvas/10 p-5">
-          <div className="flex h-full min-h-80 items-end border border-po-brand-line bg-po-brand-soft p-5">
-            <div className="grid gap-3">
+        {heroAsset?.assetUrl && (isPrivate || isPublicCmsAsset(heroAsset)) ? (
+          <figure
+            aria-label={heroAsset.altText || heroAsset.title || "Official Presidential media"}
+            className="min-h-96 border border-po-on-dark/15 bg-po-canvas/10 bg-contain bg-center bg-no-repeat"
+            role="img"
+            style={{ backgroundImage: `url(${JSON.stringify(heroAsset.assetUrl)})` }}
+          >
+            {isPrivate ? (
+              <figcaption className="m-5 mt-80 grid gap-3 border border-po-brand-line bg-po-canvas p-5 text-po-ink">
+                <p className="text-sm font-semibold">{heroAsset.title || heroAsset.assetName || "Hero media"}</p>
+                {heroAsset.savedFile ? <p className="text-xs leading-5 text-po-muted">{heroAsset.savedFile}</p> : null}
+              </figcaption>
+            ) : null}
+          </figure>
+        ) : isPrivate ? (
+          <div className="min-h-96 border border-po-on-dark/15 bg-po-canvas/10 p-5">
+            <div className="flex h-full min-h-80 items-end border border-po-brand-line bg-po-brand-soft p-5">
               <p className="text-sm font-semibold text-po-brand-strong">
-                {assets[0]?.title || assets[0]?.assetName || "Official Presidential media"}
+                Hero media pending
               </p>
-              {isPrivate && assets[0]?.savedFile ? (
-                <p className="text-xs leading-5 text-po-muted">{assets[0].savedFile}</p>
-              ) : null}
             </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </Scene>
   );
@@ -655,6 +778,8 @@ function HomepageActModule({ module, index, renderMode }: { readonly module: San
   const cta = firstCta(module);
   const ctaHref = asSeoRoutePath(cta.href);
   const id = moduleDomId(module, `homepage-act-${actNumber}`);
+  const asset = moduleAssets(module)[0];
+  const canShowAsset = Boolean(asset?.assetUrl && (isPrivateRenderMode(renderMode) || isPublicCmsAsset(asset)));
 
   return (
     <Scene ariaLabelledBy={id} tone={actNumber % 2 === 0 ? "quiet" : "default"}>
@@ -678,11 +803,20 @@ function HomepageActModule({ module, index, renderMode }: { readonly module: San
             </div>
           ) : null}
         </div>
-        <div className="aspect-[4/3] border border-po-line bg-po-canvas p-4 shadow-sm">
-          <div className="flex h-full items-end border border-po-line bg-po-soft p-4">
-            <p className="text-sm font-semibold text-po-body">CMS act media slot</p>
+        {canShowAsset && asset ? (
+          <figure
+            aria-label={asset.altText || asset.title || "Presidential media"}
+            className="aspect-[4/3] border border-po-line bg-po-canvas bg-contain bg-center bg-no-repeat shadow-sm"
+            role="img"
+            style={{ backgroundImage: `url(${JSON.stringify(asset.assetUrl)})` }}
+          />
+        ) : isPrivateRenderMode(renderMode) ? (
+          <div className="aspect-[4/3] border border-po-line bg-po-canvas p-4 shadow-sm">
+            <div className="flex h-full items-end border border-po-line bg-po-soft p-4">
+              <p className="text-sm font-semibold text-po-body">Act media pending</p>
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </Scene>
   );
@@ -697,7 +831,6 @@ function ProductOrListModule({
   readonly productRoute?: ProductRouteSlug;
   readonly renderMode: CmsRenderMode;
 }) {
-  const items = module.items || [];
   const id = moduleDomId(module, "list");
 
   return (
@@ -707,31 +840,62 @@ function ProductOrListModule({
         {productRoute ? (
           <CmsProductModuleComponents module={module} productRoute={productRoute} renderMode={renderMode} />
         ) : null}
-        {items.length ? (
-          <div className="grid gap-4 md:grid-cols-3">
-            {items.map((item, index) => (
-              <article className="border border-po-line bg-po-canvas p-5 shadow-sm" key={`${item._id || item.title || item.name || item.label || "item"}-${index}`}>
-                <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
-                  {item.label || item._type || `Item ${index + 1}`}
-                </p>
-                <h3 className="mt-4 text-xl font-semibold text-po-ink">{item.title || item.name || "Untitled"}</h3>
-                {item.description ? (
-                  <p className="mt-3 text-sm leading-6 text-po-body">{item.description}</p>
-                ) : null}
-                {item.slug ? (
-                  <p className="mt-3 text-xs leading-5 text-po-muted">Slug: {item.slug}</p>
-                ) : null}
-              </article>
-            ))}
-          </div>
-        ) : null}
         <CardGrid module={module} renderMode={renderMode} />
         <FeaturedGuides guides={module.featuredGuides} renderMode={renderMode} />
         <TimelineEvents events={module.events} />
-        <FactGrid facts={module.facts} />
-        <ColumnGrid columns={module.columns} />
+        <FactGrid facts={module.facts} renderMode={renderMode} />
+        <ColumnGrid columns={module.columns} renderMode={renderMode} />
         <RelatedContent module={module} renderMode={renderMode} />
         <AssetCards assets={moduleAssets(module)} renderMode={renderMode} />
+      </div>
+    </Scene>
+  );
+}
+
+function FaqModule({
+  module,
+  renderMode,
+}: {
+  readonly module: SanityHomepageModule;
+  readonly renderMode: CmsRenderMode;
+}) {
+  const id = moduleDomId(module, "faq");
+
+  return (
+    <Scene ariaLabelledBy={id} tone="quiet">
+      <div className="mx-auto grid w-full max-w-5xl gap-8">
+        <ModuleHeading
+          fallback="Frequently asked questions"
+          id={id}
+          kicker="FAQ"
+          module={module}
+          renderMode={renderMode}
+        />
+        <FaqItems items={module.items} />
+      </div>
+    </Scene>
+  );
+}
+
+function RelatedContentModule({
+  module,
+  renderMode,
+}: {
+  readonly module: SanityHomepageModule;
+  readonly renderMode: CmsRenderMode;
+}) {
+  const id = moduleDomId(module, "related-content");
+
+  return (
+    <Scene ariaLabelledBy={id} tone="default">
+      <div className="mx-auto grid w-full max-w-7xl gap-8">
+        <ModuleHeading
+          fallback="Related content"
+          id={id}
+          module={module}
+          renderMode={renderMode}
+        />
+        <RelatedItemLinks items={module.items} renderMode={renderMode} />
       </div>
     </Scene>
   );
@@ -782,7 +946,7 @@ function ContactDetailPanel({
   const displayEmail = contactProfile?.displayEmail;
 
   if (!contactProfile) {
-    return (
+    return isPrivate ? (
       <div className="grid gap-3 border border-po-on-dark/15 bg-po-canvas/10 p-4">
         <p className="text-sm font-semibold uppercase tracking-normal text-po-brand-line">
           Official contact details
@@ -791,7 +955,7 @@ function ContactDetailPanel({
           Contact details will appear here after the official contact profile is connected.
         </p>
       </div>
-    );
+    ) : null;
   }
 
   return (
@@ -836,7 +1000,9 @@ function ContactRouteCards({
   readonly renderMode: CmsRenderMode;
 }) {
   const isPrivate = isPrivateRenderMode(renderMode);
-  const fallbackLanguage = module.fallbackLanguage || "Availability varies by licensed retailer.";
+  const fallbackLanguage = isPrivate
+    ? module.fallbackLanguage || "Availability varies by licensed retailer."
+    : "Availability varies by licensed retailer.";
   const panels = resolvedVariant === "locator"
     ? [
         {
@@ -852,7 +1018,7 @@ function ContactRouteCards({
           body: "Brand, wholesale, and retailer questions can move through the official Presidential contact path.",
         },
       ]
-    : [
+    : isPrivate ? [
         {
           title: "Inquiry routing",
           body: "Customer care, wholesale, press, and brand inquiries can move through the official Presidential contact path.",
@@ -864,6 +1030,16 @@ function ContactRouteCards({
         {
           title: "Submission boundary",
           body: "This shell does not collect inquiry details until official form handling is confirmed.",
+        },
+      ]
+    : [
+        {
+          title: "Official inquiries",
+          body: "Use the official Presidential contact path for brand, wholesale, press, and customer-care inquiries.",
+        },
+        {
+          title: "Adult-use context",
+          body: "For adults 21+ where legal.",
         },
       ];
 
@@ -938,18 +1114,20 @@ function ContactModule({
           </div>
           <div className="grid gap-4 border border-po-on-dark/15 bg-po-canvas/10 p-5">
             <p className="text-sm font-semibold uppercase tracking-normal text-po-brand-line">
-              {resolvedVariant === "locator" ? "Locator shell" : "Contact shell"}
+              {isPrivate
+                ? resolvedVariant === "locator" ? "Locator shell" : "Contact shell"
+                : resolvedVariant === "locator" ? "Retailer information" : "Contact information"}
             </p>
             <KeyValueList entries={entries} />
             {resolvedVariant === "locator" ? (
               <p className="text-sm leading-6 text-po-on-dark-muted">
                 Retailer listings appear only after licensed retailer records are verified.
               </p>
-            ) : (
+            ) : isPrivate ? (
               <p className="text-sm leading-6 text-po-on-dark-muted">
                 Contact routing can be shown without activating a public form.
               </p>
-            )}
+            ) : null}
           </div>
         </div>
         <ContactRouteCards module={module} renderMode={renderMode} resolvedVariant={resolvedVariant} />
@@ -983,12 +1161,13 @@ function renderModule(
   module: SanityHomepageModule,
   index: number,
   renderMode: CmsRenderMode,
+  heroHeadingLevel: "h1" | "h2",
   productRoute?: ProductRouteSlug,
   supportRoute?: SupportRouteSlug,
 ) {
   switch (module._type) {
     case "heroBlock":
-      return <HeroModule index={index} key={module._key || `${module._type}-${index}`} module={module} renderMode={renderMode} />;
+      return <HeroModule headingLevel={heroHeadingLevel} index={index} key={module._key || `${module._type}-${index}`} module={module} renderMode={renderMode} />;
     case "homepageActBlock":
       return <HomepageActModule index={index} key={module._key || `${module._type}-${index}`} module={module} renderMode={renderMode} />;
     case "productPlatformBlock":
@@ -1010,27 +1189,32 @@ function renderModule(
     case "legalUtilityBlock":
       return <ProofModule key={module._key || `${module._type}-${index}`} module={module} renderMode={renderMode} />;
     case "faqBlock":
+      return <FaqModule key={module._key || `${module._type}-${index}`} module={module} renderMode={renderMode} />;
     case "mediaGalleryBlock":
     case "comparisonBlock":
-    case "relatedContentBlock":
       return <ProductOrListModule key={module._key || `${module._type}-${index}`} module={module} productRoute={productRoute} renderMode={renderMode} />;
+    case "relatedContentBlock":
+      return <RelatedContentModule key={module._key || `${module._type}-${index}`} module={module} renderMode={renderMode} />;
     case "contactBlock":
       return <ContactModule key={module._key || `${module._type}-${index}`} module={module} renderMode={renderMode} supportRoute={supportRoute} />;
     case "locatorShellBlock":
       return <ContactModule key={module._key || `${module._type}-${index}`} module={module} renderMode={renderMode} supportRoute={supportRoute} variant="locator" />;
     default:
-      return <FallbackModule index={index} key={module._key || `${module._type}-${index}`} module={module} renderMode={renderMode} />;
+      return isPrivateRenderMode(renderMode)
+        ? <FallbackModule index={index} key={module._key || `${module._type}-${index}`} module={module} renderMode={renderMode} />
+        : null;
   }
 }
 
 export function CmsHomepageModuleRenderer({
+  heroHeadingLevel = "h1",
   modules,
   productRoute,
   renderMode = "public",
   supportRoute,
 }: CmsHomepageModuleRendererProps) {
   if (!modules.length) {
-    return (
+    return isPrivateRenderMode(renderMode) ? (
       <Scene ariaLabelledBy="cms-empty-homepage-modules" tone="quiet">
         <div className="mx-auto max-w-4xl border border-po-line bg-po-canvas p-6">
           <h2 className="text-2xl font-semibold text-po-ink" id="cms-empty-homepage-modules">
@@ -1041,8 +1225,39 @@ export function CmsHomepageModuleRenderer({
           </p>
         </div>
       </Scene>
-    );
+    ) : null;
   }
 
-  return <>{modules.map((module, index) => renderModule(module, index, renderMode, productRoute, supportRoute))}</>;
+  const renderableModules = isPrivateRenderMode(renderMode)
+    ? modules
+    : modules
+        .filter(
+          (module) => module.moduleControl?.renderEligibility === PUBLIC_MODULE_RENDER_ELIGIBILITY,
+        )
+        .map(sanitizePublicCmsModule);
+  const heroIndexes = renderableModules
+    .map((module, index) => module._type === "heroBlock" ? index : -1)
+    .filter((index) => index >= 0);
+
+  if (
+    !isPrivateRenderMode(renderMode) &&
+    heroHeadingLevel === "h1" &&
+    (heroIndexes.length !== 1 ||
+      !isPublicCmsAsset(renderableModules[heroIndexes[0]]?.heroAssetRecord))
+  ) {
+    return null;
+  }
+
+  return (
+    <>
+      {renderableModules.map((module, index) => renderModule(
+        module,
+        index,
+        renderMode,
+        index === heroIndexes[0] ? heroHeadingLevel : "h2",
+        productRoute,
+        supportRoute,
+      ))}
+    </>
+  );
 }

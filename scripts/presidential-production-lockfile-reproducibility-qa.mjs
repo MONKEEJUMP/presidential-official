@@ -8,6 +8,7 @@ const packageJsonPath = path.join(webRoot, "package.json");
 const packageLockPath = path.join(webRoot, "package-lock.json");
 const workRoot = path.join(root, "sources", "spud", "work", "step11-production-lockfile-reproducibility");
 const statusJsonPath = path.join(workRoot, "step11-production-lockfile-reproducibility-status.json");
+const expectedNodeEngine = ">=24.13.0 <25";
 
 function readJson(filePath) {
   return JSON.parse(readFileSync(filePath, "utf8"));
@@ -77,8 +78,9 @@ addCheck(
 addCheck(
   rows,
   "lockfile.engines.nodePinned",
-  packageJson.engines?.node === ">=22.12",
-  packageJson.engines?.node ?? "missing",
+  packageJson.engines?.node === expectedNodeEngine &&
+    packageLock.packages?.[""]?.engines?.node === expectedNodeEngine,
+  `${packageJson.engines?.node ?? "missing"} / ${packageLock.packages?.[""]?.engines?.node ?? "missing"}`,
 );
 addCheck(
   rows,

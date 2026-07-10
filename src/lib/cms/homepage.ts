@@ -1,16 +1,22 @@
 import "server-only";
 
+import {
+  hasPublicCmsApprovalGate,
+  isPublicCmsAsset,
+  PUBLIC_MODULE_RENDER_ELIGIBILITY,
+} from "./public-content";
 import { readPublishedSanity, type SanityReadResult } from "./sanity-read-client";
 
 const HOMEPAGE_CMS_RENDER_ENABLE_ENV = "PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED";
-const PUBLIC_HOMEPAGE_APPROVAL = "approved_public";
 const PUBLIC_RENDERABLE_ROUTE_PHASES = new Set(["approved_public"]);
-const RENDERABLE_MODULE_ELIGIBILITY = "ready_for_implementation_candidate";
 
-type SanityApprovalGate = {
+export type SanityApprovalGate = {
   readonly contentApprovalStatus?: string;
   readonly sourceProofStatus?: string;
   readonly legalReviewStatus?: string;
+  readonly assetApprovalStatus?: string;
+  readonly seoApprovalStatus?: string;
+  readonly routePublicationStatus?: string;
 };
 
 export type SanityHomepageModule = {
@@ -72,15 +78,7 @@ export type SanityHomepageModule = {
   readonly columns?: readonly SanityColumn[];
   readonly question?: string;
   readonly answer?: string;
-  readonly items?: readonly {
-    readonly _id?: string;
-    readonly _type?: string;
-    readonly title?: string;
-    readonly name?: string;
-    readonly label?: string;
-    readonly description?: string;
-    readonly slug?: string;
-  }[];
+  readonly items?: readonly SanityModuleItem[];
   readonly moduleControl?: {
     readonly moduleKey?: string;
     readonly internalLabel?: string;
@@ -94,6 +92,7 @@ export type SanityCta = {
   readonly label?: string;
   readonly href?: string;
   readonly intent?: string;
+  readonly visibilityStatus?: string;
 };
 
 export type SanityAssetRecord = {
@@ -123,6 +122,19 @@ export type SanityLinkedRecord = {
   readonly shortDescription?: string;
   readonly description?: string;
   readonly publicStatus?: string;
+  readonly legalReviewStatus?: string;
+  readonly approvalGate?: SanityApprovalGate;
+};
+
+export type SanityFaqItem = {
+  readonly _key?: string;
+  readonly question?: string;
+  readonly answer?: readonly SanityPortableTextBlock[];
+  readonly approvalGate?: SanityApprovalGate;
+};
+
+export type SanityModuleItem = SanityLinkedRecord & SanityFaqItem & {
+  readonly label?: string;
 };
 
 export type SanityContactProfile = {
@@ -218,25 +230,85 @@ export const SITE_PAGE_MODULE_PROJECTION = `
     legalGateStatus,
     ctaLabel,
     ctaHref,
-    primaryCta{label,href,intent},
-    secondaryCta{label,href,intent},
-    cta{label,href,intent},
-    visibleCta{label,href,intent},
+    primaryCta{label,href,intent,visibilityStatus},
+    secondaryCta{label,href,intent,visibilityStatus},
+    cta{label,href,intent,visibilityStatus},
+    visibleCta{label,href,intent,visibilityStatus},
     question,
     answer,
-    items[]->{_id,_type,title,name,"slug": slug.current},
+    items[]{
+      _key,
+      question,
+      answer,
+      approvalGate{
+        contentApprovalStatus,
+        sourceProofStatus,
+        legalReviewStatus,
+        assetApprovalStatus,
+        seoApprovalStatus,
+        routePublicationStatus
+      },
+      _type == "reference" => @->{
+        _id,
+        _type,
+        title,
+        name,
+        label,
+        description,
+        intro,
+        positioningLine,
+        shortDescription,
+        "slug": slug.current,
+        "publicStatus": coalesce(publicStatus, candidateStatus, routePhase),
+        legalReviewStatus,
+        approvalGate{
+          contentApprovalStatus,
+          sourceProofStatus,
+          legalReviewStatus,
+          assetApprovalStatus,
+          seoApprovalStatus,
+          routePublicationStatus
+        }
+      }
+    },
     cards[]{
       title,
       route,
       sourceStatus,
       routeGate,
       assetRecord->{_id,title,altText,assetName,savedFile,"assetUrl": asset.asset->url,"assetWidth": coalesce(width, asset.asset->metadata.dimensions.width),"assetHeight": coalesce(height, asset.asset->metadata.dimensions.height),sourceSystem,approvalStatus,provenanceStatus,pageUsage},
-      contentRef->{_id,_type,title,name,"slug": slug.current}
+      contentRef->{
+        _id,_type,title,name,description,intro,positioningLine,shortDescription,
+        "slug": slug.current,
+        "publicStatus": coalesce(publicStatus, candidateStatus, routePhase),
+        legalReviewStatus,
+        approvalGate{contentApprovalStatus,sourceProofStatus,legalReviewStatus,assetApprovalStatus,seoApprovalStatus,routePublicationStatus}
+      }
     },
-    featuredGuides[]->{_id,_type,title,"slug": slug.current,guideTopic,intro},
-    relatedPlatforms[]->{_id,_type,name,"slug": slug.current,positioningLine,shortDescription,publicStatus},
-    relatedProductLinks[]->{_id,_type,name,title,"slug": slug.current,positioningLine,shortDescription},
-    linkedLocatorRegion->{_id,_type,title,name,"slug": slug.current,description,publicStatus},
+    featuredGuides[]->{
+      _id,_type,title,"slug": slug.current,guideTopic,intro,
+      "publicStatus": coalesce(publicStatus, candidateStatus, routePhase),
+      legalReviewStatus,
+      approvalGate{contentApprovalStatus,sourceProofStatus,legalReviewStatus,assetApprovalStatus,seoApprovalStatus,routePublicationStatus}
+    },
+    relatedPlatforms[]->{
+      _id,_type,name,"slug": slug.current,positioningLine,shortDescription,
+      "publicStatus": coalesce(publicStatus, candidateStatus, routePhase),
+      legalReviewStatus,
+      approvalGate{contentApprovalStatus,sourceProofStatus,legalReviewStatus,assetApprovalStatus,seoApprovalStatus,routePublicationStatus}
+    },
+    relatedProductLinks[]->{
+      _id,_type,name,title,"slug": slug.current,positioningLine,shortDescription,description,
+      "publicStatus": coalesce(publicStatus, candidateStatus, routePhase),
+      legalReviewStatus,
+      approvalGate{contentApprovalStatus,sourceProofStatus,legalReviewStatus,assetApprovalStatus,seoApprovalStatus,routePublicationStatus}
+    },
+    linkedLocatorRegion->{
+      _id,_type,title,name,"slug": slug.current,description,
+      "publicStatus": coalesce(publicStatus, candidateStatus, routePhase),
+      legalReviewStatus,
+      approvalGate{contentApprovalStatus,sourceProofStatus,legalReviewStatus,assetApprovalStatus,seoApprovalStatus,routePublicationStatus}
+    },
     contactProfile->{_id,_type,title,phone,displayEmail,mailtoEmail,emailConflictStatus,publicUseStatus},
     events[]{
       label,
@@ -251,10 +323,26 @@ export const SITE_PAGE_MODULE_PROJECTION = `
     columns[]{
       title,
       body,
-      contentRef->{_id,_type,title,name,"slug": slug.current}
+      contentRef->{
+        _id,_type,title,name,description,intro,positioningLine,shortDescription,
+        "slug": slug.current,
+        "publicStatus": coalesce(publicStatus, candidateStatus, routePhase),
+        legalReviewStatus,
+        approvalGate{contentApprovalStatus,sourceProofStatus,legalReviewStatus,assetApprovalStatus,seoApprovalStatus,routePublicationStatus}
+      }
     },
-    platform->{_id,_type,name,"slug": slug.current,positioningLine,shortDescription,publicStatus},
-    format->{_id,_type,name,"slug": slug.current,description,publicStatus},
+    platform->{
+      _id,_type,name,"slug": slug.current,positioningLine,shortDescription,
+      "publicStatus": coalesce(publicStatus, candidateStatus, routePhase),
+      legalReviewStatus,
+      approvalGate{contentApprovalStatus,sourceProofStatus,legalReviewStatus,assetApprovalStatus,seoApprovalStatus,routePublicationStatus}
+    },
+    format->{
+      _id,_type,name,"slug": slug.current,description,
+      "publicStatus": coalesce(publicStatus, candidateStatus, routePhase),
+      legalReviewStatus,
+      approvalGate{contentApprovalStatus,sourceProofStatus,legalReviewStatus,assetApprovalStatus,seoApprovalStatus,routePublicationStatus}
+    },
     assetRecord->{_id,title,altText,assetName,savedFile,"assetUrl": asset.asset->url,"assetWidth": coalesce(width, asset.asset->metadata.dimensions.width),"assetHeight": coalesce(height, asset.asset->metadata.dimensions.height),sourceSystem,approvalStatus,provenanceStatus,pageUsage},
     assetRecords[]->{_id,title,altText,assetName,savedFile,"assetUrl": asset.asset->url,"assetWidth": coalesce(width, asset.asset->metadata.dimensions.width),"assetHeight": coalesce(height, asset.asset->metadata.dimensions.height),sourceSystem,approvalStatus,provenanceStatus,pageUsage},
     heroAssetRecord->{_id,title,altText,assetName,savedFile,"assetUrl": asset.asset->url,"assetWidth": coalesce(width, asset.asset->metadata.dimensions.width),"assetHeight": coalesce(height, asset.asset->metadata.dimensions.height),sourceSystem,approvalStatus,provenanceStatus,pageUsage},
@@ -284,7 +372,10 @@ const HOMEPAGE_QUERY = `*[_type == "sitePage" && slug.current == $slug][0]{
   approvalGate{
     contentApprovalStatus,
     sourceProofStatus,
-    legalReviewStatus
+    legalReviewStatus,
+    assetApprovalStatus,
+    seoApprovalStatus,
+    routePublicationStatus
   },
   modules[]{
 ${SITE_PAGE_MODULE_PROJECTION}
@@ -308,12 +399,18 @@ function isHomepageCmsRenderingEnabled(): boolean {
 function isHomepageApprovedForPublicRendering(
   record: SanityHomepageRecord | null,
 ): record is SanityHomepageRecord {
+  const eligibleModules = (record?.modules || []).filter(
+    (module) => module.moduleControl?.renderEligibility === PUBLIC_MODULE_RENDER_ELIGIBILITY,
+  );
+  const publicHeroes = eligibleModules.filter((module) => module._type === "heroBlock");
+
   return Boolean(
     record &&
       PUBLIC_RENDERABLE_ROUTE_PHASES.has(record.routePhase || "") &&
-      record.approvalGate?.contentApprovalStatus === PUBLIC_HOMEPAGE_APPROVAL &&
-      record.approvalGate.sourceProofStatus === PUBLIC_HOMEPAGE_APPROVAL &&
-      record.approvalGate.legalReviewStatus === PUBLIC_HOMEPAGE_APPROVAL,
+      hasPublicCmsApprovalGate(record.approvalGate) &&
+      eligibleModules.length > 0 &&
+      publicHeroes.length === 1 &&
+      isPublicCmsAsset(publicHeroes[0].heroAssetRecord),
   );
 }
 
@@ -325,7 +422,7 @@ function getRenderableHomepageModules(
   }
 
   return (record.modules || []).filter(
-    (module) => module.moduleControl?.renderEligibility === RENDERABLE_MODULE_ELIGIBILITY,
+    (module) => module.moduleControl?.renderEligibility === PUBLIC_MODULE_RENDER_ELIGIBILITY,
   );
 }
 

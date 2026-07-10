@@ -90,12 +90,12 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
         body: "Customer care, wholesale, press, and brand inquiries stay organized under one official Presidential route.",
       },
       {
-        title: "Approved-inbox gated intake",
-        body: "The inquiry path stays inactive until the approved inbox is provisioned, and the website does not store inquiry details.",
+        title: "Official brand channels",
+        body: "Official Presidential contact details will appear here when they are available.",
       },
       {
         title: "Adult-use boundary",
-        body: "The contact experience remains informational for adults 21+ where legal while final routing is confirmed.",
+        body: "This informational website is intended for adults 21+ where legal.",
       },
     ];
   }
@@ -122,19 +122,6 @@ function getRouteSupportCallout(route: SeoRouteRecord): StaticRouteCallout | nul
         "State and city pages stay gated",
         "Retailer detail pages stay gated",
         "Local listing markup stays off",
-      ],
-    };
-  }
-
-  if (route.kind === "contact") {
-    return {
-      title: "Contact readiness",
-      body: "This page establishes the official contact destination with a first-party inquiry path that activates only after approved inbox provisioning.",
-      items: [
-        "Approved inbox required",
-        "Spam controls included",
-        "No CRM or newsletter embed",
-        "No stored submission data",
       ],
     };
   }
@@ -269,12 +256,12 @@ export function StaticRouteFoundationShell({
           </Scene>
         ) : null}
 
-        {route.kind === "contact" ? (
+        {route.kind === "contact" && contactInquiryConfigured ? (
           <Scene ariaLabelledBy="presidential-contact-inquiry" tone="quiet">
             <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
               <SectionHeading
                 as="h2"
-                description="Prepare an official inquiry without storing the message in this website. The path activates only after the approved inbox is provisioned."
+                description="Email Presidential directly. Your message is handled by your email provider and is not stored by this website."
                 id="presidential-contact-inquiry"
                 title="Official inquiry path"
               />

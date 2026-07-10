@@ -43,6 +43,7 @@ const expectedLaunchSequence = [
   "contact",
 ];
 const expectedRoutePublicationEvidenceCategories = [
+  "entity",
   "source",
   "proof",
   "claim",

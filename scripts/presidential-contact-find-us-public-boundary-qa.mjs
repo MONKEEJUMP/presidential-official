@@ -7,7 +7,6 @@ const findUsAppRoot = path.join(appRoot, "find-us");
 const contactPagePath = path.join(appRoot, "contact", "page.tsx");
 const findUsPagePath = path.join(findUsAppRoot, "page.tsx");
 const contactInquiryFormPath = path.join(appRoot, "contact", "contact-inquiry-form.tsx");
-const contactInquiryActionPath = path.join(appRoot, "contact", "contact-inquiry-actions.ts");
 const contactInquiryConfigPath = path.join(appRoot, "contact", "contact-inquiry-config.ts");
 const locatorTemplateShellPath = path.join(
   findUsAppRoot,
@@ -75,7 +74,6 @@ function addCheck(checks, check, passed, details) {
 const packageJson = JSON.parse(read(packageJsonPath));
 const contactPage = read(contactPagePath);
 const contactInquiryForm = read(contactInquiryFormPath);
-const contactInquiryAction = read(contactInquiryActionPath);
 const contactInquiryConfig = read(contactInquiryConfigPath);
 const findUsPage = read(findUsPagePath);
 const locatorTemplateShell = read(locatorTemplateShellPath);
@@ -100,10 +98,17 @@ const dynamicLocatorFilesMatch =
 const dynamicLocatorSource = expectedDynamicLocatorFiles
   .map((file) => read(path.join(findUsAppRoot, ...file.split("/"))))
   .join("\n");
+const dynamicLocatorStrictlyDisabled = expectedDynamicLocatorFiles.every((file) => {
+  const source = read(path.join(findUsAppRoot, ...file.split("/")));
+  return (
+    source.includes("export const dynamicParams = false") &&
+    /generateStaticParams\s*\(\)\s*{\s*return\s*\[\s*\]/.test(source) &&
+    source.includes("notFound()")
+  );
+});
 const contactAndFindUsSource = [
   contactPage,
   contactInquiryForm,
-  contactInquiryAction,
   contactInquiryConfig,
   findUsPage,
   locatorTemplateShell,
@@ -134,16 +139,12 @@ addCheck(
   dynamicLocatorFilesMatch &&
     locatorTemplateShell.includes("Verified retailer records are required") &&
     locatorTemplateShell.includes("No customer rows") &&
-    dynamicLocatorSource.includes('getRouteById("find-us-state")') &&
-    dynamicLocatorSource.includes('getRouteById("find-us-city")') &&
-    dynamicLocatorSource.includes('getRouteById("find-us-retailer-detail")') &&
-    dynamicLocatorSource.includes("buildRouteMetadata") &&
-    dynamicLocatorSource.includes("notFound()") &&
+    dynamicLocatorStrictlyDisabled &&
     !/\bLocalBusiness\b|readPublishedSanity|readDraft|fetch\s*\(|createOrReplace|\.mutate\s*\(|\.patch\s*\(|\.delete\s*\(|\.commit\s*\(|APPROVED_ROUTE_PUBLICATIONS|index_follow|sitemap:\s*["']include["']/i.test(
       [locatorTemplateShell, dynamicLocatorSource].join("\n"),
     ),
   dynamicLocatorFilesMatch
-    ? "Dynamic locator route shells exist only as noindex, verified-data-deferred shells."
+    ? "Dynamic locator routes have no params, generate no pages, and always return notFound()."
     : `Unexpected dynamic Find Us app files: ${findUsDynamicFiles.join(", ") || "none"}`,
 );
 addCheck(
@@ -159,26 +160,25 @@ addCheck(
 addCheck(
   checks,
   "contact.staticShell.noPublicCapture",
-  staticShell.includes("Approved-inbox gated intake") &&
-    staticShell.includes("Approved inbox required") &&
-    staticShell.includes("Spam controls included") &&
-    staticShell.includes("No CRM or newsletter embed") &&
-    staticShell.includes("No stored submission data"),
-  "Contact public shell states the approved-inbox, spam-control, no-storage posture.",
+  staticShell.includes('route.kind === "contact" && contactInquiryConfigured') &&
+    !staticShell.includes("Approved inbox") &&
+    !staticShell.includes("provisioned") &&
+    !staticShell.includes("provisioning"),
+  "Contact public shell hides the inquiry path until configured and exposes no internal provisioning copy.",
 );
 addCheck(
   checks,
-  "contact.formPath.approvedEnvGated",
-  contactInquiryForm.includes("<form") &&
-    contactInquiryForm.includes("useActionState") &&
-    contactInquiryAction.includes("MIN_SUBMIT_AGE_MS") &&
-    contactInquiryAction.includes("decoyWebsite") &&
-    contactInquiryConfig.includes("PRESIDENTIAL_CONTACT_FORM_ENABLED") &&
+  "contact.mailtoPath.approvedEnvGated",
+  !contactInquiryForm.includes("<form") &&
+    !contactInquiryForm.includes("useActionState") &&
+    contactInquiryForm.includes("presidential-contact-mailto") &&
+    contactInquiryForm.includes("encodeURIComponent(inbox)") &&
+    contactInquiryConfig.includes("PRESIDENTIAL_CONTACT_MAILTO_ENABLED") &&
     contactInquiryConfig.includes("PRESIDENTIAL_CONTACT_INBOX_EMAIL") &&
     !/\b(?:fetch\s*\(|XMLHttpRequest|sendBeacon|navigator\.sendBeacon|localStorage|sessionStorage|indexedDB|cookies\s*\(|createOrReplace|\.mutate\s*\(|\.patch\s*\(|\.delete\s*\(|\.commit\s*\(|hubspot|mailchimp|klaviyo|salesforce|typeform|jotform|formspree|recaptcha|hcaptcha|turnstile)\b/i.test(
-      [contactInquiryForm, contactInquiryAction, contactInquiryConfig].join("\n"),
+      [contactInquiryForm, contactInquiryConfig].join("\n"),
     ),
-  "Contact inquiry path is approved-env gated, spam controlled, and does not store or call third-party intake providers.",
+  "Contact path is a validated, approved-env-gated mailto link with no submission provider.",
 );
 addCheck(
   checks,
@@ -227,16 +227,15 @@ addCheck(
 addCheck(
   checks,
   "publicSource.noUnapprovedFormOrSubmissionSurface",
-  !/mailto:|tel:|onSubmit|fetch\s*\(|hubspot|mailchimp|klaviyo|salesforce|typeform|jotform|formspree|recaptcha|hcaptcha|turnstile/i.test(
-    contactAndFindUsSource,
-  ),
-  "Contact/Find Us source contains no unsourced contact links, external submission, CRM, newsletter, or captcha provider.",
+  !/tel:|onSubmit|fetch\s*\(|hubspot|mailchimp|klaviyo|salesforce|typeform|jotform|formspree|recaptcha|hcaptcha|turnstile/i.test(contactAndFindUsSource) &&
+    (contactAndFindUsSource.match(/mailto:/g) ?? []).length === 1,
+  "Contact/Find Us source contains one validated mailto and no submission, CRM, newsletter, or captcha provider.",
 );
 addCheck(
   checks,
   "verifyChain.includesBoundary",
-  packageJson.scripts?.verify?.includes("security:contact-find-us:verify") === true,
-  "Full verify chain includes this S8 Contact/Find Us boundary check.",
+  packageJson.scripts?.["verify:app"]?.includes("security:contact-find-us:verify") === true,
+  "Self-contained app verification includes this Contact/Find Us boundary check.",
 );
 
 const failed = checks.filter((row) => row.status === "fail");
@@ -246,7 +245,7 @@ const payload = {
     : "PASS_CONTACT_FIND_US_PUBLIC_BOUNDARY_NO_PUBLIC_UNLOCK",
   checks,
   contactFormApproved: false,
-  contactFormPathReady: true,
+  contactMailtoPathReady: true,
   contactDetailsPublicWithoutApproval: false,
   retailerLocatorApproved: false,
   dynamicLocatorRoutesBuilt: findUsDynamicFiles.length > 0,

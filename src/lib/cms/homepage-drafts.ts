@@ -4,6 +4,7 @@ import {
   SITE_PAGE_MODULE_PROJECTION,
   type SanityHomepageRecord,
 } from "./homepage";
+import { fetchSanityJsonWithTimeout } from "./sanity-read-client";
 
 const SANITY_PROJECT_ID = "4bl3xvem";
 const SANITY_DATASET = "production";
@@ -38,6 +39,14 @@ const DRAFT_HOMEPAGE_QUERY = `*[_type == "sitePage" && _id == "drafts.sitePage.h
   "slug": slug.current,
   routePhase,
   summary,
+  approvalGate{
+    contentApprovalStatus,
+    sourceProofStatus,
+    legalReviewStatus,
+    assetApprovalStatus,
+    seoApprovalStatus,
+    routePublicationStatus
+  },
   modules[]{
 ${SITE_PAGE_MODULE_PROJECTION}
   }
@@ -90,15 +99,18 @@ export async function readDraftHomepage(
     };
   }
 
-  const response = await fetch(buildDraftReadQueryUrl(DRAFT_HOMEPAGE_QUERY), {
-    ...init,
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`,
+  const { payload, response } = await fetchSanityJsonWithTimeout<SanityHomepageRecord | null>(
+    buildDraftReadQueryUrl(DRAFT_HOMEPAGE_QUERY),
+    {
+      ...init,
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
     },
-    cache: "no-store",
-  });
+  );
 
   if (!response.ok) {
     return {
@@ -110,11 +122,9 @@ export async function readDraftHomepage(
     };
   }
 
-  const payload = (await response.json()) as { result: SanityHomepageRecord | null };
-
   return {
     ok: true,
     skipped: false,
-    result: payload.result,
+    result: payload?.result || null,
   };
 }

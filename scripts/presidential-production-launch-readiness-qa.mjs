@@ -1,6 +1,10 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { expectedProductionEnvNames } from "./presidential-production-env-contract.mjs";
+import {
+  getRoutePublicationRuntimeState,
+  routeStateMatchesMode,
+} from "./lib/route-publication-runtime-state.mjs";
 
 const webRoot = process.cwd();
 
@@ -13,6 +17,7 @@ const requiredScripts = [
   "production:live-action-boundary:verify",
   "production:measurement-rendering:verify",
   "production:lockfile-reproducibility:verify",
+  "production:release-mode:verify",
   "production:launch-readiness:verify",
   "production:owner-gates:verify",
 ];
@@ -47,6 +52,10 @@ function main() {
   const packageJson = JSON.parse(packageJsonText);
   const scripts = packageJson.scripts ?? {};
   const scriptCommands = Object.values(scripts).join("\n");
+  const strictReleaseMode =
+    process.env.PRESIDENTIAL_RELEASE_VERIFY_MODE === "strict-release";
+  const strictRunnerText = read("scripts/run-presidential-strict-release-verify.mjs");
+  const routeState = getRoutePublicationRuntimeState();
   const envContractText = read("scripts/presidential-production-env-contract-qa.mjs");
   const envContractSourceText = read("scripts/presidential-production-env-contract.mjs");
   const providerText = read("scripts/presidential-production-provider-readiness-qa.mjs");
@@ -74,8 +83,11 @@ function main() {
   addCheck(
     rows,
     "launchReadiness.verifyChain.includesS11",
-    requiredScripts.every((scriptName) => scripts.verify.includes(`npm run ${scriptName}`)),
-    "full verify runs every S11 local-readiness gate",
+    requiredScripts.every((scriptName) =>
+      `${scripts["verify:web"] ?? ""}`.includes(`npm run ${scriptName}`) ||
+      strictRunnerText.includes(`"${scriptName}"`),
+    ),
+    "complete web verification or the strict release runner executes every S11 readiness gate",
   );
   addCheck(
     rows,
@@ -127,6 +139,7 @@ function main() {
     "launchReadiness.analyticsAndGsc.gated",
     analyticsText.includes("getGoogleAnalyticsMeasurementId") &&
       analyticsText.includes("presidential-ga4-loader") &&
+      read("src/app/layout.tsx").includes("adultConfirmed ? <GoogleAnalytics nonce={nonce} /> : null") &&
       googleText.includes("PRESIDENTIAL_ANALYTICS_ENABLED") &&
       googleText.includes("NEXT_PUBLIC_PRESIDENTIAL_GA_MEASUREMENT_ID") &&
       googleText.includes("PRESIDENTIAL_GOOGLE_SITE_VERIFICATION_ENABLED") &&
@@ -145,25 +158,25 @@ function main() {
   addCheck(
     rows,
     "launchReadiness.contactPostdeploySmoke.gated",
-    contactConfigText.includes("PRESIDENTIAL_CONTACT_FORM_ENABLED") &&
+    contactConfigText.includes("PRESIDENTIAL_CONTACT_MAILTO_ENABLED") &&
       contactConfigText.includes("PRESIDENTIAL_CONTACT_INBOX_EMAIL") &&
-      contactFormText.includes("presidential-contact-form-status") &&
-      contactFormText.includes("The approved inbox is not provisioned yet.") &&
-      postdeployText.includes("PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_CONTACT_FORM_READY") &&
-      postdeployText.includes("postdeploy.live.contact.formShell") &&
+      contactFormText.includes("presidential-contact-mailto") &&
+      !contactFormText.includes("<form") &&
+      postdeployText.includes("PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_CONTACT_MAILTO_READY") &&
+      postdeployText.includes("postdeploy.live.contact.noServerForm") &&
       postdeployText.includes("postdeploy.live.contact.expectedEnvValid") &&
       postdeployText.includes("postdeploy.live.contact.noThirdPartyProvider") &&
-      liveActionBoundaryText.includes("PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_CONTACT_FORM_READY"),
-    "Contact launch handling is env-gated, disabled by default, and covered by explicit post-deploy smoke expectations",
+      liveActionBoundaryText.includes("PRESIDENTIAL_PRODUCTION_SMOKE_EXPECT_CONTACT_MAILTO_READY"),
+    "Contact mailto handling is env-gated, form-free, hidden by default, and covered by explicit smoke expectations",
   );
   addCheck(
     rows,
     "launchReadiness.sitemapSubmission.localGate",
-    sitemapSubmissionText.includes("PASS_PRODUCTION_SITEMAP_SUBMISSION_GATE_LOCAL_NO_PROVIDER_ACTION") &&
+    sitemapSubmissionText.includes("strictReleaseMode") &&
+      sitemapSubmissionText.includes("exactExpectedSitemap") &&
       sitemapSubmissionText.includes("searchProviderSitemapHandoffReady") &&
-      sitemapSubmissionText.includes("providerActionExecuted: false") &&
-      sitemapSubmissionText.includes("sitemapUnlocked: false"),
-    "sitemap handoff remains local-only and false until built sitemap entries plus route records exist",
+      sitemapSubmissionText.includes("providerActionExecuted: false"),
+    "sitemap handoff is local-only and validates either the locked empty state or the exact approved release set",
   );
   addCheck(
     rows,
@@ -194,9 +207,11 @@ function main() {
   );
   addCheck(
     rows,
-    "launchReadiness.routePublication.closed",
-    /APPROVED_ROUTE_PUBLICATIONS\s*=\s*\[\]/.test(routePublicationText),
-    "route publication stays empty until per-route approval records are added",
+    "launchReadiness.routePublication.matchesMode",
+    routeStateMatchesMode(routeState, strictReleaseMode),
+    strictReleaseMode
+      ? "strict release requires approved routes with matching registry and sitemap state"
+      : "default verification requires route publication to remain closed",
   );
   addCheck(
     rows,
@@ -220,41 +235,55 @@ function main() {
   addCheck(
     rows,
     "launchReadiness.ownerDecisionGates.enforced",
-    ownerGateMatches(ownerGateText, "canonical-host", {
-      status: "implemented_pending_live_confirmation",
-      requiredBefore: "production_deploy",
-    }) &&
-      ownerGateMatches(ownerGateText, "age-gate-policy", {
-        status: "blocked_pending_owner_or_legal_review",
-        requiredBefore: "production_deploy",
-      }) &&
-      ownerGateMatches(ownerGateText, "presidential-thc-legal-framing", {
-        status: "blocked_pending_owner_or_legal_review",
-        requiredBefore: "public_route_unlock",
-      }) &&
-      ownerGateMatches(ownerGateText, "brand-teal-font", {
-        status: "blocked_pending_final_brand_choice",
-        requiredBefore: "public_route_unlock",
-      }),
-    "production deploy and public route unlock remain represented by exact owner decision gate records",
+    strictReleaseMode
+      ? [
+          "canonical-host",
+          "age-gate-policy",
+          "presidential-thc-legal-framing",
+          "brand-teal-font",
+        ].every((id) => {
+          const block = ownerGateBlock(ownerGateText, id);
+          return block.length > 0 && !/status:\s*"[^"]*pending/i.test(block);
+        })
+      : ownerGateMatches(ownerGateText, "canonical-host", {
+          status: "implemented_pending_live_confirmation",
+          requiredBefore: "production_deploy",
+        }) &&
+        ownerGateMatches(ownerGateText, "age-gate-policy", {
+          status: "blocked_pending_owner_or_legal_review",
+          requiredBefore: "production_deploy",
+        }) &&
+        ownerGateMatches(ownerGateText, "presidential-thc-legal-framing", {
+          status: "blocked_pending_owner_or_legal_review",
+          requiredBefore: "public_route_unlock",
+        }) &&
+        ownerGateMatches(ownerGateText, "brand-teal-font", {
+          status: "blocked_pending_final_brand_choice",
+          requiredBefore: "public_route_unlock",
+        }),
+    strictReleaseMode
+      ? "strict release requires every owner decision gate to be closed"
+      : "locked verification requires exact pending owner decision records",
   );
 
   const failCount = rows.filter((row) => row.status === "fail").length;
   const passCount = rows.length - failCount;
-  const verdict =
-    failCount === 0
-      ? "PASS_PRODUCTION_LAUNCH_READINESS_LOCAL_NO_DEPLOY_NO_PUBLIC_UNLOCK"
-      : "FAIL_PRODUCTION_LAUNCH_READINESS_REVIEW_REQUIRED";
+  const verdict = failCount === 0
+    ? strictReleaseMode
+      ? "PASS_PRODUCTION_LAUNCH_READINESS_STRICT_RELEASE"
+      : "PASS_PRODUCTION_LAUNCH_READINESS_LOCAL_LOCKED"
+    : "FAIL_PRODUCTION_LAUNCH_READINESS_REVIEW_REQUIRED";
 
   console.log(JSON.stringify({
     verdict,
     passCount,
     failCount,
+    strictReleaseMode,
     deploymentExecuted: false,
     providerMutated: false,
-    routePublicationApproved: false,
-    sitemapUnlocked: false,
-    indexabilityUnlocked: false,
+    routePublicationApproved: routeState.approvedRoutes.length > 0,
+    sitemapUnlocked: strictReleaseMode && routeState.sitemapEligibleRoutes.length > 0,
+    indexabilityUnlocked: strictReleaseMode && routeState.approvedRoutes.length > 0,
     secretsPrinted: false,
     checks: rows,
   }, null, 2));

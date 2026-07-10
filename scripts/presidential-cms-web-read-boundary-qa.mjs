@@ -15,6 +15,7 @@ const clientPath = path.join(cmsRoot, "sanity-read-client.ts");
 const draftHomepageClientPath = path.join(cmsRoot, "homepage-drafts.ts");
 const draftSitePageClientPath = path.join(cmsRoot, "site-page-drafts.ts");
 const draftLearnGuideClientPath = path.join(cmsRoot, "learn-guide-drafts.ts");
+const draftRouteAccessPath = path.join(cmsRoot, "draft-route-access.ts");
 const indexPath = path.join(cmsRoot, "index.ts");
 const packageJsonPath = path.join(webRoot, "package.json");
 const appRoot = path.join(webRoot, "src", "app");
@@ -35,6 +36,9 @@ const privateCmsConsumerAllowlist = new Set([
 ]);
 const publicCmsConsumerAllowlist = new Set([
   "web/src/app/learn/[guide]/page.tsx",
+  "web/src/app/learn/[guide]/learn-guide-cms-body.tsx",
+  "web/src/components/presidential/modules/cms-homepage-module-renderer.tsx",
+  "web/src/components/presidential/modules/cms-product-module-components.tsx",
   "web/src/components/seo/home-route-shell.tsx",
   "web/src/components/seo/presidential-route-shell.tsx",
 ]);
@@ -178,6 +182,7 @@ function main() {
     rel(draftHomepageClientPath),
     rel(draftSitePageClientPath),
     rel(draftLearnGuideClientPath),
+    rel(draftRouteAccessPath),
   ]);
   const unexpectedCmsSecretMatches = cmsSecretMatches.filter((file) => !expectedSecretFiles.has(file));
   const publicUnlockMatches = collectMatches(cmsFiles, publicUnlockPattern);
@@ -197,13 +202,15 @@ function main() {
   const homepageClientSource = readIfExists(path.join(cmsRoot, "homepage.ts"));
   const sitePageClientSource = readIfExists(path.join(cmsRoot, "site-page.ts"));
   const learnGuideClientSource = readIfExists(path.join(cmsRoot, "learn-guide.ts"));
+  const draftRouteAccessSource = readIfExists(draftRouteAccessPath);
+  const publicContentSource = readIfExists(path.join(cmsRoot, "public-content.ts"));
 
   addCheck("cms.directory.exists", existsSync(cmsRoot), rel(cmsRoot));
   addCheck("cms.client.exists", existsSync(clientPath), rel(clientPath));
   addCheck("cms.index.exists", existsSync(indexPath), rel(indexPath));
   addCheck(
     "cms.files.allowedSetOnly",
-    cmsFileNames.join("|") === "web/src/lib/cms/homepage-drafts.ts|web/src/lib/cms/homepage.ts|web/src/lib/cms/index.ts|web/src/lib/cms/learn-guide-drafts.ts|web/src/lib/cms/learn-guide.ts|web/src/lib/cms/sanity-read-client.ts|web/src/lib/cms/site-page-drafts.ts|web/src/lib/cms/site-page.ts",
+    cmsFileNames.join("|") === "web/src/lib/cms/draft-route-access.ts|web/src/lib/cms/homepage-drafts.ts|web/src/lib/cms/homepage.ts|web/src/lib/cms/index.ts|web/src/lib/cms/learn-guide-drafts.ts|web/src/lib/cms/learn-guide.ts|web/src/lib/cms/public-content.ts|web/src/lib/cms/sanity-read-client.ts|web/src/lib/cms/site-page-drafts.ts|web/src/lib/cms/site-page.ts",
     cmsFileNames.join(" | "),
   );
   addCheck("client.serverOnly", /import\s+["']server-only["'];/.test(clientSource), "read client is server-only");
@@ -212,6 +219,16 @@ function main() {
   addCheck("client.queryEndpoint", /\.apicdn\.sanity\.io/.test(clientSource) && /\/data\/query\//.test(clientSource), "uses Sanity CDN Query API endpoint");
   addCheck("client.publishedPerspective", /defaultPerspective:\s*["']published["']/.test(clientSource) && /perspective/.test(clientSource), "published perspective is explicit");
   addCheck("client.defaultDisabled", /PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED/.test(clientSource) && /===\s*["']true["']/.test(clientSource), "read fetch is opt-in and disabled by default");
+  addCheck(
+    "client.fetchTimeoutPreservesCancellation",
+    /SANITY_FETCH_TIMEOUT_MS\s*=\s*5000/.test(clientSource) &&
+      /AbortController/.test(clientSource) &&
+      /callerSignal\?\.reason/.test(clientSource) &&
+      /removeEventListener\(["']abort["']/.test(clientSource) &&
+      /fetchSanityJsonWithTimeout/.test(clientSource) &&
+      [draftHomepageClientSource, draftSitePageClientSource, draftLearnGuideClientSource].every((source) => /fetchSanityJsonWithTimeout/.test(source)),
+    "published and draft Sanity reads share a bounded timeout that forwards caller cancellation",
+  );
   addCheck("client.noDraftQueries", /drafts\\\./.test(clientSource) && /draft documents/.test(clientSource), "draft query guard exists");
   addCheck("client.noUnexpectedSecretSurface", unexpectedCmsSecretMatches.length === 0, unexpectedCmsSecretMatches.join(" | ") || "secret/auth references are isolated to the private draft reader");
   addCheck(
@@ -249,9 +266,21 @@ function main() {
     cmsImports.join(" | ") || "no cms consumers",
   );
   addCheck(
+    "client.privateDraftRouteBearerAccessScoped",
+    /PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED/.test(draftRouteAccessSource) &&
+      /PRESIDENTIAL_PRIVATE_DRAFTS_ACCESS_TOKEN/.test(draftRouteAccessSource) &&
+      /authorization/.test(draftRouteAccessSource) &&
+      /Bearer/.test(draftRouteAccessSource) &&
+      /timingSafeEqual/.test(draftRouteAccessSource) &&
+      /await headers\(\)/.test(draftRouteAccessSource),
+    "private draft route access requires the route flag and a timing-safe Bearer match from a token separate from the Sanity read token",
+  );
+  addCheck(
     "client.privateDraftsRouteGated",
-    /PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED/.test(privateDraftsRouteSource) && /notFound\(\)/.test(privateDraftsRouteSource),
-    "private drafts route requires development mode or explicit env gate",
+    /hasAuthenticatedPrivateDraftRouteAccess/.test(privateDraftsRouteSource) &&
+      /notFound\(\)/.test(privateDraftsRouteSource) &&
+      privateDraftsRouteSource.indexOf("hasAuthenticatedPrivateDraftRouteAccess") < privateDraftsRouteSource.indexOf("readDraftSitePage"),
+    "private drafts route authenticates before CMS and local readiness reads",
   );
   addCheck(
     "client.privateDraftsRouteUsesDraftReader",
@@ -269,10 +298,11 @@ function main() {
   );
   addCheck(
     "client.privateDraftSitePageRouteGated",
-    /PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED/.test(privateDraftSitePageRouteSource) &&
+    /hasAuthenticatedPrivateDraftRouteAccess/.test(privateDraftSitePageRouteSource) &&
       /notFound\(\)/.test(privateDraftSitePageRouteSource) &&
-      /readDraftSitePage/.test(privateDraftSitePageRouteSource),
-    "private draft sitePage route is gated and reads only allowed draft pages",
+      /readDraftSitePage/.test(privateDraftSitePageRouteSource) &&
+      privateDraftSitePageRouteSource.indexOf("hasAuthenticatedPrivateDraftRouteAccess") < privateDraftSitePageRouteSource.indexOf("readDraftSitePage"),
+    "private draft sitePage route authenticates before reading an allowed draft page or local readiness data",
   );
   addCheck(
     "client.privateDraftRoutesForceDynamic",
@@ -315,21 +345,21 @@ function main() {
   addCheck(
     "client.homepageCmsRenderEnvGated",
     /PRESIDENTIAL_HOMEPAGE_CMS_RENDERING_ENABLED/.test(readIfExists(path.join(cmsRoot, "homepage.ts"))) &&
-      /ready_for_implementation_candidate/.test(readIfExists(path.join(cmsRoot, "homepage.ts"))) &&
+      /PUBLIC_MODULE_RENDER_ELIGIBILITY/.test(readIfExists(path.join(cmsRoot, "homepage.ts"))) &&
       /approved_public/.test(readIfExists(path.join(cmsRoot, "homepage.ts"))),
     "homepage CMS render adapter requires explicit env gate, route phase, and module eligibility",
   );
   addCheck(
     "client.homepagePublicRenderingApprovalGated",
-    /approvalGate\{[\s\S]*contentApprovalStatus[\s\S]*sourceProofStatus[\s\S]*legalReviewStatus[\s\S]*\}/.test(homepageClientSource) &&
+    /approvalGate\{[\s\S]*contentApprovalStatus[\s\S]*sourceProofStatus[\s\S]*legalReviewStatus[\s\S]*assetApprovalStatus[\s\S]*seoApprovalStatus[\s\S]*routePublicationStatus[\s\S]*\}/.test(homepageClientSource) &&
       /isHomepageApprovedForPublicRendering/.test(homepageClientSource) &&
       /PUBLIC_RENDERABLE_ROUTE_PHASES\s*=\s*new Set\(\["approved_public"\]\)/.test(homepageClientSource) &&
       /PUBLIC_RENDERABLE_ROUTE_PHASES\.has\(record\.routePhase \|\| ""\)/.test(homepageClientSource) &&
-      /contentApprovalStatus\s*===\s*PUBLIC_HOMEPAGE_APPROVAL/.test(homepageClientSource) &&
-      /sourceProofStatus\s*===\s*PUBLIC_HOMEPAGE_APPROVAL/.test(homepageClientSource) &&
-      /legalReviewStatus\s*===\s*PUBLIC_HOMEPAGE_APPROVAL/.test(homepageClientSource) &&
+      /hasPublicCmsApprovalGate\(record\.approvalGate\)/.test(homepageClientSource) &&
+      /publicHeroes\.length\s*===\s*1/.test(homepageClientSource) &&
+      /isPublicCmsAsset\(publicHeroes\[0\]\.heroAssetRecord\)/.test(homepageClientSource) &&
       /record:\s*approvedRecord/.test(homepageClientSource),
-    "homepage public CMS rendering requires approved route phase plus page-level content, source, and legal approval before modules are used",
+    "homepage public CMS rendering requires the full record gate, one approved hero asset, and approved route phase before modules are used",
   );
   addCheck(
     "client.siteRoutesCmsReadFallsBackStatic",
@@ -379,39 +409,39 @@ function main() {
   addCheck(
     "client.sitePageCmsRenderEnvGated",
     /PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED/.test(sitePageClientSource) &&
-      /ready_for_implementation_candidate/.test(sitePageClientSource) &&
+      /PUBLIC_MODULE_RENDER_ELIGIBILITY/.test(sitePageClientSource) &&
       /approved_public/.test(sitePageClientSource),
     "generic sitePage CMS render adapter requires explicit env gate, route phase, and module eligibility",
   );
   addCheck(
     "client.sitePagePublicRenderingApprovalGated",
-    /approvalGate\{[\s\S]*contentApprovalStatus[\s\S]*sourceProofStatus[\s\S]*legalReviewStatus[\s\S]*\}/.test(sitePageClientSource) &&
+    /approvalGate\{[\s\S]*contentApprovalStatus[\s\S]*sourceProofStatus[\s\S]*legalReviewStatus[\s\S]*assetApprovalStatus[\s\S]*seoApprovalStatus[\s\S]*routePublicationStatus[\s\S]*\}/.test(sitePageClientSource) &&
       /isSitePageApprovedForPublicRendering/.test(sitePageClientSource) &&
       /PUBLIC_RENDERABLE_ROUTE_PHASES\s*=\s*new Set\(\["approved_public"\]\)/.test(sitePageClientSource) &&
       /PUBLIC_RENDERABLE_ROUTE_PHASES\.has\(record\.routePhase \|\| ""\)/.test(sitePageClientSource) &&
-      /contentApprovalStatus\s*===\s*PUBLIC_SITE_PAGE_APPROVAL/.test(sitePageClientSource) &&
-      /sourceProofStatus\s*===\s*PUBLIC_SITE_PAGE_APPROVAL/.test(sitePageClientSource) &&
-      /legalReviewStatus\s*===\s*PUBLIC_SITE_PAGE_APPROVAL/.test(sitePageClientSource) &&
+      /hasPublicCmsApprovalGate\(record\.approvalGate\)/.test(sitePageClientSource) &&
+      /publicHeroes\.length\s*===\s*1/.test(sitePageClientSource) &&
+      /isPublicCmsAsset\(publicHeroes\[0\]\.heroAssetRecord\)/.test(sitePageClientSource) &&
       /record:\s*approvedRecord/.test(sitePageClientSource),
-    "generic sitePage public CMS rendering requires approved route phase plus page-level content, source, and legal approval before modules are used",
+    "generic sitePage public CMS rendering requires the full record gate, one approved hero asset, and approved route phase before modules are used",
   );
   addCheck(
     "client.learnGuideCmsRenderEnvGated",
     /PRESIDENTIAL_LEARN_GUIDE_CMS_RENDERING_ENABLED/.test(learnGuideClientSource) &&
-      /PRESIDENTIAL_LEARN_GUIDE_DRAFT_RENDERING_ENABLED/.test(learnGuideRouteSource) &&
       /readPublicRenderableLearnGuide/.test(learnGuideRouteSource) &&
-      /readDraftLearnGuide/.test(learnGuideRouteSource) &&
+      !/readDraftLearnGuide|learn-guide-drafts|DRAFT_RENDERING/.test(learnGuideRouteSource) &&
       /robots:\s*\{[\s\S]*index:\s*false/.test(learnGuideRouteSource),
-    "learn guide routes have env-gated CMS/draft rendering and noindex fallback metadata",
+    "public Learn routes read approved published CMS only and remain noindex while publication is locked",
   );
   addCheck(
     "client.learnGuideMetadataUsesApprovedPublicCms",
-    /export\s+async\s+function\s+generateMetadata/.test(learnGuideRouteSource) &&
+      /export\s+async\s+function\s+generateMetadata/.test(learnGuideRouteSource) &&
       /readPublicRenderableLearnGuide\(slug/.test(learnGuideRouteSource) &&
-      /guide\.record\?\.title\s*\|\|\s*fallback\.title/.test(learnGuideRouteSource) &&
-      /guide\.record\?\.intro\s*\|\|\s*fallback\.intro/.test(learnGuideRouteSource) &&
+      /guide\.record\.title/.test(learnGuideRouteSource) &&
+      /guide\.record\.intro/.test(learnGuideRouteSource) &&
+      !/fallback|learnGuideFallbacks/.test(learnGuideRouteSource) &&
       /robots:\s*\{[\s\S]*index:\s*false/.test(learnGuideRouteSource),
-    "learn guide metadata uses approved public CMS title/intro when available and remains noindex while publication is locked",
+    "learn guide metadata is CMS-authoritative and remains noindex while publication is locked",
   );
   addCheck(
     "client.learnGuideStaticParamsUseApprovedCmsSlugs",
@@ -420,30 +450,30 @@ function main() {
       !/generateStaticParams[\s\S]{0,500}learnGuideFallbacks\.map/.test(learnGuideRouteSource) &&
       /PUBLIC_LEARN_GUIDE_SLUGS_QUERY/.test(learnGuideClientSource) &&
       /defined\(slug\.current\)/.test(learnGuideClientSource) &&
-      /routePhase == ["']approved_public["']/.test(learnGuideClientSource) &&
       /approvalGate\.contentApprovalStatus == ["']approved_public["']/.test(learnGuideClientSource) &&
       /approvalGate\.sourceProofStatus == ["']approved_public["']/.test(learnGuideClientSource) &&
-      /approvalGate\.legalReviewStatus == ["']approved_public["']/.test(learnGuideClientSource),
+      /approvalGate\.legalReviewStatus == ["']approved_public["']/.test(learnGuideClientSource) &&
+      /approvalGate\.assetApprovalStatus == ["']approved_public["']/.test(learnGuideClientSource) &&
+      /approvalGate\.seoApprovalStatus == ["']approved_public["']/.test(learnGuideClientSource) &&
+      /approvalGate\.routePublicationStatus == ["']index_follow_approved["']/.test(learnGuideClientSource) &&
+      /moduleControl\.renderEligibility == ["']approved_public["']/.test(learnGuideClientSource),
     "learn guide static params are generated from approved CMS slugs instead of hardcoded fixture slugs",
   );
   addCheck(
     "client.learnGuidePublicRenderingApprovalGated",
-    /approvalGate\{[\s\S]*contentApprovalStatus[\s\S]*sourceProofStatus[\s\S]*legalReviewStatus[\s\S]*\}/.test(learnGuideClientSource) &&
+    /approvalGate\{[\s\S]*contentApprovalStatus[\s\S]*sourceProofStatus[\s\S]*legalReviewStatus[\s\S]*assetApprovalStatus[\s\S]*seoApprovalStatus[\s\S]*routePublicationStatus[\s\S]*\}/.test(learnGuideClientSource) &&
       /isLearnGuideApprovedForPublicRendering/.test(learnGuideClientSource) &&
-      /PUBLIC_RENDERABLE_ROUTE_PHASES\s*=\s*new Set\(\["approved_public"\]\)/.test(learnGuideClientSource) &&
-      /PUBLIC_RENDERABLE_ROUTE_PHASES\.has\(record\.routePhase \|\| ""\)/.test(learnGuideClientSource) &&
-      /contentApprovalStatus\s*===\s*PUBLIC_LEARN_GUIDE_APPROVAL/.test(learnGuideClientSource) &&
-      /sourceProofStatus\s*===\s*PUBLIC_LEARN_GUIDE_APPROVAL/.test(learnGuideClientSource) &&
-      /legalReviewStatus\s*===\s*PUBLIC_LEARN_GUIDE_APPROVAL/.test(learnGuideClientSource) &&
+      /hasPublicCmsApprovalGate\(record\.approvalGate\)/.test(learnGuideClientSource) &&
+      /modules\.length/.test(learnGuideClientSource) &&
       /record:\s*approvedRecord/.test(learnGuideClientSource),
-    "learn guide public CMS rendering requires approved route phase plus guide-level content, source, and legal approval before title/body are used",
+    "learn guide public CMS rendering requires the full guide gate and at least one approved module before title/body are used",
   );
   addCheck(
     "client.learnGuideModulesEligibilityFiltered",
-    /RENDERABLE_MODULE_ELIGIBILITY\s*=\s*["']ready_for_implementation_candidate["']/.test(learnGuideClientSource) &&
+    /PUBLIC_MODULE_RENDER_ELIGIBILITY/.test(learnGuideClientSource) &&
       /getRenderableLearnGuideModules/.test(learnGuideClientSource) &&
-      /module\.moduleControl\?\.renderEligibility\s*===\s*RENDERABLE_MODULE_ELIGIBILITY/.test(learnGuideClientSource),
-    "learn guide public CMS modules are filtered to implementation-ready module eligibility",
+      /module\.moduleControl\?\.renderEligibility\s*===\s*PUBLIC_MODULE_RENDER_ELIGIBILITY/.test(learnGuideClientSource),
+    "learn guide public CMS modules are filtered to approved_public module eligibility",
   );
   addCheck(
     "client.learnGuideUsesSharedModuleProjection",
@@ -454,16 +484,17 @@ function main() {
   addCheck(
     "client.learnGuideBodyRendererSpecific",
     /import\s+\{\s*LearnGuideCmsBody\s*\}\s+from\s+["']\.\/learn-guide-cms-body["'];/.test(learnGuideRouteSource) &&
-      /<LearnGuideCmsBody\s+modules=\{modules\}\s*\/>/.test(learnGuideRouteSource) &&
+      /<LearnGuideCmsBody\s+modules=\{guide\.modules\}\s*\/>/.test(learnGuideRouteSource) &&
       /module\._type\s*===\s*["']learnGuideBlock["']/.test(learnGuideBodyRendererSource) &&
       /function\s+LearnGuideBodyModule/.test(learnGuideBodyRendererSource) &&
       /RelatedProductLinks/.test(learnGuideBodyRendererSource),
-    "learn guide routes render guide body sections through a route-local Learn renderer before falling back to shared CMS modules",
+    "learn guide routes render guide body sections through a route-local Learn renderer before handing other approved modules to the shared renderer",
   );
   addCheck(
     "client.cmsRendererSupportsDynamicGuideLinks",
     /import\s+Link\s+from\s+["']next\/link["'];/.test(cmsModuleRendererSource) &&
-      /const\s+guideHref\s*=\s*asSeoRoutePath\(guide\.slug\s*\?\s*`\/learn\/\$\{guide\.slug\}`/.test(cmsModuleRendererSource) &&
+      /function\s+linkedRecordHref/.test(cmsModuleRendererSource) &&
+      /record\._type\s*===\s*["']learnGuide["']/.test(cmsModuleRendererSource) &&
       /<Link[\s\S]{0,300}href=\{guideHref\}/.test(cmsModuleRendererSource),
     "CMS module renderer uses next/link for dynamic Learn guide links",
   );
@@ -475,15 +506,43 @@ function main() {
   );
   addCheck(
     "client.cmsRendererInternalFieldsPrivateOnly",
-    /function\s+ProofModule\([\s\S]*?if\s*\(!isPrivateRenderMode\(renderMode\)\)\s*\{[\s\S]*?return null;/.test(cmsModuleRendererSource) &&
+      /function\s+ProofModule\([\s\S]*?if\s*\(!isPrivateRenderMode\(renderMode\)\)\s*\{[\s\S]*?return null;/.test(cmsModuleRendererSource) &&
       /function\s+ModuleMeta\([\s\S]*?if\s*\(!isPrivateRenderMode\(renderMode\)\)\s*\{[\s\S]*?return null;/.test(cmsModuleRendererSource) &&
       /isPrivate\s+&&\s+asset\.savedFile/.test(cmsModuleRendererSource) &&
-      /isPrivate\s+&&\s+assets\[0\]\?\.savedFile/.test(cmsModuleRendererSource),
+      /isPrivate[\s\S]*heroAsset\.savedFile/.test(cmsModuleRendererSource),
     "internal proof/source/file metadata is private-renderer only",
   );
   addCheck(
+    "client.publicRendererSanitizesNestedData",
+    /sanitizePublicCmsModule/.test(cmsModuleRendererSource) &&
+      /PUBLIC_MODULE_RENDER_ELIGIBILITY/.test(cmsModuleRendererSource) &&
+      /isPublicCmsAsset/.test(publicContentSource) &&
+      /isPublicCmsFact/.test(publicContentSource) &&
+      /isPublicCmsCard/.test(publicContentSource) &&
+      /isPublicCmsLinkedRecord/.test(publicContentSource) &&
+      /isPublicCmsFaqItem/.test(publicContentSource) &&
+      /contactProfile:\s*isPublicCmsContactProfile/.test(publicContentSource),
+    "public mode sanitizes nested assets, facts, cards, links, FAQ items, and contact profiles before rendering",
+  );
+  addCheck(
+    "client.publicRendererHasOneApprovedHeroH1",
+    /heroHeadingLevel\s*=\s*["']h1["']/.test(cmsModuleRendererSource) &&
+      /heroIndexes\.length\s*!==\s*1/.test(cmsModuleRendererSource) &&
+      /isPublicCmsAsset\(renderableModules\[heroIndexes\[0\]\]\?\.heroAssetRecord\)/.test(cmsModuleRendererSource) &&
+      /const\s+HeroHeading\s*=\s*headingLevel/.test(cmsModuleRendererSource),
+    "CMS-owned public route compositions require one approved hero and render it as the sole route H1",
+  );
+  addCheck(
+    "client.publicRendererUsesSchemaFaqAndRelatedLinks",
+    /function\s+FaqItems/.test(cmsModuleRendererSource) &&
+      /portableTextToPlainText\(item\.answer\)/.test(cmsModuleRendererSource) &&
+      /function\s+RelatedItemLinks/.test(cmsModuleRendererSource) &&
+      /href=\{href\}/.test(cmsModuleRendererSource),
+    "FAQ object-array questions/answers and approved related records render through dedicated public components",
+  );
+  addCheck(
     "client.privateRoutesRequestPrivateRenderer",
-    /<CmsHomepageModuleRenderer\s+modules=\{renderedHomepage\.modules\s*\|\|\s*\[\]\}\s+renderMode=["']private["']/.test(privateDraftsRouteSource) &&
+    /<CmsHomepageModuleRenderer[\s\S]*heroHeadingLevel=["']h2["'][\s\S]*modules=\{renderedHomepage\.modules\s*\|\|\s*\[\]\}[\s\S]*renderMode=["']private["']/.test(privateDraftsRouteSource) &&
       /<CmsHomepageModuleRenderer[\s\S]*modules=\{modules\}[\s\S]*supportRoute=\{SUPPORT_ROUTE_SLUGS\.has\(slug\)[\s\S]*renderMode=["']private["']/.test(privateDraftSitePageRouteSource),
     "private draft routes explicitly request private renderer mode",
   );

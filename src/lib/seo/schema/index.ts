@@ -5,6 +5,7 @@ export * from "./itemList";
 export * from "./jsonLd";
 export * from "./organization";
 export * from "./product";
+export * from "./route-contract";
 export * from "./routeShell";
 export * from "./webpage";
 export * from "./website";

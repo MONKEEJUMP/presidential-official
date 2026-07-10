@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { spawn } from "node:child_process";
+import { createServer } from "node:net";
 
 const webRoot = process.cwd();
 const repoRoot = resolve(webRoot, "..");
@@ -11,8 +12,11 @@ const workRoot = join(repoRoot, "sources", "spud", "work", "cms-live-draft-smoke
 const resultsJsonPath = join(workRoot, "cms-live-draft-smoke-results.json");
 const resultsMdPath = join(workRoot, "cms-live-draft-smoke-results.md");
 const host = "127.0.0.1";
-const port = Number(process.env.PRESIDENTIAL_CMS_LIVE_DRAFT_SMOKE_PORT || "3335");
-const baseUrl = `http://${host}:${port}`;
+const portWasExplicit = Boolean(process.env.PRESIDENTIAL_CMS_LIVE_DRAFT_SMOKE_PORT);
+const preferredPort = Number(process.env.PRESIDENTIAL_CMS_LIVE_DRAFT_SMOKE_PORT || "3335");
+const previewAccessToken = "cms-live-draft-smoke-preview-access";
+let port = preferredPort;
+let baseUrl = `http://${host}:${port}`;
 const results = [];
 const serverErrorChunks = [];
 const draftRoutes = [
@@ -95,7 +99,9 @@ function sleep(ms) {
 }
 
 async function fetchText(path) {
-  const response = await fetch(`${baseUrl}${path}`);
+  const response = await fetch(`${baseUrl}${path}`, {
+    headers: { Authorization: `Bearer ${previewAccessToken}` },
+  });
   const text = await response.text();
 
   if (!response.ok) {
@@ -103,6 +109,36 @@ async function fetchText(path) {
   }
 
   return text;
+}
+
+function isPortAvailable(targetPort) {
+  return new Promise((resolveAvailability) => {
+    const probe = createServer();
+
+    probe.once("error", () => resolveAvailability(false));
+    probe.once("listening", () => {
+      probe.close(() => resolveAvailability(true));
+    });
+    probe.listen(targetPort, host);
+  });
+}
+
+async function choosePort() {
+  if (await isPortAvailable(preferredPort)) {
+    return preferredPort;
+  }
+
+  if (portWasExplicit) {
+    throw new Error(`Refusing occupied explicitly configured live-draft port ${preferredPort}.`);
+  }
+
+  for (let offset = 1; offset <= 40; offset += 1) {
+    if (await isPortAvailable(preferredPort + offset)) {
+      return preferredPort + offset;
+    }
+  }
+
+  throw new Error(`No available live-draft smoke port found after ${preferredPort}.`);
 }
 
 async function waitForServer() {
@@ -135,6 +171,7 @@ function startServer(token) {
     env: {
       ...process.env,
       PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED: "true",
+      PRESIDENTIAL_PRIVATE_DRAFTS_ACCESS_TOKEN: previewAccessToken,
       PRESIDENTIAL_SANITY_DRAFT_READ_ENABLED: "true",
       SANITY_AUTH_TOKEN: token,
     },
@@ -179,6 +216,12 @@ async function assertNoListener() {
 }
 
 async function runSmoke() {
+  const unauthenticatedResponse = await fetch(`${baseUrl}/drafts`);
+  addCheck(
+    "private drafts route rejects missing bearer access",
+    unauthenticatedResponse.status === 404,
+    `unauthenticated /drafts returned ${unauthenticatedResponse.status}`,
+  );
   const html = await fetchText("/drafts");
   addCheck("private drafts route active", html.includes("Presidential CMS bridge"), "private /drafts route rendered");
   addCheck("homepage draft read active", html.includes("Draft read active"), "live Sanity draft read marker visible");
@@ -283,6 +326,8 @@ async function main() {
   }
 
   try {
+    port = await choosePort();
+    baseUrl = `http://${host}:${port}`;
     startServer(token);
     await waitForServer();
     await runSmoke();

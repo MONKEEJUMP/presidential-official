@@ -9,6 +9,8 @@ const builtAppRoot = path.join(webRoot, ".next", "server", "app");
 const schemaConstantsPath = path.join(webRoot, "src", "lib", "seo", "schema", "constants.ts");
 const organizationSchemaPath = path.join(webRoot, "src", "lib", "seo", "schema", "organization.ts");
 const ctaLinkPath = path.join(webRoot, "src", "components", "presidential", "primitives", "cta-link.tsx");
+const contactInquiryFormPath = path.join(webRoot, "src", "app", "contact", "contact-inquiry-form.tsx");
+const contactInquiryConfigPath = path.join(webRoot, "src", "app", "contact", "contact-inquiry-config.ts");
 const docsResultsPath = path.join(
   root,
   "docs",
@@ -190,6 +192,8 @@ function main() {
   const schemaConstantsText = readIfExists(schemaConstantsPath);
   const organizationSchemaText = readIfExists(organizationSchemaPath);
   const ctaLinkText = readIfExists(ctaLinkPath);
+  const contactInquiryFormText = readIfExists(contactInquiryFormPath);
+  const contactInquiryConfigText = readIfExists(contactInquiryConfigPath);
   const packageJsonText = readIfExists(packageJsonPath);
   const nextConfigText = readIfExists(nextConfigPath);
   const sourceText = sourceFiles.map(readIfExists).join("\n");
@@ -213,6 +217,13 @@ function main() {
   const organizationUsesWhitelist = organizationSchemaText.includes("sameAs: [...APPROVED_SAME_AS]");
   const ctaLinkInternalOnly = ctaLinkText.includes("readonly href: SeoRoutePath;");
   const ctaLinkRegistryGuard = ctaLinkText.includes("getRouteByPath(href)") && ctaLinkText.includes("throw new Error");
+  const sourceHasOnlyApprovedGatedMailto =
+    sourceMailOrTelMatches.length === 1 &&
+    sourceMailOrTelMatches[0].startsWith("web/src/app/contact/contact-inquiry-form.tsx:") &&
+    contactInquiryFormText.includes("mailto:${encodeURIComponent(inbox)}") &&
+    contactInquiryConfigText.includes('import "server-only"') &&
+    contactInquiryConfigText.includes("PRESIDENTIAL_CONTACT_MAILTO_ENABLED") &&
+    contactInquiryConfigText.includes("PRESIDENTIAL_CONTACT_INBOX_EMAIL");
 
   const checks = [
     addCheck(rows, "builtOutput.exists", builtFiles.length > 0, `${builtFiles.length} built text file(s) scanned`),
@@ -220,7 +231,7 @@ function main() {
     addCheck(rows, "built.externalHrefApprovedOriginsOnly", builtExternalHrefViolations.length === 0, builtExternalHrefViolations.length ? builtExternalHrefViolations.slice(0, 10).join(" | ") : "No unapproved external href values in built output"),
     addCheck(rows, "source.targetBlankNoopener", sourceTargetBlankViolations.length === 0, sourceTargetBlankViolations.length ? sourceTargetBlankViolations.slice(0, 10).join(" | ") : "No target=_blank anchors without noopener in public source"),
     addCheck(rows, "built.targetBlankNoopener", builtTargetBlankViolations.length === 0, builtTargetBlankViolations.length ? builtTargetBlankViolations.slice(0, 10).join(" | ") : "No target=_blank anchors without noopener in built output"),
-    addCheck(rows, "source.noMailtoOrTel", sourceMailOrTelMatches.length === 0, sourceMailOrTelMatches.length ? sourceMailOrTelMatches.slice(0, 10).join(" | ") : "No mailto: or tel: links before contact policy approval"),
+    addCheck(rows, "source.onlyApprovedGatedMailto", sourceHasOnlyApprovedGatedMailto, sourceHasOnlyApprovedGatedMailto ? "Only the server-validated, explicit-env-gated Contact mailto template exists in source" : sourceMailOrTelMatches.slice(0, 10).join(" | ") || "Expected gated Contact mailto template is missing"),
     addCheck(rows, "built.noMailtoOrTel", builtMailOrTelMatches.length === 0, builtMailOrTelMatches.length ? builtMailOrTelMatches.slice(0, 10).join(" | ") : "No mailto: or tel: links in built output"),
     addCheck(rows, "source.noSocialProfileUrls", sourceSocialMatches.length === 0, sourceSocialMatches.length ? sourceSocialMatches.slice(0, 10).join(" | ") : "No social/marketplace profile URLs in public source before client confirmation"),
     addCheck(rows, "built.noSocialProfileUrls", builtSocialMatches.length === 0, builtSocialMatches.length ? builtSocialMatches.slice(0, 10).join(" | ") : "No social/marketplace profile URLs in built output before client confirmation"),
@@ -290,7 +301,7 @@ function main() {
     indexabilityUnlocked: false,
     deploymentApproved: false,
     guardrail:
-      "Step 10L is outbound link, external URL, and social profile readiness only. It permits canonical production and schema.org URL constants while keeping outbound anchors, social profile URLs, sameAs approvals, mailto/tel links, noncanonical alternate hosts, route publication, deployment, sitemap inclusion, indexability, and public SEO blocked until approval records exist.",
+      "Step 10L is outbound link, external URL, and social profile readiness only. It permits canonical production and schema.org URL constants plus the exact server-validated, explicit-env-gated Contact mailto template, which remains absent from the default build. Other outbound anchors, social profile URLs, sameAs approvals, mailto/tel links, noncanonical alternate hosts, route publication, deployment, sitemap inclusion, indexability, and public SEO remain blocked until approval records exist.",
   };
 
   mkdirSync(workRoot, { recursive: true });

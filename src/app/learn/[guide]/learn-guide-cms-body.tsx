@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { CmsHomepageModuleRenderer, Scene } from "@/components/presidential";
 import { SectionHeading } from "@/components/presidential/primitives/section-heading";
 import type {
@@ -5,6 +7,7 @@ import type {
   SanityLinkedRecord,
   SanityPortableTextBlock,
 } from "@/lib/cms/homepage";
+import { sanitizePublicCmsModule } from "@/lib/cms/public-content";
 
 type LearnGuideCmsBodyProps = {
   readonly modules: readonly SanityHomepageModule[];
@@ -14,6 +17,8 @@ type LearnGuideBodyModuleProps = {
   readonly module: SanityHomepageModule;
   readonly index: number;
 };
+
+const PUBLIC_PRODUCT_ROUTES = new Set(["moon-rocks", "moon-pods", "orbit"]);
 
 function portableTextToPlainText(value?: string | readonly SanityPortableTextBlock[]): string {
   if (!value) {
@@ -67,6 +72,14 @@ function RelatedProductLinks({ records }: { readonly records?: readonly SanityLi
           {record.positioningLine || record.shortDescription ? (
             <p className="mt-2 text-sm leading-6 text-po-body">{record.positioningLine || record.shortDescription}</p>
           ) : null}
+          {record.slug && PUBLIC_PRODUCT_ROUTES.has(record.slug) ? (
+            <Link
+              className="mt-3 inline-flex text-sm font-semibold text-po-brand-ink underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
+              href={`/${record.slug}`}
+            >
+              Explore {linkedRecordLabel(record)}
+            </Link>
+          ) : null}
         </article>
       ))}
     </div>
@@ -98,15 +111,18 @@ function LearnGuideBodyModule({ module, index }: LearnGuideBodyModuleProps) {
 }
 
 export function LearnGuideCmsBody({ modules }: LearnGuideCmsBodyProps) {
-  const guideBodyModules = modules.filter((module) => module._type === "learnGuideBlock");
-  const otherModules = modules.filter((module) => module._type !== "learnGuideBlock");
+  const publicModules = modules.map(sanitizePublicCmsModule);
+  const guideBodyModules = publicModules.filter((module) => module._type === "learnGuideBlock");
+  const otherModules = publicModules.filter((module) => module._type !== "learnGuideBlock");
 
   return (
     <>
       {guideBodyModules.map((module, index) => (
         <LearnGuideBodyModule index={index} key={module._key || `${module._type}-${index}`} module={module} />
       ))}
-      {otherModules.length ? <CmsHomepageModuleRenderer modules={otherModules} /> : null}
+      {otherModules.length ? (
+        <CmsHomepageModuleRenderer heroHeadingLevel="h2" modules={otherModules} />
+      ) : null}
     </>
   );
 }

@@ -4,34 +4,9 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import type { KeyboardEvent } from "react";
 import { clearAdultAccess, confirmAdultAccess } from "@/app/age-gate-actions";
 
-const ADULT_CONFIRMATION_KEY = "presidential_adult_confirmed";
 const AGE_GATED_CONTENT_ID = "presidential-age-gated-content";
 
-type AgeGateStatus = "checking" | "pending" | "accepted" | "blocked";
-
-function readAdultConfirmation() {
-  try {
-    return window.localStorage.getItem(ADULT_CONFIRMATION_KEY) === "true";
-  } catch {
-    return false;
-  }
-}
-
-function writeAdultConfirmation() {
-  try {
-    window.localStorage.setItem(ADULT_CONFIRMATION_KEY, "true");
-  } catch {
-    // Storage can fail in private or restricted browsing modes.
-  }
-}
-
-function clearAdultConfirmation() {
-  try {
-    window.localStorage.removeItem(ADULT_CONFIRMATION_KEY);
-  } catch {
-    // Storage can fail in private or restricted browsing modes.
-  }
-}
+type AgeGateStatus = "pending" | "accepted" | "blocked";
 
 type AgeGateProps = {
   readonly initialConfirmed?: boolean;
@@ -39,26 +14,22 @@ type AgeGateProps = {
 
 export function AgeGate({ initialConfirmed = false }: AgeGateProps) {
   const [status, setStatus] = useState<AgeGateStatus>(
-    initialConfirmed ? "accepted" : "checking",
+    initialConfirmed ? "accepted" : "pending",
   );
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const primaryActionRef = useRef<HTMLButtonElement>(null);
   const shouldFocusMainRef = useRef(false);
   const isGateActive = status !== "accepted";
 
   useEffect(() => {
-    const statusCheck = window.setTimeout(() => {
-      if (readAdultConfirmation()) {
-        setStatus("accepted");
-        return;
-      }
+    if (status === "pending") {
+      const focusRequest = window.setTimeout(() => {
+        primaryActionRef.current?.focus();
+      }, 0);
 
-      setStatus("pending");
-      primaryActionRef.current?.focus();
-    }, 0);
-
-    return () => window.clearTimeout(statusCheck);
-  }, []);
+      return () => window.clearTimeout(focusRequest);
+    }
+  }, [status]);
 
   useEffect(() => {
     const gatedContent = document.getElementById(AGE_GATED_CONTENT_ID);
@@ -96,16 +67,19 @@ export function AgeGate({ initialConfirmed = false }: AgeGateProps) {
   }, [isGateActive]);
 
   function acceptGate() {
-    shouldFocusMainRef.current = true;
-    writeAdultConfirmation();
-    setStatus("accepted");
-    startTransition(() => {
-      void confirmAdultAccess();
+    startTransition(async () => {
+      try {
+        await confirmAdultAccess();
+        shouldFocusMainRef.current = true;
+        setStatus("accepted");
+      } catch {
+        setStatus("pending");
+        primaryActionRef.current?.focus();
+      }
     });
   }
 
   function declineGate() {
-    clearAdultConfirmation();
     setStatus("blocked");
     startTransition(() => {
       void clearAdultAccess();
@@ -186,14 +160,16 @@ export function AgeGate({ initialConfirmed = false }: AgeGateProps) {
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <button
             className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-po-ink transition-colors hover:bg-po-brand-hover"
+            disabled={isPending}
             onClick={acceptGate}
             ref={primaryActionRef}
             type="button"
           >
-            I am 21 or older
+            {isPending ? "Confirming" : "I am 21 or older"}
           </button>
           <button
             className="border border-po-subtle px-4 py-3 text-sm font-semibold text-po-body transition-colors hover:border-po-muted"
+            disabled={isPending}
             onClick={declineGate}
             type="button"
           >

@@ -215,6 +215,18 @@ export type SeoMetadataRecord = {
   approvalStatus: ApprovalStatus;
 };
 
+export type RouteEntityRecord = {
+  entityId: string;
+  routeId: string;
+  approvalStatus: ApprovalStatus;
+};
+
+export type RouteContentRecord = {
+  contentId: string;
+  routeId: string;
+  approvalStatus: ApprovalStatus;
+};
+
 export type SchemaRecord = {
   schemaId: string;
   routeId: string;

@@ -6,6 +6,7 @@ const SANITY_API_VERSION = "v2025-02-19";
 const SANITY_READ_HOST = `${SANITY_PROJECT_ID}.apicdn.sanity.io`;
 const SANITY_READ_ENABLE_ENV = "PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED";
 const SANITY_QUERY_URL_LIMIT = 11000;
+const SANITY_FETCH_TIMEOUT_MS = 5000;
 
 type SanityReadEnv = Record<string, string | undefined>;
 type SanityQueryParam = string | number | boolean | null;
@@ -44,8 +45,14 @@ export const SANITY_READ_CLIENT_CONFIG = {
   endpoint: `https://${SANITY_READ_HOST}/${SANITY_API_VERSION}/data/query/${SANITY_DATASET}`,
   defaultPerspective: "published",
   enabledEnvironmentVariable: SANITY_READ_ENABLE_ENV,
+  fetchTimeoutMs: SANITY_FETCH_TIMEOUT_MS,
   publicRouteRenderingEnabled: false,
 } as const;
+
+type SanityJsonFetchResult<T> = {
+  readonly response: Response;
+  readonly payload: { readonly result: T } | null;
+};
 
 function getRuntimeEnv(): SanityReadEnv {
   return typeof process === "undefined" ? {} : process.env;
@@ -91,6 +98,52 @@ export function buildSanityReadQueryUrl(
   return url;
 }
 
+function createBoundedSanitySignal(callerSignal?: AbortSignal | null): {
+  readonly signal: AbortSignal;
+  readonly cleanup: () => void;
+} {
+  const controller = new AbortController();
+  const abortFromCaller = () => controller.abort(callerSignal?.reason);
+  const timeout = setTimeout(() => {
+    controller.abort(new DOMException("Sanity read timed out.", "TimeoutError"));
+  }, SANITY_FETCH_TIMEOUT_MS);
+
+  if (callerSignal?.aborted) {
+    abortFromCaller();
+  } else {
+    callerSignal?.addEventListener("abort", abortFromCaller, { once: true });
+  }
+
+  return {
+    signal: controller.signal,
+    cleanup: () => {
+      clearTimeout(timeout);
+      callerSignal?.removeEventListener("abort", abortFromCaller);
+    },
+  };
+}
+
+export async function fetchSanityJsonWithTimeout<T>(
+  input: URL,
+  init: RequestInit = {},
+): Promise<SanityJsonFetchResult<T>> {
+  const boundedSignal = createBoundedSanitySignal(init.signal);
+
+  try {
+    const response = await fetch(input, {
+      ...init,
+      signal: boundedSignal.signal,
+    });
+    const payload = response.ok
+      ? (await response.json()) as { readonly result: T }
+      : null;
+
+    return { response, payload };
+  } finally {
+    boundedSignal.cleanup();
+  }
+}
+
 export async function readPublishedSanity<T>(
   query: string,
   params: SanityQueryParams = {},
@@ -105,14 +158,17 @@ export async function readPublishedSanity<T>(
     };
   }
 
-  const response = await fetch(buildSanityReadQueryUrl(query, params), {
+  const { payload, response } = await fetchSanityJsonWithTimeout<T>(
+    buildSanityReadQueryUrl(query, params),
+    {
     ...init,
     method: "GET",
     headers: {
       Accept: "application/json",
     },
     cache: "no-store",
-  });
+    },
+  );
 
   if (!response.ok) {
     return {
@@ -124,11 +180,9 @@ export async function readPublishedSanity<T>(
     };
   }
 
-  const payload = (await response.json()) as { result: T };
-
   return {
     ok: true,
     skipped: false,
-    result: payload.result,
+    result: payload?.result as T,
   };
 }

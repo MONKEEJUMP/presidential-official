@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { CmsHomepageModuleRenderer } from "@/components/presidential";
+import { hasAuthenticatedPrivateDraftRouteAccess } from "@/lib/cms/draft-route-access";
 import { readDraftHomepage } from "@/lib/cms/homepage-drafts";
 import { readPublishedHomepage } from "@/lib/cms";
 import type { SanityHomepageModule, SanitySitePageRecord } from "@/lib/cms";
@@ -16,7 +17,6 @@ import { readProductMediaWorklist, type ProductMediaWorklist } from "./product-m
 import { draftSitePageFixtures } from "./site-page-fixtures";
 
 const ROUTE_PATH = "/drafts" as const;
-const PRIVATE_DRAFTS_ROUTE_ENABLE_ENV = "PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED";
 const draftReviewRoutes = listDraftSitePageSlugs().filter((slug) => slug !== "home");
 
 export const dynamic = "force-dynamic";
@@ -29,10 +29,6 @@ export function generateMetadata(): Metadata {
       follow: false,
     },
   };
-}
-
-function isPrivateDraftsRouteEnabled(): boolean {
-  return process.env[PRIVATE_DRAFTS_ROUTE_ENABLE_ENV] === "true";
 }
 
 function StatusPill({ children, tone }: { readonly children: ReactNode; readonly tone: "ok" | "wait" | "stop" }) {
@@ -60,7 +56,7 @@ type DraftRouteBoardItem = {
 };
 
 const PUBLIC_ROUTE_PHASE = "approved_public";
-const PUBLIC_MODULE_ELIGIBILITY = "ready_for_implementation_candidate";
+const PUBLIC_MODULE_ELIGIBILITY = "approved_public";
 
 function uniqueValues(values: readonly (string | undefined)[]): readonly string[] {
   return [...new Set(values.filter((value): value is string => Boolean(value)))];
@@ -241,7 +237,7 @@ function DraftRouteBoard({ items }: { readonly items: readonly DraftRouteBoardIt
 }
 
 export default async function DraftsPage() {
-  if (!isPrivateDraftsRouteEnabled()) {
+  if (!(await hasAuthenticatedPrivateDraftRouteAccess())) {
     notFound();
   }
 
@@ -393,7 +389,11 @@ export default async function DraftsPage() {
               {renderedHomepage.summary || "No summary provided."}
             </p>
           </div>
-          <CmsHomepageModuleRenderer modules={renderedHomepage.modules || []} renderMode="private" />
+          <CmsHomepageModuleRenderer
+            heroHeadingLevel="h2"
+            modules={renderedHomepage.modules || []}
+            renderMode="private"
+          />
         </section>
       </div>
     </main>
