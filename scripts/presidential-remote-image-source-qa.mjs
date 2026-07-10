@@ -53,6 +53,7 @@ const allowedPublicImageFiles = new Set([
   "brand/presidential-logo.avif",
   "brand/presidential-logo.png",
   "brand/presidential-logo.webp",
+  "favicon.ico",
   "favicon.png",
 ]);
 const remoteImageUrlPattern = /https?:\/\/[^\s"'<>)]*\.(?:avif|gif|ico|jpe?g|png|svg|webp)(?:[?#][^\s"'<>)]*)?/gi;

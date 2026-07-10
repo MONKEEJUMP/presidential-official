@@ -33,6 +33,7 @@ const approvedPublicAssetFiles = new Set([
   "brand/presidential-logo.avif",
   "brand/presidential-logo.png",
   "brand/presidential-logo.webp",
+  "favicon.ico",
   "favicon.png",
 ]);
 const forbiddenStarterAssets = new Set([
