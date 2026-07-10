@@ -4,6 +4,7 @@ const primaryNavItems = [
   { href: "/moon-rocks", label: "Moon Rocks" },
   { href: "/moon-pods", label: "Moon Pods" },
   { href: "/orbit", label: "Orbit" },
+  { href: "/our-story", label: "Our Story" },
   { href: "/learn", label: "Learn" },
   { href: "/find-us", label: "Find Presidential" },
   { href: "/contact", label: "Contact" },
