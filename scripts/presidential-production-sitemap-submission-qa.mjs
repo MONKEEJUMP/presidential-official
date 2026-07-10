@@ -1,7 +1,10 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 const webRoot = process.cwd();
+const root = path.resolve(webRoot, "..");
+const workRoot = path.join(root, "sources", "spud", "work", "step11-production-sitemap-submission");
+const statusJsonPath = path.join(workRoot, "step11-production-sitemap-submission-status.json");
 
 function read(relativePath) {
   const filePath = path.join(webRoot, relativePath);
@@ -19,6 +22,11 @@ function addCheck(rows, check, passed, details) {
 
 function scriptCommand(scripts, scriptName) {
   return typeof scripts[scriptName] === "string" ? scripts[scriptName] : "";
+}
+
+function writeFullArtifact(payload) {
+  mkdirSync(workRoot, { recursive: true });
+  writeFileSync(statusJsonPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 }
 
 function main() {
@@ -137,7 +145,7 @@ function main() {
       ? "PASS_PRODUCTION_SITEMAP_SUBMISSION_GATE_LOCAL_NO_PROVIDER_ACTION"
       : "FAIL_PRODUCTION_SITEMAP_SUBMISSION_GATE_REVIEW_REQUIRED";
 
-  console.log(JSON.stringify({
+  const payload = {
     verdict,
     passCount,
     failCount,
@@ -150,6 +158,23 @@ function main() {
     indexabilityUnlocked: false,
     secretsPrinted: false,
     checks: rows,
+  };
+
+  writeFullArtifact(payload);
+
+  console.log(JSON.stringify({
+    verdict,
+    passCount,
+    failCount,
+    builtSitemapUrlEntries,
+    searchProviderSitemapHandoffReady: searchHandoffReady,
+    providerActionExecuted: false,
+    deploymentExecuted: false,
+    routePublicationApproved: false,
+    sitemapUnlocked: false,
+    indexabilityUnlocked: false,
+    secretsPrinted: false,
+    fullArtifact: statusJsonPath,
   }, null, 2));
 
   if (failCount > 0) process.exit(1);
