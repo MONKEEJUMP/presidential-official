@@ -120,7 +120,7 @@ export const ROUTE_REGISTRY = [
     sourceArtifact:
       "04-route-seo-matrix.csv; 05-keyword-intent-map.csv; 06-schema-map.csv",
     notes:
-      "Flagship product platform. Product schema must remain informational until commerce fields receive future approval.",
+      "Flagship product platform. Product schema is informational-only. Commerce fields are permanently excluded under the billboard-only site law.",
     isMandatory: true,
     isPublicPillar: true,
   },
