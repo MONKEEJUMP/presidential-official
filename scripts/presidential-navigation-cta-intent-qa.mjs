@@ -5,6 +5,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { spawn } from "node:child_process";
+import { stripApprovedVisibleClaims } from "./lib/approved-visible-claims-qa.mjs";
 import { createServer } from "node:net";
 import path from "node:path";
 
@@ -376,8 +377,9 @@ function checkAnchor(routePath, index, tag) {
   const forbiddenHrefHits = forbiddenHrefPatterns
     .filter(({ pattern }) => pattern.test(rawHref) || pattern.test(href))
     .map(({ label: hitLabel }) => hitLabel);
+  const strippedLabel = stripApprovedVisibleClaims(label);
   const forbiddenTextHits = forbiddenAnchorTextPatterns
-    .filter(({ pattern }) => pattern.test(label))
+    .filter(({ pattern }) => pattern.test(strippedLabel))
     .map(({ label: hitLabel }) => hitLabel);
   const allowedSamePageFragment = isAllowedSamePageFragmentHref(href);
 

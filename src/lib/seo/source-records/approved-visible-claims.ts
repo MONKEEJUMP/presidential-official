@@ -1,0 +1,61 @@
+export type ApprovedVisibleClaimEntry = {
+  readonly claim: string;
+  readonly claimRecordId: string;
+  readonly claimReviewDecisionId: string;
+  readonly blueprintPlacement: string;
+  readonly scope: "visible_copy_only";
+};
+
+export type ApprovedVisibleClaimsRegistry = {
+  readonly registry: string;
+  readonly version: number;
+  readonly scope: "visible_copy_only";
+  readonly neverIn: readonly string[];
+  readonly authorization: string;
+  readonly clientMandate: string;
+  readonly entries: readonly ApprovedVisibleClaimEntry[];
+};
+
+// Kept byte-identical to ./approved-visible-claims.json (the copy consumed by
+// the QA scripts); seo-gate-tests asserts the two stay in sync.
+export const APPROVED_VISIBLE_CLAIMS: ApprovedVisibleClaimsRegistry = {
+  registry: "presidential-approved-visible-claims",
+  version: 1,
+  scope: "visible_copy_only",
+  neverIn: ["title", "description", "openGraph", "twitter", "schema", "sitemap"],
+  authorization: "AUTH-2 (5521-FABL, 2026-07-10, PAULIEWOOD via BigC) + 7183-FABL Part A2",
+  clientMandate: "PRESIDENTIAL DIGITAL EXPERIENCE BLUEPRINT (SHA256 84669d84...4928)",
+  entries: [
+    {
+      claim: "World's Strongest™",
+      claimRecordId: "drafts.claimRecord.urgent-image-visible-worlds-strongest",
+      claimReviewDecisionId: "drafts.claimReviewDecision.blueprint-mark-worlds-strongest",
+      blueprintPlacement: "ACT 3 heritage headline",
+      scope: "visible_copy_only",
+    },
+    {
+      claim: "Then. Now. Next.",
+      claimRecordId: "drafts.claimRecord.urgent-image-visible-worlds-strongest",
+      claimReviewDecisionId: "drafts.claimReviewDecision.blueprint-mark-worlds-strongest",
+      blueprintPlacement: "ACT 3 heritage headline",
+      scope: "visible_copy_only",
+    },
+    {
+      claim: "The Highest Form Of Cannabis",
+      claimRecordId: "drafts.claimRecord.blueprint-mark-highest-form-of-cannabis",
+      claimReviewDecisionId: "drafts.claimReviewDecision.blueprint-mark-highest-form-of-cannabis",
+      blueprintPlacement: "ACT 4 + /moon-rocks positioning",
+      scope: "visible_copy_only",
+    },
+    {
+      claim: "The Strongest Flavor Experience",
+      claimRecordId: "drafts.claimRecord.blueprint-mark-strongest-flavor-experience",
+      claimReviewDecisionId: "drafts.claimReviewDecision.blueprint-mark-strongest-flavor-experience",
+      blueprintPlacement: "ACT 5 / Moon Pods positioning",
+      scope: "visible_copy_only",
+    },
+  ],
+};
+
+export const APPROVED_VISIBLE_CLAIM_STRINGS: readonly string[] =
+  APPROVED_VISIBLE_CLAIMS.entries.map((entry) => entry.claim);

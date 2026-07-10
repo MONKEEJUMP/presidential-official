@@ -1,4 +1,5 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { stripApprovedVisibleClaims } from "./lib/approved-visible-claims-qa.mjs";
 import { spawn } from "node:child_process";
 import { createServer } from "node:net";
 import { join } from "node:path";
@@ -551,7 +552,7 @@ function checkRouteHtml(route, runtimeHtmlByPath) {
     { label: "staged", regex: /\bstaged\b/gi },
   ]);
 
-  checkNoMatches(`${route.label}.visibleCopy.noForbiddenClaims`, visibleText, [
+  checkNoMatches(`${route.label}.visibleCopy.noForbiddenClaims`, stripApprovedVisibleClaims(visibleText), [
     { label: "accusation language", regex: /\b(imposter|scam|hijack(?:ed|ing)?|stolen|counterfeit|knockoff|fraud)\b/gi },
     { label: "medical/effect language", regex: /\b(euphoric|euphoria|relax(?:ing|ed|ation)?|therapeutic|cerebral|uplifting|sedating|pain|anxiety|sleep|cure|treats?)\b/gi },
     { label: "unsupported superlative", regex: /\b(world'?s strongest|highest form|strongest flavor|most potent|#1\b|number[- ]one|top[- ]?ranked|best)\b/gi },

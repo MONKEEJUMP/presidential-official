@@ -1,4 +1,5 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { stripApprovedVisibleClaims } from "./lib/approved-visible-claims-qa.mjs";
 import { extname, join, relative } from "node:path";
 
 const projectRoot = process.cwd();
@@ -278,9 +279,30 @@ function checkPublicLanguage(publicCopyFiles) {
   );
 }
 
+function findStrippedLineMatches(file, patterns) {
+  const text = stripApprovedVisibleClaims(readFileSync(file, "utf8"));
+  const lines = text.split(/\r?\n/);
+  const matches = [];
+
+  lines.forEach((line, index) => {
+    for (const pattern of patterns) {
+      if (pattern.regex.test(line)) {
+        matches.push({
+          file: relativePath(file),
+          line: index + 1,
+          label: pattern.label,
+          value: line.trim().slice(0, 180),
+        });
+      }
+    }
+  });
+
+  return matches;
+}
+
 function checkCannabisClaims(publicCopyFiles) {
   const matches = publicCopyFiles.flatMap((file) =>
-    findLineMatches(file, BLOCKED_CLAIM_PATTERNS),
+    findStrippedLineMatches(file, BLOCKED_CLAIM_PATTERNS),
   );
 
   if (matches.length === 0) {
@@ -1756,7 +1778,7 @@ function checkStep9HHomeRouteComposition() {
     { path: homePagePath, text: homePageText },
     { path: homeShellPath, text: homeShellText },
   ].flatMap((file) => {
-    const lines = file.text.split(/\r?\n/);
+    const lines = stripApprovedVisibleClaims(file.text).split(/\r?\n/);
     return lines.flatMap((line, index) =>
       unsafePatterns
         .filter((pattern) => pattern.regex.test(line))
@@ -1796,7 +1818,7 @@ function checkStep9HHomeRouteComposition() {
   const visibleCopyLeaks = visibleCopyPaths.flatMap((path) => {
     if (!projectFileExists(path)) return [`${path}: missing visible-copy source file`];
 
-    return readProjectFile(path)
+    return stripApprovedVisibleClaims(readProjectFile(path))
       .split(/\r?\n/)
       .flatMap((line, index) => {
         if (machineOnlyLinePattern.test(line)) return [];
@@ -2861,7 +2883,7 @@ function checkStep9FDesignSystemFoundation() {
     { label: "unsupported superlative", regex: /\b(world'?s strongest|highest form|strongest flavor|#1\b|number[- ]one|top[- ]?ranked|best)\b/i },
   ];
   const unsafeMatches = step9fFiles.flatMap((file) => {
-    const lines = file.text.split(/\r?\n/);
+    const lines = stripApprovedVisibleClaims(file.text).split(/\r?\n/);
     return lines.flatMap((line, index) =>
       unsafePatterns
         .filter((pattern) => pattern.regex.test(line))
@@ -2968,7 +2990,7 @@ function checkStep9GRouteShellVisualFoundation() {
     { label: "threat-domain/public accusation language", regex: /\b(imposter|scam|hijack(?:ed|ing)?|stolen|counterfeit|knockoff|fraud)\b/i },
   ];
   const unsafeMatches = step9gFiles.flatMap((file) => {
-    const lines = file.text.split(/\r?\n/);
+    const lines = stripApprovedVisibleClaims(file.text).split(/\r?\n/);
     return lines.flatMap((line, index) =>
       unsafePatterns
         .filter((pattern) => pattern.regex.test(line))
@@ -3143,7 +3165,7 @@ function checkStep9LStaticRouteVisualFoundation() {
   const visibleCopyLeaks = visibleCopyPaths.flatMap((path) => {
     if (!projectFileExists(path)) return [`${path}: missing visible-copy source file`];
 
-    return readProjectFile(path)
+    return stripApprovedVisibleClaims(readProjectFile(path))
       .split(/\r?\n/)
       .flatMap((line, index) => {
         if (machineOnlyLinePattern.test(line)) return [];

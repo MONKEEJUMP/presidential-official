@@ -916,6 +916,74 @@ for (const routePath of brandDefensePaths) {
   );
 }
 
+// ---------------------------------------------------------------------------
+// AUTH-2 (5521-FABL) approved-visible-claims registry regression tests.
+// Default stays DENY: only exact registry strings pass, only in VISIBLE copy.
+
+const {APPROVED_VISIBLE_CLAIMS, stripApprovedVisibleClaims} = await import(
+  "./lib/approved-visible-claims-qa.mjs"
+);
+
+// The typed TS registry and the JSON copy consumed by QA scripts must be
+// byte-equivalent; drift here is a red build.
+const registryModulePath = path.join(distRoot, "source-records", "approved-visible-claims.js");
+const {APPROVED_VISIBLE_CLAIMS: APPROVED_VISIBLE_CLAIMS_TS} = require(registryModulePath);
+assertEqual(
+  JSON.stringify(APPROVED_VISIBLE_CLAIMS_TS),
+  JSON.stringify(APPROVED_VISIBLE_CLAIMS),
+  "approved-visible-claims.ts and approved-visible-claims.json are out of sync.",
+);
+
+const visibleSuperlativePattern =
+  /\b(world'?s strongest|highest form|strongest flavor|most potent|#1\b|number[- ]one|top[- ]?ranked|best)\b/gi;
+
+// (a) Every registry-listed mark passes the visible-copy scan after stripping.
+for (const entry of APPROVED_VISIBLE_CLAIMS.entries) {
+  const visibleSample = `Presidential presents ${entry.claim} on the official brand site.`;
+  const stripped = stripApprovedVisibleClaims(visibleSample);
+  visibleSuperlativePattern.lastIndex = 0;
+  assertEqual(
+    visibleSuperlativePattern.test(stripped),
+    false,
+    `Registry-approved mark should pass the visible-copy scan: ${entry.claim}`,
+  );
+}
+
+// (b) Non-registry superlatives still FAIL the visible-copy scan.
+const nonRegistrySuperlatives = [
+  "best in the world",
+  "world's strongest pre-rolls",
+  "the most potent moon rocks ever",
+  "the strongest flavor ever",
+];
+for (const text of nonRegistrySuperlatives) {
+  const stripped = stripApprovedVisibleClaims(text);
+  visibleSuperlativePattern.lastIndex = 0;
+  assertEqual(
+    visibleSuperlativePattern.test(stripped),
+    true,
+    `Non-registry superlative must still fail the visible-copy scan: ${text}`,
+  );
+}
+
+// (c) Registry marks in METADATA still FAIL - UNSAFE_METADATA_TEXT_PATTERNS
+// is untouched. ("The Highest Form Of Cannabis" is additionally covered in
+// metadata surfaces by the untouched serp-snippet/rendered-head superlative
+// regexes, which receive no registry exemption.)
+for (const metadataMark of ["World's Strongest™ Moon Rocks", "The Strongest Flavor Experience"]) {
+  let blockedInMetadata = false;
+  try {
+    assertMetadataTextSafe(metadataMark, "description");
+  } catch {
+    blockedInMetadata = true;
+  }
+  assertEqual(
+    blockedInMetadata,
+    true,
+    `Registry mark must remain blocked in metadata: ${metadataMark}`,
+  );
+}
+
 console.log(
-  "SEO gate tests passed: publication gate stays closed, source firewall blocks non-public/non-production sources, language guard blocks unsafe metadata text, and brand-defense routes stay noindex.",
+  "SEO gate tests passed: publication gate stays closed, source firewall blocks non-public/non-production sources, language guard blocks unsafe metadata text, brand-defense routes stay noindex, and the approved-visible-claims registry exempts exact marks in visible copy only while metadata and non-registry superlatives stay blocked.",
 );

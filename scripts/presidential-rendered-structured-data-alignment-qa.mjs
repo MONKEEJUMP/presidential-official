@@ -5,6 +5,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { spawn } from "node:child_process";
+import { stripApprovedVisibleClaims } from "./lib/approved-visible-claims-qa.mjs";
 import { createServer } from "node:net";
 import path from "node:path";
 
@@ -468,8 +469,9 @@ function routeToScope(route) {
 }
 
 function checkNoForbiddenVisibleText(scope, text) {
+  const strippedText = stripApprovedVisibleClaims(text);
   const hits = forbiddenVisiblePatterns
-    .filter(({ pattern }) => pattern.test(text))
+    .filter(({ pattern }) => pattern.test(strippedText))
     .map(({ label }) => label);
 
   recordCheck(
