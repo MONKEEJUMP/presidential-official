@@ -12,8 +12,8 @@ type SectionHeadingProps<THeading extends HeadingLevel = "h2"> = {
 } & Omit<ComponentPropsWithoutRef<THeading>, "as" | "children" | "className">;
 
 const headingClasses = {
-  h1: "text-4xl font-semibold leading-tight sm:text-5xl",
-  h2: "text-3xl font-semibold leading-tight sm:text-4xl",
+  h1: "font-display text-4xl uppercase leading-[0.95] sm:text-5xl lg:text-6xl",
+  h2: "font-display text-3xl uppercase leading-[0.98] sm:text-4xl",
   h3: "text-2xl font-semibold leading-snug sm:text-3xl",
   h4: "text-xl font-semibold leading-snug sm:text-2xl",
 } as const satisfies Record<HeadingLevel, string>;
@@ -33,7 +33,7 @@ export function SectionHeading<THeading extends HeadingLevel = "h2">({
   return (
     <header className={["max-w-3xl", className].filter(Boolean).join(" ")}>
       {kicker ? (
-        <p className="mb-4 text-sm font-semibold uppercase tracking-normal text-po-brand">
+        <p className="mb-4 text-sm font-semibold uppercase tracking-normal text-po-brand-ink">
           {kicker}
         </p>
       ) : null}

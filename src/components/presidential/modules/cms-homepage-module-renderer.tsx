@@ -127,7 +127,7 @@ function linkedRecordBody(record: SanityLinkedRecord): string {
 
 function StatusPill({ children, tone = "neutral" }: { readonly children: string; readonly tone?: "ok" | "wait" | "neutral" }) {
   const toneClass = tone === "ok"
-    ? "border-po-brand-line bg-po-brand-soft text-po-brand"
+    ? "border-po-brand-line bg-po-brand-soft text-po-brand-ink"
     : tone === "wait"
       ? "border-po-gold bg-po-gold-soft text-po-gold-ink"
       : "border-po-line bg-po-soft text-po-muted";
@@ -198,7 +198,7 @@ function ReferenceCard({
 
   return (
     <article className="grid content-start gap-3 border border-po-line bg-po-canvas p-5 shadow-sm">
-      <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
+      <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
         {label || record._type || (isPrivate ? record.publicStatus : undefined) || "Reference"}
       </p>
       <h3 className="text-lg font-semibold text-po-ink">{linkedRecordTitle(record)}</h3>
@@ -283,7 +283,7 @@ function FeaturedGuides({ guides, renderMode }: { readonly guides?: readonly San
 
         return (
           <article className="grid content-start gap-3 border border-po-line bg-po-canvas p-5 shadow-sm" key={guide._id || `${guide.slug || "guide"}-${index}`}>
-            <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
+            <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
               {guide.guideTopic || "Featured guide"}
             </p>
             <h3 className="text-lg font-semibold text-po-ink">{linkedRecordTitle(guide)}</h3>
@@ -294,7 +294,7 @@ function FeaturedGuides({ guides, renderMode }: { readonly guides?: readonly San
               <StatusPill tone="wait">{guide.publicStatus}</StatusPill>
             ) : null}
             {guideHref ? (
-              <Link className="mt-2 w-fit text-sm font-semibold text-po-brand underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand" href={guideHref}>
+              <Link className="mt-2 w-fit text-sm font-semibold text-po-brand-ink underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand" href={guideHref}>
                 Open guide
               </Link>
             ) : isPrivate && guide.slug ? (
@@ -316,7 +316,7 @@ function TimelineEvents({ events }: { readonly events?: readonly SanityTimelineE
     <ol className="grid gap-4">
       {events.map((event, index) => (
         <li className="border-l-4 border-po-brand bg-po-canvas p-5 shadow-sm" key={`${event.label || "event"}-${index}`}>
-          <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
+          <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
             {event.dateOrSequence || `Event ${index + 1}`}
           </p>
           <h3 className="mt-3 text-lg font-semibold text-po-ink">{event.label || "Untitled event"}</h3>
@@ -338,7 +338,7 @@ function FactGrid({ facts }: { readonly facts?: readonly SanityFact[] }) {
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {facts.map((fact, index) => (
         <article className="border border-po-line bg-po-canvas p-5 shadow-sm" key={`${fact.label || "fact"}-${index}`}>
-          <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
+          <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
             {fact.label || `Fact ${index + 1}`}
           </p>
           {fact.value ? (
@@ -368,7 +368,7 @@ function ColumnGrid({ columns }: { readonly columns?: readonly SanityColumn[] })
           ) : null}
           {column.contentRef ? (
             <div className="mt-4 border-t border-po-line pt-4">
-              <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
+              <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
                 {column.contentRef._type || "Referenced content"}
               </p>
               <p className="mt-2 text-sm font-semibold text-po-ink">{linkedRecordTitle(column.contentRef)}</p>
@@ -511,7 +511,7 @@ function LearnHubModule({ module, renderMode }: { readonly module: SanityHomepag
         <ModuleHeading fallback="Learn hub" id={id} kicker="Education" module={module} renderMode={renderMode} />
         <div className="grid gap-4 border border-po-brand-line bg-po-brand-soft p-5 md:grid-cols-[minmax(0,0.8fr)_minmax(260px,0.4fr)] md:items-center">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
+            <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
               Learn CMS path
             </p>
             <h3 className="mt-2 text-xl font-semibold text-po-ink">
@@ -587,7 +587,7 @@ function ModuleMeta({ module, renderMode }: { readonly module: SanityHomepageMod
 
   return (
     <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-normal">
-      <span className="text-po-brand">{label}</span>
+      <span className="text-po-brand-ink">{label}</span>
       {eligibility ? <span className="text-po-muted">{eligibility}</span> : null}
     </div>
   );
@@ -661,7 +661,7 @@ function HomepageActModule({ module, index, renderMode }: { readonly module: San
       <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[minmax(0,0.88fr)_minmax(300px,0.58fr)] lg:items-center">
         <div className="grid gap-5">
           <ModuleMeta module={module} renderMode={renderMode} />
-          <p className="text-sm font-black uppercase tracking-normal text-po-brand">
+          <p className="text-sm font-black uppercase tracking-normal text-po-brand-ink">
             Act {actNumber}
           </p>
           <h2 className="text-3xl font-semibold leading-tight text-po-ink sm:text-4xl" id={id}>
@@ -711,7 +711,7 @@ function ProductOrListModule({
           <div className="grid gap-4 md:grid-cols-3">
             {items.map((item, index) => (
               <article className="border border-po-line bg-po-canvas p-5 shadow-sm" key={`${item._id || item.title || item.name || item.label || "item"}-${index}`}>
-                <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
+                <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
                   {item.label || item._type || `Item ${index + 1}`}
                 </p>
                 <h3 className="mt-4 text-xl font-semibold text-po-ink">{item.title || item.name || "Untitled"}</h3>

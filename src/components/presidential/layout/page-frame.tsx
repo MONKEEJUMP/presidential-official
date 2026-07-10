@@ -11,7 +11,7 @@ type PageFrameProps = {
 export function PageFrame({ children, className = "", ...mainProps }: PageFrameProps) {
   const classNames = [
     "min-h-screen bg-po-canvas text-po-ink",
-    "selection:bg-po-brand selection:text-po-on-dark",
+    "selection:bg-po-brand selection:text-po-ink",
     className,
   ]
     .filter(Boolean)

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Scaffold values only: final Presidential Teal/font still require owner approval. */
+  /* Owner-approved brand values (Priority-1 drop, PAULIEWOOD, 2026-07-10). brand-ink/soft/line are AA-derived tints of the approved palette. */
   --po-color-canvas: #ffffff;
   --po-color-soft: #f8fafc;
   --po-color-ink: #09090b;
@@ -9,11 +9,12 @@
   --po-color-muted: #52525b;
   --po-color-subtle: #a1a1aa;
   --po-color-line: #e4e4e7;
-  --po-color-brand: #064e3b;
-  --po-color-brand-hover: #065f46;
-  --po-color-brand-strong: #022c22;
-  --po-color-brand-soft: #ecfdf5;
-  --po-color-brand-line: #a7f3d0;
+  --po-color-brand: #59c2b5;
+  --po-color-brand-hover: #38decb;
+  --po-color-brand-strong: #3e706a;
+  --po-color-brand-ink: #2a524c;
+  --po-color-brand-soft: #eef9f7;
+  --po-color-brand-line: #bde7e0;
   --po-color-gold: #fbbf24;
   --po-color-gold-soft: #fef3c7;
   --po-color-gold-ink: #78350f;
@@ -21,8 +22,8 @@
   --po-color-rose-gold: #f4c7b8;
   --po-color-on-dark: #ffffff;
   --po-color-on-dark-muted: #d4d4d8;
-  --po-font-display: Arial, Helvetica, sans-serif;
-  --po-font-body: Arial, Helvetica, sans-serif;
+  --po-font-display: var(--font-archivo-black), Arial, Helvetica, sans-serif;
+  --po-font-body: var(--font-inter), Arial, Helvetica, sans-serif;
   --background: var(--po-color-canvas);
   --foreground: var(--po-color-ink);
 }
@@ -40,6 +41,7 @@
   --color-po-brand: var(--po-color-brand);
   --color-po-brand-hover: var(--po-color-brand-hover);
   --color-po-brand-strong: var(--po-color-brand-strong);
+  --color-po-brand-ink: var(--po-color-brand-ink);
   --color-po-brand-soft: var(--po-color-brand-soft);
   --color-po-brand-line: var(--po-color-brand-line);
   --color-po-gold: var(--po-color-gold);
@@ -51,7 +53,6 @@
   --color-po-on-dark-muted: var(--po-color-on-dark-muted);
   --font-sans: var(--po-font-body);
   --font-display: var(--po-font-display);
-  --font-mono: var(--font-geist-mono);
 }
 
 body {

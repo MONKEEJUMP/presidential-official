@@ -60,7 +60,7 @@ function RelatedProductLinks({ records }: { readonly records?: readonly SanityLi
     <div className="grid gap-3 sm:grid-cols-2">
       {records.map((record, index) => (
         <article className="border border-po-line bg-po-canvas p-4" key={record._id || `${record.slug || "related"}-${index}`}>
-          <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
+          <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
             {record._type === "productPlatform" ? "Related platform" : "Related format"}
           </p>
           <h3 className="mt-2 text-base font-semibold text-po-ink">{linkedRecordLabel(record)}</h3>

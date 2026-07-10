@@ -156,7 +156,7 @@ export function AgeGate({ initialConfirmed = false }: AgeGateProps) {
         onKeyDown={handleDialogKeyDown}
         role="dialog"
       >
-        <p className="text-sm font-semibold uppercase text-po-brand">
+        <p className="text-sm font-semibold uppercase text-po-brand-ink">
           Official Presidential
         </p>
         <h2
@@ -185,7 +185,7 @@ export function AgeGate({ initialConfirmed = false }: AgeGateProps) {
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <button
-            className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-po-on-dark transition-colors hover:bg-po-brand-hover"
+            className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-po-ink transition-colors hover:bg-po-brand-hover"
             onClick={acceptGate}
             ref={primaryActionRef}
             type="button"

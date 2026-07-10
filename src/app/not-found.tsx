@@ -26,7 +26,7 @@ export default function NotFound() {
         tabIndex={-1}
       >
       <section className="mx-auto flex w-full max-w-3xl flex-col gap-6 border border-po-line bg-po-canvas p-8">
-        <p className="text-sm font-semibold uppercase text-po-brand">
+        <p className="text-sm font-semibold uppercase text-po-brand-ink">
           Official Presidential
         </p>
         <div className="flex flex-col gap-4">
@@ -40,7 +40,7 @@ export default function NotFound() {
         </div>
         <div className="flex flex-wrap gap-3">
           <Link
-            className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-po-on-dark transition-colors hover:bg-po-brand-hover"
+            className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-po-ink transition-colors hover:bg-po-brand-hover"
             href="/"
           >
             Return to Presidential home

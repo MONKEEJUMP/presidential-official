@@ -7,7 +7,7 @@ export default function Loading() {
       role="status"
     >
       <section className="w-full max-w-xl border border-po-line bg-po-canvas p-8">
-        <p className="text-sm font-semibold uppercase text-po-brand">
+        <p className="text-sm font-semibold uppercase text-po-brand-ink">
           Official Presidential
         </p>
         <p className="mt-4 text-3xl font-semibold leading-tight">

@@ -56,7 +56,7 @@ export function FindUsCtaShell({ compact = false }: FindUsCtaShellProps) {
             ))}
           </div>
           <div className="absolute inset-x-8 bottom-8 border border-po-line bg-po-canvas p-4 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
+            <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
               Retail path
             </p>
             <p className="mt-2 text-sm leading-6 text-po-body">

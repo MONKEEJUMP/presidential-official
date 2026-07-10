@@ -34,7 +34,7 @@ export function LocatorTemplateShell({
               </div>
             </div>
             <aside className="border border-po-line bg-po-soft p-5">
-              <p className="text-xs font-semibold uppercase tracking-normal text-po-brand">
+              <p className="text-xs font-semibold uppercase tracking-normal text-po-brand-ink">
                 {scopeLabel}
               </p>
               <p className="mt-3 text-xl font-semibold text-po-ink">

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { cookies, headers } from "next/headers";
 import { ADULT_CONFIRMATION_COOKIE } from "@/app/age-gate-constants";
 import { AgeGate } from "@/components/age-gate";
@@ -8,14 +8,18 @@ import { getGoogleSiteVerification } from "@/lib/analytics/google";
 import { METADATA_BASE } from "@/lib/seo/metadata";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const archivoBlack = localFont({
+  src: "../fonts/archivo-black-latin.woff2",
+  variable: "--font-archivo-black",
+  weight: "400",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const inter = localFont({
+  src: "../fonts/inter-latin-variable.woff2",
+  variable: "--font-inter",
+  weight: "100 900",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -54,7 +58,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${archivoBlack.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <div

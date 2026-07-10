@@ -11,7 +11,7 @@ export default function ErrorPage({ reset }: ErrorPageProps) {
   return (
     <main className="flex min-h-screen items-center bg-po-soft px-6 py-20 text-po-ink">
       <section className="mx-auto flex w-full max-w-3xl flex-col gap-6 border border-po-line bg-po-canvas p-8">
-        <p className="text-sm font-semibold uppercase text-po-brand">
+        <p className="text-sm font-semibold uppercase text-po-brand-ink">
           Official Presidential
         </p>
         <div className="flex flex-col gap-4">
@@ -25,7 +25,7 @@ export default function ErrorPage({ reset }: ErrorPageProps) {
         </div>
         <div className="flex flex-wrap gap-3">
           <button
-            className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-po-on-dark transition-colors hover:bg-po-brand-hover"
+            className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-po-ink transition-colors hover:bg-po-brand-hover"
             onClick={() => reset()}
             type="button"
           >

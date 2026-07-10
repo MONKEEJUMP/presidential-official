@@ -33,7 +33,7 @@ export function SiteHeader() {
             {primaryNavItems.map((item) => (
               <li key={item.href}>
                 <Link
-                  className="inline-flex px-3 py-2 text-sm font-semibold text-po-body transition-colors hover:text-po-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
+                  className="inline-flex px-3 py-2 text-sm font-semibold text-po-body transition-colors hover:text-po-brand-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
                   href={item.href}
                 >
                   {item.label}

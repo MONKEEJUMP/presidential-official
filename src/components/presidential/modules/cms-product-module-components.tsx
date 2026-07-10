@@ -223,7 +223,7 @@ function StatusPill({
   readonly tone?: "ok" | "wait" | "neutral";
 }) {
   const toneClass = tone === "ok"
-    ? "border-po-brand-line bg-po-brand-soft text-po-brand"
+    ? "border-po-brand-line bg-po-brand-soft text-po-brand-ink"
     : tone === "wait"
       ? "border-po-gold bg-po-gold-soft text-po-gold-ink"
       : "border-po-line bg-po-soft text-po-body";
@@ -243,7 +243,7 @@ function ProductRouteLink({ route }: { readonly route?: string }) {
   if (PRODUCT_ROUTE_HREFS.has(route)) {
     return (
       <Link
-        className="mt-2 w-fit text-sm font-semibold text-po-brand underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
+        className="mt-2 w-fit text-sm font-semibold text-po-brand-ink underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
         href={route as `/${CmsProductRouteSlug}`}
       >
         Open route
@@ -402,7 +402,7 @@ export function CmsProductModuleComponents({
         <CmsProductRoutePanel module={module} productRoute={productRoute} />
       </div>
       <div className="grid content-start gap-4 border border-po-line bg-po-soft p-5">
-        <p className="text-sm font-semibold uppercase tracking-normal text-po-brand">
+        <p className="text-sm font-semibold uppercase tracking-normal text-po-brand-ink">
           {profile?.mediaLabel || "Product media"}
         </p>
         {assets.length ? (

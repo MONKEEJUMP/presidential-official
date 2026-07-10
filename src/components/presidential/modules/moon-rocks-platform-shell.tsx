@@ -53,7 +53,11 @@ export function MoonRocksPlatformShell({
   return (
     <PageFrame>
       <SceneStack>
-        <Scene ariaLabelledBy="presidential-moon-rocks-title" tone="default">
+        <Scene
+          ariaLabelledBy="presidential-moon-rocks-title"
+          className="flex min-h-[88svh] items-center"
+          tone="default"
+        >
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-10">
             <nav aria-label="Breadcrumb" className="text-sm text-po-muted">
               <ol className="flex flex-wrap items-center gap-2">
@@ -73,7 +77,7 @@ export function MoonRocksPlatformShell({
                         </span>
                       ) : (
                         <Link
-                          className="font-medium text-po-brand underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
+                          className="font-medium text-po-brand-ink underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
                           href={breadcrumb.path}
                         >
                           {breadcrumb.name}
@@ -119,7 +123,11 @@ export function MoonRocksPlatformShell({
           </div>
         </Scene>
 
-        <Scene ariaLabelledBy="presidential-moon-rocks-lanes" tone="quiet">
+        <Scene
+          ariaLabelledBy="presidential-moon-rocks-lanes"
+          className="flex min-h-[70svh] items-center"
+          tone="quiet"
+        >
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
             <SectionHeading
               as="h2"
@@ -145,7 +153,11 @@ export function MoonRocksPlatformShell({
           </div>
         </Scene>
 
-        <Scene ariaLabelledBy="presidential-moon-rocks-journey" tone="default">
+        <Scene
+          ariaLabelledBy="presidential-moon-rocks-journey"
+          className="flex min-h-[70svh] items-center"
+          tone="default"
+        >
           <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(320px,0.72fr)] lg:items-center">
             <div className="flex flex-col gap-6">
               <SectionHeading
@@ -161,7 +173,7 @@ export function MoonRocksPlatformShell({
                   >
                     <span
                       aria-hidden="true"
-                      className="flex h-8 w-8 shrink-0 items-center justify-center bg-po-brand text-po-on-dark"
+                      className="flex h-8 w-8 shrink-0 items-center justify-center bg-po-brand text-po-ink"
                     >
                       {index + 1}
                     </span>
