@@ -91,6 +91,9 @@ export function MoonRocksPlatformShell({
 
             <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.8fr)] lg:items-center">
               <div className="flex flex-col gap-6">
+                <p className="font-display text-2xl uppercase leading-tight text-po-brand-ink sm:text-3xl">
+                  The Highest Form Of Cannabis.
+                </p>
                 <SectionHeading
                   as="h1"
                   description={route.description}

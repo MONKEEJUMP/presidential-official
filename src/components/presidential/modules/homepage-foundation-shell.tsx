@@ -238,8 +238,8 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
                 className="mt-4 font-display text-4xl uppercase leading-[0.95] text-po-on-dark sm:text-5xl lg:text-6xl"
                 id="presidential-then-now-next"
               >
-                Then. Now.{" "}
-                <span className="text-po-brand">Next.</span>
+                <span className="block text-po-brand">World&#39;s Strongest™</span>
+                <span className="mt-2 block">Then. Now. Next.</span>
               </h2>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
@@ -276,7 +276,7 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
                 className="font-display text-4xl uppercase leading-[0.95] text-po-ink sm:text-5xl lg:text-6xl"
                 id="presidential-act-moon-rocks"
               >
-                The flagship platform.
+                The Highest Form Of Cannabis.
               </h2>
               <p className="text-base leading-7 text-po-body">
                 {productPillars[0].body}
@@ -309,7 +309,7 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
                 className="font-display text-4xl uppercase leading-[0.95] text-po-ink sm:text-5xl"
                 id="presidential-act-moon-pods"
               >
-                A dedicated product lane.
+                The Strongest Flavor Experience.
               </h2>
               <p className="text-base leading-7 text-po-body">
                 {productPillars[1].body}
