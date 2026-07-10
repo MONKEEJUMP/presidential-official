@@ -129,6 +129,173 @@ function getRouteSupportCallout(route: SeoRouteRecord): StaticRouteCallout | nul
   return null;
 }
 
+function EditorialRouteFoundationShell({
+  route,
+  breadcrumbs,
+  links,
+  panels,
+}: StaticRouteFoundationShellProps & {
+  readonly panels: readonly StaticRoutePanel[];
+}) {
+  return (
+    <PageFrame>
+      <SceneStack>
+        <section
+          aria-labelledby="presidential-route-title"
+          className="grid overflow-hidden bg-po-ink text-po-on-dark lg:min-h-[calc(100svh-7rem)] lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.62fr)]"
+        >
+          <div className="flex flex-col justify-between gap-14 px-6 py-12 sm:px-10 lg:px-16 lg:py-16">
+            <nav aria-label="Breadcrumb" className="text-sm text-po-on-dark-muted">
+              <ol className="flex flex-wrap items-center gap-2">
+                {breadcrumbs.map((breadcrumb, index) => {
+                  const isCurrent = index === breadcrumbs.length - 1;
+
+                  return (
+                    <li className="flex items-center gap-2" key={breadcrumb.path}>
+                      {index > 0 ? (
+                        <span aria-hidden="true" className="text-po-brand">
+                          /
+                        </span>
+                      ) : null}
+                      {isCurrent ? (
+                        <span aria-current="page" className="text-po-on-dark">
+                          {breadcrumb.name}
+                        </span>
+                      ) : (
+                        <Link
+                          className="font-semibold text-po-brand underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
+                          href={breadcrumb.path}
+                        >
+                          {breadcrumb.name}
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
+              </ol>
+            </nav>
+
+            <div className="max-w-4xl">
+              <p className="text-xs font-black uppercase text-po-brand">
+                Official Presidential
+              </p>
+              <h1
+                className="mt-5 font-display text-4xl uppercase leading-[0.9] text-po-on-dark sm:text-6xl lg:text-7xl"
+                id="presidential-route-title"
+              >
+                {route.h1}
+              </h1>
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-po-on-dark-muted">
+                {route.description}
+              </p>
+              <p className="mt-6 max-w-xl text-sm leading-6 text-po-on-dark-muted">
+                A focused official section inside the Presidential digital
+                experience for adults 21+ where legal.
+              </p>
+            </div>
+          </div>
+
+          <div className="relative min-h-64 bg-po-brand lg:min-h-full">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[url('/brand/banner-palms-teal.webp')] bg-[length:auto_190%] bg-left bg-no-repeat opacity-55"
+            />
+            <div
+              aria-label="Presidential"
+              className="po-brand-mark absolute inset-10 bg-contain bg-center bg-no-repeat"
+              role="img"
+            />
+          </div>
+        </section>
+
+        <Scene
+          ariaLabelledBy="presidential-route-details"
+          className="py-24 lg:py-32"
+          tone="default"
+        >
+          <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">
+            <div>
+              <p className="text-xs font-black uppercase text-po-brand-ink">
+                Official context
+              </p>
+              <h2
+                className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-6xl"
+                id="presidential-route-details"
+              >
+                Inside this section
+              </h2>
+              <p className="mt-6 max-w-md text-base leading-7 text-po-body">
+                A direct route into the Presidential brand, product, education,
+                and retail ecosystem.
+              </p>
+              <p className="mt-6 text-sm font-medium text-po-muted">
+                For adults 21+ where legal.
+              </p>
+            </div>
+
+            <div className="grid gap-10 sm:grid-cols-2">
+              {panels.map((panel, index) => (
+                <article className="border-t border-po-ink pt-5" key={panel.title}>
+                  <p className="text-xs font-black text-po-brand-ink">
+                    0{index + 1}
+                  </p>
+                  <h3 className="mt-10 text-2xl font-semibold leading-snug text-po-ink">
+                    {panel.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-6 text-po-body">
+                    {panel.body}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </Scene>
+
+        {links.length > 0 ? (
+          <Scene
+            ariaLabelledBy="presidential-related-sections"
+            className="py-24 lg:py-32"
+            tone="contrast"
+          >
+            <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">
+              <div>
+                <p className="text-xs font-black uppercase text-po-brand">
+                  Continue the official path
+                </p>
+                <h2
+                  className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl"
+                  id="presidential-related-sections"
+                >
+                  Explore Presidential
+                </h2>
+                <p className="mt-6 max-w-md text-base leading-7 text-po-on-dark-muted">
+                  Continue through official Presidential sections.
+                </p>
+              </div>
+              <ul className="border-t border-po-on-dark/20">
+                {links.map((link) => (
+                  <li className="border-b border-po-on-dark/20" key={link.id}>
+                    <CtaLink
+                      className="flex w-full justify-between border-0 px-0 py-5 text-left text-po-on-dark hover:text-po-brand"
+                      href={link.path}
+                      variant="text"
+                    >
+                      <span>{link.h1}</span>
+                      <span aria-hidden="true" className="text-po-brand">
+                        /
+                      </span>
+                    </CtaLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Scene>
+        ) : null}
+      </SceneStack>
+    </PageFrame>
+  );
+}
+
 export function StaticRouteFoundationShell({
   route,
   breadcrumbs,
@@ -138,6 +305,17 @@ export function StaticRouteFoundationShell({
   const supportCallout = getRouteSupportCallout(route);
   const contactInquiryConfigured =
     route.kind === "contact" ? isContactInquiryConfigured() : false;
+
+  if (route.kind === "brand_story" || route.kind === "learn_hub") {
+    return (
+      <EditorialRouteFoundationShell
+        breadcrumbs={breadcrumbs}
+        links={links}
+        panels={panels}
+        route={route}
+      />
+    );
+  }
 
   return (
     <PageFrame>
