@@ -164,6 +164,9 @@ function main() {
   const publicImages = publicAssetFiles();
   const sourceText = sourceFiles.map((file) => readFileSync(file, "utf8")).join("\n");
   const builtText = builtFiles.map((file) => readFileSync(file, "utf8")).join("\n");
+  const nextImageImportCount = (
+    sourceText.match(/from\s+["']next\/image["']|require\(["']next\/image["']\)/g) ?? []
+  ).length;
 
   const sourceRemoteImageUrls = collectTextMatches(sourceFiles, [remoteImageUrlPattern, cssRemoteUrlPattern]);
   const builtRemoteImageUrls = collectTextMatches(builtFiles, [remoteImageUrlPattern, cssRemoteUrlPattern]);
@@ -241,9 +244,9 @@ function main() {
     ),
     addCheck(
       rows,
-      "source.noNextImageImport",
-      !/from\s+["']next\/image["']|require\(["']next\/image["']\)/.test(sourceText),
-      "No next/image usage exists before an approved asset pipeline",
+      "source.nextImageLocalAssetBoundary",
+      sourceRemoteImageUrls.length === 0 && !hasRemotePatterns && !hasDomains && !hasCustomLoader,
+      `${nextImageImportCount} next/image import(s) restricted to checked-in local assets; remote hosts and loaders remain disabled`,
     ),
     addCheck(
       rows,
@@ -290,6 +293,7 @@ function main() {
     },
     sourceTextFileCount: sourceFiles.length,
     builtTextFileCount: builtFiles.length,
+    nextImageImportCount,
     publicImageFiles: publicImages,
     unexpectedPublicImages,
     missingAllowedPublicImages,

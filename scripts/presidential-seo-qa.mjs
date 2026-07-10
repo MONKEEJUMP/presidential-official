@@ -3024,8 +3024,8 @@ function checkStep9GRouteShellVisualFoundation() {
     "MoonRocksPlatformShell",
     "PillarPlatformShell",
     "FindUsCtaShell",
-    "Presidential now has a first-party digital home",
-    "Official Presidential sections",
+    "A clearer official source for the brand",
+    "Find Presidential products.",
     "Enter Moon Rocks",
   ];
   const missingSignals = requiredSignals.filter(

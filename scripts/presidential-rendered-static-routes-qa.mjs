@@ -481,7 +481,9 @@ function checkRouteHtml(route, runtimeHtmlByPath) {
   if (route.path === "/") {
     if (
       routeHtml.includes("Official Presidential Cannabis") &&
-      routeHtml.includes("Presidential platforms")
+      routeHtml.includes("Cannabis deserves better.") &&
+      routeHtml.includes("The Highest Form Of Cannabis.") &&
+      routeHtml.includes("Find Presidential products.")
     ) {
       pass(`${route.label}.html.homeSceneFoundationPresent`, "guarded home route composition rendered");
     } else {

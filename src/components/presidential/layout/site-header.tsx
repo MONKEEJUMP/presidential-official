@@ -12,28 +12,54 @@ const primaryNavItems = [
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-po-line bg-po-canvas/95 backdrop-blur">
-      <div className="mx-auto flex min-h-16 w-full max-w-7xl flex-col items-start gap-3 px-5 py-4 sm:flex-row sm:items-center sm:gap-6 sm:px-8 sm:py-0 lg:px-12">
+    <header className="sticky top-0 z-40 border-b border-po-on-dark/10 bg-po-ink text-po-on-dark">
+      <div className="relative mx-auto flex min-h-18 w-full max-w-7xl items-center justify-between gap-6 px-5 py-3 sm:px-8 lg:px-12">
         <Link
-          className="inline-flex shrink-0 items-center"
+          className="inline-flex shrink-0 items-center bg-po-brand p-2"
           href="/"
         >
           <span
             aria-hidden="true"
-            className="block h-9 w-36 bg-contain bg-left bg-no-repeat"
-            style={{ backgroundImage: "url('/brand/presidential-logo.webp')" }}
+            className="po-brand-mark block aspect-[1200/929] w-16 bg-contain bg-center bg-no-repeat"
           />
           <span className="sr-only">Presidential</span>
         </Link>
+
+        <input
+          aria-label="Toggle navigation"
+          className="peer sr-only"
+          id="presidential-navigation-toggle"
+          type="checkbox"
+        />
+        <label
+          className="flex h-11 w-11 cursor-pointer items-center justify-center border border-po-on-dark/25 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-po-brand md:hidden"
+          htmlFor="presidential-navigation-toggle"
+        >
+          <span className="sr-only">Toggle navigation</span>
+          <span aria-hidden="true" className="grid w-5 gap-1.5">
+            <span className="h-px bg-po-on-dark" />
+            <span className="h-px bg-po-on-dark" />
+            <span className="h-px bg-po-on-dark" />
+          </span>
+        </label>
+
         <nav
           aria-label="Primary navigation"
-          className="flex w-full min-w-0 flex-1 items-center justify-start overflow-x-auto sm:w-auto sm:justify-end"
+          className="absolute inset-x-5 top-[calc(100%+0.01rem)] hidden border border-po-on-dark/15 bg-po-ink p-3 shadow-2xl peer-checked:block sm:inset-x-8 md:static md:block md:min-w-0 md:flex-1 md:border-0 md:bg-transparent md:p-0 md:shadow-none"
         >
-          <ul className="flex items-center gap-1 whitespace-nowrap">
+          <ul className="grid md:flex md:items-center md:justify-end md:gap-1 md:whitespace-nowrap">
             {primaryNavItems.map((item) => (
-              <li key={item.href}>
+              <li
+                className="po-primary-nav-item"
+                key={item.href}
+              >
                 <Link
-                  className="inline-flex px-3 py-2 text-sm font-semibold text-po-body transition-colors hover:text-po-brand-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
+                  className={[
+                    "po-primary-nav-link",
+                    item.href === "/find-us"
+                      ? "po-primary-nav-link-featured"
+                      : "",
+                  ].join(" ")}
                   href={item.href}
                 >
                   {item.label}

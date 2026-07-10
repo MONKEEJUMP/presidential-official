@@ -59,18 +59,94 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--po-font-body);
+  text-rendering: optimizeLegibility;
 }
 
-.po-hero-stage-gradient {
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--po-color-brand) 22%, transparent),
-      transparent 42%
-    ),
-    linear-gradient(
-      315deg,
-      color-mix(in srgb, var(--po-color-gold) 22%, transparent),
-      transparent 38%
-    );
+a {
+  text-underline-offset: 0.2em;
+}
+
+summary {
+  user-select: none;
+}
+
+.po-brand-mark {
+  background-image: url("/brand/presidential-logo.webp");
+}
+
+.po-primary-nav-item {
+  border-bottom: 1px solid color-mix(in srgb, var(--po-color-on-dark) 10%, transparent);
+}
+
+.po-primary-nav-item:last-child {
+  border-bottom: 0;
+}
+
+.po-primary-nav-link {
+  display: flex;
+  padding: 0.75rem;
+  color: var(--po-color-on-dark-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: color 160ms ease, background-color 160ms ease;
+}
+
+.po-primary-nav-link:hover {
+  background: color-mix(in srgb, var(--po-color-on-dark) 5%, transparent);
+  color: var(--po-color-on-dark);
+}
+
+.po-primary-nav-link:focus-visible,
+.po-footer-nav-link:focus-visible {
+  outline: 2px solid var(--po-color-brand);
+  outline-offset: 2px;
+}
+
+.po-primary-nav-link-featured {
+  color: var(--po-color-brand);
+}
+
+.po-primary-nav-link-featured:hover {
+  background: var(--po-color-brand);
+  color: var(--po-color-ink);
+}
+
+.po-footer-nav-item {
+  border-bottom: 1px solid color-mix(in srgb, var(--po-color-on-dark) 20%, transparent);
+}
+
+.po-footer-nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1rem;
+  transition: color 160ms ease;
+}
+
+.po-footer-nav-link:hover {
+  color: var(--po-color-brand);
+}
+
+@media (min-width: 48rem) {
+  .po-primary-nav-item {
+    border-bottom: 0;
+  }
+
+  .po-primary-nav-link {
+    display: inline-flex;
+    padding-block: 0.5rem;
+  }
+
+  .po-primary-nav-link:hover {
+    background: transparent;
+  }
+
+  .po-primary-nav-link-featured {
+    border: 1px solid var(--po-color-brand);
+  }
+
+  .po-primary-nav-link-featured:hover {
+    background: var(--po-color-brand);
+  }
 }

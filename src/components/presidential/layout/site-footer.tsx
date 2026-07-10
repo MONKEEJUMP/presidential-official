@@ -12,35 +12,35 @@ const footerLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-po-line bg-po-ink px-6 py-12 text-po-on-dark sm:px-10 lg:px-16">
-      <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(320px,1fr)]">
-        <div className="flex max-w-xl flex-col gap-4">
+    <footer className="border-t-4 border-po-brand bg-po-ink px-6 py-14 text-po-on-dark sm:px-10 lg:px-16 lg:py-20">
+      <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.85fr)]">
+        <div className="flex max-w-xl flex-col gap-6">
           <Link
             className="inline-flex w-fit items-center"
             href="/"
           >
             <span
               aria-hidden="true"
-              className="block h-10 w-40 bg-contain bg-left bg-no-repeat"
-              style={{ backgroundImage: "url('/brand/presidential-logo.webp')" }}
+              className="po-brand-mark block aspect-[1200/929] w-32 bg-contain bg-center bg-no-repeat"
             />
             <span className="sr-only">Presidential</span>
           </Link>
-          <p className="text-sm leading-6 text-po-on-dark-muted">
+          <p className="max-w-md text-sm leading-6 text-po-on-dark-muted">
             Official home of Presidential cannabis products. Availability varies
             by licensed retailer. For adults 21+ where legal.
           </p>
         </div>
 
         <nav aria-label="Footer navigation">
-          <ul className="grid gap-3 text-sm font-semibold text-po-on-dark-muted sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid border-t border-po-on-dark/20 text-sm font-semibold text-po-on-dark-muted sm:grid-cols-2">
             {footerLinks.map((link) => (
-              <li key={link.href}>
+              <li className="po-footer-nav-item" key={link.href}>
                 <Link
-                  className="transition-colors hover:text-po-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-gold"
+                  className="po-footer-nav-link"
                   href={link.href}
                 >
                   {link.label}
+                  <span aria-hidden="true" className="text-po-brand">/</span>
                 </Link>
               </li>
             ))}
