@@ -3013,13 +3013,14 @@ function checkStep9GRouteShellVisualFoundation() {
       "step9g.routeShellVisualSafety",
       "Step 9G route-shell visual foundation contains unsafe public-unlock, commerce, claim, effect, or accusation language.",
       unsafeMatches,
-      "Keep Step 9G placeholder-only, source-aware, and non-public.",
+      "Keep Step 9G visitor-facing, source-aware, and separate from public-unlock authority.",
     );
     return;
   }
 
   const requiredSignals = [
-    "MediaSlot",
+    "Platform architecture",
+    "banner-palms-teal.webp",
     "CtaLink",
     "MoonRocksPlatformShell",
     "PillarPlatformShell",
