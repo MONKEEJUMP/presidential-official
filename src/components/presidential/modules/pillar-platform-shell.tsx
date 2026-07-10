@@ -135,7 +135,7 @@ export function PillarPlatformShell({
                         </span>
                       ) : (
                         <Link
-                          className="font-medium text-po-brand hover:text-po-brand"
+                          className="font-medium text-po-brand underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
                           href={breadcrumb.path}
                         >
                           {breadcrumb.name}
