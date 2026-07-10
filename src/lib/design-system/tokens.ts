@@ -40,7 +40,7 @@ export const PRESIDENTIAL_RUNTIME_TOKEN_BINDINGS = [
     tokenName: "color.brand.presidential_teal",
     cssVariable: "--po-color-brand",
     themeVariable: "--color-po-brand",
-    scaffoldValue: "#59c2b5",
+    scaffoldValue: "#58c3b6",
     finalApprovalRequired: true,
   },
   {
@@ -99,7 +99,7 @@ export const PRESIDENTIAL_DESIGN_TOKENS = [
     family: "color",
     name: "color.brand.presidential_teal",
     blueprintRole: "Master brand accent",
-    candidateValue: "#59c2b5",
+    candidateValue: "#58c3b6",
     sourceStatus: "candidate",
     publicUseStatus: "approved_public",
     requiredSource: "Official brand book or exact color value",
