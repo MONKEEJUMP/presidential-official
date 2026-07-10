@@ -143,8 +143,8 @@ export function ContactInquiryForm({ configured }: ContactInquiryFormProps) {
         </button>
       </form>
 
-      <aside className="border border-po-brand-line bg-po-brand-soft p-5">
-        <p className="text-sm font-semibold uppercase tracking-normal text-po-brand">
+      <aside aria-labelledby="presidential-contact-status-heading" className="border border-po-brand-line bg-po-brand-soft p-5">
+        <p id="presidential-contact-status-heading" className="text-sm font-semibold uppercase tracking-normal text-po-brand">
           Contact status
         </p>
         <p
