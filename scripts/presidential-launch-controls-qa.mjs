@@ -24,6 +24,8 @@ const layout = read("src/app/layout.tsx");
 const contact = read("src/app/contact/contact-inquiry-form.tsx");
 const sitemap = read("src/lib/seo/sitemap.ts");
 const publication = read("src/lib/seo/source-records/route-publication.ts");
+const cmsModuleCoverage = read("scripts/presidential-cms-module-renderer-coverage-qa.mjs");
+const routeEvidenceTracker = read("scripts/presidential-route-evidence-tracker-qa.mjs");
 const scripts = packageJson.scripts ?? {};
 const checks = [];
 
@@ -97,10 +99,13 @@ addCheck(
   "ci.selfContainedAndPinned",
   workflow.includes("npm run verify") &&
     workflow.includes("npm run lhci") &&
-    workflow.includes("permissions:\n  contents: read") &&
+    /permissions:\s*\r?\n\s+contents:\s*read/.test(workflow) &&
     workflow.includes("persist-credentials: false") &&
     /actions\/checkout@[0-9a-f]{40}/.test(workflow) &&
-    /actions\/setup-node@[0-9a-f]{40}/.test(workflow),
+    /actions\/setup-node@[0-9a-f]{40}/.test(workflow) &&
+    cmsModuleCoverage.includes("studioSourceAvailable") &&
+    routeEvidenceTracker.includes("standaloneWebCheckout") &&
+    routeEvidenceTracker.includes("standalone_web_contract"),
   "Web CI is self-contained, least-privilege, and uses SHA-pinned official actions.",
 );
 addCheck(
