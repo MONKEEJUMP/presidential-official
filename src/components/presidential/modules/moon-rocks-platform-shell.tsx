@@ -111,7 +111,7 @@ export function MoonRocksPlatformShell({
               <MediaSlot
                 aspectClassName="aspect-[5/4]"
                 backgroundImagePath="/brand/banner-palms-teal.webp"
-                kind="product_visual_placeholder"
+                kind="wireframe_media_block"
                 label="Moon Rocks platform"
                 note="Presidential flagship product stage"
               />

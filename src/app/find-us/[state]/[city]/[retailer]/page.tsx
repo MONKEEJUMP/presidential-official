@@ -33,6 +33,17 @@ function formatSlugSegment(value: string): string | null {
   return clean.replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
+function normalizeSlugPathSegment(value: string): string | null {
+  const clean = decodeURIComponent(value)
+    .replace(/[-_]+/g, " ")
+    .replace(/[^a-zA-Z0-9 ]+/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .toLowerCase();
+
+  return clean && clean.length <= 100 ? clean : null;
+}
+
 export async function generateMetadata({
   params,
 }: FindUsRetailerPageProps): Promise<Metadata> {
@@ -40,14 +51,16 @@ export async function generateMetadata({
   const state = normalizeState(resolvedParams.state);
   const city = formatSlugSegment(resolvedParams.city);
   const retailer = formatSlugSegment(resolvedParams.retailer);
+  const citySlug = normalizeSlugPathSegment(resolvedParams.city);
+  const retailerSlug = normalizeSlugPathSegment(resolvedParams.retailer);
 
-  if (!route || !state || !city || !retailer) {
+  if (!route || !state || !city || !retailer || !citySlug || !retailerSlug) {
     return {};
   }
 
   return buildRouteMetadata({
     route,
-    canonicalPath: `/find-us/${state.toLowerCase()}/${resolvedParams.city}/${resolvedParams.retailer}`,
+    canonicalPath: `/find-us/${state.toLowerCase()}/${citySlug}/${retailerSlug}`,
     title: `Presidential Retailer Record | ${city}, ${state}`,
     description:
       "Verified retailer information for Presidential products appears only after licensed retailer records are confirmed.",

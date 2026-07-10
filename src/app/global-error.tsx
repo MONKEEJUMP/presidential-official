@@ -5,7 +5,7 @@ import type { CSSProperties } from "react";
 
 type GlobalErrorProps = {
   readonly error: Error & { digest?: string };
-  readonly unstable_retry: () => void;
+  readonly reset: () => void;
 };
 
 const styles: Record<string, CSSProperties> = {
@@ -87,7 +87,7 @@ const styles: Record<string, CSSProperties> = {
   },
 };
 
-export default function GlobalError({ unstable_retry }: GlobalErrorProps) {
+export default function GlobalError({ reset }: GlobalErrorProps) {
   return (
     <html lang="en">
       <head>
@@ -107,7 +107,7 @@ export default function GlobalError({ unstable_retry }: GlobalErrorProps) {
             </p>
             <div style={styles.actions}>
               <button
-                onClick={() => unstable_retry()}
+                onClick={() => reset()}
                 style={styles.primary}
                 type="button"
               >

@@ -366,13 +366,15 @@ function main() {
   addCheck(
     "client.contactDetailsPublicUseApprovalGated",
     /function\s+canShowPublicContactProfile\(profile\?:\s*SanityContactProfile\):\s*boolean\s*\{[\s\S]*?isApprovedPublicStatus\(profile\.publicUseStatus\)/.test(cmsModuleRendererSource) &&
+      /profile\.emailConflictStatus/.test(cmsModuleRendererSource) &&
+      /isApprovedPublicStatus\(profile\.emailConflictStatus\)/.test(cmsModuleRendererSource) &&
       /const\s+canShowPublic\s*=\s*canShowPublicContactProfile\(contactProfile\)/.test(cmsModuleRendererSource) &&
       /const\s+showContactDetails\s*=\s*isPrivate\s*\|\|\s*canShowPublic/.test(cmsModuleRendererSource) &&
       /showContactDetails\s*&&\s*contactProfile\.phone/.test(cmsModuleRendererSource) &&
       /showContactDetails\s*&&\s*displayEmail/.test(cmsModuleRendererSource) &&
       /Official contact details are held for client confirmation before public display/.test(cmsModuleRendererSource) &&
       /isPrivate\s*\?\s*\([\s\S]*?Email status[\s\S]*?Public use/.test(cmsModuleRendererSource),
-    "public contact phone/email require approved public-use status, while private draft review can inspect contact status fields",
+    "public contact phone/email require approved public-use and email-conflict status, while private draft review can inspect contact status fields",
   );
   addCheck(
     "client.sitePageCmsRenderEnvGated",

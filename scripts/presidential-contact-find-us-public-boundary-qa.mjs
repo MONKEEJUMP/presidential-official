@@ -185,10 +185,12 @@ addCheck(
   "contact.renderer.publicDetailsApprovalGated",
   cmsRenderer.includes("function canShowPublicContactProfile") &&
     cmsRenderer.includes('value === "approved_public"') &&
+    cmsRenderer.includes("profile.emailConflictStatus") &&
+    cmsRenderer.includes("isApprovedPublicStatus(profile.emailConflictStatus)") &&
     cmsRenderer.includes("Official contact details are held for client confirmation before public display") &&
     cmsRenderer.includes("showContactDetails && contactProfile.phone") &&
     cmsRenderer.includes("showContactDetails && displayEmail"),
-  "CMS contact profile details are hidden unless public-use approval is present.",
+  "CMS contact profile details are hidden unless public-use approval and email-conflict approval are present.",
 );
 addCheck(
   checks,

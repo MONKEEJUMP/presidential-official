@@ -746,7 +746,12 @@ function isApprovedPublicStatus(value?: string): boolean {
 }
 
 function canShowPublicContactProfile(profile?: SanityContactProfile): boolean {
-  return Boolean(profile && isApprovedPublicStatus(profile.publicUseStatus));
+  return Boolean(
+    profile &&
+      isApprovedPublicStatus(profile.publicUseStatus) &&
+      (!profile.emailConflictStatus ||
+        isApprovedPublicStatus(profile.emailConflictStatus)),
+  );
 }
 
 function getContactModuleCta(

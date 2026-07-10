@@ -4,10 +4,10 @@ import Link from "next/link";
 
 type ErrorPageProps = {
   readonly error: Error & { digest?: string };
-  readonly unstable_retry: () => void;
+  readonly reset: () => void;
 };
 
-export default function ErrorPage({ unstable_retry }: ErrorPageProps) {
+export default function ErrorPage({ reset }: ErrorPageProps) {
   return (
     <main className="flex min-h-screen items-center bg-po-soft px-6 py-20 text-po-ink">
       <section className="mx-auto flex w-full max-w-3xl flex-col gap-6 border border-po-line bg-po-canvas p-8">
@@ -26,7 +26,7 @@ export default function ErrorPage({ unstable_retry }: ErrorPageProps) {
         <div className="flex flex-wrap gap-3">
           <button
             className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-po-on-dark transition-colors hover:bg-po-brand-hover"
-            onClick={() => unstable_retry()}
+            onClick={() => reset()}
             type="button"
           >
             Try again
