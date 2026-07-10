@@ -16,7 +16,7 @@ const statusMdPath = path.join(workRoot, "step10g-public-surface-boundary-status
 const productionOrigin = "https://presidentialmoonrocks.com";
 const allowedUrlOrigins = new Set([productionOrigin, "https://schema.org"]);
 const approvedGatedAnalyticsUrlFiles = new Set([
-  "web/src/components/analytics/google-analytics.tsx",
+  "src/components/analytics/google-analytics.tsx",
 ]);
 const approvedGatedAnalyticsUrlOrigins = new Set([
   "https://www.googletagmanager.com",
@@ -94,8 +94,48 @@ function toPosix(filePath) {
   return filePath.replace(/\\/g, "/");
 }
 
+function relativeToAppRoot(appRoot, filePath, pathApi = path) {
+  return toPosix(pathApi.relative(appRoot, filePath));
+}
+
 function rel(filePath) {
   return toPosix(path.relative(root, filePath));
+}
+
+function webRel(filePath) {
+  return relativeToAppRoot(webRoot, filePath);
+}
+
+function isApprovedGatedAnalyticsUrl(relativeWebPath, origin) {
+  return (
+    approvedGatedAnalyticsUrlFiles.has(relativeWebPath) &&
+    approvedGatedAnalyticsUrlOrigins.has(origin)
+  );
+}
+
+function analyticsPathFixturesPass() {
+  const fixtures = [
+    [path.win32, "C:\\workspace\\web"],
+    [path.win32, "C:\\actions\\presidential-official"],
+    [path.posix, "/workspace/web"],
+    [path.posix, "/home/runner/work/presidential-official/presidential-official"],
+  ];
+
+  const approvedPath = "src/components/analytics/google-analytics.tsx";
+  const approvedOrigin = "https://www.googletagmanager.com";
+  const approvedFixturesPass = fixtures.every(([pathApi, appRoot]) => {
+    const filePath = pathApi.join(appRoot, ...approvedPath.split("/"));
+    return isApprovedGatedAnalyticsUrl(
+      relativeToAppRoot(appRoot, filePath, pathApi),
+      approvedOrigin,
+    );
+  });
+
+  return (
+    approvedFixturesPass &&
+    !isApprovedGatedAnalyticsUrl("src/app/page.tsx", approvedOrigin) &&
+    !isApprovedGatedAnalyticsUrl(approvedPath, "https://example.com")
+  );
 }
 
 function readIfExists(filePath) {
@@ -158,15 +198,13 @@ function findUrlOriginViolations(files, { allowW3cSvg = false } = {}) {
   const violations = [];
   for (const file of files) {
     const relativePath = rel(file);
+    const relativeWebPath = webRel(file);
     const text = readIfExists(file);
     for (const url of extractHttpUrls(text)) {
       try {
         const parsed = new URL(url);
         if (allowedUrlOrigins.has(parsed.origin)) continue;
-        if (
-          approvedGatedAnalyticsUrlFiles.has(relativePath) &&
-          approvedGatedAnalyticsUrlOrigins.has(parsed.origin)
-        ) {
+        if (isApprovedGatedAnalyticsUrl(relativeWebPath, parsed.origin)) {
           continue;
         }
         if (allowW3cSvg && parsed.origin === "http://www.w3.org") continue;
@@ -221,6 +259,7 @@ function main() {
     ...publicAssetTextFiles,
   ].map((file) => readIfExists(file)).join("\n");
   const hasPublicUnlockSignal = publicUnlockPattern.test(publicUnlockSignalText);
+  const analyticsAllowlistPathFixturesPass = analyticsPathFixturesPass();
 
   const checks = [
     addCheck(rows, "publicDirectory.exists", existsSync(publicAssetRoot), "public directory exists for future approved assets"),
@@ -230,6 +269,7 @@ function main() {
     addCheck(rows, "publicAssets.noBlockedDomainText", publicAssetBlockedDomainMatches.length === 0, publicAssetBlockedDomainMatches.length ? publicAssetBlockedDomainMatches.slice(0, 10).join(" | ") : "public asset text contains no blocked hosts or threat wording"),
     addCheck(rows, "publicAssets.onlyApprovedUrlOrigins", publicAssetUrlViolations.length === 0, publicAssetUrlViolations.length ? publicAssetUrlViolations.slice(0, 10).join(" | ") : "public asset text contains no external URL origin violations"),
     addCheck(rows, "source.noBlockedDomainText", sourceBlockedDomainMatches.length === 0, sourceBlockedDomainMatches.length ? sourceBlockedDomainMatches.slice(0, 10).join(" | ") : "public source surfaces contain no blocked hosts or threat wording"),
+    addCheck(rows, "source.analyticsAllowlistPathPortable", analyticsAllowlistPathFixturesPass, analyticsAllowlistPathFixturesPass ? "analytics URL allowlist is web-root-relative across Windows and POSIX checkout names" : "analytics URL allowlist path portability fixtures failed"),
     addCheck(rows, "source.onlyApprovedUrlOrigins", sourceUrlViolations.length === 0, sourceUrlViolations.length ? sourceUrlViolations.slice(0, 10).join(" | ") : "public source URL origins are production or schema.org only"),
     addCheck(rows, "builtOutput.exists", builtTextFiles.length > 0, `${builtTextFiles.length} built public text file(s) scanned`),
     addCheck(rows, "builtOutput.noBlockedDomainText", builtBlockedDomainMatches.length === 0, builtBlockedDomainMatches.length ? builtBlockedDomainMatches.slice(0, 10).join(" | ") : "built output contains no blocked hosts or threat wording"),
