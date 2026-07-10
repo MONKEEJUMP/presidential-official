@@ -356,7 +356,10 @@ export function CmsProductRoutePanel({
       <ol className="grid gap-2">
         {profile.nextSteps.map((step, index) => (
           <li className="flex items-center gap-3 border border-po-brand-line bg-po-canvas p-3 text-sm font-semibold text-po-ink" key={step}>
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center bg-po-brand text-po-on-dark">
+            <span
+              aria-hidden="true"
+              className="flex h-7 w-7 shrink-0 items-center justify-center bg-po-brand text-po-on-dark"
+            >
               {index + 1}
             </span>
             {step}

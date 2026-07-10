@@ -159,7 +159,10 @@ export function MoonRocksPlatformShell({
                     className="flex items-center gap-3 border border-po-line bg-po-canvas p-4 text-sm font-semibold text-po-ink"
                     key={step}
                   >
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center bg-po-brand text-po-on-dark">
+                    <span
+                      aria-hidden="true"
+                      className="flex h-8 w-8 shrink-0 items-center justify-center bg-po-brand text-po-on-dark"
+                    >
                       {index + 1}
                     </span>
                     {step}
