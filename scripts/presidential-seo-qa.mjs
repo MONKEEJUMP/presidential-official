@@ -1767,8 +1767,8 @@ function checkStep9HHomeRouteComposition() {
   const visibleCopyPaths = [
     "src/components/presidential/media/media-slot.tsx",
     "src/components/presidential/modules/homepage-foundation-shell.tsx",
-    "src/components/presidential/modules/homepage-act-shell.tsx",
-    "src/components/presidential/modules/platform-preview-shell.tsx",
+    "src/components/presidential/modules/moon-rocks-platform-shell.tsx",
+    "src/components/presidential/modules/pillar-platform-shell.tsx",
     "src/components/presidential/modules/find-us-cta-shell.tsx",
   ];
   const visibleLeakPatterns = [
@@ -2927,10 +2927,10 @@ function checkStep9FDesignSystemFoundation() {
 
 function checkStep9GRouteShellVisualFoundation() {
   const requiredFiles = [
-    "src/components/presidential/modules/homepage-act-shell.tsx",
-    "src/components/presidential/modules/platform-preview-shell.tsx",
     "src/components/presidential/modules/find-us-cta-shell.tsx",
     "src/components/presidential/modules/homepage-foundation-shell.tsx",
+    "src/components/presidential/modules/moon-rocks-platform-shell.tsx",
+    "src/components/presidential/modules/pillar-platform-shell.tsx",
     "src/components/presidential/modules/index.ts",
   ];
   const missingFiles = requiredFiles.filter((file) => !projectFileExists(file));
@@ -2990,8 +2990,8 @@ function checkStep9GRouteShellVisualFoundation() {
   const requiredSignals = [
     "MediaSlot",
     "CtaLink",
-    "HomepageActShell",
-    "PlatformPreviewShell",
+    "MoonRocksPlatformShell",
+    "PillarPlatformShell",
     "FindUsCtaShell",
     "Presidential now has a first-party digital home",
     "Official Presidential sections",
@@ -3041,8 +3041,8 @@ function checkStep9LStaticRouteVisualFoundation() {
     "src/components/seo/presidential-route-shell.tsx",
     "src/components/presidential/media/media-slot.tsx",
     "src/components/presidential/modules/homepage-foundation-shell.tsx",
-    "src/components/presidential/modules/homepage-act-shell.tsx",
-    "src/components/presidential/modules/platform-preview-shell.tsx",
+    "src/components/presidential/modules/moon-rocks-platform-shell.tsx",
+    "src/components/presidential/modules/pillar-platform-shell.tsx",
     "src/components/presidential/modules/find-us-cta-shell.tsx",
   ];
   const missingFiles = requiredFiles.filter((file) => !projectFileExists(file));
@@ -3109,8 +3109,8 @@ function checkStep9LStaticRouteVisualFoundation() {
     "src/components/presidential/media/media-slot.tsx",
     "src/components/presidential/modules/static-route-foundation-shell.tsx",
     "src/components/presidential/modules/homepage-foundation-shell.tsx",
-    "src/components/presidential/modules/homepage-act-shell.tsx",
-    "src/components/presidential/modules/platform-preview-shell.tsx",
+    "src/components/presidential/modules/moon-rocks-platform-shell.tsx",
+    "src/components/presidential/modules/pillar-platform-shell.tsx",
     "src/components/presidential/modules/find-us-cta-shell.tsx",
   ];
   const visibleLeakPatterns = [

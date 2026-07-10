@@ -23,14 +23,6 @@ const ctaLinkSourcePath = path.join(
   "primitives",
   "cta-link.tsx",
 );
-const platformPreviewSourcePath = path.join(
-  webRoot,
-  "src",
-  "components",
-  "presidential",
-  "modules",
-  "platform-preview-shell.tsx",
-);
 const moonRocksPlatformSourcePath = path.join(
   webRoot,
   "src",
@@ -566,11 +558,6 @@ function checkFallbackRoute(routeConfig, runtimeHtmlByLabel) {
 
 function checkSourceContracts() {
   const ctaSource = readRequired(ctaLinkSourcePath, "source:cta-link", "source.exists");
-  const platformSource = readRequired(
-    platformPreviewSourcePath,
-    "source:platform-preview",
-    "source.exists",
-  );
   const homepageSource = readRequired(homepageSourcePath, "source:homepage", "source.exists");
   const moonRocksPlatformSource = readRequired(
     moonRocksPlatformSourcePath,
@@ -598,16 +585,6 @@ function checkSourceContracts() {
       /getRouteByPath\(href\)/.test(ctaSource) && /CTA target is not represented/.test(ctaSource),
       "CtaLink guards targets with route registry lookup",
       "CtaLink route-registry guard missing",
-    );
-  }
-
-  if (platformSource) {
-    recordCheck(
-      "source:platform-preview",
-      "platform.ctaLabelOverrideSupported",
-      /readonly ctaLabel\?: string/.test(platformSource) && /ctaLabel \?\?/.test(platformSource),
-      "platform previews can use route-specific CTA labels",
-      "platform previews do not support route-specific CTA labels",
     );
   }
 
