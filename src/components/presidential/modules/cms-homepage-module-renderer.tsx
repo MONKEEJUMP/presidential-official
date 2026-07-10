@@ -636,11 +636,11 @@ function HeroModule({ module, index, renderMode }: { readonly module: SanityHome
         <div className="min-h-96 border border-po-on-dark/15 bg-po-canvas/10 p-5">
           <div className="flex h-full min-h-80 items-end border border-po-brand-line bg-po-brand-soft p-5">
             <div className="grid gap-3">
-              <p className="text-sm font-semibold text-po-brand-line">
+              <p className="text-sm font-semibold text-po-brand-strong">
                 {assets[0]?.title || assets[0]?.assetName || "CMS-driven hero media slot"}
               </p>
               {isPrivate && assets[0]?.savedFile ? (
-                <p className="text-xs leading-5 text-po-brand-soft">{assets[0].savedFile}</p>
+                <p className="text-xs leading-5 text-po-muted">{assets[0].savedFile}</p>
               ) : null}
             </div>
           </div>

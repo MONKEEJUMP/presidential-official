@@ -32,6 +32,9 @@ export function ContactInquiryForm({ configured }: ContactInquiryFormProps) {
   const nameError = fieldError(state, "contactName");
   const emailError = fieldError(state, "contactEmail");
   const messageError = fieldError(state, "contactMessage");
+  const nameErrorId = "contactName-error";
+  const emailErrorId = "contactEmail-error";
+  const messageErrorId = "contactMessage-error";
   const disabled = pending || !configured;
   const submitDisabled = disabled || !startedAt;
 
@@ -69,6 +72,7 @@ export function ContactInquiryForm({ configured }: ContactInquiryFormProps) {
             Name
           </label>
           <input
+            aria-describedby={nameError ? nameErrorId : undefined}
             aria-invalid={Boolean(nameError)}
             autoComplete="name"
             className="border border-po-line bg-po-canvas px-3 py-3 text-sm text-po-ink"
@@ -79,7 +83,11 @@ export function ContactInquiryForm({ configured }: ContactInquiryFormProps) {
             required
             type="text"
           />
-          {nameError ? <p className="text-sm text-po-danger">{nameError}</p> : null}
+          {nameError ? (
+            <p className="text-sm text-po-gold-ink" id={nameErrorId}>
+              {nameError}
+            </p>
+          ) : null}
         </div>
 
         <div className="grid gap-2">
@@ -87,6 +95,7 @@ export function ContactInquiryForm({ configured }: ContactInquiryFormProps) {
             Email
           </label>
           <input
+            aria-describedby={emailError ? emailErrorId : undefined}
             aria-invalid={Boolean(emailError)}
             autoComplete="email"
             className="border border-po-line bg-po-canvas px-3 py-3 text-sm text-po-ink"
@@ -97,7 +106,11 @@ export function ContactInquiryForm({ configured }: ContactInquiryFormProps) {
             required
             type="email"
           />
-          {emailError ? <p className="text-sm text-po-danger">{emailError}</p> : null}
+          {emailError ? (
+            <p className="text-sm text-po-gold-ink" id={emailErrorId}>
+              {emailError}
+            </p>
+          ) : null}
         </div>
 
         <div className="grid gap-2">
@@ -105,6 +118,7 @@ export function ContactInquiryForm({ configured }: ContactInquiryFormProps) {
             Message
           </label>
           <textarea
+            aria-describedby={messageError ? messageErrorId : undefined}
             aria-invalid={Boolean(messageError)}
             className="min-h-36 border border-po-line bg-po-canvas px-3 py-3 text-sm text-po-ink"
             disabled={disabled}
@@ -113,7 +127,11 @@ export function ContactInquiryForm({ configured }: ContactInquiryFormProps) {
             name="contactMessage"
             required
           />
-          {messageError ? <p className="text-sm text-po-danger">{messageError}</p> : null}
+          {messageError ? (
+            <p className="text-sm text-po-gold-ink" id={messageErrorId}>
+              {messageError}
+            </p>
+          ) : null}
         </div>
 
         <button

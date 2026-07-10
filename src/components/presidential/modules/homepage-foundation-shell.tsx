@@ -96,7 +96,7 @@ function HeroStage() {
         </div>
 
         <div className="grid gap-3 border border-po-brand-line bg-po-brand-soft p-4">
-          <p className="text-sm font-semibold text-po-on-dark">
+          <p className="text-sm font-semibold text-po-brand-strong">
             Official retail path
           </p>
           <div className="grid grid-cols-5 gap-2" aria-hidden="true">
