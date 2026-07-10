@@ -31,16 +31,16 @@ const routePublicationPath = path.join(
   "route-publication.ts",
 );
 const privateCmsConsumerAllowlist = new Set([
-  "web/src/app/drafts/[slug]/page.tsx",
-  "web/src/app/drafts/page.tsx",
+  "src/app/drafts/[slug]/page.tsx",
+  "src/app/drafts/page.tsx",
 ]);
 const publicCmsConsumerAllowlist = new Set([
-  "web/src/app/learn/[guide]/page.tsx",
-  "web/src/app/learn/[guide]/learn-guide-cms-body.tsx",
-  "web/src/components/presidential/modules/cms-homepage-module-renderer.tsx",
-  "web/src/components/presidential/modules/cms-product-module-components.tsx",
-  "web/src/components/seo/home-route-shell.tsx",
-  "web/src/components/seo/presidential-route-shell.tsx",
+  "src/app/learn/[guide]/page.tsx",
+  "src/app/learn/[guide]/learn-guide-cms-body.tsx",
+  "src/components/presidential/modules/cms-homepage-module-renderer.tsx",
+  "src/components/presidential/modules/cms-product-module-components.tsx",
+  "src/components/seo/home-route-shell.tsx",
+  "src/components/seo/presidential-route-shell.tsx",
 ]);
 const privateDraftsRoutePath = path.join(webRoot, "src", "app", "drafts", "page.tsx");
 const privateDraftSitePageRoutePath = path.join(webRoot, "src", "app", "drafts", "[slug]", "page.tsx");
@@ -95,7 +95,7 @@ function toPosix(filePath) {
 }
 
 function rel(filePath) {
-  return toPosix(path.relative(root, filePath));
+  return toPosix(path.relative(webRoot, filePath));
 }
 
 function readIfExists(filePath) {
@@ -210,7 +210,7 @@ function main() {
   addCheck("cms.index.exists", existsSync(indexPath), rel(indexPath));
   addCheck(
     "cms.files.allowedSetOnly",
-    cmsFileNames.join("|") === "web/src/lib/cms/draft-route-access.ts|web/src/lib/cms/homepage-drafts.ts|web/src/lib/cms/homepage.ts|web/src/lib/cms/index.ts|web/src/lib/cms/learn-guide-drafts.ts|web/src/lib/cms/learn-guide.ts|web/src/lib/cms/public-content.ts|web/src/lib/cms/sanity-read-client.ts|web/src/lib/cms/site-page-drafts.ts|web/src/lib/cms/site-page.ts",
+    cmsFileNames.join("|") === "src/lib/cms/draft-route-access.ts|src/lib/cms/homepage-drafts.ts|src/lib/cms/homepage.ts|src/lib/cms/index.ts|src/lib/cms/learn-guide-drafts.ts|src/lib/cms/learn-guide.ts|src/lib/cms/public-content.ts|src/lib/cms/sanity-read-client.ts|src/lib/cms/site-page-drafts.ts|src/lib/cms/site-page.ts",
     cmsFileNames.join(" | "),
   );
   addCheck("client.serverOnly", /import\s+["']server-only["'];/.test(clientSource), "read client is server-only");
@@ -599,7 +599,7 @@ function main() {
     sanityMutationEnabled: false,
     sanityPublicRenderingEnabled: false,
     sanityHomepageEnvGatedRenderingEnabled: rows.some((row) => row.check === "client.homepageCmsReadFallsBackStatic" && row.status === "pass"),
-    sanityPrivateDraftsRouteEnabled: cmsImports.includes("web/src/app/drafts/page.tsx"),
+    sanityPrivateDraftsRouteEnabled: cmsImports.includes("src/app/drafts/page.tsx"),
     rows,
   };
 

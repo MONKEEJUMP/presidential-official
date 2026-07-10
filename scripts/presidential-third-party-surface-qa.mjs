@@ -47,12 +47,12 @@ const textExtensions = new Set([
   ".xml",
 ]);
 
-const approvedRawScriptFiles = new Set(["web/src/lib/seo/schema/jsonLd.tsx"]);
+const approvedRawScriptFiles = new Set(["src/lib/seo/schema/jsonLd.tsx"]);
 const approvedGatedAnalyticsFiles = new Set([
-  "web/src/app/layout.tsx",
-  "web/src/components/analytics/google-analytics.tsx",
-  "web/src/lib/analytics/google.ts",
-  "web/src/proxy.ts",
+  "src/app/layout.tsx",
+  "src/components/analytics/google-analytics.tsx",
+  "src/lib/analytics/google.ts",
+  "src/proxy.ts",
 ]);
 const analyticsVendorPattern =
   /\b(?:GTM-[A-Z0-9]+|gtag|dataLayer|GoogleAnalytics|GoogleTagManager|googletagmanager|google-analytics|googleanalytics|fbq|facebook pixel|meta pixel|tiktok pixel|hotjar|posthog|mixpanel|fullstory|Microsoft Clarity|clarity\.ms|clarity\.js|clarity_project_id|NEXT_PUBLIC_CLARITY|@segment\/analytics|segment\.com|NEXT_PUBLIC_SEGMENT)\b/i;
@@ -85,7 +85,7 @@ function toPosix(filePath) {
 }
 
 function rel(filePath) {
-  return toPosix(path.relative(root, filePath));
+  return toPosix(path.relative(webRoot, filePath));
 }
 
 function readIfExists(filePath) {
@@ -301,7 +301,7 @@ async function main() {
     skipApprovedGatedAnalyticsFile: true,
   });
   const approvedGatedAnalyticsText = [...approvedGatedAnalyticsFiles]
-    .map((file) => readIfExists(path.join(root, file)))
+    .map((file) => readIfExists(path.join(webRoot, file)))
     .join("\n");
   const approvedGatedAnalyticsSource =
     nextScriptMatches.every((match) =>

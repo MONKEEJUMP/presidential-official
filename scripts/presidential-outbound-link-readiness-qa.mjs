@@ -70,7 +70,7 @@ function toPosix(filePath) {
 }
 
 function rel(filePath) {
-  return toPosix(path.relative(root, filePath));
+  return toPosix(path.relative(webRoot, filePath));
 }
 
 function readIfExists(filePath) {
@@ -219,7 +219,7 @@ function main() {
   const ctaLinkRegistryGuard = ctaLinkText.includes("getRouteByPath(href)") && ctaLinkText.includes("throw new Error");
   const sourceHasOnlyApprovedGatedMailto =
     sourceMailOrTelMatches.length === 1 &&
-    sourceMailOrTelMatches[0].startsWith("web/src/app/contact/contact-inquiry-form.tsx:") &&
+    sourceMailOrTelMatches[0].startsWith("src/app/contact/contact-inquiry-form.tsx:") &&
     contactInquiryFormText.includes("mailto:${encodeURIComponent(inbox)}") &&
     contactInquiryConfigText.includes('import "server-only"') &&
     contactInquiryConfigText.includes("PRESIDENTIAL_CONTACT_MAILTO_ENABLED") &&
