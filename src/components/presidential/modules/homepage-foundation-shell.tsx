@@ -94,45 +94,35 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
                 </p>
               </div>
 
-              <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(240px,0.34fr)]">
-                <div className="max-w-5xl">
-                  <h1
-                    className="font-display text-4xl uppercase leading-[0.9] text-po-ink sm:text-7xl"
-                    id="presidential-homepage-primary"
+              <div className="max-w-5xl">
+                <h1
+                  className="font-display text-4xl uppercase leading-[0.9] text-po-ink sm:text-7xl"
+                  id="presidential-homepage-primary"
+                >
+                  {route.h1}
+                </h1>
+                <p className="mt-5 max-w-2xl text-2xl font-semibold leading-tight text-po-ink sm:text-3xl">
+                  Cannabis deserves better.
+                </p>
+                <p className="mt-5 max-w-2xl text-base leading-7 text-po-brand-ink sm:text-lg sm:leading-8">
+                  A clearer official source for the brand, its product platforms,
+                  the learning path, and licensed retail discovery.
+                </p>
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                  <CtaLink
+                    className="border-po-ink bg-po-ink text-po-on-dark hover:bg-po-canvas hover:text-po-ink"
+                    href="/moon-rocks"
+                    variant="secondary"
                   >
-                    {route.h1}
-                  </h1>
-                  <p className="mt-5 max-w-2xl text-2xl font-semibold leading-tight text-po-ink sm:text-3xl">
-                    Cannabis deserves better.
-                  </p>
-                  <p className="mt-5 max-w-2xl text-base leading-7 text-po-brand-ink sm:text-lg sm:leading-8">
-                    A clearer official source for the brand, its product platforms,
-                    the learning path, and licensed retail discovery.
-                  </p>
-                  <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                    <CtaLink
-                      className="border-po-ink bg-po-ink text-po-on-dark hover:bg-po-canvas hover:text-po-ink"
-                      href="/moon-rocks"
-                      variant="secondary"
-                    >
-                      Enter Moon Rocks
-                    </CtaLink>
-                    <CtaLink
-                      className="border-po-ink/40 text-po-ink hover:border-po-ink hover:text-po-ink"
-                      href="/find-us"
-                      variant="secondary"
-                    >
-                      Find Presidential products
-                    </CtaLink>
-                  </div>
-                </div>
-                <div className="hidden overflow-hidden border border-po-ink lg:block">
-                  <SiteVideo
-                    className="aspect-[9/16] w-full object-cover"
-                    label="Presidential brand film loop"
-                    preload="metadata"
-                    slug="presidential-hero"
-                  />
+                    Enter Moon Rocks
+                  </CtaLink>
+                  <CtaLink
+                    className="border-po-ink/40 text-po-ink hover:border-po-ink hover:text-po-ink"
+                    href="/find-us"
+                    variant="secondary"
+                  >
+                    Find Presidential products
+                  </CtaLink>
                 </div>
               </div>
             </div>
