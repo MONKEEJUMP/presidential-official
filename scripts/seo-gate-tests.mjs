@@ -1424,6 +1424,7 @@ for (const entry of APPROVED_VISIBLE_CLAIMS.entries) {
     for (const variant of [
       `Prefix ${entry.claim}`,
       `${entry.claim} suffix`,
+      `${entry.claim} Weed On Earth`,
     ]) {
       const variantHtml = claimPlacementHtml(placement, variant);
       assertEqual(
@@ -1465,6 +1466,7 @@ for (const entry of APPROVED_VISIBLE_CLAIMS.entries) {
 const nonRegistrySuperlatives = [
   "best in the world",
   "world's strongest pre-rolls",
+  "World's Strongest™ Weed On Earth",
   "the most potent moon rocks ever",
   "the strongest flavor ever",
 ];

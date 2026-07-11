@@ -1,20 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { ADULT_CONFIRMATION_COOKIE } from "@/app/age-gate-constants";
+import { isGoogleAnalyticsEnabled } from "@/lib/analytics/google";
 import { hasPrivateDraftRouteAccess } from "@/lib/cms/draft-route-access";
 
 const canonicalHostname = "presidentialmoonrocks.com";
 const nonCanonicalHostnames = new Set(["www.presidentialmoonrocks.com"]);
-const gaMeasurementIdPattern = /^G-[A-Z0-9]{6,}$/;
-
-function isGoogleAnalyticsEnabled(): boolean {
-  return (
-    process.env.PRESIDENTIAL_ANALYTICS_ENABLED === "true" &&
-    gaMeasurementIdPattern.test(
-      process.env.NEXT_PUBLIC_PRESIDENTIAL_GA_MEASUREMENT_ID ?? "",
-    )
-  );
-}
 
 function buildContentSecurityPolicy(
   nonce: string,
