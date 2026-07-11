@@ -164,33 +164,31 @@ export async function MoonRocksPlatformShell({
           </div>
         </section>
 
-        {catalog.items.length > 0 ? (
-          <Scene
-            ariaLabelledBy="presidential-moon-rocks-catalog"
-            className="py-24 lg:py-32"
-            tone="default"
-          >
-            <div className="mx-auto w-full max-w-7xl">
-              <div className="mb-14 max-w-3xl">
-                <p className="text-xs font-black uppercase text-po-brand-ink">
-                  The catalog
-                </p>
-                <h2
-                  className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-6xl"
-                  id="presidential-moon-rocks-catalog"
-                >
-                  Every Presidential strain
-                </h2>
-                <p className="mt-6 text-base leading-7 text-po-body">
-                  Silver, Gold, and Rose Gold series — one official catalog.
-                  Choose a series to explore every strain. Availability varies
-                  by licensed retailer.
-                </p>
-              </div>
-              <SeriesSelectorShell items={catalog.items} />
+        <Scene
+          ariaLabelledBy="presidential-moon-rocks-catalog"
+          className="py-24 lg:py-32"
+          tone="default"
+        >
+          <div className="mx-auto w-full max-w-7xl">
+            <div className="mb-14 max-w-3xl">
+              <p className="text-xs font-black uppercase text-po-brand-ink">
+                The catalog
+              </p>
+              <h2
+                className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-6xl"
+                id="presidential-moon-rocks-catalog"
+              >
+                Every Presidential strain
+              </h2>
+              <p className="mt-6 text-base leading-7 text-po-body">
+                Silver, Gold, and Rose Gold series — one official catalog.
+                Choose a series to explore every strain. Availability varies
+                by licensed retailer.
+              </p>
             </div>
-          </Scene>
-        ) : null}
+            <SeriesSelectorShell items={catalog.items} />
+          </div>
+        </Scene>
 
         <Scene
           ariaLabelledBy="presidential-moon-rocks-packaging"

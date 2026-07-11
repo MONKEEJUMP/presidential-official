@@ -118,7 +118,15 @@ const allowedInternalHrefs = new Set([
   "/find-us/wa",
 ]);
 const allowedSamePageFragmentHrefs = new Set(["#presidential-main"]);
-const globalNavigationHrefs = new Set(mandatoryStaticPaths);
+const globalNavigationHrefs = new Set([
+  ...mandatoryStaticPaths,
+  // 9083-CODE P3.1 (owner directive, 2026-07-10): the sticky header's
+  // Moon Rocks mega-menu carries the series links globally, so pages that
+  // also link a series in their own content legitimately duplicate them.
+  "/moon-rocks/silver",
+  "/moon-rocks/gold",
+  "/moon-rocks/rose-gold",
+]);
 const allowedDuplicateHrefs = new Map(
   publicRoutes.map(({ route }) => [route, globalNavigationHrefs]),
 );

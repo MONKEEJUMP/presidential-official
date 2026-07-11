@@ -1,7 +1,17 @@
 import Link from "next/link";
 
+// 9083-CODE P3.1 (owner directive, 2026-07-10): sticky header with a
+// mega-menu under Moon Rocks so every series is reachable from anywhere.
+// CSS-only reveal (hover + focus-within) keeps the header server-rendered.
+const moonRocksMenuItems = [
+  { href: "/moon-rocks", label: "All Moon Rocks" },
+  { href: "/moon-rocks/silver", label: "Silver Moon Rocks" },
+  { href: "/moon-rocks/gold", label: "Gold Moon Rocks" },
+  { href: "/moon-rocks/rose-gold", label: "Rose Gold Moon Rocks" },
+] as const;
+
 const primaryNavItems = [
-  { href: "/moon-rocks", label: "Moon Rocks" },
+  { href: "/moon-rocks", label: "Moon Rocks", menu: moonRocksMenuItems },
   { href: "/moon-pods", label: "Moon Pods" },
   { href: "/orbit", label: "Orbit" },
   { href: "/our-story", label: "Our Story" },
@@ -50,7 +60,10 @@ export function SiteHeader() {
           <ul className="grid lg:flex lg:items-center lg:justify-end lg:gap-1 lg:whitespace-nowrap">
             {primaryNavItems.map((item) => (
               <li
-                className="po-primary-nav-item"
+                className={[
+                  "po-primary-nav-item",
+                  "menu" in item ? "group relative" : "",
+                ].join(" ")}
                 key={item.href}
               >
                 <Link
@@ -64,6 +77,20 @@ export function SiteHeader() {
                 >
                   {item.label}
                 </Link>
+                {"menu" in item ? (
+                  <ul className="border-l-2 border-po-brand/40 pl-4 lg:absolute lg:left-0 lg:top-full lg:hidden lg:min-w-56 lg:border-l-0 lg:border lg:border-po-on-dark/15 lg:bg-po-ink lg:p-2 lg:shadow-2xl lg:group-focus-within:block lg:group-hover:block">
+                    {item.menu.map((subItem) => (
+                      <li key={subItem.href}>
+                        <Link
+                          className="po-primary-nav-link !flex"
+                          href={subItem.href}
+                        >
+                          {subItem.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </li>
             ))}
           </ul>

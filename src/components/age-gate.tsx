@@ -126,21 +126,28 @@ export function AgeGate({ initialConfirmed = false }: AgeGateProps) {
         aria-describedby="presidential-age-gate-description"
         aria-labelledby="presidential-age-gate-title"
         aria-modal="true"
-        className="w-full max-w-md border border-po-line bg-po-canvas p-6 text-po-ink shadow-2xl"
+        className="w-full max-w-md border-t-4 border-po-brand bg-po-ink p-8 text-po-on-dark shadow-2xl"
         onKeyDown={handleDialogKeyDown}
         role="dialog"
       >
-        <p className="text-sm font-semibold uppercase text-po-brand-ink">
+        <span
+          aria-hidden="true"
+          className="po-brand-mark block aspect-[1200/929] w-20 bg-contain bg-center bg-no-repeat"
+        />
+        <p className="mt-6 text-xs font-black uppercase tracking-wide text-po-brand">
           Official Presidential
         </p>
         <h2
-          className="mt-4 text-2xl font-semibold leading-tight"
+          className="mt-3 font-display text-3xl uppercase leading-[0.95]"
           id="presidential-age-gate-title"
         >
-          Adults 21+ where legal
+          Welcome to the House.
         </h2>
+        <p className="mt-2 font-display text-lg uppercase text-po-brand">
+          Adults 21+ where legal
+        </p>
         <p
-          className="mt-4 text-base leading-7 text-po-body"
+          className="mt-4 text-base leading-7 text-po-on-dark-muted"
           id="presidential-age-gate-description"
         >
           This site is intended for adults 21 or older in places where cannabis
@@ -150,16 +157,16 @@ export function AgeGate({ initialConfirmed = false }: AgeGateProps) {
         {status === "blocked" ? (
           <p
             aria-live="polite"
-            className="mt-4 border-l-4 border-po-subtle bg-po-soft px-4 py-3 text-sm leading-6 text-po-body"
+            className="mt-4 border-l-4 border-po-brand/50 bg-po-on-dark/5 px-4 py-3 text-sm leading-6 text-po-on-dark-muted"
           >
             Please exit this site and return only when you meet the adult access
             requirement.
           </p>
         ) : null}
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        <div className="mt-8 grid gap-3 sm:grid-cols-2">
           <button
-            className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-semibold text-po-ink transition-colors hover:bg-po-brand-hover"
+            className="border border-po-brand bg-po-brand px-4 py-3 text-sm font-black uppercase text-po-ink transition-colors hover:bg-po-brand-hover"
             disabled={isPending}
             onClick={acceptGate}
             ref={primaryActionRef}
@@ -168,7 +175,7 @@ export function AgeGate({ initialConfirmed = false }: AgeGateProps) {
             {isPending ? "Confirming" : "I am 21 or older"}
           </button>
           <button
-            className="border border-po-subtle px-4 py-3 text-sm font-semibold text-po-body transition-colors hover:border-po-muted"
+            className="border border-po-on-dark/30 px-4 py-3 text-sm font-semibold uppercase text-po-on-dark-muted transition-colors hover:border-po-on-dark/60 hover:text-po-on-dark"
             disabled={isPending}
             onClick={declineGate}
             type="button"

@@ -267,20 +267,25 @@ const SERIES_PAGE_PATHS = new Map<string, string>([
 
 // Blueprint Interaction 1 (Series Selector): the Moon Rocks hub presents the
 // series as a selection moment; full product grids live on the series pages.
+// The three Blueprint series are static law — with no readable catalog
+// (flags off / nothing published) the selector still renders them, without
+// counts, so series navigation never depends on CMS availability.
 export function SeriesSelectorShell({
   items,
 }: {
   readonly items: readonly SanityCatalogItem[];
 }) {
-  if (items.length === 0) {
-    return null;
-  }
-
-  const seriesNames = [...new Set(items.map((item) => item.series || ""))];
+  const seriesNames =
+    items.length > 0
+      ? [...new Set(items.map((item) => item.series || ""))]
+      : [...SERIES_PAGE_PATHS.keys()];
   const grouped = seriesNames.map((series) => ({
     series,
     meta: seriesMetaFor(series),
-    count: items.filter((item) => (item.series || "") === series).length,
+    count:
+      items.length > 0
+        ? items.filter((item) => (item.series || "") === series).length
+        : null,
     href: SERIES_PAGE_PATHS.get(series),
   }));
 
@@ -297,9 +302,11 @@ export function SeriesSelectorShell({
               {series || "Presidential"}
             </h3>
             <p className="mt-3 text-sm leading-6 text-po-body">{meta.positioning}</p>
-            <p className="mt-6 text-xs font-black uppercase text-po-brand-ink">
-              {count} {count === 1 ? "product" : "products"}
-            </p>
+            {count !== null ? (
+              <p className="mt-6 text-xs font-black uppercase text-po-brand-ink">
+                {count} {count === 1 ? "product" : "products"}
+              </p>
+            ) : null}
           </>
         );
 

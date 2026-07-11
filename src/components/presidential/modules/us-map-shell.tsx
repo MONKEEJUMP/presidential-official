@@ -2,23 +2,24 @@ import Link from "next/link";
 
 import { PRESIDENTIAL_STATES } from "@/lib/find-us/states";
 
-// Tile-grid map of the United States — 9083-CODE P4.1. The editorial
-// tile-grid arrangement keeps all fifty states recognizable, accessible
-// (every state is a real element), and data-driven: active markets come
-// straight from PRESIDENTIAL_STATES, so PAULIEWOOD's one-line config edits
-// light states up or down with no map surgery.
+// Tile-grid map of the continental United States — 9083-CODE P4.1 (owner
+// map correction, 2026-07-11): the 48 continental states only (no Alaska,
+// no Hawaii, no DC, no territories). Exactly the eight PRESIDENTIAL_STATES
+// markets are named and clickable; the other forty are dim, unlabeled,
+// non-interactive geography that makes the eight glow harder. Data-driven:
+// PAULIEWOOD's one-line config edits light states up or down.
 
 type TilePosition = readonly [row: number, col: number];
 
 const STATE_TILES: Record<string, TilePosition> = {
-  AK: [0, 0], ME: [0, 11],
+  ME: [0, 11],
   VT: [1, 10], NH: [1, 11],
   WA: [2, 1], ID: [2, 2], MT: [2, 3], ND: [2, 4], MN: [2, 5], IL: [2, 6], WI: [2, 7], MI: [2, 8], NY: [2, 9], RI: [2, 10], MA: [2, 11],
   OR: [3, 1], NV: [3, 2], WY: [3, 3], SD: [3, 4], IA: [3, 5], IN: [3, 6], OH: [3, 7], PA: [3, 8], NJ: [3, 9], CT: [3, 10],
   CA: [4, 1], UT: [4, 2], CO: [4, 3], NE: [4, 4], MO: [4, 5], KY: [4, 6], WV: [4, 7], VA: [4, 8], MD: [4, 9], DE: [4, 10],
-  AZ: [5, 2], NM: [5, 3], KS: [5, 4], AR: [5, 5], TN: [5, 6], NC: [5, 7], SC: [5, 8], DC: [5, 9],
+  AZ: [5, 2], NM: [5, 3], KS: [5, 4], AR: [5, 5], TN: [5, 6], NC: [5, 7], SC: [5, 8],
   OK: [6, 4], LA: [6, 5], MS: [6, 6], AL: [6, 7], GA: [6, 8],
-  HI: [7, 0], TX: [7, 4], FL: [7, 9],
+  TX: [7, 4], FL: [7, 9],
 };
 
 // Static class tables so Tailwind's compiler sees literal names (runtime
@@ -41,7 +42,7 @@ export function UsMapShell() {
   return (
     <div>
       <ul
-        aria-label="Presidential priority markets across the United States"
+        aria-label="Presidential priority markets across the continental United States"
         className="grid max-w-3xl grid-cols-12 gap-1.5 sm:gap-2"
       >
         {Object.entries(STATE_TILES).map(([code, [row, col]]) => {
@@ -63,9 +64,7 @@ export function UsMapShell() {
                   </span>
                 </Link>
               ) : (
-                <span aria-hidden="true" className="po-map-tile">
-                  {code}
-                </span>
+                <span aria-hidden="true" className="po-map-tile" />
               )}
             </li>
           );
