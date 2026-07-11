@@ -187,13 +187,15 @@ function main() {
     addCheck(rows, "source.notFoundExists", existsSync(sourceFiles.notFound), rel(sourceFiles.notFound)),
     addCheck(rows, "source.errorExists", existsSync(sourceFiles.error), rel(sourceFiles.error)),
     addCheck(rows, "source.globalErrorExists", existsSync(sourceFiles.globalError), rel(sourceFiles.globalError)),
-    addCheck(rows, "source.loadingExists", existsSync(sourceFiles.loading), rel(sourceFiles.loading)),
+    // Owner order (2026-07-11): no route-transition loading interstitial —
+    // navigation keeps the current page painted until the next one streams.
+    addCheck(rows, "source.loadingExists", !existsSync(sourceFiles.loading), "no root loading.tsx interstitial (owner order 2026-07-11)"),
     addCheck(rows, "source.errorIsClientComponent", hasUseClientDirective(errorText), "error.tsx declares use client"),
     addCheck(rows, "source.globalErrorIsClientComponent", hasUseClientDirective(globalErrorText), "global-error.tsx declares use client"),
     addCheck(rows, "source.globalErrorHasHtmlAndBody", /<html\b/i.test(globalErrorText) && /<body\b/i.test(globalErrorText), "global-error.tsx owns html/body when root layout is replaced"),
     addCheck(rows, "source.globalErrorHasRobotsNoindex", /noindex,\s*follow/i.test(globalErrorText), "global-error.tsx includes explicit noindex, follow metadata"),
     addCheck(rows, "source.notFoundRobotsNoindex", /robots:\s*{[\s\S]*index:\s*false[\s\S]*follow:\s*true/i.test(notFoundText), "not-found.tsx metadata remains noindex/follow"),
-    addCheck(rows, "source.loadingIsNeutral", /Loading Presidential/i.test(loadingText) && !publicUnlockPattern.test(loadingText), "loading.tsx uses neutral official language"),
+    addCheck(rows, "source.loadingIsNeutral", loadingText === "" || !publicUnlockPattern.test(loadingText), "loading interstitial absent by owner order (2026-07-11)"),
     addCheck(rows, "source.noForms", sourceForms.length === 0, sourceForms.slice(0, 8).join(" | ") || "No forms in fallback source files"),
     addCheck(rows, "source.noFields", sourceFields.length === 0, sourceFields.slice(0, 8).join(" | ") || "No input, textarea, or select fields in fallback source files"),
     addCheck(rows, "source.noSubmissionLogic", sourceSubmissionLogic.length === 0, sourceSubmissionLogic.slice(0, 8).join(" | ") || "No submission logic in fallback source files"),

@@ -455,7 +455,7 @@ async function main() {
   addCheck(rows, "ageGate.modalHasFocusTrap", /aria-modal="true"/.test(ageGateSource) && /handleDialogKeyDown/.test(ageGateSource) && /event\.key !== "Tab"/.test(ageGateSource), "Age gate dialog declares modal semantics and traps Tab between dialog controls");
   addCheck(rows, "pageFrame.skipLinkTargetsMain", /href="#presidential-main"/.test(pageFrameSource) && /Skip to main content/.test(pageFrameSource), "Page frame renders a keyboard-visible skip link to main content");
   addCheck(rows, "pageFrame.mainTargetStable", /id="presidential-main"/.test(pageFrameSource) && /tabIndex=\{-1\}/.test(pageFrameSource), "Page frame gives main content a stable focus target");
-  addCheck(rows, "loading.noMainLandmark", !/<main\b/i.test(loadingSource) && /role="status"/.test(loadingSource), "Loading fallback uses status semantics without adding a second main landmark");
+  addCheck(rows, "loading.noMainLandmark", loadingSource === "" || (!/<main\b/i.test(loadingSource) && /role="status"/.test(loadingSource)), "No loading interstitial (owner order 2026-07-11); if one ever returns it must use status semantics without a second main landmark");
   addCheck(rows, "source.noPublicUnlockSignals", !publicUnlockPattern.test(sourceText), "No public-unlock text in accessibility source surfaces");
   addCheck(rows, "package.verifyHasStep10O", /security:accessibility:verify/.test(packageJson), "npm verify chain includes Step 10O verifier");
 
