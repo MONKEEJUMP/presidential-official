@@ -15,6 +15,10 @@ const clientPath = path.join(cmsRoot, "sanity-read-client.ts");
 const draftHomepageClientPath = path.join(cmsRoot, "homepage-drafts.ts");
 const draftSitePageClientPath = path.join(cmsRoot, "site-page-drafts.ts");
 const draftLearnGuideClientPath = path.join(cmsRoot, "learn-guide-drafts.ts");
+// 9083-CODE P2.1 (owner directive, 2026-07-10): the catalog read lane follows
+// the same split — public reader in catalog.ts, token-scoped draft reader in
+// catalog-drafts.ts.
+const draftCatalogClientPath = path.join(cmsRoot, "catalog-drafts.ts");
 const draftRouteAccessPath = path.join(cmsRoot, "draft-route-access.ts");
 const indexPath = path.join(cmsRoot, "index.ts");
 const packageJsonPath = path.join(webRoot, "package.json");
@@ -37,8 +41,12 @@ const privateCmsConsumerAllowlist = new Set([
 const publicCmsConsumerAllowlist = new Set([
   "src/app/learn/[guide]/page.tsx",
   "src/app/learn/[guide]/learn-guide-cms-body.tsx",
+  "src/app/moon-rocks/[product-or-strain]/page.tsx",
+  "src/components/presidential/modules/catalog-grid-shell.tsx",
   "src/components/presidential/modules/cms-homepage-module-renderer.tsx",
   "src/components/presidential/modules/cms-product-module-components.tsx",
+  "src/components/presidential/modules/moon-rocks-platform-shell.tsx",
+  "src/components/presidential/modules/series-page-shell.tsx",
   "src/components/seo/home-route-shell.tsx",
   "src/components/seo/presidential-route-shell.tsx",
 ]);
@@ -182,6 +190,7 @@ function main() {
     rel(draftHomepageClientPath),
     rel(draftSitePageClientPath),
     rel(draftLearnGuideClientPath),
+    rel(draftCatalogClientPath),
     rel(draftRouteAccessPath),
   ]);
   const unexpectedCmsSecretMatches = cmsSecretMatches.filter((file) => !expectedSecretFiles.has(file));
@@ -210,7 +219,7 @@ function main() {
   addCheck("cms.index.exists", existsSync(indexPath), rel(indexPath));
   addCheck(
     "cms.files.allowedSetOnly",
-    cmsFileNames.join("|") === "src/lib/cms/draft-route-access.ts|src/lib/cms/homepage-drafts.ts|src/lib/cms/homepage.ts|src/lib/cms/index.ts|src/lib/cms/learn-guide-drafts.ts|src/lib/cms/learn-guide.ts|src/lib/cms/public-content.ts|src/lib/cms/sanity-read-client.ts|src/lib/cms/site-page-drafts.ts|src/lib/cms/site-page.ts",
+    cmsFileNames.join("|") === "src/lib/cms/catalog-drafts.ts|src/lib/cms/catalog.ts|src/lib/cms/draft-route-access.ts|src/lib/cms/homepage-drafts.ts|src/lib/cms/homepage.ts|src/lib/cms/index.ts|src/lib/cms/learn-guide-drafts.ts|src/lib/cms/learn-guide.ts|src/lib/cms/public-content.ts|src/lib/cms/sanity-read-client.ts|src/lib/cms/site-page-drafts.ts|src/lib/cms/site-page.ts",
     cmsFileNames.join(" | "),
   );
   addCheck("client.serverOnly", /import\s+["']server-only["'];/.test(clientSource), "read client is server-only");

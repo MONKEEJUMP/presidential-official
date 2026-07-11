@@ -37,6 +37,9 @@ const allowedSecretFiles = new Set([
   "src/lib/cms/homepage-drafts.ts",
   "src/lib/cms/site-page-drafts.ts",
   "src/lib/cms/learn-guide-drafts.ts",
+  // 9083-CODE P2.1 (owner directive, 2026-07-10): catalog draft reader —
+  // same token-scoped *-drafts split as its siblings above.
+  "src/lib/cms/catalog-drafts.ts",
   "scripts/presidential-cms-live-draft-smoke-qa.mjs",
   "scripts/presidential-cms-runtime-smoke-qa.mjs",
   "scripts/presidential-cms-runtime-repair-qa.mjs",

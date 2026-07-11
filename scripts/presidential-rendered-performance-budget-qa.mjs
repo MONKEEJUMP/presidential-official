@@ -31,7 +31,10 @@ const statusMdPath = path.join(workRoot, "step10p-rendered-performance-budget-st
 
 const routeOutputs = [
   { label: "home", route: "/", htmlPath: "index.html", dynamicArtifactPath: "page.js", htmlBudgetBytes: 90000, rscPath: "index.rsc", rscBudgetBytes: 45000 },
-  { label: "moonRocks", route: "/moon-rocks", htmlPath: "moon-rocks.html", htmlBudgetBytes: 50000, rscPath: "moon-rocks.rsc", rscBudgetBytes: 30000 },
+  // moonRocks HTML budget raised 50000 -> 64000 for the owner-ordered catalog
+  // series-selector scene (9083-CODE P2.2/P3, 2026-07-11); still tight enough
+  // to catch runaway page growth on the flagship platform hub.
+  { label: "moonRocks", route: "/moon-rocks", htmlPath: "moon-rocks.html", htmlBudgetBytes: 64000, rscPath: "moon-rocks.rsc", rscBudgetBytes: 30000 },
   { label: "moonPods", route: "/moon-pods", htmlPath: "moon-pods.html", htmlBudgetBytes: 50000, rscPath: "moon-pods.rsc", rscBudgetBytes: 30000 },
   { label: "orbit", route: "/orbit", htmlPath: "orbit.html", htmlBudgetBytes: 50000, rscPath: "orbit.rsc", rscBudgetBytes: 30000 },
   { label: "ourStory", route: "/our-story", htmlPath: "our-story.html", htmlBudgetBytes: 50000, rscPath: "our-story.rsc", rscBudgetBytes: 25000 },

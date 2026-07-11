@@ -54,12 +54,19 @@ for (const route of [...publicRoutes, ...fallbackRoutes]) {
 const mandatoryStaticPaths = publicRoutes.map((route) => route.route);
 const allowedRenderedHrefs = new Set([
   ...mandatoryStaticPaths,
+  // 9083-CODE P2.2/P3.2 (owner directive, 2026-07-10): the Moon Rocks series
+  // routes are built, registered (routes.ts ids moon-rocks-silver/gold/
+  // rose-gold, status conditional, noindex), and reachable from the hub's
+  // series selector. Product-detail hrefs remain excluded until per-route
+  // publication sign-off.
+  "/moon-rocks/silver",
+  "/moon-rocks/gold",
+  "/moon-rocks/rose-gold",
 ]);
 const allowedSamePageFragmentHrefs = new Set(["#presidential-main"]);
 const futureOrTemplatePatterns = [
   /\/learn\/(?:%5Bguide%5D|\[guide\])/i,
   /\/find-us\/\[state\]/i,
-  /\/moon-rocks\/(?:silver|gold|rose-gold)/i,
   /^\/(?:official-presidential|pre-rolls|blunts)(?:\/|$)/i,
 ];
 const forbiddenHrefPatterns = [

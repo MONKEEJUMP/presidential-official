@@ -45,6 +45,12 @@ const expectedPageFiles = new Set([
   "learn/[guide]/page.tsx",
   "moon-pods/page.tsx",
   "moon-rocks/page.tsx",
+  // 9083-CODE P2.2 (owner directive, 2026-07-10): catalog series pages and
+  // the product detail template — registered conditional/noindex routes.
+  "moon-rocks/silver/page.tsx",
+  "moon-rocks/gold/page.tsx",
+  "moon-rocks/rose-gold/page.tsx",
+  "moon-rocks/[product-or-strain]/page.tsx",
   "orbit/page.tsx",
   "our-story/page.tsx",
 ]);

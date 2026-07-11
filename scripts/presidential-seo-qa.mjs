@@ -2372,11 +2372,11 @@ function checkAgeGateFoundation() {
 }
 
 function checkStep8HScopeBoundary() {
+  // 9083-CODE (owner directive, 2026-07-10) P2/P3 authorizes building the
+  // Moon Rocks series routes and the product detail route, so those paths are
+  // no longer out of scope. They stay conditional/noindex under the route
+  // registry and the publication gate until per-route owner sign-off.
   const outOfScopePaths = [
-    "src/app/moon-rocks/silver",
-    "src/app/moon-rocks/gold",
-    "src/app/moon-rocks/rose-gold",
-    "src/app/moon-rocks/[product-or-strain]",
     "src/app/age-gate",
     "src/app/age",
     "src/app/verify-age",
@@ -2475,6 +2475,10 @@ function checkStep8HScopeBoundary() {
 
   if (projectFileExists("src/lib/cms")) {
     const allowedCmsFiles = new Set([
+      // 9083-CODE P2.1 (owner directive, 2026-07-10): catalog read lane —
+      // public reader + token-scoped draft reader, same split as siblings.
+      "src/lib/cms/catalog-drafts.ts",
+      "src/lib/cms/catalog.ts",
       "src/lib/cms/homepage-drafts.ts",
       "src/lib/cms/homepage.ts",
       "src/lib/cms/index.ts",

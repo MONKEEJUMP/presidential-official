@@ -1,11 +1,17 @@
 import Link from "next/link";
 
+import {
+  readDraftCatalogItems,
+  readPublicRenderableCatalogItems,
+  type SanityCatalogItem,
+} from "@/lib/cms/catalog";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 import { PageFrame } from "../layout/page-frame";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { CtaLink } from "../primitives/cta-link";
+import { SeriesSelectorShell } from "./catalog-grid-shell";
 import { FindUsCtaShell } from "./find-us-cta-shell";
 
 type MoonRocksBreadcrumb = {
@@ -40,13 +46,36 @@ const ecosystemSteps = [
   "Find licensed retailers",
 ] as const;
 
-export function MoonRocksPlatformShell({
+async function readCatalogForShell(): Promise<{
+  readonly items: readonly SanityCatalogItem[];
+  readonly mode: "public" | "preview";
+}> {
+  const publicCatalog = await readPublicRenderableCatalogItems("/moon-rocks", {
+    next: { tags: ["sanity-catalog-moon-rocks"] },
+  });
+  if (publicCatalog.items.length > 0) {
+    return { items: publicCatalog.items, mode: "public" };
+  }
+
+  const draftCatalog = await readDraftCatalogItems("/moon-rocks", {
+    next: { tags: ["sanity-catalog-moon-rocks-drafts"] },
+  });
+  if (draftCatalog.ok && draftCatalog.items.length > 0) {
+    return { items: draftCatalog.items, mode: "preview" };
+  }
+
+  return { items: [], mode: "public" };
+}
+
+export async function MoonRocksPlatformShell({
   route,
   breadcrumbs,
 }: MoonRocksPlatformShellProps) {
   if (route.id !== "moon-rocks") {
     throw new Error("MoonRocksPlatformShell requires the Moon Rocks route record.");
   }
+
+  const catalog = await readCatalogForShell();
 
   return (
     <PageFrame>
@@ -133,6 +162,34 @@ export function MoonRocksPlatformShell({
             </div>
           </div>
         </section>
+
+        {catalog.items.length > 0 ? (
+          <Scene
+            ariaLabelledBy="presidential-moon-rocks-catalog"
+            className="py-24 lg:py-32"
+            tone="default"
+          >
+            <div className="mx-auto w-full max-w-7xl">
+              <div className="mb-14 max-w-3xl">
+                <p className="text-xs font-black uppercase text-po-brand-ink">
+                  The catalog
+                </p>
+                <h2
+                  className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-6xl"
+                  id="presidential-moon-rocks-catalog"
+                >
+                  Every Presidential strain
+                </h2>
+                <p className="mt-6 text-base leading-7 text-po-body">
+                  Silver, Gold, and Rose Gold series — one official catalog.
+                  Choose a series to explore every strain. Availability varies
+                  by licensed retailer.
+                </p>
+              </div>
+              <SeriesSelectorShell items={catalog.items} />
+            </div>
+          </Scene>
+        ) : null}
 
         <Scene
           ariaLabelledBy="presidential-moon-rocks-lanes"

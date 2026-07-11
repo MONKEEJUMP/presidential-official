@@ -34,6 +34,15 @@ const presidentialSecurityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.sanity.io",
+        pathname: "/images/4bl3xvem/production/**",
+      },
+    ],
+  },
   async headers() {
     return [
       {

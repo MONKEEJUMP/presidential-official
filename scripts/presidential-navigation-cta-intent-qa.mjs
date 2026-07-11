@@ -98,7 +98,15 @@ for (const route of [...publicRoutes, ...fallbackRoutes]) {
 }
 
 const mandatoryStaticPaths = publicRoutes.map((route) => route.route);
-const allowedInternalHrefs = new Set(mandatoryStaticPaths);
+const allowedInternalHrefs = new Set([
+  ...mandatoryStaticPaths,
+  // 9083-CODE P2.2 (owner directive, 2026-07-10): built, registered,
+  // conditional/noindex Moon Rocks series routes reachable from the hub's
+  // series selector.
+  "/moon-rocks/silver",
+  "/moon-rocks/gold",
+  "/moon-rocks/rose-gold",
+]);
 const allowedSamePageFragmentHrefs = new Set(["#presidential-main"]);
 const globalNavigationHrefs = new Set(mandatoryStaticPaths);
 const allowedDuplicateHrefs = new Map(
@@ -115,7 +123,7 @@ const forbiddenHrefPatterns = [
   {
     label: "future or unresolved route",
     pattern:
-      /\/learn\/(?:%5Bguide%5D|\[guide\])|\/find-us\/\[state\]|\/moon-rocks\/(?:silver|gold|rose-gold)|^\/(?:official-presidential|pre-rolls|blunts)(?:\/|$)/i,
+      /\/learn\/(?:%5Bguide%5D|\[guide\])|\/find-us\/\[state\]|^\/(?:official-presidential|pre-rolls|blunts)(?:\/|$)/i,
   },
   {
     label: "private route family",

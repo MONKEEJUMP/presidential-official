@@ -159,6 +159,7 @@ function publicAssetFiles() {
 function collectLocalImageUsage(files) {
   const nextImageSources = [];
   const staticImageImports = [];
+  const cmsNextImageSources = [];
   let nextImageComponentCount = 0;
 
   for (const file of files) {
@@ -186,9 +187,26 @@ function collectLocalImageUsage(files) {
     )) {
       nextImageSources.push({ file: relativeFile, value: match[1] });
     }
+    // 9083-CODE P2 (owner directive, 2026-07-10): CMS-fed imagery renders
+    // through gated assetRecord reads. Dynamic src is allowed ONLY for
+    // `.assetUrl` expressions coming from those approval-gated projections.
+    for (const match of text.matchAll(
+      /<Image\b[\s\S]*?\bsrc\s*=\s*\{([^}]+)\}[\s\S]*?>/g,
+    )) {
+      cmsNextImageSources.push({
+        file: relativeFile,
+        value: match[1].trim(),
+        governed: /\.assetUrl!?\s*$/.test(match[1].trim()),
+      });
+    }
   }
 
-  return { nextImageComponentCount, nextImageSources, staticImageImports };
+  return {
+    nextImageComponentCount,
+    nextImageSources,
+    staticImageImports,
+    cmsNextImageSources,
+  };
 }
 
 function main() {
@@ -209,8 +227,12 @@ function main() {
   const builtBlockedHostMatches = collectTextMatches(builtFiles, [blockedHostPattern]);
   const unexpectedPublicImages = publicImages.filter((file) => !allowedPublicImageFiles.has(file));
   const missingAllowedPublicImages = [...allowedPublicImageFiles].filter((file) => !publicImages.includes(file));
-  const { nextImageComponentCount, nextImageSources, staticImageImports } =
-    collectLocalImageUsage(sourceFiles);
+  const {
+    nextImageComponentCount,
+    nextImageSources,
+    staticImageImports,
+    cmsNextImageSources,
+  } = collectLocalImageUsage(sourceFiles);
   const invalidNextImageSources = nextImageSources.filter(({ value }) => {
     if (!value.startsWith("/")) {
       return true;
@@ -218,12 +240,36 @@ function main() {
     const publicPath = value.slice(1).split(/[?#]/, 1)[0];
     return !allowedPublicImageFiles.has(publicPath) || !publicImages.includes(publicPath);
   });
-  const unresolvedNextImageComponents = nextImageComponentCount - nextImageSources.length;
+  const governedCmsImageSources = cmsNextImageSources.filter(({ governed }) => governed);
+  const ungovernedCmsImageSources = cmsNextImageSources.filter(({ governed }) => !governed);
+  const unresolvedNextImageComponents =
+    nextImageComponentCount - nextImageSources.length - cmsNextImageSources.length;
 
   const hasImagesConfig = /\bimages\s*:/.test(nextConfigText);
   const hasRemotePatterns = /\bremotePatterns\s*:/.test(nextConfigText);
   const hasDomains = /\bdomains\s*:/.test(nextConfigText);
   const hasCustomLoader = /\bloader\s*:|\bloaderFile\s*:/.test(nextConfigText);
+
+  // 9083-CODE P2.1 (owner directive, 2026-07-10) + AUTH-1 asset records:
+  // exactly one remote image scope is approved — the project's own Sanity CDN
+  // path. Anything broader (other hosts, wildcards, domains, loaders) fails.
+  const APPROVED_REMOTE_IMAGE_HOSTNAME = "cdn.sanity.io";
+  const APPROVED_REMOTE_IMAGE_PATHNAME = "/images/4bl3xvem/production/**";
+  const configHostnames = [...nextConfigText.matchAll(/hostname:\s*"([^"]+)"/g)].map(
+    (match) => match[1],
+  );
+  const configPathnames = [...nextConfigText.matchAll(/pathname:\s*"([^"]+)"/g)].map(
+    (match) => match[1],
+  );
+  const remotePatternsApprovedScopeOnly =
+    hasRemotePatterns &&
+    configHostnames.length === 1 &&
+    configHostnames[0] === APPROVED_REMOTE_IMAGE_HOSTNAME &&
+    configPathnames.length === 1 &&
+    configPathnames[0] === APPROVED_REMOTE_IMAGE_PATHNAME &&
+    /protocol:\s*"https"/.test(nextConfigText);
+  const remoteImageScopeSafe = !hasRemotePatterns || remotePatternsApprovedScopeOnly;
+  const imagesConfigSafe = !hasImagesConfig || remotePatternsApprovedScopeOnly;
 
   const checks = [
     addCheck(rows, "nextConfig.exists", existsSync(nextConfigPath), nextConfigPath),
@@ -236,8 +282,8 @@ function main() {
     addCheck(
       rows,
       "nextImage.remotePatternsDeferred",
-      !hasRemotePatterns,
-      "No next/image remotePatterns are configured until approved asset host and path rules exist",
+      remoteImageScopeSafe,
+      "next/image remotePatterns are absent or scoped exactly to the approved Presidential Sanity CDN path (9083-CODE P2.1, AUTH-1 asset records)",
     ),
     addCheck(
       rows,
@@ -254,8 +300,8 @@ function main() {
     addCheck(
       rows,
       "nextImage.noImageConfigWithoutApproval",
-      !hasImagesConfig,
-      "No image optimization host config exists before asset host approval",
+      imagesConfigSafe,
+      "Image optimization config is absent or limited to the approved Sanity CDN scope backed by uploaded, owner-approved asset records",
     ),
     addCheck(
       rows,
@@ -297,13 +343,14 @@ function main() {
       rows,
       "source.nextImageLocalAssetBoundary",
       sourceRemoteImageUrls.length === 0 &&
-        !hasRemotePatterns &&
+        remoteImageScopeSafe &&
         !hasDomains &&
         !hasCustomLoader &&
         staticImageImports.length === 0 &&
         invalidNextImageSources.length === 0 &&
+        ungovernedCmsImageSources.length === 0 &&
         unresolvedNextImageComponents === 0,
-      `${nextImageImportCount} next/image import(s), ${nextImageComponentCount} component use(s), ${nextImageSources.length} approved local literal source(s), ${invalidNextImageSources.length} invalid source(s), ${unresolvedNextImageComponents} unresolved component source(s)`,
+      `${nextImageImportCount} next/image import(s), ${nextImageComponentCount} component use(s), ${nextImageSources.length} approved local literal source(s), ${governedCmsImageSources.length} governed CMS assetUrl source(s), ${invalidNextImageSources.length} invalid source(s), ${ungovernedCmsImageSources.length} ungoverned dynamic source(s), ${unresolvedNextImageComponents} unresolved component source(s)`,
     ),
     addCheck(
       rows,
