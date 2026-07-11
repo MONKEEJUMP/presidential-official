@@ -28,6 +28,17 @@ const cmsModuleCoverage = read("scripts/presidential-cms-module-renderer-coverag
 const routeEvidenceTracker = read("scripts/presidential-route-evidence-tracker-qa.mjs");
 const scripts = packageJson.scripts ?? {};
 const checks = [];
+const requiredLockedSeoAuditAssertions = [
+  "document-title",
+  "meta-description",
+  "http-status-code",
+  "link-text",
+  "crawlable-anchors",
+  "robots-txt",
+  "image-alt",
+  "hreflang",
+  "canonical",
+];
 
 addCheck(
   checks,
@@ -114,8 +125,11 @@ addCheck(
   lighthouse.includes('"categories:performance": ["warn"') &&
     lighthouse.includes('"categories:accessibility": ["error"') &&
     lighthouse.includes('"categories:best-practices": ["error"') &&
-    lighthouse.includes('"categories:seo": ["error"'),
-  "Accessibility, best-practices, and SEO are required while performance stays non-flaky warning-only.",
+    lighthouse.includes('"categories:seo": ["warn"') &&
+    requiredLockedSeoAuditAssertions.every((auditId) =>
+      lighthouse.includes(`"${auditId}": ["error"`),
+    ),
+  "Accessibility and best-practices remain required; every crawl-independent SEO audit is required while aggregate SEO accounts for the intentional prelaunch noindex lock.",
 );
 addCheck(
   checks,
