@@ -55,6 +55,14 @@ const allowedPublicImageFiles = new Set([
   "brand/presidential-logo.webp",
   "favicon.ico",
   "favicon.png",
+  // 9083-CODE P2.4 (owner video ruling, 2026-07-11): poster frames for the
+  // six owner product films (AUTH-1 rights basis).
+  "media/posters/flavor-blunts.jpg",
+  "media/posters/moon-rocks-film.jpg",
+  "media/posters/nationwide-map.jpg",
+  "media/posters/presidential-hero.jpg",
+  "media/posters/strains-horizontal.jpg",
+  "media/posters/strains-vertical.jpg",
 ]);
 const remoteImageUrlPattern = /https?:\/\/[^\s"'<>)]*\.(?:avif|gif|ico|jpe?g|png|svg|webp)(?:[?#][^\s"'<>)]*)?/gi;
 const cssRemoteUrlPattern = /url\(\s*["']?https?:\/\/[^)"']+["']?\s*\)/gi;

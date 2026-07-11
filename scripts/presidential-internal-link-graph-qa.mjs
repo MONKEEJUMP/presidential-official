@@ -62,6 +62,17 @@ const allowedRenderedHrefs = new Set([
   "/moon-rocks/silver",
   "/moon-rocks/gold",
   "/moon-rocks/rose-gold",
+  // 9083-CODE P4 (owner 8-state ruling, 2026-07-11): themed priority-market
+  // pages under the registered /find-us/[state] template, linked from the
+  // tile-grid map. Still conditional/noindex.
+  "/find-us/az",
+  "/find-us/ca",
+  "/find-us/fl",
+  "/find-us/mi",
+  "/find-us/nv",
+  "/find-us/ny",
+  "/find-us/ok",
+  "/find-us/wa",
 ]);
 const allowedSamePageFragmentHrefs = new Set(["#presidential-main"]);
 const futureOrTemplatePatterns = [

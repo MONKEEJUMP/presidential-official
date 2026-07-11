@@ -39,7 +39,10 @@ const routeOutputs = [
   { label: "orbit", route: "/orbit", htmlPath: "orbit.html", htmlBudgetBytes: 50000, rscPath: "orbit.rsc", rscBudgetBytes: 30000 },
   { label: "ourStory", route: "/our-story", htmlPath: "our-story.html", htmlBudgetBytes: 50000, rscPath: "our-story.rsc", rscBudgetBytes: 25000 },
   { label: "learn", route: "/learn", htmlPath: "learn.html", htmlBudgetBytes: 55000, rscPath: "learn.rsc", rscBudgetBytes: 30000 },
-  { label: "findUs", route: "/find-us", htmlPath: "find-us.html", htmlBudgetBytes: 55000, rscPath: "find-us.rsc", rscBudgetBytes: 30000 },
+  // findUs HTML budget raised 55000 -> 72000 for the owner-ordered US map
+  // centerpiece (9083-CODE P4.1, 2026-07-11: 51-tile grid + state links +
+  // nationwide film); still tight against further growth.
+  { label: "findUs", route: "/find-us", htmlPath: "find-us.html", htmlBudgetBytes: 72000, rscPath: "find-us.rsc", rscBudgetBytes: 30000 },
   { label: "contact", route: "/contact", htmlPath: "contact.html", htmlBudgetBytes: 55000, rscPath: "contact.rsc", rscBudgetBytes: 30000 },
   {
     label: "notFound",
@@ -64,7 +67,10 @@ const budgets = {
   staticJsBytes: 850000,
   largestStaticJsBytes: 325000,
   staticCssBytes: 80000,
-  largestStaticCssBytes: 50000,
+  // largest-CSS budget raised 50000 -> 64000 for the eight themed state
+  // atmospheres, map tiles, and state display faces (9083-CODE P4, owner
+  // rulings 2026-07-11); total-CSS budget unchanged.
+  largestStaticCssBytes: 64000,
   staticFontBytes: 225000,
   staticImageBytes: 75000,
   staticTotalBytes: 1300000,

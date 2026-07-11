@@ -2419,8 +2419,17 @@ function checkStep8HScopeBoundary() {
       .map((path) => readProjectFile(path))
       .join("\n");
     const dynamicLocatorSources = locatorShellFiles.slice(1).map((path) => readProjectFile(path));
+    // 9083-CODE P4 (owner 8-state ruling, 2026-07-11): /find-us/[state]
+    // serves the eight config-driven themed brand pages (PRESIDENTIAL_STATES
+    // is the only params source; no retailer data anywhere). City and
+    // retailer templates still generate zero params and 404.
+    const dynamicLocatorMarkerSets = [
+      ["dynamicParams = false", "generateStaticParams", "PRESIDENTIAL_STATES.map", "notFound()"],
+      ["dynamicParams = false", "generateStaticParams", "return [];", "notFound()"],
+      ["dynamicParams = false", "generateStaticParams", "return [];", "notFound()"],
+    ];
     const missingLocatorShellMarkers = dynamicLocatorSources.flatMap((source, index) =>
-      ["dynamicParams = false", "generateStaticParams", "return [];", "notFound()"]
+      dynamicLocatorMarkerSets[index]
         .filter((marker) => !source.includes(marker))
         .map((marker) => `${locatorShellFiles[index + 1]}:${marker}`),
     );

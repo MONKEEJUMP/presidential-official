@@ -7,6 +7,7 @@ import { PageFrame } from "../layout/page-frame";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { CtaLink } from "../primitives/cta-link";
+import { UsMapShell } from "./us-map-shell";
 
 type SupportBreadcrumb = {
   readonly name: string;
@@ -165,6 +166,34 @@ export function SupportRouteFoundationShell({
             </div>
           </div>
         </Scene>
+
+        {route.kind === "store_locator" ? (
+          <Scene
+            ariaLabelledBy="presidential-find-us-map"
+            className="py-24 lg:py-32"
+            tone="contrast"
+          >
+            <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(0,0.7fr)_minmax(420px,0.8fr)] lg:items-center lg:gap-20">
+              <div>
+                <p className="text-xs font-black uppercase text-po-brand">
+                  Find Presidential near you
+                </p>
+                <h2
+                  className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl"
+                  id="presidential-find-us-map"
+                >
+                  Eight states and growing
+                </h2>
+                <p className="mt-6 max-w-xl text-base leading-7 text-po-on-dark-muted">
+                  Choose a state to step into its Presidential experience.
+                  Licensed retailer listings publish per state once verified
+                  sources are confirmed.
+                </p>
+              </div>
+              <UsMapShell />
+            </div>
+          </Scene>
+        ) : null}
 
         {supportCallout ? (
           <Scene

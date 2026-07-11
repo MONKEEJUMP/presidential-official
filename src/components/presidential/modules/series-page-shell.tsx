@@ -10,9 +10,19 @@ import type { SeoRouteRecord } from "@/lib/seo/route-types";
 import { PageFrame } from "../layout/page-frame";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
+import { SiteVideo, type SiteVideoSlug } from "../media/site-video";
 import { CtaLink } from "../primitives/cta-link";
 import { SeriesCatalogSection, seriesMetaFor } from "./catalog-grid-shell";
 import { FindUsCtaShell } from "./find-us-cta-shell";
+
+// Filename-evidence film placement (9083-CODE video ruling, 2026-07-11):
+// "Blunt-Flavors" -> the flavor-first Silver series page.
+const SERIES_FILMS: Record<string, { slug: SiteVideoSlug; label: string }> = {
+  "Silver Flavor Series": {
+    slug: "flavor-blunts",
+    label: "Presidential flavor blunts film loop",
+  },
+};
 
 type SeriesPageShellProps = {
   readonly route: SeoRouteRecord;
@@ -101,6 +111,30 @@ export async function SeriesPageShell({ route, seriesName }: SeriesPageShellProp
             </div>
           </div>
         </Scene>
+
+        {SERIES_FILMS[seriesName] ? (
+          <Scene
+            ariaLabelledBy="presidential-series-film"
+            className="py-16 lg:py-20"
+            tone="contrast"
+          >
+            <div className="mx-auto w-full max-w-7xl">
+              <p
+                className="text-xs font-black uppercase text-po-brand"
+                id="presidential-series-film"
+              >
+                The film
+              </p>
+              <div className="mt-6 overflow-hidden border border-po-on-dark/20">
+                <SiteVideo
+                  className="aspect-video w-full object-cover"
+                  label={SERIES_FILMS[seriesName].label}
+                  slug={SERIES_FILMS[seriesName].slug}
+                />
+              </div>
+            </div>
+          </Scene>
+        ) : null}
 
         {catalog.items.length > 0 ? (
           <Scene

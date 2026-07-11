@@ -35,6 +35,27 @@ const approvedPublicAssetFiles = new Set([
   "brand/presidential-logo.webp",
   "favicon.ico",
   "favicon.png",
+  // 9083-CODE P2.4 (owner video ruling + ffmpeg authorization, 2026-07-11):
+  // owner product films, web-optimized (muted MP4/WebM + poster) under the
+  // AUTH-1 rights basis; provenance in site-video-summary.json.
+  "media/flavor-blunts.mp4",
+  "media/flavor-blunts.webm",
+  "media/moon-rocks-film.mp4",
+  "media/moon-rocks-film.webm",
+  "media/nationwide-map.mp4",
+  "media/nationwide-map.webm",
+  "media/presidential-hero.mp4",
+  "media/presidential-hero.webm",
+  "media/strains-horizontal.mp4",
+  "media/strains-horizontal.webm",
+  "media/strains-vertical.mp4",
+  "media/strains-vertical.webm",
+  "media/posters/flavor-blunts.jpg",
+  "media/posters/moon-rocks-film.jpg",
+  "media/posters/nationwide-map.jpg",
+  "media/posters/presidential-hero.jpg",
+  "media/posters/strains-horizontal.jpg",
+  "media/posters/strains-vertical.jpg",
 ]);
 const forbiddenStarterAssets = new Set([
   "file.svg",

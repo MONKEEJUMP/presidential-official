@@ -47,6 +47,9 @@ const publicCmsConsumerAllowlist = new Set([
   "src/components/presidential/modules/cms-product-module-components.tsx",
   "src/components/presidential/modules/moon-rocks-platform-shell.tsx",
   "src/components/presidential/modules/series-page-shell.tsx",
+  // 9083-CODE P4.3 (owner rulings, 2026-07-11): themed state pages render
+  // the same gated catalog rail.
+  "src/components/presidential/modules/state-page-shell.tsx",
   "src/components/seo/home-route-shell.tsx",
   "src/components/seo/presidential-route-shell.tsx",
 ]);

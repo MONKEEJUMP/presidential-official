@@ -5,8 +5,10 @@ import type { SeoRouteRecord } from "@/lib/seo/route-types";
 import { PageFrame } from "../layout/page-frame";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
+import { SiteVideo } from "../media/site-video";
 import { CtaLink } from "../primitives/cta-link";
 import { FindUsCtaShell } from "./find-us-cta-shell";
+import { UsMapShell } from "./us-map-shell";
 
 type HomepageFoundationShellProps = {
   readonly route: SeoRouteRecord;
@@ -92,38 +94,80 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
                 </p>
               </div>
 
-              <div className="max-w-5xl">
-                <h1
-                  className="font-display text-4xl uppercase leading-[0.9] text-po-ink sm:text-7xl"
-                  id="presidential-homepage-primary"
-                >
-                  {route.h1}
-                </h1>
-                <p className="mt-5 max-w-2xl text-2xl font-semibold leading-tight text-po-ink sm:text-3xl">
-                  Cannabis deserves better.
-                </p>
-                <p className="mt-5 max-w-2xl text-base leading-7 text-po-brand-ink sm:text-lg sm:leading-8">
-                  A clearer official source for the brand, its product platforms,
-                  the learning path, and licensed retail discovery.
-                </p>
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                  <CtaLink
-                    className="border-po-ink bg-po-ink text-po-on-dark hover:bg-po-canvas hover:text-po-ink"
-                    href="/moon-rocks"
-                    variant="secondary"
+              <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(240px,0.34fr)]">
+                <div className="max-w-5xl">
+                  <h1
+                    className="font-display text-4xl uppercase leading-[0.9] text-po-ink sm:text-7xl"
+                    id="presidential-homepage-primary"
                   >
-                    Enter Moon Rocks
-                  </CtaLink>
-                  <CtaLink
-                    className="border-po-ink/40 text-po-ink hover:border-po-ink hover:text-po-ink"
-                    href="/find-us"
-                    variant="secondary"
-                  >
-                    Find Presidential products
-                  </CtaLink>
+                    {route.h1}
+                  </h1>
+                  <p className="mt-5 max-w-2xl text-2xl font-semibold leading-tight text-po-ink sm:text-3xl">
+                    Cannabis deserves better.
+                  </p>
+                  <p className="mt-5 max-w-2xl text-base leading-7 text-po-brand-ink sm:text-lg sm:leading-8">
+                    A clearer official source for the brand, its product platforms,
+                    the learning path, and licensed retail discovery.
+                  </p>
+                  <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                    <CtaLink
+                      className="border-po-ink bg-po-ink text-po-on-dark hover:bg-po-canvas hover:text-po-ink"
+                      href="/moon-rocks"
+                      variant="secondary"
+                    >
+                      Enter Moon Rocks
+                    </CtaLink>
+                    <CtaLink
+                      className="border-po-ink/40 text-po-ink hover:border-po-ink hover:text-po-ink"
+                      href="/find-us"
+                      variant="secondary"
+                    >
+                      Find Presidential products
+                    </CtaLink>
+                  </div>
+                </div>
+                <div className="hidden overflow-hidden border border-po-ink lg:block">
+                  <SiteVideo
+                    className="aspect-[9/16] w-full object-cover"
+                    label="Presidential brand film loop"
+                    preload="metadata"
+                    slug="presidential-hero"
+                  />
                 </div>
               </div>
             </div>
+          </div>
+        </Scene>
+
+        <Scene
+          ariaLabelledBy="presidential-homepage-map"
+          className="py-24 lg:py-32"
+          tone="contrast"
+        >
+          <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(0,0.7fr)_minmax(420px,0.8fr)] lg:items-center lg:gap-20">
+            <div>
+              <p className="text-xs font-black uppercase text-po-brand">
+                Coast to coast
+              </p>
+              <h2
+                className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl"
+                id="presidential-homepage-map"
+              >
+                Find Presidential near you
+              </h2>
+              <p className="mt-6 max-w-xl text-base leading-7 text-po-on-dark-muted">
+                Eight priority markets, each with its own Presidential
+                experience. Choose a state to step inside.
+              </p>
+              <div className="mt-8 max-w-sm overflow-hidden border border-po-on-dark/20">
+                <SiteVideo
+                  className="aspect-video w-full object-cover"
+                  label="Presidential nationwide film loop"
+                  slug="nationwide-map"
+                />
+              </div>
+            </div>
+            <UsMapShell />
           </div>
         </Scene>
 
@@ -226,13 +270,11 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
                 </CtaLink>
               </div>
             </div>
-            <figure className="relative aspect-[1200/630] overflow-hidden bg-po-brand">
-              <Image
-                alt="Presidential brand mark on a teal field"
-                className="object-cover"
-                fill
-                sizes="(max-width: 1024px) 100vw, 52vw"
-                src="/brand/og-social-share-image.webp"
+            <figure className="relative overflow-hidden border border-po-line bg-po-brand">
+              <SiteVideo
+                className="aspect-[1200/630] w-full object-cover"
+                label="Presidential Moon Rocks film loop"
+                slug="moon-rocks-film"
               />
             </figure>
           </div>

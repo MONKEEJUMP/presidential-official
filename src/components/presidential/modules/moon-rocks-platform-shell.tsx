@@ -10,6 +10,7 @@ import type { SeoRouteRecord } from "@/lib/seo/route-types";
 import { PageFrame } from "../layout/page-frame";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
+import { SiteVideo } from "../media/site-video";
 import { CtaLink } from "../primitives/cta-link";
 import { SeriesSelectorShell } from "./catalog-grid-shell";
 import { FindUsCtaShell } from "./find-us-cta-shell";
@@ -190,6 +191,40 @@ export async function MoonRocksPlatformShell({
             </div>
           </Scene>
         ) : null}
+
+        <Scene
+          ariaLabelledBy="presidential-moon-rocks-packaging"
+          className="py-24 lg:py-32"
+          tone="contrast"
+        >
+          <div className="mx-auto w-full max-w-7xl">
+            <p className="text-xs font-black uppercase text-po-brand">
+              The packaging
+            </p>
+            <h2
+              className="mt-5 max-w-3xl font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl"
+              id="presidential-moon-rocks-packaging"
+            >
+              Built to be seen
+            </h2>
+            <div className="mt-12 grid gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,0.6fr)]">
+              <div className="overflow-hidden border border-po-on-dark/20">
+                <SiteVideo
+                  className="aspect-video h-full w-full object-cover"
+                  label="Presidential strain packaging film, widescreen loop"
+                  slug="strains-horizontal"
+                />
+              </div>
+              <div className="overflow-hidden border border-po-on-dark/20">
+                <SiteVideo
+                  className="aspect-[9/16] h-full w-full object-cover"
+                  label="Presidential strain packaging film, portrait loop"
+                  slug="strains-vertical"
+                />
+              </div>
+            </div>
+          </div>
+        </Scene>
 
         <Scene
           ariaLabelledBy="presidential-moon-rocks-lanes"

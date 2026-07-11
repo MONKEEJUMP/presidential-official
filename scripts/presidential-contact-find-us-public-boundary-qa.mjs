@@ -107,11 +107,19 @@ const dynamicLocatorFilesMatch =
 const dynamicLocatorSource = expectedDynamicLocatorFiles
   .map((file) => read(path.join(findUsAppRoot, ...file.split("/"))))
   .join("\n");
+// 9083-CODE P4 (owner 8-state ruling, 2026-07-11): /find-us/[state] serves
+// the eight config-driven themed brand pages — params come only from
+// PRESIDENTIAL_STATES and unknown states still 404. No retailer data reads
+// exist anywhere in the lane. City and retailer templates stay empty + 404.
 const dynamicLocatorStrictlyDisabled = expectedDynamicLocatorFiles.every((file) => {
   const source = read(path.join(findUsAppRoot, ...file.split("/")));
+  const paramsRule =
+    file === "[state]/page.tsx"
+      ? source.includes("PRESIDENTIAL_STATES.map")
+      : /generateStaticParams\s*\(\)\s*{\s*return\s*\[\s*\]/.test(source);
   return (
     source.includes("export const dynamicParams = false") &&
-    /generateStaticParams\s*\(\)\s*{\s*return\s*\[\s*\]/.test(source) &&
+    paramsRule &&
     source.includes("notFound()")
   );
 });

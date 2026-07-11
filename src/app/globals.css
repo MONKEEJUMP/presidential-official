@@ -111,6 +111,51 @@ summary {
   color: var(--po-color-ink);
 }
 
+/* Tile-grid US map (9083-CODE P4.1) — shared classes keep 51 tiles from
+   repeating long utility strings in every page's HTML. */
+.po-map-tile {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--po-color-on-dark) 15%, transparent);
+  color: color-mix(in srgb, var(--po-color-on-dark) 30%, transparent);
+  font-size: 0.625rem;
+  font-weight: 600;
+}
+
+.po-map-tile-active {
+  border-color: var(--po-color-brand);
+  background: color-mix(in srgb, var(--po-color-brand) 20%, transparent);
+  color: var(--po-color-brand);
+  font-size: 0.75rem;
+  font-weight: 900;
+  box-shadow: 0 0 14px rgba(56, 222, 203, 0.45);
+  transition: transform 200ms ease, background-color 200ms ease, color 200ms ease;
+}
+
+.po-map-tile-active:hover {
+  transform: translateY(-2px);
+  background: var(--po-color-brand);
+  color: var(--po-color-ink);
+}
+
+.po-map-tile-active:focus-visible {
+  outline: 2px solid var(--po-color-brand);
+  outline-offset: 2px;
+}
+
+@media (min-width: 40rem) {
+  .po-map-tile {
+    font-size: 0.75rem;
+  }
+
+  .po-map-tile-active {
+    font-size: 0.875rem;
+  }
+}
+
 .po-footer-nav-item {
   border-bottom: 1px solid color-mix(in srgb, var(--po-color-on-dark) 20%, transparent);
 }

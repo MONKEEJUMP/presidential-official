@@ -1,6 +1,8 @@
-// Presidential priority-market map config — 9083-CODE P4 (owner input,
-// 2026-07-11): the client-approved Scope of Work names eight priority markets.
-// PAULIEWOOD adds or removes a market by editing exactly one line below.
+// Presidential priority-market map config — 9083-CODE P4 (owner rulings,
+// 2026-07-11): the client-approved Scope of Work names eight priority markets,
+// each with a locked theme world and a themed state-name display face
+// (state-name headline ONLY; everything else stays Archivo Black + Inter).
+// PAULIEWOOD adds or removes a market by editing exactly one entry below.
 // Retailer data stays OFF everywhere: state pages are brand/theme experiences
 // until a verified retailer source exists (customer PII is never public).
 
@@ -20,17 +22,91 @@ export type PresidentialState = {
   readonly name: string;
   readonly theme: PresidentialStateTheme;
   readonly tagline: string;
+  readonly world: string;
+  readonly seoLine: string;
 };
 
 export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
-  { code: "AZ", slug: "az", name: "Arizona", theme: "desert-canyon", tagline: "Desert sun. Canyon calm." },
-  { code: "CA", slug: "ca", name: "California", theme: "golden-coast", tagline: "Golden coast. Where Presidential began." },
-  { code: "FL", slug: "fl", name: "Florida", theme: "neon-palms", tagline: "Palms and neon. Miami energy." },
-  { code: "MI", slug: "mi", name: "Michigan", theme: "great-lakes", tagline: "Great Lakes summers." },
-  { code: "NV", slug: "nv", name: "Nevada", theme: "neon-nights", tagline: "Desert nights that never dim." },
-  { code: "NY", slug: "ny", name: "New York", theme: "empire-skyline", tagline: "Empire state of mind." },
-  { code: "OK", slug: "ok", name: "Oklahoma", theme: "wild-west", tagline: "Wide open. Wild West." },
-  { code: "WA", slug: "wa", name: "Washington", theme: "evergreen", tagline: "Evergreen Pacific Northwest." },
+  {
+    code: "AZ",
+    slug: "az",
+    name: "Arizona",
+    theme: "desert-canyon",
+    tagline: "Desert sunsets. Cactus silhouettes. Canyon calm.",
+    world: "Sonoran desert at dusk — saguaro, sandstone, and a sky on fire.",
+    seoLine:
+      "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Arizona — through licensed retailers, adults 21+.",
+  },
+  {
+    code: "CA",
+    slug: "ca",
+    name: "California",
+    theme: "golden-coast",
+    tagline: "Surf, beaches, mountains — the golden coast where Presidential began.",
+    world: "Pacific surf, golden-hour beaches, and mountain ridgelines.",
+    seoLine:
+      "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in California — the brand's home state, through licensed retailers, adults 21+.",
+  },
+  {
+    code: "FL",
+    slug: "fl",
+    name: "Florida",
+    theme: "neon-palms",
+    tagline: "Miami nights. Neon palms. Deco heat.",
+    world: "Miami after dark — neon reflections, palms, and art-deco lines.",
+    seoLine:
+      "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Florida — through licensed retailers, adults 21+.",
+  },
+  {
+    code: "MI",
+    slug: "mi",
+    name: "Michigan",
+    theme: "great-lakes",
+    tagline: "Great Lakes summers. Jet-ski wake. Water life.",
+    world: "Lake horizons, summer docks, and spray off the wake.",
+    seoLine:
+      "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Michigan — through licensed retailers, adults 21+.",
+  },
+  {
+    code: "NV",
+    slug: "nv",
+    name: "Nevada",
+    theme: "neon-nights",
+    tagline: "Las Vegas marquees. Neon that never sleeps.",
+    world: "The Strip at midnight — marquee glow against desert black.",
+    seoLine:
+      "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Nevada — through licensed retailers, adults 21+.",
+  },
+  {
+    code: "NY",
+    slug: "ny",
+    name: "New York",
+    theme: "empire-skyline",
+    tagline: "NYC skyline. City energy. Empire state of mind.",
+    world: "Manhattan at night — skyline grids and avenue light.",
+    seoLine:
+      "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in New York — through licensed retailers, adults 21+.",
+  },
+  {
+    code: "OK",
+    slug: "ok",
+    name: "Oklahoma",
+    theme: "wild-west",
+    tagline: "Cowboy country. Wide-open Wild West.",
+    world: "Red-dirt plains, big skies, and frontier grit.",
+    seoLine:
+      "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Oklahoma — through licensed retailers, adults 21+.",
+  },
+  {
+    code: "WA",
+    slug: "wa",
+    name: "Washington",
+    theme: "evergreen",
+    tagline: "Giant evergreens. Deep-green forest quiet.",
+    world: "Old-growth evergreens in coastal mist — deep green on deeper green.",
+    seoLine:
+      "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Washington — through licensed retailers, adults 21+.",
+  },
 ] as const;
 
 export function isPresidentialStateSlug(value: string): boolean {
