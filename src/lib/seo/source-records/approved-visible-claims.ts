@@ -1,6 +1,6 @@
 export type ApprovedVisibleClaimPlacement = {
   readonly route: "/" | "/moon-rocks";
-  readonly element: "h2" | "p" | "span";
+  readonly element: "h1" | "h2" | "p" | "span";
   readonly elementId?: string;
   readonly ancestorId?: string;
 };
@@ -66,13 +66,19 @@ export const APPROVED_VISIBLE_CLAIMS: ApprovedVisibleClaimsRegistry = {
       claim: "The Highest Form Of Cannabis.",
       claimRecordId: "drafts.claimRecord.blueprint-mark-highest-form-of-cannabis",
       claimReviewDecisionId: "drafts.claimReviewDecision.blueprint-mark-highest-form-of-cannabis",
-      blueprintPlacement: "ACT 4 + /moon-rocks positioning",
+      blueprintPlacement:
+        "ACT 4 + /moon-rocks positioning + 4187-CODE Bentolio hero slogan tile (owner template order, 2026-07-11)",
       scope: "visible_copy_only",
       placements: [
         {
           route: "/",
           element: "h2",
           elementId: "presidential-act-moon-rocks",
+        },
+        {
+          route: "/",
+          element: "h1",
+          elementId: "presidential-homepage-primary",
         },
         {
           route: "/moon-rocks",

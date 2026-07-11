@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 import { PageFrame } from "../layout/page-frame";
@@ -7,6 +5,7 @@ import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { SiteVideo } from "../media/site-video";
 import { CtaLink } from "../primitives/cta-link";
+import { BentolioHeroShell } from "./bentolio-hero-shell";
 import { FindUsCtaShell } from "./find-us-cta-shell";
 import { UsMapShell } from "./us-map-shell";
 
@@ -69,65 +68,9 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
   return (
     <PageFrame>
       <SceneStack>
-        <Scene
-          ariaLabelledBy="presidential-homepage-primary"
-          className="min-h-[calc(100svh-7rem)] overflow-hidden !px-0 !py-0"
-        >
-          <div className="relative flex min-h-[calc(100svh-7rem)] bg-po-brand text-po-ink">
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 bg-[url('/brand/banner-palms-teal.webp')] bg-[length:auto_200%] bg-left bg-no-repeat opacity-45"
-            />
-            <div className="relative mx-auto flex w-full max-w-7xl flex-col justify-between gap-8 px-6 py-6 sm:px-10 lg:px-16 lg:py-8">
-              <div className="flex items-start justify-between gap-6">
-                <Image
-                  alt="Presidential"
-                  className="h-auto w-32 sm:w-40"
-                  height={929}
-                  priority
-                  sizes="(max-width: 640px) 8rem, 10rem"
-                  src="/brand/presidential-logo.webp"
-                  width={1200}
-                />
-                <p className="max-w-32 border-t border-po-ink pt-3 text-right text-xs font-bold uppercase leading-5 sm:max-w-none">
-                  Adults 21+ where legal
-                </p>
-              </div>
-
-              <div className="max-w-5xl">
-                <h1
-                  className="font-display text-4xl uppercase leading-[0.9] text-po-ink sm:text-7xl"
-                  id="presidential-homepage-primary"
-                >
-                  {route.h1}
-                </h1>
-                <p className="mt-5 max-w-2xl text-2xl font-semibold leading-tight text-po-ink sm:text-3xl">
-                  Cannabis deserves better.
-                </p>
-                <p className="mt-5 max-w-2xl text-base leading-7 text-po-brand-ink sm:text-lg sm:leading-8">
-                  A clearer official source for the brand, its product platforms,
-                  the learning path, and licensed retail discovery.
-                </p>
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                  <CtaLink
-                    className="border-po-ink bg-po-ink text-po-on-dark hover:bg-po-canvas hover:text-po-ink"
-                    href="/moon-rocks"
-                    variant="secondary"
-                  >
-                    Enter Moon Rocks
-                  </CtaLink>
-                  <CtaLink
-                    className="border-po-ink/40 text-po-ink hover:border-po-ink hover:text-po-ink"
-                    href="/find-us"
-                    variant="secondary"
-                  >
-                    Find Presidential products
-                  </CtaLink>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Scene>
+        {/* 4187-CODE (owner template order, 2026-07-11): Bentolio bento
+            hero supersedes the prior homepage hero. Map section below stays. */}
+        <BentolioHeroShell route={route} />
 
         <Scene
           ariaLabelledBy="presidential-homepage-map"

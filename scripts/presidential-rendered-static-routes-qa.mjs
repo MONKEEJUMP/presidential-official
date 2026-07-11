@@ -377,6 +377,15 @@ function checkPublicSeoUrls(check, text, { allowSchemaContext = false } = {}) {
         return false;
       }
 
+      // 4187-CODE (owner template order, 2026-07-11): the Bentolio hero
+      // renders governed CMS product imagery, so next/image emits this
+      // project's approval-gated Sanity CDN image URLs. Scoped to the
+      // exact project image path already approved in the Step 10I
+      // remotePatterns; every other origin stays blocked.
+      if (url.startsWith("https://cdn.sanity.io/images/4bl3xvem/")) {
+        return false;
+      }
+
       return parsed.origin !== productionOrigin;
     } catch {
       return true;
@@ -487,7 +496,9 @@ function checkRouteHtml(route, runtimeHtmlByPath) {
   if (route.path === "/") {
     if (
       routeHtml.includes("Official Presidential Cannabis") &&
-      routeHtml.includes("Cannabis deserves better.") &&
+      // 4187-CODE (owner template order, 2026-07-11): the Bentolio hero
+      // replaced "Cannabis deserves better." with the about-tile line.
+      routeHtml.includes("official home of Moon Rocks") &&
       routeHtml.includes("The Highest Form Of Cannabis.") &&
       routeHtml.includes("Find Presidential products.")
     ) {

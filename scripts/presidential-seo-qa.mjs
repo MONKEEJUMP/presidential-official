@@ -43,6 +43,9 @@ function relativePath(path) {
 
 const APPROVED_VISIBLE_CLAIM_SOURCE_ROUTES = new Map([
   ["src/components/presidential/modules/homepage-foundation-shell.tsx", "/"],
+  // 4187-CODE (owner template order, 2026-07-11): the Bentolio hero renders
+  // the homepage's approved visible mark in its slogan tile.
+  ["src/components/presidential/modules/bentolio-hero-shell.tsx", "/"],
   ["src/components/presidential/modules/moon-rocks-platform-shell.tsx", "/moon-rocks"],
 ]);
 
@@ -2973,6 +2976,9 @@ function checkStep9GRouteShellVisualFoundation() {
   const requiredFiles = [
     "src/components/presidential/modules/find-us-cta-shell.tsx",
     "src/components/presidential/modules/homepage-foundation-shell.tsx",
+    // 4187-CODE (owner template order, 2026-07-11): the Bentolio hero module
+    // is part of the homepage route-shell visual foundation.
+    "src/components/presidential/modules/bentolio-hero-shell.tsx",
     "src/components/presidential/modules/moon-rocks-platform-shell.tsx",
     "src/components/presidential/modules/pillar-platform-shell.tsx",
     "src/components/presidential/modules/index.ts",
@@ -3038,9 +3044,11 @@ function checkStep9GRouteShellVisualFoundation() {
     "MoonRocksPlatformShell",
     "PillarPlatformShell",
     "FindUsCtaShell",
-    "A clearer official source for the brand",
+    // 4187-CODE (owner template order, 2026-07-11): the Bentolio hero and
+    // its copy pass replaced the prior hero's pinned strings.
+    "One first-party home for Presidential",
     "Find Presidential products.",
-    "Enter Moon Rocks",
+    "official home of Moon Rocks",
   ];
   const missingSignals = requiredSignals.filter(
     (signal) => !combinedText.includes(signal),

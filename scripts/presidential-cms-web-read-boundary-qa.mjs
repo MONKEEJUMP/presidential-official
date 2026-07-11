@@ -50,6 +50,9 @@ const publicCmsConsumerAllowlist = new Set([
   // 9083-CODE P4.3 (owner rulings, 2026-07-11): themed state pages render
   // the same gated catalog rail.
   "src/components/presidential/modules/state-page-shell.tsx",
+  // 4187-CODE (owner template order #1, 2026-07-11): the Bentolio hero's
+  // catalog tile reads the same gated product imagery.
+  "src/components/presidential/modules/bentolio-hero-shell.tsx",
   "src/components/seo/home-route-shell.tsx",
   "src/components/seo/presidential-route-shell.tsx",
 ]);

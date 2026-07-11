@@ -75,8 +75,11 @@ const publicDenyMarkers = [
 ];
 const fallbackExpectations = [
   {
+    // 4187-CODE (owner template order #1, 2026-07-11): the Bentolio hero
+    // replaced the prior hero's "Enter Moon Rocks" CTA; pin the hero's
+    // static Find Presidential tile line instead.
     path: "/",
-    markers: ["Official Presidential Cannabis", "Enter Moon Rocks"],
+    markers: ["Official Presidential Cannabis", "official home of Moon Rocks"],
   },
   {
     path: "/moon-rocks",
