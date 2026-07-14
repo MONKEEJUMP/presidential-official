@@ -43,26 +43,30 @@ const textExtensions = new Set([
 const imageExtensions = /\.(?:avif|gif|ico|jpe?g|png|svg|webp)(?:[?#][^\s"'<>)]*)?$/i;
 const allowedPublicImageFiles = new Set([
   "apple-touch-icon.png",
-  "brand/banner-about-us-contact-header.avif",
   "brand/banner-about-us-contact-header.webp",
-  "brand/banner-palms-teal.avif",
   "brand/banner-palms-teal.webp",
   "brand/og-social-share-image.avif",
   "brand/og-social-share-image.png",
   "brand/og-social-share-image.webp",
-  "brand/presidential-logo.avif",
-  "brand/presidential-logo.png",
   "brand/presidential-logo.webp",
   "favicon.ico",
   "favicon.png",
-  // 9083-CODE P2.4 (owner video ruling, 2026-07-11): poster frames for the
-  // six owner product films (AUTH-1 rights basis).
+  "media/brand/presidential-banner.png",
+  "media/gems/presidential-p.png",
+  "media/posters/crest-spinning.jpg",
   "media/posters/flavor-blunts.jpg",
   "media/posters/moon-rocks-film.jpg",
   "media/posters/nationwide-map.jpg",
-  "media/posters/presidential-hero.jpg",
   "media/posters/strains-horizontal.jpg",
   "media/posters/strains-vertical.jpg",
+  "media/states/az-hero.webp",
+  "media/states/ca-hero.webp",
+  "media/states/fl-hero.webp",
+  "media/states/mi-hero.webp",
+  "media/states/nv-hero.webp",
+  "media/states/ny-hero.webp",
+  "media/states/ok-hero.webp",
+  "media/states/wa-hero.webp",
 ]);
 const remoteImageUrlPattern = /https?:\/\/[^\s"'<>)]*\.(?:avif|gif|ico|jpe?g|png|svg|webp)(?:[?#][^\s"'<>)]*)?/gi;
 const cssRemoteUrlPattern = /url\(\s*["']?https?:\/\/[^)"']+["']?\s*\)/gi;
@@ -189,23 +193,30 @@ function collectLocalImageUsage(files) {
       continue;
     }
 
-    nextImageComponentCount += (text.match(/<Image\b/g) ?? []).length;
-    for (const match of text.matchAll(
-      /<Image\b[\s\S]*?\bsrc\s*=\s*["']([^"']+)["'][\s\S]*?>/g,
-    )) {
-      nextImageSources.push({ file: relativeFile, value: match[1] });
-    }
-    // 9083-CODE P2 (owner directive, 2026-07-10): CMS-fed imagery renders
-    // through gated assetRecord reads. Dynamic src is allowed ONLY for
-    // `.assetUrl` expressions coming from those approval-gated projections.
-    for (const match of text.matchAll(
-      /<Image\b[\s\S]*?\bsrc\s*=\s*\{([^}]+)\}[\s\S]*?>/g,
-    )) {
-      cmsNextImageSources.push({
-        file: relativeFile,
-        value: match[1].trim(),
-        governed: /\.assetUrl!?\s*$/.test(match[1].trim()),
-      });
+    const imageTags = text.match(/<Image\b[\s\S]*?\/?>/g) ?? [];
+    nextImageComponentCount += imageTags.length;
+    // Dynamic image sources are limited to approval-gated CMS asset URLs or
+    // the audited local poster/state/media manifests below.
+    for (const imageTag of imageTags) {
+      const literalSource = imageTag.match(/\bsrc\s*=\s*["']([^"']+)["']/);
+      if (literalSource) {
+        nextImageSources.push({ file: relativeFile, value: literalSource[1] });
+        continue;
+      }
+
+      const dynamicSource = imageTag.match(/\bsrc\s*=\s*\{([^}]+)\}/);
+      if (dynamicSource) {
+        const expression = dynamicSource[1].trim();
+        cmsNextImageSources.push({
+          file: relativeFile,
+          value: expression,
+          governed:
+            /\.assetUrl!?\s*$/.test(expression) ||
+            /^(?:CREST_SPINNING_POSTER|NATIONWIDE_MAP_POSTER|backgroundImagePath|heroImage\.src|activePreview\.product\.imageUrl)$/.test(
+              expression,
+            ),
+        });
+      }
     }
   }
 
@@ -412,6 +423,8 @@ function main() {
     nextImageComponentCount,
     nextImageSources,
     invalidNextImageSources,
+    governedDynamicImageSources: governedCmsImageSources,
+    ungovernedDynamicImageSources: ungovernedCmsImageSources,
     unresolvedNextImageComponents,
     staticImageImports,
     sourceRemoteImageUrls,
@@ -431,7 +444,7 @@ function main() {
     indexabilityUnlocked: false,
     deploymentApproved: false,
     guardrail:
-      "Step 10I is remote image/source host readiness only. It allows only the checked-in local brand asset derivatives in public/brand plus favicon icons, while keeping remote image hosts, next/image config, social images, schema images, and image sitemap behavior blocked until asset source/proof/approval records exist.",
+      "Step 10I is remote image/source host readiness only. It allows only the audited local public image inventory, while keeping remote image hosts, next/image config, social images, schema images, and image sitemap behavior blocked until asset source/proof/approval records exist.",
   };
 
   mkdirSync(workRoot, { recursive: true });

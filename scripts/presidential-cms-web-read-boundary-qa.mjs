@@ -19,6 +19,7 @@ const draftLearnGuideClientPath = path.join(cmsRoot, "learn-guide-drafts.ts");
 // the same split — public reader in catalog.ts, token-scoped draft reader in
 // catalog-drafts.ts.
 const draftCatalogClientPath = path.join(cmsRoot, "catalog-drafts.ts");
+const catalogClientPath = path.join(cmsRoot, "catalog.ts");
 const draftRouteAccessPath = path.join(cmsRoot, "draft-route-access.ts");
 const indexPath = path.join(cmsRoot, "index.ts");
 const packageJsonPath = path.join(webRoot, "package.json");
@@ -60,6 +61,14 @@ const privateDraftsRoutePath = path.join(webRoot, "src", "app", "drafts", "page.
 const privateDraftSitePageRoutePath = path.join(webRoot, "src", "app", "drafts", "[slug]", "page.tsx");
 const learnGuideRoutePath = path.join(webRoot, "src", "app", "learn", "[guide]", "page.tsx");
 const learnGuideBodyRendererPath = path.join(webRoot, "src", "app", "learn", "[guide]", "learn-guide-cms-body.tsx");
+const catalogDetailRoutePath = path.join(
+  webRoot,
+  "src",
+  "app",
+  "moon-rocks",
+  "[product-or-strain]",
+  "page.tsx",
+);
 const productMediaWorklistPath = path.join(webRoot, "src", "app", "drafts", "product-media-worklist.ts");
 const contactLocatorReadinessPath = path.join(webRoot, "src", "app", "drafts", "contact-locator-readiness.ts");
 const cmsModuleRendererPath = path.join(
@@ -171,6 +180,7 @@ function collectMatches(files, pattern) {
 }
 
 function main() {
+  const checkOnly = process.argv.includes("--check-only");
   const clientSource = readIfExists(clientPath);
   const indexSource = readIfExists(indexPath);
   const packageJson = readIfExists(packageJsonPath);
@@ -205,6 +215,7 @@ function main() {
   const privateDraftSitePageRouteSource = readIfExists(privateDraftSitePageRoutePath);
   const learnGuideRouteSource = readIfExists(learnGuideRoutePath);
   const learnGuideBodyRendererSource = readIfExists(learnGuideBodyRendererPath);
+  const catalogDetailRouteSource = readIfExists(catalogDetailRoutePath);
   const productMediaWorklistSource = readIfExists(productMediaWorklistPath);
   const contactLocatorReadinessSource = readIfExists(contactLocatorReadinessPath);
   const cmsModuleRendererSource = readIfExists(cmsModuleRendererPath);
@@ -214,6 +225,8 @@ function main() {
   const draftHomepageClientSource = readIfExists(draftHomepageClientPath);
   const draftSitePageClientSource = readIfExists(draftSitePageClientPath);
   const draftLearnGuideClientSource = readIfExists(draftLearnGuideClientPath);
+  const draftCatalogClientSource = readIfExists(draftCatalogClientPath);
+  const catalogClientSource = readIfExists(catalogClientPath);
   const homepageClientSource = readIfExists(path.join(cmsRoot, "homepage.ts"));
   const sitePageClientSource = readIfExists(path.join(cmsRoot, "site-page.ts"));
   const learnGuideClientSource = readIfExists(path.join(cmsRoot, "learn-guide.ts"));
@@ -244,6 +257,23 @@ function main() {
       [draftHomepageClientSource, draftSitePageClientSource, draftLearnGuideClientSource].every((source) => /fetchSanityJsonWithTimeout/.test(source)),
     "published and draft Sanity reads share a bounded timeout that forwards caller cancellation",
   );
+  addCheck(
+    "client.readTransportFailsClosed",
+    /failure:\s*SanityJsonFetchFailure\s*\|\s*null/.test(clientSource) &&
+      /boundedSignal\.didTimeout\(\)/.test(clientSource) &&
+      /boundedSignal\.signal\.aborted/.test(clientSource) &&
+      /"network"/.test(clientSource) &&
+      /"invalid_json"/.test(clientSource) &&
+      /isSanityResultPayload/.test(clientSource) &&
+      /!response\.ok\s*\|\|\s*!payload/.test(clientSource),
+    "shared read transport closes timeout, abort, network, invalid JSON, and invalid result payload failures",
+  );
+  addCheck(
+    "client.publishedReadsCacheable",
+    /readPublishedSanity[\s\S]*cache:\s*["']force-cache["']/.test(clientSource) &&
+      !/readPublishedSanity[\s\S]*cache:\s*["']no-store["']/.test(clientSource),
+    "published Sanity reads may use cache tags and revalidation instead of being forced no-store",
+  );
   addCheck("client.noDraftQueries", /drafts\\\./.test(clientSource) && /draft documents/.test(clientSource), "draft query guard exists");
   addCheck("client.noUnexpectedSecretSurface", unexpectedCmsSecretMatches.length === 0, unexpectedCmsSecretMatches.join(" | ") || "secret/auth references are isolated to the private draft reader");
   addCheck(
@@ -272,6 +302,24 @@ function main() {
       /draft_slug_not_allowed/.test(draftLearnGuideClientSource) &&
       /perspective["'],\s*["']raw["']/.test(draftLearnGuideClientSource),
     "private draft learnGuide reader requires explicit env gate, token, raw perspective, and fixed Learn slug allowlist",
+  );
+  addCheck(
+    "client.catalogDraftReaderDevelopmentOnly",
+    /process\.env\.NODE_ENV\s*===\s*["']development["']/.test(draftCatalogClientSource) &&
+      /PRESIDENTIAL_SANITY_DRAFT_READ_ENABLED/.test(draftCatalogClientSource) &&
+      /SANITY_AUTH_TOKEN/.test(draftCatalogClientSource) &&
+      /Authorization:\s*`Bearer \$\{token\}`/.test(draftCatalogClientSource) &&
+      /cache:\s*["']no-store["']/.test(draftCatalogClientSource) &&
+      /readDraftCatalogItems/.test(catalogClientSource),
+    "catalog drafts require development mode, the explicit read flag, and a token, and remain no-store",
+  );
+  addCheck(
+    "client.catalogDraftReaderBurstCoalesced",
+      /DRAFT_CATALOG_CACHE_TTL_MS\s*=\s*10_000/.test(catalogClientSource) &&
+      /draftCatalogReadCache\s*=\s*new Map/.test(catalogClientSource) &&
+      /cached\.expiresAt\s*>\s*now/.test(catalogClientSource) &&
+      /draftCatalogReadCache\.set\(route,\s*\{\s*expiresAt:\s*0,\s*promise\s*\}\)/.test(catalogClientSource),
+    "development-only draft catalog bursts share one short-lived read and failures are never reused",
   );
   addCheck("client.noMutationSurface", cmsMutationMatches.length === 0, cmsMutationMatches.join(" | ") || "no mutation/write/live API references");
   addCheck("client.noUnexpectedCmsImports", publicCmsImports.length === 0, publicCmsImports.join(" | ") || "only approved CMS consumers import cms client");
@@ -484,6 +532,12 @@ function main() {
     "learn guide public CMS rendering requires the full guide gate and at least one approved module before title/body are used",
   );
   addCheck(
+    "client.learnGuideDetailRoutePhaseApproved",
+    /LEARN_GUIDE_QUERY[\s\S]*routePhase == ["']approved_public["'][\s\S]*routePhase,/.test(learnGuideClientSource) &&
+      /record\.routePhase\s*===\s*["']approved_public["']/.test(learnGuideClientSource),
+    "learn guide detail reads project and require approved_public route phase at query and runtime boundaries",
+  );
+  addCheck(
     "client.learnGuideModulesEligibilityFiltered",
     /PUBLIC_MODULE_RENDER_ELIGIBILITY/.test(learnGuideClientSource) &&
       /getRenderableLearnGuideModules/.test(learnGuideClientSource) &&
@@ -575,6 +629,27 @@ function main() {
       !/homepage-drafts|site-page-drafts|readDraftHomepage|readDraftSitePage|product-media-worklist|contact-locator-readiness|src\/app\/drafts|@\/app\/drafts/.test(presidentialRouteShellSource),
     "public route shells do not import private draft readers, private drafts helpers, or readiness worklists",
   );
+  addCheck(
+    "client.catalogDetailLookupRequestMemoized",
+    /import\s+\{\s*cache\s*\}\s+from\s+["']react["']/.test(catalogDetailRouteSource) &&
+      /const\s+readCatalogProduct\s*=\s*cache\(/.test(catalogDetailRouteSource) &&
+      (catalogDetailRouteSource.match(/readCatalogProduct\(slug\)/g) || []).length === 2,
+    "catalog detail metadata and page rendering share one request-memoized product lookup",
+  );
+  addCheck(
+    "client.catalogDetailGalleryUrlsValidated",
+    /\.filter\(hasAssetUrl\)/.test(catalogDetailRouteSource) &&
+      /image is T & \{ readonly assetUrl: string \}/.test(catalogDetailRouteSource) &&
+      !/assetUrl!/.test(catalogDetailRouteSource),
+    "catalog detail filters image records to valid URLs before rendering the hero and gallery",
+  );
+  addCheck(
+    "client.catalogDetailResponsiveContainment",
+    /min-w-0/.test(catalogDetailRouteSource) &&
+      /max-w-full/.test(catalogDetailRouteSource) &&
+      /\[overflow-wrap:anywhere\]/.test(catalogDetailRouteSource),
+    "catalog detail constrains grid children and wraps long product titles without responsive overflow",
+  );
   addCheck("client.publicRenderingDisabled", /publicRouteRenderingEnabled:\s*false/.test(clientSource), "public route rendering remains disabled");
   addCheck("client.routeApprovalsEmpty", /APPROVED_ROUTE_PUBLICATIONS\s*=\s*\[\]\s+as\s+const/.test(routePublicationSource), "route publication approvals remain empty");
   addCheck("index.exportsReadOnlyClient", /readPublishedSanity/.test(indexSource) && /SANITY_READ_CLIENT_CONFIG/.test(indexSource), "index exports read-only boundary");
@@ -592,15 +667,16 @@ function main() {
     ? "PASS_CMS_WEB_READ_BOUNDARY_NO_PUBLIC_UNLOCK"
     : "FAIL_CMS_WEB_READ_BOUNDARY_REVIEW_REQUIRED";
 
-  mkdirSync(path.dirname(docsResultsPath), { recursive: true });
-  mkdirSync(workRoot, { recursive: true });
-  writeFileSync(
-    docsResultsPath,
-    [
-      "check,status,details,public_unlock",
-      ...rows.map((row) => [row.check, row.status, row.details, row.public_unlock].map(csvEscape).join(",")),
-    ].join("\n") + "\n",
-  );
+  if (!checkOnly) {
+    mkdirSync(path.dirname(docsResultsPath), { recursive: true });
+    mkdirSync(workRoot, { recursive: true });
+    writeFileSync(
+      docsResultsPath,
+      [
+        "check,status,details,public_unlock",
+        ...rows.map((row) => [row.check, row.status, row.details, row.public_unlock].map(csvEscape).join(",")),
+      ].join("\n") + "\n",
+    );
 
   const payload = {
     verdict,
@@ -618,21 +694,22 @@ function main() {
     rows,
   };
 
-  writeFileSync(statusJsonPath, JSON.stringify(payload, null, 2) + "\n");
-  writeFileSync(
-    statusMdPath,
-    [
-      "# CMS Web Read Boundary Status",
-      "",
-      `Verdict: ${verdict}`,
-      `Checks: ${passCount}/${rows.length}`,
-      "Public unlock: no",
-      "Sanity mutation: no",
-      "Broad public route rendering: no",
-      "Homepage CMS rendering: env-gated with static fallback",
-      "",
-    ].join("\n"),
-  );
+    writeFileSync(statusJsonPath, JSON.stringify(payload, null, 2) + "\n");
+    writeFileSync(
+      statusMdPath,
+      [
+        "# CMS Web Read Boundary Status",
+        "",
+        `Verdict: ${verdict}`,
+        `Checks: ${passCount}/${rows.length}`,
+        "Public unlock: no",
+        "Sanity mutation: no",
+        "Broad public route rendering: no",
+        "Homepage CMS rendering: env-gated with static fallback",
+        "",
+      ].join("\n"),
+    );
+  }
 
   console.log(verdict);
   console.log(`Checks passed: ${passCount}/${rows.length}`);

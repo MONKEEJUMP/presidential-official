@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import {
@@ -120,8 +121,26 @@ async function readCatalogForState(): Promise<{
   return { items: draftCatalog.ok ? draftCatalog.items : [] };
 }
 
+// Owner-approved state hero imagery. Type sits in each image's reserved
+// clean sky band: top scrim for all states except
+// Washington, whose clean band is the left third.
+const STATE_HERO_IMAGES: Record<
+  string,
+  { readonly src: string; readonly position: string; readonly scrim: "left" | "top" }
+> = {
+  wa: { src: "/media/states/wa-hero.webp", position: "object-[75%_center]", scrim: "left" },
+  nv: { src: "/media/states/nv-hero.webp", position: "object-center", scrim: "top" },
+  ca: { src: "/media/states/ca-hero.webp", position: "object-center", scrim: "top" },
+  az: { src: "/media/states/az-hero.webp", position: "object-center", scrim: "top" },
+  ok: { src: "/media/states/ok-hero.webp", position: "object-center", scrim: "top" },
+  mi: { src: "/media/states/mi-hero.webp", position: "object-center", scrim: "top" },
+  ny: { src: "/media/states/ny-hero.webp", position: "object-center", scrim: "top" },
+  fl: { src: "/media/states/fl-hero.webp", position: "object-center", scrim: "top" },
+};
+
 export async function StatePageShell({ state }: { readonly state: PresidentialState }) {
   const atmosphere = THEME_ATMOSPHERES[state.theme];
+  const heroImage = STATE_HERO_IMAGES[state.slug];
   const displayName =
     atmosphere.nameCase === "upper" ? state.name.toUpperCase() : state.name;
   const catalog = await readCatalogForState();
@@ -131,12 +150,49 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
       <SceneStack>
         <section
           aria-labelledby="presidential-state-title"
-          className={`relative isolate flex min-h-[78svh] overflow-hidden ${atmosphere.base}`}
+          className={`relative isolate flex min-h-[78svh] overflow-hidden ${state.slug === "wa" ? "bg-po-ink" : atmosphere.base}`}
         >
-          {atmosphere.layers.map((layer, index) => (
-            <div aria-hidden="true" className={layer} key={index} />
-          ))}
-          <div className="relative mx-auto flex w-full max-w-7xl flex-col justify-between gap-10 px-6 py-8 sm:px-10 lg:px-16">
+          {heroImage ? (
+            <>
+              <Image
+                alt=""
+                aria-hidden="true"
+                className={`absolute inset-0 h-full w-full object-cover ${heroImage.position}`}
+                fill
+                priority
+                sizes="100vw"
+                src={heroImage.src}
+              />
+              {heroImage.scrim === "left" ? (
+                <>
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.72)_0%,rgba(0,0,0,0.55)_33%,rgba(0,0,0,0.25)_100%)]"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-x-0 bottom-0 h-1/3 bg-[linear-gradient(0deg,rgba(0,0,0,0.55),transparent)]"
+                  />
+                </>
+              ) : (
+                <>
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-x-0 top-0 h-3/5 bg-[linear-gradient(180deg,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.35)_45%,transparent_100%)]"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(0deg,rgba(0,0,0,0.35),transparent)]"
+                  />
+                </>
+              )}
+            </>
+          ) : (
+            atmosphere.layers.map((layer, index) => (
+              <div aria-hidden="true" className={layer} key={index} />
+            ))
+          )}
+          <div className={`relative mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-8 sm:px-10 lg:px-16 ${heroImage && heroImage.scrim === "top" ? "justify-start" : "justify-between"}`}>
             <nav aria-label="Breadcrumb" className="text-sm text-po-canvas/80">
               <ol className="flex flex-wrap items-center gap-2">
                 <li>
@@ -169,13 +225,10 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
               <p className="mt-6 max-w-2xl font-display text-2xl uppercase leading-tight text-po-canvas sm:text-3xl">
                 {state.tagline}
               </p>
-              <p className="mt-4 max-w-xl text-sm leading-6 text-po-canvas/85">
-                {state.world}
-              </p>
               <div className="mt-8 flex flex-col gap-3 sm:max-w-md sm:flex-row">
-                <CtaLink href="/moon-rocks">Explore Moon Rocks</CtaLink>
+                <CtaLink className="!text-po-canvas hover:!text-po-canvas" href="/moon-rocks">Explore Moon Rocks</CtaLink>
                 <CtaLink
-                  className="border-po-canvas/60 text-po-canvas hover:border-po-canvas hover:text-po-canvas"
+                  className="border-po-canvas/60 !text-po-canvas hover:border-po-canvas hover:!text-po-canvas"
                   href="/find-us"
                   variant="secondary"
                 >
@@ -188,7 +241,7 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
 
         <Scene
           ariaLabelledBy="presidential-state-official"
-          className="py-20 lg:py-28"
+          className="po-gold-thread-inlay py-20 lg:py-28"
           tone="default"
         >
           <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(320px,0.5fr)]">
@@ -222,7 +275,7 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
         {catalog.items.length > 0 ? (
           <Scene
             ariaLabelledBy="presidential-state-catalog"
-            className="py-20 lg:py-28"
+            className="po-gold-thread-inlay py-20 lg:py-28"
             tone="default"
           >
             <div className="mx-auto w-full max-w-7xl">
@@ -242,7 +295,7 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
           </Scene>
         ) : null}
 
-        <FindUsCtaShell compact />
+        <FindUsCtaShell className="po-gold-thread-inlay" compact />
       </SceneStack>
     </PageFrame>
   );

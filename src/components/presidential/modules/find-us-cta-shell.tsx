@@ -3,13 +3,19 @@ import { Scene } from "../layout/scene";
 
 type FindUsCtaShellProps = {
   readonly compact?: boolean;
+  readonly className?: string;
 };
 
-export function FindUsCtaShell({ compact = false }: FindUsCtaShellProps) {
+export function FindUsCtaShell({
+  compact = false,
+  className = "",
+}: FindUsCtaShellProps) {
   return (
     <Scene
       ariaLabelledBy="presidential-find-us-path"
-      className={compact ? "py-16" : "py-24 lg:py-32"}
+      className={[className, compact ? "py-16" : "py-24 lg:py-32"]
+        .filter(Boolean)
+        .join(" ")}
       tone="contrast"
     >
       <div
@@ -42,7 +48,7 @@ export function FindUsCtaShell({ compact = false }: FindUsCtaShellProps) {
         </div>
 
         {compact ? null : (
-          <div className="border-l border-po-brand pl-6 lg:pl-10">
+          <div className="po-gold-thread-inlay-vertical pl-6 lg:pl-10">
             <p className="font-display text-4xl uppercase leading-none text-po-brand">
               California
             </p>

@@ -40,11 +40,16 @@ type SanityLearnGuideSlugRecord = {
   readonly slug?: string;
 };
 
-const LEARN_GUIDE_QUERY = `*[_type == "learnGuide" && slug.current == $slug][0]{
+const LEARN_GUIDE_QUERY = `*[
+  _type == "learnGuide" &&
+  slug.current == $slug &&
+  routePhase == "approved_public"
+][0]{
   _id,
   _type,
   title,
   "slug": slug.current,
+  routePhase,
   guideTopic,
   topicTaxonomy,
   intro,
@@ -98,6 +103,7 @@ function isLearnGuideApprovedForPublicRendering(
   return Boolean(
     record &&
       isPublicRouteSlug(record.slug) &&
+      record.routePhase === "approved_public" &&
       record.title?.trim() &&
       record.intro?.trim() &&
       record.guideTopic?.trim() &&

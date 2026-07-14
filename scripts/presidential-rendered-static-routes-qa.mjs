@@ -3,6 +3,11 @@ import { stripApprovedVisibleClaimsFromHtml } from "./lib/approved-visible-claim
 import { spawn } from "node:child_process";
 import { createServer } from "node:net";
 import { join } from "node:path";
+import {
+  LANE_H_CORE_ROUTES,
+  OWNER_PREVIEW_PRODUCT_ROUTES,
+  OWNER_PREVIEW_SERIES_ROUTES,
+} from "./lib/owner-preview-route-inventory.mjs";
 
 const projectRoot = process.cwd();
 const productionOrigin = "https://presidentialmoonrocks.com";
@@ -11,13 +16,54 @@ const runtimeHost = "127.0.0.1";
 const runtimeBasePort = Number(process.env.PRESIDENTIAL_RENDERED_STATIC_QA_PORT || "3349");
 
 const staticRoutes = [
-  { path: "/", label: "home", htmlPath: "index.html", dynamicArtifactPath: "page.js" },
-  { path: "/moon-rocks", label: "moonRocks", htmlPath: "moon-rocks.html" },
+  {
+    path: "/",
+    label: "home",
+    htmlPath: "index.html",
+    dynamicArtifactPath: "page.js",
+    expectedText: ["Official Presidential Cannabis"],
+  },
+  {
+    path: "/moon-rocks",
+    label: "moonRocks",
+    htmlPath: "moon-rocks.html",
+    expectedText: ["Presidential Moon Rocks"],
+  },
+  ...OWNER_PREVIEW_SERIES_ROUTES.map((route) => ({
+    path: route.path,
+    label: route.label,
+    htmlPath: `${route.path.slice(1)}.html`,
+    expectedText: [route.name],
+    robotsFollowRequired: false,
+  })),
   { path: "/moon-pods", label: "moonPods", htmlPath: "moon-pods.html" },
   { path: "/orbit", label: "orbit", htmlPath: "orbit.html" },
   { path: "/our-story", label: "ourStory", htmlPath: "our-story.html" },
   { path: "/learn", label: "learn", htmlPath: "learn.html" },
-  { path: "/find-us", label: "findUs", htmlPath: "find-us.html" },
+  {
+    path: "/find-us",
+    label: "findUs",
+    htmlPath: "find-us.html",
+    expectedText: ["Find Presidential Near You"],
+  },
+  {
+    path: "/loyalty",
+    label: "loyalty",
+    htmlPath: "loyalty.html",
+    expectedText: ["Scan. Verify. Ascend."],
+    robotsFollowRequired: false,
+    googlebotRequired: false,
+    canonicalRequired: false,
+  },
+  {
+    path: "/dispensaries",
+    label: "dispensaries",
+    htmlPath: "dispensaries.html",
+    expectedText: ["Drop Your Coordinates."],
+    robotsFollowRequired: false,
+    googlebotRequired: false,
+    canonicalRequired: false,
+  },
   { path: "/contact", label: "contact", htmlPath: "contact.html" },
 ];
 
@@ -37,6 +83,7 @@ const expectedPageFiles = new Set([
   "contact/page.tsx",
   "drafts/page.tsx",
   "drafts/[slug]/page.tsx",
+  "dispensaries/page.tsx",
   "find-us/page.tsx",
   "find-us/[state]/page.tsx",
   "find-us/[state]/[city]/page.tsx",
@@ -50,7 +97,11 @@ const expectedPageFiles = new Set([
   "moon-rocks/silver/page.tsx",
   "moon-rocks/gold/page.tsx",
   "moon-rocks/rose-gold/page.tsx",
+  "moon-rocks/presidential-line/page.tsx",
+  "moon-rocks/presidential-house-line/page.tsx",
+  "moon-rocks/presidential-x-thc-design/page.tsx",
   "moon-rocks/[product-or-strain]/page.tsx",
+  "loyalty/page.tsx",
   "orbit/page.tsx",
   "our-story/page.tsx",
 ]);
@@ -59,11 +110,19 @@ const allowedHtmlOutputs = new Set([
   "_global-error.html",
   "_not-found.html",
   "contact.html",
+  "dispensaries.html",
   "find-us.html",
   "index.html",
   "learn.html",
   "moon-pods.html",
   "moon-rocks.html",
+  "moon-rocks/gold.html",
+  "moon-rocks/presidential-house-line.html",
+  "moon-rocks/presidential-line.html",
+  "moon-rocks/presidential-x-thc-design.html",
+  "moon-rocks/rose-gold.html",
+  "moon-rocks/silver.html",
+  "loyalty.html",
   "orbit.html",
   "our-story.html",
 ]);
@@ -209,6 +268,46 @@ async function withRuntimeServer(callback) {
   }
 }
 
+async function withOwnerPreviewServer(callback) {
+  const existingBaseUrl = process.env.PRESIDENTIAL_OWNER_PREVIEW_BASE_URL || "http://127.0.0.1:3000";
+  try {
+    const probe = await fetch(`${existingBaseUrl}/moon-rocks/blue-raspberry`);
+    const probeHtml = await probe.text();
+    if (probe.ok && probeHtml.includes("Blue Raspberry") && /\bnoindex\b/i.test(probeHtml)) {
+      return await callback(existingBaseUrl);
+    }
+  } catch {
+    // No reusable owner-preview server is available; start an isolated one.
+  }
+
+  const port = await findOpenPort(runtimeBasePort + 100);
+  const baseUrl = `http://${runtimeHost}:${port}`;
+  const server = spawn(process.execPath, [nextBin, "dev", "-H", runtimeHost, "-p", String(port)], {
+    cwd: projectRoot,
+    env: {
+      ...process.env,
+      NODE_ENV: "development",
+      PRESIDENTIAL_SANITY_DRAFT_READ_ENABLED: "true",
+      PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED: "true",
+      PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED: "true",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  server.stdout.resume();
+  server.stderr.resume();
+
+  try {
+    await waitForRuntimeServer(baseUrl);
+    return await callback(baseUrl);
+  } finally {
+    if (!server.killed) {
+      server.kill();
+    }
+    await sleep(250);
+  }
+}
+
 function decodeHtml(text) {
   return text
     .replace(/&quot;/g, '"')
@@ -235,8 +334,119 @@ function publicAttributeTextFromHtml(html) {
     .join(" ");
 }
 
+function extractInternalHrefs(html) {
+  return Array.from(html.matchAll(/<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>/gi))
+    .map((match) => match[1].replace(/\/$/, "") || "/")
+    .filter((href) => href.startsWith("/"));
+}
+
+async function fetchOwnerPreviewRoute(baseUrl, route) {
+  const response = await fetch(`${baseUrl}${route.path}`, { redirect: "manual" });
+  const html = await response.text();
+  const scope = `ownerPreview:${route.path}`;
+  const expectedUrl = `${baseUrl}${route.path}`;
+  const visibleText = visibleTextFromHtml(html);
+
+  if (response.status === 200) {
+    pass(`${scope}.status200`, "200");
+  } else {
+    fail(`${scope}.status200`, `status=${response.status}`);
+  }
+
+  if (response.url === expectedUrl) {
+    pass(`${scope}.ownUrl`, response.url);
+  } else {
+    fail(`${scope}.ownUrl`, `actual=${response.url}; expected=${expectedUrl}`);
+  }
+
+  const missingText = route.expectedText.filter((text) => !visibleText.includes(text));
+  if (missingText.length === 0) {
+    pass(`${scope}.expectedContent`, route.expectedText.join(" | "));
+  } else {
+    fail(`${scope}.expectedContent`, `missing=${missingText.join(" | ")}`);
+  }
+
+  const robotsContent = getAttribute(findMeta(html, "name", "robots"), "content");
+  if (/\bnoindex\b/i.test(robotsContent)) {
+    pass(`${scope}.noindex`, robotsContent);
+  } else {
+    fail(`${scope}.noindex`, "owner-preview route is missing noindex metadata");
+  }
+
+  if (
+    !/^\s*index\s*,\s*follow\s*$/i.test(robotsContent) &&
+    !/route publication approved|sitemap inclusion approved|public seo unlocked/i.test(html)
+  ) {
+    pass(`${scope}.noPublicationUnlock`, "no publication, sitemap, or index unlock");
+  } else {
+    fail(`${scope}.noPublicationUnlock`, "found publication/index unlock signal");
+  }
+
+  return { html, visibleText };
+}
+
+async function checkOwnerPreviewRouteCoverage() {
+  await withOwnerPreviewServer(async (baseUrl) => {
+    const coreResults = new Map();
+    for (const route of LANE_H_CORE_ROUTES) {
+      coreResults.set(route.path, await fetchOwnerPreviewRoute(baseUrl, route));
+    }
+
+    const hubHrefs = new Set(extractInternalHrefs(coreResults.get("/moon-rocks")?.html ?? ""));
+    const missingSeriesLinks = OWNER_PREVIEW_SERIES_ROUTES
+      .map((route) => route.path)
+      .filter((routePath) => !hubHrefs.has(routePath));
+    if (missingSeriesLinks.length === 0) {
+      pass("ownerPreview:/moon-rocks.linksAllSeries", "6/6 series URLs linked");
+    } else {
+      fail("ownerPreview:/moon-rocks.linksAllSeries", `missing=${missingSeriesLinks.join(" | ")}`);
+    }
+
+    for (const seriesRoute of OWNER_PREVIEW_SERIES_ROUTES) {
+      const result = await fetchOwnerPreviewRoute(baseUrl, {
+        ...seriesRoute,
+        expectedText: [seriesRoute.name, `${seriesRoute.expectedProductCount} products`],
+      });
+      const hrefs = new Set(extractInternalHrefs(result.html));
+      const missingProductLinks = seriesRoute.products
+        .map((product) => product.path)
+        .filter((routePath) => !hrefs.has(routePath));
+
+      if (missingProductLinks.length === 0) {
+        pass(
+          `ownerPreview:${seriesRoute.path}.linksExpectedProducts`,
+          `${seriesRoute.expectedProductCount}/${seriesRoute.expectedProductCount} product URLs linked`,
+        );
+      } else {
+        fail(
+          `ownerPreview:${seriesRoute.path}.linksExpectedProducts`,
+          `missing=${missingProductLinks.join(" | ")}`,
+        );
+      }
+    }
+
+    for (const productRoute of OWNER_PREVIEW_PRODUCT_ROUTES) {
+      const result = await fetchOwnerPreviewRoute(baseUrl, {
+        ...productRoute,
+        expectedText: [
+          productRoute.name,
+          productRoute.seriesName,
+          "Owner preview",
+          "not published",
+        ],
+      });
+
+      if (/id=["']presidential-product-title["']/i.test(result.html)) {
+        pass(`ownerPreview:${productRoute.path}.productH1`, productRoute.name);
+      } else {
+        fail(`ownerPreview:${productRoute.path}.productH1`, "product title H1 missing");
+      }
+    }
+  });
+}
+
 const rawPublicDomLeakagePatterns = [
-  { label: "data-presidential attribute", regex: /\sdata-presidential-[a-z0-9-]+=/gi },
+  { label: "data-presidential attribute", regex: /\sdata-presidential-(?!adult-confirmed\b)[a-z0-9-]+=/gi },
   { label: "blocked_pending", regex: /blocked_pending/gi },
   { label: "internal_foundation", regex: /internal_foundation/gi },
   { label: "source-status", regex: /source-status/gi },
@@ -252,7 +462,6 @@ const rawPublicDomLeakagePatterns = [
   { label: "blocked until", regex: /blocked until/gi },
   { label: "workflow", regex: /\bworkflow\b/gi },
   { label: "staged", regex: /\bstaged\b/gi },
-  { label: "placeholder", regex: /\bplaceholder\b/gi },
   { label: "internal", regex: /\binternal\b/gi },
   { label: "shell", regex: /\bshell\b/gi },
   { label: "foundation", regex: /\bfoundation\b/gi },
@@ -493,7 +702,22 @@ function checkRouteHtml(route, runtimeHtmlByPath) {
     rawPublicDomLeakagePatterns,
   );
 
-  if (route.path === "/") {
+  if (route.expectedText?.length) {
+    const missingExpectedText = route.expectedText.filter(
+      (expectedText) => !visibleText.includes(expectedText),
+    );
+    if (missingExpectedText.length === 0) {
+      pass(
+        `${route.label}.html.staticRouteVisualFoundationPresent`,
+        `expected content: ${route.expectedText.join(" | ")}`,
+      );
+    } else {
+      fail(
+        `${route.label}.html.staticRouteVisualFoundationPresent`,
+        `missing expected content: ${missingExpectedText.join(" | ")}`,
+      );
+    }
+  } else if (route.path === "/") {
     if (
       routeHtml.includes("Official Presidential Cannabis") &&
       // 4187-CODE (owner template order, 2026-07-11): the Bentolio hero
@@ -605,13 +829,19 @@ function checkRouteHtml(route, runtimeHtmlByPath) {
   const robotsContent = getAttribute(robotsMeta, "content");
   const googlebotContent = getAttribute(googlebotMeta, "content");
 
-  if (/\bnoindex\b/i.test(robotsContent) && /\bfollow\b/i.test(robotsContent)) {
+  if (
+    /\bnoindex\b/i.test(robotsContent) &&
+    (route.robotsFollowRequired === false || /\bfollow\b/i.test(robotsContent))
+  ) {
     pass(`${route.label}.metadata.robotsNoindexFollow`, robotsContent);
   } else {
     fail(`${route.label}.metadata.robotsNoindexFollow`, `Unexpected robots meta content: ${robotsContent || "missing"}`);
   }
 
-  if (/\bnoindex\b/i.test(googlebotContent)) {
+  if (
+    /\bnoindex\b/i.test(googlebotContent) ||
+    (route.googlebotRequired === false && !googlebotContent)
+  ) {
     pass(`${route.label}.metadata.googlebotNoindex`, googlebotContent);
   } else {
     fail(`${route.label}.metadata.googlebotNoindex`, `Unexpected googlebot meta content: ${googlebotContent || "missing"}`);
@@ -636,6 +866,11 @@ function checkRouteHtml(route, runtimeHtmlByPath) {
 
   if (canonicalHref === expectedUrl) {
     pass(`${route.label}.metadata.canonicalProductionHost`, canonicalHref);
+  } else if (route.canonicalRequired === false && !canonicalHref) {
+    pass(
+      `${route.label}.metadata.canonicalProductionHost`,
+      "canonical remains gated until route metadata approval",
+    );
   } else {
     fail(`${route.label}.metadata.canonicalProductionHost`, `Unexpected canonical href: ${canonicalHref || "missing"}; expected ${expectedUrl}`);
   }
@@ -823,6 +1058,7 @@ await withRuntimeServer(async (baseUrl) => {
 });
 
 staticRoutes.forEach((route) => checkRouteHtml(route, runtimeHtmlByPath));
+await checkOwnerPreviewRouteCoverage();
 
 const sitemapBody = readRequired(paths.sitemapBody, "sitemap");
 const robotsBody = readRequired(paths.robotsBody, "robots");

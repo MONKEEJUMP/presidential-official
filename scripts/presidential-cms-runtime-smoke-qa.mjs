@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { execFileSync, spawn, spawnSync } from "node:child_process";
 import { createServer } from "node:net";
@@ -8,6 +8,7 @@ const repoRoot = resolve(webRoot, "..");
 const nextBin = join(webRoot, "node_modules", "next", "dist", "bin", "next");
 const buildScriptPath = join(webRoot, "scripts", "run-next-build.mjs");
 const buildDir = join(webRoot, ".next");
+const buildCacheDir = join(buildDir, "cache");
 const sanityFailureMockPath = join(webRoot, "scripts", "mock-sanity-fetch-failure.cjs");
 const sanityApprovedMockPath = join(webRoot, "scripts", "mock-sanity-fetch-approved-cms.cjs");
 const workRoot = join(repoRoot, "sources", "spud", "work", "cms-private-preview-smoke");
@@ -75,11 +76,10 @@ const publicDenyMarkers = [
 ];
 const fallbackExpectations = [
   {
-    // 4187-CODE (owner template order #1, 2026-07-11): the Bentolio hero
-    // replaced the prior hero's "Enter Moon Rocks" CTA; pin the hero's
-    // static Find Presidential tile line instead.
+    // The owner-approved Bentolio hero replaced the retired homepage copy.
+    // Pin its visible statement without changing the claim registry.
     path: "/",
-    markers: ["Official Presidential Cannabis", "official home of Moon Rocks"],
+    markers: ["Official Presidential Cannabis", "Cannabis!"],
   },
   {
     path: "/moon-rocks",
@@ -310,6 +310,7 @@ function rebuildForScenario({
     throw new Error("Build script not found. Cannot rebuild CMS runtime smoke scenario.");
   }
 
+  rmSync(buildCacheDir, { recursive: true, force: true });
   const nodeOptions = buildNodeOptions(preload);
   const build = spawnSync(process.execPath, [buildScriptPath], {
     cwd: webRoot,
@@ -664,38 +665,42 @@ async function runSmoke() {
     Object.keys(disabledPublicCmsSmokeEnv).join(", "),
   );
 
-  await runServerScenario({
-    name: "disabled-cms",
-    port: basePort,
-    env: disabledPublicCmsSmokeEnv,
-  });
-  await runServerScenario({
-    name: "enabled-cms",
-    port: basePort + 1,
-    env: publicCmsSmokeEnv,
-    rebuild: true,
-    privatePreview: true,
-  });
-  await runServerScenario({
-    name: "approved-cms",
-    port: basePort + 2,
-    env: publicCmsSmokeEnv,
-    preload: sanityApprovedMockPath,
-    rebuild: true,
-    fallbackExpected: false,
-    afterPublicChecks: assertApprovedCmsRenderScenario,
-  });
-  await runServerScenario({
-    name: "sanity-failure",
-    port: basePort + 3,
-    env: publicCmsSmokeEnv,
-    preload: sanityFailureMockPath,
-    rebuild: true,
-  });
-  rebuildForScenario({
-    name: "restore-disabled-cms",
-    env: disabledPublicCmsSmokeEnv,
-  });
+  try {
+    await runServerScenario({
+      name: "disabled-cms",
+      port: basePort,
+      env: disabledPublicCmsSmokeEnv,
+      rebuild: true,
+    });
+    await runServerScenario({
+      name: "enabled-cms",
+      port: basePort + 1,
+      env: publicCmsSmokeEnv,
+      rebuild: true,
+      privatePreview: true,
+    });
+    await runServerScenario({
+      name: "approved-cms",
+      port: basePort + 2,
+      env: publicCmsSmokeEnv,
+      preload: sanityApprovedMockPath,
+      rebuild: true,
+      fallbackExpected: false,
+      afterPublicChecks: assertApprovedCmsRenderScenario,
+    });
+    await runServerScenario({
+      name: "sanity-failure",
+      port: basePort + 3,
+      env: publicCmsSmokeEnv,
+      preload: sanityFailureMockPath,
+      rebuild: true,
+    });
+  } finally {
+    rebuildForScenario({
+      name: "restore-disabled-cms",
+      env: disabledPublicCmsSmokeEnv,
+    });
+  }
 }
 
 function writeResults() {

@@ -39,6 +39,12 @@ export const strictReleaseCommands = [
 ];
 
 function main() {
+  const npmCliPath = process.env.npm_execpath;
+  if (!npmCliPath) {
+    console.error("[strict-release] npm_execpath is unavailable; cannot run release verification.");
+    process.exit(1);
+  }
+
   const env = {
     ...process.env,
     PRESIDENTIAL_RELEASE_VERIFY_MODE: "strict-release",
@@ -46,14 +52,16 @@ function main() {
 
   for (const scriptName of strictReleaseCommands) {
     console.log(`\n[strict-release] npm run ${scriptName}`);
-    const command = process.platform === "win32" ? "npm.cmd" : "npm";
-    const result = spawnSync(command, ["run", scriptName], {
+    const result = spawnSync(process.execPath, [npmCliPath, "run", scriptName], {
       cwd: process.cwd(),
       env,
       stdio: "inherit",
       shell: false,
       windowsHide: true,
     });
+    if (result.error) {
+      console.error(`[strict-release] failed to launch ${scriptName}: ${result.error.message}`);
+    }
     if (result.status !== 0) {
       process.exit(result.status ?? 1);
     }

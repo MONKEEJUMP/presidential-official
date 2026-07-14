@@ -255,6 +255,7 @@ function learnGuideResult(slug) {
     _type: "learnGuide",
     title: slug === "cms-smoke-extra-guide" ? "CMS Smoke Extra Guide" : "CMS Smoke Learn Guide",
     slug,
+    routePhase: "approved_public",
     guideTopic: "Moon Rocks",
     topicTaxonomy: ["moon-rocks"],
     intro: "CMS smoke guide intro rendered from public module data.",

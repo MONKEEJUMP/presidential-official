@@ -48,7 +48,11 @@ export function LocatorTemplateShell({
           </div>
         </Scene>
 
-        <Scene ariaLabelledBy="presidential-locator-data-boundary" tone="quiet">
+        <Scene
+          ariaLabelledBy="presidential-locator-data-boundary"
+          className="po-gold-thread-inlay"
+          tone="quiet"
+        >
           <div className="mx-auto grid w-full max-w-6xl gap-4 md:grid-cols-3">
             <article className="border border-po-line bg-po-canvas p-5">
               <h2

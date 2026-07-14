@@ -8,17 +8,27 @@ import { getGoogleSiteVerification } from "@/lib/analytics/google";
 import { METADATA_BASE } from "@/lib/seo/metadata";
 import "./globals.css";
 
-const archivoBlack = localFont({
-  src: "../fonts/archivo-black-latin.woff2",
-  variable: "--font-archivo-black",
-  weight: "400",
+// Clash Display + Source Serif 4 (font license files live beside
+// the woff2s). Semibold carries the 400-600 range so unweighted display
+// headings render Semibold per the owner's font order.
+const clashDisplay = localFont({
+  src: [
+    { path: "../fonts/clash-display-semibold.woff2", weight: "400 600" },
+    { path: "../fonts/clash-display-bold.woff2", weight: "700 900" },
+  ],
+  variable: "--font-clash-display",
   display: "swap",
 });
 
-const inter = localFont({
-  src: "../fonts/inter-latin-variable.woff2",
-  variable: "--font-inter",
-  weight: "100 900",
+const sourceSerif4 = localFont({
+  src: [
+    {
+      path: "../fonts/source-serif-4-latin-variable.woff2",
+      weight: "200 900",
+      style: "normal",
+    },
+  ],
+  variable: "--font-source-serif-4",
   display: "swap",
 });
 
@@ -58,7 +68,8 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${archivoBlack.variable} ${inter.variable} h-full antialiased`}
+      className={`${clashDisplay.variable} ${sourceSerif4.variable} h-full antialiased`}
+      data-presidential-adult-confirmed={adultConfirmed ? "true" : "false"}
     >
       <body className="min-h-full flex flex-col">
         <div

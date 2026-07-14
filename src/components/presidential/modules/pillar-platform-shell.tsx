@@ -1,11 +1,9 @@
-import Link from "next/link";
-
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 import { PageFrame } from "../layout/page-frame";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
-import { CtaLink } from "../primitives/cta-link";
+import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { FindUsCtaShell } from "./find-us-cta-shell";
 
 type PillarBreadcrumb = {
@@ -16,7 +14,6 @@ type PillarBreadcrumb = {
 type PillarPlatformShellProps = {
   readonly route: SeoRouteRecord;
   readonly breadcrumbs: readonly PillarBreadcrumb[];
-  readonly links: readonly SeoRouteRecord[];
 };
 
 type PillarContent = {
@@ -109,103 +106,37 @@ export function PillarPlatformShell({
   breadcrumbs,
 }: PillarPlatformShellProps) {
   const content = getPillarContent(route);
-  const isMoonPods = route.id === "moon-pods";
-
   return (
     <PageFrame>
       <SceneStack>
-        <section
-          aria-labelledby={`${route.id}-platform-title`}
-          className={[
-            "relative isolate flex min-h-[calc(100svh-7rem)] overflow-hidden text-po-ink",
-            isMoonPods ? "bg-po-brand" : "bg-po-silver",
-          ].join(" ")}
-        >
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-[url('/brand/banner-palms-teal.webp')] bg-[length:auto_190%] bg-left bg-no-repeat opacity-35"
-          />
-          <div className="relative mx-auto flex w-full max-w-7xl flex-col justify-between gap-10 px-6 py-6 sm:px-10 lg:px-16 lg:py-8">
-            <nav aria-label="Breadcrumb" className="text-sm text-po-body">
-              <ol className="flex flex-wrap items-center gap-2">
-                {breadcrumbs.map((breadcrumb, index) => {
-                  const isCurrent = index === breadcrumbs.length - 1;
-
-                  return (
-                    <li key={breadcrumb.path} className="flex items-center gap-2">
-                      {index > 0 ? (
-                        <span aria-hidden="true" className="text-po-ink/50">
-                          /
-                        </span>
-                      ) : null}
-                      {isCurrent ? (
-                        <span aria-current="page" className="font-semibold text-po-ink">
-                          {breadcrumb.name}
-                        </span>
-                      ) : (
-                        <Link
-                          className="font-semibold text-po-ink underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-ink"
-                          href={breadcrumb.path}
-                        >
-                          {breadcrumb.name}
-                        </Link>
-                      )}
-                    </li>
-                  );
-                })}
-              </ol>
-            </nav>
-
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.42fr)] lg:items-end">
-              <div className="max-w-5xl">
-                <p className="text-xs font-black uppercase text-po-ink">
-                  {content.kicker}
-                </p>
-                <h1
-                  className="mt-5 font-display text-4xl uppercase leading-[0.9] text-po-ink sm:text-7xl lg:text-8xl"
-                  id={`${route.id}-platform-title`}
-                >
-                  {route.h1}
-                </h1>
-              </div>
-
-              <div className="border-t border-po-ink pt-5">
-                <p className="text-xs font-black uppercase text-po-ink">
-                  {content.mediaLabel}
-                </p>
-                <p className="mt-1 text-sm font-semibold text-po-ink">
-                  {content.mediaNote}
-                </p>
-                <p className="mt-5 text-sm leading-6 text-po-body">
-                  {route.description}
-                </p>
-                <p className="mt-4 text-sm leading-6 text-po-body">
-                  {content.intro}
-                </p>
-                <div className="mt-6 grid gap-3">
-                  <CtaLink
-                    className="border-po-ink bg-po-ink text-po-on-dark hover:bg-po-canvas hover:text-po-ink"
-                    href="/find-us"
-                    variant="secondary"
-                  >
-                    Find Presidential products
-                  </CtaLink>
-                  <CtaLink
-                    className="border-po-ink/40 text-po-ink hover:border-po-ink hover:text-po-ink"
-                    href="/learn"
-                    variant="secondary"
-                  >
-                    Learn Presidential
-                  </CtaLink>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <DispensariesStyleHero
+          ariaLabelledBy={`${route.id}-platform-title`}
+          breadcrumbs={breadcrumbs}
+          ctas={[
+            {
+              href: "/find-us",
+              label: "Find Presidential products",
+              tone: "primary",
+            },
+            {
+              href: "/learn",
+              label: "Learn Presidential",
+              tone: "secondary",
+            },
+          ]}
+          eyebrow={content.kicker}
+          supportingText={[
+            content.mediaLabel,
+            content.mediaNote,
+            route.description,
+            content.intro,
+          ]}
+          title={route.h1}
+        />
 
         <Scene
           ariaLabelledBy={`${route.id}-platform-lanes`}
-          className="py-24 lg:py-32"
+          className="po-gold-thread-inlay py-24 lg:py-32"
           tone="default"
         >
           <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">
@@ -241,7 +172,7 @@ export function PillarPlatformShell({
 
         <Scene
           ariaLabelledBy={`${route.id}-platform-rollout`}
-          className="py-24 lg:py-32"
+          className="po-gold-thread-inlay py-24 lg:py-32"
           tone="contrast"
         >
           <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(0,0.85fr)_minmax(360px,0.65fr)] lg:items-end lg:gap-24">
@@ -280,7 +211,7 @@ export function PillarPlatformShell({
           </div>
         </Scene>
 
-        <FindUsCtaShell compact />
+        <FindUsCtaShell className="po-gold-thread-inlay" compact />
       </SceneStack>
     </PageFrame>
   );

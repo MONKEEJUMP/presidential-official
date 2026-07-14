@@ -91,7 +91,11 @@ function LearnGuideBodyModule({ module, index }: LearnGuideBodyModuleProps) {
   const body = moduleBody(module);
 
   return (
-    <Scene ariaLabelledBy={id} tone={index % 2 === 0 ? "quiet" : "default"}>
+    <Scene
+      ariaLabelledBy={id}
+      className="po-gold-thread-inlay"
+      tone={index % 2 === 0 ? "quiet" : "default"}
+    >
       <article className="mx-auto grid w-full max-w-5xl gap-6">
         <SectionHeading
           description={body || undefined}

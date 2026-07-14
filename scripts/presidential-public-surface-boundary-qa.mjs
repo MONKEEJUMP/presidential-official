@@ -12,6 +12,7 @@ const docsResultsPath = path.join(
 const workRoot = path.join(root, "sources", "spud", "work", "step10g-public-surface-boundary-qa");
 const statusJsonPath = path.join(workRoot, "step10g-public-surface-boundary-status.json");
 const statusMdPath = path.join(workRoot, "step10g-public-surface-boundary-status.md");
+const writeArtifacts = process.env.PRESIDENTIAL_QA_WRITE_ARTIFACTS !== "false";
 
 const productionOrigin = "https://presidentialmoonrocks.com";
 const allowedUrlOrigins = new Set([productionOrigin, "https://schema.org"]);
@@ -23,39 +24,48 @@ const approvedGatedAnalyticsUrlOrigins = new Set([
 ]);
 const approvedPublicAssetFiles = new Set([
   "apple-touch-icon.png",
-  "brand/banner-about-us-contact-header.avif",
   "brand/banner-about-us-contact-header.webp",
-  "brand/banner-palms-teal.avif",
   "brand/banner-palms-teal.webp",
   "brand/og-social-share-image.avif",
   "brand/og-social-share-image.png",
   "brand/og-social-share-image.webp",
-  "brand/presidential-logo.avif",
-  "brand/presidential-logo.png",
   "brand/presidential-logo.webp",
   "favicon.ico",
   "favicon.png",
-  // 9083-CODE P2.4 (owner video ruling + ffmpeg authorization, 2026-07-11):
-  // owner product films, web-optimized (muted MP4/WebM + poster) under the
-  // AUTH-1 rights basis; provenance in site-video-summary.json.
+  "media/backdrops/crest-spinning.mp4",
+  "media/backdrops/crest-spinning.webm",
+  "media/backdrops/gold-backdrop.mp4",
+  "media/backdrops/gold-backdrop.webm",
+  "media/backdrops/rosegold-backdrop.mp4",
+  "media/backdrops/rosegold-backdrop.webm",
+  "media/backdrops/silver-backdrop.mp4",
+  "media/backdrops/silver-backdrop.webm",
+  "media/brand/presidential-banner.png",
   "media/flavor-blunts.mp4",
   "media/flavor-blunts.webm",
+  "media/gems/presidential-p.png",
   "media/moon-rocks-film.mp4",
   "media/moon-rocks-film.webm",
   "media/nationwide-map.mp4",
   "media/nationwide-map.webm",
-  "media/presidential-hero.mp4",
-  "media/presidential-hero.webm",
+  "media/posters/crest-spinning.jpg",
+  "media/posters/flavor-blunts.jpg",
+  "media/posters/moon-rocks-film.jpg",
+  "media/posters/nationwide-map.jpg",
+  "media/posters/strains-horizontal.jpg",
+  "media/posters/strains-vertical.jpg",
+  "media/states/az-hero.webp",
+  "media/states/ca-hero.webp",
+  "media/states/fl-hero.webp",
+  "media/states/mi-hero.webp",
+  "media/states/nv-hero.webp",
+  "media/states/ny-hero.webp",
+  "media/states/ok-hero.webp",
+  "media/states/wa-hero.webp",
   "media/strains-horizontal.mp4",
   "media/strains-horizontal.webm",
   "media/strains-vertical.mp4",
   "media/strains-vertical.webm",
-  "media/posters/flavor-blunts.jpg",
-  "media/posters/moon-rocks-film.jpg",
-  "media/posters/nationwide-map.jpg",
-  "media/posters/presidential-hero.jpg",
-  "media/posters/strains-horizontal.jpg",
-  "media/posters/strains-vertical.jpg",
 ]);
 const forbiddenStarterAssets = new Set([
   "file.svg",
@@ -261,6 +271,9 @@ function main() {
 
   const publicAssetRelPaths = publicAssetFiles.map((file) => toPosix(path.relative(publicAssetRoot, file)));
   const unapprovedPublicAssets = publicAssetRelPaths.filter((file) => !approvedPublicAssetFiles.has(file));
+  const missingApprovedPublicAssets = Array.from(approvedPublicAssetFiles).filter(
+    (file) => !publicAssetRelPaths.includes(file),
+  );
   const starterAssetMatches = publicAssetRelPaths.filter((file) => forbiddenStarterAssets.has(path.basename(file)));
   const suspiciousPublicAssetNames = publicAssetRelPaths.flatMap((file) =>
     publicAssetFilenamePatterns
@@ -285,6 +298,7 @@ function main() {
   const checks = [
     addCheck(rows, "publicDirectory.exists", existsSync(publicAssetRoot), "public directory exists for future approved assets"),
     addCheck(rows, "publicAssets.noUnapprovedFiles", unapprovedPublicAssets.length === 0, unapprovedPublicAssets.length ? unapprovedPublicAssets.join(" | ") : "public directory contains no unapproved asset files"),
+    addCheck(rows, "publicAssets.approvedInventoryPresent", missingApprovedPublicAssets.length === 0, missingApprovedPublicAssets.length ? missingApprovedPublicAssets.join(" | ") : `${approvedPublicAssetFiles.size}/${approvedPublicAssetFiles.size} approved public assets present`),
     addCheck(rows, "publicAssets.noStarterFrameworkAssets", starterAssetMatches.length === 0, starterAssetMatches.length ? starterAssetMatches.join(" | ") : "no default Next/Vercel starter assets remain public"),
     addCheck(rows, "publicAssets.noSuspiciousFilenames", suspiciousPublicAssetNames.length === 0, suspiciousPublicAssetNames.length ? suspiciousPublicAssetNames.join(" | ") : "no draft/placeholder/fake/sample/Wix/Vercel public filenames"),
     addCheck(rows, "publicAssets.noBlockedDomainText", publicAssetBlockedDomainMatches.length === 0, publicAssetBlockedDomainMatches.length ? publicAssetBlockedDomainMatches.slice(0, 10).join(" | ") : "public asset text contains no blocked hosts or threat wording"),
@@ -304,16 +318,18 @@ function main() {
     ? "PASS_PUBLIC_SURFACE_BOUNDARY_QA_NO_PUBLIC_UNLOCK"
     : "FAIL_PUBLIC_SURFACE_BOUNDARY_QA_REVIEW_REQUIRED";
 
-  mkdirSync(path.dirname(docsResultsPath), { recursive: true });
-  writeFileSync(
-    docsResultsPath,
-    [
-      "check,status,details,public_unlock",
-      ...rows.map((row) =>
-        [row.check, row.status, row.details, row.public_unlock].map(csvEscape).join(","),
-      ),
-    ].join("\n") + "\n",
-  );
+  if (writeArtifacts) {
+    mkdirSync(path.dirname(docsResultsPath), { recursive: true });
+    writeFileSync(
+      docsResultsPath,
+      [
+        "check,status,details,public_unlock",
+        ...rows.map((row) =>
+          [row.check, row.status, row.details, row.public_unlock].map(csvEscape).join(","),
+        ),
+      ].join("\n") + "\n",
+    );
+  }
 
   const payload = {
     verdict,
@@ -322,6 +338,7 @@ function main() {
     builtTextFileCount: builtTextFiles.length,
     checks: Object.fromEntries(rows.map((row) => [row.check, row.status === "pass"])),
     unapprovedPublicAssets,
+    missingApprovedPublicAssets,
     starterAssetMatches,
     suspiciousPublicAssetNames,
     sourceBlockedDomainMatches,
@@ -342,26 +359,28 @@ function main() {
       "Step 10G verifies public asset and public URL host boundaries only. It does not approve assets, deploy, publish routes, modify metadata/schema, import data, or unlock public SEO.",
   };
 
-  mkdirSync(workRoot, { recursive: true });
-  writeFileSync(statusJsonPath, JSON.stringify(payload, null, 2));
-  writeFileSync(
-    statusMdPath,
-    [
-      "# Step 10G Public Surface Boundary Status",
-      "",
-      `Verdict: \`${verdict}\``,
-      "",
-      "## Checks",
-      "",
-      ...rows.map((row) => `- \`${row.check}\`: ${row.status.toUpperCase()} - ${row.details}`),
-      "",
-      "## Guardrail",
-      "",
-      payload.guardrail,
-      "",
-      "Final signal: `STEP_10G_PUBLIC_SURFACE_BOUNDARY_QA_COMPLETE_NO_PUBLIC_UNLOCK`",
-    ].join("\n") + "\n",
-  );
+  if (writeArtifacts) {
+    mkdirSync(workRoot, { recursive: true });
+    writeFileSync(statusJsonPath, JSON.stringify(payload, null, 2));
+    writeFileSync(
+      statusMdPath,
+      [
+        "# Step 10G Public Surface Boundary Status",
+        "",
+        `Verdict: \`${verdict}\``,
+        "",
+        "## Checks",
+        "",
+        ...rows.map((row) => `- \`${row.check}\`: ${row.status.toUpperCase()} - ${row.details}`),
+        "",
+        "## Guardrail",
+        "",
+        payload.guardrail,
+        "",
+        "Final signal: `STEP_10G_PUBLIC_SURFACE_BOUNDARY_QA_COMPLETE_NO_PUBLIC_UNLOCK`",
+      ].join("\n") + "\n",
+    );
+  }
 
   console.log(JSON.stringify(payload, null, 2));
   process.exitCode = verdict.startsWith("PASS_") ? 0 : 1;

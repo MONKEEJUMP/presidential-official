@@ -8,6 +8,10 @@ import { spawn } from "node:child_process";
 import { stripApprovedVisibleClaims } from "./lib/approved-visible-claims-qa.mjs";
 import { createServer } from "node:net";
 import path from "node:path";
+import {
+  OWNER_PREVIEW_PRODUCT_ROUTES,
+  OWNER_PREVIEW_SERIES_ROUTES,
+} from "./lib/owner-preview-route-inventory.mjs";
 
 const webRoot = process.cwd();
 const root = path.resolve(webRoot, "..");
@@ -16,6 +20,7 @@ const packageJsonPath = path.join(webRoot, "package.json");
 const nextBin = path.join(webRoot, "node_modules", "next", "dist", "bin", "next");
 const runtimeHost = "127.0.0.1";
 const runtimeBasePort = Number(process.env.PRESIDENTIAL_LINK_INTENT_QA_PORT || "3353");
+const writeArtifacts = process.env.PRESIDENTIAL_QA_WRITE_ARTIFACTS !== "false";
 const ctaLinkSourcePath = path.join(
   webRoot,
   "src",
@@ -80,6 +85,8 @@ const publicRoutes = [
   { route: "/our-story", label: "ourStory", file: "our-story.html" },
   { route: "/learn", label: "learn", file: "learn.html" },
   { route: "/find-us", label: "findUs", file: "find-us.html" },
+  { route: "/loyalty", label: "loyalty", file: "loyalty.html" },
+  { route: "/dispensaries", label: "dispensaries", file: "dispensaries.html" },
   { route: "/contact", label: "contact", file: "contact.html" },
 ];
 
@@ -98,14 +105,11 @@ for (const route of [...publicRoutes, ...fallbackRoutes]) {
 }
 
 const mandatoryStaticPaths = publicRoutes.map((route) => route.route);
+const requiredHomePaths = mandatoryStaticPaths.filter((routePath) => routePath !== "/dispensaries");
 const allowedInternalHrefs = new Set([
   ...mandatoryStaticPaths,
-  // 9083-CODE P2.2 (owner directive, 2026-07-10): built, registered,
-  // conditional/noindex Moon Rocks series routes reachable from the hub's
-  // series selector.
-  "/moon-rocks/silver",
-  "/moon-rocks/gold",
-  "/moon-rocks/rose-gold",
+  ...OWNER_PREVIEW_SERIES_ROUTES.map((route) => route.path),
+  ...OWNER_PREVIEW_PRODUCT_ROUTES.map((route) => route.path),
   // 9083-CODE P4 (owner 8-state ruling, 2026-07-11): themed priority-market
   // pages linked from the tile-grid map. Still conditional/noindex.
   "/find-us/az",
@@ -117,18 +121,31 @@ const allowedInternalHrefs = new Set([
   "/find-us/ok",
   "/find-us/wa",
 ]);
-const allowedSamePageFragmentHrefs = new Set(["#presidential-main"]);
+const catalogRouteHrefs = new Set([
+  ...OWNER_PREVIEW_SERIES_ROUTES.map((route) => route.path),
+  ...OWNER_PREVIEW_PRODUCT_ROUTES.map((route) => route.path),
+]);
+const allowedSamePageFragmentHrefs = new Set([
+  "#presidential-main",
+  "#presidential-states-map",
+]);
 const globalNavigationHrefs = new Set([
   ...mandatoryStaticPaths,
   // 9083-CODE P3.1 (owner directive, 2026-07-10): the sticky header's
   // Moon Rocks mega-menu carries the series links globally, so pages that
   // also link a series in their own content legitimately duplicate them.
-  "/moon-rocks/silver",
-  "/moon-rocks/gold",
-  "/moon-rocks/rose-gold",
+  ...OWNER_PREVIEW_SERIES_ROUTES.map((route) => route.path),
 ]);
 const allowedDuplicateHrefs = new Map(
-  publicRoutes.map(({ route }) => [route, globalNavigationHrefs]),
+  publicRoutes.map(({ route }) => [
+    route,
+    route === "/"
+      ? new Set([
+          ...globalNavigationHrefs,
+          ...OWNER_PREVIEW_PRODUCT_ROUTES.map((entry) => entry.path),
+        ])
+      : globalNavigationHrefs,
+  ]),
 );
 
 const forbiddenHrefPatterns = [
@@ -387,7 +404,7 @@ function isAllowedSamePageFragmentHref(href) {
 
 function expectedHrefSet(routePath) {
   if (routePath === "/") {
-    return new Set(mandatoryStaticPaths.filter((entry) => entry !== "/"));
+    return new Set(requiredHomePaths.filter((entry) => entry !== "/"));
   }
 
   return allowedInternalHrefs;
@@ -399,7 +416,9 @@ function checkAnchor(routePath, index, tag) {
   const href = normalizeHref(rawHref);
   const text = visibleTextFromHtml(tag);
   const title = getAttribute(tag, "title");
-  const label = text || title;
+  const ariaLabel = getAttribute(tag, "aria-label");
+  const imageAlt = getAttribute(tag.match(/<img\b[^>]*>/i)?.[0] ?? "", "alt");
+  const label = text || ariaLabel || title || imageAlt;
   const forbiddenHrefHits = forbiddenHrefPatterns
     .filter(({ pattern }) => pattern.test(rawHref) || pattern.test(href))
     .map(({ label: hitLabel }) => hitLabel);
@@ -450,12 +469,15 @@ function checkAnchor(routePath, index, tag) {
     scope,
     "text.routeContext",
     allowedSamePageFragment ||
+      catalogRouteHrefs.has(href) ||
       label.toLowerCase().includes("presidential") ||
       label.toLowerCase().includes("moon") ||
       label.toLowerCase().includes("orbit") ||
       label.toLowerCase().includes("learn") ||
       label.toLowerCase().includes("find") ||
       label.toLowerCase().includes("contact") ||
+      label.toLowerCase().includes("loyalty") ||
+      label.toLowerCase().includes("dispensar") ||
       label.toLowerCase().includes("story") ||
       label.toLowerCase().includes("platform") ||
       label.toLowerCase() === "home",
@@ -717,26 +739,30 @@ const finalVerdict =
     ? "PASS_NAVIGATION_CTA_INTENT_QA_NO_PUBLIC_UNLOCK"
     : "FAIL_NAVIGATION_CTA_INTENT_QA_REVIEW_REQUIRED";
 
-mkdirSync(path.dirname(resultsPath), { recursive: true });
-mkdirSync(workRoot, { recursive: true });
+if (writeArtifacts) {
+  mkdirSync(path.dirname(resultsPath), { recursive: true });
+  mkdirSync(workRoot, { recursive: true });
+}
 
-writeFileSync(
-  resultsPath,
-  [
-    "scope,check,status,details,public_unlock",
-    ...rows.map((row) =>
-      [
-        row.scope,
-        row.check,
-        row.status,
-        row.details,
-        row.publicUnlock,
-      ]
-        .map(csvEscape)
-        .join(","),
-    ),
-  ].join("\n"),
-);
+if (writeArtifacts) {
+  writeFileSync(
+    resultsPath,
+    [
+      "scope,check,status,details,public_unlock",
+      ...rows.map((row) =>
+        [
+          row.scope,
+          row.check,
+          row.status,
+          row.details,
+          row.publicUnlock,
+        ]
+          .map(csvEscape)
+          .join(","),
+      ),
+    ].join("\n"),
+  );
+}
 
 const status = {
   step: "10S",
@@ -752,25 +778,30 @@ const status = {
     "Step 10S verifies navigation/CTA intent and duplicate-link hygiene only. It does not approve navigation, publish routes, include sitemap URLs, promote indexability, deploy, connect a provider, import client data, or unlock public SEO.",
 };
 
-writeFileSync(statusJsonPath, `${JSON.stringify(status, null, 2)}\n`);
-writeFileSync(
-  statusMdPath,
-  [
-    "# Step 10S Navigation / CTA Intent Status",
-    "",
-    `Verdict: ${finalVerdict}`,
-    `Pass: ${passCount}`,
-    `Warnings: ${warnings.length}`,
-    `Failures: ${failures.length}`,
-    "Public unlock: no",
-    "",
-    "Guardrail: verifier-only; no final navigation approval, sitemap inclusion, indexability promotion, deployment, provider connection, client import, or public SEO unlock.",
-  ].join("\n"),
-);
+if (writeArtifacts) {
+  writeFileSync(statusJsonPath, `${JSON.stringify(status, null, 2)}\n`);
+  writeFileSync(
+    statusMdPath,
+    [
+      "# Step 10S Navigation / CTA Intent Status",
+      "",
+      `Verdict: ${finalVerdict}`,
+      `Pass: ${passCount}`,
+      `Warnings: ${warnings.length}`,
+      `Failures: ${failures.length}`,
+      "Public unlock: no",
+      "",
+      "Guardrail: verifier-only; no final navigation approval, sitemap inclusion, indexability promotion, deployment, provider connection, client import, or public SEO unlock.",
+    ].join("\n"),
+  );
+}
 
 console.log(`${finalVerdict}: ${passCount} pass / ${warnings.length} warn / ${failures.length} fail`);
 
 if (failures.length > 0 || publicUnlockRows.length > 0) {
+  failures.slice(0, 120).forEach((row) => {
+    console.error(`- ${row.scope} :: ${row.check} :: ${row.details}`);
+  });
   process.exit(1);
 }
 }

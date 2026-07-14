@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { MediaSlot } from "../media/media-slot";
@@ -282,10 +283,18 @@ export function CmsProductAssetCard({
       {canShowAssetMedia && asset.assetUrl ? (
         <figure
           aria-label={asset.altText || title}
-          className="aspect-[4/3] overflow-hidden border border-po-line bg-po-canvas bg-contain bg-center bg-no-repeat"
+          className="relative aspect-[4/3] overflow-hidden border border-po-line bg-po-canvas"
           role="img"
-          style={{ backgroundImage: `url(${asset.assetUrl})` }}
-        />
+        >
+          <Image
+            alt=""
+            aria-hidden="true"
+            className="object-contain object-center"
+            fill
+            sizes="(min-width: 1024px) 35vw, 100vw"
+            src={asset.assetUrl}
+          />
+        </figure>
       ) : (
         <MediaSlot
           aspectClassName="aspect-[4/3]"

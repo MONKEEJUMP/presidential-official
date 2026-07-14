@@ -12,7 +12,7 @@ const footerLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t-4 border-po-brand bg-po-ink px-6 py-14 text-po-on-dark sm:px-10 lg:px-16 lg:py-20">
+    <footer className="po-gold-thread-inlay bg-po-ink px-6 py-14 text-po-on-dark sm:px-10 lg:px-16 lg:py-20">
       <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.85fr)]">
         <div className="flex max-w-xl flex-col gap-6">
           <Link

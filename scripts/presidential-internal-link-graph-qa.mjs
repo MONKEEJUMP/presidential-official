@@ -7,6 +7,10 @@ import {
 import { spawn } from "node:child_process";
 import { createServer } from "node:net";
 import path from "node:path";
+import {
+  OWNER_PREVIEW_PRODUCT_ROUTES,
+  OWNER_PREVIEW_SERIES_ROUTES,
+} from "./lib/owner-preview-route-inventory.mjs";
 
 const webRoot = process.cwd();
 const root = path.resolve(webRoot, "..");
@@ -16,6 +20,7 @@ const packageJsonPath = path.join(webRoot, "package.json");
 const nextBin = path.join(webRoot, "node_modules", "next", "dist", "bin", "next");
 const runtimeHost = "127.0.0.1";
 const runtimeBasePort = Number(process.env.PRESIDENTIAL_INTERNAL_LINK_QA_PORT || "3352");
+const writeArtifacts = process.env.PRESIDENTIAL_QA_WRITE_ARTIFACTS !== "false";
 const resultsPath = path.join(
   root,
   "docs",
@@ -34,6 +39,8 @@ const publicRoutes = [
   { route: "/our-story", label: "ourStory", file: "our-story.html" },
   { route: "/learn", label: "learn", file: "learn.html" },
   { route: "/find-us", label: "findUs", file: "find-us.html" },
+  { route: "/loyalty", label: "loyalty", file: "loyalty.html" },
+  { route: "/dispensaries", label: "dispensaries", file: "dispensaries.html" },
   { route: "/contact", label: "contact", file: "contact.html" },
 ];
 
@@ -52,16 +59,11 @@ for (const route of [...publicRoutes, ...fallbackRoutes]) {
 }
 
 const mandatoryStaticPaths = publicRoutes.map((route) => route.route);
+const requiredHomePaths = mandatoryStaticPaths.filter((routePath) => routePath !== "/dispensaries");
 const allowedRenderedHrefs = new Set([
   ...mandatoryStaticPaths,
-  // 9083-CODE P2.2/P3.2 (owner directive, 2026-07-10): the Moon Rocks series
-  // routes are built, registered (routes.ts ids moon-rocks-silver/gold/
-  // rose-gold, status conditional, noindex), and reachable from the hub's
-  // series selector. Product-detail hrefs remain excluded until per-route
-  // publication sign-off.
-  "/moon-rocks/silver",
-  "/moon-rocks/gold",
-  "/moon-rocks/rose-gold",
+  ...OWNER_PREVIEW_SERIES_ROUTES.map((route) => route.path),
+  ...OWNER_PREVIEW_PRODUCT_ROUTES.map((route) => route.path),
   // 9083-CODE P4 (owner 8-state ruling, 2026-07-11): themed priority-market
   // pages under the registered /find-us/[state] template, linked from the
   // tile-grid map. Still conditional/noindex.
@@ -74,7 +76,10 @@ const allowedRenderedHrefs = new Set([
   "/find-us/ok",
   "/find-us/wa",
 ]);
-const allowedSamePageFragmentHrefs = new Set(["#presidential-main"]);
+const allowedSamePageFragmentHrefs = new Set([
+  "#presidential-main",
+  "#presidential-states-map",
+]);
 const futureOrTemplatePatterns = [
   /\/learn\/(?:%5Bguide%5D|\[guide\])/i,
   /\/find-us\/\[state\]/i,
@@ -97,6 +102,7 @@ const weakAnchorTextPattern = /^\s*(?:click here|learn more|read more|more|go|li
 const rows = [];
 const graph = new Map();
 const summaries = [];
+const ownerPreviewSummaries = [];
 
 function csvEscape(value) {
   return `"${String(value).replaceAll('"', '""')}"`;
@@ -229,6 +235,46 @@ async function withRuntimeServer(callback) {
   }
 }
 
+async function withOwnerPreviewServer(callback) {
+  const existingBaseUrl = process.env.PRESIDENTIAL_OWNER_PREVIEW_BASE_URL || "http://127.0.0.1:3000";
+  try {
+    const probe = await fetch(`${existingBaseUrl}/moon-rocks/blue-raspberry`);
+    const probeHtml = await probe.text();
+    if (probe.ok && probeHtml.includes("Blue Raspberry") && /\bnoindex\b/i.test(probeHtml)) {
+      return await callback(existingBaseUrl);
+    }
+  } catch {
+    // No reusable owner-preview server is available; start an isolated one.
+  }
+
+  const port = await findOpenPort(runtimeBasePort + 100);
+  const baseUrl = `http://${runtimeHost}:${port}`;
+  const server = spawn(process.execPath, [nextBin, "dev", "-H", runtimeHost, "-p", String(port)], {
+    cwd: webRoot,
+    env: {
+      ...process.env,
+      NODE_ENV: "development",
+      PRESIDENTIAL_SANITY_DRAFT_READ_ENABLED: "true",
+      PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED: "true",
+      PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED: "true",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  server.stdout.resume();
+  server.stderr.resume();
+
+  try {
+    await waitForRuntimeServer(baseUrl);
+    return await callback(baseUrl);
+  } finally {
+    if (!server.killed) {
+      server.kill();
+    }
+    await sleep(250);
+  }
+}
+
 function readRenderedHtml(routeConfig, scope, runtimeHtmlByLabel) {
   const filePath = path.join(builtAppRoot, routeConfig.file);
   if (existsSync(filePath)) {
@@ -281,6 +327,14 @@ function extractAnchorTags(html) {
   );
 }
 
+function accessibleAnchorText(tag) {
+  const visibleText = visibleTextFromHtml(tag);
+  const ariaLabel = getAttribute(tag, "aria-label");
+  const title = getAttribute(tag, "title");
+  const imageAlt = getAttribute(tag.match(/<img\b[^>]*>/i)?.[0] ?? "", "alt");
+  return visibleText || ariaLabel || title || imageAlt;
+}
+
 function normalizeHref(href) {
   if (href === "") {
     return href;
@@ -303,10 +357,142 @@ function isAllowedSamePageFragmentHref(href) {
 
 function renderedRequiredLinksFor(routePath, registryLinks) {
   if (routePath === "/") {
-    return mandatoryStaticPaths.filter((entry) => entry !== "/");
+    return requiredHomePaths.filter((entry) => entry !== "/");
   }
 
   return registryLinks.filter((entry) => allowedRenderedHrefs.has(entry));
+}
+
+async function fetchOwnerPreviewHtml(baseUrl, route) {
+  const response = await fetch(`${baseUrl}${route.path}`, { redirect: "manual" });
+  const html = await response.text();
+  const scope = `ownerPreview:${route.path}`;
+  const expectedUrl = `${baseUrl}${route.path}`;
+  const visibleText = visibleTextFromHtml(html);
+  const robotsTag = Array.from(html.matchAll(/<meta\b[^>]*>/gi))
+    .map((match) => match[0])
+    .find((tag) => getAttribute(tag, "name").toLowerCase() === "robots") ?? "";
+
+  recordCheck(scope, "status200", response.status === 200, "status=200", `status=${response.status}`);
+  recordCheck(scope, "ownUrl", response.url === expectedUrl, response.url, `actual=${response.url}; expected=${expectedUrl}`);
+  recordCheck(scope, "noindex", /\bnoindex\b/i.test(getAttribute(robotsTag, "content")), "owner-preview route remains noindex", "noindex metadata missing");
+
+  return { html, visibleText };
+}
+
+async function checkOwnerPreviewCatalogGraph() {
+  await withOwnerPreviewServer(async (baseUrl) => {
+    const previewGraph = new Map();
+    const hub = await fetchOwnerPreviewHtml(baseUrl, {
+      path: "/moon-rocks",
+    });
+    const hubHrefs = new Set(
+      extractAnchorTags(hub.html)
+        .map((tag) => normalizeHref(getAttribute(tag, "href")))
+        .filter(Boolean),
+    );
+    const seriesPaths = OWNER_PREVIEW_SERIES_ROUTES.map((route) => route.path);
+    const missingSeries = seriesPaths.filter((routePath) => !hubHrefs.has(routePath));
+    recordCheck(
+      "ownerPreview:/moon-rocks",
+      "linksAllSeries",
+      missingSeries.length === 0,
+      "6/6 series URLs linked",
+      `missing=${missingSeries.join(" | ")}`,
+    );
+    previewGraph.set("/moon-rocks", seriesPaths.filter((routePath) => hubHrefs.has(routePath)));
+
+    for (const seriesRoute of OWNER_PREVIEW_SERIES_ROUTES) {
+      const result = await fetchOwnerPreviewHtml(baseUrl, seriesRoute);
+      const hrefs = new Set(
+        extractAnchorTags(result.html)
+          .map((tag) => normalizeHref(getAttribute(tag, "href")))
+          .filter(Boolean),
+      );
+      const expectedProductPaths = seriesRoute.products.map((product) => product.path);
+      const missingProducts = expectedProductPaths.filter((routePath) => !hrefs.has(routePath));
+      recordCheck(
+        `ownerPreview:${seriesRoute.path}`,
+        "linksExpectedProducts",
+        missingProducts.length === 0,
+        `${seriesRoute.expectedProductCount}/${seriesRoute.expectedProductCount} product URLs linked`,
+        `missing=${missingProducts.join(" | ")}`,
+      );
+      recordCheck(
+        `ownerPreview:${seriesRoute.path}`,
+        "expectedSeriesContent",
+        result.visibleText.includes(seriesRoute.name),
+        seriesRoute.name,
+        `missing=${seriesRoute.name}`,
+      );
+      previewGraph.set(
+        seriesRoute.path,
+        expectedProductPaths.filter((routePath) => hrefs.has(routePath)),
+      );
+    }
+
+    for (const productRoute of OWNER_PREVIEW_PRODUCT_ROUTES) {
+      const result = await fetchOwnerPreviewHtml(baseUrl, productRoute);
+      const hrefs = new Set(
+        extractAnchorTags(result.html)
+          .map((tag) => normalizeHref(getAttribute(tag, "href")))
+          .filter(Boolean),
+      );
+      const missingExpectedText = [
+        productRoute.name,
+        productRoute.seriesName,
+        "Owner preview",
+        "not published",
+      ].filter((text) => !result.visibleText.includes(text));
+      recordCheck(
+        `ownerPreview:${productRoute.path}`,
+        "expectedProductContent",
+        missingExpectedText.length === 0,
+        `${productRoute.name} | ${productRoute.seriesName}`,
+        `missing=${missingExpectedText.join(" | ")}`,
+      );
+      recordCheck(
+        `ownerPreview:${productRoute.path}`,
+        "linksBackToHubAndFindUs",
+        hrefs.has("/moon-rocks") && hrefs.has("/find-us"),
+        "/moon-rocks | /find-us",
+        `hub=${hrefs.has("/moon-rocks")}; findUs=${hrefs.has("/find-us")}`,
+      );
+      previewGraph.set(productRoute.path, []);
+      ownerPreviewSummaries.push({
+        route: productRoute.path,
+        name: productRoute.name,
+        series: productRoute.seriesName,
+        ownUrl: true,
+        noindex: true,
+      });
+    }
+
+    const visited = new Set();
+    const queue = ["/moon-rocks"];
+    while (queue.length > 0) {
+      const current = queue.shift();
+      if (!current || visited.has(current)) {
+        continue;
+      }
+      visited.add(current);
+      queue.push(...(previewGraph.get(current) ?? []));
+    }
+
+    const expectedCatalogPaths = [
+      "/moon-rocks",
+      ...seriesPaths,
+      ...OWNER_PREVIEW_PRODUCT_ROUTES.map((route) => route.path),
+    ];
+    const unreachable = expectedCatalogPaths.filter((routePath) => !visited.has(routePath));
+    recordCheck(
+      "ownerPreview:graph",
+      "hubSeriesProductReachability",
+      unreachable.length === 0,
+      "54/54 hub, series, and product URLs reachable",
+      `unreachable=${unreachable.join(" | ")}`,
+    );
+  });
 }
 
 function parseRegistryLinks(routePath) {
@@ -389,7 +575,7 @@ function checkRenderedRoute(routeConfig, runtimeHtmlByLabel) {
   const anchorTags = extractAnchorTags(html);
   const anchors = anchorTags.map((tag) => ({
     href: normalizeHref(getAttribute(tag, "href")),
-    text: visibleTextFromHtml(tag),
+    text: accessibleAnchorText(tag),
     target: getAttribute(tag, "target"),
     rel: getAttribute(tag, "rel"),
   }));
@@ -514,7 +700,7 @@ function checkFallbackRoute(routeConfig, runtimeHtmlByLabel) {
 
   const anchors = extractAnchorTags(html).map((tag) => ({
     href: normalizeHref(getAttribute(tag, "href")),
-    text: visibleTextFromHtml(tag),
+    text: accessibleAnchorText(tag),
   }));
   const badHrefs = anchors
     .filter(
@@ -562,8 +748,10 @@ function checkSitemapAndPackage() {
 }
 
 async function main() {
-  mkdirSync(path.dirname(resultsPath), { recursive: true });
-  mkdirSync(workRoot, { recursive: true });
+  if (writeArtifacts) {
+    mkdirSync(path.dirname(resultsPath), { recursive: true });
+    mkdirSync(workRoot, { recursive: true });
+  }
 
   const runtimeHtmlByLabel = new Map();
   const dynamicRoutes = [...publicRoutes, ...fallbackRoutes].filter((routeConfig) => {
@@ -588,8 +776,10 @@ async function main() {
     checkFallbackRoute(routeConfig, runtimeHtmlByLabel);
   }
 
+  await checkOwnerPreviewCatalogGraph();
+
   const reachable = reachableFromHome();
-  const unreachable = mandatoryStaticPaths.filter((routePath) => !reachable.has(routePath));
+  const unreachable = requiredHomePaths.filter((routePath) => !reachable.has(routePath));
   recordCheck(
     "graph",
     "homeReachability",
@@ -609,21 +799,23 @@ async function main() {
 
   checkSitemapAndPackage();
 
-  writeFileSync(
-    resultsPath,
-    [
-      "scope,check,status,details,public_unlock",
-      ...rows.map((row) =>
-        [
-          csvEscape(row.scope),
-          csvEscape(row.check),
-          csvEscape(row.status),
-          csvEscape(row.details),
-          csvEscape(row.publicUnlock),
-        ].join(","),
-      ),
-    ].join("\n"),
-  );
+  if (writeArtifacts) {
+    writeFileSync(
+      resultsPath,
+      [
+        "scope,check,status,details,public_unlock",
+        ...rows.map((row) =>
+          [
+            csvEscape(row.scope),
+            csvEscape(row.check),
+            csvEscape(row.status),
+            csvEscape(row.details),
+            csvEscape(row.publicUnlock),
+          ].join(","),
+        ),
+      ].join("\n"),
+    );
+  }
 
   const failures = rows.filter((row) => row.status === "fail");
   const warnings = rows.filter((row) => row.status === "warn");
@@ -642,29 +834,34 @@ async function main() {
     mandatoryStaticPaths,
     reachableFromHome: Array.from(reachable).sort(),
     routeSummaries: summaries,
+    ownerPreviewProductCount: OWNER_PREVIEW_PRODUCT_ROUTES.length,
+    ownerPreviewSeriesCount: OWNER_PREVIEW_SERIES_ROUTES.length,
+    ownerPreviewSummaries,
     warnings,
     failures,
   };
 
-  writeFileSync(statusJsonPath, `${JSON.stringify(status, null, 2)}\n`);
-  writeFileSync(
-    statusMdPath,
-    [
-      "# Step 10R Internal Link Graph Readiness Status",
-      "",
-      `Verdict: \`${verdict}\``,
-      `Pass: ${passCount}`,
-      `Warnings: ${warnings.length}`,
-      `Failures: ${failures.length}`,
-      "Public unlock: blocked",
-      "Sitemap: empty",
-      "",
-      "## Reachable From Home",
-      "",
-      Array.from(reachable).sort().map((routePath) => `- ${routePath}`).join("\n"),
-      "",
-    ].join("\n"),
-  );
+  if (writeArtifacts) {
+    writeFileSync(statusJsonPath, `${JSON.stringify(status, null, 2)}\n`);
+    writeFileSync(
+      statusMdPath,
+      [
+        "# Step 10R Internal Link Graph Readiness Status",
+        "",
+        `Verdict: \`${verdict}\``,
+        `Pass: ${passCount}`,
+        `Warnings: ${warnings.length}`,
+        `Failures: ${failures.length}`,
+        "Public unlock: blocked",
+        "Sitemap: empty",
+        "",
+        "## Reachable From Home",
+        "",
+        Array.from(reachable).sort().map((routePath) => `- ${routePath}`).join("\n"),
+        "",
+      ].join("\n"),
+    );
+  }
 
   if (failures.length > 0) {
     console.error(`${verdict}: ${failures.length} failure(s)`);

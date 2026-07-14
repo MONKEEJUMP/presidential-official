@@ -1,5 +1,8 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { stripApprovedVisibleClaimsFromHtml } from "./lib/approved-visible-claims-qa.mjs";
+import {
+  APPROVED_VISIBLE_CLAIMS,
+  stripApprovedVisibleClaimsFromHtml,
+} from "./lib/approved-visible-claims-qa.mjs";
 import { extname, join, relative } from "node:path";
 
 const projectRoot = process.cwd();
@@ -48,10 +51,30 @@ const APPROVED_VISIBLE_CLAIM_SOURCE_ROUTES = new Map([
   ["src/components/presidential/modules/bentolio-hero-shell.tsx", "/"],
   ["src/components/presidential/modules/moon-rocks-platform-shell.tsx", "/moon-rocks"],
 ]);
+const APPROVED_VISIBLE_CLAIM_SOURCE_LITERALS = new Map([
+  [
+    "src/components/presidential/modules/moon-rocks-platform-shell.tsx",
+    ["The Highest Form Of Cannabis."],
+  ],
+]);
 
 function stripApprovedVisibleClaimsFromSource(path, text) {
-  const route = APPROVED_VISIBLE_CLAIM_SOURCE_ROUTES.get(toPosix(path));
-  return route ? stripApprovedVisibleClaimsFromHtml(text, route) : text;
+  const normalizedPath = toPosix(path);
+  const route = APPROVED_VISIBLE_CLAIM_SOURCE_ROUTES.get(normalizedPath);
+  let stripped = route ? stripApprovedVisibleClaimsFromHtml(text, route) : text;
+
+  for (const claim of APPROVED_VISIBLE_CLAIM_SOURCE_LITERALS.get(normalizedPath) || []) {
+    const isApprovedAtRoute = APPROVED_VISIBLE_CLAIMS.entries.some(
+      (entry) =>
+        entry.claim === claim &&
+        entry.placements.some((placement) => placement.route === route),
+    );
+    if (isApprovedAtRoute) {
+      stripped = stripped.replaceAll(claim, "");
+    }
+  }
+
+  return stripped;
 }
 
 function isInternalDraftAppFile(file) {
@@ -3039,16 +3062,16 @@ function checkStep9GRouteShellVisualFoundation() {
 
   const requiredSignals = [
     "Platform architecture",
-    "banner-palms-teal.webp",
+    "BentolioHeroShell",
     "CtaLink",
     "MoonRocksPlatformShell",
     "PillarPlatformShell",
     "FindUsCtaShell",
-    // 4187-CODE (owner template order, 2026-07-11): the Bentolio hero and
-    // its copy pass replaced the prior hero's pinned strings.
+    // The owner-approved Bentolio composition replaced the original palm
+    // banner and retired homepage sentence.
     "One first-party home for Presidential",
     "Find Presidential products.",
-    "official home of Moon Rocks",
+    "MoonRocksSeriesTheater",
   ];
   const missingSignals = requiredSignals.filter(
     (signal) => !combinedText.includes(signal),

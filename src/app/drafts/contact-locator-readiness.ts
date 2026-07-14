@@ -120,12 +120,78 @@ export type ContactLocatorReadiness = {
   };
 };
 
-function readJsonFile<T>(filePath: string): T | undefined {
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isOptionalRecord(value: Record<string, unknown>, key: string) {
+  return value[key] === undefined || isRecord(value[key]);
+}
+
+function isOptionalArray(value: Record<string, unknown>, key: string) {
+  return value[key] === undefined || Array.isArray(value[key]);
+}
+
+function isSourceIntakeSummary(value: unknown): value is SourceIntakeSummary {
+  if (!isRecord(value)) return false;
+
+  for (const key of ["asset_lane", "retailer_lane"] as const) {
+    const lane = value[key];
+    if (lane !== undefined && (!isRecord(lane) || !isOptionalRecord(lane, "checks"))) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function isRetailerWorkflowSummary(
+  value: unknown,
+): value is RetailerWorkflowSummary {
+  if (!isRecord(value)) return false;
+
+  return (
+    ["state_counts", "source_file_counts", "service_zone_counts", "checks"].every(
+      (key) => isOptionalRecord(value, key),
+    ) &&
+    ["duplicate_review_rows", "out_of_state_rows"].every((key) =>
+      isOptionalArray(value, key),
+    )
+  );
+}
+
+function isDryRunImportSummary(value: unknown): value is DryRunImportSummary {
+  return isRecord(value);
+}
+
+function isContactSubmissionSummary(
+  value: unknown,
+): value is ContactSubmissionSummary {
+  if (!isRecord(value) || !isOptionalRecord(value, "checks")) return false;
+
+  return [
+    "routeHandlers",
+    "apiRoutes",
+    "sourceFormMatches",
+    "sourceFieldMatches",
+    "sourceSubmissionMatches",
+  ].every((key) => isOptionalArray(value, key));
+}
+
+function readJsonFile<T>(
+  filePath: string,
+  validate: (value: unknown) => value is T,
+): T | undefined {
   if (!existsSync(filePath)) {
     return undefined;
   }
 
-  return JSON.parse(readFileSync(filePath, "utf8")) as T;
+  try {
+    const value: unknown = JSON.parse(readFileSync(filePath, "utf8"));
+    return validate(value) ? value : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 export function readContactLocatorReadiness(slug: string): ContactLocatorReadiness {
@@ -137,10 +203,19 @@ export function readContactLocatorReadiness(slug: string): ContactLocatorReadine
     };
   }
 
-  const sourceIntake = readJsonFile<SourceIntakeSummary>(SUMMARY_PATHS.sourceIntake);
-  const retailerWorkflow = readJsonFile<RetailerWorkflowSummary>(SUMMARY_PATHS.retailerWorkflow);
-  const dryRunImport = readJsonFile<DryRunImportSummary>(SUMMARY_PATHS.dryRunImport);
-  const contactSubmission = readJsonFile<ContactSubmissionSummary>(SUMMARY_PATHS.contactSubmission);
+  const sourceIntake = readJsonFile(SUMMARY_PATHS.sourceIntake, isSourceIntakeSummary);
+  const retailerWorkflow = readJsonFile(
+    SUMMARY_PATHS.retailerWorkflow,
+    isRetailerWorkflowSummary,
+  );
+  const dryRunImport = readJsonFile(
+    SUMMARY_PATHS.dryRunImport,
+    isDryRunImportSummary,
+  );
+  const contactSubmission = readJsonFile(
+    SUMMARY_PATHS.contactSubmission,
+    isContactSubmissionSummary,
+  );
   const summaries = {
     sourceIntake,
     retailerWorkflow,

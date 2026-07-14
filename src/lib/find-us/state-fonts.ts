@@ -1,6 +1,6 @@
 // Themed state-name display faces — 9083-CODE P4 typography ruling
 // (2026-07-11). Each face applies to the state-name headline ONLY; all other
-// type stays Archivo Black + Inter. All eight are SIL Open Font License
+// type stays Clash Display + Source Serif 4. All eight are SIL Open Font License
 // families from Google Fonts, self-hosted as exact-glyph woff2 subsets
 // (state-name glyphs only, 1.8-7.2KB each). preload:false = a page downloads
 // only the face its own headline uses.

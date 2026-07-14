@@ -32,7 +32,7 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     slug: "az",
     name: "Arizona",
     theme: "desert-canyon",
-    tagline: "Desert sunsets. Cactus silhouettes. Canyon calm.",
+    tagline: "From the Canyon to the Cosmos – Presidential",
     world: "Sonoran desert at dusk — saguaro, sandstone, and a sky on fire.",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Arizona — through licensed retailers, adults 21+.",
@@ -42,7 +42,7 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     slug: "ca",
     name: "California",
     theme: "golden-coast",
-    tagline: "Surf, beaches, mountains — the golden coast where Presidential began.",
+    tagline: "Pre-rolling High in the Golden State.",
     world: "Pacific surf, golden-hour beaches, and mountain ridgelines.",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in California — the brand's home state, through licensed retailers, adults 21+.",
@@ -52,7 +52,7 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     slug: "fl",
     name: "Florida",
     theme: "neon-palms",
-    tagline: "Miami nights. Neon palms. Deco heat.",
+    tagline: "Moon Rockets to the Moon with a Sunshine State of Mind.",
     world: "Miami after dark — neon reflections, palms, and art-deco lines.",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Florida — through licensed retailers, adults 21+.",
@@ -62,7 +62,7 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     slug: "mi",
     name: "Michigan",
     theme: "great-lakes",
-    tagline: "Great Lakes summers. Jet-ski wake. Water life.",
+    tagline: "Motor City High. Presidential Octane.",
     world: "Lake horizons, summer docks, and spray off the wake.",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Michigan — through licensed retailers, adults 21+.",
@@ -72,7 +72,7 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     slug: "nv",
     name: "Nevada",
     theme: "neon-nights",
-    tagline: "Las Vegas marquees. Neon that never sleeps.",
+    tagline: "From the Strip to Space – Presidential Moon Rocks Rock.",
     world: "The Strip at midnight — marquee glow against desert black.",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Nevada — through licensed retailers, adults 21+.",
@@ -82,7 +82,7 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     slug: "ny",
     name: "New York",
     theme: "empire-skyline",
-    tagline: "NYC skyline. City energy. Empire state of mind.",
+    tagline: "Skyscraper High. Presidential Grade.",
     world: "Manhattan at night — skyline grids and avenue light.",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in New York — through licensed retailers, adults 21+.",
@@ -92,7 +92,7 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     slug: "ok",
     name: "Oklahoma",
     theme: "wild-west",
-    tagline: "Cowboy country. Wide-open Wild West.",
+    tagline: "The Sooner The Better. A Presidential High.",
     world: "Red-dirt plains, big skies, and frontier grit.",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Oklahoma — through licensed retailers, adults 21+.",
@@ -102,8 +102,8 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     slug: "wa",
     name: "Washington",
     theme: "evergreen",
-    tagline: "Giant evergreens. Deep-green forest quiet.",
-    world: "Old-growth evergreens in coastal mist — deep green on deeper green.",
+    tagline: "Evergreen State. Presidential High.",
+    world: "",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Washington — through licensed retailers, adults 21+.",
   },

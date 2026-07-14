@@ -16,14 +16,22 @@ import {
 } from "./catalog-drafts";
 
 const SITE_PAGE_CMS_RENDER_ENABLE_ENV = "PRESIDENTIAL_SITE_PAGE_CMS_RENDERING_ENABLED";
+const DRAFT_CATALOG_CACHE_TTL_MS = 10_000;
+
+type DraftCatalogCacheEntry = {
+  readonly expiresAt: number;
+  readonly promise: Promise<DraftCatalogReadResult>;
+};
+
+const draftCatalogReadCache = new Map<string, DraftCatalogCacheEntry>();
 
 export const CATALOG_SERIES_ORDER = [
   "Silver Flavor Series",
   "Gold Strain Series",
   "Rose Gold Connoisseur Series",
   "Presidential Line",
-  "House Line",
-  "THC Design Collaboration",
+  "Presidential House Line",
+  "Presidential x THC Design",
 ] as const;
 
 export type SanityCatalogItem = {
@@ -167,9 +175,31 @@ export async function readDraftCatalogItems(
   route: string,
   init: Pick<RequestInit, "signal" | "next"> = {},
 ): Promise<DraftCatalogReadResult> {
-  const read = await readDraftCatalogItemsUnsorted(route, init);
+  const cached = draftCatalogReadCache.get(route);
+  const now = Date.now();
 
-  return read.ok ? { ...read, items: sortCatalogItems(read.items) } : read;
+  if (!init.signal && cached && cached.expiresAt > now) {
+    return cached.promise;
+  }
+
+  const promise = readDraftCatalogItemsUnsorted(route, init).then((read) =>
+    read.ok ? { ...read, items: sortCatalogItems(read.items) } : read,
+  );
+
+  if (!init.signal) {
+    draftCatalogReadCache.set(route, {
+      expiresAt: now + DRAFT_CATALOG_CACHE_TTL_MS,
+      promise,
+    });
+  }
+
+  const read = await promise;
+
+  if (!read.ok && draftCatalogReadCache.get(route)?.promise === promise) {
+    draftCatalogReadCache.set(route, { expiresAt: 0, promise });
+  }
+
+  return read;
 }
 
 const SERIES_SLUG_PREFIXES = ["silver-", "gold-", "rose-gold-"] as const;

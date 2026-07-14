@@ -63,7 +63,10 @@ ${DRAFT_CATALOG_ITEM_PROJECTION}
 }`;
 
 function isDraftReadEnabled(): boolean {
-  return process.env[SANITY_DRAFT_READ_ENABLE_ENV] === "true";
+  return (
+    process.env.NODE_ENV === "development" &&
+    process.env[SANITY_DRAFT_READ_ENABLE_ENV] === "true"
+  );
 }
 
 function getDraftReadToken(): string {
@@ -102,7 +105,7 @@ export async function readDraftCatalogItems(
   const { payload, response } = await fetchSanityJsonWithTimeout<
     readonly SanityCatalogItem[]
   >(buildDraftCatalogQueryUrl(route), {
-    ...init,
+    signal: init.signal,
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -111,7 +114,7 @@ export async function readDraftCatalogItems(
     cache: "no-store",
   });
 
-  if (!response.ok) {
+  if (!response.ok || !payload) {
     return {
       ok: false,
       skipped: false,
@@ -124,6 +127,6 @@ export async function readDraftCatalogItems(
   return {
     ok: true,
     skipped: false,
-    items: payload?.result || [],
+    items: payload.result,
   };
 }

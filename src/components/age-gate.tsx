@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import type { KeyboardEvent } from "react";
 import { clearAdultAccess, confirmAdultAccess } from "@/app/age-gate-actions";
+import { publishAdultConfirmation } from "@/lib/browser/adult-video-playback";
 
 const AGE_GATED_CONTENT_ID = "presidential-age-gated-content";
 
@@ -70,6 +71,7 @@ export function AgeGate({ initialConfirmed = false }: AgeGateProps) {
     startTransition(async () => {
       try {
         await confirmAdultAccess();
+        publishAdultConfirmation(true);
         shouldFocusMainRef.current = true;
         setStatus("accepted");
       } catch {
@@ -80,6 +82,7 @@ export function AgeGate({ initialConfirmed = false }: AgeGateProps) {
   }
 
   function declineGate() {
+    publishAdultConfirmation(false);
     setStatus("blocked");
     startTransition(() => {
       void clearAdultAccess();

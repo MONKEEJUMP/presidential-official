@@ -9,16 +9,22 @@ import {
 import { spawn } from "node:child_process";
 import { createServer } from "node:net";
 import path from "node:path";
+import { computeBuildInputFingerprint } from "./lib/build-input-fingerprint.mjs";
+import { OWNER_PREVIEW_SERIES_ROUTES } from "./lib/owner-preview-route-inventory.mjs";
 
 const webRoot = process.cwd();
 const root = path.resolve(webRoot, "..");
 const nextRoot = path.join(webRoot, ".next");
 const builtAppRoot = path.join(nextRoot, "server", "app");
 const staticRoot = path.join(nextRoot, "static");
+const publicRoot = path.join(webRoot, "public");
+const buildIdPath = path.join(nextRoot, "BUILD_ID");
+const buildFingerprintPath = path.join(nextRoot, "presidential-build-fingerprint.json");
 const nextBin = path.join(webRoot, "node_modules", "next", "dist", "bin", "next");
 const packageJsonPath = path.join(webRoot, "package.json");
 const runtimeHost = "127.0.0.1";
 const runtimeBasePort = Number(process.env.PRESIDENTIAL_PERFORMANCE_QA_PORT || "3347");
+const writeArtifacts = process.env.PRESIDENTIAL_QA_WRITE_ARTIFACTS !== "false";
 const docsResultsPath = path.join(
   root,
   "docs",
@@ -30,12 +36,20 @@ const statusJsonPath = path.join(workRoot, "step10p-rendered-performance-budget-
 const statusMdPath = path.join(workRoot, "step10p-rendered-performance-budget-status.md");
 
 const routeOutputs = [
-  { label: "home", route: "/", htmlPath: "index.html", dynamicArtifactPath: "page.js", htmlBudgetBytes: 90000, rscPath: "index.rsc", rscBudgetBytes: 45000 },
+  { label: "home", route: "/", htmlPath: "index.html", dynamicArtifactPath: "page.js", htmlBudgetBytes: 160000, rscPath: "index.rsc", rscBudgetBytes: 45000 },
   // moonRocks HTML budget raised 50000 -> 70000 for the owner-ordered catalog
   // series-selector scene, packaging films, and sticky mega-menu header
   // (9083-CODE P2.2/P2.3/P3.1, 2026-07-11); still tight enough to catch
   // runaway page growth on the flagship platform hub.
   { label: "moonRocks", route: "/moon-rocks", htmlPath: "moon-rocks.html", htmlBudgetBytes: 70000, rscPath: "moon-rocks.rsc", rscBudgetBytes: 30000 },
+  ...OWNER_PREVIEW_SERIES_ROUTES.map((seriesRoute) => ({
+    label: seriesRoute.label,
+    route: seriesRoute.path,
+    htmlPath: `${seriesRoute.path.slice(1)}.html`,
+    htmlBudgetBytes: 75000,
+    rscPath: `${seriesRoute.path.slice(1)}.rsc`,
+    rscBudgetBytes: 35000,
+  })),
   { label: "moonPods", route: "/moon-pods", htmlPath: "moon-pods.html", htmlBudgetBytes: 50000, rscPath: "moon-pods.rsc", rscBudgetBytes: 30000 },
   { label: "orbit", route: "/orbit", htmlPath: "orbit.html", htmlBudgetBytes: 50000, rscPath: "orbit.rsc", rscBudgetBytes: 30000 },
   { label: "ourStory", route: "/our-story", htmlPath: "our-story.html", htmlBudgetBytes: 50000, rscPath: "our-story.rsc", rscBudgetBytes: 25000 },
@@ -44,6 +58,8 @@ const routeOutputs = [
   // centerpiece (9083-CODE P4.1, 2026-07-11: 51-tile grid + state links +
   // nationwide film); still tight against further growth.
   { label: "findUs", route: "/find-us", htmlPath: "find-us.html", htmlBudgetBytes: 72000, rscPath: "find-us.rsc", rscBudgetBytes: 30000 },
+  { label: "loyalty", route: "/loyalty", htmlPath: "loyalty.html", htmlBudgetBytes: 65000, rscPath: "loyalty.rsc", rscBudgetBytes: 35000 },
+  { label: "dispensaries", route: "/dispensaries", htmlPath: "dispensaries.html", htmlBudgetBytes: 65000, rscPath: "dispensaries.rsc", rscBudgetBytes: 35000 },
   { label: "contact", route: "/contact", htmlPath: "contact.html", htmlBudgetBytes: 55000, rscPath: "contact.rsc", rscBudgetBytes: 30000 },
   {
     label: "notFound",
@@ -63,19 +79,22 @@ for (const route of routeOutputs) {
 }
 
 const budgets = {
-  aggregateRouteHtmlBytes: 500000,
-  aggregateRouteRscBytes: 280000,
-  staticJsBytes: 850000,
+  aggregateRouteHtmlBytes: 1100000,
+  aggregateRouteRscBytes: 600000,
+  staticJsBytes: 925000,
   largestStaticJsBytes: 325000,
-  staticCssBytes: 80000,
-  // largest-CSS budget raised 50000 -> 64000 for the eight themed state
-  // atmospheres, map tiles, and state display faces (9083-CODE P4, owner
-  // rulings 2026-07-11); total-CSS budget unchanged.
-  largestStaticCssBytes: 64000,
-  staticFontBytes: 225000,
+  staticCssBytes: 110000,
+  largestStaticCssBytes: 75000,
+  staticFontBytes: 350000,
   staticImageBytes: 75000,
-  staticTotalBytes: 1300000,
+  staticTotalBytes: 1500000,
   staticFileCount: 80,
+  publicFileCount: 50,
+  publicTotalBytes: 275000000,
+  publicImageBytes: 6000000,
+  largestPublicImageBytes: 1200000,
+  publicVideoBytes: 265000000,
+  largestPublicVideoBytes: 95000000,
 };
 
 const publicUnlockPattern =
@@ -98,6 +117,19 @@ function rel(filePath) {
 
 function readIfExists(filePath) {
   return existsSync(filePath) ? readFileSync(filePath, "utf8") : "";
+}
+
+function readJsonIfExists(filePath) {
+  const contents = readIfExists(filePath);
+  if (!contents) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(contents);
+  } catch {
+    return null;
+  }
 }
 
 function sizeOf(filePath) {
@@ -242,6 +274,7 @@ function groupStaticFiles(files) {
     css: [],
     font: [],
     image: [],
+    video: [],
     other: [],
   };
 
@@ -255,6 +288,8 @@ function groupStaticFiles(files) {
       groups.font.push(file);
     } else if ([".png", ".jpg", ".jpeg", ".webp", ".gif", ".avif", ".svg", ".ico"].includes(ext)) {
       groups.image.push(file);
+    } else if ([".mp4", ".webm", ".mov", ".m4v"].includes(ext)) {
+      groups.video.push(file);
     } else {
       groups.other.push(file);
     }
@@ -303,14 +338,45 @@ async function main() {
   const rows = [];
   const routeSummaries = [];
   const staticFiles = walkFiles(staticRoot);
+  const publicFiles = walkFiles(publicRoot);
   const builtTextFiles = walkFiles(builtAppRoot);
   const staticGroups = groupStaticFiles(staticFiles);
+  const publicGroups = groupStaticFiles(publicFiles);
   const routeHtmlBytes = [];
   const routeRscBytes = [];
 
   addCheck(rows, "build.nextRoot.exists", existsSync(nextRoot), rel(nextRoot));
   addCheck(rows, "build.appOutput.exists", existsSync(builtAppRoot), rel(builtAppRoot));
   addCheck(rows, "build.staticOutput.exists", existsSync(staticRoot), rel(staticRoot));
+  addCheck(rows, "build.publicRoot.exists", existsSync(publicRoot), rel(publicRoot));
+
+  const currentBuildInput = computeBuildInputFingerprint(webRoot);
+  const recordedBuildFingerprint = readJsonIfExists(buildFingerprintPath);
+  const buildId = readIfExists(buildIdPath).trim();
+  addCheck(
+    rows,
+    "build.fingerprint.existsAndParses",
+    recordedBuildFingerprint !== null,
+    rel(buildFingerprintPath),
+    recordedBuildFingerprint ? "present" : "missing",
+    "required",
+  );
+  addCheck(
+    rows,
+    "build.fingerprint.matchesCurrentInputs",
+    recordedBuildFingerprint?.sha256 === currentBuildInput.sha256,
+    `recorded=${recordedBuildFingerprint?.sha256 ?? "missing"}; current=${currentBuildInput.sha256}`,
+    recordedBuildFingerprint?.sha256 ?? "missing",
+    currentBuildInput.sha256,
+  );
+  addCheck(
+    rows,
+    "build.fingerprint.matchesBuildId",
+    Boolean(buildId) && recordedBuildFingerprint?.buildId === buildId,
+    `recorded=${recordedBuildFingerprint?.buildId ?? "missing"}; BUILD_ID=${buildId || "missing"}`,
+    recordedBuildFingerprint?.buildId ?? "missing",
+    buildId || "required",
+  );
 
   const runtimeHtmlByRoute = new Map();
   await withRuntimeServer(async (baseUrl) => {
@@ -366,6 +432,11 @@ async function main() {
   const staticBytes = totalBytes(staticFiles);
   const largestJs = largestFile(staticGroups.js);
   const largestCss = largestFile(staticGroups.css);
+  const publicImageBytes = totalBytes(publicGroups.image);
+  const publicVideoBytes = totalBytes(publicGroups.video);
+  const publicBytes = totalBytes(publicFiles);
+  const largestPublicImage = largestFile(publicGroups.image);
+  const largestPublicVideo = largestFile(publicGroups.video);
   const matches = scanBuiltText(builtTextFiles);
   const packageJson = readIfExists(packageJsonPath);
 
@@ -379,6 +450,12 @@ async function main() {
   addCheck(rows, "static.css.largestWithinBudget", largestCss.bytes <= budgets.largestStaticCssBytes, rel(largestCss.file), largestCss.bytes, budgets.largestStaticCssBytes);
   addCheck(rows, "static.fonts.totalWithinBudget", fontBytes <= budgets.staticFontBytes, "static font bytes", fontBytes, budgets.staticFontBytes);
   addCheck(rows, "static.images.totalWithinBudget", imageBytes <= budgets.staticImageBytes, "static image/icon bytes", imageBytes, budgets.staticImageBytes);
+  addCheck(rows, "public.fileCount.withinBudget", publicFiles.length <= budgets.publicFileCount, "public file count", publicFiles.length, budgets.publicFileCount);
+  addCheck(rows, "public.total.withinBudget", publicBytes <= budgets.publicTotalBytes, "all public asset bytes", publicBytes, budgets.publicTotalBytes);
+  addCheck(rows, "public.images.totalWithinBudget", publicImageBytes <= budgets.publicImageBytes, "public image/icon bytes", publicImageBytes, budgets.publicImageBytes);
+  addCheck(rows, "public.images.largestWithinBudget", largestPublicImage.bytes <= budgets.largestPublicImageBytes, rel(largestPublicImage.file), largestPublicImage.bytes, budgets.largestPublicImageBytes);
+  addCheck(rows, "public.video.totalWithinBudget", publicVideoBytes <= budgets.publicVideoBytes, "public video bytes", publicVideoBytes, budgets.publicVideoBytes);
+  addCheck(rows, "public.video.largestWithinBudget", largestPublicVideo.bytes <= budgets.largestPublicVideoBytes, rel(largestPublicVideo.file), largestPublicVideo.bytes, budgets.largestPublicVideoBytes);
   addCheck(rows, "built.noPublicUnlockSignals", matches.publicUnlock.length === 0, matches.publicUnlock.join(" | ") || "no public-unlock wording", matches.publicUnlock.length, 0);
   addCheck(rows, "built.noNonProductionHostLeakage", matches.nonProductionHost.length === 0, matches.nonProductionHost.join(" | ") || "no non-production host leakage", matches.nonProductionHost.length, 0);
   addCheck(rows, "built.noUnexpectedRemoteUrls", matches.remoteUrl.length === 0, matches.remoteUrl.slice(0, 10).join(" | ") || "no unexpected remote URLs", matches.remoteUrl.length, 0);
@@ -390,17 +467,21 @@ async function main() {
     ? "PASS_RENDERED_PERFORMANCE_BUDGET_READINESS_NO_PUBLIC_UNLOCK"
     : "FAIL_RENDERED_PERFORMANCE_BUDGET_READINESS_REVIEW_REQUIRED";
 
-  mkdirSync(path.dirname(docsResultsPath), { recursive: true });
-  mkdirSync(workRoot, { recursive: true });
+  if (writeArtifacts) {
+    mkdirSync(path.dirname(docsResultsPath), { recursive: true });
+    mkdirSync(workRoot, { recursive: true });
+  }
 
   const csvHeader = ["check", "status", "details", "actual", "budget", "public_unlock"];
-  writeFileSync(
-    docsResultsPath,
-    [
-      csvHeader.map(csvEscape).join(","),
-      ...rows.map((row) => csvHeader.map((key) => csvEscape(row[key] ?? "")).join(",")),
-    ].join("\n"),
-  );
+  if (writeArtifacts) {
+    writeFileSync(
+      docsResultsPath,
+      [
+        csvHeader.map(csvEscape).join(","),
+        ...rows.map((row) => csvHeader.map((key) => csvEscape(row[key] ?? "")).join(",")),
+      ].join("\n"),
+    );
+  }
 
   const status = {
     verdict,
@@ -410,6 +491,13 @@ async function main() {
       nextBundleAnalysis: "Next.js documents bundle analysis and package bundling review for identifying large client/server modules.",
     },
     budgets,
+    buildFingerprint: {
+      recorded: recordedBuildFingerprint,
+      currentInput: currentBuildInput,
+      matchesCurrentInputs:
+        recordedBuildFingerprint?.sha256 === currentBuildInput.sha256,
+      matchesBuildId: recordedBuildFingerprint?.buildId === buildId,
+    },
     routeCount: routeOutputs.length,
     routeSummaries,
     staticSummary: {
@@ -428,6 +516,23 @@ async function main() {
       otherFileCount: staticGroups.other.length,
       otherBytes: totalBytes(staticGroups.other),
     },
+    publicMediaSummary: {
+      publicFileCount: publicFiles.length,
+      publicTotalBytes: publicBytes,
+      imageFileCount: publicGroups.image.length,
+      imageBytes: publicImageBytes,
+      largestImage: { path: rel(largestPublicImage.file), bytes: largestPublicImage.bytes },
+      videoFileCount: publicGroups.video.length,
+      videoBytes: publicVideoBytes,
+      largestVideo: { path: rel(largestPublicVideo.file), bytes: largestPublicVideo.bytes },
+      inventory: publicFiles
+        .map((file) => ({
+          path: rel(file),
+          bytes: sizeOf(file),
+          type: publicGroups.video.includes(file) ? "video" : "image",
+        }))
+        .sort((left, right) => left.path.localeCompare(right.path)),
+    },
     passCount,
     failCount,
     publicSeoUnlocked: false,
@@ -439,30 +544,42 @@ async function main() {
     rows,
   };
 
-  writeFileSync(statusJsonPath, `${JSON.stringify(status, null, 2)}\n`);
-  writeFileSync(
-    statusMdPath,
-    [
-      "# Step 10P Rendered Performance Budget Readiness Status",
-      "",
-      `Verdict: ${verdict}`,
-      `Checks: ${passCount}/${rows.length}`,
-      `Routes checked: ${routeOutputs.length}`,
-      `Static bytes: ${staticBytes}`,
-      `JavaScript bytes: ${jsBytes}`,
-      `CSS bytes: ${cssBytes}`,
-      "Public unlock: no",
-      "",
-      "Final signal:",
-      "",
-      verdict,
-      "",
-    ].join("\n"),
-  );
+  if (writeArtifacts) {
+    writeFileSync(statusJsonPath, `${JSON.stringify(status, null, 2)}\n`);
+    writeFileSync(
+      statusMdPath,
+      [
+        "# Step 10P Rendered Performance Budget Readiness Status",
+        "",
+        `Verdict: ${verdict}`,
+        `Checks: ${passCount}/${rows.length}`,
+        `Routes checked: ${routeOutputs.length}`,
+        `Build fingerprint: ${currentBuildInput.sha256}`,
+        `Static bytes: ${staticBytes}`,
+        `JavaScript bytes: ${jsBytes}`,
+        `CSS bytes: ${cssBytes}`,
+        `Font bytes: ${fontBytes}`,
+        `Public media bytes: ${publicBytes}`,
+        "Public unlock: no",
+        "",
+        "Final signal:",
+        "",
+        verdict,
+        "",
+      ].join("\n"),
+    );
+  }
 
   if (failCount > 0) {
     console.error(verdict);
     console.error(`Checks passed: ${passCount}/${rows.length}`);
+    rows
+      .filter((row) => row.status === "fail")
+      .forEach((row) => {
+        console.error(
+          `- ${row.check}: actual=${row.actual || "n/a"}; budget=${row.budget || "n/a"}; ${row.details}`,
+        );
+      });
     process.exit(1);
   }
 

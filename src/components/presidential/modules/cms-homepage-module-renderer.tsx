@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import type {
@@ -499,10 +500,18 @@ function AssetCards({ assets, renderMode }: { readonly assets: readonly SanityAs
           {asset.assetUrl && (isPrivate || isPublicCmsAsset(asset)) ? (
             <figure
               aria-label={asset.altText || asset.title || "Presidential media"}
-              className="aspect-[4/3] border border-po-line bg-po-canvas bg-contain bg-center bg-no-repeat"
+              className="relative aspect-[4/3] overflow-hidden border border-po-line bg-po-canvas"
               role="img"
-              style={{ backgroundImage: `url(${JSON.stringify(asset.assetUrl)})` }}
-            />
+            >
+              <Image
+                alt=""
+                aria-hidden="true"
+                className="object-contain object-center"
+                fill
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                src={asset.assetUrl}
+              />
+            </figure>
           ) : isPrivate ? (
             <div className="aspect-[4/3] border border-po-line bg-po-canvas p-4">
               <div className="flex h-full items-end border border-dashed border-po-subtle bg-po-soft p-4">
@@ -748,12 +757,19 @@ function HeroModule({
         {heroAsset?.assetUrl && (isPrivate || isPublicCmsAsset(heroAsset)) ? (
           <figure
             aria-label={heroAsset.altText || heroAsset.title || "Official Presidential media"}
-            className="min-h-96 border border-po-on-dark/15 bg-po-canvas/10 bg-contain bg-center bg-no-repeat"
+            className="relative min-h-96 overflow-hidden border border-po-on-dark/15 bg-po-canvas/10"
             role="img"
-            style={{ backgroundImage: `url(${JSON.stringify(heroAsset.assetUrl)})` }}
           >
+            <Image
+              alt=""
+              aria-hidden="true"
+              className="object-contain object-center"
+              fill
+              sizes="(min-width: 1024px) 35vw, 100vw"
+              src={heroAsset.assetUrl}
+            />
             {isPrivate ? (
-              <figcaption className="m-5 mt-80 grid gap-3 border border-po-brand-line bg-po-canvas p-5 text-po-ink">
+              <figcaption className="relative z-10 m-5 mt-80 grid gap-3 border border-po-brand-line bg-po-canvas p-5 text-po-ink">
                 <p className="text-sm font-semibold">{heroAsset.title || heroAsset.assetName || "Hero media"}</p>
                 {heroAsset.savedFile ? <p className="text-xs leading-5 text-po-muted">{heroAsset.savedFile}</p> : null}
               </figcaption>
@@ -803,13 +819,21 @@ function HomepageActModule({ module, index, renderMode }: { readonly module: San
             </div>
           ) : null}
         </div>
-        {canShowAsset && asset ? (
+        {canShowAsset && asset?.assetUrl ? (
           <figure
             aria-label={asset.altText || asset.title || "Presidential media"}
-            className="aspect-[4/3] border border-po-line bg-po-canvas bg-contain bg-center bg-no-repeat shadow-sm"
+            className="relative aspect-[4/3] overflow-hidden border border-po-line bg-po-canvas shadow-sm"
             role="img"
-            style={{ backgroundImage: `url(${JSON.stringify(asset.assetUrl)})` }}
-          />
+          >
+            <Image
+              alt=""
+              aria-hidden="true"
+              className="object-contain object-center"
+              fill
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              src={asset.assetUrl}
+            />
+          </figure>
         ) : isPrivateRenderMode(renderMode) ? (
           <div className="aspect-[4/3] border border-po-line bg-po-canvas p-4 shadow-sm">
             <div className="flex h-full items-end border border-po-line bg-po-soft p-4">

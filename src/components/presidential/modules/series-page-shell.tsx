@@ -1,18 +1,20 @@
-import Link from "next/link";
-
 import {
   readDraftCatalogItems,
   readPublicRenderableCatalogItems,
   type SanityCatalogItem,
 } from "@/lib/cms/catalog";
+import {
+  filterCatalogSeriesProducts,
+  type CatalogSeriesDefinition,
+} from "@/lib/catalog/series-registry";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 import { PageFrame } from "../layout/page-frame";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { SiteVideo, type SiteVideoSlug } from "../media/site-video";
-import { CtaLink } from "../primitives/cta-link";
 import { SeriesCatalogSection, seriesMetaFor } from "./catalog-grid-shell";
+import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { FindUsCtaShell } from "./find-us-cta-shell";
 
 // Filename-evidence film placement (9083-CODE video ruling, 2026-07-11):
@@ -25,20 +27,18 @@ const SERIES_FILMS: Record<string, { slug: SiteVideoSlug; label: string }> = {
 };
 
 type SeriesPageShellProps = {
-  readonly route: SeoRouteRecord;
-  readonly seriesName: string;
+  readonly definition: CatalogSeriesDefinition;
+  readonly route?: Pick<SeoRouteRecord, "description" | "h1">;
 };
 
-async function readSeriesItems(seriesName: string): Promise<{
+async function readSeriesItems(definition: CatalogSeriesDefinition): Promise<{
   readonly items: readonly SanityCatalogItem[];
   readonly mode: "public" | "preview";
 }> {
   const publicCatalog = await readPublicRenderableCatalogItems("/moon-rocks", {
     next: { tags: ["sanity-catalog-moon-rocks"] },
   });
-  const publicItems = publicCatalog.items.filter(
-    (item) => (item.series || "") === seriesName,
-  );
+  const publicItems = filterCatalogSeriesProducts(definition, publicCatalog.items);
   if (publicItems.length > 0) {
     return { items: publicItems, mode: "public" };
   }
@@ -48,9 +48,7 @@ async function readSeriesItems(seriesName: string): Promise<{
   });
   if (draftCatalog.ok) {
     return {
-      items: draftCatalog.items.filter(
-        (item) => (item.series || "") === seriesName,
-      ),
+      items: filterCatalogSeriesProducts(definition, draftCatalog.items),
       mode: "preview",
     };
   }
@@ -58,88 +56,67 @@ async function readSeriesItems(seriesName: string): Promise<{
   return { items: [], mode: "public" };
 }
 
-export async function SeriesPageShell({ route, seriesName }: SeriesPageShellProps) {
+export async function SeriesPageShell({
+  definition,
+  route,
+}: SeriesPageShellProps) {
+  const seriesName = definition.productFilter.series;
+  const title = route?.h1 || definition.title;
+  const description = route?.description || definition.description;
   const meta = seriesMetaFor(seriesName);
-  const catalog = await readSeriesItems(seriesName);
+  const catalog = await readSeriesItems(definition);
+  const film = SERIES_FILMS[seriesName];
 
   return (
     <PageFrame>
       <SceneStack>
-        <Scene ariaLabelledBy="presidential-series-title" tone="default">
-          <div className="mx-auto w-full max-w-7xl">
-            <nav aria-label="Breadcrumb" className="text-sm text-po-brand-ink">
-              <ol className="flex flex-wrap items-center gap-2">
-                <li>
-                  <Link
-                    className="font-semibold underline-offset-4 hover:underline"
-                    href="/moon-rocks"
-                  >
-                    Moon Rocks
-                  </Link>
-                </li>
-                <li aria-hidden="true" className="text-po-body">
-                  /
-                </li>
-                <li>
-                  <span aria-current="page" className="font-semibold text-po-ink">
-                    {route.h1}
-                  </span>
-                </li>
-              </ol>
-            </nav>
-
-            <div className="mt-10 max-w-4xl">
-              <span aria-hidden="true" className={`block h-2 w-24 ${meta.accentBar}`} />
-              <h1
-                className="mt-6 font-display text-5xl uppercase leading-[0.9] text-po-ink sm:text-7xl"
-                id="presidential-series-title"
-              >
-                {route.h1}
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-po-body">
-                {meta.positioning}
-              </p>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-po-body">
-                {route.description}
-              </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:max-w-md">
-                <CtaLink href="/find-us">Find Presidential near you</CtaLink>
-                <CtaLink href="/moon-rocks" variant="secondary">
-                  All Moon Rocks
-                </CtaLink>
-              </div>
-            </div>
-          </div>
-        </Scene>
-
-        {SERIES_FILMS[seriesName] ? (
-          <Scene
-            ariaLabelledBy="presidential-series-film"
-            className="py-16 lg:py-20"
-            tone="contrast"
-          >
-            <div className="mx-auto w-full max-w-7xl">
+        <DispensariesStyleHero
+          ariaLabelledBy="presidential-series-title"
+          breadcrumbs={[
+            { name: "Moon Rocks", path: "/moon-rocks" },
+            { name: title, path: definition.path },
+          ]}
+          ctas={[
+            {
+              href: "/find-us",
+              label: "Find Presidential near you",
+              tone: "primary",
+            },
+            {
+              href: "/moon-rocks",
+              label: "All Moon Rocks",
+              tone: "secondary",
+            },
+          ]}
+          eyebrow={definition.cardEyebrow}
+          fitLongTitle
+          leadMedia={
+            film ? (
+              <section aria-labelledby="presidential-series-film">
               <p
                 className="text-xs font-black uppercase text-po-brand"
                 id="presidential-series-film"
               >
                 The film
               </p>
-              <div className="mt-6 overflow-hidden border border-po-on-dark/20">
+              <div className="mt-6 overflow-hidden bg-po-ink">
                 <SiteVideo
                   className="aspect-video w-full object-cover"
-                  label={SERIES_FILMS[seriesName].label}
-                  slug={SERIES_FILMS[seriesName].slug}
+                  label={film.label}
+                  slug={film.slug}
                 />
               </div>
-            </div>
-          </Scene>
-        ) : null}
+              </section>
+            ) : undefined
+          }
+          supportingText={[meta.positioning, description]}
+          title={title}
+        />
 
         {catalog.items.length > 0 ? (
           <Scene
             ariaLabelledBy={`catalog-${meta.anchor}`}
-            className="py-20 lg:py-28"
+            className="po-gold-thread-inlay py-20 lg:py-28"
             tone="default"
           >
             <div className="mx-auto w-full max-w-7xl">
@@ -148,13 +125,14 @@ export async function SeriesPageShell({ route, seriesName }: SeriesPageShellProp
                 items={catalog.items}
                 mode={catalog.mode}
                 series={seriesName}
+                heading={definition.title}
               />
             </div>
           </Scene>
         ) : (
           <Scene
             ariaLabelledBy="presidential-series-pending"
-            className="py-20 lg:py-28"
+            className="po-gold-thread-inlay py-20 lg:py-28"
             tone="default"
           >
             <div className="mx-auto w-full max-w-7xl border-t border-po-ink pt-6">
@@ -172,7 +150,7 @@ export async function SeriesPageShell({ route, seriesName }: SeriesPageShellProp
           </Scene>
         )}
 
-        <FindUsCtaShell compact />
+        <FindUsCtaShell className="po-gold-thread-inlay" compact />
       </SceneStack>
     </PageFrame>
   );

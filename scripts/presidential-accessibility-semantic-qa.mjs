@@ -329,8 +329,19 @@ function checkRenderedRoute(route, rendered, rows, summaries) {
     .map((tag) => ({ type: getAttribute(tag, "type"), text: getTagText(tag), tag }))
     .filter((button) => !button.type || !button.text || badControlTextPattern.test(button.text));
   const imgAltFailures = imgTags
-    .map((tag) => ({ alt: getAttribute(tag, "alt"), tag }))
-    .filter((image) => !/\balt=/.test(image.tag) || image.alt.trim() === "");
+    .map((tag) => ({
+      alt: getAttribute(tag, "alt"),
+      ariaHidden: getAttribute(tag, "aria-hidden") === "true",
+      role: getAttribute(tag, "role"),
+      tag,
+    }))
+    .filter(
+      (image) =>
+        !/\balt=/.test(image.tag) ||
+        (image.alt.trim() === "" &&
+          !image.ariaHidden &&
+          !["none", "presentation"].includes(image.role)),
+    );
   const headingLevelSkips = [];
   const initialHtmlIsAgeGateOnly =
     visibleText.includes("Adults 21+ where legal") && !visibleText.includes(route.expectedH1);

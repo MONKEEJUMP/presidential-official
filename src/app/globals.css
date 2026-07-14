@@ -20,10 +20,15 @@
   --po-color-gold-ink: #78350f;
   --po-color-silver: #e5e7eb;
   --po-color-rose-gold: #f4c7b8;
+  --po-gold-thread-stops:
+    #f4e3a1 0%,
+    #d4b96a 48%,
+    #8f6b24 100%;
+  --po-gold-thread-inlay: linear-gradient(180deg, var(--po-gold-thread-stops));
   --po-color-on-dark: #ffffff;
   --po-color-on-dark-muted: #d4d4d8;
-  --po-font-display: var(--font-archivo-black), Arial, Helvetica, sans-serif;
-  --po-font-body: var(--font-inter), Arial, Helvetica, sans-serif;
+  --po-font-display: var(--font-clash-display), Arial, Helvetica, sans-serif;
+  --po-font-body: var(--font-source-serif-4), Arial, Helvetica, sans-serif;
   --background: var(--po-color-canvas);
   --foreground: var(--po-color-ink);
 }
@@ -62,6 +67,109 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.po-home-canvas-light {
+  --po-home-canvas-bg: var(--po-color-canvas);
+  --po-home-canvas-copy: var(--po-color-ink);
+  --po-home-canvas-muted: var(--po-color-body);
+  --po-home-canvas-accent: var(--po-color-brand-ink);
+  --po-home-canvas-rule: var(--po-color-ink);
+}
+
+.po-home-canvas-dark {
+  --po-home-canvas-bg: var(--po-color-ink);
+  --po-home-canvas-copy: var(--po-color-on-dark);
+  --po-home-canvas-muted: var(--po-color-on-dark-muted);
+  --po-home-canvas-accent: var(--po-color-brand);
+  --po-home-canvas-rule: color-mix(
+    in srgb,
+    var(--po-color-on-dark) 24%,
+    transparent
+  );
+}
+
+.po-home-canvas-light,
+.po-home-canvas-dark {
+  background-color: var(--po-home-canvas-bg);
+  color: var(--po-home-canvas-copy);
+}
+
+.po-home-canvas-surface {
+  background-color: var(--po-home-canvas-bg) !important;
+  color: var(--po-home-canvas-copy) !important;
+}
+
+.po-home-canvas-copy {
+  color: var(--po-home-canvas-copy);
+}
+
+.po-home-canvas-muted {
+  color: var(--po-home-canvas-muted);
+}
+
+.po-home-canvas-accent {
+  color: var(--po-home-canvas-accent);
+}
+
+.po-home-canvas-rule {
+  border-color: var(--po-home-canvas-rule);
+}
+
+.po-teal-pinstripe {
+  position: relative;
+}
+
+.po-teal-pinstripe::after {
+  position: absolute;
+  z-index: 20;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 3px var(--po-color-brand);
+  content: "";
+  pointer-events: none;
+}
+
+.po-gold-thread-inlay {
+  position: relative;
+}
+
+.po-gold-thread-inlay::before {
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: var(--po-gold-thread-inlay);
+  content: "";
+  pointer-events: none;
+}
+
+.po-gold-thread-inlay-vertical {
+  position: relative;
+}
+
+.po-gold-thread-inlay-vertical::before {
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: var(--po-gold-thread-inlay);
+  content: "";
+  pointer-events: none;
+}
+
+@media (min-width: 64rem) {
+  .po-gold-thread-inlay-vertical::before {
+    right: auto;
+    bottom: 0;
+    width: 3px;
+    height: auto;
+    background: linear-gradient(90deg, var(--po-gold-thread-stops));
+  }
+}
+
 a {
   text-underline-offset: 0.2em;
 }
@@ -72,6 +180,99 @@ summary {
 
 .po-brand-mark {
   background-image: url("/brand/presidential-logo.webp");
+}
+
+.po-gem-track {
+  animation: po-gem-marquee 80s linear infinite;
+  flex: none;
+  will-change: transform;
+}
+
+.po-gem-band:hover .po-gem-track,
+.po-gem-band:focus-within .po-gem-track {
+  animation-play-state: paused;
+}
+
+.po-gem-preview {
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  top: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
+  visibility: hidden;
+}
+
+.po-gem-preview-arrow {
+  bottom: -7px;
+  left: calc(var(--po-gem-preview-arrow-left, 24px) - 6px);
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+}
+
+.po-gem-preview[data-side="below"] .po-gem-preview-arrow {
+  top: -7px;
+  bottom: auto;
+  border-width: 1px 0 0 1px;
+}
+
+.po-gem-preview-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.po-gem:hover,
+.po-gem:focus-visible {
+  box-shadow:
+    0 0 0 3px rgba(88, 195, 182, 0.4),
+    0 0 14px rgba(88, 195, 182, 0.4);
+}
+
+.po-gem {
+  background: radial-gradient(
+    circle at 42% 36%,
+    var(--po-color-brand) 0%,
+    var(--po-color-brand) 58%,
+    color-mix(in srgb, var(--po-color-brand) 88%, black) 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .po-gem-track {
+    animation: none;
+    transform: translateX(0);
+  }
+
+  .po-gem-band {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+
+  .po-gem-band::-webkit-scrollbar {
+    display: none;
+  }
+
+  .po-gem-clone {
+    display: none;
+  }
+
+  .po-gem-preview {
+    transform: none;
+    transition: none;
+  }
+}
+
+@keyframes po-gem-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .po-primary-nav-item {
@@ -86,6 +287,8 @@ summary {
   display: flex;
   padding: 0.75rem;
   color: var(--po-color-on-dark-muted);
+  font-family: var(--po-font-display);
+  text-transform: uppercase;
   font-size: 0.875rem;
   font-weight: 600;
   transition: color 160ms ease, background-color 160ms ease;
@@ -119,7 +322,7 @@ summary {
   width: 100%;
   align-items: center;
   justify-content: center;
-  border: 1px solid color-mix(in srgb, var(--po-color-on-dark) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--po-color-on-dark) 75%, transparent);
   color: color-mix(in srgb, var(--po-color-on-dark) 30%, transparent);
   font-size: 0.625rem;
   font-weight: 600;
@@ -180,7 +383,9 @@ summary {
 
   .po-primary-nav-link {
     display: inline-flex;
+    padding-inline: clamp(0.4rem, 0.65vw, 0.75rem);
     padding-block: 0.5rem;
+    font-size: clamp(0.75rem, 0.85vw, 0.875rem);
   }
 
   .po-primary-nav-link:hover {

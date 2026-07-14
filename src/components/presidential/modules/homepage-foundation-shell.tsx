@@ -13,6 +13,8 @@ type HomepageFoundationShellProps = {
   readonly route: SeoRouteRecord;
 };
 
+const HOMEPAGE_CANVAS_TONE: "dark" | "light" = "dark";
+
 const proofPoints = [
   {
     title: "Official source",
@@ -66,15 +68,14 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
   }
 
   return (
-    <PageFrame>
+    <PageFrame className={`po-home-canvas-${HOMEPAGE_CANVAS_TONE}`}>
       <SceneStack>
-        {/* 4187-CODE (owner template order, 2026-07-11): Bentolio bento
-            hero supersedes the prior homepage hero. Map section below stays. */}
         <BentolioHeroShell route={route} />
 
         <Scene
           ariaLabelledBy="presidential-homepage-map"
-          className="py-24 lg:py-32"
+          className="po-gold-thread-inlay py-24 lg:py-32"
+          id="presidential-states-map"
           tone="contrast"
         >
           <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(0,0.7fr)_minmax(420px,0.8fr)] lg:items-center lg:gap-20">
@@ -106,33 +107,33 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
 
         <Scene
           ariaLabelledBy="presidential-expect-more"
-          className="py-24 lg:py-32"
+          className="po-gold-thread-inlay po-home-canvas-surface py-24 lg:py-32"
           tone="default"
         >
           <div className="mx-auto w-full max-w-7xl">
             <div className="grid gap-12 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">
               <div>
                 <h2
-                  className="font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-6xl"
+                  className="po-home-canvas-copy font-display text-4xl uppercase leading-[0.92] sm:text-6xl"
                   id="presidential-expect-more"
                 >
                   Expect more.
                 </h2>
-                <p className="mt-6 max-w-md text-base leading-7 text-po-body">
+                <p className="po-home-canvas-muted mt-6 max-w-md text-base leading-7">
                   Presidential connects the product story, the proof path, and
                   retail discovery without losing the culture that built it.
                 </p>
               </div>
               <div className="grid gap-10 sm:grid-cols-3">
                 {proofPoints.map((point, index) => (
-                  <article className="border-t border-po-ink pt-5" key={point.title}>
-                    <p className="text-xs font-black text-po-brand-ink">
+                  <article className="po-home-canvas-rule border-t pt-5" key={point.title}>
+                    <p className="po-home-canvas-accent text-xs font-black">
                       0{index + 1}
                     </p>
-                    <h3 className="mt-10 text-xl font-semibold leading-snug text-po-ink">
+                    <h3 className="po-home-canvas-copy mt-10 text-xl font-semibold leading-snug">
                       {point.title}
                     </h3>
-                    <p className="mt-3 text-sm leading-6 text-po-body">
+                    <p className="po-home-canvas-muted mt-3 text-sm leading-6">
                       {point.body}
                     </p>
                   </article>
@@ -144,7 +145,7 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
 
         <Scene
           ariaLabelledBy="presidential-then-now-next"
-          className="py-24 lg:py-32"
+          className="po-gold-thread-inlay py-24 lg:py-32"
           tone="contrast"
         >
           <div className="mx-auto w-full max-w-7xl">
@@ -155,10 +156,15 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
               <span className="block text-po-brand">World&#39;s Strongest™</span>
               <span className="mt-2 block">Then. Now. Next.</span>
             </h2>
-            <div className="mt-16 grid border-t border-po-on-dark/20 md:grid-cols-3">
+            <div className="po-gold-thread-inlay mt-16 grid md:grid-cols-3">
               {brandChapters.map((chapter, index) => (
                 <article
-                  className="border-b border-po-on-dark/20 py-8 md:border-b-0 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0 md:last:pr-0"
+                  className={[
+                    "py-8 md:px-8 md:first:pl-0 md:last:pr-0",
+                    index > 0 ? "po-gold-thread-inlay-vertical" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
                   key={chapter.title}
                 >
                   <div className="flex items-baseline justify-between gap-4">
@@ -178,19 +184,19 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
 
         <Scene
           ariaLabelledBy="presidential-act-moon-rocks"
-          className="py-24 lg:py-32"
+          className="po-gold-thread-inlay po-home-canvas-surface py-24 lg:py-32"
           tone="default"
         >
           <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,0.78fr)_minmax(420px,1fr)] lg:items-center lg:gap-20">
             <div className="max-w-xl">
-              <p className="text-sm font-bold text-po-brand-ink">Moon Rocks™</p>
+              <p className="po-home-canvas-accent text-sm font-bold">Moon Rocks™</p>
               <h2
-                className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-6xl"
+                className="po-home-canvas-copy mt-5 font-display text-4xl uppercase leading-[0.92] sm:text-6xl"
                 id="presidential-act-moon-rocks"
               >
                 The Highest Form Of Cannabis.
               </h2>
-              <p className="mt-6 text-base leading-7 text-po-body">
+              <p className="po-home-canvas-muted mt-6 text-base leading-7">
                 The flagship Presidential platform for Moon Rocks, infused
                 pre-rolls, blunts, education, and retail discovery.
               </p>
@@ -198,12 +204,12 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
                 <CtaLink href="/moon-rocks" variant="primary">
                   Explore Moon Rocks
                 </CtaLink>
-                <CtaLink href="/learn" variant="text">
+                <CtaLink className="po-home-canvas-accent" href="/learn" variant="text">
                   Learn about Moon Rocks
                 </CtaLink>
               </div>
             </div>
-            <figure className="relative overflow-hidden border border-po-line bg-po-brand">
+            <figure className="po-home-canvas-rule relative overflow-hidden border bg-po-brand">
               <SiteVideo
                 className="aspect-[1200/630] w-full object-cover"
                 label="Presidential Moon Rocks film loop"
@@ -215,12 +221,13 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
 
         <section
           aria-label="Presidential product platforms"
-          className="grid lg:grid-cols-2"
+          className="po-gold-thread-inlay grid lg:grid-cols-2"
         >
-          {secondaryPlatforms.map((platform) => (
+          {secondaryPlatforms.map((platform, index) => (
             <article
               className={[
                 "flex min-h-[28rem] flex-col justify-between gap-16 px-6 py-16 sm:px-10 lg:px-16 lg:py-20",
+                index > 0 ? "po-gold-thread-inlay-vertical" : "",
                 platform.tone === "brand"
                   ? "bg-po-brand text-po-ink"
                   : "bg-po-silver text-po-ink",
@@ -249,7 +256,9 @@ export function HomepageFoundationShell({ route }: HomepageFoundationShellProps)
           ))}
         </section>
 
-        <FindUsCtaShell />
+        <div className="po-gold-thread-inlay">
+          <FindUsCtaShell />
+        </div>
       </SceneStack>
     </PageFrame>
   );

@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { spawn } from "node:child_process";
+import { createHash } from "node:crypto";
 import { createServer } from "node:net";
 import path from "node:path";
 
@@ -20,6 +21,36 @@ const statusJsonPath = path.join(workRoot, "step10c-security-headers-status.json
 const statusMdPath = path.join(workRoot, "step10c-security-headers-status.md");
 const runtimeHost = "127.0.0.1";
 const runtimeBasePort = Number(process.env.PRESIDENTIAL_SECURITY_HEADERS_QA_PORT || "3362");
+const writeResultArtifacts =
+  process.env.PRESIDENTIAL_SECURITY_HEADERS_QA_WRITE_RESULTS !== "false";
+const appInlineStyleSourcePaths = [
+  path.join(webRoot, "src", "app", "global-error.tsx"),
+  path.join(webRoot, "src", "components", "presidential", "media", "media-slot.tsx"),
+  path.join(
+    webRoot,
+    "src",
+    "components",
+    "presidential",
+    "modules",
+    "cms-homepage-module-renderer.tsx",
+  ),
+  path.join(
+    webRoot,
+    "src",
+    "components",
+    "presidential",
+    "modules",
+    "cms-product-module-components.tsx",
+  ),
+];
+const nextImageLayerSourcePaths = appInlineStyleSourcePaths.slice(1);
+const nextImageStyleAttributeValues = [
+  "color:transparent",
+  "position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent",
+];
+const requiredNextImageStyleHashes = nextImageStyleAttributeValues.map(
+  (value) => `'sha256-${createHash("sha256").update(value).digest("base64")}'`,
+);
 
 const requiredRuntimeCspFragments = [
   "default-src 'self'",
@@ -27,6 +58,7 @@ const requiredRuntimeCspFragments = [
   "script-src 'self'",
   "'strict-dynamic'",
   "style-src 'self'",
+  "style-src-attr 'unsafe-hashes'",
   "connect-src 'self'",
   "font-src 'self'",
   "img-src 'self'",
@@ -75,6 +107,27 @@ function headerMapFromManifest(manifest) {
   return map;
 }
 
+function cspDirectiveMap(value) {
+  const directives = new Map();
+
+  for (const directive of value.split(";")) {
+    const [name, ...sources] = directive.trim().split(/\s+/);
+
+    if (name) {
+      directives.set(name, sources);
+    }
+  }
+
+  return directives;
+}
+
+function hasExactSources(actualSources, expectedSources) {
+  return (
+    actualSources.length === expectedSources.length &&
+    expectedSources.every((source) => actualSources.includes(source))
+  );
+}
+
 function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
@@ -111,7 +164,10 @@ async function waitForRuntimeServer(baseUrl) {
     try {
       const response = await fetch(`${baseUrl}/`);
       if (response.ok) {
-        return response;
+        return {
+          headers: response.headers,
+          html: await response.text(),
+        };
       }
     } catch (error) {
       lastError = error;
@@ -161,11 +217,36 @@ async function main() {
     ? JSON.parse(readFileSync(routesManifestPath, "utf8"))
     : {};
   const manifestHeaders = headerMapFromManifest(manifest);
+  const appInlineStyleSources = new Map(
+    appInlineStyleSourcePaths.map((sourcePath) => [
+      sourcePath,
+      existsSync(sourcePath) ? readFileSync(sourcePath, "utf8") : "",
+    ]),
+  );
+  const sourcesWithInlineStyleAttributes = [...appInlineStyleSources]
+    .filter(([, sourceText]) => /\bstyle\s*=/.test(sourceText))
+    .map(([sourcePath]) => path.relative(webRoot, sourcePath));
   const runtimeResponse = await readRuntimeHeaders();
   const runtimeCspValue = runtimeResponse.headers.get("Content-Security-Policy") ?? "";
   const runtimeHstsValue = runtimeResponse.headers.get("Strict-Transport-Security") ?? "";
+  const runtimeStyleAttributeValues = [
+    ...runtimeResponse.html.matchAll(/\sstyle="([^"]*)"/g),
+  ].map((match) => match[1]);
+  const unexpectedRuntimeStyleAttributeValues = [
+    ...new Set(
+      runtimeStyleAttributeValues.filter(
+        (value) => !nextImageStyleAttributeValues.includes(value),
+      ),
+    ),
+  ];
   const cspNonceMatch = runtimeCspValue.match(/'nonce-([^']+)'/);
   const cspHasUnsafeInline = /'unsafe-inline'/i.test(runtimeCspValue);
+  const cspDirectives = cspDirectiveMap(runtimeCspValue);
+  const scriptSrc = cspDirectives.get("script-src") ?? [];
+  const styleSrc = cspDirectives.get("style-src") ?? [];
+  const styleSrcAttr = cspDirectives.get("style-src-attr") ?? [];
+  const nonceSource = cspNonceMatch?.[0];
+  const expectedStyleSrcAttr = ["'unsafe-hashes'", ...requiredNextImageStyleHashes];
 
   const checks = [
     addCheck(rows, "nextConfig.exists", existsSync(nextConfigPath), nextConfigPath),
@@ -185,6 +266,30 @@ async function main() {
     ),
     addCheck(
       rows,
+      "proxy.nextImageStyleHashes",
+      requiredNextImageStyleHashes.every((hash) => proxyText.includes(hash)) &&
+        proxyText.includes("style-src-attr 'unsafe-hashes'"),
+      requiredNextImageStyleHashes.join(" "),
+    ),
+    addCheck(
+      rows,
+      "source.appInlineStyleAttributesAbsent",
+      sourcesWithInlineStyleAttributes.length === 0,
+      sourcesWithInlineStyleAttributes.length
+        ? sourcesWithInlineStyleAttributes.join(", ")
+        : "owned TSX sources contain no app-authored style attributes",
+    ),
+    addCheck(
+      rows,
+      "source.nextImageLayersPresent",
+      nextImageLayerSourcePaths.every((sourcePath) => {
+        const sourceText = appInlineStyleSources.get(sourcePath) ?? "";
+        return sourceText.includes('from "next/image"') && sourceText.includes("<Image");
+      }),
+      "owned content-background renderers use next/image layers",
+    ),
+    addCheck(
+      rows,
       "runtime.cspPresent",
       runtimeCspValue.length > 0,
       runtimeCspValue || "missing",
@@ -200,6 +305,36 @@ async function main() {
       "runtime.cspNoUnsafeInline",
       !cspHasUnsafeInline,
       cspHasUnsafeInline ? runtimeCspValue : "unsafe-inline absent",
+    ),
+    addCheck(
+      rows,
+      "runtime.cspScriptAndStyleNoncePolicy",
+      Boolean(
+        nonceSource &&
+          scriptSrc.includes("'self'") &&
+          scriptSrc.includes(nonceSource) &&
+          scriptSrc.includes("'strict-dynamic'") &&
+          styleSrc.includes("'self'") &&
+          styleSrc.includes(nonceSource),
+      ),
+      nonceSource
+        ? `script-src and style-src retain ${nonceSource}`
+        : "missing shared nonce source",
+    ),
+    addCheck(
+      rows,
+      "runtime.cspStyleSrcAttrExactNextImageHashes",
+      hasExactSources(styleSrcAttr, expectedStyleSrcAttr),
+      styleSrcAttr.join(" ") || "missing style-src-attr",
+    ),
+    addCheck(
+      rows,
+      "runtime.styleAttributesRestrictedToNextImageValues",
+      runtimeStyleAttributeValues.length > 0 &&
+        unexpectedRuntimeStyleAttributeValues.length === 0,
+      unexpectedRuntimeStyleAttributeValues.length
+        ? unexpectedRuntimeStyleAttributeValues.join(" | ")
+        : `${runtimeStyleAttributeValues.length} Next/Image style attribute(s)`,
     ),
     addCheck(
       rows,
@@ -287,20 +422,23 @@ async function main() {
     ? "PASS_SECURITY_HEADERS_HARDENING_NO_PUBLIC_UNLOCK"
     : "FAIL_SECURITY_HEADERS_HARDENING_REVIEW_REQUIRED";
 
-  mkdirSync(path.dirname(docsResultsPath), { recursive: true });
-  writeFileSync(
-    docsResultsPath,
-    [
-      "check,status,details,public_unlock",
-      ...rows.map((row) =>
-        [row.check, row.status, row.details, row.public_unlock].map(csvEscape).join(","),
-      ),
-    ].join("\n") + "\n",
-  );
+  if (writeResultArtifacts) {
+    mkdirSync(path.dirname(docsResultsPath), { recursive: true });
+    writeFileSync(
+      docsResultsPath,
+      [
+        "check,status,details,public_unlock",
+        ...rows.map((row) =>
+          [row.check, row.status, row.details, row.public_unlock].map(csvEscape).join(","),
+        ),
+      ].join("\n") + "\n",
+    );
+  }
 
   const payload = {
     verdict,
     requiredRuntimeCspFragments,
+    requiredNextImageStyleHashes,
     requiredManifestHeaders: Object.fromEntries(requiredManifestHeaders),
     forbiddenHeaders,
     manifestHeaderKeys: [...manifestHeaders.keys()],
@@ -314,31 +452,39 @@ async function main() {
     hstsEnforcedNoPreload: true,
     cspUnsafeInlinePresent: cspHasUnsafeInline,
     cspNoncePresent: Boolean(cspNonceMatch?.[1]),
+    cspStyleSrcAttrRestrictedToNextImageHashes: hasExactSources(
+      styleSrcAttr,
+      expectedStyleSrcAttr,
+    ),
+    runtimeStyleAttributeValues: [...new Set(runtimeStyleAttributeValues)],
     cspNonceMigrationRequiredBeforePublicLaunch: false,
+    resultArtifactsWritten: writeResultArtifacts,
     guardrail:
-      "Step 10C verifies security header hardening only. Runtime CSP is nonce-based and does not include unsafe-inline. It does not deploy, index, publish, approve routes, or unlock public SEO.",
+      "Step 10C verifies security header hardening only. Runtime CSP is nonce-based, does not include unsafe-inline, and limits style attributes to exact Next/Image hashes. It does not deploy, index, publish, approve routes, or unlock public SEO.",
   };
 
-  mkdirSync(workRoot, { recursive: true });
-  writeFileSync(statusJsonPath, JSON.stringify(payload, null, 2));
-  writeFileSync(
-    statusMdPath,
-    [
-      "# Step 10C Security Headers Status",
-      "",
-      `Verdict: \`${verdict}\``,
-      "",
-      "## Checks",
-      "",
-      ...rows.map((row) => `- \`${row.check}\`: ${row.status.toUpperCase()} - ${row.details}`),
-      "",
-      "## Guardrail",
-      "",
-      payload.guardrail,
-      "",
-      "Final signal: `STEP_10C_SECURITY_HEADERS_HARDENING_COMPLETE_NO_PUBLIC_UNLOCK`",
-    ].join("\n") + "\n",
-  );
+  if (writeResultArtifacts) {
+    mkdirSync(workRoot, { recursive: true });
+    writeFileSync(statusJsonPath, JSON.stringify(payload, null, 2));
+    writeFileSync(
+      statusMdPath,
+      [
+        "# Step 10C Security Headers Status",
+        "",
+        `Verdict: \`${verdict}\``,
+        "",
+        "## Checks",
+        "",
+        ...rows.map((row) => `- \`${row.check}\`: ${row.status.toUpperCase()} - ${row.details}`),
+        "",
+        "## Guardrail",
+        "",
+        payload.guardrail,
+        "",
+        "Final signal: `STEP_10C_SECURITY_HEADERS_HARDENING_COMPLETE_NO_PUBLIC_UNLOCK`",
+      ].join("\n") + "\n",
+    );
+  }
 
   console.log(JSON.stringify(payload, null, 2));
   process.exitCode = verdict.startsWith("PASS_") ? 0 : 1;

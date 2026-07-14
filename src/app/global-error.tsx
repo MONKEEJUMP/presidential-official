@@ -1,90 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import type { CSSProperties } from "react";
+
+import styles from "./global-error.module.css";
 
 type GlobalErrorProps = {
   readonly error: Error & { digest?: string };
   readonly reset: () => void;
-};
-
-const styles: Record<string, CSSProperties> = {
-  body: {
-    margin: 0,
-    minHeight: "100vh",
-    background: "var(--po-color-soft)",
-    color: "var(--po-color-ink)",
-    fontFamily: "var(--po-font-body)",
-  },
-  main: {
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "48px 24px",
-    boxSizing: "border-box",
-  },
-  section: {
-    width: "100%",
-    maxWidth: "720px",
-    border: "1px solid var(--po-color-line)",
-    background: "var(--po-color-canvas)",
-    padding: "32px",
-    boxSizing: "border-box",
-  },
-  eyebrow: {
-    margin: "0 0 24px 0",
-    color: "var(--po-color-brand)",
-    fontSize: "14px",
-    fontWeight: 700,
-    letterSpacing: 0,
-    textTransform: "uppercase",
-  },
-  h1: {
-    margin: 0,
-    color: "var(--po-color-ink)",
-    fontSize: "36px",
-    lineHeight: 1.12,
-    fontWeight: 700,
-    letterSpacing: 0,
-  },
-  p: {
-    margin: "16px 0 0 0",
-    color: "var(--po-color-body)",
-    fontSize: "16px",
-    lineHeight: 1.7,
-  },
-  actions: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "12px",
-    marginTop: "28px",
-  },
-  primary: {
-    border: "1px solid var(--po-color-brand)",
-    background: "var(--po-color-brand)",
-    color: "var(--po-color-canvas)",
-    padding: "12px 16px",
-    fontSize: "14px",
-    fontWeight: 700,
-    cursor: "pointer",
-  },
-  secondary: {
-    display: "inline-flex",
-    alignItems: "center",
-    border: "1px solid var(--po-color-subtle)",
-    color: "var(--po-color-body)",
-    padding: "12px 16px",
-    fontSize: "14px",
-    fontWeight: 700,
-    textDecoration: "none",
-  },
-  footnote: {
-    marginTop: "28px",
-    color: "var(--po-color-muted)",
-    fontSize: "14px",
-    fontWeight: 600,
-  },
 };
 
 export default function GlobalError({ reset }: GlobalErrorProps) {
@@ -94,30 +16,30 @@ export default function GlobalError({ reset }: GlobalErrorProps) {
         <title>Presidential | Page Error</title>
         <meta content="noindex, follow" name="robots" />
       </head>
-      <body style={styles.body}>
-        <main style={styles.main}>
-          <section aria-labelledby="presidential-global-error-title" style={styles.section}>
-            <p style={styles.eyebrow}>Official Presidential</p>
-            <h1 id="presidential-global-error-title" style={styles.h1}>
+      <body className={styles.body}>
+        <main className={styles.main}>
+          <section aria-labelledby="presidential-global-error-title" className={styles.section}>
+            <p className={styles.eyebrow}>Official Presidential</p>
+            <h1 className={styles.heading} id="presidential-global-error-title">
               This page could not load
             </h1>
-            <p style={styles.p}>
+            <p className={styles.message}>
               The official Presidential experience is still protected. Try again
               or return to the official home.
             </p>
-            <div style={styles.actions}>
+            <div className={styles.actions}>
               <button
+                className={styles.primary}
                 onClick={() => reset()}
-                style={styles.primary}
                 type="button"
               >
                 Try again
               </button>
-              <Link href="/" style={styles.secondary}>
+              <Link className={styles.secondary} href="/">
                 Return home
               </Link>
             </div>
-            <p style={styles.footnote}>For adults 21+ where legal.</p>
+            <p className={styles.footnote}>For adults 21+ where legal.</p>
           </section>
         </main>
       </body>

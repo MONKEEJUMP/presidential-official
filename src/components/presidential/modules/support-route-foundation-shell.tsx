@@ -4,9 +4,12 @@ import { ContactInquiryForm } from "@/app/contact/contact-inquiry-form";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 import { PageFrame } from "../layout/page-frame";
+import { LocatorConsole } from "../locator/locator-console";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
+import { FindUsNationwideVideo } from "../media/find-us-nationwide-video";
 import { CtaLink } from "../primitives/cta-link";
+import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { UsMapShell } from "./us-map-shell";
 
 type SupportBreadcrumb = {
@@ -32,6 +35,7 @@ type SupportRouteFoundationShellProps = {
   readonly panels: readonly SupportPanel[];
   readonly supportCallout: SupportCallout | null;
   readonly contactInquiryConfigured: boolean;
+  readonly heroVariant?: "dispensaries";
 };
 
 export function SupportRouteFoundationShell({
@@ -41,6 +45,7 @@ export function SupportRouteFoundationShell({
   panels,
   supportCallout,
   contactInquiryConfigured,
+  heroVariant,
 }: SupportRouteFoundationShellProps) {
   if (route.kind !== "contact" && route.kind !== "store_locator") {
     throw new Error(
@@ -51,82 +56,97 @@ export function SupportRouteFoundationShell({
   return (
     <PageFrame>
       <SceneStack>
-        <section
+        {heroVariant === "dispensaries" ? (
+          <DispensariesStyleHero
+            ariaLabelledBy="presidential-route-title"
+            breadcrumbs={breadcrumbs}
+            eyebrow="Official Presidential"
+            leadMedia={
+              route.kind === "store_locator" ? <FindUsNationwideVideo /> : undefined
+            }
+            supportingText={[
+              route.description,
+              "A focused official section inside the Presidential digital experience for adults 21+ where legal.",
+            ]}
+            title={route.h1}
+          />
+        ) : (
+          <section
           aria-labelledby="presidential-route-title"
-          className="grid overflow-hidden bg-po-ink text-po-on-dark lg:min-h-[calc(100svh-7rem)] lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.62fr)]"
-        >
-          <div className="flex flex-col justify-between gap-14 px-6 py-12 sm:px-10 lg:px-16 lg:py-16">
-            <nav aria-label="Breadcrumb" className="text-sm text-po-on-dark-muted">
-              <ol className="flex flex-wrap items-center gap-2">
-                {breadcrumbs.map((breadcrumb, index) => {
-                  const isCurrent = index === breadcrumbs.length - 1;
+          className="overflow-hidden bg-po-ink text-po-on-dark lg:min-h-[calc(100svh-7rem)]"
+          >
+            <div className="flex flex-col justify-between gap-14 px-6 py-12 sm:px-10 lg:px-16 lg:py-16">
+              <nav aria-label="Breadcrumb" className="text-sm text-po-on-dark-muted">
+                <ol className="flex flex-wrap items-center gap-2">
+                  {breadcrumbs.map((breadcrumb, index) => {
+                    const isCurrent = index === breadcrumbs.length - 1;
 
-                  return (
-                    <li className="flex items-center gap-2" key={breadcrumb.path}>
-                      {index > 0 ? (
-                        <span aria-hidden="true" className="text-po-brand">
-                          /
-                        </span>
-                      ) : null}
-                      {isCurrent ? (
-                        <span aria-current="page" className="text-po-on-dark">
-                          {breadcrumb.name}
-                        </span>
-                      ) : (
-                        <Link
-                          className="font-semibold text-po-brand underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
-                          href={breadcrumb.path}
-                        >
-                          {breadcrumb.name}
-                        </Link>
-                      )}
-                    </li>
-                  );
-                })}
-              </ol>
-            </nav>
+                    return (
+                      <li className="flex items-center gap-2" key={breadcrumb.path}>
+                        {index > 0 ? (
+                          <span aria-hidden="true" className="text-po-brand">
+                            /
+                          </span>
+                        ) : null}
+                        {isCurrent ? (
+                          <span aria-current="page" className="text-po-on-dark">
+                            {breadcrumb.name}
+                          </span>
+                        ) : (
+                          <Link
+                            className="font-semibold text-po-brand underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
+                            href={breadcrumb.path}
+                          >
+                            {breadcrumb.name}
+                          </Link>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ol>
+              </nav>
 
-            <div className="max-w-4xl">
-              <p className="text-xs font-black uppercase text-po-brand">
-                Official Presidential
-              </p>
-              <h1
-                className="mt-5 font-display text-4xl uppercase leading-[0.9] text-po-on-dark sm:text-6xl lg:text-7xl"
-                id="presidential-route-title"
-              >
-                {route.h1}
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-po-on-dark-muted">
-                {route.description}
-              </p>
-              <p className="mt-6 max-w-xl text-sm leading-6 text-po-on-dark-muted">
-                A focused official section inside the Presidential digital
-                experience for adults 21+ where legal.
-              </p>
+              {route.kind === "store_locator" ? (
+                <FindUsNationwideVideo />
+              ) : null}
+
+              <div className="max-w-4xl">
+                <p className="text-xs font-black uppercase text-po-brand">
+                  Official Presidential
+                </p>
+                <h1
+                  className="mt-5 font-display text-4xl uppercase leading-[0.9] text-po-on-dark sm:text-6xl lg:text-7xl"
+                  id="presidential-route-title"
+                >
+                  {route.h1}
+                </h1>
+                <p className="mt-6 max-w-2xl text-lg leading-8 text-po-on-dark-muted">
+                  {route.description}
+                </p>
+                <p className="mt-6 max-w-xl text-sm leading-6 text-po-on-dark-muted">
+                  A focused official section inside the Presidential digital
+                  experience for adults 21+ where legal.
+                </p>
+              </div>
             </div>
-          </div>
 
-          <figure className="relative min-h-64 overflow-hidden bg-po-brand lg:min-h-full">
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 bg-[url('/brand/banner-palms-teal.webp')] bg-[length:auto_190%] bg-left bg-no-repeat opacity-55"
-            />
-            <div
-              aria-hidden="true"
-              className="po-brand-mark absolute inset-10 bg-contain bg-center bg-no-repeat"
-            />
-            <figcaption className="absolute inset-x-6 bottom-6 border-t border-po-ink pt-4 text-po-ink sm:inset-x-10">
-              <span className="block text-xs font-black uppercase">
-                {route.h1} media
-              </span>
-              <span className="mt-1 block text-sm">Presidential section visual</span>
-            </figcaption>
-          </figure>
-        </section>
+          </section>
+        )}
+
+        {route.kind === "store_locator" ? (
+          <section
+            aria-label="Find a dispensary"
+            className="po-gold-thread-inlay bg-po-ink text-po-on-dark"
+          >
+            <div className="mx-auto w-full max-w-7xl px-[clamp(1.25rem,4vw,4rem)] pb-[clamp(4rem,8vw,7rem)] pt-[clamp(3rem,8vw,7rem)]">
+              <LocatorConsole missionControlIntro />
+            </div>
+          </section>
+        ) : null}
 
         <Scene
           ariaLabelledBy="presidential-route-details"
-          className="py-24 lg:py-32"
+          className="po-gold-thread-inlay py-24 lg:py-32"
           tone="default"
         >
           <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">
@@ -170,7 +190,7 @@ export function SupportRouteFoundationShell({
         {route.kind === "store_locator" ? (
           <Scene
             ariaLabelledBy="presidential-find-us-map"
-            className="py-24 lg:py-32"
+            className="po-gold-thread-inlay py-24 lg:py-32"
             tone="contrast"
           >
             <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(0,0.7fr)_minmax(420px,0.8fr)] lg:items-center lg:gap-20">
@@ -198,7 +218,7 @@ export function SupportRouteFoundationShell({
         {supportCallout ? (
           <Scene
             ariaLabelledBy="presidential-support-readiness"
-            className="py-24 lg:py-32"
+            className="po-gold-thread-inlay py-24 lg:py-32"
             tone="contrast"
           >
             <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(0,0.85fr)_minmax(360px,0.65fr)] lg:gap-24">
@@ -236,7 +256,7 @@ export function SupportRouteFoundationShell({
         {route.kind === "contact" && contactInquiryConfigured ? (
           <section
             aria-labelledby="presidential-contact-inquiry"
-            className="bg-po-brand px-6 py-24 text-po-ink sm:px-10 lg:px-16 lg:py-32"
+            className="po-gold-thread-inlay bg-po-brand px-6 py-24 text-po-ink sm:px-10 lg:px-16 lg:py-32"
           >
             <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">
               <div>
@@ -263,7 +283,7 @@ export function SupportRouteFoundationShell({
         {links.length > 0 ? (
           <Scene
             ariaLabelledBy="presidential-related-sections"
-            className="py-24 lg:py-32"
+            className="po-gold-thread-inlay py-24 lg:py-32"
             tone="quiet"
           >
             <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">

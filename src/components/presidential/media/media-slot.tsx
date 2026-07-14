@@ -1,4 +1,5 @@
-import type { CSSProperties, ReactNode } from "react";
+import Image from "next/image";
+import type { ReactNode } from "react";
 
 import {
   getPlaceholderPolicy,
@@ -14,6 +15,28 @@ type MediaSlotProps = {
   readonly backgroundImagePath?: `/${string}`;
   readonly backgroundPosition?: string;
   readonly note?: string;
+};
+
+const backgroundPositionClasses: Readonly<Record<string, string>> = {
+  bottom: "object-bottom",
+  center: "object-center",
+  "center bottom": "object-bottom",
+  "center top": "object-top",
+  left: "object-left",
+  "left bottom": "object-left-bottom",
+  "left center": "object-left",
+  "left top": "object-left-top",
+  right: "object-right",
+  "right bottom": "object-right-bottom",
+  "right center": "object-right",
+  "right top": "object-right-top",
+  top: "object-top",
+  "top center": "object-top",
+  "top left": "object-left-top",
+  "top right": "object-right-top",
+  "bottom center": "object-bottom",
+  "bottom left": "object-left-bottom",
+  "bottom right": "object-right-bottom",
 };
 
 export function MediaSlot({
@@ -39,25 +62,29 @@ export function MediaSlot({
   ]
     .filter(Boolean)
     .join(" ");
-  const backgroundStyle = backgroundImagePath
-    ? ({
-        backgroundImage: `linear-gradient(180deg, color-mix(in srgb, var(--po-color-ink) 16%, transparent), color-mix(in srgb, var(--po-color-ink) 72%, transparent)), url("${backgroundImagePath}")`,
-        backgroundPosition,
-      } satisfies CSSProperties)
-    : undefined;
+  const backgroundPositionClass =
+    backgroundPositionClasses[backgroundPosition.trim().toLowerCase()] ||
+    "object-center";
 
   return (
     <figure className={classNames}>
       <div
         aria-hidden="true"
-        className={[
-          "absolute inset-0",
-          backgroundImagePath ? "bg-cover bg-no-repeat" : "",
-        ].filter(Boolean).join(" ")}
-        style={backgroundStyle}
+        className="absolute inset-0"
       >
         {backgroundImagePath ? (
-          <div className="absolute inset-0 bg-po-brand-strong/20" />
+          <>
+            <Image
+              alt=""
+              aria-hidden="true"
+              className={`object-cover ${backgroundPositionClass}`}
+              fill
+              sizes="100vw"
+              src={backgroundImagePath}
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--po-color-ink)_16%,transparent),color-mix(in_srgb,var(--po-color-ink)_72%,transparent))]" />
+            <div className="absolute inset-0 bg-po-brand-strong/20" />
+          </>
         ) : (
           <>
             <div className="absolute inset-x-0 top-0 h-1 bg-po-gold" />

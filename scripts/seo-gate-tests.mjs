@@ -1462,7 +1462,49 @@ for (const entry of APPROVED_VISIBLE_CLAIMS.entries) {
   );
 }
 
-// (b) Non-registry superlatives still FAIL the visible-copy scan.
+// (b) The owner-ruled homepage statement is placement-scoped without changing
+// the legal claim registry or weakening metadata checks.
+const ownerProtectedStatement = "World's Strongest Cannabis!";
+const ownerProtectedStatementHtml =
+  '<p id="presidential-homepage-statement">World&#39;s Strongest<br />Cannabis!</p>';
+assertEqual(
+  normalizeVisibleClaimNode(
+    stripApprovedVisibleClaimsFromHtml(ownerProtectedStatementHtml, "/").replace(
+      /<[^>]+>/g,
+      " ",
+    ),
+  ),
+  "",
+  "Owner-protected homepage statement was not removed from its exact placement.",
+);
+assertEqual(
+  stripApprovedVisibleClaimsFromHtml(ownerProtectedStatementHtml, "/wrong-route"),
+  ownerProtectedStatementHtml,
+  "Owner-protected homepage statement was incorrectly exempted on another route.",
+);
+assertEqual(
+  stripApprovedVisibleClaimsFromHtml(
+    ownerProtectedStatementHtml.replace(
+      "presidential-homepage-statement",
+      "wrong-placement",
+    ),
+    "/",
+  ),
+  ownerProtectedStatementHtml.replace(
+    "presidential-homepage-statement",
+    "wrong-placement",
+  ),
+  "Owner-protected homepage statement was incorrectly exempted at another element id.",
+);
+assertEqual(
+  APPROVED_VISIBLE_CLAIMS.entries.some(
+    (entry) => normalizeVisibleClaimNode(entry.claim) === ownerProtectedStatement,
+  ),
+  false,
+  "Owner-protected display copy must not mutate the legal claim registry.",
+);
+
+// (c) Non-registry superlatives still FAIL the visible-copy scan.
 const nonRegistrySuperlatives = [
   "best in the world",
   "world's strongest pre-rolls",
@@ -1480,7 +1522,7 @@ for (const text of nonRegistrySuperlatives) {
   );
 }
 
-// (c) Registry marks in METADATA still FAIL - UNSAFE_METADATA_TEXT_PATTERNS
+// (d) Registry marks in METADATA still FAIL - UNSAFE_METADATA_TEXT_PATTERNS
 // is untouched. ("The Highest Form Of Cannabis" is additionally covered in
 // metadata surfaces by the untouched serp-snippet/rendered-head superlative
 // regexes, which receive no registry exemption.)
@@ -1497,6 +1539,18 @@ for (const metadataMark of ["World's Strongest™ Moon Rocks", "The Strongest Fl
     `Registry mark must remain blocked in metadata: ${metadataMark}`,
   );
 }
+
+let ownerStatementBlockedInMetadata = false;
+try {
+  assertMetadataTextSafe(ownerProtectedStatement, "description");
+} catch {
+  ownerStatementBlockedInMetadata = true;
+}
+assertEqual(
+  ownerStatementBlockedInMetadata,
+  true,
+  "Owner-protected homepage statement must remain blocked in metadata.",
+);
 
 console.log(
   "SEO gate tests passed: publication gate stays closed, source firewall blocks non-public/non-production sources, language guard blocks unsafe metadata text, brand-defense routes stay noindex, and the approved-visible-claims registry exempts exact marks in visible copy only while metadata and non-registry superlatives stay blocked.",

@@ -1,0 +1,78 @@
+.stage {
+  min-height: 100vh;
+  background: var(--po-color-ink);
+  color: var(--po-color-on-dark);
+}
+
+.hero,
+.controlBand,
+.ageBand {
+  width: min(100%, var(--container-7xl));
+  margin: 0 auto;
+  padding-inline: clamp(1.25rem, 4vw, 4rem);
+}
+
+.hero {
+  padding-top: clamp(3rem, 8vw, 7rem);
+  padding-bottom: clamp(3rem, 7vw, 6rem);
+}
+
+.breadcrumb {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  margin-bottom: 4rem;
+  color: var(--po-color-on-dark-muted);
+  font-family: var(--po-font-display);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.breadcrumb a {
+  color: var(--po-color-brand);
+}
+
+.eyebrow {
+  margin-bottom: 1rem;
+  color: var(--po-color-brand);
+  font-family: var(--po-font-display);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  min-width: 0;
+  max-width: min(12ch, 100%);
+  font-family: var(--po-font-display);
+  font-size: clamp(3.25rem, 10vw, 8.5rem);
+  font-weight: 700;
+  line-height: 0.82;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.supportingCopy {
+  max-width: 38rem;
+  margin-top: 2rem;
+  color: var(--po-color-on-dark-muted);
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.55;
+}
+
+.controlBand {
+  padding-top: clamp(3rem, 6vw, 5rem);
+  padding-bottom: clamp(4rem, 8vw, 7rem);
+}
+
+.ageBand {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  color: var(--po-color-on-dark-muted);
+  font-family: var(--po-font-display);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}

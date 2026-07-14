@@ -5,6 +5,10 @@ import {
   catalogItemSlug,
   type SanityCatalogItem,
 } from "@/lib/cms/catalog";
+import {
+  CATALOG_SERIES_REGISTRY,
+  filterCatalogSeriesProducts,
+} from "@/lib/catalog/series-registry";
 
 type CatalogRenderMode = "public" | "preview";
 
@@ -52,7 +56,7 @@ const SERIES_META = new Map<string, SeriesMeta>([
     },
   ],
   [
-    "House Line",
+    "Presidential House Line",
     {
       anchor: "presidential-house-line",
       eyebrow: "Heritage",
@@ -63,7 +67,7 @@ const SERIES_META = new Map<string, SeriesMeta>([
     },
   ],
   [
-    "THC Design Collaboration",
+    "Presidential x THC Design",
     {
       anchor: "thc-design-collaboration",
       eyebrow: "Collaboration",
@@ -196,18 +200,14 @@ function CatalogProductCard({
     </>
   );
 
-  if (mode === "public") {
-    return (
-      <Link
-        className="group block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
-        href={`/moon-rocks/${catalogItemSlug(item)}`}
-      >
-        {cardBody}
-      </Link>
-    );
-  }
-
-  return <article className="group">{cardBody}</article>;
+  return (
+    <Link
+      className="group block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
+      href={`/moon-rocks/${catalogItemSlug(item)}`}
+    >
+      {cardBody}
+    </Link>
+  );
 }
 
 export function SeriesCatalogSection({
@@ -215,11 +215,13 @@ export function SeriesCatalogSection({
   items,
   mode,
   headingLevel = "h3",
+  heading = series,
 }: {
   readonly series: string;
   readonly items: readonly SanityCatalogItem[];
   readonly mode: CatalogRenderMode;
   readonly headingLevel?: "h2" | "h3";
+  readonly heading?: string;
 }) {
   const meta = seriesMetaFor(series);
   const Heading = headingLevel;
@@ -240,7 +242,7 @@ export function SeriesCatalogSection({
             className="mt-4 font-display text-3xl uppercase leading-none text-po-ink sm:text-5xl"
             id={`catalog-${meta.anchor}`}
           >
-            {series}
+            {heading}
           </Heading>
           <p className="mt-3 max-w-xl text-sm leading-6 text-po-body">
             {meta.positioning}
@@ -272,36 +274,73 @@ const SERIES_PAGE_PATHS = new Map<string, string>([
 // counts, so series navigation never depends on CMS availability.
 export function SeriesSelectorShell({
   items,
+  completeCatalog = false,
 }: {
   readonly items: readonly SanityCatalogItem[];
+  readonly completeCatalog?: boolean;
 }) {
   const seriesNames =
     items.length > 0
       ? [...new Set(items.map((item) => item.series || ""))]
       : [...SERIES_PAGE_PATHS.keys()];
-  const grouped = seriesNames.map((series) => ({
-    series,
-    meta: seriesMetaFor(series),
-    count:
-      items.length > 0
-        ? items.filter((item) => (item.series || "") === series).length
-        : null,
-    href: SERIES_PAGE_PATHS.get(series),
-  }));
+  const grouped = completeCatalog
+    ? CATALOG_SERIES_REGISTRY.map((definition) => ({
+        key: definition.slug,
+        title: definition.title,
+        eyebrow: definition.cardEyebrow,
+        description: definition.description,
+        accentBar: definition.accentBar,
+        accentText: definition.accentText,
+        count:
+          items.length > 0
+            ? filterCatalogSeriesProducts(definition, items).length
+            : definition.expectedProductCount,
+        href: definition.path,
+        buttonLabel: definition.buttonLabel,
+      }))
+    : seriesNames.map((series) => {
+        const meta = seriesMetaFor(series);
+
+        return {
+          key: series,
+          title: series || "Presidential",
+          eyebrow: meta.eyebrow,
+          description: meta.positioning,
+          accentBar: meta.accentBar,
+          accentText: meta.accentText,
+          count:
+            items.length > 0
+              ? items.filter((item) => (item.series || "") === series).length
+              : null,
+          href: SERIES_PAGE_PATHS.get(series),
+          buttonLabel: `Explore ${meta.eyebrow} Moon Rocks`,
+        };
+      });
 
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {grouped.map(({ series, meta, count, href }) => {
+      {grouped.map(
+        ({
+          key,
+          title,
+          eyebrow,
+          description,
+          accentBar,
+          accentText,
+          count,
+          href,
+          buttonLabel,
+        }) => {
         const panelBody = (
           <>
-            <span aria-hidden="true" className={`block h-2 w-16 ${meta.accentBar}`} />
-            <p className={`mt-5 text-xs font-black uppercase ${meta.accentText}`}>
-              {meta.eyebrow}
+            <span aria-hidden="true" className={`block h-2 w-16 ${accentBar}`} />
+            <p className={`mt-5 text-xs font-black uppercase ${accentText}`}>
+              {eyebrow}
             </p>
-            <h3 className="mt-2 font-display text-2xl uppercase leading-tight text-po-ink sm:text-3xl">
-              {series || "Presidential"}
-            </h3>
-            <p className="mt-3 text-sm leading-6 text-po-body">{meta.positioning}</p>
+            <h2 className="mt-2 font-display text-2xl uppercase leading-tight text-po-ink sm:text-3xl">
+              {title}
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-po-body">{description}</p>
             {count !== null ? (
               <p className="mt-6 text-xs font-black uppercase text-po-brand-ink">
                 {count} {count === 1 ? "product" : "products"}
@@ -313,7 +352,7 @@ export function SeriesSelectorShell({
         return (
           <article
             className={`border p-6 ${href ? "border-po-ink" : "border-po-line"}`}
-            key={series}
+            key={key}
           >
             {panelBody}
             {href ? (
@@ -321,13 +360,13 @@ export function SeriesSelectorShell({
                 className="mt-5 inline-block border border-po-ink px-4 py-2 text-xs font-black uppercase text-po-ink transition-colors hover:bg-po-ink hover:text-po-on-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
                 href={href}
               >
-                Explore {meta.eyebrow} Moon Rocks
+                {buttonLabel}
               </Link>
             ) : null}
           </article>
         );
-      })}
+      },
+      )}
     </div>
   );
 }
-

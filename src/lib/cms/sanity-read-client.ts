@@ -49,9 +49,17 @@ export const SANITY_READ_CLIENT_CONFIG = {
   publicRouteRenderingEnabled: false,
 } as const;
 
+type SanityJsonFetchFailure =
+  | "http_error"
+  | "timeout"
+  | "aborted"
+  | "network"
+  | "invalid_json";
+
 type SanityJsonFetchResult<T> = {
   readonly response: Response;
   readonly payload: { readonly result: T } | null;
+  readonly failure: SanityJsonFetchFailure | null;
 };
 
 function getRuntimeEnv(): SanityReadEnv {
@@ -100,11 +108,14 @@ export function buildSanityReadQueryUrl(
 
 function createBoundedSanitySignal(callerSignal?: AbortSignal | null): {
   readonly signal: AbortSignal;
+  readonly didTimeout: () => boolean;
   readonly cleanup: () => void;
 } {
   const controller = new AbortController();
+  let timedOut = false;
   const abortFromCaller = () => controller.abort(callerSignal?.reason);
   const timeout = setTimeout(() => {
+    timedOut = true;
     controller.abort(new DOMException("Sanity read timed out.", "TimeoutError"));
   }, SANITY_FETCH_TIMEOUT_MS);
 
@@ -116,11 +127,32 @@ function createBoundedSanitySignal(callerSignal?: AbortSignal | null): {
 
   return {
     signal: controller.signal,
+    didTimeout: () => timedOut,
     cleanup: () => {
       clearTimeout(timeout);
       callerSignal?.removeEventListener("abort", abortFromCaller);
     },
   };
+}
+
+function createSanityFailureResult<T>(
+  status: number,
+  statusText: string,
+  failure: Exclude<SanityJsonFetchFailure, "http_error">,
+): SanityJsonFetchResult<T> {
+  return {
+    response: new Response(null, { status, statusText }),
+    payload: null,
+    failure,
+  };
+}
+
+function isSanityResultPayload<T>(value: unknown): value is { readonly result: T } {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      Object.prototype.hasOwnProperty.call(value, "result"),
+  );
 }
 
 export async function fetchSanityJsonWithTimeout<T>(
@@ -130,15 +162,47 @@ export async function fetchSanityJsonWithTimeout<T>(
   const boundedSignal = createBoundedSanitySignal(init.signal);
 
   try {
-    const response = await fetch(input, {
-      ...init,
-      signal: boundedSignal.signal,
-    });
-    const payload = response.ok
-      ? (await response.json()) as { readonly result: T }
-      : null;
+    let response: Response;
 
-    return { response, payload };
+    try {
+      response = await fetch(input, {
+        ...init,
+        signal: boundedSignal.signal,
+      });
+    } catch {
+      if (boundedSignal.didTimeout()) {
+        return createSanityFailureResult(504, "Sanity read timed out", "timeout");
+      }
+
+      if (boundedSignal.signal.aborted) {
+        return createSanityFailureResult(499, "Sanity read aborted", "aborted");
+      }
+
+      return createSanityFailureResult(502, "Sanity read network failure", "network");
+    }
+
+    if (!response.ok) {
+      return { response, payload: null, failure: "http_error" };
+    }
+
+    let payload: unknown;
+    try {
+      payload = await response.json();
+    } catch {
+      if (boundedSignal.didTimeout()) {
+        return createSanityFailureResult(504, "Sanity read timed out", "timeout");
+      }
+
+      if (boundedSignal.signal.aborted) {
+        return createSanityFailureResult(499, "Sanity read aborted", "aborted");
+      }
+
+      return createSanityFailureResult(502, "Invalid Sanity JSON response", "invalid_json");
+    }
+
+    return isSanityResultPayload<T>(payload)
+      ? { response, payload, failure: null }
+      : createSanityFailureResult(502, "Invalid Sanity JSON response", "invalid_json");
   } finally {
     boundedSignal.cleanup();
   }
@@ -161,16 +225,16 @@ export async function readPublishedSanity<T>(
   const { payload, response } = await fetchSanityJsonWithTimeout<T>(
     buildSanityReadQueryUrl(query, params),
     {
-    ...init,
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-    },
-    cache: "no-store",
+      ...init,
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+      cache: "force-cache",
     },
   );
 
-  if (!response.ok) {
+  if (!response.ok || !payload) {
     return {
       ok: false,
       skipped: false,
@@ -183,6 +247,6 @@ export async function readPublishedSanity<T>(
   return {
     ok: true,
     skipped: false,
-    result: payload?.result as T,
+    result: payload.result,
   };
 }

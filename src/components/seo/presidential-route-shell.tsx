@@ -81,13 +81,11 @@ export async function PresidentialRouteShell({ route }: PresidentialRouteShellPr
       ) : route.id === "moon-rocks" ? (
         <MoonRocksPlatformShell
           breadcrumbs={breadcrumbs}
-          links={links}
           route={route}
         />
       ) : usesPillarPlatformShell ? (
         <PillarPlatformShell
           breadcrumbs={breadcrumbs}
-          links={links}
           route={route}
         />
       ) : (

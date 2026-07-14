@@ -6,6 +6,11 @@ import { hasPrivateDraftRouteAccess } from "@/lib/cms/draft-route-access";
 
 const canonicalHostname = "presidentialmoonrocks.com";
 const nonCanonicalHostnames = new Set(["www.presidentialmoonrocks.com"]);
+// Exact hashes for Next/Image's deterministic intrinsic and fill style attributes.
+const nextImageStyleAttributeHashes = [
+  "'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk='",
+  "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='",
+] as const;
 
 function buildContentSecurityPolicy(
   nonce: string,
@@ -34,12 +39,17 @@ function buildContentSecurityPolicy(
   ]
     .filter(Boolean)
     .join(" ");
+  const styleSrcAttr = [
+    "style-src-attr 'unsafe-hashes'",
+    ...nextImageStyleAttributeHashes,
+  ].join(" ");
 
   return [
     "default-src 'self'",
     "base-uri 'self'",
     scriptSrc,
     `style-src 'self' 'nonce-${nonce}'`,
+    styleSrcAttr,
     connectSrc,
     "font-src 'self'",
     imgSrc,

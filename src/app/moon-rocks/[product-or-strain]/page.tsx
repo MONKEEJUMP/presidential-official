@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 
 import {
   PageFrame,
@@ -29,6 +30,18 @@ type CatalogDetailPageProps = {
 
 export const dynamicParams = false;
 
+const readCatalogProduct = cache((slug: string) =>
+  readCatalogItemBySlug(CATALOG_ROUTE, slug, {
+    next: { tags: [`sanity-catalog-item-${slug}`] },
+  }),
+);
+
+function hasAssetUrl<T extends { readonly assetUrl?: string }>(
+  image: T,
+): image is T & { readonly assetUrl: string } {
+  return Boolean(image.assetUrl?.trim());
+}
+
 export async function generateStaticParams() {
   const slugs = await readCatalogProductParams(CATALOG_ROUTE);
 
@@ -39,9 +52,7 @@ export async function generateMetadata({
   params,
 }: CatalogDetailPageProps): Promise<Metadata> {
   const { "product-or-strain": slug } = await params;
-  const detail = await readCatalogItemBySlug(CATALOG_ROUTE, slug, {
-    next: { tags: [`sanity-catalog-item-${slug}`] },
-  });
+  const detail = await readCatalogProduct(slug);
 
   if (!detail.item) {
     return {
@@ -66,9 +77,7 @@ export default async function CatalogProductDetailPage({
   params,
 }: CatalogDetailPageProps) {
   const { "product-or-strain": slug } = await params;
-  const detail = await readCatalogItemBySlug(CATALOG_ROUTE, slug, {
-    next: { tags: [`sanity-catalog-item-${slug}`] },
-  });
+  const detail = await readCatalogProduct(slug);
 
   if (!detail.item) {
     notFound();
@@ -77,13 +86,13 @@ export default async function CatalogProductDetailPage({
   const item = detail.item;
   const meta = seriesMetaFor(item.series);
   const chips = parseFormatChips(item.productType);
-  const [heroImage, ...galleryImages] = item.images || [];
+  const [heroImage, ...galleryImages] = (item.images || []).filter(hasAssetUrl);
 
   return (
     <PageFrame>
       <SceneStack>
         <Scene ariaLabelledBy="presidential-product-title" tone="default">
-          <div className="mx-auto w-full max-w-7xl">
+          <div className="mx-auto w-full min-w-0 max-w-7xl">
             <nav aria-label="Breadcrumb" className="text-sm text-po-brand-ink">
               <ol className="flex flex-wrap items-center gap-2">
                 <li>
@@ -98,7 +107,10 @@ export default async function CatalogProductDetailPage({
                   /
                 </li>
                 <li>
-                  <span aria-current="page" className="font-semibold text-po-ink">
+                  <span
+                    aria-current="page"
+                    className="font-semibold text-po-ink [overflow-wrap:anywhere]"
+                  >
                     {item.name}
                   </span>
                 </li>
@@ -113,7 +125,7 @@ export default async function CatalogProductDetailPage({
 
             <div className="mt-8 grid gap-12 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,0.45fr)] lg:items-start">
               <div
-                className={`relative aspect-square overflow-hidden bg-gradient-to-b ${meta.canvas} to-po-canvas`}
+                className={`relative min-w-0 aspect-square overflow-hidden bg-gradient-to-b ${meta.canvas} to-po-canvas`}
               >
                 {heroImage?.assetUrl ? (
                   <Image
@@ -134,19 +146,19 @@ export default async function CatalogProductDetailPage({
                 )}
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <span aria-hidden="true" className={`block h-2 w-16 ${meta.accentBar}`} />
                 <p className={`mt-4 text-xs font-black uppercase ${meta.accentText}`}>
                   {item.series}
                 </p>
                 <h1
-                  className="mt-3 font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-6xl"
+                  className="mt-3 max-w-full font-display text-4xl uppercase leading-[0.92] text-po-ink [overflow-wrap:anywhere] sm:text-6xl"
                   id="presidential-product-title"
                 >
                   {item.name}
                 </h1>
                 {item.description ? (
-                  <p className="mt-6 max-w-xl text-base leading-7 text-po-body">
+                  <p className="mt-6 max-w-xl text-base leading-7 text-po-body [overflow-wrap:anywhere]">
                     {item.description}
                   </p>
                 ) : null}
@@ -183,7 +195,7 @@ export default async function CatalogProductDetailPage({
             </div>
 
             {galleryImages.length > 0 ? (
-              <div className="mt-16 border-t border-po-ink pt-8">
+              <div className="po-gold-thread-inlay mt-16 pt-8">
                 <p className="text-xs font-black uppercase text-po-brand-ink">
                   Format gallery
                 </p>
@@ -202,7 +214,7 @@ export default async function CatalogProductDetailPage({
                         fill
                         loading="lazy"
                         sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                        src={image.assetUrl!}
+                        src={image.assetUrl}
                       />
                     </div>
                   ))}
@@ -212,7 +224,7 @@ export default async function CatalogProductDetailPage({
           </div>
         </Scene>
 
-        <FindUsCtaShell compact />
+        <FindUsCtaShell className="po-gold-thread-inlay" compact />
       </SceneStack>
     </PageFrame>
   );

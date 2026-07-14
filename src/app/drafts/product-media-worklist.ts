@@ -164,12 +164,101 @@ export type ProductMediaWorklist = {
   readonly directionItems: readonly ClientDirectionItem[];
 };
 
-function readJsonFile<T>(filePath: string): T | undefined {
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isOptionalRecord(value: Record<string, unknown>, key: string) {
+  return value[key] === undefined || isRecord(value[key]);
+}
+
+function isOptionalRecordArray(value: Record<string, unknown>, key: string) {
+  const entries = value[key];
+  return (
+    entries === undefined ||
+    (Array.isArray(entries) && entries.every(isRecord))
+  );
+}
+
+function isProductMediaApprovalSummary(
+  value: unknown,
+): value is ProductMediaApprovalSummary {
+  if (!isRecord(value)) return false;
+
+  return (
+    ["counts", "queueCounts", "publicBoundary"].every((key) =>
+      isOptionalRecord(value, key),
+    ) && isOptionalRecordArray(value, "productCatalogItems")
+  );
+}
+
+function isProductMediaReviewPacketsSummary(
+  value: unknown,
+): value is ProductMediaReviewPacketsSummary {
+  if (!isRecord(value)) return false;
+
+  const counts = value.counts;
+  return (
+    isOptionalRecord(value, "counts") &&
+    (counts === undefined ||
+      (isRecord(counts) && isOptionalRecord(counts, "byPlatform"))) &&
+    isOptionalRecord(value, "boundaries") &&
+    isOptionalRecordArray(value, "gaps")
+  );
+}
+
+function isAssetSourceBridgeSummary(
+  value: unknown,
+): value is AssetSourceBridgeSummary {
+  if (!isRecord(value)) return false;
+
+  const layers = value.layers;
+  return (
+    ["totals", "layers", "publicBoundary"].every((key) =>
+      isOptionalRecord(value, key),
+    ) &&
+    (layers === undefined ||
+      (isRecord(layers) &&
+        [
+          "urgentPackage",
+          "googleDrive",
+          "wixOriginalSite",
+          "sanityInternalCandidateDocs",
+        ].every((key) => isOptionalRecord(layers, key))))
+  );
+}
+
+function isProductMediaClientDirectionSummary(
+  value: unknown,
+): value is ProductMediaClientDirectionSummary {
+  if (!isRecord(value)) return false;
+
+  return (
+    [
+      "counts",
+      "queueCounts",
+      "laneCounts",
+      "countsByDirectionStatus",
+      "countsByPriority",
+    ].every((key) => isOptionalRecord(value, key)) &&
+    isOptionalRecordArray(value, "items")
+  );
+}
+
+function readJsonFile<T>(
+  filePath: string,
+  validate: (value: unknown) => value is T,
+): T | undefined {
   if (!existsSync(filePath)) {
     return undefined;
   }
 
-  return JSON.parse(readFileSync(filePath, "utf8")) as T;
+  try {
+    const value: unknown = JSON.parse(readFileSync(filePath, "utf8"));
+    return validate(value) ? value : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 export function readProductMediaWorklist(slug: string): ProductMediaWorklist {
@@ -184,10 +273,22 @@ export function readProductMediaWorklist(slug: string): ProductMediaWorklist {
     };
   }
 
-  const approvalWorklist = readJsonFile<ProductMediaApprovalSummary>(SUMMARY_PATHS.approvalWorklist);
-  const reviewPackets = readJsonFile<ProductMediaReviewPacketsSummary>(SUMMARY_PATHS.reviewPackets);
-  const assetBridge = readJsonFile<AssetSourceBridgeSummary>(SUMMARY_PATHS.assetBridge);
-  const clientDirection = readJsonFile<ProductMediaClientDirectionSummary>(SUMMARY_PATHS.clientDirection);
+  const approvalWorklist = readJsonFile(
+    SUMMARY_PATHS.approvalWorklist,
+    isProductMediaApprovalSummary,
+  );
+  const reviewPackets = readJsonFile(
+    SUMMARY_PATHS.reviewPackets,
+    isProductMediaReviewPacketsSummary,
+  );
+  const assetBridge = readJsonFile(
+    SUMMARY_PATHS.assetBridge,
+    isAssetSourceBridgeSummary,
+  );
+  const clientDirection = readJsonFile(
+    SUMMARY_PATHS.clientDirection,
+    isProductMediaClientDirectionSummary,
+  );
 
   if (!approvalWorklist || !reviewPackets || !assetBridge || !clientDirection) {
     return {

@@ -15,7 +15,7 @@ export default function NotFound() {
   return (
     <>
       <a
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:border focus:border-po-brand focus:bg-po-canvas focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-po-brand-strong focus:shadow-lg"
+        className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4 focus-visible:z-[60] focus-visible:border focus-visible:border-po-brand focus-visible:bg-po-canvas focus-visible:px-4 focus-visible:py-3 focus-visible:text-sm focus-visible:font-semibold focus-visible:text-po-brand-strong focus-visible:shadow-lg"
         href="#presidential-main"
       >
         Skip to main content

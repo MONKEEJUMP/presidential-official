@@ -4,7 +4,19 @@ module.exports = {
       numberOfRuns: 1,
       startServerCommand: "npm run start -- -p 3000",
       startServerReadyPattern: "Ready",
-      url: ["http://localhost:3000/"],
+      url: [
+        "http://localhost:3000/",
+        "http://localhost:3000/moon-rocks",
+        "http://localhost:3000/moon-rocks/silver",
+        "http://localhost:3000/moon-rocks/gold",
+        "http://localhost:3000/moon-rocks/rose-gold",
+        "http://localhost:3000/moon-rocks/presidential-line",
+        "http://localhost:3000/moon-rocks/presidential-house-line",
+        "http://localhost:3000/moon-rocks/presidential-x-thc-design",
+        "http://localhost:3000/loyalty",
+        "http://localhost:3000/find-us",
+        "http://localhost:3000/dispensaries",
+      ],
       settings: {
         chromeFlags:
           "--no-sandbox --disable-dev-shm-usage --disable-gpu --disable-extensions --disable-background-networking",
@@ -27,6 +39,11 @@ module.exports = {
         "image-alt": ["error", { minScore: 1 }],
         "hreflang": ["error", { minScore: 1 }],
         "canonical": ["error", { minScore: 1 }],
+        "resource-summary:stylesheet:size": ["warn", { maxNumericValue: 110000 }],
+        "resource-summary:font:size": ["warn", { maxNumericValue: 350000 }],
+        "resource-summary:image:size": ["warn", { maxNumericValue: 6000000 }],
+        "resource-summary:media:size": ["warn", { maxNumericValue: 265000000 }],
+        "resource-summary:total:size": ["warn", { maxNumericValue: 275000000 }],
       },
     },
     upload: {

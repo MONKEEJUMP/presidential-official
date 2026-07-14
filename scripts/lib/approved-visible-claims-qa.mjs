@@ -19,6 +19,22 @@ const registryPath = resolve(
 // Metadata scans must never import this helper.
 export const APPROVED_VISIBLE_CLAIMS = JSON.parse(readFileSync(registryPath, 'utf8'))
 
+// Owner-protected visible copy is separate from the legal claim registry.
+// It is exempt only at the exact rendered placement named here; metadata
+// scanners never import this helper.
+const OWNER_PROTECTED_VISIBLE_COPY = [
+  {
+    claim: "World's Strongest Cannabis!",
+    placements: [
+      {
+        route: '/',
+        element: 'p',
+        elementId: 'presidential-homepage-statement',
+      },
+    ],
+  },
+]
+
 const voidElements = new Set([
   'area',
   'base',
@@ -79,13 +95,47 @@ function approvedEntryForNode(text, route, current, stack) {
     return undefined
   }
 
-  return APPROVED_VISIBLE_CLAIMS.entries.find(
+  return [...APPROVED_VISIBLE_CLAIMS.entries, ...OWNER_PROTECTED_VISIBLE_COPY].find(
     (entry) =>
       normalizeVisibleClaimNode(entry.claim) === normalizedNode &&
       entry.placements.some((placement) =>
         placementMatches(placement, route, current, stack),
       ),
   )
+}
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function stripOwnerProtectedElementCopy(html, route) {
+  let strippedHtml = String(html)
+
+  for (const entry of OWNER_PROTECTED_VISIBLE_COPY) {
+    for (const placement of entry.placements) {
+      if (placement.route !== route || !placement.elementId) {
+        continue
+      }
+
+      const elementName = escapeRegExp(placement.element)
+      const elementId = escapeRegExp(placement.elementId)
+      const elementPattern = new RegExp(
+        `(<${elementName}\\b(?=[^>]*\\bid=["']${elementId}["'])[^>]*>)([\\s\\S]*?)(<\\/${elementName}>)`,
+        'gi',
+      )
+
+      strippedHtml = strippedHtml.replace(
+        elementPattern,
+        (match, openingTag, contents, closingTag) =>
+          normalizeVisibleClaimNode(String(contents).replace(/<[^>]+>/g, ' ')) ===
+          normalizeVisibleClaimNode(entry.claim)
+            ? `${openingTag} ${closingTag}`
+            : match,
+      )
+    }
+  }
+
+  return strippedHtml
 }
 
 export function stripApprovedVisibleClaims(text, placement) {
@@ -108,7 +158,7 @@ export function stripApprovedVisibleClaims(text, placement) {
 
 export function stripApprovedVisibleClaimsFromHtml(html, route) {
   const stack = []
-  const tokens = String(html).split(/(<[^>]*>)/g)
+  const tokens = stripOwnerProtectedElementCopy(html, route).split(/(<[^>]*>)/g)
 
   return tokens
     .map((token) => {
