@@ -255,7 +255,7 @@
 
 .resultValid { color: var(--po-color-brand); }
 .resultClaimed { color: var(--po-color-gold); }
-.resultCounterfeit { color: #f87171; }
+.resultUnverified { color: #f87171; }
 
 .memberPanel {
   border: 1px solid color-mix(in srgb, var(--po-color-brand) 34%, transparent);

@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 
 import styles from "./loyalty.module.css";
 
-type DemoOutcome = "valid" | "claimed" | "counterfeit";
+type DemoOutcome = "valid" | "claimed" | "unverified";
 
 type DemoCode = {
   readonly code: string;
@@ -16,7 +16,7 @@ type DemoCode = {
 const DEMO_CODES: readonly DemoCode[] = [
   { code: "PRES-BR01", label: "Valid", outcome: "valid" },
   { code: "PRES-USED", label: "Claimed", outcome: "claimed" },
-  { code: "FAKE-0000", label: "Counterfeit", outcome: "counterfeit" },
+  { code: "UNKNOWN-0000", label: "Unverified", outcome: "unverified" },
   { code: "BAD", label: "Invalid", outcome: "invalid" },
 ];
 
@@ -129,7 +129,7 @@ export function LoyaltyPrototype() {
     setOutcome(
       fixture?.outcome === "valid" || fixture?.outcome === "claimed"
         ? fixture.outcome
-        : "counterfeit",
+        : "unverified",
     );
   }
 
@@ -216,8 +216,8 @@ export function LoyaltyPrototype() {
             </article>
           ) : null}
 
-          {!scanning && outcome === "counterfeit" ? (
-            <article className={`${styles.resultCard} ${styles.resultCounterfeit}`}>
+          {!scanning && outcome === "unverified" ? (
+            <article className={`${styles.resultCard} ${styles.resultUnverified}`}>
               <p><span aria-hidden="true">{"\u2715"}</span> Not A Presidential Product</p>
               <h2>This code is not in our system. Report where you purchased it.</h2>
             </article>
