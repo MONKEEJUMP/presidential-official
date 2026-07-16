@@ -94,7 +94,7 @@ export function CompactStoreFinderPanel({
     >
       <form className="grid gap-3" noValidate onSubmit={submitZip}>
         <p className="font-display text-xs font-semibold uppercase text-po-brand">
-          BUY PRESIDENTIAL @ LOCAL DISPO
+          BUY PRESIDENTIAL @ YOUR LOCAL DISPO
         </p>
         <label className="sr-only" htmlFor={inputId}>
           ZIP code
