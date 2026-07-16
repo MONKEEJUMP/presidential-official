@@ -303,6 +303,8 @@ export function LocatorConsole({
             </button>
           </div>
 
+          <p className={styles.repeatCta}>ENTER YOUR ZIP CODE HERE</p>
+
           <p aria-live="polite" className={styles.message} id={messageId}>
             {message}
           </p>

@@ -55,13 +55,22 @@
   container-type: inline-size;
 }
 
-.searchForm label {
+.searchForm label,
+.repeatCta {
   display: block;
-  margin-bottom: 0.8rem;
   color: var(--po-color-brand);
   font-family: var(--po-font-display);
   font-size: 0.78rem;
   text-transform: uppercase;
+}
+
+.searchForm label {
+  margin-bottom: 0.8rem;
+}
+
+.repeatCta {
+  margin-top: 0.8rem;
+  text-align: center;
 }
 
 .inputRow {
