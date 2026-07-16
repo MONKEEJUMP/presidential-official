@@ -231,6 +231,8 @@ export async function SupportRouteFoundationShell({
           </div>
         </Scene>
 
+        {route.kind === "store_locator" ? <FindUsMiniBluntsGrid /> : null}
+
         {route.kind === "store_locator" ? (
           <Scene
             ariaLabelledBy="presidential-find-us-map"
@@ -366,7 +368,6 @@ export async function SupportRouteFoundationShell({
           </Scene>
         ) : null}
 
-        {route.kind === "store_locator" ? <FindUsMiniBluntsGrid /> : null}
       </SceneStack>
     </PageFrame>
   );

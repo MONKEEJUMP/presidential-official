@@ -68,6 +68,10 @@ export async function PresidentialRouteShell({
       })
     : null;
   const cmsModules = cmsPage?.modules.length ? cmsPage.modules : null;
+  const findUsLocatorModuleIndex =
+    route.id === "find-us" && cmsModules
+      ? cmsModules.findIndex((module) => module._type === "locatorShellBlock")
+      : -1;
 
   return (
     <>
@@ -78,13 +82,32 @@ export async function PresidentialRouteShell({
       {cmsModules ? (
         <PageFrame>
           <SceneStack>
-            <CmsHomepageModuleRenderer
-              modules={cmsModules}
-              productRoute={routeToCmsProductRoute(route)}
-              supportRoute={routeToCmsSupportRoute(route)}
-            />
+            {findUsLocatorModuleIndex >= 0 ? (
+              <>
+                <CmsHomepageModuleRenderer
+                  modules={cmsModules.slice(0, findUsLocatorModuleIndex + 1)}
+                  productRoute={routeToCmsProductRoute(route)}
+                  supportRoute={routeToCmsSupportRoute(route)}
+                />
+                <FindUsMiniBluntsGrid />
+                <CmsHomepageModuleRenderer
+                  heroHeadingLevel="h2"
+                  modules={cmsModules.slice(findUsLocatorModuleIndex + 1)}
+                  productRoute={routeToCmsProductRoute(route)}
+                  supportRoute={routeToCmsSupportRoute(route)}
+                />
+              </>
+            ) : (
+              <CmsHomepageModuleRenderer
+                modules={cmsModules}
+                productRoute={routeToCmsProductRoute(route)}
+                supportRoute={routeToCmsSupportRoute(route)}
+              />
+            )}
             {route.id === "our-story" ? <OurStoryPrerollGraphicsGrid /> : null}
-            {route.id === "find-us" ? <FindUsMiniBluntsGrid /> : null}
+            {route.id === "find-us" && findUsLocatorModuleIndex < 0 ? (
+              <FindUsMiniBluntsGrid />
+            ) : null}
           </SceneStack>
         </PageFrame>
       ) : route.id === "moon-rocks" ? (
