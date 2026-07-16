@@ -9,12 +9,12 @@ import {
   Scene,
   SceneStack,
 } from "@/components/presidential";
+import { CompactStoreFinderPanel } from "@/components/presidential/locator/compact-store-finder-panel";
 import {
   parseFormatChips,
   seriesMetaFor,
 } from "@/components/presidential/modules/catalog-grid-shell";
 import { FindUsCtaShell } from "@/components/presidential/modules/find-us-cta-shell";
-import { CtaLink } from "@/components/presidential/primitives/cta-link";
 import {
   readCatalogItemBySlug,
   readCatalogProductParams,
@@ -117,12 +117,6 @@ export default async function CatalogProductDetailPage({
               </ol>
             </nav>
 
-            {detail.mode === "preview" ? (
-              <p className="mt-6 inline-block bg-po-ink px-3 py-1 text-[11px] font-black uppercase tracking-wide text-po-on-dark">
-                Owner preview · gated draft · not published
-              </p>
-            ) : null}
-
             <div className="mt-8 grid gap-12 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,0.45fr)] lg:items-start">
               <div
                 className={`relative min-w-0 aspect-square overflow-hidden bg-gradient-to-b ${meta.canvas} to-po-canvas`}
@@ -168,29 +162,15 @@ export default async function CatalogProductDetailPage({
                     <p className="text-xs font-black uppercase text-po-brand-ink">
                       Formats
                     </p>
-                    <ul className="mt-3 flex flex-wrap gap-2">
+                    <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold uppercase text-po-ink">
                       {chips.map((chip) => (
-                        <li
-                          className="border border-po-ink px-3 py-1 text-xs font-semibold uppercase text-po-ink"
-                          key={chip}
-                        >
-                          {chip}
-                        </li>
+                        <li key={chip}>{chip}</li>
                       ))}
                     </ul>
                   </div>
                 ) : null}
 
-                <div className="mt-10 grid gap-3 sm:max-w-sm">
-                  <CtaLink href="/find-us">Find Presidential near you</CtaLink>
-                  <CtaLink href="/moon-rocks" variant="secondary">
-                    Back to Moon Rocks
-                  </CtaLink>
-                </div>
-                <p className="mt-6 text-xs leading-5 text-po-body">
-                  Adults 21+ where legal. Product information is informational
-                  only; availability varies by licensed retailer.
-                </p>
+                <CompactStoreFinderPanel className="mt-10 w-full max-w-md" />
               </div>
             </div>
 

@@ -114,6 +114,21 @@ export function sortCatalogItems(
   );
 }
 
+function consumerDescription(description?: string): string | undefined {
+  if (!description) return undefined;
+
+  const sourceIndex = description.search(/\bSOURCE:\s*/i);
+  const value = (sourceIndex >= 0 ? description.slice(0, sourceIndex) : description).trim();
+  return value || undefined;
+}
+
+function toRenderableCatalogItem(item: SanityCatalogItem): SanityCatalogItem {
+  return {
+    ...item,
+    description: consumerDescription(item.description),
+  };
+}
+
 function isCatalogItemApprovedForPublicRendering(
   item: SanityCatalogItem,
 ): boolean {
@@ -132,7 +147,7 @@ function isCatalogItemApprovedForPublicRendering(
 
 function toPublicCatalogItem(item: SanityCatalogItem): SanityCatalogItem {
   return {
-    ...item,
+    ...toRenderableCatalogItem(item),
     images: (item.images || []).filter(isPublicCmsAsset),
   };
 }
@@ -183,7 +198,12 @@ export async function readDraftCatalogItems(
   }
 
   const promise = readDraftCatalogItemsUnsorted(route, init).then((read) =>
-    read.ok ? { ...read, items: sortCatalogItems(read.items) } : read,
+    read.ok
+      ? {
+          ...read,
+          items: sortCatalogItems(read.items.map(toRenderableCatalogItem)),
+        }
+      : read,
   );
 
   if (!init.signal) {
