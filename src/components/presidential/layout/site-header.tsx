@@ -15,6 +15,7 @@ const primaryNavItems = [
   { href: "/learn", label: "Learn" },
   { href: "/contact", label: "Contact" },
   { href: "/loyalty", label: "Loyalty" },
+  { href: "/find-us", label: "Find Us" },
 ] as const;
 
 export function SiteHeader() {
