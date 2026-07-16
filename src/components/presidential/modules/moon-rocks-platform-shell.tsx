@@ -13,6 +13,7 @@ import { CtaLink } from "../primitives/cta-link";
 import { SeriesSelectorShell } from "./catalog-grid-shell";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { FindUsCtaShell } from "./find-us-cta-shell";
+import { MoonRocksGraphicsGrid } from "./moon-rocks-graphics-grid";
 
 type MoonRocksBreadcrumb = {
   readonly name: string;
@@ -99,6 +100,8 @@ export async function MoonRocksPlatformShell({
           ]}
           title={route.h1}
         />
+
+        <MoonRocksGraphicsGrid />
 
         <Scene
           ariaLabelledBy="presidential-moon-rocks-catalog"

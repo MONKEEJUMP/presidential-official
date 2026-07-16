@@ -55,8 +55,7 @@
   container-type: inline-size;
 }
 
-.searchForm label,
-.rangeSelector legend {
+.searchForm label {
   display: block;
   margin-bottom: 0.8rem;
   color: var(--po-color-brand);
@@ -90,8 +89,7 @@
 }
 
 .inputRow button,
-.locationButton,
-.rangeSelector button {
+.locationButton {
   min-height: 3.25rem;
   border: 1px solid var(--po-color-brand);
   border-radius: 6px;
@@ -109,36 +107,21 @@
 
 .locationButton {
   width: 100%;
-  margin-top: 0.75rem;
   background: transparent;
   color: var(--po-color-brand);
+}
+
+.actionRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .inputRow button:disabled,
 .locationButton:disabled {
   cursor: wait;
   opacity: 0.58;
-}
-
-.rangeSelector {
-  margin-top: 2rem;
-  border: 0;
-}
-
-.rangeSelector > div {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-}
-
-.rangeSelector button {
-  background: transparent;
-  color: var(--po-color-on-dark-muted);
-}
-
-.rangeSelector .rangeActive {
-  background: var(--po-color-brand);
-  color: var(--po-color-ink);
 }
 
 .message {

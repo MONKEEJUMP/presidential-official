@@ -17,6 +17,7 @@ type HeroCta = {
 };
 
 type DispensariesStyleHeroProps = {
+  readonly afterContent?: ReactNode;
   readonly ariaLabelledBy: string;
   readonly breadcrumbs: readonly HeroBreadcrumb[];
   readonly eyebrow: ReactNode;
@@ -25,9 +26,11 @@ type DispensariesStyleHeroProps = {
   readonly supportingText: readonly ReactNode[];
   readonly ctas?: readonly HeroCta[];
   readonly fitLongTitle?: boolean;
+  readonly mediaOnly?: boolean;
 };
 
 export function DispensariesStyleHero({
+  afterContent,
   ariaLabelledBy,
   breadcrumbs,
   eyebrow,
@@ -36,16 +39,19 @@ export function DispensariesStyleHero({
   supportingText,
   ctas = [],
   fitLongTitle = false,
+  mediaOnly = false,
 }: DispensariesStyleHeroProps) {
   return (
     <section
       aria-labelledby={ariaLabelledBy}
       className="relative isolate overflow-hidden bg-po-ink text-po-on-dark [container-type:inline-size]"
     >
-      <div className="mx-auto w-full max-w-[80rem] px-[clamp(1.25rem,4vw,4rem)] pb-[clamp(3rem,7vw,6rem)] pt-[clamp(3rem,8vw,7rem)]">
+      <div
+        className={`mx-auto w-full max-w-[80rem] px-[clamp(1.25rem,4vw,4rem)] pt-[clamp(3rem,8vw,7rem)] ${mediaOnly ? "pb-[clamp(2rem,4vw,3rem)]" : "pb-[clamp(3rem,7vw,6rem)]"}`}
+      >
         <nav
           aria-label="Breadcrumb"
-          className="mb-16 font-display text-[0.78rem] uppercase text-po-on-dark-muted"
+          className={`${mediaOnly ? "mb-[clamp(2rem,4vw,3rem)]" : "mb-16"} font-display text-[0.78rem] uppercase text-po-on-dark-muted`}
         >
           <ol className="flex flex-wrap items-center gap-2.5">
             {breadcrumbs.map((breadcrumb, index) => {
@@ -76,46 +82,58 @@ export function DispensariesStyleHero({
           </ol>
         </nav>
 
-        {leadMedia ? <div className="mb-16 w-full">{leadMedia}</div> : null}
-
-        <p className="mb-4 font-display text-[0.85rem] font-bold uppercase text-po-brand">
-          {eyebrow}
-        </p>
-        <h1
-          className={
-            fitLongTitle
-              ? "max-w-[12ch] font-display text-[clamp(2.25rem,10cqi,8.5rem)] font-bold uppercase leading-[0.82] text-po-on-dark"
-              : "max-w-[12ch] font-display text-[clamp(3.25rem,10cqi,8.5rem)] font-bold uppercase leading-[0.82] text-po-on-dark"
-          }
-          id={ariaLabelledBy}
-        >
-          {title}
-        </h1>
-
-        <div className="mt-8 max-w-[46rem] space-y-4 font-sans text-[clamp(1.05rem,2vw,1.35rem)] leading-[1.55] text-po-on-dark-muted">
-          {supportingText.map((content, index) => (
-            <p key={index}>{content}</p>
-          ))}
-        </div>
-
-        {ctas.length > 0 ? (
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            {ctas.map((cta) => (
-              <CtaLink
-                className={
-                  cta.tone === "primary"
-                    ? "border-po-brand bg-po-brand text-po-ink hover:bg-po-brand-hover hover:text-po-ink"
-                    : "!border-po-brand !bg-transparent !text-po-brand hover:!bg-po-brand hover:!text-po-ink"
-                }
-                href={cta.href}
-                key={cta.href}
-                variant={cta.tone}
-              >
-                {cta.label}
-              </CtaLink>
-            ))}
-          </div>
+        {leadMedia ? (
+          <div className={mediaOnly ? "w-full" : "mb-16 w-full"}>{leadMedia}</div>
         ) : null}
+
+        {mediaOnly ? (
+          <h1 className="sr-only" id={ariaLabelledBy}>
+            {title}
+          </h1>
+        ) : (
+          <>
+            <p className="mb-4 font-display text-[0.85rem] font-bold uppercase text-po-brand">
+              {eyebrow}
+            </p>
+            <h1
+              className={
+                fitLongTitle
+                  ? "max-w-[12ch] font-display text-[clamp(2.25rem,10cqi,8.5rem)] font-bold uppercase leading-[0.82] text-po-on-dark"
+                  : "max-w-[12ch] font-display text-[clamp(3.25rem,10cqi,8.5rem)] font-bold uppercase leading-[0.82] text-po-on-dark"
+              }
+              id={ariaLabelledBy}
+            >
+              {title}
+            </h1>
+
+            <div className="mt-8 max-w-[46rem] space-y-4 font-sans text-[clamp(1.05rem,2vw,1.35rem)] leading-[1.55] text-po-on-dark-muted">
+              {supportingText.map((content, index) => (
+                <p key={index}>{content}</p>
+              ))}
+            </div>
+
+            {ctas.length > 0 ? (
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                {ctas.map((cta) => (
+                  <CtaLink
+                    className={
+                      cta.tone === "primary"
+                        ? "border-po-brand bg-po-brand text-po-ink hover:bg-po-brand-hover hover:text-po-ink"
+                        : "!border-po-brand !bg-transparent !text-po-brand hover:!bg-po-brand hover:!text-po-ink"
+                    }
+                    href={cta.href}
+                    key={cta.href}
+                    variant={cta.tone}
+                  >
+                    {cta.label}
+                  </CtaLink>
+                ))}
+              </div>
+            ) : null}
+
+            {afterContent ? <div className="mt-8">{afterContent}</div> : null}
+          </>
+        )}
       </div>
 
       <span

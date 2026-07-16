@@ -59,7 +59,7 @@ export function GemTicker({
   const [activePreview, setActivePreview] = useState<ActivePreview | null>(null);
   const [positioned, setPositioned] = useState(false);
   const [visible, setVisible] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLAnchorElement>(null);
   const hoverIntentTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -103,6 +103,11 @@ export function GemTicker({
     },
     [canHover, openPreview],
   );
+
+  const keepPreviewOpen = useCallback(() => {
+    clearTimer(closeTimer);
+    setVisible(true);
+  }, []);
 
   const updatePlacement = useCallback(() => {
     if (!activePreview || !cardRef.current) return;
@@ -197,7 +202,7 @@ export function GemTicker({
                         ? previewId
                         : undefined
                     }
-                    className="po-gem flex h-[52px] w-[52px] items-center justify-center overflow-hidden rounded-full border-2 border-po-on-dark/[0.92] transition-transform duration-200 hover:scale-[1.15] focus-visible:scale-[1.15] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:focus-visible:transform-none"
+                    className="po-gem flex h-[52px] w-[52px] items-center justify-center overflow-hidden rounded-[12px] border-2 border-po-on-dark/[0.92] transition-transform duration-200 hover:scale-[1.15] focus-visible:scale-[1.15] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:focus-visible:transform-none"
                     href={gem.href}
                     onBlur={closePreview}
                     onFocus={(event) => {
@@ -242,12 +247,19 @@ export function GemTicker({
       </div>
       {activePreview && canHover
         ? createPortal(
-            <div
+            <Link
               aria-hidden={!visible}
+              aria-label={`View ${activePreview.product.name}`}
               className={`po-gem-preview fixed z-[100] w-[min(300px,calc(100vw-24px))] rounded-[16px] border border-po-brand bg-po-ink p-3 text-po-on-dark shadow-[0_18px_45px_rgba(0,0,0,0.36)] ${visible ? "po-gem-preview-visible" : ""}`}
+              href={activePreview.product.href}
               id={`gem-preview-${activePreview.instanceId}`}
+              onBlur={closePreview}
+              onFocus={keepPreviewOpen}
+              onMouseEnter={keepPreviewOpen}
+              onMouseLeave={closePreview}
+              prefetch={false}
               ref={cardRef}
-              role="tooltip"
+              tabIndex={visible ? 0 : -1}
             >
               <span
                 aria-hidden="true"
@@ -283,7 +295,7 @@ export function GemTicker({
               <p className="mt-3 font-display text-lg font-bold uppercase leading-tight">
                 {activePreview.product.name}
               </p>
-            </div>,
+            </Link>,
             document.body,
           )
         : null}

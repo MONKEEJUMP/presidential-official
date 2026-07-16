@@ -6,21 +6,22 @@ import type {
   LocatorApiError,
   LocatorApiResponse,
   LocatorResult,
+  LocatorStateCode,
 } from "@/lib/locator/types";
+import type { LocatorInitialSearch } from "@/lib/locator/inbound-search";
 
 import styles from "./locator-console.module.css";
 
-const RANGES = [10, 25, 50] as const;
-type RangeMiles = (typeof RANGES)[number];
 type SearchPayload =
-  | { zip: string; radiusMiles: RangeMiles }
-  | { latitude: number; longitude: number; radiusMiles: RangeMiles };
+  | { zip: string }
+  | { latitude: number; longitude: number };
 
 type LocatorConsoleProps = {
   readonly className?: string;
-  readonly defaultRadiusMiles?: RangeMiles;
   readonly heading?: string;
+  readonly initialSearch?: LocatorInitialSearch;
   readonly missionControlIntro?: boolean;
+  readonly state?: LocatorStateCode;
 };
 
 function delay(milliseconds: number) {
@@ -64,6 +65,7 @@ function isLocatorResult(value: unknown): value is LocatorResult {
 
 function parseLocatorApiPayload(
   value: unknown,
+  expectedState?: LocatorStateCode,
 ): LocatorApiResponse | LocatorApiError | undefined {
   if (!isRecord(value)) return undefined;
 
@@ -73,8 +75,12 @@ function parseLocatorApiPayload(
 
   if (
     Array.isArray(value.results) &&
-    value.results.length <= 100 &&
-    value.results.every(isLocatorResult)
+    value.results.length <= 25 &&
+    value.results.every(
+      (result) =>
+        isLocatorResult(result) &&
+        (expectedState === undefined || result.state === expectedState),
+    )
   ) {
     return { results: value.results };
   }
@@ -84,21 +90,22 @@ function parseLocatorApiPayload(
 
 export function LocatorConsole({
   className = "",
-  defaultRadiusMiles = 10,
   heading,
+  initialSearch,
   missionControlIntro = false,
+  state,
 }: LocatorConsoleProps) {
   const zipInputId = useId();
   const messageId = useId();
-  const [zip, setZip] = useState("");
-  const [radiusMiles, setRadiusMiles] =
-    useState<RangeMiles>(defaultRadiusMiles);
+  const [zip, setZip] = useState(() =>
+    initialSearch && "zip" in initialSearch ? initialSearch.zip : "",
+  );
   const [results, setResults] = useState<readonly LocatorResult[]>([]);
   const [searching, setSearching] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
   const [message, setMessage] = useState("");
   const [reducedMotion, setReducedMotion] = useState(false);
   const autoSearchKey = useRef("");
+  const inboundSearchKey = useRef("");
   const requestNumber = useRef(0);
 
   useEffect(() => {
@@ -116,7 +123,7 @@ export function LocatorConsole({
     const request = fetch("/api/dispensaries", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(state ? { ...payload, state } : payload),
     });
 
     try {
@@ -124,7 +131,7 @@ export function LocatorConsole({
         request,
         reducedMotion ? Promise.resolve() : delay(800),
       ]);
-      const data = parseLocatorApiPayload(await response.json());
+      const data = parseLocatorApiPayload(await response.json(), state);
       if (currentRequest !== requestNumber.current) return;
       if (!data) {
         setResults([]);
@@ -136,14 +143,15 @@ export function LocatorConsole({
             ? data.error
             : "Locator service is temporarily unavailable.",
         );
+      } else if (data.results.length === 0) {
+        setResults([]);
+        setMessage("Nearest retailers are unavailable for this location.");
       } else {
         setResults(data.results);
       }
-      setHasSearched(true);
     } catch {
       if (currentRequest === requestNumber.current) {
         setResults([]);
-        setHasSearched(true);
         setMessage("Locator service is temporarily unavailable.");
       }
     } finally {
@@ -152,27 +160,46 @@ export function LocatorConsole({
   }
 
   useEffect(() => {
-    const key = `${zip}:${radiusMiles}`;
+    if (!initialSearch) return;
+
+    if ("zip" in initialSearch) {
+      const key = `${state || "ALL"}:zip:${initialSearch.zip}`;
+      if (inboundSearchKey.current === key) return;
+      inboundSearchKey.current = key;
+      autoSearchKey.current = "";
+      setZip(initialSearch.zip);
+      setMessage("");
+      return;
+    }
+
+    const key = `${state || "ALL"}:coords:${initialSearch.latitude}:${initialSearch.longitude}`;
+    if (inboundSearchKey.current === key) return;
+    inboundSearchKey.current = key;
+    void locate(initialSearch);
+    // locate is intentionally keyed by the validated inbound search values.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialSearch, state]);
+
+  useEffect(() => {
+    const key = `${state || "ALL"}:${zip}`;
     if (zip.length !== 5 || autoSearchKey.current === key) return;
-    autoSearchKey.current = key;
-    const timer = window.setTimeout(
-      () => void locate({ zip, radiusMiles }),
-      120,
-    );
+    const timer = window.setTimeout(() => {
+      autoSearchKey.current = key;
+      void locate({ zip });
+    }, 120);
     return () => window.clearTimeout(timer);
     // locate is intentionally keyed by the stable search inputs only.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [zip, radiusMiles]);
+  }, [zip, state]);
 
   function submitZip(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!/^\d{5}$/.test(zip)) {
       setMessage("Enter a valid five-digit ZIP code.");
-      setHasSearched(false);
       return;
     }
-    autoSearchKey.current = `${zip}:${radiusMiles}`;
-    void locate({ zip, radiusMiles });
+    autoSearchKey.current = `${state || "ALL"}:${zip}`;
+    void locate({ zip });
   }
 
   function useLocation() {
@@ -186,7 +213,6 @@ export function LocatorConsole({
         void locate({
           latitude: coords.latitude,
           longitude: coords.longitude,
-          radiusMiles,
         }),
       () =>
         setMessage(
@@ -194,6 +220,15 @@ export function LocatorConsole({
         ),
       { enableHighAccuracy: false, maximumAge: 300000, timeout: 10000 },
     );
+  }
+
+  function clearFinder() {
+    requestNumber.current += 1;
+    autoSearchKey.current = "";
+    setZip("");
+    setResults([]);
+    setSearching(false);
+    setMessage("");
   }
 
   return (
@@ -222,6 +257,7 @@ export function LocatorConsole({
               <input
                 aria-describedby={messageId}
                 autoComplete="postal-code"
+                className="presidential-locator-zip-input"
                 id={zipInputId}
                 inputMode="numeric"
                 maxLength={5}
@@ -230,7 +266,7 @@ export function LocatorConsole({
                   setMessage("");
                 }}
                 pattern="[0-9]{5}"
-                placeholder="00000"
+                placeholder="ENTER YOUR ZIP CODE HERE"
                 type="text"
                 value={zip}
               />
@@ -242,35 +278,30 @@ export function LocatorConsole({
                 GO!
               </button>
             </div>
+            <style jsx>{`
+              .presidential-locator-zip-input::placeholder {
+                font-size: clamp(0.82rem, 3.6cqi, 1.35rem);
+              }
+            `}</style>
           </form>
 
-          <button
-            className={styles.locationButton}
-            disabled={searching}
-            onClick={useLocation}
-            type="button"
-          >
-            Use My Location
-          </button>
-
-          <fieldset className={styles.rangeSelector}>
-            <legend>Mission range</legend>
-            <div>
-              {RANGES.map((range) => (
-                <button
-                  aria-pressed={radiusMiles === range}
-                  className={
-                    radiusMiles === range ? styles.rangeActive : ""
-                  }
-                  key={range}
-                  onClick={() => setRadiusMiles(range)}
-                  type="button"
-                >
-                  {range} MI
-                </button>
-              ))}
-            </div>
-          </fieldset>
+          <div className={styles.actionRow}>
+            <button
+              className={styles.locationButton}
+              onClick={clearFinder}
+              type="button"
+            >
+              Clear
+            </button>
+            <button
+              className={styles.locationButton}
+              disabled={searching}
+              onClick={useLocation}
+              type="button"
+            >
+              Use My Location
+            </button>
+          </div>
 
           <p aria-live="polite" className={styles.message} id={messageId}>
             {message}
@@ -287,12 +318,6 @@ export function LocatorConsole({
               <span className={styles.radarBeam} />
               <span className={styles.radarPing} />
             </div>
-          ) : null}
-
-          {!searching && hasSearched && results.length === 0 && !message ? (
-            <p className={styles.emptyState}>
-              No doors in your orbit yet — Presidential is growing.
-            </p>
           ) : null}
 
           {!searching && results.length > 0 ? (

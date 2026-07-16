@@ -1,3 +1,23 @@
+export const LOCATOR_STATE_CODES = [
+  "AZ",
+  "CA",
+  "FL",
+  "MI",
+  "NV",
+  "NY",
+  "OK",
+  "WA",
+] as const;
+
+export type LocatorStateCode = (typeof LOCATOR_STATE_CODES)[number];
+
+export function isLocatorStateCode(value: unknown): value is LocatorStateCode {
+  return (
+    typeof value === "string" &&
+    LOCATOR_STATE_CODES.includes(value as LocatorStateCode)
+  );
+}
+
 export type LocatorResult = Readonly<{
   id: number;
   name: string;
@@ -16,4 +36,9 @@ export type LocatorApiResponse = Readonly<{
 
 export type LocatorApiError = Readonly<{
   error: string;
+}>;
+
+export type LocatorCountApiResponse = Readonly<{
+  state: LocatorStateCode;
+  count: number;
 }>;

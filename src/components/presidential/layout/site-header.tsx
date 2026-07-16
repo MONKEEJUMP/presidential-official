@@ -2,7 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
+
+import { HeaderStoreFinder } from "./header-store-finder";
 
 const primaryNavItems = [
   { href: "/moon-rocks", label: "Moon Rocks" },
@@ -10,20 +13,29 @@ const primaryNavItems = [
   { href: "/orbit", label: "Orbit" },
   { href: "/our-story", label: "Our Story" },
   { href: "/learn", label: "Learn" },
-  { href: "/find-us", label: "Find Presidential" },
   { href: "/contact", label: "Contact" },
   { href: "/loyalty", label: "Loyalty" },
 ] as const;
 
 export function SiteHeader() {
   const [navigationOpen, setNavigationOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-40 bg-po-ink text-po-on-dark">
       <div className="relative mx-auto flex min-h-18 w-full max-w-7xl items-center justify-between gap-6 px-5 py-3 sm:px-8 lg:px-12">
         <Link
-          className="inline-flex shrink-0 items-center"
+          aria-label="Presidential — home"
+          className="inline-flex shrink-0 cursor-pointer items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
           href="/"
+          onClick={(event) => {
+            setNavigationOpen(false);
+
+            if (pathname === "/") {
+              event.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
         >
           <Image
             alt="Presidential"
@@ -57,15 +69,11 @@ export function SiteHeader() {
           id="presidential-primary-navigation"
         >
           <ul className="grid lg:flex lg:items-center lg:justify-end lg:gap-0 lg:whitespace-nowrap">
+            <HeaderStoreFinder onRoute={() => setNavigationOpen(false)} />
             {primaryNavItems.map((item) => (
               <li className="po-primary-nav-item" key={item.href}>
                 <Link
-                  className={[
-                    "po-primary-nav-link",
-                    item.href === "/find-us"
-                      ? "po-primary-nav-link-featured"
-                      : "",
-                  ].join(" ")}
+                  className="po-primary-nav-link"
                   href={item.href}
                   onClick={() => setNavigationOpen(false)}
                 >

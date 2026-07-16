@@ -16,7 +16,7 @@ type DemoCode = {
 const DEMO_CODES: readonly DemoCode[] = [
   { code: "PRES-BR01", label: "Valid", outcome: "valid" },
   { code: "PRES-USED", label: "Claimed", outcome: "claimed" },
-  { code: "UNKNOWN-0000", label: "Unverified", outcome: "unverified" },
+  { code: "NONE-0000", label: "Unverified", outcome: "unverified" },
   { code: "BAD", label: "Invalid", outcome: "invalid" },
 ];
 
@@ -218,8 +218,8 @@ export function LoyaltyPrototype() {
 
           {!scanning && outcome === "unverified" ? (
             <article className={`${styles.resultCard} ${styles.resultUnverified}`}>
-              <p><span aria-hidden="true">{"\u2715"}</span> Not A Presidential Product</p>
-              <h2>This code is not in our system. Report where you purchased it.</h2>
+              <h2>CODE NOT RECOGNIZED</h2>
+              <p>This code isn&apos;t in our system. Contact Presidential to verify your product.</p>
             </article>
           ) : null}
 

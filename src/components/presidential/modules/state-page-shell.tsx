@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 
 import {
   readDraftCatalogItems,
@@ -8,8 +7,11 @@ import {
 } from "@/lib/cms/catalog";
 import { stateFontClass } from "@/lib/find-us/state-fonts";
 import type { PresidentialState, PresidentialStateTheme } from "@/lib/find-us/states";
+import { readLocatorStateCount } from "@/lib/locator/state-counts";
+import { isLocatorStateCode } from "@/lib/locator/types";
 
 import { PageFrame } from "../layout/page-frame";
+import { StateLocatorSection } from "../locator/state-locator-section";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { CtaLink } from "../primitives/cta-link";
@@ -143,7 +145,11 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
   const heroImage = STATE_HERO_IMAGES[state.slug];
   const displayName =
     atmosphere.nameCase === "upper" ? state.name.toUpperCase() : state.name;
-  const catalog = await readCatalogForState();
+  const stateCode = isLocatorStateCode(state.code) ? state.code : null;
+  const [catalog, doorCount] = await Promise.all([
+    readCatalogForState(),
+    stateCode ? readLocatorStateCount(stateCode) : Promise.resolve(null),
+  ]);
 
   return (
     <PageFrame>
@@ -192,27 +198,8 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
               <div aria-hidden="true" className={layer} key={index} />
             ))
           )}
-          <div className={`relative mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-8 sm:px-10 lg:px-16 ${heroImage && heroImage.scrim === "top" ? "justify-start" : "justify-between"}`}>
-            <nav aria-label="Breadcrumb" className="text-sm text-po-canvas/80">
-              <ol className="flex flex-wrap items-center gap-2">
-                <li>
-                  <Link
-                    className="font-semibold underline-offset-4 hover:underline"
-                    href="/find-us"
-                  >
-                    Find Us
-                  </Link>
-                </li>
-                <li aria-hidden="true">/</li>
-                <li>
-                  <span aria-current="page" className="font-semibold text-po-canvas">
-                    {state.name}
-                  </span>
-                </li>
-              </ol>
-            </nav>
-
-            <div className="pb-4">
+          <div className="relative mx-auto flex w-full max-w-7xl flex-col justify-start gap-10 px-6 py-8 sm:px-10 lg:px-16">
+            <div className="my-auto pb-4">
               <p className="text-xs font-black uppercase tracking-wide text-po-canvas/90">
                 Presidential in
               </p>
@@ -238,6 +225,14 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
             </div>
           </div>
         </section>
+
+        {stateCode ? (
+          <StateLocatorSection
+            doorCount={doorCount}
+            stateCode={stateCode}
+            stateName={state.name}
+          />
+        ) : null}
 
         <Scene
           ariaLabelledBy="presidential-state-official"

@@ -9,13 +9,18 @@ import {
   buildRouteShellJsonLd,
   JsonLd,
 } from "@/lib/seo/schema";
+import type { LocatorInitialSearch } from "@/lib/locator/inbound-search";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 type HomeRouteShellProps = {
+  readonly locatorInitialSearch?: LocatorInitialSearch;
   readonly route: SeoRouteRecord;
 };
 
-export async function HomeRouteShell({ route }: HomeRouteShellProps) {
+export async function HomeRouteShell({
+  locatorInitialSearch,
+  route,
+}: HomeRouteShellProps) {
   if (route.id !== "home" || route.path !== "/") {
     throw new Error("HomeRouteShell requires the home route record.");
   }
@@ -37,7 +42,10 @@ export async function HomeRouteShell({ route }: HomeRouteShellProps) {
           </SceneStack>
         </PageFrame>
       ) : (
-        <HomepageFoundationShell route={route} />
+        <HomepageFoundationShell
+          locatorInitialSearch={locatorInitialSearch}
+          route={route}
+        />
       )}
     </>
   );

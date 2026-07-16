@@ -257,6 +257,22 @@
 .resultClaimed { color: var(--po-color-gold); }
 .resultUnverified { color: #f87171; }
 
+.resultUnverified h2 {
+  margin-top: 0;
+  font-size: clamp(1.7rem, 5vw, 3.5rem);
+  line-height: 0.95;
+}
+
+.resultUnverified p {
+  display: block;
+  margin-top: 1.25rem;
+  font-family: var(--po-font-body);
+  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  font-weight: 400;
+  line-height: 1.5;
+  text-transform: none;
+}
+
 .memberPanel {
   border: 1px solid color-mix(in srgb, var(--po-color-brand) 34%, transparent);
   border-radius: 8px;

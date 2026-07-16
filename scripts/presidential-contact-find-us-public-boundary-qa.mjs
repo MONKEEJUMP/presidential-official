@@ -148,8 +148,11 @@ addCheck(
   checks,
   "findUs.page.shellOnly",
   findUsPage.includes('const ROUTE_PATH = "/find-us" as const') &&
-    findUsPage.includes("<PresidentialRouteShell route={route} />"),
-  "Find Us page delegates to the gated PresidentialRouteShell.",
+    findUsPage.includes("parseLocatorInitialSearch(await searchParams)") &&
+    findUsPage.includes("<PresidentialRouteShell") &&
+    findUsPage.includes("locatorInitialSearch={locatorInitialSearch}") &&
+    findUsPage.includes("route={route}"),
+  "Find Us page validates inbound search values and delegates them to the gated PresidentialRouteShell.",
 );
 addCheck(
   checks,

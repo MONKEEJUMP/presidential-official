@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { CtaLink } from "../primitives/cta-link";
 import { Scene } from "../layout/scene";
 
@@ -5,6 +7,17 @@ type FindUsCtaShellProps = {
   readonly compact?: boolean;
   readonly className?: string;
 };
+
+const FIND_US_STATE_LINKS = [
+  { href: "/find-us/az", label: "Arizona" },
+  { href: "/find-us/ca", label: "California" },
+  { href: "/find-us/fl", label: "Florida" },
+  { href: "/find-us/mi", label: "Michigan" },
+  { href: "/find-us/nv", label: "Nevada" },
+  { href: "/find-us/ny", label: "New York" },
+  { href: "/find-us/ok", label: "Oklahoma" },
+  { href: "/find-us/wa", label: "Washington" },
+] as const;
 
 export function FindUsCtaShell({
   compact = false,
@@ -28,7 +41,11 @@ export function FindUsCtaShell({
       >
         <div>
           <h2
-            className="max-w-4xl font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl lg:text-7xl"
+            className={
+              compact
+                ? "max-w-4xl font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl lg:text-7xl"
+                : "max-w-[12ch] font-display text-[clamp(3.25rem,6vw,6rem)] font-bold uppercase leading-[0.86] text-po-on-dark"
+            }
             id="presidential-find-us-path"
           >
             Find Presidential products.
@@ -48,13 +65,19 @@ export function FindUsCtaShell({
         </div>
 
         {compact ? null : (
-          <div className="po-gold-thread-inlay-vertical pl-6 lg:pl-10">
-            <p className="font-display text-4xl uppercase leading-none text-po-brand">
-              California
-            </p>
-            <p className="mt-5 text-sm leading-6 text-po-on-dark-muted">
-              Verified locations will appear only as approved retailer records become available.
-            </p>
+          <div className="po-gold-thread-inlay-vertical self-stretch pl-6 lg:pl-10">
+            <ul className="flex h-full flex-col justify-between gap-3">
+              {FIND_US_STATE_LINKS.map((state) => (
+                <li key={state.href}>
+                  <Link
+                    className="block font-display text-4xl uppercase leading-none text-po-brand transition-colors hover:text-po-on-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
+                    href={state.href}
+                  >
+                    {state.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>

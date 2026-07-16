@@ -1646,12 +1646,16 @@ function checkRouteShellFoundation() {
       pageRegistryIssues.push(filePath);
     }
 
-    const expectedShell =
+    const usesExpectedShell =
       routePath === "/"
-        ? "<HomeRouteShell route={route} />"
-        : "<PresidentialRouteShell route={route} />";
+        ? text.includes("<HomeRouteShell route={route} />")
+        : routePath === "/find-us"
+          ? text.includes("<PresidentialRouteShell") &&
+            text.includes("locatorInitialSearch={locatorInitialSearch}") &&
+            text.includes("route={route}")
+          : text.includes("<PresidentialRouteShell route={route} />");
 
-    if (!text.includes(expectedShell)) {
+    if (!usesExpectedShell) {
       pageShellIssues.push(filePath);
     }
   }
@@ -2271,19 +2275,43 @@ function checkAgeGateFoundation() {
   const redirectMatches = collectTextFiles(["src/app", "src/components"]).flatMap(
     (file) => findLineMatches(file, redirectPatterns),
   );
+  const dispensariesRedirectPath = "src/app/dispensaries/page.tsx";
+  const dispensariesRedirectIsCanonical =
+    projectFileExists(dispensariesRedirectPath) &&
+    readProjectFile(dispensariesRedirectPath).includes('permanentRedirect("/find-us")');
+  const headerStoreFinderPath =
+    "src/components/presidential/layout/header-store-finder.tsx";
+  const headerStoreFinderIsCanonical =
+    projectFileExists(headerStoreFinderPath) &&
+    readProjectFile(headerStoreFinderPath).includes(
+      "router.push(`/find-us?${params.toString()}#presidential-locator-console`)",
+    );
+  const unapprovedRedirectMatches = redirectMatches.filter(
+    (match) =>
+      !(
+        dispensariesRedirectIsCanonical &&
+        match.file === dispensariesRedirectPath &&
+        match.label === "Next permanent redirect"
+      ) &&
+      !(
+        headerStoreFinderIsCanonical &&
+        match.file === headerStoreFinderPath &&
+        match.label === "router push"
+      ),
+  );
 
-  if (redirectMatches.length === 0) {
+  if (unapprovedRedirectMatches.length === 0) {
     addResult(
       "PASS",
       "agegate.noRedirects",
-      "No age-gate redirect wall or client navigation redirect code was found in app/components source.",
+      "No age-gate redirect wall code was found; only the exact /dispensaries canonical redirect and validated header store-finder navigation to /find-us are allowlisted.",
     );
   } else {
     addResult(
       "FAIL",
       "agegate.noRedirects",
       "Redirect-like code was found in app/components source.",
-      redirectMatches.map((match) => `${match.file}:${match.line} ${match.label}`),
+      unapprovedRedirectMatches.map((match) => `${match.file}:${match.line} ${match.label}`),
       "Do not route users or crawlers away from page-specific content for age gate handling.",
     );
   }

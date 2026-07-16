@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import {
   catalogItemSlug,
   readDraftCatalogItems,
@@ -7,7 +9,6 @@ import {
 import { GEM_PRODUCTS } from "@/lib/gems/gems-manifest";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
-import { CrestSpinningVideo } from "../media/crest-spinning-video";
 import { SiteVideo } from "../media/site-video";
 import { FindPresidentialScrollTile } from "./find-presidential-scroll-tile";
 import { GemTicker } from "./gem-ticker";
@@ -39,6 +40,8 @@ const THEATER_SERIES = [
     series: "Rose Gold Connoisseur Series",
   },
 ] as const;
+
+const CREST_SPINNING_POSTER = "/media/posters/crest-spinning.jpg";
 
 async function readHeroCatalogItems(): Promise<readonly SanityCatalogItem[]> {
 
@@ -83,19 +86,23 @@ function toTheaterSeries(
 }
 
 function toGemTickerProducts(items: readonly SanityCatalogItem[]) {
-  const itemBySlug = new Map(
-    items.map((item) => [catalogItemSlug(item), item]),
+  const itemByProductKey = new Map(
+    items.flatMap((item) =>
+      item.productKey ? ([[item.productKey, item]] as const) : [],
+    ),
   );
 
   return GEM_PRODUCTS.map((product) => {
-    const item = itemBySlug.get(product.slug);
+    const item = itemByProductKey.get(product.productKey);
     const heroImage = item?.images?.[0];
+    const name = item?.name?.trim() || product.name;
 
     return {
       ...product,
+      name,
       imageAlt:
         heroImage?.altText?.trim() ||
-        (heroImage?.assetUrl ? `${product.name} product packaging` : undefined),
+        (heroImage?.assetUrl ? `${name} product packaging` : undefined),
       imageUrl: heroImage?.assetUrl,
     };
   });
@@ -120,7 +127,36 @@ export async function BentolioHeroShell({
       <div className="mx-auto grid w-full max-w-[1392px] grid-cols-1 gap-6 lg:aspect-[1392/854] lg:grid-cols-[minmax(0,565fr)_minmax(0,330fr)_minmax(0,447fr)] lg:grid-rows-[101fr_354fr_226fr_101fr]">
         {/* CREST tile — owner-supplied spinning crest film, nothing else. */}
         <div className="po-teal-pinstripe relative min-h-[320px] overflow-hidden rounded-[20px] bg-[#0D0D0D] lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:min-h-0">
-          <CrestSpinningVideo />
+          <Image
+            alt=""
+            aria-hidden="true"
+            className="object-cover"
+            fill
+            priority
+            sizes="(min-width: 1024px) 41vw, 100vw"
+            src={CREST_SPINNING_POSTER}
+          />
+          <video
+            aria-hidden="true"
+            autoPlay
+            className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
+            loop
+            muted
+            playsInline
+            poster={CREST_SPINNING_POSTER}
+            preload="metadata"
+          >
+            <source
+              media="(prefers-reduced-motion: no-preference)"
+              src="/media/backdrops/crest-spinning.webm"
+              type="video/webm"
+            />
+            <source
+              media="(prefers-reduced-motion: no-preference)"
+              src="/media/backdrops/crest-spinning.mp4"
+              type="video/mp4"
+            />
+          </video>
           <h1 className="sr-only" id="presidential-homepage-primary">
             {route.h1}
           </h1>

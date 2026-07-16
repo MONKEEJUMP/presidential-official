@@ -1,6 +1,7 @@
 import { catalogItemSlug } from "@/lib/cms/catalog";
 
 export type GemProduct = {
+  readonly productKey: string;
   readonly slug: string;
   readonly name: string;
   readonly series: string;

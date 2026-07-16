@@ -1,6 +1,10 @@
 import Link from "next/link";
 
 import { ContactInquiryForm } from "@/app/contact/contact-inquiry-form";
+import { PRESIDENTIAL_STATES } from "@/lib/find-us/states";
+import type { LocatorInitialSearch } from "@/lib/locator/inbound-search";
+import { readLocatorStateCounts } from "@/lib/locator/state-counts";
+import { isLocatorStateCode } from "@/lib/locator/types";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 import { PageFrame } from "../layout/page-frame";
@@ -9,6 +13,10 @@ import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { FindUsNationwideVideo } from "../media/find-us-nationwide-video";
 import { CtaLink } from "../primitives/cta-link";
+import {
+  CinematicStateWall,
+  type CinematicStateWallState,
+} from "./cinematic-state-wall";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { UsMapShell } from "./us-map-shell";
 
@@ -36,9 +44,10 @@ type SupportRouteFoundationShellProps = {
   readonly supportCallout: SupportCallout | null;
   readonly contactInquiryConfigured: boolean;
   readonly heroVariant?: "dispensaries";
+  readonly locatorInitialSearch?: LocatorInitialSearch;
 };
 
-export function SupportRouteFoundationShell({
+export async function SupportRouteFoundationShell({
   route,
   breadcrumbs,
   links,
@@ -46,12 +55,41 @@ export function SupportRouteFoundationShell({
   supportCallout,
   contactInquiryConfigured,
   heroVariant,
+  locatorInitialSearch,
 }: SupportRouteFoundationShellProps) {
   if (route.kind !== "contact" && route.kind !== "store_locator") {
     throw new Error(
       "SupportRouteFoundationShell requires a contact or store-locator route record.",
     );
   }
+
+  const stateCounts =
+    route.kind === "store_locator" ? await readLocatorStateCounts() : null;
+  const stateWallStates: CinematicStateWallState[] = stateCounts
+    ? PRESIDENTIAL_STATES.flatMap((state) => {
+        if (!isLocatorStateCode(state.code)) return [];
+        return [
+          {
+            code: state.code,
+            name: state.name,
+            tagline: state.tagline,
+            path: `/find-us/${state.slug}`,
+            imageSrc: `/media/states/${state.slug}-hero.webp`,
+            doorCount: stateCounts[state.code],
+          },
+        ];
+      })
+    : [];
+
+  stateWallStates.sort((left, right) => {
+    const leftIsLive = left.doorCount !== null && left.doorCount > 0;
+    const rightIsLive = right.doorCount !== null && right.doorCount > 0;
+    if (leftIsLive !== rightIsLive) return leftIsLive ? -1 : 1;
+    if (leftIsLive && rightIsLive) {
+      return (right.doorCount ?? 0) - (left.doorCount ?? 0);
+    }
+    return 0;
+  });
 
   return (
     <PageFrame>
@@ -64,6 +102,7 @@ export function SupportRouteFoundationShell({
             leadMedia={
               route.kind === "store_locator" ? <FindUsNationwideVideo /> : undefined
             }
+            mediaOnly={route.kind === "store_locator"}
             supportingText={[
               route.description,
               "A focused official section inside the Presidential digital experience for adults 21+ where legal.",
@@ -137,9 +176,10 @@ export function SupportRouteFoundationShell({
           <section
             aria-label="Find a dispensary"
             className="po-gold-thread-inlay bg-po-ink text-po-on-dark"
+            id="presidential-locator-console"
           >
-            <div className="mx-auto w-full max-w-7xl px-[clamp(1.25rem,4vw,4rem)] pb-[clamp(4rem,8vw,7rem)] pt-[clamp(3rem,8vw,7rem)]">
-              <LocatorConsole missionControlIntro />
+            <div className="mx-auto w-full max-w-7xl px-[clamp(1.25rem,4vw,4rem)] py-[clamp(2rem,4vw,3.5rem)]">
+              <LocatorConsole initialSearch={locatorInitialSearch} />
             </div>
           </section>
         ) : null}
@@ -213,6 +253,10 @@ export function SupportRouteFoundationShell({
               <UsMapShell />
             </div>
           </Scene>
+        ) : null}
+
+        {route.kind === "store_locator" ? (
+          <CinematicStateWall states={stateWallStates} />
         ) : null}
 
         {supportCallout ? (

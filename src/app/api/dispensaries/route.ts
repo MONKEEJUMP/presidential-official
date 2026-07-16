@@ -1,16 +1,21 @@
 import { NextResponse } from "next/server";
 
-import type { LocatorApiResponse, LocatorResult } from "@/lib/locator/types";
+import {
+  isLocatorStateCode,
+  type LocatorApiResponse,
+  type LocatorCountApiResponse,
+  type LocatorResult,
+  type LocatorStateCode,
+} from "@/lib/locator/types";
 
 export const dynamic = "force-dynamic";
 
 const ZIP_PATTERN = /^\d{5}$/;
-const ALLOWED_RADII = new Set([10, 25, 50]);
 const ALLOWED_REQUEST_FIELDS = new Set([
   "zip",
   "latitude",
   "longitude",
-  "radiusMiles",
+  "state",
 ]);
 const MAX_REQUEST_BODY_BYTES = 4_096;
 const UPSTREAM_TIMEOUT_MS = 5_000;
@@ -19,7 +24,7 @@ type LocatorRequest = {
   readonly zip?: unknown;
   readonly latitude?: unknown;
   readonly longitude?: unknown;
-  readonly radiusMiles?: unknown;
+  readonly state?: unknown;
 };
 
 function finiteCoordinate(value: unknown, minimum: number, maximum: number) {
@@ -96,6 +101,7 @@ function normalizeResult(value: unknown): LocatorResult | null {
   if (typeof id !== "number" || !Number.isSafeInteger(id) || id <= 0) return null;
   if (typeof distance !== "number" || !Number.isFinite(distance) || distance < 0) return null;
   if (required.some((field) => typeof record[field] !== "string" || !record[field])) return null;
+  if (!isLocatorStateCode(record.state)) return null;
   if (!ZIP_PATTERN.test(String(record.zip))) return null;
   if (record.website !== null && typeof record.website !== "string") return null;
 
@@ -110,6 +116,82 @@ function normalizeResult(value: unknown): LocatorResult | null {
     website: typeof record.website === "string" && record.website ? record.website : null,
     distance_miles: distance,
   };
+}
+
+function getSupabaseSettings() {
+  const url = process.env.SUPABASE_URL?.replace(/\/$/, "");
+  const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+  return url && key ? { url, key } : null;
+}
+
+function parseStateCount(value: unknown): number | null {
+  const count =
+    typeof value === "string" && /^\d+$/.test(value) ? Number(value) : value;
+  return typeof count === "number" &&
+    Number.isSafeInteger(count) &&
+    count >= 0
+    ? count
+    : null;
+}
+
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const keys = [...new Set(url.searchParams.keys())];
+  const states = url.searchParams.getAll("state");
+  const state = states.length === 1 ? states[0] : null;
+
+  if (keys.length !== 1 || keys[0] !== "state" || !isLocatorStateCode(state)) {
+    return NextResponse.json({ error: "Invalid state request." }, { status: 400 });
+  }
+
+  const settings = getSupabaseSettings();
+  if (!settings) {
+    return NextResponse.json({ error: "Locator service is not configured." }, { status: 503 });
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(
+      `${settings.url}/rest/v1/rpc/count_retailers_by_state`,
+      {
+        method: "POST",
+        headers: {
+          apikey: settings.key,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ state_code: state }),
+        cache: "no-store",
+        signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
+      },
+    );
+  } catch {
+    console.error("Locator state count request failed.");
+    return NextResponse.json({ error: "Locator service is temporarily unavailable." }, { status: 502 });
+  }
+
+  if (!response.ok) {
+    console.error("Locator state count RPC failed with status", response.status);
+    return NextResponse.json({ error: "Locator service is temporarily unavailable." }, { status: 502 });
+  }
+
+  let payload: unknown;
+  try {
+    payload = (await response.json()) as unknown;
+  } catch {
+    console.error("Locator state count RPC returned invalid JSON.");
+    return NextResponse.json({ error: "Locator service is temporarily unavailable." }, { status: 502 });
+  }
+
+  const count = parseStateCount(payload);
+  if (count === null) {
+    console.error("Locator state count RPC returned an invalid payload.");
+    return NextResponse.json({ error: "Locator service is temporarily unavailable." }, { status: 502 });
+  }
+
+  const apiResponse: LocatorCountApiResponse = { state, count };
+  return NextResponse.json(apiResponse, {
+    headers: { "Cache-Control": "no-store" },
+  });
 }
 
 export async function POST(request: Request) {
@@ -142,30 +224,33 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Enter a valid five-digit ZIP code." }, { status: 400 });
   }
 
-  const radius = hasOwn(body, "radiusMiles") ? body.radiusMiles : 10;
-  if (typeof radius !== "number" || !ALLOWED_RADII.has(radius)) {
-    return NextResponse.json({ error: "Invalid mission range." }, { status: 400 });
+  const state: LocatorStateCode | null = hasOwn(body, "state")
+    ? isLocatorStateCode(body.state)
+      ? body.state
+      : null
+    : null;
+  if (hasOwn(body, "state") && state === null) {
+    return NextResponse.json({ error: "Invalid state request." }, { status: 400 });
   }
 
-  const supabaseUrl = process.env.SUPABASE_URL?.replace(/\/$/, "");
-  const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY;
-  if (!supabaseUrl || !publishableKey) {
+  const settings = getSupabaseSettings();
+  if (!settings) {
     return NextResponse.json({ error: "Locator service is not configured." }, { status: 503 });
   }
 
   let response: Response;
   try {
-    response = await fetch(`${supabaseUrl}/rest/v1/rpc/search_retailers`, {
+    response = await fetch(`${settings.url}/rest/v1/rpc/search_retailers`, {
       method: "POST",
       headers: {
-        apikey: publishableKey,
+        apikey: settings.key,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         search_zip: hasZip ? zip : null,
         search_lat: hasCoordinates ? body.latitude : null,
         search_lng: hasCoordinates ? body.longitude : null,
-        radius_miles: radius,
+        state_code: state,
       }),
       cache: "no-store",
       signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
@@ -192,10 +277,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Locator service is temporarily unavailable." }, { status: 502 });
   }
 
-  const results = payload
-    .map(normalizeResult)
-    .filter((result): result is LocatorResult => result !== null)
-    .slice(0, 100);
+  const normalized = payload.map(normalizeResult);
+  if (
+    normalized.some(
+      (result) => result === null || (state !== null && result.state !== state),
+    )
+  ) {
+    console.error("Locator RPC returned an invalid or cross-state payload.");
+    return NextResponse.json({ error: "Locator service is temporarily unavailable." }, { status: 502 });
+  }
+
+  const results = (normalized as LocatorResult[]).slice(0, 25);
   const apiResponse: LocatorApiResponse = { results };
   return NextResponse.json(apiResponse, {
     headers: { "Cache-Control": "no-store" },

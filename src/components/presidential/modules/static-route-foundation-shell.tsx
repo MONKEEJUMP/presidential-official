@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { isContactInquiryConfigured } from "@/app/contact/contact-inquiry-config";
+import type { LocatorInitialSearch } from "@/lib/locator/inbound-search";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 import { PageFrame } from "../layout/page-frame";
@@ -10,6 +11,7 @@ import { MediaSlot } from "../media/media-slot";
 import { CtaLink } from "../primitives/cta-link";
 import { SectionHeading } from "../primitives/section-heading";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
+import { OurStoryPrerollGraphicsGrid } from "./our-story-preroll-graphics-grid";
 import { SupportRouteFoundationShell } from "./support-route-foundation-shell";
 
 type StaticRouteBreadcrumb = {
@@ -21,6 +23,7 @@ type StaticRouteFoundationShellProps = {
   readonly route: SeoRouteRecord;
   readonly breadcrumbs: readonly StaticRouteBreadcrumb[];
   readonly links: readonly SeoRouteRecord[];
+  readonly locatorInitialSearch?: LocatorInitialSearch;
 };
 
 type StaticRoutePanel = {
@@ -58,15 +61,27 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
     ];
   }
 
-  if (route.kind === "brand_story") {
+  if (route.id === "our-story") {
     return [
       {
-        title: "Official story",
-        body: "Presidential is presented as the parent brand behind Moon Rocks, pre-rolls, blunts, Moon Pods, and Orbit.",
+        title: "Where it started",
+        body: "Los Angeles, 2012. Founders Everett Smith and John Zapp built cannabis the way the great houses build anything worth owning — obsessively, no shortcuts. They didn't just launch a brand; they helped father the infused-product category in Southern California. Presidential was premium before 'premium cannabis' was a phrase.",
       },
       {
-        title: "Brand context",
-        body: "The story connects the company, the products, and the official retail path in one first-party source.",
+        title: "How it's built",
+        body: "A Presidential Moon Rock isn't flower with a dusting on top. It's the Presidential Infusion System™ — premium flower, rich resin, and a coat of the finest kief, fused into one complete product. Three layers, one hit, engineered for flavor and strength you actually feel. That's what Cannabis Evolved means — and why Moon Rocks earned the name.",
+      },
+      {
+        title: "The reputation",
+        body: "Presidential became the house behind the World's Strongest™ pre-rolls and the moon rock blunt the whole market tried to copy — carried across 400+ licensed California retailers. The reputation wasn't marketed into existence. It was earned, one pack at a time.",
+      },
+      {
+        title: "The culture",
+        body: "Presidential never stayed in its lane. In West Hollywood, it opened Esco's — a New York-style pizzeria — and the Presidential Suite, a speakeasy-style lounge you enter through an NYC subway car built inside the restaurant. A brand this obsessed with experience was never going to stop at the product.",
+      },
+      {
+        title: "What's next",
+        body: "Today Presidential is a full platform — Moon Rocks, Moon Pods, and Orbit — each engineered around flavor, all carrying the same standard. The belief that started it in 2012 hasn't moved: build it better, expect more, never miss. Then. Now. Next.",
       },
     ];
   }
@@ -142,13 +157,22 @@ function EditorialRouteFoundationShell({
     <PageFrame>
       <SceneStack>
         <DispensariesStyleHero
+          afterContent={
+            route.id === "our-story" ? <OurStoryPrerollGraphicsGrid /> : undefined
+          }
           ariaLabelledBy="presidential-route-title"
           breadcrumbs={breadcrumbs}
           eyebrow="Official Presidential"
-          supportingText={[
-            route.description,
-            "A focused official section inside the Presidential digital experience for adults 21+ where legal.",
-          ]}
+          supportingText={
+            route.id === "our-story"
+              ? [
+                  "Los Angeles, 2012. Two founders, Everett Smith and John Zapp, set out with one stubborn belief: cannabis deserves better. Not better marketing — better cannabis. They weren't interested in growing flower and calling it premium; they wanted to build the best product on the shelf and obsess over every gram to get there. What they made didn't just sell — it helped invent a category. Presidential became one of the founding fathers of the infused-product market in Southern California: the house behind the World's Strongest™ pre-rolls and the moon rock blunt the whole industry spent the next decade trying to copy, stocked across 400+ licensed California retailers from MedMen and Stiiizy to Catalyst and March & Ash. But Presidential never chased the copies. It kept chasing better — better flavor, greater consistency, a premium experience pack after pack, no misses. More than a decade later, that obsession has grown into a full platform: Moon Rocks, Moon Pods, and Orbit. The name on the box hasn't changed, and neither has the standard behind it. Cannabis Evolved. Expect More. Because Presidential Doesn't Miss.",
+                ]
+              : [
+                  route.description,
+                  "A focused official section inside the Presidential digital experience for adults 21+ where legal.",
+                ]
+          }
           title={route.h1}
         />
 
@@ -244,6 +268,7 @@ export function StaticRouteFoundationShell({
   route,
   breadcrumbs,
   links,
+  locatorInitialSearch,
 }: StaticRouteFoundationShellProps) {
   const panels = getRoutePanels(route);
   const supportCallout = getRouteSupportCallout(route);
@@ -268,6 +293,7 @@ export function StaticRouteFoundationShell({
         contactInquiryConfigured={contactInquiryConfigured}
         heroVariant="dispensaries"
         links={links}
+        locatorInitialSearch={locatorInitialSearch}
         panels={panels}
         route={route}
         supportCallout={supportCallout}

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 
+import { useAdultVideoPlayback } from "@/lib/browser/adult-video-playback";
+
 type MoonRocksTheaterProduct = {
   readonly id: string;
   readonly name: string;
@@ -15,6 +17,58 @@ export type MoonRocksTheaterSeries = {
   readonly label: "Silver" | "Gold" | "Rose Gold";
   readonly products: readonly MoonRocksTheaterProduct[];
 };
+
+const THEATER_FRAME_PINSTRIPE_WIDTH_CLASS =
+  "border-x-[3px] border-b-[3px]";
+
+const THEATER_MEDIA = {
+  silver: {
+    mp4: "/media/backdrops/silver-backdrop.mp4",
+    poster: "/media/posters/silver-backdrop.jpg",
+    webm: "/media/backdrops/silver-backdrop.webm",
+  },
+  gold: {
+    mp4: "/media/backdrops/gold-backdrop.mp4",
+    poster: "/media/posters/gold-backdrop.jpg",
+    webm: "/media/backdrops/gold-backdrop.webm",
+  },
+  "rose-gold": {
+    mp4: "/media/backdrops/rosegold-backdrop.mp4",
+    poster: "/media/posters/rosegold-backdrop.jpg",
+    webm: "/media/backdrops/rosegold-backdrop.webm",
+  },
+} as const;
+
+function TheaterBackdrop({
+  seriesId,
+}: {
+  readonly seriesId: MoonRocksTheaterSeries["id"];
+}) {
+  const { canStream, videoRef } = useAdultVideoPlayback();
+  const media = THEATER_MEDIA[seriesId];
+
+  return (
+    <video
+      aria-hidden="true"
+      autoPlay={canStream}
+      className="absolute inset-0 z-0 h-full w-full object-cover"
+      loop
+      muted
+      playsInline
+      poster={media.poster}
+      preload={canStream ? "metadata" : "none"}
+      ref={videoRef}
+      tabIndex={-1}
+    >
+      {canStream ? (
+        <>
+          <source src={media.webm} type="video/webm" />
+          <source src={media.mp4} type="video/mp4" />
+        </>
+      ) : null}
+    </video>
+  );
+}
 
 function motionIsReduced(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -91,10 +145,12 @@ export function MoonRocksSeriesTheater({
 
   return (
     <>
-      <div className="flex flex-col rounded-[20px] bg-po-brand p-6 text-po-ink lg:col-start-3 lg:row-span-3 lg:row-start-2">
-        <div className="flex items-start justify-between">
+      <div
+        className={`flex flex-col rounded-[20px] border-solid border-po-brand bg-po-brand pt-6 text-po-ink lg:col-start-3 lg:row-span-3 lg:row-start-2 ${THEATER_FRAME_PINSTRIPE_WIDTH_CLASS}`}
+      >
+        <div className="flex w-full items-start justify-center px-6">
           <Link
-            className="font-display text-[25px] uppercase leading-none transition-colors hover:text-po-canvas"
+            className="text-center font-display text-[25px] uppercase leading-none transition-colors hover:text-po-canvas"
             href="/moon-rocks"
           >
             Moon Rocks
@@ -110,6 +166,13 @@ export function MoonRocksSeriesTheater({
           id="moon-rocks-series-screen"
           role="tabpanel"
         >
+          {displayedSeries ? (
+            <TheaterBackdrop
+              key={displayedSeries.id}
+              seriesId={displayedSeries.id}
+            />
+          ) : null}
+          <div aria-hidden="true" className="po-theater-scrim absolute inset-0 z-10" />
           <nav
             aria-label={`${displayedSeries?.label || "Moon Rocks"} products`}
             className="absolute inset-0 z-20 overflow-y-auto p-[clamp(0.75rem,4cqi,1.5rem)] [mask-image:linear-gradient(to_bottom,black_0%,black_calc(100%_-_40px),transparent_100%)] [scrollbar-width:none] [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_calc(100%_-_40px),transparent_100%)] [&::-webkit-scrollbar]:hidden"
@@ -122,7 +185,7 @@ export function MoonRocksSeriesTheater({
                   key={product.id}
                 >
                   <Link
-                    className="block min-h-11 py-[clamp(0.625rem,3cqi,0.875rem)] font-display text-[clamp(0.8125rem,3.7cqi,1rem)] uppercase leading-tight text-po-on-dark transition-colors hover:text-po-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-po-brand"
+                    className="block min-h-11 py-[clamp(0.625rem,3cqi,0.875rem)] font-display text-[clamp(0.8125rem,3.7cqi,1rem)] uppercase leading-tight text-po-on-dark [text-shadow:0_1px_3px_rgb(0_0_0_/_0.95)] transition-colors hover:text-po-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-po-brand"
                     href={product.href}
                     onFocus={(event) => {
                       const scroller = event.currentTarget.closest<HTMLElement>(
@@ -162,9 +225,9 @@ export function MoonRocksSeriesTheater({
               <button
                 aria-controls="moon-rocks-series-screen"
                 aria-selected={active}
-                className={`flex h-[16cqi] items-center justify-center rounded-[12px] border font-display text-[clamp(0.75rem,4cqi,1rem)] uppercase transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-ink ${
+                className={`flex h-[16cqi] items-center justify-center rounded-[12px] border-2 font-display text-[clamp(0.75rem,4cqi,1rem)] uppercase outline-none transition-colors focus-visible:border-po-on-dark ${
                   active
-                    ? "border-po-ink/20 bg-po-brand text-po-ink"
+                    ? "border-po-on-dark bg-po-brand text-po-ink"
                     : "border-transparent bg-po-ink text-po-on-dark"
                 }`}
                 id={`moon-rocks-series-tab-${item.id}`}

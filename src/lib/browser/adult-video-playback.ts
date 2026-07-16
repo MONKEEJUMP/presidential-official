@@ -6,16 +6,6 @@ import type { RefObject } from "react";
 const ADULT_CONFIRMATION_EVENT = "presidential:adult-confirmation";
 const ADULT_CONFIRMATION_DATA_KEY = "presidentialAdultConfirmed";
 
-type AdultConfirmationEvent = CustomEvent<{
-  readonly confirmed: boolean;
-}>;
-
-function adultConfirmationFromDocument(): boolean {
-  return (
-    document.documentElement.dataset[ADULT_CONFIRMATION_DATA_KEY] === "true"
-  );
-}
-
 function releaseVideo(video: HTMLVideoElement) {
   video.pause();
   video.removeAttribute("src");
@@ -43,10 +33,6 @@ export function useAdultVideoPlayback<T extends Element>(
   visibilityTargetRef?: RefObject<T | null>,
 ) {
   const videoElementRef = useRef<HTMLVideoElement | null>(null);
-  const [adultConfirmed, setAdultConfirmed] = useState(
-    () =>
-      typeof document !== "undefined" && adultConfirmationFromDocument(),
-  );
   const [isInViewport, setIsInViewport] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(
     () =>
@@ -60,29 +46,12 @@ export function useAdultVideoPlayback<T extends Element>(
   );
 
   useEffect(() => {
-    const handleAdultConfirmation = (event: Event) => {
-      setAdultConfirmed(
-        (event as AdultConfirmationEvent).detail?.confirmed === true,
-      );
-    };
-
-    window.addEventListener(ADULT_CONFIRMATION_EVENT, handleAdultConfirmation);
-    const syncRequest = window.requestAnimationFrame(() => {
-      setAdultConfirmed(adultConfirmationFromDocument());
-    });
-
-    return () => {
-      window.cancelAnimationFrame(syncRequest);
-      window.removeEventListener(ADULT_CONFIRMATION_EVENT, handleAdultConfirmation);
-    };
-  }, []);
-
-  useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const updateMotionPreference = () => {
       setPrefersReducedMotion(mediaQuery.matches);
     };
 
+    updateMotionPreference();
     mediaQuery.addEventListener("change", updateMotionPreference);
 
     return () => {
@@ -95,6 +64,7 @@ export function useAdultVideoPlayback<T extends Element>(
       setPageIsVisible(document.visibilityState === "visible");
     };
 
+    updatePageVisibility();
     document.addEventListener("visibilitychange", updatePageVisibility);
 
     return () => {
@@ -120,13 +90,13 @@ export function useAdultVideoPlayback<T extends Element>(
     };
   }, [visibilityTargetRef]);
 
-  const canStream =
-    adultConfirmed &&
-    isInViewport &&
-    !prefersReducedMotion &&
-    pageIsVisible;
+  const canStream = isInViewport && !prefersReducedMotion && pageIsVisible;
 
   const videoRef = useCallback((video: HTMLVideoElement | null) => {
+    if (!video) {
+      return;
+    }
+
     const previousVideo = videoElementRef.current;
 
     if (previousVideo && previousVideo !== video) {
