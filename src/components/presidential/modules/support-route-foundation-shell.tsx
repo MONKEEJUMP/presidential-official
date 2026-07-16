@@ -198,11 +198,14 @@ export async function SupportRouteFoundationShell({
                 className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-6xl"
                 id="presidential-route-details"
               >
-                Inside this section
+                {route.kind === "store_locator"
+                  ? "FROM SCREEN TO SHELF."
+                  : "Inside this section"}
               </h2>
               <p className="mt-6 max-w-md text-base leading-7 text-po-body">
-                A direct route into the Presidential brand, product, education,
-                and retail ecosystem.
+                {route.kind === "store_locator"
+                  ? "One search stands between you and the real thing. Drop your zip and Presidential maps the nearest licensed retailers carrying authentic product — vetted, official, coast to coast. No middlemen. No guesswork. Just the shortest line from screen to shelf."
+                  : "A direct route into the Presidential brand, product, education, and retail ecosystem."}
               </p>
               <p className="mt-6 text-sm font-medium text-po-muted">
                 For adults 21+ where legal.

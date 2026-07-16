@@ -48,15 +48,15 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
     return [
       {
         title: "Verified retailer records",
-        body: "Retailer listings appear only after the source records are verified for licensed retail use.",
+        body: "Every location on the map is an official, licensed Presidential retailer — verified at the source. No scraped lists, no lookalikes, no dead ends. If it shows up here, it's the real house stocking the real product. Authenticity, confirmed before you ever walk in the door.",
       },
       {
         title: "Local route structure",
-        body: "State, city, and retailer detail routes are planned for verified records, not customer-account rows.",
+        body: "The finder is built around one job: getting you from your zip code to the nearest door, fast. Search from downtown LA or the middle of Montana — it ranks the closest official retailers by distance and points the way. Coast to coast, your nearest Presidential is always one search away.",
       },
       {
         title: "Availability boundary",
-        body: "Product availability stays framed as retailer-dependent until approved retailer data is connected.",
+        body: "We point you to the door — the shelf belongs to the retailer. Stock, formats, and fresh drops move by location and by day, so real-time availability lives with each licensed store. Find your closest one here, then lock in the details with them. Straight talk, no overpromises.",
       },
     ];
   }
