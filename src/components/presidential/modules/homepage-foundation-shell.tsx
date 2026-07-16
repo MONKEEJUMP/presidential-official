@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 import type { LocatorInitialSearch } from "@/lib/locator/inbound-search";
@@ -27,6 +28,7 @@ const proofPoints = [
     body: "This is the one official home of Presidential — the real brand, straight from the people who make it. Every product, every image, every word here traces back to Presidential itself. What you see is exactly what reaches the shelf: authentic Presidential, verified at the source. If it's here, it's real.",
     image: {
       alt: "Pink Cookies Moon Rock product graphic",
+      href: "/moon-rocks/pink-cookies",
       src: "/media/moonrock-pinkcookies.jpg",
     },
   },
@@ -35,6 +37,7 @@ const proofPoints = [
     body: "Three platforms, one standard. Moon Rocks is the flagship — The Highest Form Of Cannabis, where premium flower, resin, and kief come together as one. Moon Pods and Orbit come next, engineered around flavor. And every platform runs the same three series — Silver, Gold, and Rose Gold — from approachable and flavor-first to solventless connoisseur craft. Whatever you pick up, you'll know exactly what's inside and exactly why it's built that way.",
     image: {
       alt: "Skywalker Moon Rock product graphic",
+      href: "/moon-rocks/skywalker",
       src: "/media/moonrock-skywalker.jpg",
     },
   },
@@ -43,6 +46,7 @@ const proofPoints = [
     body: "Presidential doesn't sell here — it points you straight to the shelf. Drop your zip and the store finder maps authentic Presidential at licensed retailers near you, across eight priority markets. No carts, no checkout, no guesswork — just the fastest route from screen to store. Availability varies by retailer. Adults 21+ where legal.",
     image: {
       alt: "Cherry Gelato Moon Rock product graphic",
+      href: "/moon-rocks/cherry-gelato",
       src: "/media/moonrock-cherrygelato.jpg",
     },
   },
@@ -175,7 +179,11 @@ export function HomepageFoundationShell({
                       {point.body}
                     </p>
                     <div className="mt-auto pt-6">
-                      <div className="relative aspect-square overflow-hidden rounded-[20px]">
+                      <Link
+                        aria-label={`View ${point.image.alt.replace(" product graphic", "")}`}
+                        className="relative block aspect-square cursor-pointer overflow-hidden rounded-[20px] transition-transform duration-200 hover:-translate-y-1 focus-visible:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:focus-visible:transform-none"
+                        href={point.image.href}
+                      >
                         <Image
                           alt={point.image.alt}
                           className="object-contain"
@@ -183,7 +191,7 @@ export function HomepageFoundationShell({
                           sizes="(min-width: 640px) 33vw, 100vw"
                           src={point.image.src}
                         />
-                      </div>
+                      </Link>
                     </div>
                   </article>
                 ))}
