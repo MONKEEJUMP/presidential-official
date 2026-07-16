@@ -85,29 +85,6 @@ function toTheaterSeries(
   });
 }
 
-function toGemTickerProducts(items: readonly SanityCatalogItem[]) {
-  const itemByProductKey = new Map(
-    items.flatMap((item) =>
-      item.productKey ? ([[item.productKey, item]] as const) : [],
-    ),
-  );
-
-  return GEM_PRODUCTS.map((product) => {
-    const item = itemByProductKey.get(product.productKey);
-    const heroImage = item?.images?.[0];
-    const name = item?.name?.trim() || product.name;
-
-    return {
-      ...product,
-      name,
-      imageAlt:
-        heroImage?.altText?.trim() ||
-        (heroImage?.assetUrl ? `${name} product packaging` : undefined),
-      imageUrl: heroImage?.assetUrl,
-    };
-  });
-}
-
 export async function BentolioHeroShell({
   route,
 }: {
@@ -115,11 +92,10 @@ export async function BentolioHeroShell({
 }) {
   const catalogItems = await readHeroCatalogItems();
   const theaterSeries = toTheaterSeries(catalogItems);
-  const gemTickerProducts = toGemTickerProducts(catalogItems);
 
   return (
     <>
-    <GemTicker products={gemTickerProducts} />
+    <GemTicker />
     <section
       aria-labelledby="presidential-homepage-primary"
       className="po-home-canvas-surface p-6"

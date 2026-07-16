@@ -188,90 +188,46 @@ summary {
   background-image: url("/brand/presidential-logo.webp");
 }
 
-.po-gem-track {
-  animation: po-gem-marquee 80s linear infinite;
+.po-product-conveyor-track {
+  animation: po-product-conveyor-marquee 95s linear infinite;
   flex: none;
   will-change: transform;
 }
 
-.po-gem-band:hover .po-gem-track,
-.po-gem-band:focus-within .po-gem-track {
+.po-product-conveyor:hover .po-product-conveyor-track,
+.po-product-conveyor:focus-within .po-product-conveyor-track {
   animation-play-state: paused;
 }
 
-.po-gem-preview {
-  left: 0;
-  opacity: 0;
-  pointer-events: auto;
-  top: 0;
-  transform: translateY(4px);
-  transition:
-    opacity 120ms ease,
-    transform 120ms ease;
-  visibility: hidden;
-}
-
-.po-gem-preview-arrow {
-  bottom: -7px;
-  left: calc(var(--po-gem-preview-arrow-left, 24px) - 6px);
-  border-right-width: 1px;
-  border-bottom-width: 1px;
-}
-
-.po-gem-preview[data-side="below"] .po-gem-preview-arrow {
-  top: -7px;
-  bottom: auto;
-  border-width: 1px 0 0 1px;
-}
-
-.po-gem-preview-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.po-gem:hover,
-.po-gem:focus-visible {
+.po-product-conveyor-pack:hover,
+.po-product-conveyor-pack:focus-visible {
   box-shadow:
-    0 0 0 3px rgba(88, 195, 182, 0.4),
-    0 0 14px rgba(88, 195, 182, 0.4);
-}
-
-.po-gem {
-  background: radial-gradient(
-    circle at 42% 36%,
-    var(--po-color-brand) 0%,
-    var(--po-color-brand) 58%,
-    color-mix(in srgb, var(--po-color-brand) 88%, black) 100%
-  );
+    0 0 0 2px rgba(88, 195, 182, 0.42),
+    0 0 16px rgba(88, 195, 182, 0.34);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .po-gem-track {
+  .po-product-conveyor-track {
     animation: none;
     transform: translateX(0);
   }
 
-  .po-gem-band {
+  .po-product-conveyor {
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: none;
   }
 
-  .po-gem-band::-webkit-scrollbar {
+  .po-product-conveyor::-webkit-scrollbar {
     display: none;
   }
 
-  .po-gem-clone {
+  .po-product-conveyor-clone {
     display: none;
-  }
-
-  .po-gem-preview {
-    transform: none;
-    transition: none;
   }
 }
 
-@keyframes po-gem-marquee {
+@keyframes po-product-conveyor-marquee {
   from {
     transform: translateX(0);
   }
