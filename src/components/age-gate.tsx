@@ -144,7 +144,7 @@ export function AgeGate({ initialConfirmed = false }: AgeGateProps) {
           className="mt-3 font-display text-3xl uppercase leading-[0.95]"
           id="presidential-age-gate-title"
         >
-          Welcome to the House.
+          Welcome to Presidential.
         </h2>
         <p className="mt-2 font-display text-lg uppercase text-po-brand">
           Adults 21+ where legal

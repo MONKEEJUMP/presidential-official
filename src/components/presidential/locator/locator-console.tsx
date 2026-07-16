@@ -252,7 +252,7 @@ export function LocatorConsole({
       >
         <div className={styles.console}>
           <form className={styles.searchForm} onSubmit={submitZip}>
-            <label htmlFor={zipInputId}>ZIP coordinates</label>
+            <label htmlFor={zipInputId}>ENTER YOUR ZIP CODE HERE</label>
             <div className={styles.inputRow}>
               <input
                 aria-describedby={messageId}
@@ -266,7 +266,7 @@ export function LocatorConsole({
                   setMessage("");
                 }}
                 pattern="[0-9]{5}"
-                placeholder="ENTER YOUR ZIP CODE HERE"
+                placeholder="00000"
                 type="text"
                 value={zip}
               />

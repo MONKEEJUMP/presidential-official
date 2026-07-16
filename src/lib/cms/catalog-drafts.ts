@@ -63,10 +63,7 @@ ${DRAFT_CATALOG_ITEM_PROJECTION}
 }`;
 
 function isDraftReadEnabled(): boolean {
-  return (
-    process.env.NODE_ENV === "development" &&
-    process.env[SANITY_DRAFT_READ_ENABLE_ENV] === "true"
-  );
+  return process.env[SANITY_DRAFT_READ_ENABLE_ENV] === "true";
 }
 
 function getDraftReadToken(): string {
