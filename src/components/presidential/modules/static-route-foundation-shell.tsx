@@ -47,16 +47,16 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
   if (route.kind === "store_locator") {
     return [
       {
-        title: "Verified retailer records",
-        body: "Every location on the map is an official, licensed Presidential retailer — verified at the source. No scraped lists, no lookalikes, no dead ends. If it shows up here, it's the real house stocking the real product. Authenticity, confirmed before you ever walk in the door.",
+        title: "Find the real thing",
+        body: "Every location here is an official, licensed Presidential retailer — verified at the source. No scraped lists, no lookalikes, no dead ends. When you find us, you find the real house stocking the real product. Authenticity, confirmed before you ever walk in the door.",
       },
       {
-        title: "Local route structure",
-        body: "The finder is built around one job: getting you from your zip code to the nearest door, fast. Search from downtown LA or the middle of Montana — it ranks the closest official retailers by distance and points the way. Coast to coast, your nearest Presidential is always one search away.",
+        title: "Find your nearest door",
+        body: "One search, one job: getting you from your zip code to the closest Presidential, fast. Search from downtown LA or the middle of Montana — we rank the nearest official retailers by distance and point the way. Coast to coast, your next Presidential run is always one search away.",
       },
       {
-        title: "Availability boundary",
-        body: "We point you to the door — the shelf belongs to the retailer. Stock, formats, and fresh drops move by location and by day, so real-time availability lives with each licensed store. Find your closest one here, then lock in the details with them. Straight talk, no overpromises.",
+        title: "Find it all, right here",
+        body: "This is the official home of everything Presidential — the products, the story, the standard, and the shops that carry it. Explore the lineup, learn the craft, then find your closest door. Stock shifts by store and by day, so lock the final details with your retailer. Everything Presidential, all in one place.",
       },
     ];
   }
