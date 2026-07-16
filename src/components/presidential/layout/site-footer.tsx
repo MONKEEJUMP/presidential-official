@@ -40,7 +40,6 @@ export function SiteFooter() {
                   href={link.href}
                 >
                   {link.label}
-                  <span aria-hidden="true" className="text-po-brand">/</span>
                 </Link>
               </li>
             ))}
