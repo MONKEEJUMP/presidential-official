@@ -2,7 +2,7 @@
 
 import type { MouseEventHandler } from "react";
 
-const STATES_MAP_ID = "presidential-states-map";
+const HOMEPAGE_LOCATOR_ID = "presidential-homepage-locator";
 
 export function FindPresidentialScrollTile() {
   const handleClick: MouseEventHandler<HTMLAnchorElement> = (event) => {
@@ -16,7 +16,7 @@ export function FindPresidentialScrollTile() {
       return;
     }
 
-    const target = document.getElementById(STATES_MAP_ID);
+    const target = document.getElementById(HOMEPAGE_LOCATOR_ID);
     if (!target) {
       return;
     }
@@ -29,13 +29,13 @@ export function FindPresidentialScrollTile() {
       behavior: reduceMotion ? "auto" : "smooth",
       block: "start",
     });
-    window.history.pushState(null, "", `#${STATES_MAP_ID}`);
+    window.history.pushState(null, "", `#${HOMEPAGE_LOCATOR_ID}`);
   };
 
   return (
     <a
       className="po-teal-pinstripe group flex min-h-[240px] cursor-pointer flex-col items-center justify-center rounded-[20px] bg-po-ink p-6 text-center text-po-on-dark [container-type:inline-size] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand lg:min-h-0"
-      href={`#${STATES_MAP_ID}`}
+      href={`#${HOMEPAGE_LOCATOR_ID}`}
       onClick={handleClick}
     >
       <span
