@@ -6,6 +6,7 @@ import {
   SceneStack,
   StaticRouteFoundationShell,
 } from "@/components/presidential";
+import { FindUsMiniBluntsGrid } from "@/components/presidential/modules/find-us-mini-blunts-grid";
 import { OurStoryPrerollGraphicsGrid } from "@/components/presidential/modules/our-story-preroll-graphics-grid";
 import { readPublicRenderableSitePage } from "@/lib/cms";
 import {
@@ -83,6 +84,7 @@ export async function PresidentialRouteShell({
               supportRoute={routeToCmsSupportRoute(route)}
             />
             {route.id === "our-story" ? <OurStoryPrerollGraphicsGrid /> : null}
+            {route.id === "find-us" ? <FindUsMiniBluntsGrid /> : null}
           </SceneStack>
         </PageFrame>
       ) : route.id === "moon-rocks" ? (

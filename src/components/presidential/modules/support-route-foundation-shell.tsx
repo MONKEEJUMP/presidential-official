@@ -18,6 +18,7 @@ import {
   type CinematicStateWallState,
 } from "./cinematic-state-wall";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
+import { FindUsMiniBluntsGrid } from "./find-us-mini-blunts-grid";
 import { UsMapShell } from "./us-map-shell";
 
 type SupportBreadcrumb = {
@@ -364,6 +365,8 @@ export async function SupportRouteFoundationShell({
             </div>
           </Scene>
         ) : null}
+
+        {route.kind === "store_locator" ? <FindUsMiniBluntsGrid /> : null}
       </SceneStack>
     </PageFrame>
   );
