@@ -3,9 +3,7 @@ import type { MetadataRoute } from "next";
 import { isPrivateOrFutureRoute } from "./indexability";
 import type { SeoRoutePath, SeoRouteRecord } from "./route-types";
 import { ROUTE_REGISTRY } from "./routes";
-import { canonicalUrl } from "./schema/constants";
 
-export const ROBOTS_SITEMAP_URL = canonicalUrl("/sitemap.xml");
 export const ROBOTS_ALLOW_PATHS = ["/"] as const;
 
 function normalizeDisallowPath(path: SeoRoutePath): readonly string[] {
@@ -37,6 +35,5 @@ export function buildPresidentialRobots(): MetadataRoute.Robots {
       allow: [...ROBOTS_ALLOW_PATHS],
       disallow: [...getRobotsDisallowPaths()],
     },
-    sitemap: ROBOTS_SITEMAP_URL,
   };
 }
