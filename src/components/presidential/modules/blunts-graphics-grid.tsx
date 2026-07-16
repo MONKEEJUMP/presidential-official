@@ -132,26 +132,34 @@ const BLUNT_GRAPHICS = [
 export function BluntsGraphicsGrid() {
   return (
     <section
-      aria-label="Presidential blunt product graphics"
+      aria-labelledby="presidential-blunts-graphics-title"
       className="bg-po-ink px-6 pb-16 pt-1 sm:px-10 lg:px-16 lg:pb-20"
       id="presidential-blunts-graphics"
     >
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
-        {BLUNT_GRAPHICS.map((graphic) => (
-          <Link
-            className="relative aspect-square overflow-hidden rounded-[20px] border border-po-brand bg-po-ink transition-transform duration-200 hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
-            href={graphic.href}
-            key={graphic.src}
-          >
-            <Image
-              alt={graphic.alt}
-              className="object-contain"
-              fill
-              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-              src={graphic.src}
-            />
-          </Link>
-        ))}
+      <div className="mx-auto w-full max-w-7xl">
+        <h2
+          className="font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl"
+          id="presidential-blunts-graphics-title"
+        >
+          Blunts
+        </h2>
+        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
+          {BLUNT_GRAPHICS.map((graphic) => (
+            <Link
+              className="relative aspect-square overflow-hidden rounded-[20px] border border-po-brand bg-po-ink transition-transform duration-200 hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
+              href={graphic.href}
+              key={graphic.src}
+            >
+              <Image
+                alt={graphic.alt}
+                className="object-contain"
+                fill
+                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                src={graphic.src}
+              />
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );
