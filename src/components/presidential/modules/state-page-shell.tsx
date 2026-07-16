@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import {
   readDraftCatalogItems,
@@ -6,7 +7,11 @@ import {
   type SanityCatalogItem,
 } from "@/lib/cms/catalog";
 import { stateFontClass } from "@/lib/find-us/state-fonts";
-import type { PresidentialState, PresidentialStateTheme } from "@/lib/find-us/states";
+import {
+  PRESIDENTIAL_STATES,
+  type PresidentialState,
+  type PresidentialStateTheme,
+} from "@/lib/find-us/states";
 import { readLocatorStateCount } from "@/lib/locator/state-counts";
 import { isLocatorStateCode } from "@/lib/locator/types";
 
@@ -145,6 +150,9 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
   const heroImage = STATE_HERO_IMAGES[state.slug];
   const displayName =
     atmosphere.nameCase === "upper" ? state.name.toUpperCase() : state.name;
+  const otherStates = PRESIDENTIAL_STATES
+    .filter((candidate) => candidate.slug !== state.slug)
+    .toSorted((left, right) => left.name.localeCompare(right.name));
   const stateCode = isLocatorStateCode(state.code) ? state.code : null;
   const [catalog, doorCount] = await Promise.all([
     readCatalogForState(),
@@ -224,6 +232,23 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
               </div>
             </div>
           </div>
+          <nav
+            aria-label="Jump to another Presidential state"
+            className="absolute bottom-[clamp(0.75rem,2.5vw,2rem)] right-[clamp(0.75rem,3vw,3rem)] z-20"
+          >
+            <ul className="flex flex-col items-end gap-0.5 text-right">
+              {otherStates.map((otherState) => (
+                <li key={otherState.slug}>
+                  <Link
+                    className="block cursor-pointer font-display text-[clamp(0.7rem,1.35vw,1.25rem)] font-black uppercase leading-[1.05] text-po-brand [-webkit-text-stroke:1.5px_#fff] [paint-order:stroke_fill] [text-shadow:1px_0_#fff,-1px_0_#fff,0_1px_#fff,0_-1px_#fff,1px_1px_#fff,-1px_1px_#fff,1px_-1px_#fff,-1px_-1px_#fff] transition-transform duration-150 hover:scale-105 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:[-webkit-text-stroke:2px_#fff]"
+                    href={`/find-us/${otherState.slug}`}
+                  >
+                    {otherState.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </section>
 
         {stateCode ? (
