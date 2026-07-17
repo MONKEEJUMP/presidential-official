@@ -236,11 +236,11 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
             aria-label="Jump to another Presidential state"
             className="absolute bottom-[clamp(0.75rem,2.5vw,2rem)] right-[clamp(0.75rem,3vw,3rem)] z-20"
           >
-            <ul className="flex flex-col items-end gap-0.5 text-right">
+            <ul className="flex flex-col items-end gap-1 text-right sm:gap-2">
               {otherStates.map((otherState) => (
                 <li key={otherState.slug}>
                   <Link
-                    className="block cursor-pointer font-display text-[clamp(0.7rem,1.35vw,1.25rem)] font-black uppercase leading-[1.05] text-po-brand [-webkit-text-stroke:1.5px_#fff] [paint-order:stroke_fill] [text-shadow:1px_0_#fff,-1px_0_#fff,0_1px_#fff,0_-1px_#fff,1px_1px_#fff,-1px_1px_#fff,1px_-1px_#fff,-1px_-1px_#fff] transition-transform duration-150 hover:scale-105 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:[-webkit-text-stroke:2px_#fff]"
+                    className="block cursor-pointer font-display text-[clamp(0.8rem,1.6vw,1.5rem)] font-black uppercase leading-[1.1] text-po-brand [-webkit-text-stroke:1px_#000] [paint-order:stroke_fill] [text-shadow:1px_0_#000,-1px_0_#000,0_1px_#000,0_-1px_#000,1px_1px_#000,-1px_1px_#000,1px_-1px_#000,-1px_-1px_#000] transition-transform duration-150 hover:scale-105 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:[-webkit-text-stroke:1.5px_#000]"
                     href={`/find-us/${otherState.slug}`}
                   >
                     {otherState.name}
