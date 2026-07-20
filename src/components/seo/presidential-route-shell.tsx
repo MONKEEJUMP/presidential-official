@@ -60,7 +60,7 @@ export async function PresidentialRouteShell({
   const jsonLdEntries = buildRouteShellJsonLd(route);
   const breadcrumbs = buildRouteShellBreadcrumbItems(route);
   const usesPillarPlatformShell =
-    route.id === "moon-pods" || route.id === "orbit";
+    route.id === "moon-pods" || route.id === "orbit" || route.id === "vapes";
   const sanitySlug = routeToSanitySlug(route);
   const cmsPage = cmsSiteRouteIds.has(route.id)
     ? await readPublicRenderableSitePage(sanitySlug, {

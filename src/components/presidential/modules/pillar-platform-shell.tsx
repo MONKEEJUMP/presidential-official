@@ -19,6 +19,7 @@ type PillarPlatformShellProps = {
 type PillarContent = {
   readonly kicker: string;
   readonly intro: string;
+  readonly heroSupportingText?: readonly string[];
   readonly mediaLabel: string;
   readonly mediaNote: string;
   readonly lanesTitle: string;
@@ -30,7 +31,7 @@ type PillarContent = {
   readonly rollout: readonly string[];
 };
 
-type PillarRouteId = "moon-pods" | "orbit";
+type PillarRouteId = "moon-pods" | "orbit" | "vapes";
 
 const pillarContent: Record<PillarRouteId, PillarContent> = {
   "moon-pods": {
@@ -91,10 +92,28 @@ const pillarContent: Record<PillarRouteId, PillarContent> = {
       "Connect source-backed education and retail paths",
     ],
   },
+  vapes: {
+    kicker: "PRESIDENTIAL PRODUCT PLATFORM",
+    intro:
+      "Explore the Presidential vape lineup. Availability varies by licensed retailer.",
+    heroSupportingText: [
+      "Explore the Presidential vape lineup. Availability varies by licensed retailer.",
+    ],
+    mediaLabel: "",
+    mediaNote: "",
+    lanesTitle: "",
+    lanesDescription: "",
+    lanes: [],
+    rollout: [],
+  },
 };
 
 function getPillarContent(route: SeoRouteRecord): PillarContent {
-  if (route.id !== "moon-pods" && route.id !== "orbit") {
+  if (
+    route.id !== "moon-pods" &&
+    route.id !== "orbit" &&
+    route.id !== "vapes"
+  ) {
     throw new Error(`PillarPlatformShell does not support route id: ${route.id}`);
   }
 
@@ -125,16 +144,19 @@ export function PillarPlatformShell({
             },
           ]}
           eyebrow={content.kicker}
-          supportingText={[
-            content.mediaLabel,
-            content.mediaNote,
-            route.description,
-            content.intro,
-          ]}
+          supportingText={
+            content.heroSupportingText ?? [
+              content.mediaLabel,
+              content.mediaNote,
+              route.description,
+              content.intro,
+            ]
+          }
           title={route.h1}
         />
 
-        <Scene
+        {content.lanes.length > 0 ? (
+          <Scene
           ariaLabelledBy={`${route.id}-platform-lanes`}
           className="po-gold-thread-inlay py-24 lg:py-32"
           tone="default"
@@ -168,9 +190,11 @@ export function PillarPlatformShell({
               ))}
             </div>
           </div>
-        </Scene>
+          </Scene>
+        ) : null}
 
-        <Scene
+        {content.rollout.length > 0 ? (
+          <Scene
           ariaLabelledBy={`${route.id}-platform-rollout`}
           className="po-gold-thread-inlay py-24 lg:py-32"
           tone="contrast"
@@ -209,7 +233,8 @@ export function PillarPlatformShell({
               ))}
             </ol>
           </div>
-        </Scene>
+          </Scene>
+        ) : null}
 
         <FindUsCtaShell className="po-gold-thread-inlay" compact />
       </SceneStack>

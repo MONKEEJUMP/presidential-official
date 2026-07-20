@@ -9,6 +9,7 @@ export const STATIC_ROUTE_SHELL_PATHS = [
   "/moon-rocks",
   "/moon-pods",
   "/orbit",
+  "/vapes",
   "/our-story",
   "/learn",
   "/find-us",
@@ -43,4 +44,3 @@ export function getStaticRouteShellLinks(
     .map((path) => getRouteByPath(path))
     .filter((linkedRoute): linkedRoute is SeoRouteRecord => Boolean(linkedRoute));
 }
-
