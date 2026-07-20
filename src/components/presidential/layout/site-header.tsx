@@ -9,8 +9,6 @@ import { HeaderStoreFinder } from "./header-store-finder";
 
 const primaryNavItems = [
   { href: "/moon-rocks", label: "Moon Rocks" },
-  { href: "/moon-pods", label: "Moon Pods" },
-  { href: "/orbit", label: "Orbit" },
   { href: "/vapes", label: "Vapes" },
   { href: "/our-story", label: "Our Story" },
   { href: "/learn", label: "Learn" },

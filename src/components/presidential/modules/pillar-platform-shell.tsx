@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 import { PageFrame } from "../layout/page-frame";
@@ -32,6 +34,19 @@ type PillarContent = {
 };
 
 type PillarRouteId = "moon-pods" | "orbit" | "vapes";
+
+const vapesProducts = [
+  {
+    href: "/moon-pods",
+    title: "MOON PODS",
+    tagline: "The Strongest Flavor Experience.",
+  },
+  {
+    href: "/orbit",
+    title: "ORBIT",
+    tagline: "Designed For Flavor.",
+  },
+] as const;
 
 const pillarContent: Record<PillarRouteId, PillarContent> = {
   "moon-pods": {
@@ -154,6 +169,38 @@ export function PillarPlatformShell({
           }
           title={route.h1}
         />
+
+        {route.id === "vapes" ? (
+          <Scene
+            ariaLabel="Vapes products"
+            className="py-12 sm:py-16 lg:py-20"
+            tone="contrast"
+          >
+            <div className="mx-auto grid w-full max-w-7xl gap-5 sm:grid-cols-2 sm:gap-6">
+              {vapesProducts.map((product) => (
+                <Link
+                  aria-label={`Explore ${product.title}`}
+                  className="group block overflow-hidden rounded-[20px] border border-po-brand bg-po-ink transition-transform duration-200 hover:-translate-y-1 focus-visible:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:focus-visible:transform-none"
+                  href={product.href}
+                  key={product.href}
+                >
+                  <div
+                    aria-hidden="true"
+                    className="aspect-[16/6] border-b border-po-brand/50 bg-po-on-dark/[0.035]"
+                  />
+                  <div className="p-6 sm:p-8">
+                    <h2 className="font-display text-[clamp(2.25rem,5vw,4.5rem)] font-bold uppercase leading-[0.88] text-po-on-dark transition-colors group-hover:text-po-brand">
+                      {product.title}
+                    </h2>
+                    <p className="mt-4 font-sans text-[clamp(1rem,1.8vw,1.25rem)] leading-7 text-po-on-dark-muted">
+                      {product.tagline}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </Scene>
+        ) : null}
 
         {content.lanes.length > 0 ? (
           <Scene
