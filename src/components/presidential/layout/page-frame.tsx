@@ -19,12 +19,6 @@ export function PageFrame({ children, className = "", ...mainProps }: PageFrameP
 
   return (
     <>
-      <a
-        className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4 focus-visible:z-[60] focus-visible:border focus-visible:border-po-brand focus-visible:bg-po-canvas focus-visible:px-4 focus-visible:py-3 focus-visible:text-sm focus-visible:font-semibold focus-visible:text-po-brand-strong focus-visible:shadow-lg"
-        href="#presidential-main"
-      >
-        Skip to main content
-      </a>
       <SiteHeader />
       <main {...mainProps} id="presidential-main" tabIndex={-1} className={classNames}>
         {children}
