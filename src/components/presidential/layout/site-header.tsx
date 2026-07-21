@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { HeaderStoreFinder } from "./header-store-finder";
 
@@ -19,75 +19,145 @@ const primaryNavItems = [
 
 export function SiteHeader() {
   const [navigationOpen, setNavigationOpen] = useState(false);
+  const lockedScrollYRef = useRef(0);
   const pathname = usePathname();
 
+  useEffect(() => {
+    setNavigationOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!navigationOpen) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setNavigationOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [navigationOpen]);
+
+  useEffect(() => {
+    if (!navigationOpen) {
+      return;
+    }
+
+    const body = document.body;
+    const root = document.documentElement;
+    const scrollY = window.scrollY;
+    const previousBodyStyles = {
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      right: body.style.right,
+      width: body.style.width,
+      overflow: body.style.overflow,
+    };
+    const previousRootOverscrollBehavior = root.style.overscrollBehavior;
+
+    lockedScrollYRef.current = scrollY;
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
+    root.style.overscrollBehavior = "none";
+
+    return () => {
+      body.style.position = previousBodyStyles.position;
+      body.style.top = previousBodyStyles.top;
+      body.style.left = previousBodyStyles.left;
+      body.style.right = previousBodyStyles.right;
+      body.style.width = previousBodyStyles.width;
+      body.style.overflow = previousBodyStyles.overflow;
+      root.style.overscrollBehavior = previousRootOverscrollBehavior;
+      window.scrollTo(0, lockedScrollYRef.current);
+    };
+  }, [navigationOpen]);
+
   return (
-    <header className="sticky top-0 z-40 bg-po-ink text-po-on-dark">
-      <div className="relative mx-auto flex min-h-18 w-full max-w-7xl items-center justify-between gap-6 px-5 py-3 sm:px-8 lg:px-12">
-        <Link
-          aria-label="Presidential — home"
-          className="inline-flex shrink-0 cursor-pointer items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
-          href="/"
-          onClick={(event) => {
-            setNavigationOpen(false);
+    <>
+      <header className="sticky top-0 z-40 bg-po-ink text-po-on-dark">
+        <div className="relative mx-auto flex min-h-18 w-full max-w-7xl items-center justify-between gap-6 px-5 py-3 sm:px-8 lg:px-12">
+          <Link
+            aria-label="Presidential — home"
+            className="inline-flex shrink-0 cursor-pointer items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
+            href="/"
+            onClick={(event) => {
+              setNavigationOpen(false);
 
-            if (pathname === "/") {
-              event.preventDefault();
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }
-          }}
-        >
-          <Image
-            alt="Presidential"
-            className="h-9 w-auto sm:h-10 lg:h-11"
-            height={604}
-            priority
-            sizes="(min-width: 1024px) 134px, (min-width: 640px) 122px, 110px"
-            src="/media/brand/presidential-banner.png"
-            width={1839}
-          />
-        </Link>
+              if (pathname === "/") {
+                event.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}
+          >
+            <Image
+              alt="Presidential"
+              className="h-9 w-auto sm:h-10 lg:h-11"
+              height={604}
+              priority
+              sizes="(min-width: 1024px) 134px, (min-width: 640px) 122px, 110px"
+              src="/media/brand/presidential-banner.png"
+              width={1839}
+            />
+          </Link>
 
-        <button
-          aria-controls="presidential-primary-navigation"
-          aria-expanded={navigationOpen}
-          className="flex h-11 w-11 cursor-pointer items-center justify-center border border-po-on-dark/25 bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand lg:hidden"
-          onClick={() => setNavigationOpen((open) => !open)}
-          type="button"
-        >
-          <span className="sr-only">Toggle navigation</span>
-          <span aria-hidden="true" className="grid w-5 gap-1.5">
-            <span className="h-px bg-po-on-dark" />
-            <span className="h-px bg-po-on-dark" />
-            <span className="h-px bg-po-on-dark" />
-          </span>
-        </button>
+          <button
+            aria-controls="presidential-primary-navigation"
+            aria-expanded={navigationOpen}
+            className="flex h-11 w-11 cursor-pointer items-center justify-center border border-po-on-dark/25 bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand lg:hidden"
+            onClick={() => setNavigationOpen((open) => !open)}
+            type="button"
+          >
+            <span className="sr-only">Toggle navigation</span>
+            <span aria-hidden="true" className="grid w-5 gap-1.5">
+              <span className="h-px bg-po-on-dark" />
+              <span className="h-px bg-po-on-dark" />
+              <span className="h-px bg-po-on-dark" />
+            </span>
+          </button>
 
-        <nav
-          aria-label="Primary navigation"
-          className={`absolute inset-x-5 top-[calc(100%+0.01rem)] border border-po-on-dark/15 bg-po-ink p-3 shadow-2xl sm:inset-x-8 lg:static lg:block lg:min-w-0 lg:flex-1 lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none ${navigationOpen ? "block" : "hidden"}`}
-          id="presidential-primary-navigation"
-        >
-          <ul className="grid lg:flex lg:items-center lg:justify-end lg:gap-0 lg:whitespace-nowrap">
-            <HeaderStoreFinder onRoute={() => setNavigationOpen(false)} />
-            {primaryNavItems.map((item) => (
-              <li className="po-primary-nav-item" key={item.href}>
-                <Link
-                  className="po-primary-nav-link"
-                  href={item.href}
-                  onClick={() => setNavigationOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-      <span
-        aria-hidden="true"
-        className="po-gold-thread-inlay !absolute inset-x-0 bottom-0 h-0"
-      />
-    </header>
+          <nav
+            aria-label="Primary navigation"
+            className={`absolute inset-x-5 top-[calc(100%+0.01rem)] max-h-[calc(100dvh-4.5rem)] overflow-y-auto overscroll-contain border border-po-on-dark/15 bg-po-ink p-3 shadow-2xl [-webkit-overflow-scrolling:touch] sm:inset-x-8 lg:static lg:block lg:max-h-none lg:min-w-0 lg:flex-1 lg:overflow-visible lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none ${navigationOpen ? "block" : "hidden"}`}
+            id="presidential-primary-navigation"
+          >
+            <ul className="grid lg:flex lg:items-center lg:justify-end lg:gap-0 lg:whitespace-nowrap">
+              <HeaderStoreFinder onRoute={() => setNavigationOpen(false)} />
+              {primaryNavItems.map((item) => (
+                <li className="po-primary-nav-item" key={item.href}>
+                  <Link
+                    className="po-primary-nav-link"
+                    href={item.href}
+                    onClick={() => setNavigationOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+        <span
+          aria-hidden="true"
+          className="po-gold-thread-inlay !absolute inset-x-0 bottom-0 h-0"
+        />
+      </header>
+      {navigationOpen ? (
+        <div
+          aria-hidden="true"
+          className="fixed inset-0 z-30 touch-none bg-black/55 lg:hidden"
+          data-presidential-mobile-menu-backdrop
+          onClick={() => setNavigationOpen(false)}
+        />
+      ) : null}
+    </>
   );
 }
