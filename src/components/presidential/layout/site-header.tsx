@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { HeaderStoreFinder } from "./header-store-finder";
 
@@ -19,7 +19,6 @@ const primaryNavItems = [
 
 export function SiteHeader() {
   const [navigationOpen, setNavigationOpen] = useState(false);
-  const lockedScrollYRef = useRef(0);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -31,53 +30,19 @@ export function SiteHeader() {
       return;
     }
 
+    const closeNavigation = () => setNavigationOpen(false);
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setNavigationOpen(false);
+        closeNavigation();
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
-
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [navigationOpen]);
-
-  useEffect(() => {
-    if (!navigationOpen) {
-      return;
-    }
-
-    const body = document.body;
-    const root = document.documentElement;
-    const scrollY = window.scrollY;
-    const previousBodyStyles = {
-      position: body.style.position,
-      top: body.style.top,
-      left: body.style.left,
-      right: body.style.right,
-      width: body.style.width,
-      overflow: body.style.overflow,
-    };
-    const previousRootOverscrollBehavior = root.style.overscrollBehavior;
-
-    lockedScrollYRef.current = scrollY;
-    body.style.position = "fixed";
-    body.style.top = `-${scrollY}px`;
-    body.style.left = "0";
-    body.style.right = "0";
-    body.style.width = "100%";
-    body.style.overflow = "hidden";
-    root.style.overscrollBehavior = "none";
+    window.addEventListener("scroll", closeNavigation, { passive: true });
 
     return () => {
-      body.style.position = previousBodyStyles.position;
-      body.style.top = previousBodyStyles.top;
-      body.style.left = previousBodyStyles.left;
-      body.style.right = previousBodyStyles.right;
-      body.style.width = previousBodyStyles.width;
-      body.style.overflow = previousBodyStyles.overflow;
-      root.style.overscrollBehavior = previousRootOverscrollBehavior;
-      window.scrollTo(0, lockedScrollYRef.current);
+      document.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("scroll", closeNavigation);
     };
   }, [navigationOpen]);
 
@@ -153,7 +118,7 @@ export function SiteHeader() {
       {navigationOpen ? (
         <div
           aria-hidden="true"
-          className="fixed inset-0 z-30 touch-none bg-black/55 lg:hidden"
+          className="fixed inset-0 z-30 touch-pan-y bg-transparent lg:hidden"
           data-presidential-mobile-menu-backdrop
           onClick={() => setNavigationOpen(false)}
         />
