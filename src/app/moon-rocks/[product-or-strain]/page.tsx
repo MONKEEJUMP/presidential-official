@@ -170,7 +170,10 @@ export default async function CatalogProductDetailPage({
                   </div>
                 ) : null}
 
-                <CompactStoreFinderPanel className="mt-10 w-full max-w-md" />
+                <CompactStoreFinderPanel
+                  className="mt-10 w-full max-w-md"
+                  inlineResults
+                />
               </div>
             </div>
 

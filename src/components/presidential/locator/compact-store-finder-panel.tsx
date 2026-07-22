@@ -1,11 +1,21 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { FormEvent, useId, useState } from "react";
+import { FormEvent, useId, useRef, useState } from "react";
+
+import type { LocatorInitialSearch } from "@/lib/locator/inbound-search";
+
+import { LocatorConsole } from "./locator-console";
 
 type CompactStoreFinderPanelProps = {
   readonly className?: string;
+  readonly inlineResults?: boolean;
   readonly onRoute?: () => void;
+};
+
+type InlineSearchRequest = {
+  readonly initialSearch: LocatorInitialSearch;
+  readonly key: number;
 };
 
 export function LocationPin({ className = "" }: { readonly className?: string }) {
@@ -30,6 +40,7 @@ export function LocationPin({ className = "" }: { readonly className?: string })
 
 export function CompactStoreFinderPanel({
   className = "",
+  inlineResults = false,
   onRoute,
 }: CompactStoreFinderPanelProps) {
   const pathname = usePathname();
@@ -39,6 +50,9 @@ export function CompactStoreFinderPanel({
   const [zip, setZip] = useState("");
   const [message, setMessage] = useState("");
   const [locating, setLocating] = useState(false);
+  const [inlineSearchRequest, setInlineSearchRequest] =
+    useState<InlineSearchRequest | null>(null);
+  const inlineSearchKey = useRef(0);
 
   function routeToFinder(params: URLSearchParams) {
     setMessage("");
@@ -50,6 +64,27 @@ export function CompactStoreFinderPanel({
     router.push(destination);
   }
 
+  function runFinder(initialSearch: LocatorInitialSearch) {
+    setMessage("");
+    if (inlineResults) {
+      inlineSearchKey.current += 1;
+      setInlineSearchRequest({
+        initialSearch,
+        key: inlineSearchKey.current,
+      });
+      return;
+    }
+
+    const params =
+      "zip" in initialSearch
+        ? new URLSearchParams({ zip: initialSearch.zip })
+        : new URLSearchParams({
+            latitude: initialSearch.latitude.toFixed(6),
+            longitude: initialSearch.longitude.toFixed(6),
+          });
+    routeToFinder(params);
+  }
+
   function submitZip(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!/^\d{5}$/.test(zip)) {
@@ -57,7 +92,7 @@ export function CompactStoreFinderPanel({
       return;
     }
 
-    routeToFinder(new URLSearchParams({ zip }));
+    runFinder({ zip });
   }
 
   function useLocation() {
@@ -71,12 +106,10 @@ export function CompactStoreFinderPanel({
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
         setLocating(false);
-        routeToFinder(
-          new URLSearchParams({
-            latitude: coords.latitude.toFixed(6),
-            longitude: coords.longitude.toFixed(6),
-          }),
-        );
+        runFinder({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+        });
       },
       () => {
         setLocating(false);
@@ -110,6 +143,7 @@ export function CompactStoreFinderPanel({
             onChange={(event) => {
               setZip(event.target.value.replace(/\D/g, "").slice(0, 5));
               setMessage("");
+              if (inlineResults) setInlineSearchRequest(null);
             }}
             pattern="[0-9]{5}"
             placeholder="ENTER YOUR ZIP CODE HERE"
@@ -142,6 +176,14 @@ export function CompactStoreFinderPanel({
       >
         {message}
       </p>
+
+      {inlineResults && inlineSearchRequest ? (
+        <LocatorConsole
+          displayMode="results-only"
+          initialSearch={inlineSearchRequest.initialSearch}
+          key={inlineSearchRequest.key}
+        />
+      ) : null}
     </div>
   );
 }

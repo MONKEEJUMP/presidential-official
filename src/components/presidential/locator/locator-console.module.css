@@ -144,6 +144,14 @@
   min-height: 24rem;
 }
 
+.inlineResults {
+  margin-top: 1rem;
+}
+
+.inlineReadout {
+  min-height: 0;
+}
+
 .radar {
   position: relative;
   width: min(72vw, 22rem);

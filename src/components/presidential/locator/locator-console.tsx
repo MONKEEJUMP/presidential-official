@@ -18,10 +18,17 @@ type SearchPayload =
 
 type LocatorConsoleProps = {
   readonly className?: string;
+  readonly displayMode?: "full" | "results-only";
   readonly heading?: string;
   readonly initialSearch?: LocatorInitialSearch;
   readonly missionControlIntro?: boolean;
   readonly state?: LocatorStateCode;
+};
+
+type LocatorReadoutProps = {
+  readonly compact?: boolean;
+  readonly results: readonly LocatorResult[];
+  readonly searching: boolean;
 };
 
 function delay(milliseconds: number) {
@@ -88,8 +95,61 @@ function parseLocatorApiPayload(
   return undefined;
 }
 
+function LocatorReadout({
+  compact = false,
+  results,
+  searching,
+}: LocatorReadoutProps) {
+  return (
+    <div
+      className={`${styles.readout} ${compact ? styles.inlineReadout : ""}`}
+    >
+      {searching ? (
+        <div
+          aria-label="Scanning for nearby retailers"
+          className={styles.radar}
+          role="status"
+        >
+          <span className={styles.radarBeam} />
+          <span className={styles.radarPing} />
+        </div>
+      ) : null}
+
+      {!searching && results.length > 0 ? (
+        <div className={styles.resultsRegion}>
+          <div className={styles.resultsHeading}>
+            <p>Signal acquired</p>
+            <span>{results.length} locations</span>
+          </div>
+          <ol className={styles.resultsList}>
+            {results.map((result) => (
+              <li className={styles.resultCard} key={result.id}>
+                <div>
+                  <h2>{result.name}</h2>
+                  <address>
+                    {result.address}
+                    <br />
+                    {result.city}, {result.state} {result.zip}
+                  </address>
+                  {result.phone ? (
+                    <a href={`tel:${result.phone}`}>{result.phone}</a>
+                  ) : null}
+                </div>
+                <span className={styles.distance}>
+                  {result.distance_miles.toFixed(1)} MI
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export function LocatorConsole({
   className = "",
+  displayMode = "full",
   heading,
   initialSearch,
   missionControlIntro = false,
@@ -231,6 +291,17 @@ export function LocatorConsole({
     setMessage("");
   }
 
+  if (displayMode === "results-only") {
+    return (
+      <div className={`${styles.inlineResults} ${className}`}>
+        <p aria-live="polite" className={styles.message} id={messageId}>
+          {message}
+        </p>
+        <LocatorReadout compact results={results} searching={searching} />
+      </div>
+    );
+  }
+
   return (
     <div className={className}>
       {missionControlIntro ? (
@@ -310,47 +381,7 @@ export function LocatorConsole({
           </p>
         </div>
 
-        <div className={styles.readout}>
-          {searching ? (
-            <div
-              aria-label="Scanning for nearby retailers"
-              className={styles.radar}
-              role="status"
-            >
-              <span className={styles.radarBeam} />
-              <span className={styles.radarPing} />
-            </div>
-          ) : null}
-
-          {!searching && results.length > 0 ? (
-            <div className={styles.resultsRegion}>
-              <div className={styles.resultsHeading}>
-                <p>Signal acquired</p>
-                <span>{results.length} locations</span>
-              </div>
-              <ol className={styles.resultsList}>
-                {results.map((result) => (
-                  <li className={styles.resultCard} key={result.id}>
-                    <div>
-                      <h2>{result.name}</h2>
-                      <address>
-                        {result.address}
-                        <br />
-                        {result.city}, {result.state} {result.zip}
-                      </address>
-                      {result.phone ? (
-                        <a href={`tel:${result.phone}`}>{result.phone}</a>
-                      ) : null}
-                    </div>
-                    <span className={styles.distance}>
-                      {result.distance_miles.toFixed(1)} MI
-                    </span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          ) : null}
-        </div>
+        <LocatorReadout results={results} searching={searching} />
       </div>
     </div>
   );
