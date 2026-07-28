@@ -25,8 +25,8 @@ export async function readLocatorStateCount(
   state: LocatorStateCode,
 ): Promise<number | null> {
   const supabaseUrl = process.env.SUPABASE_URL?.replace(/\/$/, "");
-  const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY;
-  if (!supabaseUrl || !publishableKey) return null;
+  const secretKey = process.env.SUPABASE_SECRET_KEY;
+  if (!supabaseUrl || !secretKey) return null;
 
   try {
     const response = await fetch(
@@ -34,7 +34,7 @@ export async function readLocatorStateCount(
       {
         method: "POST",
         headers: {
-          apikey: publishableKey,
+          apikey: secretKey,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ state_code: state }),

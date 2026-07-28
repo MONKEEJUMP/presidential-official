@@ -1,3 +1,5 @@
+import "server-only";
+
 import { NextResponse } from "next/server";
 
 import {
@@ -120,7 +122,7 @@ function normalizeResult(value: unknown): LocatorResult | null {
 
 function getSupabaseSettings() {
   const url = process.env.SUPABASE_URL?.replace(/\/$/, "");
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+  const key = process.env.SUPABASE_SECRET_KEY;
   return url && key ? { url, key } : null;
 }
 
