@@ -20,8 +20,26 @@ type InformationalProductInput = BlockedCommerceFields & {
   path: string;
   name: string;
   description: string;
-  imagePaths: readonly string[];
+  imageUrls: readonly string[];
 };
+
+function approvedProductImageUrl(value: string): string {
+  if (!value.startsWith("http://") && !value.startsWith("https://")) {
+    return canonicalUrl(value);
+  }
+
+  const parsed = new URL(value);
+  const isApprovedSanityAsset =
+    parsed.protocol === "https:" &&
+    parsed.hostname === "cdn.sanity.io" &&
+    parsed.pathname.startsWith("/images/4bl3xvem/production/");
+
+  if (!isApprovedSanityAsset) {
+    throw new Error(`Unapproved Product schema image URL: ${value}`);
+  }
+
+  return parsed.toString();
+}
 
 export function buildInformationalProductSchema(
   input: InformationalProductInput,
@@ -40,8 +58,7 @@ export function buildInformationalProductSchema(
     url,
     name: input.name,
     description: input.description,
-    image: input.imagePaths.map(canonicalUrl),
+    image: input.imageUrls.map(approvedProductImageUrl),
     brand,
   };
 }
-

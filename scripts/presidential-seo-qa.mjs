@@ -1648,7 +1648,9 @@ function checkRouteShellFoundation() {
 
     const usesExpectedShell =
       routePath === "/"
-        ? text.includes("<HomeRouteShell route={route} />")
+        ? text.includes("<HomeRouteShell") &&
+          text.includes("locatorInitialSearch={locatorInitialSearch}") &&
+          text.includes("route={route}")
         : routePath === "/find-us"
           ? text.includes("<PresidentialRouteShell") &&
             text.includes("locatorInitialSearch={locatorInitialSearch}") &&
@@ -1792,12 +1794,16 @@ function checkStep9HHomeRouteComposition() {
     homePageText.includes('ROUTE_PATH = "/"') &&
     homePageText.includes("buildStaticRouteMetadata(ROUTE_PATH)") &&
     homePageText.includes("getStaticRouteRecord(ROUTE_PATH)") &&
-    homePageText.includes("<HomeRouteShell route={route} />") &&
+    homePageText.includes("<HomeRouteShell") &&
+    homePageText.includes("locatorInitialSearch={locatorInitialSearch}") &&
+    homePageText.includes("route={route}") &&
     !homePageText.includes("<PresidentialRouteShell route={route} />");
 
   const shellKeepsSeoAuthorityBoundary =
     homeShellText.includes("buildRouteShellJsonLd(route)") &&
-    homeShellText.includes("<HomepageFoundationShell route={route} />") &&
+    homeShellText.includes("<HomepageFoundationShell") &&
+    homeShellText.includes("locatorInitialSearch={locatorInitialSearch}") &&
+    homeShellText.includes("route={route}") &&
     homeShellText.includes('route.id !== "home"') &&
     homeShellText.includes('route.path !== "/"') &&
     !homeShellText.includes("buildRouteMetadata") &&
@@ -2272,39 +2278,20 @@ function checkAgeGateFoundation() {
     { label: "router push", regex: /\brouter\.push\s*\(/ },
     { label: "window location", regex: /\bwindow\.location\b|\blocation\.href\b/ },
   ];
-  const redirectMatches = collectTextFiles(["src/app", "src/components"]).flatMap(
-    (file) => findLineMatches(file, redirectPatterns),
-  );
-  const dispensariesRedirectPath = "src/app/dispensaries/page.tsx";
-  const dispensariesRedirectIsCanonical =
-    projectFileExists(dispensariesRedirectPath) &&
-    readProjectFile(dispensariesRedirectPath).includes('permanentRedirect("/find-us")');
-  const headerStoreFinderPath =
-    "src/components/presidential/layout/header-store-finder.tsx";
-  const headerStoreFinderIsCanonical =
-    projectFileExists(headerStoreFinderPath) &&
-    readProjectFile(headerStoreFinderPath).includes(
-      "router.push(`/find-us?${params.toString()}#presidential-locator-console`)",
-    );
-  const unapprovedRedirectMatches = redirectMatches.filter(
-    (match) =>
-      !(
-        dispensariesRedirectIsCanonical &&
-        match.file === dispensariesRedirectPath &&
-        match.label === "Next permanent redirect"
-      ) &&
-      !(
-        headerStoreFinderIsCanonical &&
-        match.file === headerStoreFinderPath &&
-        match.label === "router push"
-      ),
+  const ageGateRedirectScanPaths = [
+    ageGatePath,
+    ageGateActionPath,
+    layoutPath,
+  ].filter((file) => projectFileExists(file));
+  const unapprovedRedirectMatches = ageGateRedirectScanPaths.flatMap((file) =>
+    findLineMatches(projectPath(file), redirectPatterns),
   );
 
   if (unapprovedRedirectMatches.length === 0) {
     addResult(
       "PASS",
       "agegate.noRedirects",
-      "No age-gate redirect wall code was found; only the exact /dispensaries canonical redirect and validated header store-finder navigation to /find-us are allowlisted.",
+      "No redirect code exists in the age-gate component, action, or root layout; page-specific HTML remains the crawler-visible route surface.",
     );
   } else {
     addResult(

@@ -7,6 +7,10 @@ import {
   filterCatalogSeriesProducts,
   type CatalogSeriesDefinition,
 } from "@/lib/catalog/series-registry";
+import {
+  buildRouteShellJsonLd,
+  JsonLd,
+} from "@/lib/seo/schema";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 import { PageFrame } from "../layout/page-frame";
@@ -28,7 +32,7 @@ const SERIES_FILMS: Record<string, { slug: SiteVideoSlug; label: string }> = {
 
 type SeriesPageShellProps = {
   readonly definition: CatalogSeriesDefinition;
-  readonly route?: Pick<SeoRouteRecord, "description" | "h1">;
+  readonly route: SeoRouteRecord;
 };
 
 async function readSeriesItems(definition: CatalogSeriesDefinition): Promise<{
@@ -66,10 +70,16 @@ export async function SeriesPageShell({
   const meta = seriesMetaFor(seriesName);
   const catalog = await readSeriesItems(definition);
   const film = SERIES_FILMS[seriesName];
+  const jsonLdEntries = buildRouteShellJsonLd(route);
 
   return (
-    <PageFrame>
-      <SceneStack>
+    <>
+      {jsonLdEntries.map((entry) => (
+        <JsonLd key={`${route.id}-${entry.id}`} data={entry.data} />
+      ))}
+
+      <PageFrame>
+        <SceneStack>
         <DispensariesStyleHero
           ariaLabelledBy="presidential-series-title"
           breadcrumbs={[
@@ -151,7 +161,8 @@ export async function SeriesPageShell({
         )}
 
         <FindUsCtaShell className="po-gold-thread-inlay" compact />
-      </SceneStack>
-    </PageFrame>
+        </SceneStack>
+      </PageFrame>
+    </>
   );
 }

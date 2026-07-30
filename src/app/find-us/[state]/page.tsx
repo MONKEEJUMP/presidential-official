@@ -6,6 +6,12 @@ import {
   getPresidentialState,
   PRESIDENTIAL_STATES,
 } from "@/lib/find-us/states";
+import { buildStateSeoRoute } from "@/lib/seo/concrete-routes";
+import { buildRouteMetadata } from "@/lib/seo/metadata";
+import {
+  buildRouteShellJsonLd,
+  JsonLd,
+} from "@/lib/seo/schema";
 
 // 9083-CODE P4 (owner rulings, 2026-07-11): the eight priority-market state
 // pages render themed brand experiences. Everything else still 404s, no
@@ -39,14 +45,7 @@ export async function generateMetadata({
     };
   }
 
-  return {
-    title: `Presidential in ${state.name} | Official Presidential Site`,
-    description: state.seoLine,
-    robots: {
-      index: false,
-      follow: true,
-    },
-  };
+  return buildRouteMetadata({ route: buildStateSeoRoute(state) });
 }
 
 export default async function FindUsStatePage({ params }: FindUsStatePageProps) {
@@ -57,5 +56,15 @@ export default async function FindUsStatePage({ params }: FindUsStatePageProps) 
     notFound();
   }
 
-  return <StatePageShell state={state} />;
+  const route = buildStateSeoRoute(state);
+  const jsonLdEntries = buildRouteShellJsonLd(route);
+
+  return (
+    <>
+      {jsonLdEntries.map((entry) => (
+        <JsonLd key={`${route.id}-${entry.id}`} data={entry.data} />
+      ))}
+      <StatePageShell state={state} />
+    </>
+  );
 }

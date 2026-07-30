@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-
 import type { SanityCatalogItem } from "@/lib/cms/catalog";
 import type { SeoRoutePath } from "@/lib/seo/route-types";
 
@@ -121,19 +119,4 @@ export function filterCatalogSeriesProducts(
   return items.filter(
     (item) => (item.series || "") === definition.productFilter.series,
   );
-}
-
-export function buildCatalogSeriesMetadata(
-  definition: CatalogSeriesDefinition,
-): Metadata {
-  return {
-    title: `${definition.title} | Presidential Moon Rocks`,
-    description: definition.description,
-    alternates: { canonical: definition.path },
-    robots: {
-      index: false,
-      follow: false,
-      googleBot: { index: false, follow: false },
-    },
-  };
 }

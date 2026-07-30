@@ -12,6 +12,7 @@ export type RouteKind =
   | "city_locator"
   | "retailer_detail"
   | "contact"
+  | "redirect"
   | "future_module"
   | "private_system";
 

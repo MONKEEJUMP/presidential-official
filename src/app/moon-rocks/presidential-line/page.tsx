@@ -1,17 +1,24 @@
 import type { Metadata } from "next";
 
 import { SeriesPageShell } from "@/components/presidential/modules/series-page-shell";
+import { getCatalogSeriesBySlug } from "@/lib/catalog/series-registry";
 import {
-  buildCatalogSeriesMetadata,
-  getCatalogSeriesBySlug,
-} from "@/lib/catalog/series-registry";
+  buildStaticRouteMetadata,
+  getStaticRouteRecord,
+} from "@/lib/seo/route-page";
 
+const ROUTE_PATH = "/moon-rocks/presidential-line" as const;
 const SERIES = getCatalogSeriesBySlug("presidential-line");
 
 export function generateMetadata(): Metadata {
-  return buildCatalogSeriesMetadata(SERIES);
+  return buildStaticRouteMetadata(ROUTE_PATH);
 }
 
 export default function PresidentialLineSeriesPage() {
-  return <SeriesPageShell definition={SERIES} />;
+  return (
+    <SeriesPageShell
+      definition={SERIES}
+      route={getStaticRouteRecord(ROUTE_PATH)}
+    />
+  );
 }

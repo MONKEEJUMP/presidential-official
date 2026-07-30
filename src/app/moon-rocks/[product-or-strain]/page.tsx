@@ -19,6 +19,12 @@ import {
   readCatalogItemBySlug,
   readCatalogProductParams,
 } from "@/lib/cms/catalog";
+import { buildCatalogProductSeoRoute } from "@/lib/seo/concrete-routes";
+import { buildRouteMetadata } from "@/lib/seo/metadata";
+import {
+  buildProductRouteJsonLd,
+  JsonLd,
+} from "@/lib/seo/schema";
 
 const CATALOG_ROUTE = "/moon-rocks";
 
@@ -54,7 +60,7 @@ export async function generateMetadata({
   const { "product-or-strain": slug } = await params;
   const detail = await readCatalogProduct(slug);
 
-  if (!detail.item) {
+  if (!detail.item?.name?.trim()) {
     return {
       robots: {
         index: false,
@@ -63,14 +69,11 @@ export async function generateMetadata({
     };
   }
 
-  return {
-    title: `${detail.item.name} | Presidential Moon Rocks`,
-    description: `Approved product information for ${detail.item.name}, part of the Presidential ${detail.item.series}. Availability varies by licensed retailer.`,
-    robots: {
-      index: false,
-      follow: true,
-    },
-  };
+  return buildRouteMetadata({
+    route: buildCatalogProductSeoRoute(detail.item as typeof detail.item & {
+      readonly name: string;
+    }, slug),
+  });
 }
 
 export default async function CatalogProductDetailPage({
@@ -79,18 +82,32 @@ export default async function CatalogProductDetailPage({
   const { "product-or-strain": slug } = await params;
   const detail = await readCatalogProduct(slug);
 
-  if (!detail.item) {
+  if (!detail.item?.name?.trim()) {
     notFound();
   }
 
-  const item = detail.item;
+  const item = detail.item as typeof detail.item & { readonly name: string };
+  const route = buildCatalogProductSeoRoute(item, slug);
   const meta = seriesMetaFor(item.series);
   const chips = parseFormatChips(item.productType);
-  const [heroImage, ...galleryImages] = (item.images || []).filter(hasAssetUrl);
+  const approvedImages = (item.images || []).filter(hasAssetUrl);
+  const [heroImage, ...galleryImages] = approvedImages;
+  const jsonLdEntries = buildProductRouteJsonLd({
+    route,
+    name: item.name,
+    description: route.description,
+    imageUrls: approvedImages.map((image) => image.assetUrl),
+    publicRenderable: detail.mode === "public",
+  });
 
   return (
-    <PageFrame>
-      <SceneStack>
+    <>
+      {jsonLdEntries.map((entry) => (
+        <JsonLd key={`${route.id}-${entry.id}`} data={entry.data} />
+      ))}
+
+      <PageFrame>
+        <SceneStack>
         <Scene ariaLabelledBy="presidential-product-title" tone="default">
           <div className="mx-auto w-full min-w-0 max-w-7xl">
             <nav aria-label="Breadcrumb" className="text-sm text-po-brand-ink">
@@ -208,7 +225,8 @@ export default async function CatalogProductDetailPage({
         </Scene>
 
         <FindUsCtaShell className="po-gold-thread-inlay" compact />
-      </SceneStack>
-    </PageFrame>
+        </SceneStack>
+      </PageFrame>
+    </>
   );
 }

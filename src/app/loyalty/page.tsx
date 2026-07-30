@@ -5,15 +5,23 @@ import type { Metadata } from "next";
 
 import { PageFrame } from "@/components/presidential/layout/page-frame";
 import { DispensariesStyleHero } from "@/components/presidential/modules/dispensaries-style-hero";
+import {
+  buildStaticRouteMetadata,
+  getStaticRouteRecord,
+} from "@/lib/seo/route-page";
+import {
+  buildRouteShellJsonLd,
+  JsonLd,
+} from "@/lib/seo/schema";
 
 import { LoyaltyPrototype } from "./loyalty-prototype";
 import styles from "./loyalty.module.css";
 
-export const metadata: Metadata = {
-  title: "Rock Club Loyalty Prototype | Presidential",
-  description: "Preview the Presidential Rock Club verification and loyalty experience.",
-  robots: { index: false, follow: false },
-};
+const ROUTE_PATH = "/loyalty" as const;
+
+export function generateMetadata(): Metadata {
+  return buildStaticRouteMetadata(ROUTE_PATH);
+}
 
 const HOW_IT_WORKS = [
   ["Buy", "Pick up Presidential at any licensed retailer."],
@@ -32,12 +40,19 @@ const TIERS = [
 const PROGRAM_DOCUMENT_PATH = "/media/docs/rock-club-program.pdf";
 
 export default function LoyaltyPage() {
+  const route = getStaticRouteRecord(ROUTE_PATH);
+  const jsonLdEntries = buildRouteShellJsonLd(route);
   const programDocumentAvailable = existsSync(
     join(process.cwd(), "public", "media", "docs", "rock-club-program.pdf"),
   );
 
   return (
-    <PageFrame className="bg-po-ink text-po-on-dark">
+    <>
+      {jsonLdEntries.map((entry) => (
+        <JsonLd key={`${route.id}-${entry.id}`} data={entry.data} />
+      ))}
+
+      <PageFrame className="bg-po-ink text-po-on-dark">
       <DispensariesStyleHero
         ariaLabelledBy="rock-club-title"
         breadcrumbs={[
@@ -126,6 +141,7 @@ export default function LoyaltyPage() {
       <footer className={`po-gold-thread-inlay ${styles.complianceBand}`}>
         For adults 21+ where legal. Rewards are non-cannabis merchandise and experiences. Program availability varies by state.
       </footer>
-    </PageFrame>
+      </PageFrame>
+    </>
   );
 }
