@@ -1,5 +1,6 @@
 import { getRouteById, getRouteByPath } from "./route-helpers";
 import type { SeoRoutePath, SeoRouteRecord } from "./route-types";
+import { PRODUCT_METADATA_BY_SLUG } from "./pw7404-1019-product-metadata";
 
 export const CONCRETE_SEO_DOCUMENT_PATHS = [
   "/",
@@ -91,7 +92,8 @@ export function buildCatalogProductSeoRoute(
   const series = item.series?.trim();
   const seriesPath = series ? SERIES_PATH_BY_NAME[series] : undefined;
   const path = `/moon-rocks/${slug}` as const;
-  const description =
+  const metadata = PRODUCT_METADATA_BY_SLUG[slug];
+  const generatedDescription =
     item.description?.trim() ||
     `Approved product information for ${name}${series ? `, part of the Presidential ${series}` : ""}. Availability varies by licensed retailer.`;
 
@@ -100,8 +102,8 @@ export function buildCatalogProductSeoRoute(
     id: `moon-rocks-product-${slug}`,
     path,
     canonicalPath: path,
-    title: `${name} | Presidential Moon Rocks`,
-    description,
+    title: metadata?.seoTitle ?? `${name} | Presidential Moon Rocks`,
+    description: metadata?.metaDescription ?? generatedDescription,
     h1: name,
     keywords: [
       `${name.toLowerCase()} presidential`,
