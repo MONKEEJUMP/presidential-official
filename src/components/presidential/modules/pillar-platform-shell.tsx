@@ -176,6 +176,9 @@ export function PillarPlatformShell({
             className="py-12 sm:py-16 lg:py-20"
             tone="contrast"
           >
+            <h2 className="mx-auto mb-12 w-full max-w-7xl text-center font-display text-5xl font-bold uppercase leading-[0.82] text-po-brand sm:text-7xl lg:text-9xl">
+              COMING SOON.
+            </h2>
             <div className="mx-auto grid w-full max-w-7xl gap-5 sm:grid-cols-2 sm:gap-6">
               {vapesProducts.map((product) => (
                 <Link
