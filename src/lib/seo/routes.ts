@@ -211,11 +211,20 @@ export const ROUTE_REGISTRY = [
     priority: 4,
     changeFrequency: "weekly",
     canonicalPath: "/vapes",
-    title: "Presidential Vapes",
+    title: "Presidential Vapes | Moon Pods & Orbit Vape Platforms",
     description:
-      "Explore the Presidential vape lineup. Availability varies by licensed retailer.",
+      "Explore Presidential Vapes, Moon Pods, Orbit hardware, vape cartridge education, and the official path to licensed retailers carrying Presidential products.",
     h1: "VAPES",
-    keywords: ["presidential vapes", "presidential vape lineup"],
+    keywords: [
+      "presidential vapes",
+      "how to judge a vape cartridge",
+      "cannabis vape cartridge hardware",
+      "live resin vs distillate vape",
+      "vape cartridge terpenes",
+      "vape cartridge testing",
+      "moon pods",
+      "orbit vape hardware",
+    ],
     schema: ["WebPage", "BreadcrumbList"],
     requiredData: [
       "product_platforms",
@@ -232,10 +241,10 @@ export const ROUTE_REGISTRY = [
       "schema approval",
     ],
     blocks: [],
-    linksTo: ["/learn", "/find-us"],
-    sourceArtifact: "Owner request 3389-SPUD",
+    linksTo: ["/moon-pods", "/orbit", "/learn", "/find-us"],
+    sourceArtifact: "Owner requests 3389-SPUD and 9956-SPUD",
     notes:
-      "Placeholder product-platform page. Product graphics and final copy remain pending owner direction.",
+      "Public-approved Vapes platform and educational page. General cartridge education does not assert unapproved Presidential product specifications.",
     isPublicPillar: true,
   },
   {

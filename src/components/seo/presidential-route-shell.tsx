@@ -9,6 +9,7 @@ import {
 import { FindUsMiniBluntsGrid } from "@/components/presidential/modules/find-us-mini-blunts-grid";
 import { OurStoryPrerollGraphicsGrid } from "@/components/presidential/modules/our-story-preroll-graphics-grid";
 import { AboutCompanyShell } from "@/components/presidential/modules/about-company-shell";
+import { VapesPlatformShell } from "@/components/presidential/modules/vapes-platform-shell";
 import { readPublicRenderableSitePage } from "@/lib/cms";
 import {
   buildRouteShellBreadcrumbItems,
@@ -61,7 +62,7 @@ export async function PresidentialRouteShell({
   const jsonLdEntries = buildRouteShellJsonLd(route);
   const breadcrumbs = buildRouteShellBreadcrumbItems(route);
   const usesPillarPlatformShell =
-    route.id === "moon-pods" || route.id === "orbit" || route.id === "vapes";
+    route.id === "moon-pods" || route.id === "orbit";
   const sanitySlug = routeToSanitySlug(route);
   const cmsPage = cmsSiteRouteIds.has(route.id)
     ? await readPublicRenderableSitePage(sanitySlug, {
@@ -118,6 +119,8 @@ export async function PresidentialRouteShell({
           breadcrumbs={breadcrumbs}
           route={route}
         />
+      ) : route.id === "vapes" ? (
+        <VapesPlatformShell breadcrumbs={breadcrumbs} route={route} />
       ) : usesPillarPlatformShell ? (
         <PillarPlatformShell
           breadcrumbs={breadcrumbs}

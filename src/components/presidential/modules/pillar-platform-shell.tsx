@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 import { PageFrame } from "../layout/page-frame";
@@ -21,7 +19,6 @@ type PillarPlatformShellProps = {
 type PillarContent = {
   readonly kicker: string;
   readonly intro: string;
-  readonly heroSupportingText?: readonly string[];
   readonly mediaLabel: string;
   readonly mediaNote: string;
   readonly lanesTitle: string;
@@ -33,20 +30,7 @@ type PillarContent = {
   readonly rollout: readonly string[];
 };
 
-type PillarRouteId = "moon-pods" | "orbit" | "vapes";
-
-const vapesProducts = [
-  {
-    href: "/moon-pods",
-    title: "MOON PODS",
-    tagline: "The Strongest Flavor Experience.",
-  },
-  {
-    href: "/orbit",
-    title: "ORBIT",
-    tagline: "Designed For Flavor.",
-  },
-] as const;
+type PillarRouteId = "moon-pods" | "orbit";
 
 const pillarContent: Record<PillarRouteId, PillarContent> = {
   "moon-pods": {
@@ -107,27 +91,12 @@ const pillarContent: Record<PillarRouteId, PillarContent> = {
       "Connect source-backed education and retail paths",
     ],
   },
-  vapes: {
-    kicker: "PRESIDENTIAL PRODUCT PLATFORM",
-    intro:
-      "Explore the Presidential vape lineup. Availability varies by licensed retailer.",
-    heroSupportingText: [
-      "Explore the Presidential vape lineup. Availability varies by licensed retailer.",
-    ],
-    mediaLabel: "",
-    mediaNote: "",
-    lanesTitle: "",
-    lanesDescription: "",
-    lanes: [],
-    rollout: [],
-  },
 };
 
 function getPillarContent(route: SeoRouteRecord): PillarContent {
   if (
     route.id !== "moon-pods" &&
-    route.id !== "orbit" &&
-    route.id !== "vapes"
+    route.id !== "orbit"
   ) {
     throw new Error(`PillarPlatformShell does not support route id: ${route.id}`);
   }
@@ -159,51 +128,14 @@ export function PillarPlatformShell({
             },
           ]}
           eyebrow={content.kicker}
-          supportingText={
-            content.heroSupportingText ?? [
-              content.mediaLabel,
-              content.mediaNote,
-              route.description,
-              content.intro,
-            ]
-          }
+          supportingText={[
+            content.mediaLabel,
+            content.mediaNote,
+            route.description,
+            content.intro,
+          ]}
           title={route.h1}
         />
-
-        {route.id === "vapes" ? (
-          <Scene
-            ariaLabel="Vapes products"
-            className="py-12 sm:py-16 lg:py-20"
-            tone="contrast"
-          >
-            <h2 className="mx-auto mb-12 w-full max-w-7xl text-center font-display text-5xl font-bold uppercase leading-[0.82] text-po-brand sm:text-7xl lg:text-9xl">
-              COMING SOON.
-            </h2>
-            <div className="mx-auto grid w-full max-w-7xl gap-5 sm:grid-cols-2 sm:gap-6">
-              {vapesProducts.map((product) => (
-                <Link
-                  aria-label={`Explore ${product.title}`}
-                  className="group block overflow-hidden rounded-[20px] border border-po-brand bg-po-ink transition-transform duration-200 hover:-translate-y-1 focus-visible:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:focus-visible:transform-none"
-                  href={product.href}
-                  key={product.href}
-                >
-                  <div
-                    aria-hidden="true"
-                    className="aspect-[16/6] border-b border-po-brand/50 bg-po-on-dark/[0.035]"
-                  />
-                  <div className="p-6 sm:p-8">
-                    <h2 className="font-display text-[clamp(2.25rem,5vw,4.5rem)] font-bold uppercase leading-[0.88] text-po-on-dark transition-colors group-hover:text-po-brand">
-                      {product.title}
-                    </h2>
-                    <p className="mt-4 font-sans text-[clamp(1rem,1.8vw,1.25rem)] leading-7 text-po-on-dark-muted">
-                      {product.tagline}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </Scene>
-        ) : null}
 
         {content.lanes.length > 0 ? (
           <Scene
