@@ -49,6 +49,15 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: presidentialSecurityHeaders,
       },
+      {
+        source: "/api/:path*",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "noindex, nofollow",
+          },
+        ],
+      },
     ];
   },
 };

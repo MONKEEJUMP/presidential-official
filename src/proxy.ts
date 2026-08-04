@@ -110,7 +110,10 @@ export function proxy(request: NextRequest) {
   ) {
     const response = new NextResponse("Not Found", {
       status: 404,
-      headers: { "Content-Type": "text/plain; charset=utf-8" },
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "X-Robots-Tag": "noindex, nofollow",
+      },
     });
     response.headers.set("Content-Security-Policy", csp);
     return response;
