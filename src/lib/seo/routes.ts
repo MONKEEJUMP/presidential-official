@@ -318,14 +318,14 @@ export const ROUTE_REGISTRY = [
     priority: 4,
     changeFrequency: "monthly",
     canonicalPath: "/about",
-    title: "About Presidential | Company, Craft & Platforms",
+    title: "About Presidential | Company, Craft & Formats",
     description:
-      "Meet Presidential today: three product platforms, three series, the Presidential Infusion System™, brand culture, and official licensed retail paths.",
+      "Meet Presidential today: three cannabis formats, three series, the Presidential Infusion System™, brand culture, and official licensed retail paths.",
     h1: "BUILT BETTER. ON PURPOSE.",
     keywords: [
       "about presidential cannabis",
       "presidential cannabis company",
-      "presidential product platforms",
+      "presidential cannabis formats",
       "presidential infusion system",
     ],
     schema: [],

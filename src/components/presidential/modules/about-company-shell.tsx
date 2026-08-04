@@ -1,7 +1,9 @@
+import Image from "next/image";
+import Link from "next/link";
+
 import { PageFrame } from "../layout/page-frame";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
-import { MediaSlot } from "../media/media-slot";
 import { CtaLink } from "../primitives/cta-link";
 
 const platforms = [
@@ -10,16 +12,24 @@ const platforms = [
     tagline: '"The Highest Form Of Cannabis."',
     body: "The flagship, and the reason the name travels. Premium flower, rich resin, and a coat of the finest kief fused into one complete product — built to be experienced as a single thing rather than three. Available as moon rocks, blunts, pre-rolls, and mini blunts.",
     image: "/media/moonrock-cherrygelato.jpg" as const,
+    imageAlt: "Cherry Gelato Presidential Moon Rocks product graphic",
+    href: "/moon-rocks/cherry-gelato" as const,
   },
   {
-    title: "MOON PODS™",
-    tagline: '"The Strongest Flavor Experience."',
-    body: "The next platform, engineered around flavor with the same discipline that built the first. Presidential's method, in a format made for the way people actually move.",
+    title: "PRESIDENTIAL BLUNTS",
+    tagline: '"The format that built the reputation."',
+    body: "A Presidential Blunt is the house method in its most complete form: flower, concentrate, and kief brought together in a single wrap, rolled to burn evenly and finish clean. The original argument — still winning it.",
+    image: "/media/blunt-nino-brown.jpg" as const,
+    imageAlt: "Nino Brown Presidential Blunt product graphic",
+    href: "/moon-rocks/presidential-line-nino-brown" as const,
   },
   {
-    title: "ORBIT™",
-    tagline: '"Designed For Flavor."',
-    body: "Purpose-built, precise, and unmistakably Presidential. Same standard, different orbit.",
+    title: "PRESIDENTIAL PRE-ROLLS",
+    tagline: '"Everything the house does, ready when you are."',
+    body: "The full method, packed and finished by hand — no compromise made for convenience, no step skipped for speed. The easy choice that gave up nothing.",
+    image: "/media/preroll-cherry-gelato.jpg" as const,
+    imageAlt: "Cherry Gelato Presidential Pre-roll product graphic",
+    href: "/moon-rocks/cherry-gelato" as const,
   },
 ] as const;
 
@@ -75,6 +85,34 @@ function SectionIntro({
   );
 }
 
+function AboutImage({
+  alt,
+  src,
+  aspectClassName,
+  className = "",
+  contain = false,
+}: {
+  readonly alt: string;
+  readonly src: `/${string}`;
+  readonly aspectClassName: string;
+  readonly className?: string;
+  readonly contain?: boolean;
+}) {
+  return (
+    <figure
+      className={`relative overflow-hidden rounded-[20px] border border-po-brand bg-po-ink ${aspectClassName} ${className}`}
+    >
+      <Image
+        alt={alt}
+        className={contain ? "object-contain p-8 sm:p-12" : "object-contain"}
+        fill
+        sizes="(min-width: 1024px) 42vw, 100vw"
+        src={src}
+      />
+    </figure>
+  );
+}
+
 export function AboutCompanyShell() {
   return (
     <PageFrame>
@@ -100,11 +138,11 @@ export function AboutCompanyShell() {
               </p>
             </div>
 
-            <MediaSlot
+            <AboutImage
+              alt="Presidential"
               aspectClassName="aspect-[4/5]"
-              kind="wireframe_media_block"
-              label="Presidential company hero image"
-              note="Hero image slot"
+              contain
+              src="/media/brand/presidential-crest-master.png"
             />
           </div>
         </Scene>
@@ -128,8 +166,8 @@ export function AboutCompanyShell() {
             <SectionIntro
               eyebrow="THE PLATFORMS"
               id="about-platforms-title"
-              intro="Presidential doesn't make a catalog. It builds platforms — each one engineered around a different way to experience the same obsession."
-              title="THREE PLATFORMS. ONE STANDARD."
+              intro="Presidential doesn't make a catalog. It builds formats — each one engineered around a different way to experience the same obsession."
+              title="THREE FORMATS. ONE STANDARD."
             />
             <div className="mt-14 grid gap-8 lg:grid-cols-3">
               {platforms.map((platform, index) => (
@@ -137,23 +175,27 @@ export function AboutCompanyShell() {
                   <p className="text-xs font-black text-po-brand-ink">
                     0{index + 1}
                   </p>
-                  <MediaSlot
-                    aspectClassName="aspect-square"
-                    backgroundImagePath={"image" in platform ? platform.image : undefined}
-                    className="mt-6"
-                    kind="wireframe_media_block"
-                    label={`${platform.title} image`}
-                    note="Product platform image slot"
-                  />
-                  <h3 className="mt-7 font-display text-3xl uppercase leading-none text-po-ink sm:text-4xl">
-                    {platform.title}
-                  </h3>
-                  <p className="mt-3 text-lg font-semibold text-po-brand-ink">
-                    {platform.tagline}
-                  </p>
-                  <p className="mt-5 text-base leading-7 text-po-body">
-                    {platform.body}
-                  </p>
+                  <Link
+                    aria-label={`Explore ${platform.title}`}
+                    className="group mt-6 block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
+                    href={platform.href}
+                  >
+                    <AboutImage
+                      alt={platform.imageAlt}
+                      aspectClassName="aspect-square"
+                      className="transition-transform duration-200 group-hover:-translate-y-1 motion-reduce:transition-none motion-reduce:group-hover:transform-none"
+                      src={platform.image}
+                    />
+                    <h3 className="mt-7 font-display text-3xl uppercase leading-none text-po-ink transition-colors group-hover:text-po-brand-ink sm:text-4xl">
+                      {platform.title}
+                    </h3>
+                    <p className="mt-3 text-lg font-semibold text-po-brand-ink">
+                      {platform.tagline}
+                    </p>
+                    <p className="mt-5 text-base leading-7 text-po-body">
+                      {platform.body}
+                    </p>
+                  </Link>
                 </article>
               ))}
             </div>
@@ -205,11 +247,10 @@ export function AboutCompanyShell() {
                 A Presidential Moon Rock isn't flower with something dusted on top. It's a system: premium flower, rich resin, and the finest kief brought together so the layers stop behaving like layers. Three components, one product, engineered to burn evenly and finish clean. That process has a name because it took years to earn one. Cannabis Evolved.
               </p>
             </div>
-            <MediaSlot
+            <AboutImage
+              alt="Presidential Moon Rocks"
               aspectClassName="aspect-[4/3]"
-              kind="wireframe_media_block"
-              label="Presidential craft image"
-              note="Craft image slot"
+              src="/media/moonrock-whoa-si-whoa.jpg"
             />
           </div>
         </Scene>
@@ -263,11 +304,10 @@ export function AboutCompanyShell() {
                 Presidential has always treated experience as part of the product. In West Hollywood that meant Esco's, a New York–style pizzeria, and the Presidential Suite — a speakeasy-style lounge entered through an NYC subway car built inside the restaurant. A house this obsessed with how something feels was never going to stop at what's in the package.
               </p>
             </div>
-            <MediaSlot
+            <AboutImage
+              alt="Presidential"
               aspectClassName="aspect-[4/3]"
-              kind="wireframe_media_block"
-              label="Presidential culture image"
-              note="Culture image slot"
+              src="/media/preroll-presidential.jpg"
             />
           </div>
         </Scene>
