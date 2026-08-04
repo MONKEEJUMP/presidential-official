@@ -54,22 +54,31 @@ function SectionIntro({
   intro,
   id,
   contrast = false,
+  titleSize = "default",
 }: {
   readonly eyebrow: string;
   readonly title: string;
   readonly intro?: string;
   readonly id: string;
   readonly contrast?: boolean;
+  readonly titleSize?: "default" | "balanced" | "compact";
 }) {
+  const titleSizeClass =
+    titleSize === "compact"
+      ? "text-4xl sm:text-6xl lg:text-5xl xl:text-6xl"
+      : titleSize === "balanced"
+        ? "text-4xl sm:text-6xl lg:text-6xl xl:text-7xl"
+        : "text-4xl sm:text-6xl lg:text-7xl";
+
   return (
-    <div className="max-w-4xl">
+    <div className="min-w-0 max-w-4xl">
       <p
         className={`text-xs font-black uppercase ${contrast ? "text-po-brand" : "text-po-brand-ink"}`}
       >
         {eyebrow}
       </p>
       <h2
-        className={`mt-5 font-display text-4xl uppercase leading-[0.92] sm:text-6xl lg:text-7xl ${contrast ? "text-po-on-dark" : "text-po-ink"}`}
+        className={`mt-5 font-display uppercase leading-[0.92] ${titleSizeClass} ${contrast ? "text-po-on-dark" : "text-po-ink"}`}
         id={id}
       >
         {title}
@@ -123,12 +132,12 @@ export function AboutCompanyShell() {
           tone="contrast"
         >
           <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.75fr)] lg:items-center lg:gap-20">
-            <div>
+            <div className="min-w-0">
               <p className="text-xs font-black uppercase text-po-brand">
                 OFFICIAL PRESIDENTIAL
               </p>
               <h1
-                className="mt-6 max-w-5xl font-display text-5xl uppercase leading-[0.88] text-po-on-dark sm:text-7xl lg:text-9xl"
+                className="mt-6 max-w-5xl font-display text-5xl uppercase leading-[0.88] text-po-on-dark sm:text-7xl lg:text-7xl xl:text-9xl"
                 id="about-company-title"
               >
                 BUILT BETTER. ON PURPOSE.
@@ -242,6 +251,7 @@ export function AboutCompanyShell() {
                 eyebrow="HOW IT'S BUILT"
                 id="about-craft-title"
                 title="THE PRESIDENTIAL INFUSION SYSTEM™"
+                titleSize="balanced"
               />
               <p className="mt-7 max-w-3xl text-lg leading-8 text-po-body">
                 A Presidential Moon Rock isn't flower with something dusted on top. It's a system: premium flower, rich resin, and the finest kief brought together so the layers stop behaving like layers. Three components, one product, engineered to burn evenly and finish clean. That process has a name because it took years to earn one. Cannabis Evolved.
@@ -275,6 +285,7 @@ export function AboutCompanyShell() {
               eyebrow="THE HERITAGE"
               id="about-heritage-title"
               title="TEN YEARS OF NOT SETTLING."
+              titleSize="balanced"
             />
             <div className="lg:pt-8">
               <p className="max-w-3xl text-lg leading-8 text-po-body">
@@ -317,11 +328,12 @@ export function AboutCompanyShell() {
           className="po-gold-thread-inlay py-24 lg:py-32"
           tone="default"
         >
-          <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">
+          <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)] lg:gap-20">
             <SectionIntro
               eyebrow="OFFICIAL RETAIL"
               id="about-retail-title"
               title="FIND PRESIDENTIAL NEAR YOU."
+              titleSize="compact"
             />
             <div className="lg:pt-8">
               <p className="max-w-3xl text-lg leading-8 text-po-body">
