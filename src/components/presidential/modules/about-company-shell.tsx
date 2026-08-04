@@ -12,15 +12,15 @@ const platforms = [
     tagline: '"The Highest Form Of Cannabis."',
     body: "The flagship, and the reason the name travels. Premium flower, rich resin, and a coat of the finest kief fused into one complete product — built to be experienced as a single thing rather than three. Available as moon rocks, blunts, pre-rolls, and mini blunts.",
     image: "/media/moonrock-cherrygelato.jpg" as const,
-    imageAlt: "Cherry Gelato Presidential Moon Rocks product graphic",
-    href: "/moon-rocks/cherry-gelato" as const,
+    imageAlt: "Cherry Gelato Presidential Moon Rocks package artwork",
+    href: "/moon-rocks" as const,
   },
   {
     title: "PRESIDENTIAL BLUNTS",
     tagline: '"The format that built the reputation."',
     body: "A Presidential Blunt is the house method in its most complete form: flower, concentrate, and kief brought together in a single wrap, rolled to burn evenly and finish clean. The original argument — still winning it.",
     image: "/media/blunt-nino-brown.jpg" as const,
-    imageAlt: "Nino Brown Presidential Blunt product graphic",
+    imageAlt: "Nino Brown Presidential Moon Rock Blunt package artwork",
     href: "/moon-rocks/presidential-line-nino-brown" as const,
   },
   {
@@ -28,7 +28,7 @@ const platforms = [
     tagline: '"Everything the house does, ready when you are."',
     body: "The full method, packed and finished by hand — no compromise made for convenience, no step skipped for speed. The easy choice that gave up nothing.",
     image: "/media/preroll-cherry-gelato.jpg" as const,
-    imageAlt: "Cherry Gelato Presidential Pre-roll product graphic",
+    imageAlt: "Cherry Gelato Presidential Moon Rock Pre-roll package artwork",
     href: "/moon-rocks/cherry-gelato" as const,
   },
 ] as const;
@@ -139,7 +139,7 @@ export function AboutCompanyShell() {
             </div>
 
             <AboutImage
-              alt="Presidential"
+              alt="Presidential cannabis company crest logo"
               aspectClassName="aspect-[4/5]"
               contain
               src="/media/brand/presidential-crest-master.png"
@@ -248,7 +248,7 @@ export function AboutCompanyShell() {
               </p>
             </div>
             <AboutImage
-              alt="Presidential Moon Rocks"
+              alt="Whoa Si Whoa Presidential Moon Rocks package artwork"
               aspectClassName="aspect-[4/3]"
               src="/media/moonrock-whoa-si-whoa.jpg"
             />
@@ -305,7 +305,7 @@ export function AboutCompanyShell() {
               </p>
             </div>
             <AboutImage
-              alt="Presidential"
+              alt="Presidential pre-roll package artwork featuring the Los Angeles skyline"
               aspectClassName="aspect-[4/3]"
               src="/media/preroll-presidential.jpg"
             />

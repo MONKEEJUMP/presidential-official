@@ -17,6 +17,17 @@ const ORGANIZATION_SOURCE_FIELD_MAP = {
   description: "schema.constants.PRESIDENTIAL_DESCRIPTION",
 } as const;
 
+function buildOrganizationSourceFieldMap(
+  route: SeoRouteRecord,
+): Readonly<Record<string, string>> {
+  return route.path === "/about"
+    ? {
+        ...ORGANIZATION_SOURCE_FIELD_MAP,
+        logo: "schema.routeShell.ABOUT_ORGANIZATION_LOGO_PATH",
+      }
+    : ORGANIZATION_SOURCE_FIELD_MAP;
+}
+
 const WEBSITE_SOURCE_FIELD_MAP = {
   "@id": "schema.constants.WEBSITE_ID",
   name: "schema.constants.PRESIDENTIAL_NAME",
@@ -59,6 +70,8 @@ export function getEmittedRouteShellSchemaTypes(
 
   if (route.path === "/") {
     schemaTypes.push("Organization", "WebSite");
+  } else if (route.schema.includes("Organization")) {
+    schemaTypes.push("Organization");
   }
 
   if (route.schema.includes("WebPage")) {
@@ -78,7 +91,7 @@ export function getExpectedRouteShellSchemaSourceFieldMap(
 ): Readonly<Record<string, string>> {
   switch (schemaType) {
     case "Organization":
-      return ORGANIZATION_SOURCE_FIELD_MAP;
+      return buildOrganizationSourceFieldMap(route);
     case "WebSite":
       return WEBSITE_SOURCE_FIELD_MAP;
     case "WebPage":

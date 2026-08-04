@@ -5,6 +5,7 @@ const footerLinks = [
   { href: "/moon-pods", label: "Moon Pods" },
   { href: "/orbit", label: "Orbit" },
   { href: "/our-story", label: "Our Story" },
+  { href: "/about", label: "About" },
   { href: "/learn", label: "Learn" },
   { href: "/find-us", label: "Find Presidential" },
   { href: "/contact", label: "Contact" },

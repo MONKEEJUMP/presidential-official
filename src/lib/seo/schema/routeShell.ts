@@ -41,6 +41,9 @@ export const ROUTE_SHELL_SUPPRESSED_SCHEMA_TYPES = [
   "Product",
 ] as const satisfies readonly SeoSchemaType[];
 
+export const ABOUT_ORGANIZATION_LOGO_PATH =
+  "/media/brand/presidential-crest-master.png" as const;
+
 function assertConcreteRouteShell(route: SeoRouteRecord): SeoRouteRecord {
   if (isRouteTemplate(route)) {
     throw new Error(
@@ -105,15 +108,21 @@ export function buildRouteShellJsonLd(
   const entries: RouteShellJsonLdEntry[] = [];
   const emittedSchemaTypes = getEmittedRouteShellSchemaTypes(route);
 
-  if (
-    route.path === "/" &&
-    emittedSchemaTypes.includes("Organization") &&
-    emittedSchemaTypes.includes("WebSite")
-  ) {
+  if (emittedSchemaTypes.includes("Organization")) {
     entries.push(
-      { id: "organization", data: buildOrganizationSchema() },
-      { id: "website", data: buildWebsiteSchema() },
+      {
+        id: "organization",
+        data: buildOrganizationSchema(
+          route.path === "/about"
+            ? { logoPath: ABOUT_ORGANIZATION_LOGO_PATH }
+            : {},
+        ),
+      },
     );
+  }
+
+  if (route.path === "/" && emittedSchemaTypes.includes("WebSite")) {
+    entries.push({ id: "website", data: buildWebsiteSchema() });
   }
 
   if (emittedSchemaTypes.includes("WebPage")) {
