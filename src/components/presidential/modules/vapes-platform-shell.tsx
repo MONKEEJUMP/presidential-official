@@ -73,22 +73,24 @@ function SectionHeader({
   intro,
   title,
   contrast = false,
+  compact = false,
 }: {
   readonly eyebrow: string;
   readonly id: string;
   readonly intro?: string;
   readonly title: string;
   readonly contrast?: boolean;
+  readonly compact?: boolean;
 }) {
   return (
-    <header className="max-w-5xl">
+    <header className="min-w-0 max-w-5xl">
       <p
         className={`text-xs font-black uppercase ${contrast ? "text-po-brand" : "text-po-brand-ink"}`}
       >
         {eyebrow}
       </p>
       <h2
-        className={`mt-5 max-w-[15ch] font-display text-4xl uppercase leading-[0.9] sm:text-6xl lg:text-8xl ${contrast ? "text-po-on-dark" : "text-po-ink"}`}
+        className={`mt-5 max-w-[15ch] font-display uppercase leading-[0.9] ${compact ? "text-4xl sm:text-6xl lg:text-5xl xl:text-6xl" : "text-4xl sm:text-6xl lg:text-8xl"} ${contrast ? "text-po-on-dark" : "text-po-ink"}`}
         id={id}
       >
         {title}
@@ -238,8 +240,9 @@ export function VapesPlatformShell({
           className="po-gold-thread-inlay py-24 lg:py-32"
           tone="contrast"
         >
-          <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(260px,0.7fr)_minmax(0,1fr)] lg:items-end lg:gap-20">
+          <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] lg:items-end lg:gap-20">
             <SectionHeader
+              compact
               contrast
               eyebrow="OFFICIAL RETAIL"
               id="vapes-find-title"
