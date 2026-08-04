@@ -19,6 +19,10 @@ function normalizeDisallowPath(path: SeoRoutePath): readonly string[] {
 }
 
 export function isRobotsDisallowRoute(route: SeoRouteRecord): boolean {
+  if (route.id === "loyalty") {
+    return false;
+  }
+
   return isPrivateOrFutureRoute(route) || route.kind === "private_system";
 }
 

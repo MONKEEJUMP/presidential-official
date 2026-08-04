@@ -68,10 +68,11 @@ function buildCanonicalHostRedirect(request: NextRequest): NextResponse | null {
     request.nextUrl.protocol.replace(":", "")
   ).toLowerCase();
   const usesNonCanonicalHost = nonCanonicalHostnames.has(hostname);
+  const usesVercelAlias = hostname.endsWith(".vercel.app");
   const usesHttpCanonicalHost =
     hostname === canonicalHostname && forwardedProto === "http";
 
-  if (!usesNonCanonicalHost && !usesHttpCanonicalHost) {
+  if (!usesNonCanonicalHost && !usesVercelAlias && !usesHttpCanonicalHost) {
     return null;
   }
 

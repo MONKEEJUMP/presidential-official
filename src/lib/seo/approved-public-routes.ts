@@ -1,0 +1,133 @@
+import { PRESIDENTIAL_STATES } from "../find-us/states";
+
+import {
+  buildCatalogProductSeoRoute,
+  buildStateSeoRoute,
+  getConcreteSeriesSeoRoutes,
+} from "./concrete-routes";
+import { getRouteById } from "./route-helpers";
+import type { SeoRouteRecord } from "./route-types";
+import { PRODUCT_METADATA_BY_SLUG } from "./pw7404-1019-product-metadata";
+
+const APPROVED_PUBLIC_STATIC_ROUTE_IDS = [
+  "home",
+  "moon-rocks",
+  "moon-pods",
+  "orbit",
+  "vapes",
+  "our-story",
+  "about",
+  "learn",
+  "find-us",
+  "contact",
+] as const;
+
+const APPROVED_PRODUCT_ROUTE_ROWS = [
+  { slug: "blue-raspberry", name: "Blue Raspberry", series: "Silver Flavor Series" },
+  { slug: "grape", name: "Grape", series: "Silver Flavor Series" },
+  { slug: "peach-mango", name: "Peach Mango", series: "Silver Flavor Series" },
+  { slug: "pineapple", name: "Pineapple", series: "Silver Flavor Series" },
+  { slug: "strawberry", name: "Strawberry", series: "Silver Flavor Series" },
+  { slug: "tropical", name: "Tropical", series: "Silver Flavor Series" },
+  { slug: "watermelon", name: "Watermelon", series: "Silver Flavor Series" },
+  { slug: "24k", name: "24K", series: "Gold Strain Series" },
+  { slug: "blue-dream", name: "Blue Dream", series: "Gold Strain Series" },
+  { slug: "cap-junky", name: "Cap Junky", series: "Gold Strain Series" },
+  { slug: "cherry-gelato", name: "Cherry Gelato", series: "Gold Strain Series" },
+  { slug: "crescendo", name: "Crescendo", series: "Gold Strain Series" },
+  { slug: "galactic-gas", name: "Galactic Gas", series: "Gold Strain Series" },
+  { slug: "gorilla-goo", name: "Gorilla Goo", series: "Gold Strain Series" },
+  { slug: "king-louis", name: "King Louis", series: "Gold Strain Series" },
+  { slug: "nyc-diesel", name: "NYC Diesel", series: "Gold Strain Series" },
+  { slug: "orange-push-pop", name: "Orange Push Pop", series: "Gold Strain Series" },
+  { slug: "papaya-punch", name: "Papaya Punch", series: "Gold Strain Series" },
+  { slug: "pink-cookies", name: "Pink Cookies", series: "Gold Strain Series" },
+  { slug: "presidential-og", name: "Presidential OG", series: "Gold Strain Series" },
+  { slug: "rainbow-belts", name: "Rainbow Belts", series: "Gold Strain Series" },
+  { slug: "sfv-og", name: "SFV OG", series: "Gold Strain Series" },
+  { slug: "skywalker", name: "Skywalker", series: "Gold Strain Series" },
+  { slug: "waui", name: "Waui", series: "Gold Strain Series" },
+  { slug: "xj-13", name: "XJ-13", series: "Gold Strain Series" },
+  { slug: "xxx", name: "XXX", series: "Gold Strain Series" },
+  { slug: "cereal-milk", name: "Cereal Milk", series: "Rose Gold Connoisseur Series" },
+  { slug: "cosmic-cookies", name: "Cosmic Cookies", series: "Rose Gold Connoisseur Series" },
+  { slug: "gods-gift", name: "God's Gift", series: "Rose Gold Connoisseur Series" },
+  { slug: "wedding-cake", name: "Wedding Cake", series: "Rose Gold Connoisseur Series" },
+  { slug: "white-walker", name: "White Walker", series: "Rose Gold Connoisseur Series" },
+  { slug: "presidential-line-apricotti", name: "Apricotti", series: "Presidential Line" },
+  { slug: "presidential-line-daniel-larusso", name: "Daniel LaRusso", series: "Presidential Line" },
+  { slug: "presidential-line-garlic-cookies", name: "Garlic Cookies", series: "Presidential Line" },
+  { slug: "presidential-line-ghost-haze-train", name: "Ghost Haze Train", series: "Presidential Line" },
+  { slug: "presidential-line-guava-haze", name: "Guava Haze", series: "Presidential Line" },
+  { slug: "presidential-line-head-cheese", name: "Head Cheese", series: "Presidential Line" },
+  { slug: "presidential-line-iced-lemon", name: "Iced Lemon", series: "Presidential Line" },
+  { slug: "presidential-line-laura-charles", name: "Laura Charles", series: "Presidential Line" },
+  { slug: "presidential-line-nino-brown", name: "Nino Brown", series: "Presidential Line" },
+  { slug: "presidential-line-whoa-si-whoa", name: "Whoa Si Whoa", series: "Presidential Line" },
+  { slug: "presidential-blunts", name: "Presidential Blunts", series: "Presidential House Line" },
+  { slug: "presidential-moon-rocks", name: "Presidential Moon Rocks", series: "Presidential House Line" },
+  { slug: "presidential-prerolls", name: "Presidential Prerolls", series: "Presidential House Line" },
+  { slug: "thc-design-blunts", name: "Presidential x THC Design Blunts", series: "Presidential x THC Design" },
+  { slug: "thc-design-moon-rocks", name: "Presidential x THC Design Moon Rocks", series: "Presidential x THC Design" },
+  { slug: "thc-design-prerolls", name: "Presidential x THC Design Prerolls", series: "Presidential x THC Design" },
+] as const;
+
+function getRequiredApprovedStaticRoute(id: string): SeoRouteRecord {
+  const route = getRouteById(id);
+
+  if (!route) {
+    throw new Error(`Missing approved public Presidential route: ${id}`);
+  }
+
+  return route;
+}
+
+function assertApprovedProductInventory(): void {
+  const routeSlugs = APPROVED_PRODUCT_ROUTE_ROWS.map((row) => row.slug).sort();
+  const metadataSlugs = Object.keys(PRODUCT_METADATA_BY_SLUG).sort();
+
+  if (routeSlugs.length !== 47 || routeSlugs.join("|") !== metadataSlugs.join("|")) {
+    throw new Error(
+      "Approved product route inventory must exactly match all 47 PW7404-1019 metadata records.",
+    );
+  }
+}
+
+assertApprovedProductInventory();
+
+export const APPROVED_PUBLIC_STATIC_ROUTES = APPROVED_PUBLIC_STATIC_ROUTE_IDS.map(
+  getRequiredApprovedStaticRoute,
+);
+
+export const APPROVED_PUBLIC_PRODUCT_ROUTES = APPROVED_PRODUCT_ROUTE_ROWS.map(
+  (row) =>
+    buildCatalogProductSeoRoute(
+      {
+        _id: `owner-approved-product-${row.slug}`,
+        name: row.name,
+        series: row.series,
+        sourceArtifact:
+          `PW7404-1019 product evidence/copy record:${row.slug}; 7734-SPUD owner publication approval`,
+      },
+      row.slug,
+    ),
+);
+
+export const APPROVED_PUBLIC_STATE_ROUTES = PRESIDENTIAL_STATES.map(
+  buildStateSeoRoute,
+);
+
+export const APPROVED_PUBLIC_SEO_ROUTES = [
+  ...APPROVED_PUBLIC_STATIC_ROUTES,
+  ...getConcreteSeriesSeoRoutes(),
+  ...APPROVED_PUBLIC_PRODUCT_ROUTES,
+  ...APPROVED_PUBLIC_STATE_ROUTES,
+] as const satisfies readonly SeoRouteRecord[];
+
+export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 71 as const;
+
+if (APPROVED_PUBLIC_SEO_ROUTES.length !== APPROVED_PUBLIC_SEO_ROUTE_COUNT) {
+  throw new Error(
+    `Approved public SEO route count mismatch: ${APPROVED_PUBLIC_SEO_ROUTES.length}`,
+  );
+}

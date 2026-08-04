@@ -58,7 +58,9 @@ export function buildInformationalProductSchema(
     url,
     name: input.name,
     description: input.description,
-    image: input.imageUrls.map(approvedProductImageUrl),
+    ...(input.imageUrls.length > 0
+      ? { image: input.imageUrls.map(approvedProductImageUrl) }
+      : {}),
     brand,
   };
 }

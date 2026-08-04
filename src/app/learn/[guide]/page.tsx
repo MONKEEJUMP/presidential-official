@@ -12,6 +12,8 @@ import {
   readPublicRenderableLearnGuide,
   readPublicRenderableLearnGuideSlugs,
 } from "@/lib/cms";
+import { buildLearnGuideSeoRoute } from "@/lib/seo/concrete-routes";
+import { buildRouteMetadata } from "@/lib/seo/metadata";
 
 import { LearnGuideCmsBody } from "./learn-guide-cms-body";
 
@@ -46,14 +48,15 @@ export async function generateMetadata({ params }: LearnGuidePageProps): Promise
     };
   }
 
-  return {
-    title: `${guide.record.title!} | Presidential Learn`,
-    description: guide.record.intro!,
-    robots: {
-      index: false,
-      follow: true,
-    },
-  };
+  return buildRouteMetadata({
+    route: buildLearnGuideSeoRoute(
+      {
+        title: guide.record.title!,
+        intro: guide.record.intro!,
+      },
+      slug,
+    ),
+  });
 }
 
 export default async function LearnGuidePage({ params }: LearnGuidePageProps) {

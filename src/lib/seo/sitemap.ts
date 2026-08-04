@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
 
+import { APPROVED_PUBLIC_SEO_ROUTES } from "./approved-public-routes";
 import { isSitemapEligible } from "./indexability";
 import { buildRouteCanonicalUrl, isRouteTemplate } from "./route-helpers";
 import type { SeoRouteRecord } from "./route-types";
-import { ROUTE_REGISTRY } from "./routes";
 
 export type PresidentialSitemapEntry = MetadataRoute.Sitemap[number];
 
@@ -31,10 +31,9 @@ export function buildPresidentialSitemapEntry(
 }
 
 export function getPresidentialSitemapRoutes(): readonly SeoRouteRecord[] {
-  return ROUTE_REGISTRY.filter(isPresidentialSitemapRoute);
+  return APPROVED_PUBLIC_SEO_ROUTES.filter(isPresidentialSitemapRoute);
 }
 
 export function buildPresidentialSitemap(): MetadataRoute.Sitemap {
   return getPresidentialSitemapRoutes().map(buildPresidentialSitemapEntry);
 }
-

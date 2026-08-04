@@ -19,8 +19,20 @@ import type {
   SourceRecord,
   SourceRecordGateResult,
 } from "./types";
+import {
+  APPROVED_PUBLICATION_ASSET_PROVENANCE_RECORDS,
+  APPROVED_PUBLICATION_ASSET_RECORDS,
+  APPROVED_PUBLICATION_CLAIM_RECORDS,
+  APPROVED_PUBLICATION_CONTENT_RECORDS,
+  APPROVED_PUBLICATION_ENTITY_RECORDS,
+  APPROVED_PUBLICATION_METADATA_RECORDS,
+  APPROVED_PUBLICATION_PROOF_RECORDS,
+  APPROVED_PUBLICATION_ROUTE_RECORDS,
+  APPROVED_PUBLICATION_SCHEMA_RECORDS,
+  APPROVED_PUBLICATION_SOURCE_RECORDS,
+} from "./approved-publication-records";
 
-export const APPROVED_ROUTE_PUBLICATIONS = [] as const satisfies readonly RoutePublicationRecord[];
+export const APPROVED_ROUTE_PUBLICATIONS = APPROVED_PUBLICATION_ROUTE_RECORDS;
 export const ROUTE_PUBLICATION_APPROVAL_SEQUENCE = [
   "home",
   "moon-rocks",
@@ -88,15 +100,16 @@ export type RouteMetadataEmission = {
   readonly ogDescription: string;
 };
 
-export const APPROVED_ROUTE_ENTITY_RECORDS = [] as const satisfies readonly RouteEntityRecord[];
-export const APPROVED_ROUTE_CONTENT_RECORDS = [] as const satisfies readonly RouteContentRecord[];
-export const APPROVED_SEO_METADATA_RECORDS = [] as const satisfies readonly SeoMetadataRecord[];
-export const APPROVED_SCHEMA_RECORDS = [] as const satisfies readonly SchemaRecord[];
-export const APPROVED_SOURCE_RECORDS = [] as const satisfies readonly SourceRecord[];
-export const APPROVED_PROOF_RECORDS = [] as const satisfies readonly ProofRecord[];
-export const APPROVED_CLAIM_RECORDS = [] as const satisfies readonly ClaimRecord[];
-export const APPROVED_ASSET_RECORDS = [] as const satisfies readonly AssetRecord[];
-export const APPROVED_ASSET_PROVENANCE_RECORDS = [] as const satisfies readonly AssetProvenanceRecord[];
+export const APPROVED_ROUTE_ENTITY_RECORDS = APPROVED_PUBLICATION_ENTITY_RECORDS;
+export const APPROVED_ROUTE_CONTENT_RECORDS = APPROVED_PUBLICATION_CONTENT_RECORDS;
+export const APPROVED_SEO_METADATA_RECORDS = APPROVED_PUBLICATION_METADATA_RECORDS;
+export const APPROVED_SCHEMA_RECORDS = APPROVED_PUBLICATION_SCHEMA_RECORDS;
+export const APPROVED_SOURCE_RECORDS = APPROVED_PUBLICATION_SOURCE_RECORDS;
+export const APPROVED_PROOF_RECORDS = APPROVED_PUBLICATION_PROOF_RECORDS;
+export const APPROVED_CLAIM_RECORDS = APPROVED_PUBLICATION_CLAIM_RECORDS;
+export const APPROVED_ASSET_RECORDS = APPROVED_PUBLICATION_ASSET_RECORDS;
+export const APPROVED_ASSET_PROVENANCE_RECORDS =
+  APPROVED_PUBLICATION_ASSET_PROVENANCE_RECORDS;
 export const APPROVED_ROUTE_PUBLICATION_CONTEXT = {
   entityRecords: APPROVED_ROUTE_ENTITY_RECORDS,
   contentRecords: APPROVED_ROUTE_CONTENT_RECORDS,

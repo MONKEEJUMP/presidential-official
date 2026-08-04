@@ -20,7 +20,10 @@ import {
   readCatalogProductParams,
 } from "@/lib/cms/catalog";
 import { buildCatalogProductSeoRoute } from "@/lib/seo/concrete-routes";
-import { buildRouteMetadata } from "@/lib/seo/metadata";
+import {
+  buildRouteMetadata,
+  isRouteMetadataIndexable,
+} from "@/lib/seo/metadata";
 import {
   buildProductRouteJsonLd,
   JsonLd,
@@ -96,8 +99,11 @@ export default async function CatalogProductDetailPage({
     route,
     name: item.name,
     description: route.description,
-    imageUrls: approvedImages.map((image) => image.assetUrl),
-    publicRenderable: detail.mode === "public",
+    imageUrls:
+      detail.mode === "public"
+        ? approvedImages.map((image) => image.assetUrl)
+        : [],
+    publicRenderable: isRouteMetadataIndexable(route),
   });
 
   return (

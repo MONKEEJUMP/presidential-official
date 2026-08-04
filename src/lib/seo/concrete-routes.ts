@@ -43,6 +43,7 @@ type ConcreteCatalogItem = {
   readonly name: string;
   readonly series?: string;
   readonly description?: string;
+  readonly sourceArtifact?: string;
 };
 
 type ConcreteState = {
@@ -116,9 +117,38 @@ export function buildCatalogProductSeoRoute(
       ...(seriesPath ? [seriesPath] : []),
       "/find-us",
     ],
-    sourceArtifact: `${template.sourceArtifact}; Sanity productCatalogItem:${item._id}`,
+    sourceArtifact:
+      item.sourceArtifact ??
+      `${template.sourceArtifact}; Sanity productCatalogItem:${item._id}`,
     notes:
       "Concrete product route materialized from the gated catalog record and the product-detail SEO policy template.",
+  };
+}
+
+type ConcreteLearnGuide = {
+  readonly title: string;
+  readonly intro: string;
+};
+
+export function buildLearnGuideSeoRoute(
+  guide: ConcreteLearnGuide,
+  slug: string,
+): SeoRouteRecord {
+  const template = getRequiredRouteTemplate("learn-guide");
+  const path = `/learn/${slug}` as const;
+
+  return {
+    ...template,
+    id: `learn-guide-${slug}`,
+    path,
+    canonicalPath: path,
+    title: `${guide.title.trim()} | Presidential Learn`,
+    description: guide.intro.trim(),
+    h1: guide.title.trim(),
+    linksTo: ["/learn", "/moon-rocks", "/find-us"],
+    sourceArtifact: `${template.sourceArtifact}; approved Sanity learnGuide:${slug}`,
+    notes:
+      "Concrete learn-guide route materialized from the approved CMS record and the central publication gate.",
   };
 }
 
