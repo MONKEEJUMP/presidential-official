@@ -8,6 +8,7 @@ import {
 } from "@/components/presidential";
 import { FindUsMiniBluntsGrid } from "@/components/presidential/modules/find-us-mini-blunts-grid";
 import { OurStoryPrerollGraphicsGrid } from "@/components/presidential/modules/our-story-preroll-graphics-grid";
+import { AboutCompanyShell } from "@/components/presidential/modules/about-company-shell";
 import { readPublicRenderableSitePage } from "@/lib/cms";
 import {
   buildRouteShellBreadcrumbItems,
@@ -79,7 +80,9 @@ export async function PresidentialRouteShell({
         <JsonLd key={`${route.id}-${entry.id}`} data={entry.data} />
       ))}
 
-      {cmsModules ? (
+      {route.id === "about" ? (
+        <AboutCompanyShell />
+      ) : cmsModules ? (
         <PageFrame>
           <SceneStack>
             {findUsLocatorModuleIndex >= 0 ? (

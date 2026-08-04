@@ -11,6 +11,7 @@ const primaryNavItems = [
   { href: "/moon-rocks", label: "Moon Rocks" },
   { href: "/vapes", label: "Vapes" },
   { href: "/our-story", label: "Our Story" },
+  { href: "/about", label: "About" },
   { href: "/learn", label: "Learn" },
   { href: "/contact", label: "Contact" },
   { href: "/loyalty", label: "Loyalty" },

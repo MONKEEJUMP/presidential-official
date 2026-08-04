@@ -6,6 +6,7 @@ export const MANDATORY_ROUTE_PATHS = [
   "/moon-pods",
   "/orbit",
   "/our-story",
+  "/about",
   "/learn",
   "/learn/[guide]",
   "/find-us",
@@ -305,6 +306,40 @@ export const ROUTE_REGISTRY = [
       "04-route-seo-matrix.csv; 20-presidential-seo-doctrine.md",
     notes:
       "Credibility route for entity proof. Claims must be source-backed before indexability.",
+    isMandatory: true,
+  },
+  {
+    id: "about",
+    path: "/about",
+    kind: "brand_story",
+    status: "planned",
+    indexability: "conditional_index",
+    sitemap: "exclude",
+    priority: 4,
+    changeFrequency: "monthly",
+    canonicalPath: "/about",
+    title: "About Presidential | Company, Craft & Platforms",
+    description:
+      "Meet Presidential today: three product platforms, three series, the Presidential Infusion System™, brand culture, and official licensed retail paths.",
+    h1: "BUILT BETTER. ON PURPOSE.",
+    keywords: [
+      "about presidential cannabis",
+      "presidential cannabis company",
+      "presidential product platforms",
+      "presidential infusion system",
+    ],
+    schema: [],
+    requiredData: ["approved_about_copy", "approved_assets"],
+    requiredApprovals: [
+      "content approval",
+      "asset approval",
+      "compliance review",
+    ],
+    blocks: ["content_approval", "product_assets", "compliance_review"],
+    linksTo: ["/moon-rocks", "/vapes", "/our-story", "/find-us"],
+    sourceArtifact: "Owner request 3396-SPUD",
+    notes:
+      "Current-company route distinct from the heritage narrative on /our-story. It remains noindex and excluded from the sitemap until publication approval.",
     isMandatory: true,
   },
   {

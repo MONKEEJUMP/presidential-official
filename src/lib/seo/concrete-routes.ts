@@ -9,6 +9,7 @@ export const CONCRETE_SEO_DOCUMENT_PATHS = [
   "/orbit",
   "/vapes",
   "/our-story",
+  "/about",
   "/learn",
   "/find-us",
   "/contact",
@@ -34,7 +35,7 @@ export const CONCRETE_SEO_SURFACE_COUNTS = {
   series: CONCRETE_SEO_SERIES_PATHS.length,
   products: 47,
   states: 8,
-  total: 72,
+  total: 73,
 } as const;
 
 type ConcreteCatalogItem = {

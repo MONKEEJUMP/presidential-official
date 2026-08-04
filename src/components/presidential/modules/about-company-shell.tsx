@@ -1,0 +1,317 @@
+import { PageFrame } from "../layout/page-frame";
+import { Scene } from "../layout/scene";
+import { SceneStack } from "../layout/scene-stack";
+import { MediaSlot } from "../media/media-slot";
+import { CtaLink } from "../primitives/cta-link";
+
+const platforms = [
+  {
+    title: "MOON ROCKS™",
+    tagline: '"The Highest Form Of Cannabis."',
+    body: "The flagship, and the reason the name travels. Premium flower, rich resin, and a coat of the finest kief fused into one complete product — built to be experienced as a single thing rather than three. Available as moon rocks, blunts, pre-rolls, and mini blunts.",
+    image: "/media/moonrock-cherrygelato.jpg" as const,
+  },
+  {
+    title: "MOON PODS™",
+    tagline: '"The Strongest Flavor Experience."',
+    body: "The next platform, engineered around flavor with the same discipline that built the first. Presidential's method, in a format made for the way people actually move.",
+  },
+  {
+    title: "ORBIT™",
+    tagline: '"Designed For Flavor."',
+    body: "Purpose-built, precise, and unmistakably Presidential. Same standard, different orbit.",
+  },
+] as const;
+
+const series = [
+  {
+    title: "SILVER FLAVOR SERIES",
+    body: "Flavor-first and unapologetically fun. Bright, vivid, approachable — the easiest door into the house, and the hardest kind of flavor to get right.",
+  },
+  {
+    title: "GOLD STRAIN SERIES",
+    body: "Balanced. Authentic. Full-spectrum. Cannabis-forward. The strains people ask for by name, treated with the seriousness they stopped receiving years ago.",
+  },
+  {
+    title: "ROSE GOLD CONNOISSEUR SERIES",
+    body: "Solventless craft for people who taste everything. The most exacting work Presidential does, made for the ones who notice.",
+  },
+] as const;
+
+function SectionIntro({
+  eyebrow,
+  title,
+  intro,
+  id,
+  contrast = false,
+}: {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly intro?: string;
+  readonly id: string;
+  readonly contrast?: boolean;
+}) {
+  return (
+    <div className="max-w-4xl">
+      <p
+        className={`text-xs font-black uppercase ${contrast ? "text-po-brand" : "text-po-brand-ink"}`}
+      >
+        {eyebrow}
+      </p>
+      <h2
+        className={`mt-5 font-display text-4xl uppercase leading-[0.92] sm:text-6xl lg:text-7xl ${contrast ? "text-po-on-dark" : "text-po-ink"}`}
+        id={id}
+      >
+        {title}
+      </h2>
+      {intro ? (
+        <p
+          className={`mt-7 max-w-3xl text-lg leading-8 ${contrast ? "text-po-on-dark-muted" : "text-po-body"}`}
+        >
+          {intro}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+export function AboutCompanyShell() {
+  return (
+    <PageFrame>
+      <SceneStack>
+        <Scene
+          ariaLabelledBy="about-company-title"
+          className="py-20 sm:py-24 lg:py-32"
+          tone="contrast"
+        >
+          <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.75fr)] lg:items-center lg:gap-20">
+            <div>
+              <p className="text-xs font-black uppercase text-po-brand">
+                OFFICIAL PRESIDENTIAL
+              </p>
+              <h1
+                className="mt-6 max-w-5xl font-display text-5xl uppercase leading-[0.88] text-po-on-dark sm:text-7xl lg:text-9xl"
+                id="about-company-title"
+              >
+                BUILT BETTER. ON PURPOSE.
+              </h1>
+              <p className="mt-8 max-w-3xl text-lg leading-8 text-po-on-dark-muted sm:text-xl sm:leading-9">
+                Presidential exists because someone refused to accept what the market called good enough. Not better marketing — better cannabis. That standard has governed every decision since the first batch, and it still does: obsess over the material, engineer the experience, and never ship something that misses. Cannabis Deserves Better. That's not a tagline. It's the assignment.
+              </p>
+            </div>
+
+            <MediaSlot
+              aspectClassName="aspect-[4/5]"
+              kind="wireframe_media_block"
+              label="Presidential company hero image"
+              note="Hero image slot"
+            />
+          </div>
+        </Scene>
+
+        <Scene
+          ariaLabel="Presidential standard"
+          className="po-gold-thread-inlay py-20 sm:py-24 lg:py-28"
+          tone="contrast"
+        >
+          <blockquote className="mx-auto max-w-7xl font-display text-5xl uppercase leading-[0.9] text-po-brand sm:text-7xl lg:text-8xl">
+            "Cannabis Deserves Better. Expect More."
+          </blockquote>
+        </Scene>
+
+        <Scene
+          ariaLabelledBy="about-platforms-title"
+          className="po-gold-thread-inlay py-24 lg:py-32"
+          tone="default"
+        >
+          <div className="mx-auto w-full max-w-7xl">
+            <SectionIntro
+              eyebrow="THE PLATFORMS"
+              id="about-platforms-title"
+              intro="Presidential doesn't make a catalog. It builds platforms — each one engineered around a different way to experience the same obsession."
+              title="THREE PLATFORMS. ONE STANDARD."
+            />
+            <div className="mt-14 grid gap-8 lg:grid-cols-3">
+              {platforms.map((platform, index) => (
+                <article className="border-t border-po-ink pt-5" key={platform.title}>
+                  <p className="text-xs font-black text-po-brand-ink">
+                    0{index + 1}
+                  </p>
+                  <MediaSlot
+                    aspectClassName="aspect-square"
+                    backgroundImagePath={"image" in platform ? platform.image : undefined}
+                    className="mt-6"
+                    kind="wireframe_media_block"
+                    label={`${platform.title} image`}
+                    note="Product platform image slot"
+                  />
+                  <h3 className="mt-7 font-display text-3xl uppercase leading-none text-po-ink sm:text-4xl">
+                    {platform.title}
+                  </h3>
+                  <p className="mt-3 text-lg font-semibold text-po-brand-ink">
+                    {platform.tagline}
+                  </p>
+                  <p className="mt-5 text-base leading-7 text-po-body">
+                    {platform.body}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </Scene>
+
+        <Scene
+          ariaLabelledBy="about-series-title"
+          className="po-gold-thread-inlay py-24 lg:py-32"
+          tone="contrast"
+        >
+          <div className="mx-auto w-full max-w-7xl">
+            <SectionIntro
+              contrast
+              eyebrow="THE SERIES"
+              id="about-series-title"
+              intro="Every platform runs the same three series, so you always know what you're holding and why it's built that way."
+              title="THREE SERIES. NO WEAK LINK."
+            />
+            <div className="mt-14 grid gap-10 lg:grid-cols-3">
+              {series.map((item, index) => (
+                <article className="border-t border-po-on-dark/30 pt-5" key={item.title}>
+                  <p className="text-xs font-black text-po-brand">0{index + 1}</p>
+                  <h3 className="mt-10 font-display text-3xl uppercase leading-none text-po-on-dark sm:text-4xl">
+                    {item.title}
+                  </h3>
+                  <p className="mt-5 text-base leading-7 text-po-on-dark-muted">
+                    {item.body}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </Scene>
+
+        <Scene
+          ariaLabelledBy="about-craft-title"
+          className="po-gold-thread-inlay py-24 lg:py-32"
+          tone="default"
+        >
+          <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(360px,0.7fr)] lg:items-center lg:gap-20">
+            <div>
+              <SectionIntro
+                eyebrow="HOW IT'S BUILT"
+                id="about-craft-title"
+                title="THE PRESIDENTIAL INFUSION SYSTEM™"
+              />
+              <p className="mt-7 max-w-3xl text-lg leading-8 text-po-body">
+                A Presidential Moon Rock isn't flower with something dusted on top. It's a system: premium flower, rich resin, and the finest kief brought together so the layers stop behaving like layers. Three components, one product, engineered to burn evenly and finish clean. That process has a name because it took years to earn one. Cannabis Evolved.
+              </p>
+            </div>
+            <MediaSlot
+              aspectClassName="aspect-[4/3]"
+              kind="wireframe_media_block"
+              label="Presidential craft image"
+              note="Craft image slot"
+            />
+          </div>
+        </Scene>
+
+        <Scene
+          ariaLabel="Presidential promise"
+          className="po-gold-thread-inlay py-20 sm:py-24 lg:py-28"
+          tone="contrast"
+        >
+          <blockquote className="mx-auto max-w-7xl font-display text-5xl uppercase leading-[0.9] text-po-brand sm:text-7xl lg:text-8xl">
+            "Presidential Doesn't Miss."
+          </blockquote>
+        </Scene>
+
+        <Scene
+          ariaLabelledBy="about-heritage-title"
+          className="po-gold-thread-inlay py-24 lg:py-32"
+          tone="default"
+        >
+          <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">
+            <SectionIntro
+              eyebrow="THE HERITAGE"
+              id="about-heritage-title"
+              title="TEN YEARS OF NOT SETTLING."
+            />
+            <div className="lg:pt-8">
+              <p className="max-w-3xl text-lg leading-8 text-po-body">
+                It started in Los Angeles, and it started early — early enough to help shape what infused cannabis became. Presidential built a reputation the slow way: one pack at a time, in a market that rewarded shortcuts. The full story is worth reading on its own.
+              </p>
+              <CtaLink className="mt-8" href="/our-story" variant="secondary">
+                Read the Presidential story
+              </CtaLink>
+            </div>
+          </div>
+        </Scene>
+
+        <Scene
+          ariaLabelledBy="about-culture-title"
+          className="po-gold-thread-inlay py-24 lg:py-32"
+          tone="contrast"
+        >
+          <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(360px,0.7fr)] lg:items-center lg:gap-20">
+            <div>
+              <SectionIntro
+                contrast
+                eyebrow="BEYOND THE PRODUCT"
+                id="about-culture-title"
+                title="A BRAND THAT NEVER STAYED IN ITS LANE."
+              />
+              <p className="mt-7 max-w-3xl text-lg leading-8 text-po-on-dark-muted">
+                Presidential has always treated experience as part of the product. In West Hollywood that meant Esco's, a New York–style pizzeria, and the Presidential Suite — a speakeasy-style lounge entered through an NYC subway car built inside the restaurant. A house this obsessed with how something feels was never going to stop at what's in the package.
+              </p>
+            </div>
+            <MediaSlot
+              aspectClassName="aspect-[4/3]"
+              kind="wireframe_media_block"
+              label="Presidential culture image"
+              note="Culture image slot"
+            />
+          </div>
+        </Scene>
+
+        <Scene
+          ariaLabelledBy="about-retail-title"
+          className="po-gold-thread-inlay py-24 lg:py-32"
+          tone="default"
+        >
+          <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">
+            <SectionIntro
+              eyebrow="OFFICIAL RETAIL"
+              id="about-retail-title"
+              title="FIND PRESIDENTIAL NEAR YOU."
+            />
+            <div className="lg:pt-8">
+              <p className="max-w-3xl text-lg leading-8 text-po-body">
+                Presidential doesn't sell here — it points you to the shelf. Drop your zip code and the store finder maps the nearest licensed retailers carrying authentic product, coast to coast. No carts, no checkout, no guesswork. Availability varies by retailer.
+              </p>
+              <CtaLink className="mt-8" href="/find-us" variant="primary">
+                Find Presidential near you
+              </CtaLink>
+            </div>
+          </div>
+        </Scene>
+
+        <Scene
+          ariaLabelledBy="about-closing-title"
+          className="po-gold-thread-inlay py-24 lg:py-32"
+          tone="contrast"
+        >
+          <div className="mx-auto w-full max-w-7xl">
+            <h2
+              className="font-display text-6xl uppercase leading-[0.86] text-po-brand sm:text-8xl lg:text-9xl"
+              id="about-closing-title"
+            >
+              EXPECT MORE.
+            </h2>
+            <p className="mt-7 text-xl text-po-on-dark sm:text-2xl">
+              Then. Now. &amp; Next.
+            </p>
+          </div>
+        </Scene>
+      </SceneStack>
+    </PageFrame>
+  );
+}
