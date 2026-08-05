@@ -141,12 +141,18 @@ export function buildLearnGuideSeoRoute(
     ...template,
     id: `learn-guide-${slug}`,
     path,
+    status: "approved",
+    indexability: "index_follow",
+    sitemap: "include",
     canonicalPath: path,
     title: `${guide.title.trim()} | Presidential Learn`,
     description: guide.intro.trim(),
     h1: guide.title.trim(),
     linksTo: ["/learn", "/moon-rocks", "/find-us"],
-    sourceArtifact: `${template.sourceArtifact}; approved Sanity learnGuide:${slug}`,
+    blocks: [],
+    sourceArtifact:
+      `${template.sourceArtifact}; approved Sanity learnGuide:${slug}; ` +
+      "6108-FABLE approved copy; 6110-FABLE CMS publication; 6111-SPUD owner route publication approval",
     notes:
       "Concrete learn-guide route materialized from the approved CMS record and the central publication gate.",
   };
