@@ -7,6 +7,7 @@ import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { CtaLink } from "../primitives/cta-link";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
+import { ParentLearnGuideLink } from "./learn-guide-discovery";
 
 type VapesBreadcrumb = {
   readonly name: string;
@@ -205,6 +206,8 @@ export function VapesPlatformShell({
             </div>
           </div>
         </Scene>
+
+        <ParentLearnGuideLink parentPath="/vapes" />
 
         <Scene
           ariaLabelledBy="vapes-details-title"

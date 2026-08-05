@@ -11,6 +11,7 @@ import { MediaSlot } from "../media/media-slot";
 import { CtaLink } from "../primitives/cta-link";
 import { SectionHeading } from "../primitives/section-heading";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
+import { LearnGuideIndex } from "./learn-guide-discovery";
 import { OurStoryPrerollGraphicsGrid } from "./our-story-preroll-graphics-grid";
 import { SupportRouteFoundationShell } from "./support-route-foundation-shell";
 
@@ -218,6 +219,8 @@ function EditorialRouteFoundationShell({
             </div>
           </div>
         </Scene>
+
+        {route.kind === "learn_hub" ? <LearnGuideIndex /> : null}
 
         {links.length > 0 ? (
           <Scene

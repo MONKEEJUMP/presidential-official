@@ -5,6 +5,7 @@ import { PageFrame } from "../layout/page-frame";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { CtaLink } from "../primitives/cta-link";
+import { ParentLearnGuideLink } from "./learn-guide-discovery";
 
 const platforms = [
   {
@@ -264,6 +265,8 @@ export function AboutCompanyShell() {
             />
           </div>
         </Scene>
+
+        <ParentLearnGuideLink parentPath="/about" />
 
         <Scene
           ariaLabel="Presidential promise"

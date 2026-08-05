@@ -20,6 +20,7 @@ import { SiteVideo, type SiteVideoSlug } from "../media/site-video";
 import { SeriesCatalogSection, seriesMetaFor } from "./catalog-grid-shell";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { FindUsCtaShell } from "./find-us-cta-shell";
+import { ParentLearnGuideLink } from "./learn-guide-discovery";
 
 // Filename-evidence film placement (9083-CODE video ruling, 2026-07-11):
 // "Blunt-Flavors" -> the flavor-first Silver series page.
@@ -159,6 +160,8 @@ export async function SeriesPageShell({
             </div>
           </Scene>
         )}
+
+        <ParentLearnGuideLink parentPath={definition.path} />
 
         <FindUsCtaShell className="po-gold-thread-inlay" compact />
         </SceneStack>

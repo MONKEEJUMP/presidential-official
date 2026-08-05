@@ -10,6 +10,10 @@ import { FindUsMiniBluntsGrid } from "@/components/presidential/modules/find-us-
 import { OurStoryPrerollGraphicsGrid } from "@/components/presidential/modules/our-story-preroll-graphics-grid";
 import { AboutCompanyShell } from "@/components/presidential/modules/about-company-shell";
 import { VapesPlatformShell } from "@/components/presidential/modules/vapes-platform-shell";
+import {
+  LearnGuideIndex,
+  ParentLearnGuideLink,
+} from "@/components/presidential/modules/learn-guide-discovery";
 import { readPublicRenderableSitePage } from "@/lib/cms";
 import {
   buildRouteShellBreadcrumbItems,
@@ -112,6 +116,8 @@ export async function PresidentialRouteShell({
             {route.id === "find-us" && findUsLocatorModuleIndex < 0 ? (
               <FindUsMiniBluntsGrid />
             ) : null}
+            {route.id === "learn" ? <LearnGuideIndex /> : null}
+            <ParentLearnGuideLink parentPath={route.path} />
           </SceneStack>
         </PageFrame>
       ) : route.id === "moon-rocks" ? (

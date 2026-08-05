@@ -5,6 +5,7 @@ import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { FindUsCtaShell } from "./find-us-cta-shell";
+import { ParentLearnGuideLink } from "./learn-guide-discovery";
 
 type PillarBreadcrumb = {
   readonly name: string;
@@ -174,6 +175,8 @@ export function PillarPlatformShell({
           </div>
           </Scene>
         ) : null}
+
+        <ParentLearnGuideLink parentPath={route.path} />
 
         {content.rollout.length > 0 ? (
           <Scene
