@@ -4,7 +4,9 @@ import {
   buildCatalogProductSeoRoute,
   buildLearnGuideSeoRoute,
   buildStateSeoRoute,
+  buildTermSeoRoute,
   getConcreteSeriesSeoRoutes,
+  type ConcreteTermPage,
 } from "./concrete-routes";
 import { getRouteById } from "./route-helpers";
 import type { SeoRouteRecord } from "./route-types";
@@ -118,6 +120,66 @@ const APPROVED_LEARN_GUIDE_ROUTE_ROWS = [
   },
 ] as const;
 
+export const APPROVED_TERM_ROUTE_ROWS = [
+  {
+    slug: "presidential-thc",
+    title: "Presidential THC — Infusion, Potency and Extract Science",
+    description:
+      "How Presidential builds infused cannabis: the distillate, the kief coat, the extracts behind each series, and what the numbers on the label actually mean. Adults 21+.",
+    h1: "Presidential THC",
+    keywords: [
+      "Presidential THC",
+      "infused cannabis science",
+      "THC potency",
+      "cannabis extract science",
+    ],
+    linksTo: [
+      "/presidential-blunts",
+      "/presidential-cannabis",
+      "/moon-rocks",
+      "/learn",
+    ],
+  },
+  {
+    slug: "presidential-blunts",
+    title: "Presidential Blunts — Tobacco-Free Infused Hemp Wraps",
+    description:
+      "Infused blunts and minis rolled in tobacco-free hemp. Sizes, strains, how they burn, and how to smoke one properly. Through licensed retailers, adults 21+.",
+    h1: "Presidential Blunts",
+    keywords: [
+      "Presidential blunts",
+      "tobacco-free hemp wraps",
+      "infused blunts",
+      "mini blunts",
+    ],
+    linksTo: [
+      "/presidential-thc",
+      "/presidential-cannabis",
+      "/moon-rocks",
+      "/find-us",
+    ],
+  },
+  {
+    slug: "presidential-cannabis",
+    title: "Presidential Cannabis — The Company, Los Angeles 2012",
+    description:
+      "Who Presidential is: founded in Los Angeles in 2012, wholesale only, 47 products across six series, sold through licensed retail in eight states.",
+    h1: "Presidential Cannabis",
+    keywords: [
+      "Presidential cannabis",
+      "Presidential company",
+      "Los Angeles cannabis brand",
+      "licensed Presidential retailers",
+    ],
+    linksTo: [
+      "/presidential-thc",
+      "/presidential-blunts",
+      "/about",
+      "/find-us",
+    ],
+  },
+] as const satisfies readonly ConcreteTermPage[];
+
 function getRequiredApprovedStaticRoute(id: string): SeoRouteRecord {
   const route = getRouteById(id);
 
@@ -170,6 +232,24 @@ export const APPROVED_PUBLIC_LEARN_GUIDE_ROUTES =
     ),
   );
 
+export const APPROVED_PUBLIC_TERM_ROUTES = APPROVED_TERM_ROUTE_ROWS.map(
+  buildTermSeoRoute,
+);
+
+export function getApprovedTermSeoRoute(
+  slug: ConcreteTermPage["slug"],
+): SeoRouteRecord {
+  const route = APPROVED_PUBLIC_TERM_ROUTES.find(
+    (candidate) => candidate.path === `/${slug}`,
+  );
+
+  if (!route) {
+    throw new Error(`Missing approved Presidential term route: ${slug}`);
+  }
+
+  return route;
+}
+
 export const APPROVED_PUBLIC_STATE_ROUTES = PRESIDENTIAL_STATES.map(
   buildStateSeoRoute,
 );
@@ -179,10 +259,11 @@ export const APPROVED_PUBLIC_SEO_ROUTES = [
   ...getConcreteSeriesSeoRoutes(),
   ...APPROVED_PUBLIC_PRODUCT_ROUTES,
   ...APPROVED_PUBLIC_LEARN_GUIDE_ROUTES,
+  ...APPROVED_PUBLIC_TERM_ROUTES,
   ...APPROVED_PUBLIC_STATE_ROUTES,
 ] as const satisfies readonly SeoRouteRecord[];
 
-export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 78 as const;
+export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 81 as const;
 
 if (APPROVED_PUBLIC_SEO_ROUTES.length !== APPROVED_PUBLIC_SEO_ROUTE_COUNT) {
   throw new Error(

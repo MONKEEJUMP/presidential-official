@@ -14,6 +14,9 @@ export const CONCRETE_SEO_DOCUMENT_PATHS = [
   "/find-us",
   "/contact",
   "/loyalty",
+  "/presidential-thc",
+  "/presidential-blunts",
+  "/presidential-cannabis",
 ] as const satisfies readonly SeoRoutePath[];
 
 export const CONCRETE_SEO_REDIRECT_PATHS = [
@@ -35,7 +38,7 @@ export const CONCRETE_SEO_SURFACE_COUNTS = {
   series: CONCRETE_SEO_SERIES_PATHS.length,
   products: 47,
   states: 8,
-  total: 73,
+  total: 76,
 } as const;
 
 type ConcreteCatalogItem = {
@@ -129,6 +132,44 @@ type ConcreteLearnGuide = {
   readonly title: string;
   readonly intro: string;
 };
+
+export type ConcreteTermPage = {
+  readonly slug: "presidential-thc" | "presidential-blunts" | "presidential-cannabis";
+  readonly title: string;
+  readonly description: string;
+  readonly h1: string;
+  readonly keywords: readonly string[];
+  readonly linksTo: readonly SeoRoutePath[];
+};
+
+export function buildTermSeoRoute(term: ConcreteTermPage): SeoRouteRecord {
+  const template = getRequiredRouteTemplate("about");
+  const path = `/${term.slug}` as const;
+
+  return {
+    ...template,
+    id: `presidential-term-${term.slug}`,
+    path,
+    kind: "brand_story",
+    status: "approved",
+    indexability: "index_follow",
+    sitemap: "include",
+    canonicalPath: path,
+    title: term.title,
+    description: term.description,
+    h1: term.h1,
+    keywords: term.keywords,
+    schema: ["WebPage", "BreadcrumbList"],
+    requiredData: ["owner-approved term-page copy", "approved Presidential imagery"],
+    requiredApprovals: [],
+    blocks: [],
+    linksTo: term.linksTo,
+    sourceArtifact:
+      "THREE-TERM-PAGES-DRAFT-2.md; 6112-SPUD owner route publication approval",
+    notes:
+      "Distinct informational brand-term route materialized through the same approved concrete-route pattern used by learn guides.",
+  };
+}
 
 export function buildLearnGuideSeoRoute(
   guide: ConcreteLearnGuide,

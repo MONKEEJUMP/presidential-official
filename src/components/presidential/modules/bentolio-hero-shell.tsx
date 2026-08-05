@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import {
   catalogItemSlug,
@@ -169,6 +170,43 @@ export async function BentolioHeroShell({
           <FindPresidentialScrollTile />
         </div>
 
+      </div>
+      <div className="po-teal-pinstripe mx-auto mt-6 w-full max-w-[1392px] overflow-hidden rounded-[20px] bg-[#0D0D0D] px-6 py-8 text-po-on-dark sm:px-10 lg:px-12">
+        <h2 className="font-display text-4xl uppercase leading-none text-po-brand sm:text-5xl">
+          Presidential
+        </h2>
+        <nav aria-label="Presidential term pages" className="mt-8">
+          {[
+            {
+              description: "what's inside it",
+              href: "/presidential-thc",
+              label: "THC",
+            },
+            {
+              description: "tobacco-free, infused",
+              href: "/presidential-blunts",
+              label: "BLUNTS",
+            },
+            {
+              description: "the company, since 2012",
+              href: "/presidential-cannabis",
+              label: "CANNABIS",
+            },
+          ].map((item) => (
+            <Link
+              className="po-gold-thread-inlay grid gap-1 py-6 transition-colors hover:text-po-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-po-brand sm:grid-cols-[minmax(9rem,0.3fr)_1fr] sm:items-baseline sm:gap-8"
+              href={item.href}
+              key={item.href}
+            >
+              <span className="font-display text-2xl uppercase sm:text-3xl">
+                {item.label}
+              </span>
+              <span className="text-lg text-po-on-dark-muted">
+                — {item.description}
+              </span>
+            </Link>
+          ))}
+        </nav>
       </div>
     </section>
     </>
