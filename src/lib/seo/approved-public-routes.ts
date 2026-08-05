@@ -2,6 +2,7 @@ import { PRESIDENTIAL_STATES } from "../find-us/states";
 
 import {
   buildCatalogProductSeoRoute,
+  buildLearnGuideSeoRoute,
   buildStateSeoRoute,
   getConcreteSeriesSeoRoutes,
 } from "./concrete-routes";
@@ -72,6 +73,51 @@ const APPROVED_PRODUCT_ROUTE_ROWS = [
   { slug: "thc-design-prerolls", name: "Presidential x THC Design Prerolls", series: "Presidential x THC Design" },
 ] as const;
 
+const APPROVED_LEARN_GUIDE_ROUTE_ROWS = [
+  {
+    slug: "what-are-moon-rocks",
+    title: "What Are Moon Rocks",
+    intro:
+      "Moon Rocks are a layered cannabis format: flower, concentrate, and kief working together in one product.",
+  },
+  {
+    slug: "what-is-live-resin",
+    title: "What Is Live Resin",
+    intro:
+      "Live resin is a cannabis extract made from plants that are frozen at harvest instead of dried and cured.",
+  },
+  {
+    slug: "what-is-live-rosin",
+    title: "What Is Live Rosin",
+    intro:
+      "Live rosin is a solventless cannabis concentrate made with ice water, heat, and pressure — no chemical solvents.",
+  },
+  {
+    slug: "what-are-liquid-diamonds",
+    title: "What Are Liquid Diamonds",
+    intro:
+      "Liquid diamonds combine THCa crystals with the terpene-rich sauce they formed in, gently warmed into a liquid.",
+  },
+  {
+    slug: "infusion-science",
+    title: "Infusion Science",
+    intro:
+      "Infusion is how concentrate and flower become one product instead of two ingredients sitting side by side.",
+  },
+  {
+    slug: "flavor-science",
+    title: "Flavor Science",
+    intro:
+      "Cannabis flavor comes from terpenes — aromatic compounds that vary strain to strain and fade when mishandled.",
+  },
+  {
+    slug: "different-extracts-need-different-heat",
+    title: "Different Extracts Need Different Heat",
+    intro:
+      "Live rosin, live resin, and liquid diamonds each perform at their own temperature — one heat setting cannot serve all three.",
+  },
+] as const;
+
 function getRequiredApprovedStaticRoute(id: string): SeoRouteRecord {
   const route = getRouteById(id);
 
@@ -113,6 +159,17 @@ export const APPROVED_PUBLIC_PRODUCT_ROUTES = APPROVED_PRODUCT_ROUTE_ROWS.map(
     ),
 );
 
+export const APPROVED_PUBLIC_LEARN_GUIDE_ROUTES =
+  APPROVED_LEARN_GUIDE_ROUTE_ROWS.map((row) =>
+    buildLearnGuideSeoRoute(
+      {
+        title: row.title,
+        intro: row.intro,
+      },
+      row.slug,
+    ),
+  );
+
 export const APPROVED_PUBLIC_STATE_ROUTES = PRESIDENTIAL_STATES.map(
   buildStateSeoRoute,
 );
@@ -121,10 +178,11 @@ export const APPROVED_PUBLIC_SEO_ROUTES = [
   ...APPROVED_PUBLIC_STATIC_ROUTES,
   ...getConcreteSeriesSeoRoutes(),
   ...APPROVED_PUBLIC_PRODUCT_ROUTES,
+  ...APPROVED_PUBLIC_LEARN_GUIDE_ROUTES,
   ...APPROVED_PUBLIC_STATE_ROUTES,
 ] as const satisfies readonly SeoRouteRecord[];
 
-export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 71 as const;
+export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 78 as const;
 
 if (APPROVED_PUBLIC_SEO_ROUTES.length !== APPROVED_PUBLIC_SEO_ROUTE_COUNT) {
   throw new Error(

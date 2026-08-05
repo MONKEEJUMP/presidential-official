@@ -15,6 +15,8 @@ import type {
 } from "./types";
 
 const OWNER_APPROVAL_SOURCE_ID = "source-owner-7734-publication-approval";
+const LEARN_GUIDE_APPROVAL_SOURCE_ID =
+  "source-owner-6111-learn-guide-publication-approval";
 const SHARED_BRAND_ASSET_ID = "asset-presidential-header-banner";
 const OWNER_APPROVAL_DATE = "2026-08-04";
 
@@ -34,6 +36,18 @@ function proofId(routeId: string): string {
   return recordId("proof-owner-approval", routeId);
 }
 
+function approvalSourceId(routeId: string): string {
+  return routeId.startsWith("learn-guide-")
+    ? LEARN_GUIDE_APPROVAL_SOURCE_ID
+    : OWNER_APPROVAL_SOURCE_ID;
+}
+
+function approvalSourceLocator(routeId: string): string {
+  return routeId.startsWith("learn-guide-")
+    ? "6111-SPUD owner learn guide publication directive dated 2026-08-04"
+    : "7734-SPUD owner directive dated 2026-08-04";
+}
+
 export const APPROVED_PUBLICATION_SOURCE_RECORDS = [
   {
     sourceId: OWNER_APPROVAL_SOURCE_ID,
@@ -48,6 +62,20 @@ export const APPROVED_PUBLICATION_SOURCE_RECORDS = [
     verifiedAt: OWNER_APPROVAL_DATE,
     notes:
       "The owner, CTO, and legal authority explicitly approved the current copy and ordered public indexing on the production domain.",
+  },
+  {
+    sourceId: LEARN_GUIDE_APPROVAL_SOURCE_ID,
+    sourceName: "6111-SPUD owner learn guide publication and indexing approval",
+    sourceType: "client_provided",
+    sourceLocator: "6111-SPUD owner learn guide publication directive dated 2026-08-04",
+    allowedUsage: "production",
+    confidentialityStatus: "public",
+    publisherOrProvider: "PAULIEWOOD",
+    confidenceScore: 100,
+    verifiedBy: "PAULIEWOOD",
+    verifiedAt: OWNER_APPROVAL_DATE,
+    notes:
+      "The owner explicitly approved the seven published Learn guides for production rendering, self-canonical indexing, and sitemap inclusion.",
   },
 ] as const satisfies readonly SourceRecord[];
 
@@ -145,11 +173,11 @@ export const APPROVED_PUBLICATION_PROOF_RECORDS =
   APPROVED_PUBLIC_SEO_ROUTES.map(
     (route): ProofRecord => ({
       proofId: proofId(route.id),
-      sourceId: OWNER_APPROVAL_SOURCE_ID,
+      sourceId: approvalSourceId(route.id),
       relatedRecordType: "route_publication",
       relatedRecordId: publicationId(route.id),
       evidenceType: "client_confirmation",
-      evidenceLocator: "7734-SPUD owner directive dated 2026-08-04",
+      evidenceLocator: approvalSourceLocator(route.id),
       proofSummary:
         `PAULIEWOOD approved the current ${route.path} copy, metadata, compliance posture, and public indexing as owner, CTO, and legal authority.`,
       proofLevel: "client_confirmed",
@@ -188,7 +216,7 @@ export const APPROVED_PUBLICATION_ROUTE_RECORDS =
       ),
       assetRecordIds: [SHARED_BRAND_ASSET_ID],
       claimRecordIds: [claimId(route.id)],
-      sourceRecordIds: [OWNER_APPROVAL_SOURCE_ID],
+      sourceRecordIds: [approvalSourceId(route.id)],
       proofRecordIds: [proofId(route.id)],
       complianceRecordIds: [proofId(route.id)],
       publicationStatus: "published",
