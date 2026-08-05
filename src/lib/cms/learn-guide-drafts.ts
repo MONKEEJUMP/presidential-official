@@ -2,14 +2,24 @@ import "server-only";
 
 import type { SanityLearnGuideRecord } from "./learn-guide";
 import { SITE_PAGE_MODULE_PROJECTION } from "./homepage";
-import { fetchSanityJsonWithTimeout } from "./sanity-read-client";
+import {
+  buildSanityReadQueryUrl,
+  fetchSanityJsonWithTimeout,
+  type SanityReadResult,
+} from "./sanity-read-client";
 
 const SANITY_PROJECT_ID = "4bl3xvem";
 const SANITY_DATASET = "production";
 const SANITY_API_VERSION = "v2025-02-19";
 const SANITY_DRAFT_READ_TOKEN_ENV = "SANITY_AUTH_TOKEN";
 const SANITY_DRAFT_READ_ENABLE_ENV = "PRESIDENTIAL_SANITY_DRAFT_READ_ENABLED";
+const SANITY_PUBLISHED_READ_ENABLE_ENV = "PRESIDENTIAL_SANITY_READ_CLIENT_ENABLED";
 const SANITY_QUERY_URL_LIMIT = 14000;
+
+type SanityPublishedQueryParam = string | number | boolean | null;
+type SanityPublishedQueryParams = Readonly<
+  Record<string, SanityPublishedQueryParam>
+>;
 
 const DRAFT_LEARN_GUIDE_SLUGS = new Set([
   "what-are-moon-rocks",
@@ -68,6 +78,74 @@ function isDraftReadEnabled(): boolean {
 
 function getDraftReadToken(): string {
   return process.env[SANITY_DRAFT_READ_TOKEN_ENV]?.trim() || "";
+}
+
+function isPublishedReadEnabled(): boolean {
+  return process.env[SANITY_PUBLISHED_READ_ENABLE_ENV] === "true";
+}
+
+function assertPublishedLearnGuideQuery(query: string): void {
+  if (!/_type\s*==\s*["']learnGuide["']/.test(query) || /drafts\./i.test(query)) {
+    throw new Error(
+      "Authenticated published Learn reads must target only published learnGuide documents.",
+    );
+  }
+}
+
+export async function readPrivatePublishedLearnGuideQuery<T>(
+  query: string,
+  params: SanityPublishedQueryParams = {},
+  init: Pick<RequestInit, "signal" | "next"> = {},
+): Promise<SanityReadResult<T>> {
+  if (!isPublishedReadEnabled()) {
+    return {
+      ok: false,
+      skipped: true,
+      reason: "sanity_read_disabled",
+    };
+  }
+
+  assertPublishedLearnGuideQuery(query);
+
+  const token = getDraftReadToken();
+  if (!token) {
+    return {
+      ok: false,
+      skipped: false,
+      reason: "sanity_read_failed",
+      status: 401,
+      statusText: "Published Learn read token is unavailable",
+    };
+  }
+
+  const { payload, response } = await fetchSanityJsonWithTimeout<T>(
+    buildSanityReadQueryUrl(query, params),
+    {
+      ...init,
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "force-cache",
+    },
+  );
+
+  if (!response.ok || !payload) {
+    return {
+      ok: false,
+      skipped: false,
+      reason: "sanity_read_failed",
+      status: response.status,
+      statusText: response.statusText,
+    };
+  }
+
+  return {
+    ok: true,
+    skipped: false,
+    result: payload.result,
+  };
 }
 
 function buildDraftLearnGuideQueryUrl(slug: string): URL {

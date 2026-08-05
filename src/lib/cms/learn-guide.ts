@@ -1,9 +1,7 @@
 import "server-only";
 
-import {
-  readPublishedSanity,
-  type SanityReadResult,
-} from "./sanity-read-client";
+import { readPrivatePublishedLearnGuideQuery } from "./learn-guide-drafts";
+import type { SanityReadResult } from "./sanity-read-client";
 import {
   SITE_PAGE_MODULE_PROJECTION,
   type SanityApprovalGate,
@@ -125,7 +123,7 @@ export function readPublishedLearnGuide(
   slug: string,
   init: Pick<RequestInit, "signal" | "next"> = {},
 ): Promise<SanityReadResult<SanityLearnGuideRecord | null>> {
-  return readPublishedSanity<SanityLearnGuideRecord | null>(
+  return readPrivatePublishedLearnGuideQuery<SanityLearnGuideRecord | null>(
     LEARN_GUIDE_QUERY,
     {slug},
     init,
@@ -170,7 +168,7 @@ export async function readPublicRenderableLearnGuideSlugs(
   }
 
   try {
-    const slugs = await readPublishedSanity<readonly SanityLearnGuideSlugRecord[]>(
+    const slugs = await readPrivatePublishedLearnGuideQuery<readonly SanityLearnGuideSlugRecord[]>(
       PUBLIC_LEARN_GUIDE_SLUGS_QUERY,
       {},
       init,
@@ -192,7 +190,7 @@ export async function readPublicRenderableLearnGuideSummaries(
   }
 
   try {
-    const summaries = await readPublishedSanity<readonly Partial<SanityLearnGuideSummaryRecord>[]>(
+    const summaries = await readPrivatePublishedLearnGuideQuery<readonly Partial<SanityLearnGuideSummaryRecord>[]>(
       PUBLIC_LEARN_GUIDE_SUMMARIES_QUERY,
       {},
       init,
