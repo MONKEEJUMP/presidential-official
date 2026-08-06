@@ -27,6 +27,14 @@ export function SiteHeader() {
   }, [pathname]);
 
   useEffect(() => {
+    if (pathname !== "/" || window.location.hash) {
+      return;
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [pathname]);
+
+  useEffect(() => {
     if (!navigationOpen) {
       return;
     }
