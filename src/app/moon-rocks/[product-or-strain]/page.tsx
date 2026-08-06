@@ -99,10 +99,7 @@ export default async function CatalogProductDetailPage({
     route,
     name: item.name,
     description: route.description,
-    imageUrls:
-      detail.mode === "public"
-        ? approvedImages.map((image) => image.assetUrl)
-        : [],
+    imageUrls: heroImage ? [heroImage.assetUrl] : [],
     publicRenderable: isRouteMetadataIndexable(route),
   });
 

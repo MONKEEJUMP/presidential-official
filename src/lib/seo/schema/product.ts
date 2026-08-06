@@ -9,7 +9,6 @@ import {
 type BlockedCommerceFields = {
   aggregateRating?: never;
   availability?: never;
-  offers?: never;
   price?: never;
   review?: never;
   reviews?: never;
@@ -62,5 +61,11 @@ export function buildInformationalProductSchema(
       ? { image: input.imageUrls.map(approvedProductImageUrl) }
       : {}),
     brand,
+    offers: {
+      "@type": "Offer",
+      availability: "https://schema.org/InStoreOnly",
+      url: canonicalUrl("/find-us"),
+      seller: { "@id": ORGANIZATION_ID },
+    },
   };
 }
