@@ -64,7 +64,7 @@ export function assertProductionMetadataUrl(url: string): string {
   }
 
   if (parsed.pathname === "/" && !parsed.search && !parsed.hash) {
-    return PRODUCTION_ORIGIN;
+    return `${PRODUCTION_ORIGIN}/`;
   }
 
   return parsed.toString();
