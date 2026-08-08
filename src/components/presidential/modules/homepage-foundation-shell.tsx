@@ -113,7 +113,7 @@ export function HomepageFoundationShell({
                 Coast to coast
               </p>
               <h1
-                className="mt-2 font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl"
+                className="mt-2 font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-5xl 2xl:text-6xl"
                 id="presidential-homepage-map"
               >
                 Find Presidential near you
@@ -124,11 +124,11 @@ export function HomepageFoundationShell({
               </p>
             </div>
 
-            <div className="w-full max-w-lg xl:max-w-xl 2xl:max-w-3xl">
+            <div className="w-full max-w-sm xl:max-w-md 2xl:max-w-xl">
               <FindUsNationwideVideo />
             </div>
 
-            <div className="w-full max-w-md xl:max-w-xl 2xl:max-w-3xl [&_p]:!mt-2 [&_p]:text-center [&_ul]:mx-auto">
+            <div className="w-full max-w-sm xl:max-w-md 2xl:max-w-xl [&_p]:!mt-2 [&_p]:text-center [&_ul]:mx-auto">
               <UsMapShell activeHref="#presidential-homepage-locator" />
             </div>
           </div>
