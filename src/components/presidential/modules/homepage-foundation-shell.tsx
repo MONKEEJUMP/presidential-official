@@ -103,7 +103,7 @@ export function HomepageFoundationShell({
 
         <Scene
           ariaLabelledBy="presidential-homepage-map"
-          className="po-gold-thread-inlay !py-3"
+          className="po-gold-thread-inlay !py-2"
           id="presidential-states-map"
           tone="contrast"
         >
