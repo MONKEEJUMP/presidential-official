@@ -103,32 +103,32 @@ export function HomepageFoundationShell({
 
         <Scene
           ariaLabelledBy="presidential-homepage-map"
-          className="po-gold-thread-inlay !py-12 lg:!py-16"
+          className="po-gold-thread-inlay !py-3"
           id="presidential-states-map"
           tone="contrast"
         >
-          <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-6 text-center lg:gap-8">
+          <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-3 text-center">
             <div className="flex w-full flex-col items-center">
               <p className="text-xs font-black uppercase text-po-brand">
                 Coast to coast
               </p>
               <h1
-                className="mt-3 font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl"
+                className="mt-2 font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl"
                 id="presidential-homepage-map"
               >
                 Find Presidential near you
               </h1>
-              <p className="mt-3 max-w-xl text-base leading-7 text-po-on-dark-muted">
+              <p className="mt-2 max-w-xl text-base leading-7 text-po-on-dark-muted">
                 Eight priority markets, each with its own Presidential
                 experience. Choose a state to step inside.
               </p>
             </div>
 
-            <div className="w-full max-w-6xl">
+            <div className="w-full max-w-lg xl:max-w-xl 2xl:max-w-3xl">
               <FindUsNationwideVideo />
             </div>
 
-            <div className="w-full max-w-5xl [&_p]:!mt-3 [&_p]:text-center [&_ul]:mx-auto">
+            <div className="w-full max-w-md xl:max-w-xl 2xl:max-w-3xl [&_p]:!mt-2 [&_p]:text-center [&_ul]:mx-auto">
               <UsMapShell activeHref="#presidential-homepage-locator" />
             </div>
           </div>
