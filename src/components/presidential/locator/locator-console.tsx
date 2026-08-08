@@ -21,6 +21,7 @@ type LocatorConsoleProps = {
   readonly displayMode?: "full" | "results-only";
   readonly heading?: string;
   readonly initialSearch?: LocatorInitialSearch;
+  readonly layout?: "default" | "stacked";
   readonly missionControlIntro?: boolean;
   readonly state?: LocatorStateCode;
 };
@@ -152,6 +153,7 @@ export function LocatorConsole({
   displayMode = "full",
   heading,
   initialSearch,
+  layout = "default",
   missionControlIntro = false,
   state,
 }: LocatorConsoleProps) {
@@ -303,7 +305,11 @@ export function LocatorConsole({
   }
 
   return (
-    <div className={className}>
+    <div
+      className={`${
+        layout === "stacked" ? styles.fullWidthFold : ""
+      } ${className}`.trim()}
+    >
       {missionControlIntro ? (
         <div className={styles.missionIntro}>
           <p className={styles.missionEyebrow}>Mission Control</p>
@@ -373,8 +379,6 @@ export function LocatorConsole({
               Use My Location
             </button>
           </div>
-
-          <p className={styles.repeatCta}>ENTER YOUR ZIP CODE HERE</p>
 
           <p aria-live="polite" className={styles.message} id={messageId}>
             {message}

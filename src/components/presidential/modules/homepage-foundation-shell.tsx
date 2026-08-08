@@ -8,9 +8,13 @@ import { PageFrame } from "../layout/page-frame";
 import { LocatorConsole } from "../locator/locator-console";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
+import { FindUsNationwideVideo } from "../media/find-us-nationwide-video";
 import { SiteVideo } from "../media/site-video";
 import { CtaLink } from "../primitives/cta-link";
-import { BentolioHeroShell } from "./bentolio-hero-shell";
+import {
+  BentolioHeroShell,
+  HomepageSpinningCrestFold,
+} from "./bentolio-hero-shell";
 import { BluntsGraphicsGrid } from "./blunts-graphics-grid";
 import { FindUsCtaShell } from "./find-us-cta-shell";
 import { UsMapShell } from "./us-map-shell";
@@ -95,17 +99,7 @@ export function HomepageFoundationShell({
   return (
     <PageFrame className={`po-home-canvas-${HOMEPAGE_CANVAS_TONE}`}>
       <SceneStack>
-        <BentolioHeroShell route={route} />
-
-        <section
-          aria-label="Find a dispensary"
-          className="po-gold-thread-inlay bg-po-ink text-po-on-dark"
-          id="presidential-homepage-locator"
-        >
-          <div className="mx-auto w-full max-w-7xl px-[clamp(1.25rem,4vw,4rem)] py-[clamp(2rem,4vw,3.5rem)]">
-            <LocatorConsole initialSearch={locatorInitialSearch} />
-          </div>
-        </section>
+        <HomepageSpinningCrestFold />
 
         <Scene
           ariaLabelledBy="presidential-homepage-map"
@@ -113,32 +107,47 @@ export function HomepageFoundationShell({
           id="presidential-states-map"
           tone="contrast"
         >
-          <div className="mx-auto grid w-full max-w-7xl gap-14 lg:grid-cols-[minmax(0,0.7fr)_minmax(420px,0.8fr)] lg:items-center lg:gap-20">
-            <div>
+          <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-12 text-center lg:gap-16">
+            <div className="flex w-full flex-col items-center">
               <p className="text-xs font-black uppercase text-po-brand">
                 Coast to coast
               </p>
-              <h2
+              <h1
                 className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl"
                 id="presidential-homepage-map"
               >
                 Find Presidential near you
-              </h2>
+              </h1>
               <p className="mt-6 max-w-xl text-base leading-7 text-po-on-dark-muted">
                 Eight priority markets, each with its own Presidential
                 experience. Choose a state to step inside.
               </p>
-              <div className="mt-8 max-w-sm overflow-hidden border border-po-on-dark/20">
-                <SiteVideo
-                  className="aspect-video w-full object-cover"
-                  label="Presidential nationwide film loop"
-                  slug="nationwide-map"
-                />
-              </div>
             </div>
-            <UsMapShell />
+
+            <div className="w-full max-w-6xl">
+              <FindUsNationwideVideo />
+            </div>
+
+            <div className="w-full max-w-5xl [&_p]:text-center [&_ul]:mx-auto">
+              <UsMapShell />
+            </div>
           </div>
         </Scene>
+
+        <section
+          aria-label="Find a dispensary"
+          className="po-gold-thread-inlay bg-po-ink text-po-on-dark"
+          id="presidential-homepage-locator"
+        >
+          <div className="mx-auto w-full max-w-7xl px-[clamp(1.25rem,4vw,4rem)] py-[clamp(2rem,4vw,3.5rem)]">
+            <LocatorConsole
+              initialSearch={locatorInitialSearch}
+              layout="stacked"
+            />
+          </div>
+        </section>
+
+        <BentolioHeroShell route={route} />
 
         <Scene
           ariaLabelledBy="presidential-expect-more"

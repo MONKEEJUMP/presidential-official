@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import {
@@ -10,6 +9,7 @@ import {
 import { GEM_PRODUCTS } from "@/lib/gems/gems-manifest";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
+import { CrestSpinningVideo } from "../media/crest-spinning-video";
 import { SiteVideo } from "../media/site-video";
 import { FindPresidentialScrollTile } from "./find-presidential-scroll-tile";
 import { GemTicker } from "./gem-ticker";
@@ -42,8 +42,6 @@ const THEATER_SERIES = [
   },
 ] as const;
 
-const CREST_SPINNING_POSTER = "/media/posters/crest-spinning.jpg";
-
 async function readHeroCatalogItems(): Promise<readonly SanityCatalogItem[]> {
 
   const publicCatalog = await readPublicRenderableCatalogItems("/moon-rocks", {
@@ -55,6 +53,19 @@ async function readHeroCatalogItems(): Promise<readonly SanityCatalogItem[]> {
     next: { tags: ["sanity-catalog-moon-rocks-drafts"] },
   });
   return draftCatalog.ok ? draftCatalog.items : [];
+}
+
+export function HomepageSpinningCrestFold() {
+  return (
+    <section
+      aria-label="Presidential crest"
+      className="po-home-canvas-surface flex min-h-[calc(100svh-4.5rem)] w-full items-center px-6 py-6 sm:px-10 lg:px-16"
+    >
+      <div className="po-teal-pinstripe relative mx-auto min-h-[calc(100svh-7.5rem)] w-full max-w-[1392px] overflow-hidden rounded-[20px] bg-[#0D0D0D]">
+        <CrestSpinningVideo />
+      </div>
+    </section>
+  );
 }
 
 function toTheaterSeries(
@@ -96,51 +107,17 @@ export async function BentolioHeroShell({
 
   return (
     <>
-    <GemTicker />
-    <section
-      aria-labelledby="presidential-homepage-primary"
-      className="po-home-canvas-surface p-6"
-    >
-      <div className="mx-auto grid w-full max-w-[1392px] grid-cols-1 gap-6 lg:aspect-[1392/854] lg:grid-cols-[minmax(0,565fr)_minmax(0,330fr)_minmax(0,447fr)] lg:grid-rows-[101fr_354fr_226fr_101fr]">
-        {/* CREST tile — owner-supplied spinning crest film, nothing else. */}
-        <div className="po-teal-pinstripe relative min-h-[320px] overflow-hidden rounded-[20px] bg-[#0D0D0D] lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:min-h-0">
-          <Image
-            alt=""
-            aria-hidden="true"
-            className="object-cover"
-            fill
-            priority
-            sizes="(min-width: 1024px) 41vw, 100vw"
-            src={CREST_SPINNING_POSTER}
-          />
-          <video
-            aria-hidden="true"
-            autoPlay
-            className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
-            loop
-            muted
-            playsInline
-            poster={CREST_SPINNING_POSTER}
-            preload="metadata"
-          >
-            <source
-              media="(prefers-reduced-motion: no-preference)"
-              src="/media/backdrops/crest-spinning.webm"
-              type="video/webm"
-            />
-            <source
-              media="(prefers-reduced-motion: no-preference)"
-              src="/media/backdrops/crest-spinning.mp4"
-              type="video/mp4"
-            />
-          </video>
-          <h1 className="sr-only" id="presidential-homepage-primary">
-            {route.h1}
-          </h1>
-        </div>
-
+      <GemTicker />
+      <section
+        aria-labelledby="presidential-homepage-primary"
+        className="po-home-canvas-surface p-6"
+      >
+        <h2 className="sr-only" id="presidential-homepage-primary">
+          {route.h1}
+        </h2>
+        <div className="mx-auto grid w-full max-w-[1392px] grid-cols-1 gap-6 lg:aspect-[1392/854] lg:grid-cols-[minmax(0,565fr)_minmax(0,330fr)_minmax(0,447fr)] lg:grid-rows-[101fr_354fr_226fr_101fr]">
         {/* PORTRAIT tile — product film loop */}
-        <div className="overflow-hidden rounded-[20px] bg-po-ink lg:col-start-2 lg:row-span-2 lg:row-start-1">
+        <div className="overflow-hidden rounded-[20px] bg-po-ink lg:col-span-2 lg:col-start-1 lg:row-span-2 lg:row-start-1">
           <SiteVideo
             className="aspect-[330/476] w-full object-cover lg:aspect-auto lg:h-full"
             label="Presidential strain packaging film, portrait loop"
@@ -170,8 +147,8 @@ export async function BentolioHeroShell({
           <FindPresidentialScrollTile />
         </div>
 
-      </div>
-      <div className="po-teal-pinstripe mx-auto mt-6 w-full max-w-[1392px] overflow-hidden rounded-[20px] bg-[#0D0D0D] px-6 py-8 text-po-on-dark sm:px-10 lg:px-12">
+        </div>
+        <div className="po-teal-pinstripe mx-auto mt-6 w-full max-w-[1392px] overflow-hidden rounded-[20px] bg-[#0D0D0D] px-6 py-8 text-po-on-dark sm:px-10 lg:px-12">
         <h2 className="font-display text-4xl uppercase leading-none text-po-brand sm:text-5xl">
           Presidential
         </h2>
@@ -207,8 +184,8 @@ export async function BentolioHeroShell({
             </Link>
           ))}
         </nav>
-      </div>
-    </section>
+        </div>
+      </section>
     </>
   );
 }

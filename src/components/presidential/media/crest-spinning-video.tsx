@@ -20,7 +20,7 @@ export function CrestSpinningVideo() {
         className="object-cover"
         fill
         priority
-        sizes="(min-width: 1024px) 41vw, 100vw"
+        sizes="(min-width: 1536px) 1392px, 100vw"
         src={CREST_SPINNING_POSTER}
       />
 

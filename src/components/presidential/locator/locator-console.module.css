@@ -55,8 +55,7 @@
   container-type: inline-size;
 }
 
-.searchForm label,
-.repeatCta {
+.searchForm label {
   display: block;
   color: var(--po-color-brand);
   font-family: var(--po-font-display);
@@ -66,11 +65,6 @@
 
 .searchForm label {
   margin-bottom: 0.8rem;
-}
-
-.repeatCta {
-  margin-top: 0.8rem;
-  text-align: left;
 }
 
 .inputRow {
@@ -314,6 +308,19 @@
     min-width: 0;
     padding-inline: 0.5rem;
   }
+}
+
+.fullWidthFold .controlGrid,
+.fullWidthFold .inputRow {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.fullWidthFold .inputRow button {
+  width: 100%;
+}
+
+.fullWidthFold .readout {
+  min-height: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
