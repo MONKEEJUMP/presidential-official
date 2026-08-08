@@ -17,7 +17,9 @@ import type {
 import { PRESIDENTIAL_NAME, PRODUCTION_ORIGIN } from "./schema/constants";
 import type { SeoRouteRecord } from "./route-types";
 
-export const METADATA_BASE = new URL(PRODUCTION_ORIGIN);
+// Route metadata emits absolute URLs; omitting a base prevents Next.js from
+// collapsing the homepage's canonical trailing slash.
+export const METADATA_BASE = null;
 export const OPEN_GRAPH_SITE_NAME = PRESIDENTIAL_NAME;
 export const TWITTER_CARD_TYPE = "summary" as const;
 
