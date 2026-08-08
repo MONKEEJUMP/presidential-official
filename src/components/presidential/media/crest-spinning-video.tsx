@@ -13,11 +13,14 @@ export function CrestSpinningVideo() {
   const shouldPlayVideo = canStream && !videoFailed;
 
   return (
-    <div className="absolute inset-0" ref={mountRef}>
+    <div
+      className="absolute inset-[clamp(1rem,4vmin,3rem)]"
+      ref={mountRef}
+    >
       <Image
         alt=""
         aria-hidden="true"
-        className="object-cover"
+        className="object-contain"
         fill
         priority
         sizes="(min-width: 1536px) 1392px, 100vw"
@@ -28,7 +31,7 @@ export function CrestSpinningVideo() {
         <video
           aria-hidden="true"
           autoPlay
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-contain"
           loop
           muted
           onError={() => setVideoFailed(true)}

@@ -61,7 +61,7 @@ export function HomepageSpinningCrestFold() {
       aria-label="Presidential crest"
       className="po-home-canvas-surface flex min-h-[calc(100svh-4.5rem)] w-full items-center px-6 py-6 sm:px-10 lg:px-16"
     >
-      <div className="po-teal-pinstripe relative mx-auto min-h-[calc(100svh-7.5rem)] w-full max-w-[1392px] overflow-hidden rounded-[20px] bg-[#0D0D0D]">
+      <div className="po-teal-pinstripe relative mx-auto aspect-square w-full max-w-[min(1392px,calc(100svh-7.5rem))] overflow-hidden rounded-[20px] bg-[#0D0D0D]">
         <CrestSpinningVideo />
       </div>
     </section>
