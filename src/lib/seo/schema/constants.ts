@@ -26,7 +26,7 @@ export function canonicalUrl(path = "/"): string {
 
   const normalized = path.startsWith("/") ? path : `/${path}`;
   if (normalized === "/") {
-    return PRODUCTION_ORIGIN;
+    return `${PRODUCTION_ORIGIN}/`;
   }
 
   const parsed = new URL(normalized, PRODUCTION_ORIGIN);
