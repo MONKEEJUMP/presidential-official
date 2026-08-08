@@ -329,7 +329,9 @@ export function LocatorConsole({
       >
         <div className={styles.console}>
           <form className={styles.searchForm} onSubmit={submitZip}>
-            <label htmlFor={zipInputId}>ENTER YOUR ZIP CODE HERE</label>
+            <label className={styles.zipLabel} htmlFor={zipInputId}>
+              ENTER YOUR ZIP CODE HERE
+            </label>
             <div className={styles.inputRow}>
               <input
                 aria-describedby={messageId}
@@ -379,6 +381,10 @@ export function LocatorConsole({
               Use My Location
             </button>
           </div>
+
+          <p className={`${styles.zipLabel} ${styles.zipLabelBottom}`}>
+            ENTER YOUR ZIP CODE HERE
+          </p>
 
           <p aria-live="polite" className={styles.message} id={messageId}>
             {message}

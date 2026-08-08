@@ -34,7 +34,11 @@ const ROW_START = [
   "row-start-5", "row-start-6", "row-start-7", "row-start-8",
 ] as const;
 
-export function UsMapShell() {
+type UsMapShellProps = {
+  readonly activeHref?: string;
+};
+
+export function UsMapShell({ activeHref }: UsMapShellProps = {}) {
   const activeByCode = new Map(
     PRESIDENTIAL_STATES.map((state) => [state.code, state]),
   );
@@ -56,7 +60,7 @@ export function UsMapShell() {
               {active ? (
                 <Link
                   className="po-map-tile po-map-tile-active"
-                  href={`/find-us/${active.slug}`}
+                  href={activeHref ?? `/find-us/${active.slug}`}
                 >
                   <span aria-hidden="true">{code}</span>
                   <span className="sr-only">

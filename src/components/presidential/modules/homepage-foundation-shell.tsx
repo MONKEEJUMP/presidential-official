@@ -103,22 +103,22 @@ export function HomepageFoundationShell({
 
         <Scene
           ariaLabelledBy="presidential-homepage-map"
-          className="po-gold-thread-inlay py-24 lg:py-32"
+          className="po-gold-thread-inlay !py-12 lg:!py-16"
           id="presidential-states-map"
           tone="contrast"
         >
-          <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-12 text-center lg:gap-16">
+          <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-6 text-center lg:gap-8">
             <div className="flex w-full flex-col items-center">
               <p className="text-xs font-black uppercase text-po-brand">
                 Coast to coast
               </p>
               <h1
-                className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl"
+                className="mt-3 font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl"
                 id="presidential-homepage-map"
               >
                 Find Presidential near you
               </h1>
-              <p className="mt-6 max-w-xl text-base leading-7 text-po-on-dark-muted">
+              <p className="mt-3 max-w-xl text-base leading-7 text-po-on-dark-muted">
                 Eight priority markets, each with its own Presidential
                 experience. Choose a state to step inside.
               </p>
@@ -128,18 +128,18 @@ export function HomepageFoundationShell({
               <FindUsNationwideVideo />
             </div>
 
-            <div className="w-full max-w-5xl [&_p]:text-center [&_ul]:mx-auto">
-              <UsMapShell />
+            <div className="w-full max-w-5xl [&_p]:!mt-3 [&_p]:text-center [&_ul]:mx-auto">
+              <UsMapShell activeHref="#presidential-homepage-locator" />
             </div>
           </div>
         </Scene>
 
         <section
           aria-label="Find a dispensary"
-          className="po-gold-thread-inlay bg-po-ink text-po-on-dark"
+          className="po-gold-thread-inlay scroll-mt-24 bg-po-ink text-po-on-dark"
           id="presidential-homepage-locator"
         >
-          <div className="mx-auto w-full max-w-7xl px-[clamp(1.25rem,4vw,4rem)] py-[clamp(2rem,4vw,3.5rem)]">
+          <div className="mx-auto w-full max-w-7xl px-[clamp(1.25rem,4vw,4rem)] py-[clamp(1rem,2vw,1.75rem)]">
             <LocatorConsole
               initialSearch={locatorInitialSearch}
               layout="stacked"
@@ -151,11 +151,11 @@ export function HomepageFoundationShell({
 
         <Scene
           ariaLabelledBy="presidential-expect-more"
-          className="po-gold-thread-inlay po-home-canvas-surface py-24 lg:py-32"
+          className="po-gold-thread-inlay po-home-canvas-surface !py-12 lg:!py-16"
           tone="default"
         >
           <div className="mx-auto w-full max-w-7xl">
-            <div className="grid gap-12 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">
+            <div className="grid gap-6 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-10">
               <div>
                 <h2
                   className="po-home-canvas-copy font-display text-4xl uppercase leading-[0.92] sm:text-6xl"
@@ -163,7 +163,7 @@ export function HomepageFoundationShell({
                 >
                   Expect more.
                 </h2>
-                <p className="po-home-canvas-muted mt-6 max-w-md text-base leading-7">
+                <p className="po-home-canvas-muted mt-3 max-w-md text-base leading-7">
                   Cannabis Deserves Better — so we built it. For over a decade,
                   Presidential has created cannabis engineered for better flavor,
                   greater consistency, and premium experiences. More flavor. More
@@ -172,7 +172,7 @@ export function HomepageFoundationShell({
                   home.
                 </p>
               </div>
-              <div className="grid gap-10 sm:grid-cols-3">
+              <div className="grid gap-5 sm:grid-cols-3">
                 {proofPoints.map((point, index) => (
                   <article
                     className="po-home-canvas-rule flex h-full flex-col border-t pt-5"
@@ -181,13 +181,13 @@ export function HomepageFoundationShell({
                     <p className="po-home-canvas-accent text-xs font-black">
                       0{index + 1}
                     </p>
-                    <h3 className="po-home-canvas-copy mt-10 text-xl font-semibold leading-snug">
+                    <h3 className="po-home-canvas-copy mt-5 text-xl font-semibold leading-snug">
                       {point.title}
                     </h3>
                     <p className="po-home-canvas-muted mt-3 text-sm leading-6">
                       {point.body}
                     </p>
-                    <div className="mt-auto pt-6">
+                    <div className="mt-auto pt-3">
                       <Link
                         aria-label={`View ${point.image.alt.replace(" product graphic", "")}`}
                         className="relative block aspect-square cursor-pointer overflow-hidden rounded-[20px] transition-transform duration-200 hover:-translate-y-1 focus-visible:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:focus-visible:transform-none"
@@ -211,7 +211,7 @@ export function HomepageFoundationShell({
 
         <Scene
           ariaLabelledBy="presidential-then-now-next"
-          className="po-gold-thread-inlay py-24 lg:py-32"
+          className="po-gold-thread-inlay !py-12 lg:!py-16"
           tone="contrast"
         >
           <div className="mx-auto w-full max-w-7xl">
@@ -222,11 +222,11 @@ export function HomepageFoundationShell({
               <span className="block text-po-brand">World&#39;s Strongest</span>
               <span className="mt-2 block">Then. Now. &amp; Next.</span>
             </h2>
-            <div className="po-gold-thread-inlay mt-16 grid md:grid-cols-3">
+            <div className="po-gold-thread-inlay mt-8 grid md:grid-cols-3">
               {brandChapters.map((chapter, index) => (
                 <article
                   className={[
-                    "py-8 md:px-8 md:first:pl-0 md:last:pr-0",
+                    "py-4 md:px-8 md:first:pl-0 md:last:pr-0",
                     index > 0 ? "po-gold-thread-inlay-vertical" : "",
                   ]
                     .filter(Boolean)
@@ -239,7 +239,7 @@ export function HomepageFoundationShell({
                     </h3>
                     <span className="text-xs font-black text-po-brand">0{index + 1}</span>
                   </div>
-                  <p className="mt-8 max-w-sm text-sm leading-6 text-po-on-dark-muted">
+                  <p className="mt-4 max-w-sm text-sm leading-6 text-po-on-dark-muted">
                     {chapter.body}
                   </p>
                 </article>
@@ -248,27 +248,29 @@ export function HomepageFoundationShell({
           </div>
         </Scene>
 
-        <BluntsGraphicsGrid />
+        <div className="[&>section]:!pb-8 lg:[&>section]:!pb-10">
+          <BluntsGraphicsGrid />
+        </div>
 
         <Scene
           ariaLabelledBy="presidential-act-moon-rocks"
-          className="po-gold-thread-inlay po-home-canvas-surface py-24 lg:py-32"
+          className="po-gold-thread-inlay po-home-canvas-surface !py-12 lg:!py-16"
           tone="default"
         >
-          <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,0.78fr)_minmax(420px,1fr)] lg:items-center lg:gap-20">
+          <div className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[minmax(0,0.78fr)_minmax(420px,1fr)] lg:items-center lg:gap-10">
             <div className="max-w-xl">
               <p className="po-home-canvas-accent text-sm font-bold">Moon Rocks™</p>
               <h2
-                className="po-home-canvas-copy mt-5 font-display text-4xl uppercase leading-[0.92] sm:text-6xl"
+                className="po-home-canvas-copy mt-3 font-display text-4xl uppercase leading-[0.92] sm:text-6xl"
                 id="presidential-act-moon-rocks"
               >
                 The Highest Form Of Cannabis.
               </h2>
-              <p className="po-home-canvas-muted mt-6 text-base leading-7">
+              <p className="po-home-canvas-muted mt-3 text-base leading-7">
                 The flagship Presidential platform for Moon Rocks, infused
                 pre-rolls, blunts, education, and retail discovery.
               </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                 <CtaLink href="/moon-rocks" variant="primary">
                   Explore Moon Rocks
                 </CtaLink>
@@ -294,7 +296,7 @@ export function HomepageFoundationShell({
           {secondaryPlatforms.map((platform, index) => (
             <article
               className={[
-                "flex min-h-[28rem] flex-col justify-between gap-16 px-6 py-16 sm:px-10 lg:px-16 lg:py-20",
+                "flex min-h-[20rem] flex-col justify-between gap-8 px-6 py-8 sm:px-10 lg:px-16 lg:py-10",
                 index > 0 ? "po-gold-thread-inlay-vertical" : "",
                 platform.tone === "brand"
                   ? "bg-po-brand text-po-ink"
@@ -307,10 +309,10 @@ export function HomepageFoundationShell({
                 <h2 className="font-display text-5xl uppercase leading-[0.9] sm:text-6xl">
                   {platform.title}
                 </h2>
-                <p className="mt-6 max-w-md text-base leading-7 text-po-body">
+                <p className="mt-3 max-w-md text-base leading-7 text-po-body">
                   {platform.body}
                 </p>
-                <div className="mt-8">
+                <div className="mt-4">
                   <CtaLink
                     className="border-po-ink text-po-ink hover:border-po-ink hover:bg-po-ink hover:text-po-on-dark"
                     href={platform.href}
@@ -325,7 +327,7 @@ export function HomepageFoundationShell({
         </section>
 
         <div className="po-gold-thread-inlay">
-          <FindUsCtaShell />
+          <FindUsCtaShell className="!py-12 lg:!py-16" />
         </div>
       </SceneStack>
     </PageFrame>

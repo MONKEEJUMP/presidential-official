@@ -59,7 +59,7 @@ export function HomepageSpinningCrestFold() {
   return (
     <section
       aria-label="Presidential crest"
-      className="po-home-canvas-surface flex min-h-[calc(100svh-4.5rem)] w-full items-center px-6 py-6 sm:px-10 lg:px-16"
+      className="po-home-canvas-surface flex w-full items-center px-6 py-3 sm:px-10 lg:px-16"
     >
       <div className="po-teal-pinstripe relative mx-auto aspect-square w-full max-w-[min(800px,calc(100svh-7.5rem))] overflow-hidden rounded-[20px] bg-[#0D0D0D]">
         <CrestSpinningVideo />
@@ -110,12 +110,12 @@ export async function BentolioHeroShell({
       <GemTicker />
       <section
         aria-labelledby="presidential-homepage-primary"
-        className="po-home-canvas-surface p-6"
+        className="po-home-canvas-surface px-6 py-3"
       >
         <h2 className="sr-only" id="presidential-homepage-primary">
           {route.h1}
         </h2>
-        <div className="mx-auto grid w-full max-w-[1392px] grid-cols-1 gap-6 lg:aspect-[1392/854] lg:grid-cols-[minmax(0,565fr)_minmax(0,330fr)_minmax(0,447fr)] lg:grid-rows-[101fr_354fr_226fr_101fr]">
+        <div className="mx-auto grid w-full max-w-[1392px] grid-cols-1 gap-x-6 gap-y-3 lg:aspect-[1392/854] lg:grid-cols-[minmax(0,565fr)_minmax(0,330fr)_minmax(0,447fr)] lg:grid-rows-[101fr_354fr_226fr_101fr]">
         {/* PORTRAIT tile — product film loop */}
         <div className="overflow-hidden rounded-[20px] bg-po-ink lg:col-span-2 lg:col-start-1 lg:row-span-2 lg:row-start-1">
           <SiteVideo
@@ -130,7 +130,7 @@ export async function BentolioHeroShell({
         <MoonRocksSeriesTheater series={theaterSeries} />
 
         {/* ABOUT + CONTACT — the template's equal 448/448 bottom-left split */}
-        <div className="grid grid-cols-1 gap-6 lg:col-span-2 lg:col-start-1 lg:row-span-2 lg:row-start-3 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-3 lg:col-span-2 lg:col-start-1 lg:row-span-2 lg:row-start-3 lg:grid-cols-2">
           {/* STATEMENT tile — owner-approved visible statement copy */}
           <div className="flex min-h-[240px] items-center justify-center rounded-[20px] bg-po-brand px-3 py-6 [container-type:inline-size] lg:min-h-0">
             <p
@@ -148,11 +148,11 @@ export async function BentolioHeroShell({
         </div>
 
         </div>
-        <div className="po-teal-pinstripe mx-auto mt-6 w-full max-w-[1392px] overflow-hidden rounded-[20px] bg-[#0D0D0D] px-6 py-8 text-po-on-dark sm:px-10 lg:px-12">
+        <div className="po-teal-pinstripe mx-auto mt-3 w-full max-w-[1392px] overflow-hidden rounded-[20px] bg-[#0D0D0D] px-6 py-4 text-po-on-dark sm:px-10 lg:px-12">
         <h2 className="font-display text-4xl uppercase leading-none text-po-brand sm:text-5xl">
           Presidential
         </h2>
-        <nav aria-label="Presidential term pages" className="mt-8">
+        <nav aria-label="Presidential term pages" className="mt-4">
           {[
             {
               description: "what's inside it",
@@ -171,7 +171,7 @@ export async function BentolioHeroShell({
             },
           ].map((item) => (
             <Link
-              className="po-gold-thread-inlay grid gap-1 py-6 transition-colors hover:text-po-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-po-brand sm:grid-cols-[minmax(9rem,0.3fr)_1fr] sm:items-baseline sm:gap-8"
+              className="po-gold-thread-inlay grid gap-1 py-3 transition-colors hover:text-po-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-po-brand sm:grid-cols-[minmax(9rem,0.3fr)_1fr] sm:items-baseline sm:gap-8"
               href={item.href}
               key={item.href}
             >

@@ -55,16 +55,20 @@
   container-type: inline-size;
 }
 
-.searchForm label {
+.zipLabel {
   display: block;
   color: var(--po-color-brand);
   font-family: var(--po-font-display);
-  font-size: 0.78rem;
+  font-size: 1.014rem;
   text-transform: uppercase;
 }
 
-.searchForm label {
+.searchForm .zipLabel {
   margin-bottom: 0.8rem;
+}
+
+.zipLabelBottom {
+  margin-top: 0.8rem;
 }
 
 .inputRow {
