@@ -60,6 +60,22 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      // Recover editorial backlink authority from the dead Wix homepage.
+      {
+        source: "/home-1",
+        destination: "/",
+        permanent: true,
+      },
+      // Recover the legacy Wix /shop backlink.
+      {
+        source: "/shop",
+        destination: "/",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
