@@ -3,8 +3,8 @@
 // each with a locked theme world and a themed state-name display face
 // (state-name headline ONLY; everything else stays Archivo Black + Inter).
 // PAULIEWOOD adds or removes a market by editing exactly one entry below.
-// Retailer data stays OFF everywhere: state pages are brand/theme experiences
-// until a verified retailer source exists (customer PII is never public).
+// Verified locator counts and searches render from the retailer database where
+// live records exist; the theme configuration below never stores retailer data.
 
 export type PresidentialStateTheme =
   | "golden-coast"

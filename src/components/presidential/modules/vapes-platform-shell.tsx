@@ -8,6 +8,7 @@ import { SceneStack } from "../layout/scene-stack";
 import { CtaLink } from "../primitives/cta-link";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { ParentLearnGuideLink } from "./learn-guide-discovery";
+import { RepoOwnedPageCopy } from "./repo-owned-page-copy";
 
 type VapesBreadcrumb = {
   readonly name: string;
@@ -135,6 +136,8 @@ export function VapesPlatformShell({
           ]}
           title={route.h1}
         />
+
+        <RepoOwnedPageCopy path="/vapes" />
 
         <Scene
           ariaLabelledBy="vapes-platforms-title"

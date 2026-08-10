@@ -21,6 +21,7 @@ import { SeriesCatalogSection, seriesMetaFor } from "./catalog-grid-shell";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { FindUsCtaShell } from "./find-us-cta-shell";
 import { ParentLearnGuideLink } from "./learn-guide-discovery";
+import { RepoOwnedPageCopy } from "./repo-owned-page-copy";
 
 // Filename-evidence film placement (9083-CODE video ruling, 2026-07-11):
 // "Blunt-Flavors" -> the flavor-first Silver series page.
@@ -72,6 +73,12 @@ export async function SeriesPageShell({
   const catalog = await readSeriesItems(definition);
   const film = SERIES_FILMS[seriesName];
   const jsonLdEntries = buildRouteShellJsonLd(route);
+  const repoCopyPath =
+    definition.slug === "rose-gold"
+      ? "/moon-rocks/rose-gold"
+      : definition.slug === "presidential-x-thc-design"
+        ? "/moon-rocks/presidential-x-thc-design"
+        : null;
 
   return (
     <>
@@ -123,6 +130,8 @@ export async function SeriesPageShell({
           supportingText={[meta.positioning, description]}
           title={title}
         />
+
+        {repoCopyPath ? <RepoOwnedPageCopy path={repoCopyPath} /> : null}
 
         {catalog.items.length > 0 ? (
           <Scene

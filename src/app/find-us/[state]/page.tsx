@@ -14,9 +14,8 @@ import {
 } from "@/lib/seo/schema";
 
 // 9083-CODE P4 (owner rulings, 2026-07-11): the eight priority-market state
-// pages render themed brand experiences. Everything else still 404s, no
-// retailer data is read anywhere, and every state page stays noindex until
-// per-route publication sign-off.
+// pages render themed brand experiences. Everything else still 404s; verified
+// locator counts/searches are read by StatePageShell where live records exist.
 
 type FindUsStatePageProps = {
   readonly params: Promise<{

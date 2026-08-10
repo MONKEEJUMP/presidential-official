@@ -22,6 +22,7 @@ import { SceneStack } from "../layout/scene-stack";
 import { CtaLink } from "../primitives/cta-link";
 import { SeriesSelectorShell } from "./catalog-grid-shell";
 import { FindUsCtaShell } from "./find-us-cta-shell";
+import { RepoOwnedPageCopy } from "./repo-owned-page-copy";
 
 type ThemeAtmosphere = {
   readonly base: string;
@@ -158,6 +159,14 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
     readCatalogForState(),
     stateCode ? readLocatorStateCount(stateCode) : Promise.resolve(null),
   ]);
+  const repoCopyPath =
+    state.slug === "az"
+      ? "/find-us/az"
+      : state.slug === "ny"
+        ? "/find-us/ny"
+        : state.slug === "fl"
+          ? "/find-us/fl"
+          : null;
 
   return (
     <PageFrame>
@@ -259,38 +268,42 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
           />
         ) : null}
 
-        <Scene
-          ariaLabelledBy="presidential-state-official"
-          className="po-gold-thread-inlay py-20 lg:py-28"
-          tone="default"
-        >
-          <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(320px,0.5fr)]">
-            <div>
-              <p className="text-xs font-black uppercase text-po-brand-ink">
-                Official Presidential site
-              </p>
-              <h2
-                className="mt-5 font-display text-3xl uppercase leading-[0.95] text-po-ink sm:text-5xl"
-                id="presidential-state-official"
-              >
-                Presidential in {state.name}
-              </h2>
-              <p className="mt-6 max-w-2xl text-base leading-7 text-po-body">
-                {state.seoLine}
-              </p>
+        {repoCopyPath ? (
+          <RepoOwnedPageCopy path={repoCopyPath} />
+        ) : (
+          <Scene
+            ariaLabelledBy="presidential-state-official"
+            className="po-gold-thread-inlay py-20 lg:py-28"
+            tone="default"
+          >
+            <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(320px,0.5fr)]">
+              <div>
+                <p className="text-xs font-black uppercase text-po-brand-ink">
+                  Official Presidential site
+                </p>
+                <h2
+                  className="mt-5 font-display text-3xl uppercase leading-[0.95] text-po-ink sm:text-5xl"
+                  id="presidential-state-official"
+                >
+                  Presidential in {state.name}
+                </h2>
+                <p className="mt-6 max-w-2xl text-base leading-7 text-po-body">
+                  {state.seoLine}
+                </p>
+              </div>
+              <aside className="border border-po-line bg-po-soft p-5">
+                <p className="text-xs font-semibold uppercase text-po-brand-ink">
+                  Licensed retail
+                </p>
+                <p className="mt-3 text-sm leading-6 text-po-body">
+                  Licensed retailer listings for {state.name} publish here once a
+                  verified retailer source is confirmed. No unverified listings
+                  are ever shown. Adults 21+ where legal.
+                </p>
+              </aside>
             </div>
-            <aside className="border border-po-line bg-po-soft p-5">
-              <p className="text-xs font-semibold uppercase text-po-brand-ink">
-                Licensed retail
-              </p>
-              <p className="mt-3 text-sm leading-6 text-po-body">
-                Licensed retailer listings for {state.name} publish here once a
-                verified retailer source is confirmed. No unverified listings
-                are ever shown. Adults 21+ where legal.
-              </p>
-            </aside>
-          </div>
-        </Scene>
+          </Scene>
+        )}
 
         {catalog.items.length > 0 ? (
           <Scene
