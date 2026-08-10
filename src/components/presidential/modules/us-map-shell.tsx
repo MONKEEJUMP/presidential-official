@@ -57,6 +57,8 @@ export function UsMapShell() {
                 <Link
                   className="po-map-tile po-map-tile-active"
                   href={`/find-us/${active.slug}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <span aria-hidden="true">{code}</span>
                   <span className="sr-only">
