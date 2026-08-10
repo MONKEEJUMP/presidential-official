@@ -15,6 +15,7 @@ import {
   seriesMetaFor,
 } from "@/components/presidential/modules/catalog-grid-shell";
 import { FindUsCtaShell } from "@/components/presidential/modules/find-us-cta-shell";
+import { ProductDescription } from "@/components/presidential/modules/product-description";
 import {
   readCatalogItemBySlug,
   readCatalogProductParams,
@@ -171,11 +172,7 @@ export default async function CatalogProductDetailPage({
                 >
                   {item.name}
                 </h1>
-                {item.description ? (
-                  <p className="mt-6 max-w-xl text-base leading-7 text-po-body [overflow-wrap:anywhere]">
-                    {item.description}
-                  </p>
-                ) : null}
+                <ProductDescription value={item.description} />
 
                 {chips.length > 0 ? (
                   <div className="mt-8 border-t border-po-ink pt-5">
