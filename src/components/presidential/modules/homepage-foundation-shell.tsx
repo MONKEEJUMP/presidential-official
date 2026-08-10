@@ -118,34 +118,33 @@ export function HomepageFoundationShell({
               >
                 Find Presidential near you
               </h1>
-              <p className="mt-2 max-w-xl text-base leading-7 text-po-on-dark-muted">
-                Eight priority markets, each with its own Presidential
-                experience. Choose a state to step inside.
-              </p>
             </div>
+
+            <section
+              aria-label="Find a dispensary"
+              className="scroll-mt-24 w-full py-4 text-left"
+              id="presidential-homepage-locator"
+            >
+              <LocatorConsole
+                initialSearch={locatorInitialSearch}
+                layout="stacked"
+              />
+            </section>
+
+            <p className="max-w-xl text-base leading-7 text-po-on-dark-muted">
+              Eight priority markets, each with its own Presidential
+              experience. Choose a state to step inside.
+            </p>
 
             <div className="w-full max-w-sm xl:max-w-md 2xl:max-w-xl">
               <FindUsNationwideVideo />
             </div>
 
             <div className="w-full max-w-sm xl:max-w-md 2xl:max-w-xl [&_p]:!mt-2 [&_p]:text-center [&_ul]:mx-auto">
-              <UsMapShell activeHref="#presidential-homepage-locator" />
+              <UsMapShell />
             </div>
           </div>
         </Scene>
-
-        <section
-          aria-label="Find a dispensary"
-          className="po-gold-thread-inlay scroll-mt-24 bg-po-ink text-po-on-dark"
-          id="presidential-homepage-locator"
-        >
-          <div className="mx-auto w-full max-w-7xl px-[clamp(1.25rem,4vw,4rem)] py-[clamp(1rem,2vw,1.75rem)]">
-            <LocatorConsole
-              initialSearch={locatorInitialSearch}
-              layout="stacked"
-            />
-          </div>
-        </section>
 
         <BentolioHeroShell route={route} />
 
