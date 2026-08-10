@@ -13,6 +13,7 @@ import { SectionHeading } from "../primitives/section-heading";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { LearnGuideIndex } from "./learn-guide-discovery";
 import { OurStoryPrerollGraphicsGrid } from "./our-story-preroll-graphics-grid";
+import { RepoOwnedPageCopy } from "./repo-owned-page-copy";
 import { SupportRouteFoundationShell } from "./support-route-foundation-shell";
 
 type StaticRouteBreadcrumb = {
@@ -220,7 +221,12 @@ function EditorialRouteFoundationShell({
           </div>
         </Scene>
 
-        {route.kind === "learn_hub" ? <LearnGuideIndex /> : null}
+        {route.kind === "learn_hub" ? (
+          <>
+            <RepoOwnedPageCopy path="/learn" />
+            <LearnGuideIndex />
+          </>
+        ) : null}
 
         {links.length > 0 ? (
           <Scene
