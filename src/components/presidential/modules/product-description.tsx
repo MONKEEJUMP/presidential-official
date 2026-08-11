@@ -14,14 +14,34 @@ type ProductDescriptionProps = {
 
 const SUBHEAD = /^\*\*(.+)\*\*$/;
 
+// Single-asterisk *emphasis* -> <em>. Only balanced `*pair*`s match (a lone `*`
+// renders literally), and this runs on the segments left AFTER `**bold**` is
+// split out in renderInline, so bold and italic never collide. Added 6188-FABLE
+// (2026-08-11): the last-five product copy uses `*Indica*`, and this also fixes a
+// pre-existing latent leak where `*powered by planet 13*` rendered its literal
+// asterisks on the live Cap Junky page (the earlier `**`-only checks missed it).
+function renderEmphasis(text: string, keyPrefix: string): ReactNode {
+  return text.split(/\*([^*]+)\*/).map((segment, index) =>
+    index % 2 === 1 ? (
+      <em className="italic" key={`${keyPrefix}-i${index}`}>
+        {segment}
+      </em>
+    ) : (
+      <Fragment key={`${keyPrefix}-e${index}`}>{segment}</Fragment>
+    ),
+  );
+}
+
 function renderInline(text: string, keyPrefix: string): ReactNode {
   return text.split("**").map((segment, index) =>
     index % 2 === 1 ? (
       <strong className="font-black text-po-ink" key={`${keyPrefix}-b${index}`}>
-        {segment}
+        {renderEmphasis(segment, `${keyPrefix}-b${index}`)}
       </strong>
     ) : (
-      <Fragment key={`${keyPrefix}-t${index}`}>{segment}</Fragment>
+      <Fragment key={`${keyPrefix}-t${index}`}>
+        {renderEmphasis(segment, `${keyPrefix}-t${index}`)}
+      </Fragment>
     ),
   );
 }
