@@ -12,6 +12,10 @@ import {
 
 type CatalogRenderMode = "public" | "preview";
 
+function shouldShowCatalogPreviewBadge(mode: CatalogRenderMode): boolean {
+  return mode === "preview" && process.env.VERCEL_ENV !== "production";
+}
+
 type SeriesMeta = {
   readonly anchor: string;
   readonly eyebrow: string;
@@ -178,7 +182,7 @@ function CatalogProductCard({
             Photography in production
           </div>
         )}
-        {mode === "preview" ? (
+        {shouldShowCatalogPreviewBadge(mode) ? (
           <p className="absolute left-3 top-3 bg-po-ink px-2 py-1 text-[10px] font-black uppercase tracking-wide text-po-on-dark">
             Owner preview · gated draft
           </p>
