@@ -58,7 +58,7 @@ The build does not change between them. Only the size and the count.
 
 **The catalogue, in three tiers**
 
-The Silver Flavour Series carries flavour-led releases. The Gold Strain Series carries named strains. The Rose Gold Connoisseur tier sits above both. Running across all three are the collaboration releases, each carrying a partner's mark printed on the front of the pack.
+The Silver Flavour Series carries flavour-led releases. The Gold Strain Series carries named strains, including [XXX](/moon-rocks/xxx). The Rose Gold Connoisseur tier sits above both. Running across all three are the collaboration releases, each carrying a partner's mark printed on the front of the pack.
 
 **Where to find Presidential**
 
@@ -134,7 +134,7 @@ Alongside them run the collaboration releases, each carrying a partner's mark on
 
 **Arizona in the wider footprint**
 
-Presidential is currently active across six state markets with two more opening. Arizona sits in that group alongside California, Oklahoma, Nevada, New York and Michigan.
+Presidential is currently active across six state markets with two more opening, including [Washington](/find-us/wa). Arizona sits in that group alongside California, Oklahoma, Nevada, New York and Michigan.
 
 Each market carries its own mix. Some collaboration releases are market-specific — the Platinum partnership packs carry Michigan regulatory markings, and Nature's Chemistry prints Las Vegas, Nevada on its packs. What reaches Arizona shelves is decided by distribution and by the retailers themselves.
 
@@ -174,7 +174,7 @@ That composition line is the one that matters. FLOWER · LIVE RESIN · DIAMONDS 
 
 **The footprint**
 
-Presidential is currently active across six state markets with two more opening, running from California through Oklahoma, Nevada, Arizona, Michigan and New York.
+Presidential is currently active across six state markets — California, Oklahoma, Nevada, Arizona, Michigan and New York — with [Washington](/find-us/wa) among the two opening next.
 
 **Start with the search**
 
@@ -295,6 +295,8 @@ THC Design sits with the cultivation and processing group, and the artwork on bo
 The build. Every partner release runs through the Presidential Infusion System exactly as the core catalogue does: flower as the base, a concentrate coat, a dry finish bonded to the coat. A partner's name on the front changes the market, sometimes the strain, and often the artwork. It does not change the process.
 
 **Formats and availability**
+
+The collaboration appears across [Presidential x THC Design Moon Rocks](/moon-rocks/thc-design-moon-rocks), [Presidential x THC Design Prerolls](/moon-rocks/thc-design-prerolls) and [Presidential x THC Design Blunts](/moon-rocks/thc-design-blunts).
 
 The Presidential ladder holds: Blunt 1.5 g, Preroll 1 g, loose Moon Rocks 2 g, Mini Blunts 3 × 0.7 g, Mini Prerolls 3 × 0.5 g.
 

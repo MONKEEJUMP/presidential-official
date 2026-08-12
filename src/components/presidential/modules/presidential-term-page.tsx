@@ -321,6 +321,12 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
         <p><strong>Distillate</strong> is refined to near-pure cannabinoid, stripped of nearly everything else. Neutral in aroma, which makes it the base where flavor is added deliberately. This is the Silver Flavor Series.</p>
         <p><strong>Live resin</strong> comes from cannabis frozen at harvest instead of dried and cured — the freeze preserves terpenes that would otherwise evaporate over a weeks-long cure. It carries the strain&apos;s own character. This is the Gold Strain Series.</p>
         <p><strong>Live rosin</strong> is solventless. Fresh-frozen material is washed in ice water to collect trichomes, and that hash is pressed with heat and pressure into rosin. No chemical solvents at any stage. It is the most expensive way to make a concentrate and the smallest yield. This is the Rose Gold Connoisseur Series.</p>
+        <p>
+          That same infused framework appears in the collaboration catalog as{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/thc-design-moon-rocks">Presidential x THC Design Moon Rocks</Link>,{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/thc-design-prerolls">Presidential x THC Design Prerolls</Link>, and{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/thc-design-blunts">Presidential x THC Design Blunts</Link>.
+        </p>
       </TermSection>
 
       <TermSection id="presidential-thc-label" title="Reading the numbers on a label" tone="contrast">
@@ -374,7 +380,7 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
       </Scene>
 
       <TermSection id="presidential-blunts-differences" images={[images[1]]} title="Blunt, pre-roll, mini — the actual differences">
-        <p><strong>Presidential pre-rolls</strong> place infused material inside a slim rolling paper. Their familiar shape makes them an easy entry into the lineup, while the measured build supports an even, approachable session.</p>
+        <p><strong><Link className={inlineLinkClass} href="/moon-rocks/presidential-prerolls">Presidential pre-rolls</Link></strong> place infused material inside a slim rolling paper. Their familiar shape makes them an easy entry into the lineup, while the measured build supports an even, approachable session.</p>
         <p><strong>Presidential Blunts</strong> use a broader hemp wrap that carries more material and holds heat over a longer burn. The format suits a shared circle, a paced solo session, or any occasion that benefits from time and room for the flavor to develop.</p>
         <p><strong>Presidential Mini Blunts</strong> translate that construction into a compact size. They keep the hemp-wrap character and infused composition while matching a shorter occasion.</p>
         <p>Each format begins with the same focus on construction. Size, wrap, airflow, and burn rate shape the experience, giving people a clear way to choose the Presidential format that fits the moment.</p>
@@ -400,7 +406,7 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
 
       <TermSection id="presidential-blunts-strains" title="Available strains" tone="contrast">
         <p>The Presidential Blunts catalog spans strain-led and flavor-led releases. Recognizable names include Cherry Gelato, Gorilla Goo, Cap Junky, Skywalker, Crescendo, XJ-13, Garlic Cookies, Ghost Haze Train, Laura Charles, Nino Brown, Whoa Si Whoa, and Daniel LaRusso.</p>
-        <p>Flavor-focused choices include Blue Raspberry, Peach Mango, Pineapple, Tropical, Grape, Strawberry, Watermelon, Orange Push Pop, Pink Cookies, Waui, XXX, and Apricotti. That range gives the format a broad shelf presence while every package remains tied to a specific named selection.</p>
+        <p>Flavor-focused choices include Blue Raspberry, Peach Mango, Pineapple, Tropical, Grape, Strawberry, Watermelon, Orange Push Pop, Pink Cookies, Waui, <Link className={inlineLinkClass} href="/moon-rocks/xxx">XXX</Link>, and Apricotti. That range gives the format a broad shelf presence while every package remains tied to a specific named selection.</p>
         <p>Availability varies by licensed retailer.</p>
       </TermSection>
 
@@ -469,10 +475,16 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
         </div>
         <p>
           Formats:{" "}
-          <Link className={inlineLinkClass} href="/presidential-thc">Moon Rocks</Link>, infused pre-rolls,{" "}
+          <Link className={inlineLinkClass} href="/presidential-thc">Moon Rocks</Link>,{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/presidential-prerolls">Presidential pre-rolls</Link>,{" "}
           <Link className={inlineLinkClass} href="/presidential-blunts">blunts</Link>, minis.
         </p>
-        <p>The Silver Flavor Series centers deliberate flavor profiles. The Gold Strain Series organizes strain-led releases around live resin. The Rose Gold Connoisseur Series features live rosin. The Presidential Line, Presidential House Line, and Presidential x THC Design collections extend the catalog through named house releases and collaboration products already represented across the site.</p>
+        <p>
+          The Silver Flavor Series centers deliberate flavor profiles. The Gold Strain Series organizes strain-led releases around live resin. The Rose Gold Connoisseur Series features live rosin. The Presidential Line and Presidential House Line extend the catalog through named house releases, while the collaboration is represented by{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/thc-design-moon-rocks">Presidential x THC Design Moon Rocks</Link>,{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/thc-design-prerolls">Presidential x THC Design Prerolls</Link>, and{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/thc-design-blunts">Presidential x THC Design Blunts</Link>.
+        </p>
         <p>Across those groupings, Moon Rocks remain the flagship infused format. Pre-rolls make the method ready to enjoy in a familiar paper form. Blunts bring the material into a tobacco-free hemp wrap, while Mini Blunts offer a compact expression of the same wrapped format.</p>
       </TermSection>
 
