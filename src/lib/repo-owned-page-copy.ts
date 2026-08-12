@@ -1,6 +1,7 @@
 export type RepoOwnedPagePath =
   | "/learn"
   | "/vapes"
+  | "/find-us/wa"
   | "/find-us/az"
   | "/find-us/ny"
   | "/find-us/fl"
@@ -62,6 +63,46 @@ The Silver Flavour Series carries flavour-led releases. The Gold Strain Series c
 **Where to find Presidential**
 
 Presidential is a wholesale brand and sells exclusively through licensed retailers. Availability varies by retailer and stock changes by store and by day. Presidential is currently active across six state markets with two more opening. Use the zip search to find the nearest licensed retailer carrying Presidential. For adults 21+ where legal.`,
+  },
+  "/find-us/wa": {
+    label: "Presidential in Washington",
+    markdown: `**Evergreen State. Presidential High.**
+
+Presidential is landing soon in Washington.
+
+**What that means, plainly**
+
+Presidential is currently active across six state markets — California, Oklahoma, Nevada, New York, Michigan and Arizona — with two more opening. Washington is one of the two.
+
+The retailer search on this page goes live the moment verified licensed Washington retailers carrying Presidential are in the locator database. Until then this page says so rather than showing an empty list.
+
+**What arrives when it does**
+
+Presidential builds moon rocks. Flower, coated in a concentrate, finished in a dry material that bonds to the coat — three stages applied in sequence, a process the company has run under the name the Presidential Infusion System since Los Angeles in 2012.
+
+Five formats, with weights fixed in every market. The Moon Rock Blunt is one unit at 1.5 grams, .053 oz. The Moon Rock Preroll is one at 1 gram, .035 oz. Loose Moon Rocks come at 2 grams, 0.071 oz. Mini Blunts are three at 0.7 grams for 2.1 grams total. Mini Prerolls are three at 0.5 grams for 1.5 grams total.
+
+The build does not change between them. Only the size and the count, and the crescent numeral on the front of each pack tells you which you are holding at a glance.
+
+**The catalogue**
+
+Three tiers. The Silver Flavour Series carries flavour-led releases — Grape, Pineapple, Watermelon, Peach Mango, Strawberry, Tropical, Blue Raspberry. The Gold Strain Series carries named strains — Blue Dream, King Louis, 24K, NYC Diesel, Presidential OG, Galactic Gas, Cap Junky and others. The Rose Gold Connoisseur tier sits above both, defined by live rosin — the solventless method, made without butane, propane, CO2 or ethanol at any stage.
+
+Running across all three are the collaboration releases, each carrying a partner's mark printed on the front of the pack: Ball Family Farms, Nature's Chemistry of Las Vegas, Top Shelf Cultivation, THC Design, Trendi by Planet 13, Moxie, Polaris Cannabis, ROVE, Platinum and VladTV.
+
+**Reading a Presidential pack when it gets here**
+
+Every pack carries the same architecture — WORLD'S STRONGEST across the top, the strain type in script beneath it, the silver crown crest with the PRESIDENTIAL banner, a crescent-moon unit numeral, the format line, the strain name in its lozenge, and the composition line separated by pot-leaf marks.
+
+Three of those differ from product to product: the strain type, the format line and the composition line. That last one is the description that matters. Some packs print live resin and diamonds. Some print distillate and kief. Cap Junky prints liquid live resin. They are different builds from the same process, and the pack tells you which one you have.
+
+**How Presidential reaches shelves anywhere**
+
+Presidential is wholesale and does not sell direct, in any state. Every product reaches you through a licensed retailer, and each shop decides independently which strains and formats to carry. That is why availability varies by store and by week, and why this page will point you at retailers rather than at a checkout.
+
+**Check back**
+
+This page updates automatically when Presidential reaches licensed Washington retailers. For adults 21+ where legal.`,
   },
   "/find-us/az": {
     label: "Presidential in Arizona",

@@ -160,13 +160,15 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
     stateCode ? readLocatorStateCount(stateCode) : Promise.resolve(null),
   ]);
   const repoCopyPath =
-    state.slug === "az"
-      ? "/find-us/az"
-      : state.slug === "ny"
-        ? "/find-us/ny"
-        : state.slug === "fl"
-          ? "/find-us/fl"
-          : null;
+    state.slug === "wa"
+      ? "/find-us/wa"
+      : state.slug === "az"
+        ? "/find-us/az"
+        : state.slug === "ny"
+          ? "/find-us/ny"
+          : state.slug === "fl"
+            ? "/find-us/fl"
+            : null;
 
   return (
     <PageFrame>
