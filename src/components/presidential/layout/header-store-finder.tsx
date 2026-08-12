@@ -108,7 +108,7 @@ export function HeaderStoreFinder({ onRoute }: HeaderStoreFinderProps) {
 
   return (
     <li
-      className="po-primary-nav-item relative z-30 lg:mr-6"
+      className="po-primary-nav-item relative z-30 lg:ml-6"
       onMouseEnter={keepHoverOpen}
       onMouseLeave={scheduleHoverClose}
       ref={rootRef}

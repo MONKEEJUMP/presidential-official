@@ -110,7 +110,6 @@ export function SiteHeader() {
             id="presidential-primary-navigation"
           >
             <ul className="grid lg:flex lg:items-center lg:justify-end lg:gap-0 lg:whitespace-nowrap">
-              <HeaderStoreFinder onRoute={() => setNavigationOpen(false)} />
               {primaryNavItems.map((item) => (
                 <li className="po-primary-nav-item" key={item.href}>
                   <Link
@@ -122,6 +121,7 @@ export function SiteHeader() {
                   </Link>
                 </li>
               ))}
+              <HeaderStoreFinder onRoute={() => setNavigationOpen(false)} />
             </ul>
           </nav>
         </div>
