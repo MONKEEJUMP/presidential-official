@@ -72,6 +72,12 @@ export function SiteHeader() {
               }
             }}
           >
+            <span
+              aria-hidden="true"
+              className="mr-2 shrink-0 font-display text-[0.68rem] font-semibold tracking-[0.075em] text-po-on-dark"
+            >
+              THE REAL
+            </span>
             <Image
               alt="Presidential"
               className="h-9 w-auto sm:h-10 lg:h-11"
