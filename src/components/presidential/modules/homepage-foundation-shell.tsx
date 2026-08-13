@@ -112,12 +112,12 @@ export function HomepageFoundationShell({
               <p className="text-xs font-black uppercase text-po-brand">
                 Coast to coast
               </p>
-              <h1
+              <h2
                 className="mt-2 font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-5xl 2xl:text-6xl"
                 id="presidential-homepage-map"
               >
                 Find Presidential near you
-              </h1>
+              </h2>
             </div>
 
             <section

@@ -24,9 +24,9 @@ export const ROUTE_REGISTRY = [
     priority: 5,
     changeFrequency: "weekly",
     canonicalPath: "/",
-    title: "Presidential Cannabis | Official Site",
+    title: "Presidential Moon Rocks | Official Site",
     description:
-      "The official home of Presidential cannabis products for adults 21+ where legal.",
+      "Presidential Moon Rocks is the official site to explore the product collection and find licensed retailers carrying it. For adults 21+ where legal.",
     h1: "Official Presidential Cannabis",
     keywords: [
       "presidential thc",

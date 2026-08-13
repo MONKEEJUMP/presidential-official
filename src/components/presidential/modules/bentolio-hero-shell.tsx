@@ -112,9 +112,9 @@ export async function BentolioHeroShell({
         aria-labelledby="presidential-homepage-primary"
         className="po-home-canvas-surface px-6 py-3"
       >
-        <h2 className="sr-only" id="presidential-homepage-primary">
-          {route.h1}
-        </h2>
+        <h1 className="sr-only" id="presidential-homepage-primary">
+          {route.path === "/" ? "Presidential Moon Rocks" : route.h1}
+        </h1>
         <div className="mx-auto grid w-full max-w-[1392px] grid-cols-1 gap-x-6 gap-y-3 lg:aspect-[1392/854] lg:grid-cols-[minmax(0,565fr)_minmax(0,330fr)_minmax(0,447fr)] lg:grid-rows-[101fr_354fr_226fr_101fr]">
         {/* PORTRAIT tile — product film loop */}
         <div className="overflow-hidden rounded-[20px] bg-po-ink lg:col-span-2 lg:col-start-1 lg:row-span-2 lg:row-start-1">
