@@ -122,6 +122,10 @@ export function seriesMetaFor(series?: string): SeriesMeta {
 }
 
 export function parseFormatChips(productType?: string): readonly string[] {
+  if (productType?.toLowerCase().includes("reviewernotes")) {
+    return [];
+  }
+
   const inParens = productType?.match(/\(([^)]+)\)/)?.[1];
   if (!inParens) {
     return [];

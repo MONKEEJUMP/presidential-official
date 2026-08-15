@@ -248,7 +248,7 @@ export async function SupportRouteFoundationShell({
                   className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl"
                   id="presidential-find-us-map"
                 >
-                  Eight states and growing
+                  Seven states and growing
                 </h2>
                 <p className="mt-6 max-w-xl text-base leading-7 text-po-on-dark-muted">
                   Choose a state to step into its Presidential experience.

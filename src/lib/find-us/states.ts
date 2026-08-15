@@ -1,5 +1,5 @@
 // Presidential priority-market map config — 9083-CODE P4 (owner rulings,
-// 2026-07-11): the client-approved Scope of Work names eight priority markets,
+// 2026-08-15): the owner-approved footprint names seven priority markets,
 // each with a locked theme world and a themed state-name display face
 // (state-name headline ONLY; everything else stays Archivo Black + Inter).
 // PAULIEWOOD adds or removes a market by editing exactly one entry below.
@@ -13,7 +13,6 @@ export type PresidentialStateTheme =
   | "wild-west"
   | "great-lakes"
   | "empire-skyline"
-  | "neon-palms"
   | "evergreen";
 
 export type PresidentialState = {
@@ -46,16 +45,6 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     world: "Pacific surf, golden-hour beaches, and mountain ridgelines.",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in California — the brand's home state, through licensed retailers, adults 21+.",
-  },
-  {
-    code: "FL",
-    slug: "fl",
-    name: "Florida",
-    theme: "neon-palms",
-    tagline: "Moon Rockets to the Moon with a Sunshine State of Mind.",
-    world: "Miami after dark — neon reflections, palms, and art-deco lines.",
-    seoLine:
-      "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Florida — through licensed retailers, adults 21+.",
   },
   {
     code: "MI",

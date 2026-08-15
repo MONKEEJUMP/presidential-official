@@ -163,7 +163,7 @@ export const APPROVED_TERM_ROUTE_ROWS = [
     slug: "presidential-cannabis",
     title: "Presidential Cannabis — The Company, Los Angeles 2012",
     description:
-      "Who Presidential is: founded in Los Angeles in 2012, wholesale only, 47 products across six series, sold through licensed retail in eight states.",
+      "Who Presidential is: founded in Los Angeles in 2012, wholesale only, 47 products across six series, sold through licensed retail in seven states.",
     h1: "Presidential Cannabis",
     keywords: [
       "Presidential cannabis",
@@ -263,7 +263,7 @@ export const APPROVED_PUBLIC_SEO_ROUTES = [
   ...APPROVED_PUBLIC_STATE_ROUTES,
 ] as const satisfies readonly SeoRouteRecord[];
 
-export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 81 as const;
+export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 80 as const;
 
 if (APPROVED_PUBLIC_SEO_ROUTES.length !== APPROVED_PUBLIC_SEO_ROUTE_COUNT) {
   throw new Error(

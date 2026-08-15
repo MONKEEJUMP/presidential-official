@@ -11,7 +11,6 @@ type FindUsCtaShellProps = {
 const FIND_US_STATE_LINKS = [
   { href: "/find-us/az", label: "Arizona" },
   { href: "/find-us/ca", label: "California" },
-  { href: "/find-us/fl", label: "Florida" },
   { href: "/find-us/mi", label: "Michigan" },
   { href: "/find-us/nv", label: "Nevada" },
   { href: "/find-us/ny", label: "New York" },

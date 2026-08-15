@@ -63,7 +63,7 @@ const brandChapters = [
   },
   {
     title: "Now",
-    body: "That obsession is a full platform today — Moon Rocks, Moon Pods, and Orbit — carried in 1,000+ licensed dispensaries across eight states. The brand, the products, and the learning all live in one official home, straight from the source. Same standard as day one: better flavor, greater consistency, no misses. Because Presidential Doesn't Miss.",
+    body: "That obsession is a full platform today — Moon Rocks, Moon Pods, and Orbit — carried in 1,000+ licensed dispensaries across seven states. The brand, the products, and the learning all live in one official home, straight from the source. Same standard as day one: better flavor, greater consistency, no misses. Because Presidential Doesn't Miss.",
   },
   {
     title: "Next",

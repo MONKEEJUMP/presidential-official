@@ -98,6 +98,19 @@ export function proxy(request: NextRequest) {
     nonce,
     adultConfirmed && isGoogleAnalyticsEnabled(),
   );
+
+  if (request.nextUrl.pathname === "/find-us/fl") {
+    const response = new NextResponse("Gone", {
+      status: 410,
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "X-Robots-Tag": "noindex, nofollow",
+      },
+    });
+    response.headers.set("Content-Security-Policy", csp);
+    return response;
+  }
+
   const requestHeaders = new Headers(request.headers);
 
   requestHeaders.set("x-nonce", nonce);

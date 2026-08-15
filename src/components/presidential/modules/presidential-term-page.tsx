@@ -489,7 +489,7 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
       </TermSection>
 
       <TermSection id="presidential-cannabis-markets" images={[images[5]]} title="Where it is carried" tone="contrast">
-        <p>Presidential has an active licensed-retail presence in California, Oklahoma, New York, Nevada, Michigan, Arizona, Florida, and Washington.</p>
+        <p>Presidential has an active licensed-retail presence in California, Oklahoma, New York, Nevada, Michigan, Arizona, and Washington.</p>
         <p>Each state market has its own retailer network and product mix. California connects directly to the company&apos;s Los Angeles roots, while the other markets extend Presidential formats to customers through state-regulated cannabis programs.</p>
         <p>The store finder turns that geographic footprint into a useful customer tool. Entering a ZIP code returns the nearest listed retailers with real mileage, allowing people anywhere in the country to see the most practical path toward an official store.</p>
         <Link className={buttonLinkClass} href="/find-us">Find a licensed retailer</Link>

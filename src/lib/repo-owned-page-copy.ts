@@ -4,7 +4,6 @@ export type RepoOwnedPagePath =
   | "/find-us/wa"
   | "/find-us/az"
   | "/find-us/ny"
-  | "/find-us/fl"
   | "/moon-rocks/rose-gold"
   | "/moon-rocks/presidential-x-thc-design";
 
@@ -62,7 +61,7 @@ The Silver Flavour Series carries flavour-led releases. The Gold Strain Series c
 
 **Where to find Presidential**
 
-Presidential is a wholesale brand and sells exclusively through licensed retailers. Availability varies by retailer and stock changes by store and by day. Presidential is currently active across six state markets with two more opening. Use the zip search to find the nearest licensed retailer carrying Presidential. For adults 21+ where legal.`,
+Presidential is a wholesale brand and sells exclusively through licensed retailers. Availability varies by retailer and stock changes by store and by day. Presidential's seven-state footprint spans California, Oklahoma, New York, Nevada, Michigan, Arizona and Washington. Use the zip search to find the nearest licensed retailer carrying Presidential. For adults 21+ where legal.`,
   },
   "/find-us/wa": {
     label: "Presidential in Washington",
@@ -72,7 +71,7 @@ Presidential is landing soon in Washington.
 
 **What that means, plainly**
 
-Presidential is currently active across six state markets — California, Oklahoma, Nevada, New York, Michigan and Arizona — with two more opening. Washington is one of the two.
+Presidential's seven-state footprint spans California, Oklahoma, Nevada, New York, Michigan, Arizona and Washington.
 
 The retailer search on this page goes live the moment verified licensed Washington retailers carrying Presidential are in the locator database. Until then this page says so rather than showing an empty list.
 
@@ -134,7 +133,7 @@ Alongside them run the collaboration releases, each carrying a partner's mark on
 
 **Arizona in the wider footprint**
 
-Presidential is currently active across six state markets with two more opening, including [Washington](/find-us/wa). Arizona sits in that group alongside California, Oklahoma, Nevada, New York and Michigan.
+Presidential's seven-state footprint includes [Washington](/find-us/wa). Arizona sits in that group alongside California, Oklahoma, Nevada, New York and Michigan.
 
 Each market carries its own mix. Some collaboration releases are market-specific — the Platinum partnership packs carry Michigan regulatory markings, and Nature's Chemistry prints Las Vegas, Nevada on its packs. What reaches Arizona shelves is decided by distribution and by the retailers themselves.
 
@@ -174,45 +173,11 @@ That composition line is the one that matters. FLOWER · LIVE RESIN · DIAMONDS 
 
 **The footprint**
 
-Presidential is currently active across six state markets — California, Oklahoma, Nevada, Arizona, Michigan and New York — with [Washington](/find-us/wa) among the two opening next.
+Presidential's seven-state footprint spans California, Oklahoma, Nevada, Arizona, Michigan, New York and [Washington](/find-us/wa).
 
 **Start with the search**
 
 Enter your zip code above to find the licensed New York retailers nearest you carrying Presidential. For adults 21+ where legal.`,
-  },
-  "/find-us/fl": {
-    label: "Presidential in Florida",
-    markdown: `**Moon Rockets to the Moon with a Sunshine State of Mind**
-
-Presidential is landing soon in Florida.
-
-**What that means**
-
-Presidential is currently active across six state markets — California, Oklahoma, Nevada, New York, Michigan and Arizona — with two more opening. Florida is one of the two.
-
-The retailer search on this page goes live the moment verified licensed Florida retailers carrying Presidential are in the locator database. Until then this page says so plainly rather than showing an empty list or a placeholder.
-
-**What will be here**
-
-Presidential builds moon rocks. Flower, coated in a concentrate, finished in a dry material that bonds to the coat — three stages applied in sequence, a process the company has run under the name the Presidential Infusion System since Los Angeles in 2012.
-
-Five formats, with weights fixed across every market. The Moon Rock Blunt is one unit at 1.5 grams, .053 oz. The Moon Rock Preroll is one unit at 1 gram, .035 oz. Loose Moon Rocks come at 2 grams, 0.071 oz. Mini Blunts are three at 0.7 grams for 2.1 grams total. Mini Prerolls are three at 0.5 grams for 1.5 grams total.
-
-**The catalogue**
-
-Three tiers. The Silver Flavour Series carries flavour-led releases including Grape, Pineapple, Watermelon and Peach Mango. The Gold Strain Series carries named strains — Blue Dream, King Louis, 24K, NYC Diesel, Presidential OG, Galactic Gas, Cap Junky and others. The Rose Gold Connoisseur tier sits above both.
-
-Alongside those run the collaboration releases, each carrying a partner's mark printed on the front of the pack — Ball Family Farms, Nature's Chemistry, Top Shelf Cultivation, THC Design, Trendi by Planet 13, Moxie, Polaris Cannabis, ROVE, Platinum and VladTV.
-
-**Reading a Presidential pack when it gets here**
-
-Every pack carries the same architecture, and three things differ from product to product: the strain type in script beneath the tagline, the format line, and the composition line with its pot-leaf dots.
-
-That composition line is the description that matters. Some packs print live resin and diamonds. Some print distillate and kief. Cap Junky prints liquid live resin. They are different builds from the same process, and the pack tells you which one you have.
-
-**Check back**
-
-This page updates automatically when Presidential reaches licensed Florida retailers. For adults 21+ where legal.`,
   },
   "/moon-rocks/rose-gold": {
     label: "Rose Gold Connoisseur tier",
@@ -264,7 +229,7 @@ Those releases are frequently market-specific — the Platinum packs carry Michi
 
 **Where to find Presidential**
 
-Wholesale, through licensed retailers only. Availability varies by retailer and by market. Six state markets active with two more opening. Use the zip search above to find the nearest licensed retailer. For adults 21+ where legal.`,
+Wholesale, through licensed retailers only. Availability varies by retailer and by market. Seven state markets make up the Presidential footprint. Use the zip search above to find the nearest licensed retailer. For adults 21+ where legal.`,
   },
   "/moon-rocks/presidential-x-thc-design": {
     label: "Presidential x THC Design collaboration",
@@ -304,7 +269,7 @@ Collaboration releases typically reach fewer formats and fewer markets than the 
 
 **Where to find Presidential**
 
-Wholesale, licensed retailers only. Six state markets active with two more opening. Use the zip search above. For adults 21+ where legal.`,
+Wholesale, licensed retailers only. Seven state markets make up the Presidential footprint. Use the zip search above. For adults 21+ where legal.`,
   },
   "/vapes": {
     label: "Presidential Vapes",
@@ -326,7 +291,7 @@ That composition line is the habit worth building. On the moon rock side it runs
 
 Presidential is wholesale. It does not sell direct, to anyone, in any category. Every product reaches you through a licensed retailer, and each shop decides independently what to carry. Availability varies by retailer, by market and by day.
 
-The brand is currently active across six state markets with two more opening — California, Oklahoma, Nevada, New York, Michigan and Arizona.
+The brand's seven-state footprint spans California, Oklahoma, Nevada, New York, Michigan, Arizona and Washington.
 
 **Collaborations run across the line**
 
