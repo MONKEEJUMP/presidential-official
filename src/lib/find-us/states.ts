@@ -13,6 +13,7 @@ export type PresidentialStateTheme =
   | "wild-west"
   | "great-lakes"
   | "empire-skyline"
+  | "neon-palms"
   | "evergreen";
 
 export type PresidentialState = {
