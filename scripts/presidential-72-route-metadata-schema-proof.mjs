@@ -68,7 +68,7 @@ const productDocuments = OWNER_PREVIEW_PRODUCT_ROUTES.map((entry) => ({
   surfaceType: "document",
 }));
 
-const stateDocuments = ["az", "ca", "fl", "mi", "nv", "ny", "ok", "wa"].map(
+const stateDocuments = ["az", "ca", "mi", "nv", "ny", "ok", "wa"].map(
   (slug) => ({
     route: `/find-us/${slug}`,
     kind: "state-locator",

@@ -4,9 +4,9 @@ import { PRESIDENTIAL_STATES } from "@/lib/find-us/states";
 
 // Tile-grid map of the continental United States — 9083-CODE P4.1 (owner
 // map correction, 2026-07-11): the 48 continental states only (no Alaska,
-// no Hawaii, no DC, no territories). Exactly the eight PRESIDENTIAL_STATES
-// markets are named and clickable; the other forty are dim, unlabeled,
-// non-interactive geography that makes the eight glow harder. Data-driven:
+// no Hawaii, no DC, no territories). Exactly the seven PRESIDENTIAL_STATES
+// markets are named and clickable; the other forty-one are dim, unlabeled,
+// non-interactive geography that makes the seven glow harder. Data-driven:
 // PAULIEWOOD's one-line config edits light states up or down.
 
 type TilePosition = readonly [row: number, col: number];
@@ -73,7 +73,7 @@ export function UsMapShell() {
         })}
       </ul>
       <p className="mt-6 text-xs leading-5 text-po-on-dark-muted">
-        Eight priority markets. Availability varies by licensed retailer;
+        Seven priority markets. Availability varies by licensed retailer;
         adults 21+ where legal.
       </p>
     </div>

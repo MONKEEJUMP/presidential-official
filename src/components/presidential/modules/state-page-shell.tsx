@@ -91,16 +91,6 @@ const THEME_ATMOSPHERES: Record<PresidentialStateTheme, ThemeAtmosphere> = {
     nameCase: "upper",
     nameClass: "text-po-canvas drop-shadow-[0_4px_24px_rgba(88,195,182,0.5)]",
   },
-  "neon-palms": {
-    base: "bg-[linear-gradient(180deg,#170a2e_0%,#3b0764_55%,#0e7490_100%)]",
-    layers: [
-      "absolute inset-x-0 bottom-0 h-1/3 bg-[radial-gradient(ellipse_at_50%_100%,rgba(56,222,203,0.4),transparent_60%)]",
-      "absolute right-1/4 top-1/4 h-56 w-56 bg-[radial-gradient(circle,rgba(244,114,182,0.3),transparent_70%)]",
-    ],
-    nameCase: "upper",
-    nameClass:
-      "text-[#f9a8d4] drop-shadow-[0_0_20px_rgba(244,114,182,0.7)]",
-  },
   evergreen: {
     base: "bg-[linear-gradient(180deg,#04140d_0%,#052e16_55%,#14532d_100%)]",
     layers: [
@@ -143,7 +133,6 @@ const STATE_HERO_IMAGES: Record<
   ok: { src: "/media/states/ok-hero.webp", position: "object-center", scrim: "top" },
   mi: { src: "/media/states/mi-hero.webp", position: "object-center", scrim: "top" },
   ny: { src: "/media/states/ny-hero.webp", position: "object-center", scrim: "top" },
-  fl: { src: "/media/states/fl-hero.webp", position: "object-center", scrim: "top" },
 };
 
 export async function StatePageShell({ state }: { readonly state: PresidentialState }) {

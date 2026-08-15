@@ -114,7 +114,6 @@ const allowedInternalHrefs = new Set([
   // pages linked from the tile-grid map. Still conditional/noindex.
   "/find-us/az",
   "/find-us/ca",
-  "/find-us/fl",
   "/find-us/mi",
   "/find-us/nv",
   "/find-us/ny",

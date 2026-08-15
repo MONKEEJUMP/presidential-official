@@ -1,7 +1,6 @@
 export const LOCATOR_STATE_CODES = [
   "AZ",
   "CA",
-  "FL",
   "MI",
   "NV",
   "NY",

@@ -61,7 +61,6 @@ const allowedPublicImageFiles = new Set([
   "media/posters/strains-vertical.jpg",
   "media/states/az-hero.webp",
   "media/states/ca-hero.webp",
-  "media/states/fl-hero.webp",
   "media/states/mi-hero.webp",
   "media/states/nv-hero.webp",
   "media/states/ny-hero.webp",
