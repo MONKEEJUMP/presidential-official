@@ -166,9 +166,7 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
         ? "/find-us/az"
         : state.slug === "ny"
           ? "/find-us/ny"
-          : state.slug === "fl"
-            ? "/find-us/fl"
-            : null;
+          : null;
 
   return (
     <PageFrame>
