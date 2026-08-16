@@ -64,7 +64,7 @@ export function FindUsCtaShell({
         </div>
 
         {compact ? null : (
-          <div className="po-gold-thread-inlay-vertical self-stretch pl-6 lg:pl-10">
+          <div className="po-gold-thread-inlay-vertical self-stretch pl-6 pt-6 lg:pl-10 lg:pt-0">
             <ul className="flex h-full flex-col justify-between gap-3">
               {FIND_US_STATE_LINKS.map((state) => (
                 <li key={state.href}>
