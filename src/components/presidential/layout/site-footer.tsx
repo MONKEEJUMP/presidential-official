@@ -9,6 +9,7 @@ const footerLinks = [
   { href: "/learn", label: "Learn" },
   { href: "/find-us", label: "Find Presidential" },
   { href: "/contact", label: "Contact" },
+  { href: "/presidential-thc", label: "Presidential THC" },
   { href: "/presidential-cannabis", label: "Presidential Cannabis" },
   { href: "/presidential-blunts", label: "Presidential Blunts" },
 ] as const;
