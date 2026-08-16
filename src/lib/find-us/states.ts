@@ -15,6 +15,13 @@ export type PresidentialStateTheme =
   | "empire-skyline"
   | "evergreen";
 
+export type PresidentialStateSiteLink = {
+  readonly before: string;
+  readonly anchor: string;
+  readonly after: string;
+  readonly href: string;
+};
+
 export type PresidentialState = {
   readonly code: string;
   readonly slug: string;
@@ -23,6 +30,7 @@ export type PresidentialState = {
   readonly tagline: string;
   readonly world: string;
   readonly seoLine: string;
+  readonly siteLink: PresidentialStateSiteLink;
 };
 
 export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
@@ -35,6 +43,12 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     world: "Sonoran desert at dusk — saguaro, sandstone, and a sky on fire.",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Arizona — through licensed retailers, adults 21+.",
+    siteLink: {
+      before: "",
+      anchor: "Presidential THC Arizona",
+      after: " covers the state on its own site.",
+      href: "https://presidentialthcarizona.com/",
+    },
   },
   {
     code: "CA",
@@ -45,6 +59,12 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     world: "Pacific surf, golden-hour beaches, and mountain ridgelines.",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in California — the brand's home state, through licensed retailers, adults 21+.",
+    siteLink: {
+      before: "The full California retail network has its own home at ",
+      anchor: "Presidential THC California",
+      after: ".",
+      href: "https://presidentialthccalifornia.com/",
+    },
   },
   {
     code: "MI",
@@ -55,6 +75,12 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     world: "Lake horizons, summer docks, and spray off the wake.",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Michigan — through licensed retailers, adults 21+.",
+    siteLink: {
+      before: "Michigan's retail network has its own home at ",
+      anchor: "Presidential THC Michigan",
+      after: ".",
+      href: "https://presidentialthcmichigan.com/",
+    },
   },
   {
     code: "NV",
@@ -65,6 +91,12 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     world: "The Strip at midnight — marquee glow against desert black.",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Nevada — through licensed retailers, adults 21+.",
+    siteLink: {
+      before: "",
+      anchor: "Presidential in Nevada",
+      after: " runs its own site for the state.",
+      href: "https://presidentialthcnevada.com/",
+    },
   },
   {
     code: "NY",
@@ -75,6 +107,12 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     world: "Manhattan at night — skyline grids and avenue light.",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in New York — through licensed retailers, adults 21+.",
+    siteLink: {
+      before: "New York has its own Presidential site at ",
+      anchor: "Presidential THC New York",
+      after: ".",
+      href: "https://presidentialthcnewyork.com/",
+    },
   },
   {
     code: "OK",
@@ -85,6 +123,13 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     world: "Red-dirt plains, big skies, and frontier grit.",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Oklahoma — through licensed retailers, adults 21+.",
+    siteLink: {
+      before: "",
+      anchor: "Presidential THC Oklahoma",
+      after:
+        " carries the statewide retail map, grouped by Oklahoma's tourism regions.",
+      href: "https://presidentialthcoklahoma.com/",
+    },
   },
   {
     code: "WA",
@@ -95,6 +140,12 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     world: "",
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Washington — through licensed retailers, adults 21+.",
+    siteLink: {
+      before: "",
+      anchor: "Presidential THC Washington",
+      after: " is live ahead of the state's market opening.",
+      href: "https://presidentialthcwashington.com/",
+    },
   },
 ] as const;
 

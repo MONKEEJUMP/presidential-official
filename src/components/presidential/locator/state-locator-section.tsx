@@ -1,3 +1,4 @@
+import type { PresidentialStateSiteLink } from "@/lib/find-us/states";
 import type { LocatorStateCode } from "@/lib/locator/types";
 
 import { LocatorConsole } from "./locator-console";
@@ -6,12 +7,33 @@ type StateLocatorSectionProps = {
   readonly stateCode: LocatorStateCode;
   readonly stateName: string;
   readonly doorCount: number | null;
+  readonly stateSiteLink: PresidentialStateSiteLink;
 };
+
+function StateSiteSentence({
+  stateSiteLink,
+}: {
+  readonly stateSiteLink: PresidentialStateSiteLink;
+}) {
+  return (
+    <>
+      {stateSiteLink.before}
+      <a
+        className="text-po-brand underline decoration-po-brand underline-offset-4 transition-colors hover:text-po-on-dark focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
+        href={stateSiteLink.href}
+      >
+        {stateSiteLink.anchor}
+      </a>
+      {stateSiteLink.after}
+    </>
+  );
+}
 
 export function StateLocatorSection({
   stateCode,
   stateName,
   doorCount,
+  stateSiteLink,
 }: StateLocatorSectionProps) {
   const headingId = `presidential-${stateCode.toLowerCase()}-locator`;
 
@@ -31,6 +53,9 @@ export function StateLocatorSection({
           >
             Locator status unavailable
           </h2>
+          <p className="mt-6 max-w-xl text-base leading-7 text-po-on-dark-muted">
+            <StateSiteSentence stateSiteLink={stateSiteLink} />
+          </p>
         </div>
       </section>
     );
@@ -54,7 +79,8 @@ export function StateLocatorSection({
           </h2>
           <p className="mt-6 max-w-xl text-base leading-7 text-po-on-dark-muted">
             Verified licensed retailer listings for {stateName} will appear
-            here when live records are available.
+            here when live records are available.{" "}
+            <StateSiteSentence stateSiteLink={stateSiteLink} />
           </p>
         </div>
       </section>
@@ -100,6 +126,7 @@ export function StateLocatorSection({
         </div>
 
         <p className="mt-8 text-sm leading-6 text-po-on-dark-muted">
+          <StateSiteSentence stateSiteLink={stateSiteLink} />{" "}
           Availability varies by licensed retailer. For adults 21+ where legal.
         </p>
       </div>

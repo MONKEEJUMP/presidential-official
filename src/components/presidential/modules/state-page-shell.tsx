@@ -254,6 +254,7 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
             doorCount={doorCount}
             stateCode={stateCode}
             stateName={state.name}
+            stateSiteLink={state.siteLink}
           />
         ) : null}
 
