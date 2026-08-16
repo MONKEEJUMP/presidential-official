@@ -71,6 +71,11 @@ const nextConfig: NextConfig = {
       // Recover the legacy Wix /shop backlink.
       {
         source: "/shop",
+        destination: "/moon-rocks",
+        permanent: true,
+      },
+      {
+        source: "/not-old-enough",
         destination: "/",
         permanent: true,
       },
