@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { ADULT_CONFIRMATION_COOKIE } from "@/app/age-gate-constants";
 import { isGoogleAnalyticsEnabled } from "@/lib/analytics/google";
 import { hasPrivateDraftRouteAccess } from "@/lib/cms/draft-route-access";
 
@@ -92,12 +91,7 @@ export function proxy(request: NextRequest) {
   }
 
   const nonce = btoa(crypto.randomUUID());
-  const adultConfirmed =
-    request.cookies.get(ADULT_CONFIRMATION_COOKIE)?.value === "true";
-  const csp = buildContentSecurityPolicy(
-    nonce,
-    adultConfirmed && isGoogleAnalyticsEnabled(),
-  );
+  const csp = buildContentSecurityPolicy(nonce, isGoogleAnalyticsEnabled());
 
   if (request.nextUrl.pathname === "/find-us/fl") {
     const response = new NextResponse("Gone", {

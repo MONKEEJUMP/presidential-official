@@ -3,9 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { RefObject } from "react";
 
-const ADULT_CONFIRMATION_EVENT = "presidential:adult-confirmation";
-const ADULT_CONFIRMATION_DATA_KEY = "presidentialAdultConfirmed";
-
 function releaseVideo(video: HTMLVideoElement) {
   video.pause();
   video.removeAttribute("src");
@@ -18,15 +15,6 @@ function releaseVideo(video: HTMLVideoElement) {
   } catch {
     // Detached media can reject load() during teardown; its sources are gone.
   }
-}
-
-export function publishAdultConfirmation(confirmed: boolean) {
-  document.documentElement.dataset[ADULT_CONFIRMATION_DATA_KEY] = String(confirmed);
-  window.dispatchEvent(
-    new CustomEvent(ADULT_CONFIRMATION_EVENT, {
-      detail: { confirmed },
-    }),
-  );
 }
 
 export function useAdultVideoPlayback<T extends Element>(

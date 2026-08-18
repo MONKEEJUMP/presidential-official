@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { cookies, headers } from "next/headers";
-import { ADULT_CONFIRMATION_COOKIE } from "@/app/age-gate-constants";
-import { AgeGate } from "@/components/age-gate";
+import { headers } from "next/headers";
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { getGoogleSiteVerification } from "@/lib/analytics/google";
 import { METADATA_BASE } from "@/lib/seo/metadata";
@@ -61,26 +59,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const adultConfirmed =
-    (await cookies()).get(ADULT_CONFIRMATION_COOKIE)?.value === "true";
   const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   return (
     <html
       lang="en"
       className={`${clashDisplay.variable} ${sourceSerif4.variable} h-full antialiased`}
-      data-presidential-adult-confirmed={adultConfirmed ? "true" : "false"}
     >
       <body className="min-h-full flex flex-col">
-        <div
-          aria-hidden={adultConfirmed ? undefined : "true"}
-          id="presidential-age-gated-content"
-          inert={adultConfirmed ? undefined : true}
-        >
-          {children}
-        </div>
-        <AgeGate initialConfirmed={adultConfirmed} />
-        {adultConfirmed ? <GoogleAnalytics nonce={nonce} /> : null}
+        {children}
+        <GoogleAnalytics nonce={nonce} />
       </body>
     </html>
   );
