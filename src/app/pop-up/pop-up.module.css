@@ -151,7 +151,11 @@
 .slot:focus-visible,
 .selectionSummary button:focus-visible,
 .submitButton:focus-visible,
-.bookingForm input:focus-visible {
+.bookingForm input:focus-visible,
+.manageRecovery input:focus-visible,
+.manageRecovery button:focus-visible,
+.cancelButton:focus-visible,
+.keepBookingButton:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 3px;
 }
@@ -395,6 +399,90 @@
   font-size: clamp(1.1rem, 2vw, 1.45rem);
 }
 
+.selectionStart {
+  display: grid;
+  gap: 2rem;
+}
+
+.manageRecovery {
+  display: grid;
+  max-width: 48rem;
+  gap: 1rem;
+  border: 1px solid rgb(255 255 255 / 24%);
+  background: rgb(255 255 255 / 4%);
+  padding: clamp(1.4rem, 4vw, 2.4rem);
+}
+
+.manageRecovery h3,
+.manageRecovery p {
+  margin: 0;
+}
+
+.manageRecovery h3 {
+  color: #fff;
+  font-family: var(--po-font-display);
+  font-size: clamp(1.5rem, 3vw, 2.3rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.manageRecovery div > p,
+.manageRecovery > p {
+  margin-top: 0.55rem;
+  color: var(--po-color-on-dark-muted);
+  line-height: 1.5;
+}
+
+.manageRecovery label {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.manageRecovery label > span {
+  font-family: var(--po-font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.manageRecovery input {
+  min-height: 3.5rem;
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 0;
+  background: #070708;
+  color: #fff;
+  font: inherit;
+  padding: 0.85rem 0.9rem;
+}
+
+.manageRecovery button,
+.cancelButton,
+.keepBookingButton {
+  width: fit-content;
+  min-height: 3.4rem;
+  border: 1px solid currentColor;
+  cursor: pointer;
+  font-family: var(--po-font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.8rem 1.2rem;
+  text-transform: uppercase;
+}
+
+.manageRecovery button {
+  background: var(--po-color-brand);
+  color: #06100f;
+}
+
+.manageRecovery button:disabled,
+.cancelButton:disabled,
+.keepBookingButton:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
 .selectionSummary {
   display: flex;
   align-items: end;
@@ -538,6 +626,33 @@
   color: var(--po-color-on-dark-muted);
   font-size: clamp(1.05rem, 2vw, 1.4rem);
   line-height: 1.45;
+}
+
+.confirmation > span {
+  color: var(--po-color-on-dark-muted);
+  line-height: 1.5;
+}
+
+.manageWarning {
+  color: #f4d89b !important;
+}
+
+.cancelActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.cancelButton {
+  margin-top: 0.5rem;
+  background: #e5484d;
+  color: #fff;
+}
+
+.keepBookingButton {
+  margin-top: 0.5rem;
+  background: transparent;
+  color: #fff;
 }
 
 @media (max-width: 900px) {

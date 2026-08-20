@@ -31,9 +31,27 @@ type Selection = Readonly<{
 type BookingResponse = Readonly<{
   success?: boolean;
   error?: string;
+  manageToken?: string;
+  booking?: ManagedBooking;
+  customerNotificationAccepted?: boolean;
+}>;
+
+type ManagedBooking = Readonly<{
+  eventDate: string;
+  slots: readonly Slot[];
+  wholeDay: boolean;
+  dispensaryName: string;
+}>;
+
+type ManageResponse = Readonly<{
+  success?: boolean;
+  error?: string;
+  message?: string;
+  booking?: ManagedBooking;
 }>;
 
 const WEEKDAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"] as const;
+const MANAGE_SESSION_KEY = "presidential-popup-manage-token";
 
 function chicagoDateParts() {
   const parts = new Intl.DateTimeFormat("en-US", {
@@ -126,7 +144,15 @@ export function PopUpBooking({
   const [wholeDay, setWholeDay] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [formMessage, setFormMessage] = useState("");
-  const [confirmed, setConfirmed] = useState(false);
+  const [manageToken, setManageToken] = useState("");
+  const [managedBooking, setManagedBooking] = useState<ManagedBooking | null>(null);
+  const [managing, setManaging] = useState(false);
+  const [manageMessage, setManageMessage] = useState("");
+  const [cancelPrompt, setCancelPrompt] = useState(false);
+  const [cancelled, setCancelled] = useState(false);
+  const [recoverySubmitting, setRecoverySubmitting] = useState(false);
+  const [recoveryMessage, setRecoveryMessage] = useState("");
+  const [customerEmailSent, setCustomerEmailSent] = useState<boolean | null>(null);
 
   const retailerByLabel = useMemo(
     () => new Map(retailers.map((retailer) => [retailerLabel(retailer), retailer])),
@@ -157,11 +183,57 @@ export function PopUpBooking({
     }
   }, []);
 
+  const loadManagedBooking = useCallback(async (token: string) => {
+    setManaging(true);
+    setManageMessage("");
+    setCancelled(false);
+    try {
+      const response = await fetch("/api/pop-up/booking", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ manageToken: token }),
+        cache: "no-store",
+      });
+      const payload = (await response.json()) as ManageResponse;
+      if (!response.ok || !payload.success || !payload.booking) {
+        window.sessionStorage.removeItem(MANAGE_SESSION_KEY);
+        setManageToken("");
+        setManagedBooking(null);
+        setManageMessage(payload.error ?? "This private booking link is invalid or expired.");
+        return;
+      }
+      setManageToken(token);
+      setManagedBooking(payload.booking);
+      window.setTimeout(
+        () => formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+        0,
+      );
+    } catch {
+      setManageMessage("Booking management is temporarily unavailable.");
+    } finally {
+      setManaging(false);
+    }
+  }, []);
+
   useEffect(() => {
     const controller = new AbortController();
     void loadAvailability(month, controller.signal);
     return () => controller.abort();
   }, [loadAvailability, month]);
+
+  useEffect(() => {
+    const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const hashToken = hash.get("manage")?.trim() ?? "";
+    const storedToken = window.sessionStorage.getItem(MANAGE_SESSION_KEY)?.trim() ?? "";
+    const token = hashToken || storedToken;
+    if (!token) return;
+
+    window.sessionStorage.setItem(MANAGE_SESSION_KEY, token);
+    if (hashToken) {
+      window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+    }
+    void loadManagedBooking(token);
+  }, [loadManagedBooking]);
 
   const calendarCells = useMemo(() => {
     const [year, monthNumber] = month.split("-").map(Number);
@@ -178,7 +250,9 @@ export function PopUpBooking({
   const selectSlot = (date: string, slot: Slot) => {
     setSelection({ date, slot });
     setWholeDay(false);
-    setConfirmed(false);
+    setManagedBooking(null);
+    setCancelled(false);
+    setCancelPrompt(false);
     setFormMessage("");
     window.setTimeout(
       () => formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
@@ -189,7 +263,9 @@ export function PopUpBooking({
   const changeDay = () => {
     setSelection(null);
     setWholeDay(false);
-    setConfirmed(false);
+    setManagedBooking(null);
+    setCancelled(false);
+    setCancelPrompt(false);
     setFormMessage("");
     calendarRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -252,11 +328,92 @@ export function PopUpBooking({
           },
         };
       });
-      setConfirmed(true);
+      const booking = payload.booking ?? {
+        eventDate: selection.date,
+        slots: wholeDay ? (["morning", "afternoon"] as const) : [selection.slot],
+        wholeDay,
+        dispensaryName: selectedRetailer?.name ?? dispensary,
+      };
+      setManagedBooking(booking);
+      setCancelled(false);
+      setCancelPrompt(false);
+      setCustomerEmailSent(payload.customerNotificationAccepted ?? false);
+      if (payload.manageToken) {
+        setManageToken(payload.manageToken);
+        window.sessionStorage.setItem(MANAGE_SESSION_KEY, payload.manageToken);
+      }
     } catch {
       setFormMessage("Booking is temporarily unavailable.");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const requestManageLink = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (recoverySubmitting) return;
+    const form = new FormData(event.currentTarget);
+    setRecoverySubmitting(true);
+    setRecoveryMessage("");
+    try {
+      const response = await fetch("/api/pop-up/booking", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: form.get("manageEmail") }),
+        cache: "no-store",
+      });
+      const payload = (await response.json()) as ManageResponse;
+      setRecoveryMessage(
+        payload.message ?? "If that email matches an active booking, a private link is on its way.",
+      );
+    } catch {
+      setRecoveryMessage("Booking management is temporarily unavailable.");
+    } finally {
+      setRecoverySubmitting(false);
+    }
+  };
+
+  const cancelManagedBooking = async () => {
+    if (!manageToken || !managedBooking || managing) return;
+    setManaging(true);
+    setManageMessage("");
+    try {
+      const response = await fetch("/api/pop-up/booking", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ manageToken }),
+        cache: "no-store",
+      });
+      const payload = (await response.json()) as ManageResponse;
+      if (!response.ok || !payload.success) {
+        setManageMessage(payload.error ?? "Booking cancellation is temporarily unavailable.");
+        return;
+      }
+
+      setAvailability((current) => {
+        const day = current[managedBooking.eventDate];
+        if (!day) return current;
+        return {
+          ...current,
+          [managedBooking.eventDate]: {
+            ...day,
+            morningBooked: managedBooking.slots.includes("morning")
+              ? false
+              : day.morningBooked,
+            afternoonBooked: managedBooking.slots.includes("afternoon")
+              ? false
+              : day.afternoonBooked,
+          },
+        };
+      });
+      setCancelled(true);
+      setCancelPrompt(false);
+      setManageToken("");
+      window.sessionStorage.removeItem(MANAGE_SESSION_KEY);
+    } catch {
+      setManageMessage("Booking cancellation is temporarily unavailable.");
+    } finally {
+      setManaging(false);
     }
   };
 
@@ -359,8 +516,88 @@ export function PopUpBooking({
             <h2 id="information-heading">YOUR INFORMATION</h2>
           </div>
 
-          {!selection ? (
-            <p className={styles.selectionPrompt}>Choose an open morning or afternoon above to continue.</p>
+          {managedBooking ? (
+            <div className={styles.confirmation} role="status">
+              <p>{cancelled ? "Booking cancelled." : "You’re on the calendar."}</p>
+              <strong>
+                {formatDate(managedBooking.eventDate)} · {managedBooking.wholeDay
+                  ? "whole day"
+                  : managedBooking.slots.join(" + ")}
+              </strong>
+              <span>{managedBooking.dispensaryName}</span>
+
+              {cancelled ? (
+                <span>Your calendar slot is open again. Confirmation was sent by email.</span>
+              ) : (
+                <>
+                  <span>Only someone with your private management link can change this booking.</span>
+                  {customerEmailSent === false ? (
+                    <span className={styles.manageWarning}>
+                      The private link could not be emailed, but you can manage the booking on this screen.
+                    </span>
+                  ) : null}
+                  {manageMessage ? <span className={styles.manageWarning}>{manageMessage}</span> : null}
+
+                  {cancelPrompt ? (
+                    <div className={styles.cancelActions}>
+                      <button
+                        className={styles.cancelButton}
+                        disabled={managing}
+                        onClick={() => void cancelManagedBooking()}
+                        type="button"
+                      >
+                        {managing ? "CANCELLING" : "YES, CANCEL MY BOOKING"}
+                      </button>
+                      <button
+                        className={styles.keepBookingButton}
+                        disabled={managing}
+                        onClick={() => setCancelPrompt(false)}
+                        type="button"
+                      >
+                        KEEP MY BOOKING
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      className={styles.cancelButton}
+                      onClick={() => setCancelPrompt(true)}
+                      type="button"
+                    >
+                      CANCEL THIS BOOKING
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+          ) : managing ? (
+            <p className={styles.selectionPrompt}>Opening your private booking…</p>
+          ) : !selection ? (
+            <div className={styles.selectionStart}>
+              {manageMessage ? <p className={styles.formMessage}>{manageMessage}</p> : null}
+              <p className={styles.selectionPrompt}>
+                Choose an open morning or afternoon above to continue.
+              </p>
+              <form className={styles.manageRecovery} onSubmit={requestManageLink}>
+                <div>
+                  <h3>Already booked?</h3>
+                  <p>Enter the same email you booked with and we’ll send your private management link.</p>
+                </div>
+                <label>
+                  <span>Booking email</span>
+                  <input
+                    autoComplete="email"
+                    maxLength={254}
+                    name="manageEmail"
+                    required
+                    type="email"
+                  />
+                </label>
+                <button disabled={recoverySubmitting} type="submit">
+                  {recoverySubmitting ? "SENDING" : "EMAIL MY PRIVATE LINK"}
+                </button>
+                {recoveryMessage ? <p role="status">{recoveryMessage}</p> : null}
+              </form>
+            </div>
           ) : (
             <>
               <div className={styles.selectionSummary}>
@@ -371,13 +608,7 @@ export function PopUpBooking({
                 <button type="button" onClick={changeDay}>CHANGE YOUR DAY</button>
               </div>
 
-              {confirmed ? (
-                <div className={styles.confirmation} role="status">
-                  <p>You&apos;re on the calendar.</p>
-                  <strong>Sit back — a Presidential client associate will get back to you ASAP.</strong>
-                </div>
-              ) : (
-                <form className={styles.bookingForm} onSubmit={submitBooking}>
+              <form className={styles.bookingForm} onSubmit={submitBooking}>
                   <label className={styles.fullField}>
                     <span>Dispensary</span>
                     <input
@@ -429,8 +660,7 @@ export function PopUpBooking({
                   <button className={styles.submitButton} disabled={submitting} type="submit">
                     {submitting ? "SUBMITTING" : "SUBMIT YOUR INFORMATION"}
                   </button>
-                </form>
-              )}
+              </form>
             </>
           )}
         </div>

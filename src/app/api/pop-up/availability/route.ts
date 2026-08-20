@@ -69,6 +69,7 @@ export async function GET(request: Request) {
   endpoint.searchParams.set("select", "event_date,slot");
   endpoint.searchParams.set("event_date", `gte.${month}-01`);
   endpoint.searchParams.append("event_date", `lt.${nextMonth(month)}-01`);
+  endpoint.searchParams.set("status", "neq.cancelled");
   endpoint.searchParams.set("order", "event_date.asc,slot.asc");
 
   let upstream: Response;
