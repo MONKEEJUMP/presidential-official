@@ -30,7 +30,14 @@
 .heroMedia::after {
   position: absolute;
   inset: 0;
-  background: rgb(0 0 0 / 40%);
+  background: linear-gradient(
+    125deg,
+    rgb(0 0 0 / 60%) 0%,
+    rgb(0 0 0 / 50%) 24%,
+    rgb(0 0 0 / 35%) 48%,
+    rgb(0 0 0 / 18%) 73%,
+    rgb(0 0 0 / 8%) 100%
+  );
   content: "";
 }
 
@@ -832,7 +839,13 @@
   }
 
   .heroMedia::after {
-    background: rgb(0 0 0 / 40%);
+    background: linear-gradient(
+      135deg,
+      rgb(0 0 0 / 58%) 0%,
+      rgb(0 0 0 / 44%) 30%,
+      rgb(0 0 0 / 27%) 62%,
+      rgb(0 0 0 / 10%) 100%
+    );
   }
 
   .calendarControls {
