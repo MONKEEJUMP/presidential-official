@@ -251,16 +251,16 @@
 
 .calendarScroller {
   margin-top: 1.4rem;
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
+  overflow: visible;
   padding-bottom: 0.75rem;
 }
 
 .calendarGrid {
   display: grid;
-  min-width: 62rem;
+  width: 100%;
+  min-width: 0;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 0.6rem;
+  gap: clamp(0.2rem, 0.7vw, 0.6rem);
 }
 
 .weekday {
@@ -696,6 +696,55 @@
 
   .calendarControls button {
     font-size: 0.58rem;
+  }
+
+  .calendarFold {
+    padding-inline: 0.55rem;
+  }
+
+  .calendarGrid {
+    gap: 0.2rem;
+  }
+
+  .weekday {
+    font-size: 0.5rem;
+    letter-spacing: 0.04em;
+    padding: 0.55rem 0.1rem;
+  }
+
+  .blankDay,
+  .dayCell {
+    min-height: 8.25rem;
+  }
+
+  .dayNumber {
+    top: 0.35rem;
+    right: 0.35rem;
+    font-size: 1.1rem;
+  }
+
+  .slot {
+    justify-items: center;
+    padding: 0.65rem 0.12rem 0.35rem;
+    text-align: center;
+  }
+
+  .morningSlot {
+    padding-top: 1.65rem;
+  }
+
+  .slot small {
+    font-size: 0.42rem;
+    letter-spacing: 0.02em;
+  }
+
+  .slot strong {
+    font-size: 0.58rem;
+    letter-spacing: 0;
+  }
+
+  .slot span {
+    display: none;
   }
 
   .selectionSummary {
