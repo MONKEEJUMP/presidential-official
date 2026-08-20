@@ -152,6 +152,7 @@ export function PopUpBooking({
   const [cancelled, setCancelled] = useState(false);
   const [recoverySubmitting, setRecoverySubmitting] = useState(false);
   const [recoveryMessage, setRecoveryMessage] = useState("");
+  const [recoveryResult, setRecoveryResult] = useState<"idle" | "success" | "error">("idle");
   const [customerEmailSent, setCustomerEmailSent] = useState<boolean | null>(null);
 
   const retailerByLabel = useMemo(
@@ -355,6 +356,7 @@ export function PopUpBooking({
     const form = new FormData(event.currentTarget);
     setRecoverySubmitting(true);
     setRecoveryMessage("");
+    setRecoveryResult("idle");
     try {
       const response = await fetch("/api/pop-up/booking", {
         method: "PUT",
@@ -363,11 +365,18 @@ export function PopUpBooking({
         cache: "no-store",
       });
       const payload = (await response.json()) as ManageResponse;
+      if (!response.ok || !payload.success) {
+        setRecoveryResult("error");
+        setRecoveryMessage(payload.error ?? "We couldn’t send the link. Please try again.");
+        return;
+      }
+      setRecoveryResult("success");
       setRecoveryMessage(
         payload.message ?? "If that email matches an active booking, a private link is on its way.",
       );
     } catch {
-      setRecoveryMessage("Booking management is temporarily unavailable.");
+      setRecoveryResult("error");
+      setRecoveryMessage("We couldn’t send the link. Please check your connection and try again.");
     } finally {
       setRecoverySubmitting(false);
     }
@@ -593,9 +602,32 @@ export function PopUpBooking({
                   />
                 </label>
                 <button disabled={recoverySubmitting} type="submit">
-                  {recoverySubmitting ? "SENDING" : "EMAIL MY PRIVATE LINK"}
+                  {recoverySubmitting ? "SENDING YOUR LINK…" : "EMAIL MY PRIVATE LINK"}
                 </button>
-                {recoveryMessage ? <p role="status">{recoveryMessage}</p> : null}
+                {recoveryResult === "success" ? (
+                  <div
+                    aria-live="polite"
+                    className={`${styles.recoveryNotice} ${styles.recoverySuccess}`}
+                    role="status"
+                  >
+                    <strong>CHECK YOUR INBOX NOW</strong>
+                    <span>{recoveryMessage}</span>
+                    <b>
+                      Nothing arrived? Check spam and make sure the email above exactly matches the
+                      one used to book. Correct it and try again if needed.
+                    </b>
+                  </div>
+                ) : recoveryResult === "error" ? (
+                  <div
+                    aria-live="assertive"
+                    className={`${styles.recoveryNotice} ${styles.recoveryError}`}
+                    role="alert"
+                  >
+                    <strong>YOUR LINK WAS NOT SENT</strong>
+                    <span>{recoveryMessage}</span>
+                    <b>Check the email address above, then press the button again.</b>
+                  </div>
+                ) : null}
               </form>
             </div>
           ) : (
