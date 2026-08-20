@@ -93,7 +93,7 @@ export function SiteHeader() {
           <button
             aria-controls="presidential-primary-navigation"
             aria-expanded={navigationOpen}
-            className="flex h-11 w-11 cursor-pointer items-center justify-center border border-po-on-dark/25 bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand lg:hidden"
+            className="flex h-11 w-11 cursor-pointer items-center justify-center border border-po-on-dark/25 bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand xl:hidden"
             onClick={() => setNavigationOpen((open) => !open)}
             type="button"
           >
@@ -107,10 +107,10 @@ export function SiteHeader() {
 
           <nav
             aria-label="Primary navigation"
-            className={`absolute inset-x-5 top-[calc(100%+0.01rem)] max-h-[calc(100dvh-4.5rem)] overflow-y-auto overscroll-contain border border-po-on-dark/15 bg-po-ink p-3 shadow-2xl [-webkit-overflow-scrolling:touch] sm:inset-x-8 lg:static lg:block lg:max-h-none lg:min-w-0 lg:flex-1 lg:overflow-visible lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none ${navigationOpen ? "block" : "hidden"}`}
+            className={`absolute inset-x-5 top-[calc(100%+0.01rem)] max-h-[calc(100dvh-4.5rem)] overflow-y-auto overscroll-contain border border-po-on-dark/15 bg-po-ink p-3 shadow-2xl [-webkit-overflow-scrolling:touch] sm:inset-x-8 xl:static xl:block xl:max-h-none xl:min-w-0 xl:flex-1 xl:overflow-visible xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none ${navigationOpen ? "block" : "hidden"}`}
             id="presidential-primary-navigation"
           >
-            <ul className="grid lg:flex lg:items-center lg:justify-end lg:gap-0 lg:whitespace-nowrap">
+            <ul className="grid xl:flex xl:items-center xl:justify-end xl:gap-0 xl:whitespace-nowrap">
               {primaryNavItems.map((item) => (
                 <li className="po-primary-nav-item" key={item.href}>
                   <Link
@@ -134,7 +134,7 @@ export function SiteHeader() {
       {navigationOpen ? (
         <div
           aria-hidden="true"
-          className="fixed inset-0 z-30 touch-pan-y bg-transparent lg:hidden"
+          className="fixed inset-0 z-30 touch-pan-y bg-transparent xl:hidden"
           data-presidential-mobile-menu-backdrop
           onClick={() => setNavigationOpen(false)}
         />
