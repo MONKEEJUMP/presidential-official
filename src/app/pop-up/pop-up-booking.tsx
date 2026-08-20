@@ -52,6 +52,28 @@ type ManageResponse = Readonly<{
 
 const WEEKDAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"] as const;
 const MANAGE_SESSION_KEY = "presidential-popup-manage-token";
+const ADVANCE_BOOKING_YEARS = [
+  {
+    year: "2026",
+    months: [
+      { value: "2026-09", label: "September" },
+      { value: "2026-10", label: "October" },
+      { value: "2026-11", label: "November" },
+      { value: "2026-12", label: "December" },
+    ],
+  },
+  {
+    year: "2027",
+    months: [
+      { value: "2027-01", label: "January" },
+      { value: "2027-02", label: "February" },
+      { value: "2027-03", label: "March" },
+      { value: "2027-04", label: "April" },
+      { value: "2027-05", label: "May" },
+      { value: "2027-06", label: "June" },
+    ],
+  },
+] as const;
 
 function chicagoDateParts() {
   const parts = new Intl.DateTimeFormat("en-US", {
@@ -261,6 +283,17 @@ export function PopUpBooking({
     );
   };
 
+  const showMonth = (targetMonth: string) => {
+    setMonth(targetMonth);
+    setSelection(null);
+    setWholeDay(false);
+    setFormMessage("");
+    window.setTimeout(
+      () => calendarRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+      0,
+    );
+  };
+
   const changeDay = () => {
     setSelection(null);
     setWholeDay(false);
@@ -449,11 +482,11 @@ export function PopUpBooking({
         </div>
 
         <div className={styles.calendarControls}>
-          <button type="button" onClick={() => setMonth((value) => shiftMonth(value, -1))}>
+          <button type="button" onClick={() => showMonth(shiftMonth(month, -1))}>
             <span aria-hidden="true">←</span> PREVIOUS
           </button>
           <strong>{monthLabel(month)}</strong>
-          <button type="button" onClick={() => setMonth((value) => shiftMonth(value, 1))}>
+          <button type="button" onClick={() => showMonth(shiftMonth(month, 1))}>
             NEXT <span aria-hidden="true">→</span>
           </button>
         </div>
@@ -511,6 +544,34 @@ export function PopUpBooking({
             })}
           </div>
         </div>
+
+        <nav className={styles.advanceBooking} aria-label="Advance booking months">
+          <div className={styles.advanceBookingHeading}>
+            <span>Plan ahead</span>
+            <strong>BOOK YOUR MONTH</strong>
+          </div>
+          {ADVANCE_BOOKING_YEARS.map((yearGroup) => (
+            <div className={styles.bookingYear} key={yearGroup.year}>
+              <strong>{yearGroup.year}</strong>
+              <div className={styles.bookingMonths}>
+                {yearGroup.months.map((bookingMonth) => {
+                  const active = month === bookingMonth.value;
+                  return (
+                    <button
+                      aria-current={active ? "date" : undefined}
+                      className={active ? styles.activeBookingMonth : undefined}
+                      key={bookingMonth.value}
+                      onClick={() => showMonth(bookingMonth.value)}
+                      type="button"
+                    >
+                      {bookingMonth.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </nav>
       </section>
 
       <section
