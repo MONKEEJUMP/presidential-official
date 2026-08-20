@@ -100,6 +100,9 @@ export default async function PopUpPage() {
           </div>
 
           <div className={styles.heroContent}>
+            <p className={styles.tourTagline}>
+              First Stop: Oklahoma. Next Stop: The World.
+            </p>
             <p className={styles.eyebrow}>Presidential Pop-Up</p>
             <h1 id="popup-title">
               <span>THREE</span>

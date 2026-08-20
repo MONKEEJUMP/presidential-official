@@ -45,6 +45,20 @@
   padding: clamp(5.5rem, 10vw, 8rem) clamp(1.25rem, 6vw, 6rem) clamp(4.5rem, 9vw, 7rem);
 }
 
+.tourTagline {
+  max-width: 42rem;
+  margin: 0 0 0.75rem;
+  color: #fff;
+  font-family: var(--po-font-display);
+  font-size: clamp(0.8rem, 1.25vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.35;
+  text-shadow: 0 0.1em 0.5em rgb(0 0 0 / 80%);
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
 .eyebrow {
   margin: 0 0 1rem;
   color: var(--po-color-brand);
