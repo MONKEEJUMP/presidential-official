@@ -241,13 +241,11 @@
   display: grid;
   min-width: 62rem;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  border-top: 1px solid rgb(255 255 255 / 16%);
-  border-left: 1px solid rgb(255 255 255 / 16%);
+  gap: 0.6rem;
 }
 
 .weekday {
-  border-right: 1px solid rgb(255 255 255 / 16%);
-  border-bottom: 1px solid rgb(255 255 255 / 16%);
+  border-bottom: 1px solid rgb(161 161 170 / 42%);
   color: var(--po-color-on-dark-muted);
   font-family: var(--po-font-display);
   font-size: 0.68rem;
@@ -259,11 +257,10 @@
 .blankDay,
 .dayCell {
   min-height: 12.5rem;
-  border-right: 1px solid rgb(255 255 255 / 16%);
-  border-bottom: 1px solid rgb(255 255 255 / 16%);
 }
 
 .blankDay {
+  border: 1px solid rgb(255 255 255 / 12%);
   background: rgb(255 255 255 / 1.5%);
 }
 
@@ -271,17 +268,20 @@
   position: relative;
   display: grid;
   grid-template-rows: 1fr 1fr;
+  border: 1px solid #fff;
   background: #09090b;
 }
 
 .dayNumber {
   position: absolute;
-  top: 0.45rem;
-  right: 0.55rem;
+  top: 0.55rem;
+  right: 0.7rem;
   z-index: 2;
-  color: rgb(255 255 255 / 72%);
+  color: #fff;
   font-family: var(--po-font-display);
-  font-size: 0.7rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
   pointer-events: none;
 }
 
@@ -292,7 +292,6 @@
   justify-items: start;
   gap: 0.18rem;
   border: 0;
-  border-left: 2px solid var(--po-color-brand);
   background: transparent;
   color: var(--po-color-on-dark);
   cursor: pointer;
@@ -301,7 +300,8 @@
 }
 
 .morningSlot {
-  border-bottom: 1px solid #b88a38;
+  border-bottom: 1px solid rgb(161 161 170 / 42%);
+  padding-top: 2rem;
 }
 
 .slot small,
@@ -337,13 +337,11 @@
 }
 
 .morningBooked {
-  border-left-color: var(--po-color-brand);
   background: var(--po-color-brand);
   color: #06100f;
 }
 
 .afternoonBooked {
-  border-left-color: #f4d89b;
   background: linear-gradient(135deg, #f4d89b 0%, #d4ad60 50%, #a97823 100%);
   color: #171006;
 }
@@ -360,10 +358,6 @@
 
 .pastDay {
   opacity: 0.34;
-}
-
-.pastDay .slot {
-  border-left-color: rgb(255 255 255 / 20%);
 }
 
 .formFold {
