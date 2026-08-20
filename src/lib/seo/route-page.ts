@@ -15,6 +15,7 @@ export const STATIC_ROUTE_SHELL_PATHS = [
   "/learn",
   "/find-us",
   "/contact",
+  "/pop-up",
 ] as const satisfies readonly SeoRoutePath[];
 
 const staticRouteShellPaths = new Set<SeoRoutePath>(STATIC_ROUTE_SHELL_PATHS);

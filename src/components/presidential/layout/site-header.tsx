@@ -13,6 +13,7 @@ const primaryNavItems = [
   { href: "/our-story", label: "Our Story" },
   { href: "/about", label: "About" },
   { href: "/learn", label: "Learn" },
+  { href: "/pop-up", label: "Pop Up" },
   { href: "/contact", label: "Contact" },
   { href: "/loyalty", label: "Loyalty" },
   { href: "/find-us", label: "Find Us" },

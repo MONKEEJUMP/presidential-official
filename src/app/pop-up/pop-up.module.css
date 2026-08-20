@@ -1,0 +1,627 @@
+:global(html):has(.page) {
+  scroll-behavior: smooth;
+}
+
+.page {
+  background: #070708;
+  color: var(--po-color-on-dark);
+}
+
+.hero {
+  position: relative;
+  display: grid;
+  min-height: calc(100svh - 4.5rem);
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 75% 25%, rgb(88 195 182 / 14%), transparent 28rem),
+    linear-gradient(135deg, #040405 0%, #0b0b0e 55%, #050506 100%);
+}
+
+.heroBackdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: grid;
+  place-items: center end;
+  padding: clamp(2rem, 6vw, 6rem);
+  opacity: 0.62;
+}
+
+.heroBackdrop::before {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 3%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 3%) 1px, transparent 1px);
+  background-size: 42px 42px;
+  content: "";
+  mask-image: linear-gradient(90deg, transparent 28%, black 100%);
+}
+
+.ledBoard {
+  position: relative;
+  display: grid;
+  width: min(54vw, 52rem);
+  min-height: 23rem;
+  place-items: center;
+  border: 1px solid rgb(244 216 155 / 55%);
+  background:
+    repeating-radial-gradient(circle at center, rgb(88 195 182 / 18%) 0 1px, transparent 1px 8px),
+    #050506;
+  box-shadow:
+    0 0 0 0.65rem #111216,
+    0 0 0 0.72rem rgb(244 216 155 / 55%),
+    0 2rem 5rem rgb(0 0 0 / 65%);
+  color: var(--po-color-brand);
+  font-family: var(--po-font-display);
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+  transform: perspective(70rem) rotateY(-7deg);
+}
+
+.ledBoard strong {
+  max-width: 9ch;
+  font-size: clamp(2.4rem, 6vw, 6.8rem);
+  line-height: 0.82;
+  text-shadow: 0 0 1.5rem rgb(88 195 182 / 55%);
+}
+
+.ledBoard span {
+  color: #f4d89b;
+  font-size: 0.7rem;
+}
+
+.goldSeam {
+  position: absolute;
+  right: -8vw;
+  bottom: 9%;
+  width: 58vw;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #f4d89b 20%, #a97823 70%, transparent);
+  box-shadow: 0 0 1rem rgb(244 216 155 / 45%);
+  transform: rotate(-5deg);
+}
+
+.heroContent {
+  align-self: end;
+  width: min(100%, 82rem);
+  margin: 0 auto;
+  padding: clamp(5rem, 12vw, 10rem) clamp(1.25rem, 5vw, 5rem) clamp(4rem, 8vw, 7rem);
+}
+
+.eyebrow,
+.foldHeading > p {
+  margin: 0 0 1rem;
+  color: var(--po-color-brand);
+  font-family: var(--po-font-display);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  max-width: 9ch;
+  margin: 0;
+  font-family: var(--po-font-display);
+  font-size: clamp(4.25rem, 13vw, 11.75rem);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 0.76;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  max-width: 38rem;
+  margin: 1.4rem 0 0;
+  color: #f4d89b;
+  font-family: var(--po-font-display);
+  font-size: clamp(1.1rem, 2.4vw, 2rem);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.heroLines {
+  display: grid;
+  gap: 0.18rem;
+  max-width: 42rem;
+  margin-top: 2rem;
+  color: var(--po-color-on-dark-muted);
+  font-size: clamp(1rem, 1.6vw, 1.24rem);
+  line-height: 1.45;
+}
+
+.heroLines p {
+  margin: 0;
+}
+
+.heroButton,
+.submitButton {
+  display: inline-flex;
+  min-height: 3.6rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2.4rem;
+  border: 1px solid var(--po-color-brand);
+  background: var(--po-color-brand);
+  color: #06100f;
+  font-family: var(--po-font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.9rem 1.4rem;
+  text-decoration: none;
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.heroButton:hover,
+.submitButton:hover:not(:disabled) {
+  background: #73d9ce;
+  transform: translateY(-2px);
+}
+
+.heroButton:focus-visible,
+.calendarControls button:focus-visible,
+.slot:focus-visible,
+.selectionSummary button:focus-visible,
+.submitButton:focus-visible,
+.bookingForm input:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.calendarFold,
+.formFold {
+  scroll-margin-top: 4.5rem;
+}
+
+.calendarFold {
+  position: relative;
+  width: min(100%, 90rem);
+  margin: 0 auto;
+  padding: clamp(4.5rem, 9vw, 8rem) clamp(1rem, 4vw, 4rem) clamp(5rem, 10vw, 9rem);
+}
+
+.calendarFold::before,
+.formFold::before {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #f4d89b 15%, #a97823 50%, #f4d89b 85%, transparent);
+  content: "";
+}
+
+.foldHeading {
+  display: grid;
+  margin-bottom: clamp(2.2rem, 5vw, 4rem);
+}
+
+.foldHeading h2 {
+  max-width: 12ch;
+  margin: 0;
+  font-family: var(--po-font-display);
+  font-size: clamp(3rem, 8vw, 7.25rem);
+  letter-spacing: -0.045em;
+  line-height: 0.86;
+  text-transform: uppercase;
+}
+
+.foldHeading > span {
+  margin-top: 1rem;
+  color: var(--po-color-on-dark-muted);
+  font-size: 1rem;
+}
+
+.calendarControls {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(12rem, 2fr) minmax(7rem, 1fr);
+  align-items: center;
+  border-block: 1px solid rgb(255 255 255 / 14%);
+}
+
+.calendarControls strong {
+  color: #f4d89b;
+  font-family: var(--po-font-display);
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  letter-spacing: 0.04em;
+  padding: 1.25rem 0.5rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.calendarControls button,
+.selectionSummary button {
+  min-height: 3.2rem;
+  border: 0;
+  background: transparent;
+  color: var(--po-color-brand);
+  cursor: pointer;
+  font-family: var(--po-font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.calendarControls button:first-child {
+  text-align: left;
+}
+
+.calendarControls button:last-child {
+  text-align: right;
+}
+
+.calendarMessage,
+.formMessage {
+  margin: 1.2rem 0 0;
+  border-left: 2px solid #f4d89b;
+  color: #f4d89b;
+  padding-left: 1rem;
+}
+
+.calendarScroller {
+  margin-top: 1.4rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding-bottom: 0.75rem;
+}
+
+.calendarGrid {
+  display: grid;
+  min-width: 62rem;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border-top: 1px solid rgb(255 255 255 / 16%);
+  border-left: 1px solid rgb(255 255 255 / 16%);
+}
+
+.weekday {
+  border-right: 1px solid rgb(255 255 255 / 16%);
+  border-bottom: 1px solid rgb(255 255 255 / 16%);
+  color: var(--po-color-on-dark-muted);
+  font-family: var(--po-font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  padding: 0.8rem;
+  text-align: center;
+}
+
+.blankDay,
+.dayCell {
+  min-height: 12.5rem;
+  border-right: 1px solid rgb(255 255 255 / 16%);
+  border-bottom: 1px solid rgb(255 255 255 / 16%);
+}
+
+.blankDay {
+  background: rgb(255 255 255 / 1.5%);
+}
+
+.dayCell {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  background: #09090b;
+}
+
+.dayNumber {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.55rem;
+  z-index: 2;
+  color: rgb(255 255 255 / 72%);
+  font-family: var(--po-font-display);
+  font-size: 0.7rem;
+  pointer-events: none;
+}
+
+.slot {
+  display: grid;
+  min-width: 0;
+  align-content: center;
+  justify-items: start;
+  gap: 0.18rem;
+  border: 0;
+  border-left: 2px solid var(--po-color-brand);
+  background: transparent;
+  color: var(--po-color-on-dark);
+  cursor: pointer;
+  padding: 1.15rem 0.75rem 0.75rem;
+  text-align: left;
+}
+
+.morningSlot {
+  border-bottom: 1px solid #b88a38;
+}
+
+.slot small,
+.slot span {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  text-transform: uppercase;
+}
+
+.slot small {
+  color: rgb(255 255 255 / 62%);
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
+}
+
+.slot strong {
+  font-family: var(--po-font-display);
+  font-size: 0.86rem;
+  letter-spacing: 0.06em;
+}
+
+.slot span {
+  color: rgb(255 255 255 / 52%);
+  font-size: 0.5rem;
+  line-height: 1.25;
+}
+
+.slot:hover:not(:disabled) {
+  background: rgb(88 195 182 / 10%);
+}
+
+.slot:disabled {
+  cursor: default;
+}
+
+.morningBooked {
+  border-left-color: var(--po-color-brand);
+  background: var(--po-color-brand);
+  color: #06100f;
+}
+
+.afternoonBooked {
+  border-left-color: #f4d89b;
+  background: linear-gradient(135deg, #f4d89b 0%, #d4ad60 50%, #a97823 100%);
+  color: #171006;
+}
+
+.morningBooked small,
+.afternoonBooked small {
+  color: currentColor;
+  opacity: 0.66;
+}
+
+.selectedSlot {
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+.pastDay {
+  opacity: 0.34;
+}
+
+.pastDay .slot {
+  border-left-color: rgb(255 255 255 / 20%);
+}
+
+.formFold {
+  position: relative;
+  background:
+    radial-gradient(circle at 20% 10%, rgb(88 195 182 / 10%), transparent 30rem),
+    #0c0c0f;
+  padding: clamp(4.5rem, 9vw, 8rem) clamp(1.25rem, 5vw, 5rem) clamp(6rem, 12vw, 10rem);
+}
+
+.formInner {
+  width: min(100%, 74rem);
+  margin: 0 auto;
+}
+
+.selectionPrompt {
+  max-width: 44rem;
+  margin: 0;
+  color: var(--po-color-on-dark-muted);
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+}
+
+.selectionSummary {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  border-block: 1px solid rgb(255 255 255 / 18%);
+  padding: 1.4rem 0;
+}
+
+.selectionSummary div {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.selectionSummary span {
+  color: var(--po-color-on-dark-muted);
+  font-size: 0.78rem;
+}
+
+.selectionSummary strong {
+  color: #f4d89b;
+  font-family: var(--po-font-display);
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  text-transform: uppercase;
+}
+
+.selectionSummary button {
+  border-bottom: 1px solid currentColor;
+  padding: 0;
+}
+
+.bookingForm {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.4rem;
+}
+
+.bookingForm label {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.bookingForm label > span {
+  font-family: var(--po-font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bookingForm input[type="text"],
+.bookingForm input[type="tel"],
+.bookingForm input[type="email"],
+.bookingForm input:not([type]) {
+  min-width: 0;
+  min-height: 3.5rem;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: 0;
+  background: #070708;
+  color: #fff;
+  font: inherit;
+  padding: 0.85rem 0.9rem;
+}
+
+.bookingForm input:focus {
+  border-color: var(--po-color-brand);
+}
+
+.bookingForm small {
+  color: var(--po-color-on-dark-muted);
+  font-size: 0.78rem;
+}
+
+.fullField,
+.wholeDayField,
+.formMessage,
+.submitButton {
+  grid-column: 1 / -1;
+}
+
+.wholeDayField {
+  display: flex !important;
+  min-height: 4rem;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  border: 1px solid rgb(244 216 155 / 45%);
+  background: rgb(244 216 155 / 7%);
+  cursor: pointer;
+  padding: 1rem;
+}
+
+.wholeDayField input {
+  width: 1.2rem;
+  height: 1.2rem;
+  accent-color: var(--po-color-brand);
+}
+
+.wholeDayField > span {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.unavailableWholeDay {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.submitButton {
+  width: fit-content;
+  min-width: min(100%, 20rem);
+  cursor: pointer;
+}
+
+.submitButton:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.confirmation {
+  display: grid;
+  max-width: 52rem;
+  gap: 1rem;
+  border: 1px solid var(--po-color-brand);
+  background: rgb(88 195 182 / 9%);
+  padding: clamp(2rem, 5vw, 4rem);
+}
+
+.confirmation p {
+  margin: 0;
+  color: var(--po-color-brand);
+  font-family: var(--po-font-display);
+  font-size: clamp(2.3rem, 6vw, 5rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.confirmation strong {
+  color: var(--po-color-on-dark-muted);
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  line-height: 1.45;
+}
+
+@media (max-width: 900px) {
+  .heroBackdrop {
+    place-items: start end;
+    padding-top: 4rem;
+  }
+
+  .ledBoard {
+    width: 78vw;
+    min-height: 17rem;
+    opacity: 0.42;
+  }
+
+  .bookingForm {
+    grid-template-columns: 1fr;
+  }
+
+  .bookingForm > * {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    min-height: calc(100svh - 4.5rem);
+  }
+
+  .heroContent {
+    padding-top: 9rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(3.7rem, 22vw, 6rem);
+  }
+
+  .calendarControls {
+    grid-template-columns: 1fr 1.45fr 1fr;
+  }
+
+  .calendarControls button {
+    font-size: 0.58rem;
+  }
+
+  .selectionSummary {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .selectionSummary button {
+    min-height: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(html):has(.page) {
+    scroll-behavior: auto;
+  }
+
+  .heroButton,
+  .submitButton {
+    transition: none;
+  }
+}
+
