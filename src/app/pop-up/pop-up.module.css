@@ -47,7 +47,8 @@
 
 .tourTagline {
   display: grid;
-  max-width: 22ch;
+  width: max-content;
+  max-width: min(22ch, 100%);
   gap: 0.08em;
   margin: 0 0 1.4rem;
   color: #fff;
@@ -58,6 +59,12 @@
   line-height: 0.94;
   text-shadow: 0 0.1em 0.5em rgb(0 0 0 / 80%);
   text-transform: uppercase;
+}
+
+.tourTaglineSpread {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .eyebrow {
