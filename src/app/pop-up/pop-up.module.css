@@ -10,88 +10,94 @@
 .hero {
   position: relative;
   display: grid;
-  min-height: calc(100svh - 4.5rem);
+  min-height: clamp(44rem, calc(100svh - 4.5rem), 64rem);
   overflow: hidden;
   isolation: isolate;
+  background: #050506;
+}
+
+.heroMedia {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.heroImage {
+  object-fit: cover;
+  object-position: center center;
+}
+
+.heroMedia::after {
+  position: absolute;
+  inset: 0;
   background:
-    radial-gradient(circle at 75% 25%, rgb(88 195 182 / 14%), transparent 28rem),
-    linear-gradient(135deg, #040405 0%, #0b0b0e 55%, #050506 100%);
-}
-
-.heroBackdrop {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  display: grid;
-  place-items: center end;
-  padding: clamp(2rem, 6vw, 6rem);
-  opacity: 0.62;
-}
-
-.heroBackdrop::before {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgb(255 255 255 / 3%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 3%) 1px, transparent 1px);
-  background-size: 42px 42px;
+    linear-gradient(90deg, rgb(0 0 0 / 86%) 0%, rgb(0 0 0 / 68%) 45%, rgb(0 0 0 / 38%) 76%, rgb(0 0 0 / 48%) 100%),
+    linear-gradient(180deg, rgb(0 0 0 / 18%) 0%, rgb(0 0 0 / 10%) 48%, rgb(0 0 0 / 74%) 100%);
   content: "";
-  mask-image: linear-gradient(90deg, transparent 28%, black 100%);
-}
-
-.ledBoard {
-  position: relative;
-  display: grid;
-  width: min(54vw, 52rem);
-  min-height: 23rem;
-  place-items: center;
-  border: 1px solid rgb(244 216 155 / 55%);
-  background:
-    repeating-radial-gradient(circle at center, rgb(88 195 182 / 18%) 0 1px, transparent 1px 8px),
-    #050506;
-  box-shadow:
-    0 0 0 0.65rem #111216,
-    0 0 0 0.72rem rgb(244 216 155 / 55%),
-    0 2rem 5rem rgb(0 0 0 / 65%);
-  color: var(--po-color-brand);
-  font-family: var(--po-font-display);
-  letter-spacing: 0.12em;
-  text-align: center;
-  text-transform: uppercase;
-  transform: perspective(70rem) rotateY(-7deg);
-}
-
-.ledBoard strong {
-  max-width: 9ch;
-  font-size: clamp(2.4rem, 6vw, 6.8rem);
-  line-height: 0.82;
-  text-shadow: 0 0 1.5rem rgb(88 195 182 / 55%);
-}
-
-.ledBoard span {
-  color: #f4d89b;
-  font-size: 0.7rem;
-}
-
-.goldSeam {
-  position: absolute;
-  right: -8vw;
-  bottom: 9%;
-  width: 58vw;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #f4d89b 20%, #a97823 70%, transparent);
-  box-shadow: 0 0 1rem rgb(244 216 155 / 45%);
-  transform: rotate(-5deg);
 }
 
 .heroContent {
-  align-self: end;
-  width: min(100%, 82rem);
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: min(100%, 90rem);
+  min-height: inherit;
+  align-content: center;
   margin: 0 auto;
-  padding: clamp(5rem, 12vw, 10rem) clamp(1.25rem, 5vw, 5rem) clamp(4rem, 8vw, 7rem);
+  padding: clamp(5.5rem, 10vw, 8rem) clamp(1.25rem, 6vw, 6rem) clamp(4.5rem, 9vw, 7rem);
 }
 
-.eyebrow,
+.eyebrow {
+  margin: 0 0 1rem;
+  color: var(--po-color-brand);
+  font-family: var(--po-font-display);
+  font-size: clamp(0.95rem, 1.6vw, 1.2rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  display: grid;
+  max-width: 12ch;
+  gap: 0.04em;
+  margin: 0;
+  font-family: var(--po-font-display);
+  font-size: clamp(4.4rem, 9.2vw, 9rem);
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  line-height: 0.9;
+  text-shadow: 0 0.12em 0.6em rgb(0 0 0 / 70%);
+  text-transform: uppercase;
+}
+
+.subtitle {
+  max-width: 42rem;
+  margin: 1.5rem 0 0;
+  color: #f4d89b;
+  font-family: var(--po-font-display);
+  font-size: clamp(1.25rem, 2.3vw, 2rem);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-shadow: 0 0.1em 0.5em rgb(0 0 0 / 72%);
+}
+
+.heroDetails {
+  display: grid;
+  gap: 0.35rem;
+  max-width: 46rem;
+  margin-top: 1.65rem;
+  color: rgb(255 255 255 / 88%);
+  font-size: clamp(1rem, 1.4vw, 1.18rem);
+  line-height: 1.5;
+  text-shadow: 0 0.1em 0.5em rgb(0 0 0 / 80%);
+}
+
+.heroDetails p {
+  margin: 0;
+}
+
 .foldHeading > p {
   margin: 0 0 1rem;
   color: var(--po-color-brand);
@@ -100,41 +106,6 @@
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-}
-
-.hero h1 {
-  max-width: 9ch;
-  margin: 0;
-  font-family: var(--po-font-display);
-  font-size: clamp(4.25rem, 13vw, 11.75rem);
-  font-weight: 800;
-  letter-spacing: -0.055em;
-  line-height: 0.76;
-  text-transform: uppercase;
-}
-
-.subtitle {
-  max-width: 38rem;
-  margin: 1.4rem 0 0;
-  color: #f4d89b;
-  font-family: var(--po-font-display);
-  font-size: clamp(1.1rem, 2.4vw, 2rem);
-  font-weight: 600;
-  line-height: 1.1;
-}
-
-.heroLines {
-  display: grid;
-  gap: 0.18rem;
-  max-width: 42rem;
-  margin-top: 2rem;
-  color: var(--po-color-on-dark-muted);
-  font-size: clamp(1rem, 1.6vw, 1.24rem);
-  line-height: 1.45;
-}
-
-.heroLines p {
-  margin: 0;
 }
 
 .heroButton,
@@ -563,15 +534,8 @@
 }
 
 @media (max-width: 900px) {
-  .heroBackdrop {
-    place-items: start end;
-    padding-top: 4rem;
-  }
-
-  .ledBoard {
-    width: 78vw;
-    min-height: 17rem;
-    opacity: 0.42;
+  .heroImage {
+    object-position: 58% center;
   }
 
   .bookingForm {
@@ -589,11 +553,21 @@
   }
 
   .heroContent {
-    padding-top: 9rem;
+    align-content: end;
+    padding-top: 7rem;
+    padding-bottom: 4rem;
   }
 
   .hero h1 {
-    font-size: clamp(3.7rem, 22vw, 6rem);
+    max-width: 11ch;
+    font-size: clamp(3.2rem, 17vw, 5.4rem);
+    line-height: 0.94;
+  }
+
+  .heroMedia::after {
+    background:
+      linear-gradient(90deg, rgb(0 0 0 / 76%) 0%, rgb(0 0 0 / 58%) 100%),
+      linear-gradient(180deg, rgb(0 0 0 / 18%) 0%, rgb(0 0 0 / 26%) 42%, rgb(0 0 0 / 88%) 100%);
   }
 
   .calendarControls {
@@ -624,4 +598,3 @@
     transition: none;
   }
 }
-

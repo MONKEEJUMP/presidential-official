@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { Metadata } from "next";
+import Image from "next/image";
 
 import { PageFrame } from "@/components/presidential";
 import { JsonLd, buildRouteShellJsonLd } from "@/lib/seo/schema";
@@ -87,25 +88,28 @@ export default async function PopUpPage() {
 
       <PageFrame className={styles.page}>
         <section className={styles.hero} aria-labelledby="popup-title">
-          <div className={styles.heroBackdrop} aria-hidden="true">
-            <div className={styles.ledBoard}>
-              <span>LED</span>
-              <strong>YOUR NAME IN LIGHTS</strong>
-              <span>OKLAHOMA</span>
-            </div>
-            <div className={styles.goldSeam} />
+          <div className={styles.heroMedia} aria-hidden="true">
+            <Image
+              className={styles.heroImage}
+              src="/media/presidential-pop-up-party-hero.jpg"
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+            />
           </div>
 
           <div className={styles.heroContent}>
             <p className={styles.eyebrow}>Presidential Pop-Up</p>
-            <h1 id="popup-title">THREE YOU&apos;RE FREE</h1>
+            <h1 id="popup-title">
+              <span>THREE</span>
+              <span>YOU&apos;RE FREE</span>
+            </h1>
             <p className={styles.subtitle}>The Presidential Pop-Up Party Weekend</p>
-            <div className={styles.heroLines}>
-              <p>The billboard-sized LED sign rolls up to your dispensary.</p>
-              <p>Your logo and name light up the block.</p>
+            <div className={styles.heroDetails}>
               <p>Presidential staff, promotional products and a DJ bring the party.</p>
               <p>Thursday through Saturday is free for Presidential retailers.</p>
-              <p>Oklahoma distributors choose the day; a Presidential associate closes it by phone.</p>
+              <p>Choose your day, then a Presidential associate closes it by phone.</p>
             </div>
             <a className={styles.heroButton} href="#book-your-day">
               TO GET STARTED CLICK HERE
