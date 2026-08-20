@@ -45,6 +45,21 @@
   padding: clamp(5.5rem, 10vw, 8rem) clamp(1.25rem, 6vw, 6rem) clamp(4.5rem, 9vw, 7rem);
 }
 
+.popupBanner {
+  width: max-content;
+  margin: 0 0 clamp(0.7rem, 1.4vw, 1.15rem);
+  color: #fff;
+  font-family: Futura, "Futura PT", "Futura Std", "Century Gothic", "Avenir Next", Arial, sans-serif;
+  font-size: clamp(3rem, 5.4vw, 5.75rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 0.72;
+  text-shadow: 0 0.1em 0.5em rgb(0 0 0 / 80%);
+  transform: scaleX(1.28) scaleY(0.82);
+  transform-origin: left bottom;
+  white-space: nowrap;
+}
+
 .tourTagline {
   display: grid;
   width: max-content;
@@ -802,6 +817,12 @@
     align-content: end;
     padding-top: 7rem;
     padding-bottom: 4rem;
+  }
+
+  .popupBanner {
+    max-width: 78vw;
+    font-size: clamp(2.2rem, 11vw, 4.25rem);
+    transform: scaleX(1.18) scaleY(0.84);
   }
 
   .hero h1 {

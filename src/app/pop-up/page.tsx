@@ -100,6 +100,7 @@ export default async function PopUpPage() {
           </div>
 
           <div className={styles.heroContent}>
+            <p className={styles.popupBanner}>POP-UP</p>
             <p className={styles.tourTagline}>
               <span>First Stop: Oklahoma</span>
               <span
