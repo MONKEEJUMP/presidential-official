@@ -46,17 +46,18 @@
 }
 
 .tourTagline {
-  max-width: 42rem;
-  margin: 0 0 0.75rem;
+  display: grid;
+  max-width: 22ch;
+  gap: 0.08em;
+  margin: 0 0 1.4rem;
   color: #fff;
   font-family: var(--po-font-display);
-  font-size: clamp(0.8rem, 1.25vw, 1rem);
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  line-height: 1.35;
+  font-size: clamp(2.2rem, 4.6vw, 4.9rem);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 0.94;
   text-shadow: 0 0.1em 0.5em rgb(0 0 0 / 80%);
   text-transform: uppercase;
-  text-wrap: balance;
 }
 
 .eyebrow {
