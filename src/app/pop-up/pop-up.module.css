@@ -47,15 +47,15 @@
 
 .popupBanner {
   width: max-content;
-  margin: 0 0 clamp(0.7rem, 1.4vw, 1.15rem);
+  margin: 0 0 clamp(0.85rem, 1.6vw, 1.35rem);
   color: #fff;
   font-family: Futura, "Futura PT", "Futura Std", "Century Gothic", "Avenir Next", Arial, sans-serif;
-  font-size: clamp(3rem, 5.4vw, 5.75rem);
+  font-size: clamp(5rem, 10.5vw, 11rem);
   font-weight: 900;
-  letter-spacing: 0.06em;
-  line-height: 0.72;
+  letter-spacing: 0.04em;
+  line-height: 0.68;
   text-shadow: 0 0.1em 0.5em rgb(0 0 0 / 80%);
-  transform: scaleX(1.28) scaleY(0.82);
+  transform: translateY(clamp(-3rem, -3vw, -1.25rem)) scaleX(1.32) scaleY(0.86);
   transform-origin: left bottom;
   white-space: nowrap;
 }
@@ -820,9 +820,9 @@
   }
 
   .popupBanner {
-    max-width: 78vw;
-    font-size: clamp(2.2rem, 11vw, 4.25rem);
-    transform: scaleX(1.18) scaleY(0.84);
+    max-width: 82vw;
+    font-size: clamp(3.4rem, 16vw, 6rem);
+    transform: translateY(-0.75rem) scaleX(1.22) scaleY(0.86);
   }
 
   .hero h1 {
