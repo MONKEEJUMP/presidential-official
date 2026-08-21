@@ -108,7 +108,7 @@ export function HeaderStoreFinder({ onRoute }: HeaderStoreFinderProps) {
 
   return (
     <li
-      className="po-primary-nav-item relative z-30 xl:ml-6"
+      className="po-primary-nav-item relative z-30 min-[1100px]:ml-6"
       onMouseEnter={keepHoverOpen}
       onMouseLeave={scheduleHoverClose}
       ref={rootRef}
@@ -117,7 +117,7 @@ export function HeaderStoreFinder({ onRoute }: HeaderStoreFinderProps) {
         aria-controls={panelId}
         aria-expanded={open}
         aria-haspopup="dialog"
-        className="flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-full bg-po-brand px-3 py-2 font-display text-[0.75rem] font-semibold uppercase text-[#04342c] transition-colors hover:bg-po-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand xl:h-[2.3125rem] xl:w-auto xl:px-[clamp(0.65rem,0.8vw,0.85rem)] xl:py-0"
+        className="flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-full bg-po-brand px-3 py-2 font-display text-[0.75rem] font-semibold uppercase text-[#04342c] transition-colors hover:bg-po-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand min-[1100px]:h-[2.3125rem] min-[1100px]:w-auto min-[1100px]:px-[clamp(0.65rem,0.8vw,0.85rem)] min-[1100px]:py-0"
         onMouseEnter={scheduleHoverOpen}
         onClick={() => {
           if (hoverOpenTimer.current) {
@@ -138,7 +138,7 @@ export function HeaderStoreFinder({ onRoute }: HeaderStoreFinderProps) {
 
       {open ? (
         <div
-          className="absolute inset-x-0 top-[calc(100%+0.25rem)] z-50 before:absolute before:-top-1 before:inset-x-0 before:h-1 before:content-[''] xl:left-auto xl:right-0 xl:w-96"
+          className="absolute inset-x-0 top-[calc(100%+0.25rem)] z-50 before:absolute before:-top-1 before:inset-x-0 before:h-1 before:content-[''] min-[1100px]:left-auto min-[1100px]:right-0 min-[1100px]:w-96"
           onMouseEnter={keepHoverOpen}
           id={panelId}
           role="dialog"
