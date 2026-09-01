@@ -23,8 +23,12 @@ export async function createSalesAuthClient() {
         return cookieStore.getAll();
       },
       setAll(cookiesToSet) {
-        for (const cookie of cookiesToSet) {
-          cookieStore.set(cookie.name, cookie.value, cookie.options);
+        try {
+          for (const cookie of cookiesToSet) {
+            cookieStore.set(cookie.name, cookie.value, cookie.options);
+          }
+        } catch {
+          // Server Components cannot write cookies; Route Handlers refresh them.
         }
       },
     },

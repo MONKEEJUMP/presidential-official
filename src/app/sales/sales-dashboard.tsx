@@ -75,9 +75,9 @@ function csvCell(value: unknown): string {
   return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 
-export function SalesDashboard() {
+export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyAuthenticated: boolean }>) {
   const [snapshot, setSnapshot] = useState<SalesSnapshot | null>(null);
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(!initiallyAuthenticated);
   const [loadingData, setLoadingData] = useState(false);
   const [pageError, setPageError] = useState("");
   const [loginError, setLoginError] = useState("");
