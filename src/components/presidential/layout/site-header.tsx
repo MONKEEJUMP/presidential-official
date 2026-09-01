@@ -17,6 +17,7 @@ const primaryNavItems = [
   { href: "/contact", label: "Contact" },
   { href: "/loyalty", label: "Loyalty" },
   { href: "/find-us", label: "Find Us" },
+  { href: "/sales", label: "Login" },
 ] as const;
 
 export function SiteHeader() {
@@ -93,7 +94,7 @@ export function SiteHeader() {
           <button
             aria-controls="presidential-primary-navigation"
             aria-expanded={navigationOpen}
-            className="flex h-11 w-11 cursor-pointer items-center justify-center border border-po-on-dark/25 bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand min-[1100px]:hidden"
+            className="flex h-11 w-11 cursor-pointer items-center justify-center border border-po-on-dark/25 bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand min-[1170px]:hidden"
             onClick={() => setNavigationOpen((open) => !open)}
             type="button"
           >
@@ -107,10 +108,10 @@ export function SiteHeader() {
 
           <nav
             aria-label="Primary navigation"
-            className={`absolute inset-x-5 top-[calc(100%+0.01rem)] max-h-[calc(100dvh-4.5rem)] overflow-y-auto overscroll-contain border border-po-on-dark/15 bg-po-ink p-3 shadow-2xl [-webkit-overflow-scrolling:touch] sm:inset-x-8 min-[1100px]:static min-[1100px]:block min-[1100px]:max-h-none min-[1100px]:min-w-0 min-[1100px]:flex-1 min-[1100px]:overflow-visible min-[1100px]:border-0 min-[1100px]:bg-transparent min-[1100px]:p-0 min-[1100px]:shadow-none ${navigationOpen ? "block" : "hidden"}`}
+            className={`absolute inset-x-5 top-[calc(100%+0.01rem)] max-h-[calc(100dvh-4.5rem)] overflow-y-auto overscroll-contain border border-po-on-dark/15 bg-po-ink p-3 shadow-2xl [-webkit-overflow-scrolling:touch] sm:inset-x-8 min-[1170px]:static min-[1170px]:block min-[1170px]:max-h-none min-[1170px]:min-w-0 min-[1170px]:flex-1 min-[1170px]:overflow-visible min-[1170px]:border-0 min-[1170px]:bg-transparent min-[1170px]:p-0 min-[1170px]:shadow-none ${navigationOpen ? "block" : "hidden"}`}
             id="presidential-primary-navigation"
           >
-            <ul className="grid min-[1100px]:flex min-[1100px]:items-center min-[1100px]:justify-end min-[1100px]:gap-0 min-[1100px]:whitespace-nowrap">
+            <ul className="grid min-[1170px]:flex min-[1170px]:items-center min-[1170px]:justify-end min-[1170px]:gap-0 min-[1170px]:whitespace-nowrap">
               {primaryNavItems.map((item) => (
                 <li className="po-primary-nav-item" key={item.href}>
                   <Link
@@ -134,7 +135,7 @@ export function SiteHeader() {
       {navigationOpen ? (
         <div
           aria-hidden="true"
-          className="fixed inset-0 z-30 touch-pan-y bg-transparent min-[1100px]:hidden"
+          className="fixed inset-0 z-30 touch-pan-y bg-transparent min-[1170px]:hidden"
           data-presidential-mobile-menu-backdrop
           onClick={() => setNavigationOpen(false)}
         />

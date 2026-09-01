@@ -338,7 +338,7 @@ summary {
   color: var(--po-color-brand);
 }
 
-@media (min-width: 68.75rem) {
+@media (min-width: 73.125rem) {
   .po-primary-nav-item {
     border-bottom: 0;
   }
