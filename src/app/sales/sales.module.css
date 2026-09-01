@@ -1,0 +1,659 @@
+.loginPage,
+.salesPage {
+  min-height: 100svh;
+  background: #070708;
+  color: #f7f7f5;
+  font-family: var(--po-font-body);
+}
+
+.loginPage {
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+}
+
+.loginCard {
+  display: grid;
+  width: min(100%, 31rem);
+  gap: 1.15rem;
+  border: 1px solid rgb(88 195 182 / 65%);
+  background: #101113;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  box-shadow: 0 2rem 6rem rgb(0 0 0 / 45%);
+}
+
+.loginCard > span,
+.salesHeader > div > span,
+.commandBar label > span,
+.rowField > span,
+.extraContacts > span,
+.callClock > span {
+  color: #58c3b6;
+  font-family: var(--po-font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.loginCard h1,
+.salesHeader h1,
+.panelHeader h2,
+.callHistory h3 {
+  margin: 0;
+  font-family: var(--po-font-display);
+  text-transform: uppercase;
+}
+
+.loginCard h1 {
+  font-size: clamp(2.8rem, 10vw, 5rem);
+  line-height: 0.88;
+}
+
+.loginCard p {
+  margin: 0;
+  color: rgb(255 255 255 / 70%);
+  line-height: 1.5;
+}
+
+.loginCard label,
+.commandBar label,
+.advancedFields label {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.loginCard input,
+.commandBar input,
+.commandBar select,
+.advancedFields input,
+.advancedFields textarea {
+  width: 100%;
+  border: 1px solid rgb(88 195 182 / 48%);
+  border-radius: 0;
+  background: #070708;
+  color: #fff;
+  font: inherit;
+  padding: 0.8rem 0.9rem;
+}
+
+.loginCard button,
+.repIdentity button,
+.viewToggle button,
+.exportButton,
+.outcomeGrid button,
+.advancedToggle,
+.advancedFields > button,
+.loggedState button,
+.panelHeader > button {
+  border: 1px solid currentColor;
+  border-radius: 0;
+  cursor: pointer;
+  font-family: var(--po-font-display);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.loginCard button {
+  min-height: 3.5rem;
+  background: #58c3b6;
+  color: #041412;
+}
+
+.loginCard button:disabled,
+.outcomeGrid button:disabled,
+.advancedFields > button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.salesPage {
+  padding-bottom: 4rem;
+}
+
+.salesHeader {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  border-bottom: 1px solid rgb(88 195 182 / 55%);
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+.salesHeader h1 {
+  margin-top: 0.25rem;
+  font-size: clamp(2.4rem, 6vw, 5.5rem);
+  line-height: 0.82;
+}
+
+.repIdentity {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.repIdentity > span {
+  font-family: var(--po-font-display);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.repIdentity button {
+  min-height: 2.6rem;
+  background: transparent;
+  color: #58c3b6;
+  padding: 0.6rem 0.85rem;
+}
+
+.commandBar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.55fr) minmax(14rem, 2fr) auto auto;
+  align-items: end;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgb(255 255 255 / 14%);
+  background: rgb(7 7 8 / 96%);
+  padding: 1rem clamp(1rem, 3vw, 2.5rem);
+  backdrop-filter: blur(14px);
+}
+
+.viewToggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.viewToggle button,
+.exportButton {
+  min-height: 2.85rem;
+  background: transparent;
+  color: #fff;
+  padding: 0.65rem 1rem;
+}
+
+.viewToggle .activeToggle,
+.exportButton {
+  background: #58c3b6;
+  color: #041412;
+}
+
+.countLine {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 3vw, 2.5rem);
+}
+
+.countLine strong {
+  color: #f4e3a1;
+  font-family: var(--po-font-display);
+  font-size: clamp(1.05rem, 2vw, 1.5rem);
+  text-transform: uppercase;
+}
+
+.countLine span {
+  color: rgb(255 255 255 / 58%);
+  font-size: 0.82rem;
+}
+
+.doorList {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0 clamp(0.6rem, 2vw, 1.5rem);
+}
+
+.doorRow {
+  position: relative;
+  display: grid;
+  min-height: 6.5rem;
+  grid-template-columns: minmax(14rem, 2fr) minmax(6rem, 0.75fr) minmax(8rem, 1fr) minmax(12rem, 1.45fr) repeat(4, minmax(7rem, 0.8fr));
+  align-items: center;
+  gap: 0.8rem;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 18%);
+  color: #111214;
+  cursor: pointer;
+  padding: 0.9rem 1rem 0.9rem 1.35rem;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 6.5rem;
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+}
+
+.doorRow::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0.45rem;
+  background: #fff;
+  content: "";
+}
+
+.doorRow:hover,
+.doorRow:focus-visible {
+  z-index: 2;
+  outline: 2px solid #58c3b6;
+  outline-offset: 1px;
+  transform: translateY(-1px);
+}
+
+.prospectRow {
+  background: #fff;
+}
+
+.stockedRow {
+  background: linear-gradient(100deg, rgb(244 227 161 / 42%) 0%, rgb(212 185 106 / 24%) 34%, rgb(255 255 255 / 96%) 78%);
+}
+
+.stockedRow::before {
+  background: linear-gradient(180deg, #f4e3a1, #d4b96a 52%, #8f6b24);
+}
+
+.callbackRow {
+  box-shadow: inset 0 0 0 2px #d4b96a;
+}
+
+.calledTodayRow {
+  opacity: 0.52;
+}
+
+.closedRow {
+  filter: grayscale(0.9);
+  opacity: 0.62;
+}
+
+.struckRow .storeCell > strong,
+.struckRow .rowField > strong,
+.struckRow .rowField > a {
+  text-decoration: line-through;
+}
+
+.storeCell {
+  display: grid;
+  min-width: 0;
+  gap: 0.28rem;
+}
+
+.storeCell > strong {
+  overflow: hidden;
+  font-family: var(--po-font-display);
+  font-size: clamp(1.05rem, 1.45vw, 1.35rem);
+  line-height: 1;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.storeCell > small {
+  overflow: hidden;
+  color: rgb(17 18 20 / 62%);
+  font-size: 0.72rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.rowBadges span,
+.outcomeBadge {
+  width: fit-content;
+  font-family: var(--po-font-display);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.22rem 0.38rem;
+  text-transform: uppercase;
+}
+
+.presidentialBadge {
+  background: #8f6b24;
+  color: #fff8dc;
+}
+
+.closedBadge {
+  background: #65676b;
+  color: #fff;
+}
+
+.calledBadge {
+  background: #111214;
+  color: #fff;
+}
+
+.rowField {
+  display: grid;
+  min-width: 0;
+  gap: 0.25rem;
+}
+
+.rowField > span {
+  color: rgb(17 18 20 / 55%);
+  font-size: 0.55rem;
+}
+
+.rowField > strong,
+.rowField > a {
+  overflow: hidden;
+  color: #111214;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowField > a {
+  color: #075e55;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+.outcomeBadge {
+  background: #111214;
+  color: #fff !important;
+}
+
+.emptyState {
+  border: 1px solid rgb(88 195 182 / 36%);
+  color: rgb(255 255 255 / 65%);
+  padding: 2rem;
+  text-align: center;
+}
+
+.callPanel {
+  position: fixed;
+  inset: 0 0 0 auto;
+  z-index: 50;
+  width: min(100%, 35rem);
+  overflow-y: auto;
+  border-left: 2px solid #58c3b6;
+  background: #0d0e10;
+  color: #fff;
+  padding: clamp(1.1rem, 3vw, 2rem);
+  box-shadow: -2rem 0 6rem rgb(0 0 0 / 60%);
+}
+
+.panelHeader {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgb(88 195 182 / 38%);
+  padding-bottom: 1.2rem;
+}
+
+.panelHeader > div > span {
+  color: #58c3b6;
+  font-family: var(--po-font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+}
+
+.panelHeader h2 {
+  margin-top: 0.45rem;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  line-height: 0.92;
+}
+
+.panelHeader p {
+  margin: 0.7rem 0 0;
+  color: rgb(255 255 255 / 60%);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.panelHeader > button {
+  width: 2.6rem;
+  height: 2.6rem;
+  flex: 0 0 auto;
+  background: transparent;
+  color: #fff;
+  font-size: 1.6rem;
+}
+
+.actionLink {
+  display: block;
+  margin-top: 0.75rem;
+  border: 1px solid #58c3b6;
+  color: #58c3b6;
+  font-family: var(--po-font-display);
+  font-size: 0.82rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  padding: 0.8rem;
+  text-decoration: none;
+}
+
+.extraContacts,
+.logComposer,
+.callHistory,
+.loggedState {
+  margin-top: 1.25rem;
+  border: 1px solid rgb(88 195 182 / 28%);
+  background: rgb(255 255 255 / 3%);
+  padding: 1rem;
+}
+
+.extraContacts pre {
+  margin: 0.55rem 0 0;
+  color: rgb(255 255 255 / 76%);
+  font: 0.78rem/1.55 ui-monospace, SFMono-Regular, Consolas, monospace;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.callClock {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.callClock strong {
+  color: #f4e3a1;
+  font-family: var(--po-font-display);
+  font-size: 0.8rem;
+}
+
+.logComposer > p {
+  margin: 0.75rem 0;
+  color: rgb(255 255 255 / 65%);
+  font-size: 0.85rem;
+}
+
+.outcomeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.outcomeGrid button {
+  min-height: 3rem;
+  background: #fff;
+  color: #111214;
+  font-size: 0.68rem;
+  padding: 0.55rem;
+}
+
+.outcomeGrid button:hover,
+.outcomeGrid .selectedOutcome {
+  background: #58c3b6;
+  color: #041412;
+}
+
+.advancedToggle {
+  width: 100%;
+  margin-top: 0.75rem;
+  background: transparent;
+  color: #f4e3a1;
+  font-size: 0.68rem;
+  padding: 0.75rem;
+}
+
+.advancedFields {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.advancedFields label > span {
+  color: rgb(255 255 255 / 66%);
+  font-family: var(--po-font-display);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}
+
+.advancedFields textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.advancedFields > button,
+.loggedState button {
+  min-height: 3rem;
+  background: #58c3b6;
+  color: #041412;
+  padding: 0.7rem;
+}
+
+.loggedState {
+  display: grid;
+  gap: 0.65rem;
+  border-color: #d4b96a;
+  background: rgb(212 185 106 / 10%);
+}
+
+.loggedState > strong {
+  color: #f4e3a1;
+  font-family: var(--po-font-display);
+  font-size: 1.4rem;
+}
+
+.callHistory h3 {
+  color: #58c3b6;
+  font-size: 1rem;
+}
+
+.callHistory > article {
+  display: grid;
+  gap: 0.25rem;
+  border-top: 1px solid rgb(255 255 255 / 12%);
+  padding: 0.85rem 0;
+}
+
+.callHistory > article strong {
+  font-family: var(--po-font-display);
+  text-transform: uppercase;
+}
+
+.callHistory > article span,
+.callHistory > p {
+  color: rgb(255 255 255 / 58%);
+  font-size: 0.78rem;
+}
+
+.callHistory > article p {
+  margin: 0.3rem 0 0;
+  line-height: 1.45;
+}
+
+.errorMessage {
+  margin: 0.75rem clamp(1rem, 3vw, 2.5rem);
+  border-left: 3px solid #e5484d;
+  color: #ff8588 !important;
+  padding: 0.7rem 0.9rem;
+}
+
+@media (max-width: 75rem) {
+  .doorRow {
+    grid-template-columns: minmax(13rem, 2fr) repeat(3, minmax(8rem, 1fr));
+  }
+}
+
+@media (max-width: 52rem) {
+  .salesHeader,
+  .countLine {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .commandBar {
+    position: static;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .searchControl {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .doorRow {
+    grid-template-columns: 1fr 1fr;
+    padding: 1rem 0.9rem 1rem 1.25rem;
+  }
+
+  .storeCell {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 35rem) {
+  .salesHeader {
+    padding: 1rem;
+  }
+
+  .salesHeader h1 {
+    font-size: 2.75rem;
+  }
+
+  .repIdentity {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .commandBar {
+    grid-template-columns: 1fr;
+    padding: 0.85rem;
+  }
+
+  .searchControl,
+  .viewToggle,
+  .exportButton {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .countLine {
+    padding-inline: 0.85rem;
+  }
+
+  .doorList {
+    padding-inline: 0.4rem;
+  }
+
+  .doorRow {
+    gap: 0.75rem 0.5rem;
+  }
+
+  .rowField > strong,
+  .rowField > a {
+    font-size: 0.7rem;
+  }
+
+  .callPanel {
+    width: 100%;
+    border-left: 0;
+    border-top: 2px solid #58c3b6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doorRow {
+    transition: none;
+  }
+}

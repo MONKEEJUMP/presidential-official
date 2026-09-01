@@ -58,6 +58,15 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        source: "/sales/:path*",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "noindex, nofollow, noarchive, nosnippet, noimageindex",
+          },
+        ],
+      },
     ];
   },
   async redirects() {
