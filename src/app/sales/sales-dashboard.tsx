@@ -439,16 +439,16 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     setWorkMode(null);
   }
 
-  async function resetMyActivityCounters() {
-    if (!snapshot || !window.confirm("RESET YOUR PERSONAL SALES COUNTERS TO ZERO? Call history stays saved.")) return;
+  async function resetMyDailyCalls() {
+    if (!snapshot || !window.confirm("RESET ONLY TODAY'S PERSONAL CALL COUNTER? Weekly and monthly reports stay unchanged.")) return;
     setPageError("");
     try {
-      await postAction({ action: "reset_my_activity_counters" });
+      await postAction({ action: "reset_my_daily_calls" });
       setSnapshot((current) => current ? {
         ...current,
         user: {
           ...current.user,
-          stats: { callsToday: 0, callsThisWeek: 0, soldThisMonth: 0 },
+          stats: { ...current.user.stats, callsToday: 0 },
         },
         doors: current.doors.map((door) => ({ ...door, myLastActivityAt: null })),
       } : current);
@@ -456,6 +456,13 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     } catch (error) {
       setPageError(error instanceof Error ? error.message : "Your counters could not be reset.");
     }
+  }
+
+  function showTeamActivityReport() {
+    if (!canSeeActivity) return;
+    setActivityOpen(true);
+    void loadActivity(Boolean(isSuper));
+    window.requestAnimationFrame(() => document.getElementById("rep-activity")?.scrollIntoView({ block: "start" }));
   }
 
   async function logCall(outcome: SalesOutcome) {
@@ -724,7 +731,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       ) : null}
 
       {activityOpen && canSeeActivity ? (
-        <section className={styles.activityPanel}>
+        <section className={styles.activityPanel} id="rep-activity">
           <div className={styles.sectionHeading}><div><span>EXECUTIVE VISIBILITY</span><h2>REP ACTIVITY</h2></div><button disabled={adminBusy} onClick={() => void loadActivity(Boolean(isSuper))} type="button">REFRESH</button></div>
           <section className={styles.verificationRequests}>
             <h3>CUSTOMER VERIFICATION REQUESTS</h3>
@@ -784,9 +791,17 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       ) : null}
 
       <section className={styles.personalCounter} aria-label="Your sales activity">
-        <div><strong>{snapshot.user.stats.callsToday} calls today</strong><span>·</span><strong>{snapshot.user.stats.callsThisWeek} this week</strong><span>·</span><strong>{snapshot.user.stats.soldThisMonth} sold this month</strong></div>
-        <button onClick={() => void resetMyActivityCounters()} type="button">RESET MY COUNTERS</button>
-        <small>Resets your displayed activity and My Work Today. Saved history remains available.</small>
+        <div className={styles.personalMetric}>
+          {canSeeActivity ? <button className={styles.metricButton} onClick={showTeamActivityReport} type="button">{snapshot.user.stats.callsToday} CALLS TODAY</button> : <strong>{snapshot.user.stats.callsToday} CALLS TODAY</strong>}
+          <button className={styles.dailyResetButton} onClick={() => void resetMyDailyCalls()} type="button">RESET DAILY CALLS</button>
+        </div>
+        <div className={styles.personalMetric}>
+          {canSeeActivity ? <button className={styles.metricButton} onClick={showTeamActivityReport} type="button">{snapshot.user.stats.callsThisWeek} THIS WEEK</button> : <strong>{snapshot.user.stats.callsThisWeek} THIS WEEK</strong>}
+        </div>
+        <div className={styles.personalMetric}>
+          {canSeeActivity ? <button className={styles.metricButton} onClick={showTeamActivityReport} type="button">{snapshot.user.stats.soldThisMonth} SOLD THIS MONTH</button> : <strong>{snapshot.user.stats.soldThisMonth} SOLD THIS MONTH</strong>}
+        </div>
+        <small>Daily reset affects only your Calls Today and My Work Today. Master accounts can click any total to open the permanent team report.</small>
       </section>
 
       {snapshot.user.role === "sales_rep" && snapshot.verificationRequests.length ? (

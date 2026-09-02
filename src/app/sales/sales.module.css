@@ -409,8 +409,8 @@
 .doorRow {
   position: relative;
   display: grid;
-  min-height: 6.5rem;
-  grid-template-columns: minmax(13rem, 1.8fr) minmax(6rem, 0.7fr) minmax(8rem, 0.9fr) minmax(11rem, 1.3fr) minmax(5rem, 0.55fr) repeat(4, minmax(6.5rem, 0.7fr)) minmax(9rem, 0.9fr);
+  min-height: 9rem;
+  grid-template-columns: repeat(9, minmax(7rem, 1fr));
   align-items: center;
   gap: 0.8rem;
   overflow: hidden;
@@ -465,6 +465,7 @@
 
 .storeCell {
   display: grid;
+  grid-column: 1 / -1;
   min-width: 0;
   gap: 0.28rem;
 }
@@ -1428,26 +1429,36 @@
 }
 
 .personalCounter {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.55rem;
-  padding: 0.8rem clamp(1rem, 3vw, 2.5rem) 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding: 0.9rem clamp(1rem, 3vw, 2.5rem) 0;
 }
 
-.personalCounter > div {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.55rem;
+.personalMetric {
+  display: grid;
+  justify-items: start;
+  gap: 0.45rem;
 }
 
-.personalCounter span {
-  color: rgb(255 255 255 / 28%);
+.metricButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #58c3b6;
+  font-family: var(--po-font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: left;
 }
 
-.personalCounter button {
-  margin-left: 0.75rem;
+.metricButton:hover,
+.metricButton:focus-visible {
+  color: #f4e3a1;
+  text-decoration: underline;
+}
+
+.dailyResetButton {
   padding: 0.45rem 0.7rem;
   border: 1px solid #58c3b6;
   background: rgb(88 195 182 / 12%);
@@ -1458,7 +1469,7 @@
 }
 
 .personalCounter small {
-  width: 100%;
+  grid-column: 1 / -1;
   color: rgb(255 255 255 / 48%);
   font-size: 0.66rem;
 }
@@ -1515,13 +1526,13 @@
 }
 
 .storeTitleLine > strong {
-  overflow: hidden;
+  overflow: visible;
   font-family: var(--po-font-display);
-  font-size: clamp(1.05rem, 1.45vw, 1.35rem);
+  font-size: clamp(1.35rem, 2vw, 2rem);
   line-height: 1;
-  text-overflow: ellipsis;
+  text-overflow: clip;
   text-transform: uppercase;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .starButton,

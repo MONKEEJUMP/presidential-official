@@ -35,6 +35,7 @@ const USERNAME_PATTERN = /^[a-z][a-z0-9]{0,31}$/;
 const PIN_PATTERN = /^\d{6}$/;
 const TEAM_CODE_PATTERN = /^[A-Z0-9]{4,32}$/;
 const VALID_STATUSES = new Set<DoorStatus>(["stocked", "prospect", "review", "closed"]);
+const SALES_REPORTING_START_AT = new Date("2026-09-02T22:18:00.000Z").getTime();
 
 type DoorRow = Readonly<{
   id: number;
@@ -426,6 +427,7 @@ function callHistoryForTarget(
       (call) =>
         call.rep_id === userId &&
         !voidedCallIds.has(Number(call.id)) &&
+        new Date(call.called_at).getTime() >= SALES_REPORTING_START_AT &&
         (!activityResetAt || new Date(call.called_at).getTime() > new Date(activityResetAt).getTime()),
     )?.called_at ?? null,
   };
@@ -554,14 +556,14 @@ function mapSalesTargets(
   return [...licensedTargets, ...unlinkedTargets];
 }
 
-function approvedSoldReports(requests: VerificationRequestRow[], userId: string, month: string, resetAt: string | null): number {
+function approvedSoldReports(requests: VerificationRequestRow[], userId: string, month: string): number {
   return requests.filter(
     (request) =>
       request.submitted_by === userId &&
       request.claimed_status === "sold" &&
       request.status === "approved" &&
       chicagoDateKey(request.submitted_at) >= month &&
-      (!resetAt || new Date(request.submitted_at).getTime() > new Date(resetAt).getTime()),
+      new Date(request.submitted_at).getTime() >= SALES_REPORTING_START_AT,
   ).length;
 }
 
@@ -577,17 +579,21 @@ function personalStats(
   const mine = calls.filter(
     (call) =>
       call.rep_id === userId &&
-      (!resetAt || new Date(call.called_at).getTime() > new Date(resetAt).getTime()),
+      new Date(call.called_at).getTime() >= SALES_REPORTING_START_AT,
   );
   return {
-    callsToday: mine.filter((call) => chicagoDateKey(call.called_at) === today).length,
+    callsToday: mine.filter(
+      (call) =>
+        chicagoDateKey(call.called_at) === today &&
+        (!resetAt || new Date(call.called_at).getTime() > new Date(resetAt).getTime()),
+    ).length,
     callsThisWeek: mine.filter((call) => {
       const key = chicagoDateKey(call.called_at);
       return key >= week && key <= today;
     }).length,
     soldThisMonth:
       mine.filter((call) => call.outcome === "sold" && chicagoDateKey(call.called_at) >= month).length +
-      approvedSoldReports(requests, userId, month, resetAt),
+      approvedSoldReports(requests, userId, month),
   };
 }
 
@@ -603,8 +609,7 @@ function buildActivity(
     const mine = calls.filter(
       (call) =>
         call.rep_id === profile.user_id &&
-        (!profile.activity_counters_reset_at ||
-          new Date(call.called_at).getTime() > new Date(profile.activity_counters_reset_at).getTime()),
+        new Date(call.called_at).getTime() >= SALES_REPORTING_START_AT,
     );
     const latestRequest = requests.find((request) => request.submitted_by === profile.user_id)?.submitted_at ?? null;
     const latestCall = mine[0]?.called_at ?? null;
@@ -622,7 +627,7 @@ function buildActivity(
       callsThisMonth: mine.filter((call) => chicagoDateKey(call.called_at) >= month).length,
       soldThisMonth:
         mine.filter((call) => call.outcome === "sold" && chicagoDateKey(call.called_at) >= month).length +
-        approvedSoldReports(requests, profile.user_id, month, profile.activity_counters_reset_at),
+        approvedSoldReports(requests, profile.user_id, month),
       lastActivityAt:
         latestRequest && (!latestCall || new Date(latestRequest).getTime() > new Date(latestCall).getTime())
           ? latestRequest
@@ -1023,15 +1028,15 @@ export async function POST(request: Request) {
       return error ? json({ error: "Your PIN could not be changed." }, 503) : json({ success: true });
     }
 
-    if (input.action === "reset_my_activity_counters") {
+    if (input.action === "reset_my_daily_calls") {
       const resetAt = new Date().toISOString();
       const { error } = await admin
         .from("sales_rep_profiles")
         .update({ activity_counters_reset_at: resetAt, updated_at: resetAt })
         .eq("user_id", user.id);
       if (error) throw error;
-      await addAudit(admin, profile, "personal_activity_counters_reset", {
-        reason: "User reset personal sales counters while preserving history.",
+      await addAudit(admin, profile, "personal_daily_calls_reset", {
+        reason: "User reset today's personal call counter while preserving weekly and monthly reporting.",
         metadata: { reset_at: resetAt },
       });
       return json({ success: true, resetAt });
