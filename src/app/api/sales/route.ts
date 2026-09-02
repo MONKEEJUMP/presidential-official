@@ -375,7 +375,6 @@ function mapSalesTargets(
       operationalStatus: row.operational_status,
       status: row.status,
       isPurchasing: Boolean(verified),
-      noLicenseMatch: false,
       nextCallbackAt: row.next_callback_at,
       sourceListDate: row.source_list_date,
       callHistory,
@@ -413,7 +412,6 @@ function mapSalesTargets(
       operationalStatus: "VERIFIED CUSTOMER",
       status: "review" as const,
       isPurchasing: true,
-      noLicenseMatch: true,
       nextCallbackAt: verified.next_callback_at,
       sourceListDate: retailer.updated_at.slice(0, 10),
       callHistory,
@@ -609,12 +607,9 @@ export async function GET(request: Request) {
       states,
       selectedState,
       purchasingCount: doors.filter((door) => door.isPurchasing).length,
-      linkedCustomerCount: doors.filter((door) => door.isPurchasing && !door.noLicenseMatch).length,
-      unlinkedCustomerCount: doors.filter((door) => door.noLicenseMatch).length,
       opportunityCount: doors.filter((door) => !door.isPurchasing).length,
       activeDispensaryCount: doorRows.filter((door) => !isClosedDoorRow(door)).length,
       closedCount: doorRows.filter(isClosedDoorRow).length,
-      totalSalesRows: doors.length,
       doors,
     };
     return json(snapshot);

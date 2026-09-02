@@ -74,7 +74,6 @@ export function SalesRow({
         <div className={styles.rowBadges}>
           {door.companyPriority ? <span className={styles.priorityBadge}>★ PRIORITY</span> : null}
           {door.isPurchasing ? <span className={styles.presidentialBadge}>PRESIDENTIAL</span> : null}
-          {door.noLicenseMatch ? <span className={styles.noLicenseBadge}>NO LICENSE MATCH</span> : null}
           {closed ? <span className={styles.closedBadge}>CLOSED</span> : null}
           {calledToday && lastCall ? <span className={styles.calledBadge}>Called today by {lastCall.repName}</span> : null}
         </div>

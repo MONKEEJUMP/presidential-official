@@ -598,7 +598,6 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         <strong>{snapshot.purchasingCount} PURCHASING PRESIDENTIAL</strong>
         <strong>{snapshot.opportunityCount} SALES OPPORTUNITIES</strong>
         <strong>{snapshot.activeDispensaryCount} ACTIVE {STATE_NAMES[snapshot.selectedState] ?? snapshot.selectedState} DISPENSARIES</strong>
-        <span>{snapshot.unlinkedCustomerCount} VERIFIED CUSTOMERS NEED LICENSE MATCH · {snapshot.totalSalesRows} TOTAL SALES ROWS</span>
         {city !== "ALL CITIES" || search || myBook || myStars ? <span>{filteredDoors.length} MATCHING CURRENT FILTERS</span> : null}
       </section>
       {pageError ? <p className={styles.errorMessage}>{pageError}</p> : null}
@@ -610,7 +609,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
 
       {activeDoor ? (
         <aside className={styles.callPanel} aria-label={`Call log for ${displayDoorName(activeDoor)}`} ref={panelRef}>
-          <div className={styles.panelHeader}><div><span>{activeDoor.stateCode} · {activeDoor.noLicenseMatch ? "NO LICENSE MATCH" : activeDoor.stateLicenseId || "NO LICENSE ID"}</span><h2>{displayDoorName(activeDoor)}</h2><p>{[activeDoor.streetAddress, activeDoor.city, activeDoor.stateCode, activeDoor.zip].filter(Boolean).join(" · ")}</p></div><button aria-label="Close call panel" onClick={closeDoor} type="button">×</button></div>
+          <div className={styles.panelHeader}><div><span>{[activeDoor.stateCode, activeDoor.stateLicenseId].filter(Boolean).join(" · ")}</span><h2>{displayDoorName(activeDoor)}</h2><p>{[activeDoor.streetAddress, activeDoor.city, activeDoor.stateCode, activeDoor.zip].filter(Boolean).join(" · ")}</p></div><button aria-label="Close call panel" onClick={closeDoor} type="button">×</button></div>
           <div className={styles.panelStarControls}><button className={activeDoor.personallyStarred ? styles.starButtonActive : styles.starButton} onClick={() => void togglePersonalStar(activeDoor)} type="button">{activeDoor.personallyStarred ? "★ MY STAR" : "☆ ADD MY STAR"}</button>{isSuper ? <button className={activeDoor.companyPriority ? styles.companyStarActive : styles.companyStarButton} onClick={() => void togglePriority(activeDoor)} type="button">{activeDoor.companyPriority ? "★ COMPANY PRIORITY" : "SET COMPANY PRIORITY"}</button> : null}{isSuper && activeDoor.marketDoorId !== null && activeDoor.retailerId === null ? <button onClick={() => void togglePurchasingVerification(activeDoor)} type="button">{activeDoor.isPurchasing ? "REMOVE MANUAL PURCHASING VERIFICATION" : "VERIFY PURCHASING"}</button> : null}</div>
           {activeDoor.phone ? <a className={styles.actionLink} href={`tel:${activeDoor.phone}`}>CALL {activeDoor.phone}</a> : null}
           {activeDoor.email ? <div className={styles.panelEmail}><a className={styles.actionLink} href={`mailto:${activeDoor.email}`}>EMAIL {activeDoor.email}</a><button onClick={() => void navigator.clipboard.writeText(activeDoor.email!)} type="button">COPY EMAIL</button></div> : null}
