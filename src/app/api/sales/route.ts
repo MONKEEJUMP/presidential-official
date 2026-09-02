@@ -762,7 +762,7 @@ export async function GET(request: Request) {
       ]);
       const visibleProfiles = isSuper(profile)
         ? profiles
-        : profiles.filter((candidate) => candidate.role !== "super_master");
+        : profiles.filter((candidate) => candidate.role !== "super_master" && candidate.username !== "paulie");
       return json({ activity: buildActivity(visibleProfiles, calls.filter((call) => !voids.has(Number(call.id))), requests, chicagoDateKey()) });
     }
     if (resource === "admin_log") {
@@ -770,13 +770,19 @@ export async function GET(request: Request) {
       return json({ events: await fetchAdminEvents(admin) });
     }
     if (resource === "verification_requests") {
-      const [requests, calls] = await Promise.all([
+      const [requests, calls, profiles] = await Promise.all([
         fetchVerificationRequests(admin),
         fetchAllCalls(admin),
+        fetchProfiles(admin),
       ]);
-      const visibleRequests = profile.role === "sales_rep"
-        ? requests.filter((request) => request.submitted_by === user.id)
-        : requests;
+      const superMasterIds = new Set(
+        profiles.filter((candidate) => candidate.role === "super_master" || candidate.username === "paulie").map((candidate) => candidate.user_id),
+      );
+      const visibleRequests = isSuper(profile)
+        ? requests
+        : profile.role === "sales_rep"
+          ? requests.filter((request) => request.submitted_by === user.id)
+          : requests.filter((request) => !superMasterIds.has(request.submitted_by));
       return json({
         requests: visibleRequests.map((request) =>
           mapVerificationRequest(request, user.id, calls, requests)),
@@ -788,18 +794,27 @@ export async function GET(request: Request) {
     if (!states.length) return json({ error: "No sales door data is available." }, 503);
     const requested = url.searchParams.get("state")?.toUpperCase() ?? "";
     const selectedState = STATE_PATTERN.test(requested) && states.includes(requested) ? requested : states[0];
-    const [doorRows, verifiedCustomers, retailerRows, allCalls, requests, voids, personalStars, priorities, settings] = await Promise.all([
+    const [doorRows, verifiedCustomers, retailerRows, allCalls, requests, profiles, voids, personalStars, priorities, settings] = await Promise.all([
       fetchDoors(admin, selectedState),
       fetchVerifiedCustomers(admin),
       fetchVerifiedRetailers(admin),
       fetchAllCalls(admin),
       fetchVerificationRequests(admin),
+      fetchProfiles(admin),
       fetchVoidedCallIds(admin),
       fetchIdSet(admin, "sales_personal_stars", user.id),
       fetchIdSet(admin, "sales_company_priorities"),
       isSuper(profile) ? fetchTeamSettings(admin) : Promise.resolve(null),
     ]);
     const activeCalls = allCalls.filter((call) => !voids.has(Number(call.id)));
+    const superMasterIds = new Set(
+      profiles.filter((candidate) => candidate.role === "super_master" || candidate.username === "paulie").map((candidate) => candidate.user_id),
+    );
+    const visibleVerificationRequests = isSuper(profile)
+      ? requests
+      : profile.role === "sales_rep"
+        ? requests.filter((request) => request.submitted_by === user.id)
+        : requests.filter((request) => !superMasterIds.has(request.submitted_by));
     const selectedIds = new Set(doorRows.map((door) => Number(door.id)));
     const selectedRetailers = retailerRows.filter((retailer) => retailer.state === selectedState);
     const selectedRetailerIds = new Set(selectedRetailers.map((retailer) => Number(retailer.id)));
@@ -847,10 +862,7 @@ export async function GET(request: Request) {
       opportunityCount: doors.filter((door) => !door.isPurchasing).length,
       activeDispensaryCount: doorRows.filter((door) => !isClosedDoorRow(door)).length,
       closedCount: doorRows.filter(isClosedDoorRow).length,
-      verificationRequests: (profile.role === "sales_rep"
-        ? requests.filter((request) => request.submitted_by === user.id)
-        : requests
-      ).map((request) => mapVerificationRequest(request, user.id, allCalls, requests)),
+      verificationRequests: visibleVerificationRequests.map((request) => mapVerificationRequest(request, user.id, allCalls, requests)),
       doors,
     };
     return json(snapshot);

@@ -230,6 +230,12 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   const activeDoor = snapshot?.doors.find((door) => door.id === activeDoorId) ?? null;
   const isSuper = snapshot?.user.role === "super_master";
   const canSeeActivity = snapshot?.user.role === "super_master" || snapshot?.user.role === "master";
+  const visibleActivity = isSuper
+    ? activity
+    : activity.filter((rep) => rep.role !== "super_master" && rep.username !== "paulie");
+  const visibleExecutiveRequests = isSuper
+    ? snapshot?.verificationRequests ?? []
+    : (snapshot?.verificationRequests ?? []).filter((request) => request.submittedByName.trim().toLowerCase() !== "paulie");
 
   function openWorkArea(door: SalesDoor, mode: "log" | "history") {
     if (door.isPurchasing || (mode === "log" && door.doNotCallLocked)) return;
@@ -284,6 +290,10 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       });
       const payload = (await response.json()) as ApiResponse;
       if (!response.ok) throw new Error(payload.error ?? "Login failed.");
+      setActivity([]);
+      setAdminEvents([]);
+      setActivityOpen(false);
+      setTeamPanelOpen(false);
       await loadSnapshot();
     } catch (error) {
       setLoginError(error instanceof Error ? error.message : "Login failed.");
@@ -435,6 +445,10 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   async function logout() {
     await fetch("/api/sales", { method: "DELETE" });
     setSnapshot(null);
+    setActivity([]);
+    setAdminEvents([]);
+    setActivityOpen(false);
+    setTeamPanelOpen(false);
     setActiveDoorId(null);
     setWorkMode(null);
   }
@@ -735,7 +749,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
           <div className={styles.sectionHeading}><div><span>EXECUTIVE VISIBILITY</span><h2>REP ACTIVITY</h2></div><button disabled={adminBusy} onClick={() => void loadActivity(Boolean(isSuper))} type="button">REFRESH</button></div>
           <section className={styles.verificationRequests}>
             <h3>CUSTOMER VERIFICATION REQUESTS</h3>
-            {snapshot.verificationRequests.length ? snapshot.verificationRequests.map((request) => (
+            {visibleExecutiveRequests.length ? visibleExecutiveRequests.map((request) => (
               <article key={request.id}>
                 <div>
                   <strong>{request.storeName} · {request.stateCode}{request.city ? ` · ${request.city}` : ""}</strong>
@@ -758,7 +772,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
             <table>
               <thead><tr><th>Rep</th><th>Role</th><th>Status</th><th>Today</th><th>Week</th><th>Month</th><th>Sold month</th><th>Last activity</th>{isSuper ? <th>Paulie controls</th> : null}</tr></thead>
               <tbody>
-                {activity.map((rep) => (
+                {visibleActivity.map((rep) => (
                   <tr key={rep.userId}>
                     <td><strong>{rep.displayName}</strong><small>@{rep.username}</small></td>
                     <td>{roleLabel(rep.role)}</td>
