@@ -1435,8 +1435,32 @@
   padding: 0.8rem clamp(1rem, 3vw, 2.5rem) 0;
 }
 
+.personalCounter > div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
 .personalCounter span {
   color: rgb(255 255 255 / 28%);
+}
+
+.personalCounter button {
+  margin-left: 0.75rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #58c3b6;
+  background: rgb(88 195 182 / 12%);
+  color: #58c3b6;
+  font-family: var(--po-font-display);
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.personalCounter small {
+  width: 100%;
+  color: rgb(255 255 255 / 48%);
+  font-size: 0.66rem;
 }
 
 .controlGroup {

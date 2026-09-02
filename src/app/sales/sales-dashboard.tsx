@@ -39,6 +39,7 @@ type ApiResponse = Readonly<{
   requestId?: number;
   requestSubmittedAt?: string;
   requestCallbackAt?: string | null;
+  resetAt?: string;
 }>;
 
 const STRUCK_OUTCOMES = new Set<SalesOutcome>(["not_interested", "do_not_call"]);
@@ -438,6 +439,25 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     setWorkMode(null);
   }
 
+  async function resetMyActivityCounters() {
+    if (!snapshot || !window.confirm("RESET YOUR PERSONAL SALES COUNTERS TO ZERO? Call history stays saved.")) return;
+    setPageError("");
+    try {
+      await postAction({ action: "reset_my_activity_counters" });
+      setSnapshot((current) => current ? {
+        ...current,
+        user: {
+          ...current.user,
+          stats: { callsToday: 0, callsThisWeek: 0, soldThisMonth: 0 },
+        },
+        doors: current.doors.map((door) => ({ ...door, myLastActivityAt: null })),
+      } : current);
+      setMyBook(false);
+    } catch (error) {
+      setPageError(error instanceof Error ? error.message : "Your counters could not be reset.");
+    }
+  }
+
   async function logCall(outcome: SalesOutcome) {
     if (!activeDoor || !snapshot || savingCall) return;
     setSavingCall(true);
@@ -764,7 +784,9 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       ) : null}
 
       <section className={styles.personalCounter} aria-label="Your sales activity">
-        <strong>{snapshot.user.stats.callsToday} calls today</strong><span>·</span><strong>{snapshot.user.stats.callsThisWeek} this week</strong><span>·</span><strong>{snapshot.user.stats.soldThisMonth} sold this month</strong>
+        <div><strong>{snapshot.user.stats.callsToday} calls today</strong><span>·</span><strong>{snapshot.user.stats.callsThisWeek} this week</strong><span>·</span><strong>{snapshot.user.stats.soldThisMonth} sold this month</strong></div>
+        <button onClick={() => void resetMyActivityCounters()} type="button">RESET MY COUNTERS</button>
+        <small>Resets your displayed activity and My Work Today. Saved history remains available.</small>
       </section>
 
       {snapshot.user.role === "sales_rep" && snapshot.verificationRequests.length ? (

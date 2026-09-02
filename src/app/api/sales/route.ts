@@ -119,6 +119,7 @@ type RepProfile = Readonly<{
   role: SalesRole;
   active: boolean;
   deactivated_at: string | null;
+  activity_counters_reset_at: string | null;
 }>;
 
 type TeamSettings = Readonly<{
@@ -184,7 +185,7 @@ async function authenticatedUser(): Promise<User | null> {
 async function fetchRepProfile(admin: SupabaseClient, userId: string): Promise<RepProfile | null> {
   const { data, error } = await admin
     .from("sales_rep_profiles")
-    .select("user_id,username,display_name,can_invite,role,active,deactivated_at")
+    .select("user_id,username,display_name,can_invite,role,active,deactivated_at,activity_counters_reset_at")
     .eq("user_id", userId)
     .maybeSingle();
   if (error) throw error;
@@ -196,7 +197,7 @@ async function fetchProfiles(admin: SupabaseClient): Promise<RepProfile[]> {
   for (let offset = 0; ; offset += PAGE_SIZE) {
     const { data, error } = await admin
       .from("sales_rep_profiles")
-      .select("user_id,username,display_name,can_invite,role,active,deactivated_at")
+      .select("user_id,username,display_name,can_invite,role,active,deactivated_at,activity_counters_reset_at")
       .order("display_name")
       .range(offset, offset + PAGE_SIZE - 1);
     if (error) throw error;
@@ -394,6 +395,7 @@ function callHistoryForTarget(
   voidedCallIds: Set<number>,
   userId: string,
   role: SalesRole,
+  activityResetAt: string | null,
 ): { history: SalesCall[]; lastCall: SalesCall | null; myLastActivityAt: string | null } {
   const targetCalls = calls.filter(
     (call) => salesTargetId(call.door_id, call.verified_customer_id) === targetId,
@@ -421,7 +423,10 @@ function callHistoryForTarget(
       ? history.find((call) => call.id === Number(latestActive.id)) ?? null
       : null,
     myLastActivityAt: targetCalls.find(
-      (call) => call.rep_id === userId && !voidedCallIds.has(Number(call.id)),
+      (call) =>
+        call.rep_id === userId &&
+        !voidedCallIds.has(Number(call.id)) &&
+        (!activityResetAt || new Date(call.called_at).getTime() > new Date(activityResetAt).getTime()),
     )?.called_at ?? null,
   };
 }
@@ -445,6 +450,7 @@ function mapSalesTargets(
   voidedCallIds: Set<number>,
   userId: string,
   role: SalesRole,
+  activityResetAt: string | null,
   personalStars: Set<number>,
   priorities: Set<number>,
 ): SalesDoor[] {
@@ -467,7 +473,7 @@ function mapSalesTargets(
     const retailer = verified?.retailer_id === null || verified?.retailer_id === undefined
       ? null
       : retailerById.get(Number(verified.retailer_id)) ?? null;
-    const activity = callHistoryForTarget(id, calls, requests, voidedCallIds, userId, role);
+    const activity = callHistoryForTarget(id, calls, requests, voidedCallIds, userId, role, activityResetAt);
     const pendingRow = pendingRequestByDoor.get(id) ?? null;
     return {
       id,
@@ -510,7 +516,7 @@ function mapSalesTargets(
     const retailer = retailerById.get(Number(verified.retailer_id));
     if (!retailer) return [];
     const id = -Number(verified.id);
-    const activity = callHistoryForTarget(id, calls, requests, voidedCallIds, userId, role);
+    const activity = callHistoryForTarget(id, calls, requests, voidedCallIds, userId, role, activityResetAt);
     return [{
       id,
       marketDoorId: null,
@@ -548,13 +554,14 @@ function mapSalesTargets(
   return [...licensedTargets, ...unlinkedTargets];
 }
 
-function approvedSoldReports(requests: VerificationRequestRow[], userId: string, month: string): number {
+function approvedSoldReports(requests: VerificationRequestRow[], userId: string, month: string, resetAt: string | null): number {
   return requests.filter(
     (request) =>
       request.submitted_by === userId &&
       request.claimed_status === "sold" &&
       request.status === "approved" &&
-      chicagoDateKey(request.submitted_at) >= month,
+      chicagoDateKey(request.submitted_at) >= month &&
+      (!resetAt || new Date(request.submitted_at).getTime() > new Date(resetAt).getTime()),
   ).length;
 }
 
@@ -563,10 +570,15 @@ function personalStats(
   requests: VerificationRequestRow[],
   userId: string,
   today: string,
+  resetAt: string | null,
 ): SalesPersonalStats {
   const week = startOfWeek(today);
   const month = `${today.slice(0, 7)}-01`;
-  const mine = calls.filter((call) => call.rep_id === userId);
+  const mine = calls.filter(
+    (call) =>
+      call.rep_id === userId &&
+      (!resetAt || new Date(call.called_at).getTime() > new Date(resetAt).getTime()),
+  );
   return {
     callsToday: mine.filter((call) => chicagoDateKey(call.called_at) === today).length,
     callsThisWeek: mine.filter((call) => {
@@ -575,7 +587,7 @@ function personalStats(
     }).length,
     soldThisMonth:
       mine.filter((call) => call.outcome === "sold" && chicagoDateKey(call.called_at) >= month).length +
-      approvedSoldReports(requests, userId, month),
+      approvedSoldReports(requests, userId, month, resetAt),
   };
 }
 
@@ -588,7 +600,12 @@ function buildActivity(
   const week = startOfWeek(today);
   const month = `${today.slice(0, 7)}-01`;
   return profiles.map((profile) => {
-    const mine = calls.filter((call) => call.rep_id === profile.user_id);
+    const mine = calls.filter(
+      (call) =>
+        call.rep_id === profile.user_id &&
+        (!profile.activity_counters_reset_at ||
+          new Date(call.called_at).getTime() > new Date(profile.activity_counters_reset_at).getTime()),
+    );
     const latestRequest = requests.find((request) => request.submitted_by === profile.user_id)?.submitted_at ?? null;
     const latestCall = mine[0]?.called_at ?? null;
     return {
@@ -605,7 +622,7 @@ function buildActivity(
       callsThisMonth: mine.filter((call) => chicagoDateKey(call.called_at) >= month).length,
       soldThisMonth:
         mine.filter((call) => call.outcome === "sold" && chicagoDateKey(call.called_at) >= month).length +
-        approvedSoldReports(requests, profile.user_id, month),
+        approvedSoldReports(requests, profile.user_id, month, profile.activity_counters_reset_at),
       lastActivityAt:
         latestRequest && (!latestCall || new Date(latestRequest).getTime() > new Date(latestCall).getTime())
           ? latestRequest
@@ -800,6 +817,7 @@ export async function GET(request: Request) {
       voids,
       user.id,
       profile.role,
+      profile.activity_counters_reset_at,
       personalStars,
       priorities,
     );
@@ -813,7 +831,7 @@ export async function GET(request: Request) {
         active: profile.active,
         teamSetupCode: settings ? displayTeamCode(settings.setup_code) : null,
         onboardingOpen: settings?.onboarding_open ?? null,
-        stats: personalStats(activeCalls, requests, user.id, chicagoDateKey()),
+        stats: personalStats(activeCalls, requests, user.id, chicagoDateKey(), profile.activity_counters_reset_at),
       },
       states,
       selectedState,
@@ -934,7 +952,7 @@ export async function POST(request: Request) {
     }
     const admin = createSalesAdminClient();
     const { data, error } = await admin.from("sales_rep_profiles")
-      .select("user_id,username,display_name,can_invite,role,active,deactivated_at")
+      .select("user_id,username,display_name,can_invite,role,active,deactivated_at,activity_counters_reset_at")
       .eq("username", username).maybeSingle();
     if (error || !data) return json({ error: "Username or PIN was not recognized." }, 401);
     const profile = data as RepProfile;
@@ -1003,6 +1021,20 @@ export async function POST(request: Request) {
       const auth = await createSalesAuthClient();
       const { error } = await auth.auth.updateUser({ password: pin });
       return error ? json({ error: "Your PIN could not be changed." }, 503) : json({ success: true });
+    }
+
+    if (input.action === "reset_my_activity_counters") {
+      const resetAt = new Date().toISOString();
+      const { error } = await admin
+        .from("sales_rep_profiles")
+        .update({ activity_counters_reset_at: resetAt, updated_at: resetAt })
+        .eq("user_id", user.id);
+      if (error) throw error;
+      await addAudit(admin, profile, "personal_activity_counters_reset", {
+        reason: "User reset personal sales counters while preserving history.",
+        metadata: { reset_at: resetAt },
+      });
+      return json({ success: true, resetAt });
     }
 
     if (input.action === "change_team_code") {
