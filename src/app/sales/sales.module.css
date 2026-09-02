@@ -217,6 +217,68 @@
   padding: 0.65rem 0.8rem;
 }
 
+.pinPanel {
+  display: grid;
+  grid-template-columns: auto minmax(10rem, 1fr) minmax(10rem, 1fr) auto;
+  align-items: end;
+  gap: 0.8rem;
+  margin: 1rem clamp(1rem, 3vw, 2.5rem) 0;
+  border: 1px solid #58c3b6;
+  background: rgb(88 195 182 / 8%);
+  padding: 1rem;
+}
+
+.pinPanel > strong {
+  align-self: center;
+  color: #fff;
+  font-family: var(--po-font-display);
+  font-size: 0.85rem;
+}
+
+.pinPanel label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.pinPanel label span {
+  color: #58c3b6;
+  font-family: var(--po-font-display);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+}
+
+.pinPanel input {
+  min-height: 2.8rem;
+  border: 1px solid rgb(88 195 182 / 48%);
+  background: #070708;
+  color: #fff;
+  font: inherit;
+  padding: 0.7rem;
+}
+
+.pinPanel button {
+  min-height: 2.8rem;
+  border: 1px solid #58c3b6;
+  background: #58c3b6;
+  color: #041412;
+  cursor: pointer;
+  font-family: var(--po-font-display);
+  font-weight: 700;
+  padding: 0.65rem 0.85rem;
+}
+
+.pinPanel button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.pinPanel > p {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #f4e3a1;
+  font-weight: 700;
+}
+
 .commandBar {
   position: sticky;
   top: 0;
@@ -702,6 +764,15 @@
     grid-template-columns: 1fr;
   }
 
+  .pinPanel {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pinPanel > strong,
+  .pinPanel > button {
+    grid-column: 1 / -1;
+  }
+
   .searchControl {
     grid-column: 1 / -1;
     grid-row: 2;
@@ -734,6 +805,15 @@
   .commandBar {
     grid-template-columns: 1fr;
     padding: 0.85rem;
+  }
+
+  .pinPanel {
+    grid-template-columns: 1fr;
+  }
+
+  .pinPanel > strong,
+  .pinPanel > button {
+    grid-column: 1;
   }
 
   .searchControl,

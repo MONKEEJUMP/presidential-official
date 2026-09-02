@@ -103,6 +103,9 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   const [settingUp, setSettingUp] = useState(false);
   const [creatingInvite, setCreatingInvite] = useState(false);
   const [inviteInfo, setInviteInfo] = useState<{ code: string; expiresAt: string } | null>(null);
+  const [changePinOpen, setChangePinOpen] = useState(false);
+  const [changingPin, setChangingPin] = useState(false);
+  const [pinMessage, setPinMessage] = useState("");
   const [search, setSearch] = useState("");
   const [view, setView] = useState<ViewMode>("today");
   const [activeDoorId, setActiveDoorId] = useState<number | null>(null);
@@ -278,6 +281,36 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       setPageError(error instanceof Error ? error.message : "The setup code could not be created.");
     } finally {
       setCreatingInvite(false);
+    }
+  }
+
+  async function changePin(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (changingPin) return;
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
+    const pin = String(form.get("newPin") ?? "");
+    const confirmedPin = String(form.get("confirmNewPin") ?? "");
+    if (pin !== confirmedPin) {
+      setPinMessage("The two PIN entries do not match.");
+      return;
+    }
+    setChangingPin(true);
+    setPinMessage("");
+    try {
+      const response = await fetch("/api/sales", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "change_pin", password: pin }),
+      });
+      const payload = (await response.json()) as { success?: boolean; error?: string };
+      if (!response.ok || !payload.success) throw new Error(payload.error ?? "Your PIN could not be changed.");
+      formElement.reset();
+      setPinMessage("PIN UPDATED. Use your new 6-digit PIN next time you sign in.");
+    } catch (error) {
+      setPinMessage(error instanceof Error ? error.message : "Your PIN could not be changed.");
+    } finally {
+      setChangingPin(false);
     }
   }
 
@@ -565,6 +598,15 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
               {creatingInvite ? "CREATING…" : "ADD REP"}
             </button>
           ) : null}
+          <button
+            onClick={() => {
+              setChangePinOpen((current) => !current);
+              setPinMessage("");
+            }}
+            type="button"
+          >
+            CHANGE PIN
+          </button>
           <button onClick={() => void logout()} type="button">SIGN OUT</button>
         </div>
       </header>
@@ -581,6 +623,42 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
           </p>
           <button onClick={() => setInviteInfo(null)} type="button">DISMISS</button>
         </section>
+      ) : null}
+
+      {changePinOpen ? (
+        <form className={styles.pinPanel} onSubmit={changePin}>
+          <strong>CHOOSE YOUR NEW PIN</strong>
+          <label>
+            <span>New 6-digit PIN</span>
+            <input
+              autoComplete="new-password"
+              inputMode="numeric"
+              maxLength={6}
+              minLength={6}
+              name="newPin"
+              pattern="[0-9]{6}"
+              required
+              type="password"
+            />
+          </label>
+          <label>
+            <span>Confirm PIN</span>
+            <input
+              autoComplete="new-password"
+              inputMode="numeric"
+              maxLength={6}
+              minLength={6}
+              name="confirmNewPin"
+              pattern="[0-9]{6}"
+              required
+              type="password"
+            />
+          </label>
+          <button disabled={changingPin} type="submit">
+            {changingPin ? "UPDATING…" : "SAVE MY PIN"}
+          </button>
+          {pinMessage ? <p role="status">{pinMessage}</p> : null}
+        </form>
       ) : null}
 
       <section className={styles.commandBar} aria-label="Sales list controls">

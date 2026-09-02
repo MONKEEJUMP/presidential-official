@@ -371,6 +371,15 @@ export async function POST(request: Request) {
   const user = await authenticatedUser();
   if (!user) return response({ authenticated: false }, 401);
 
+  if (input.action === "change_pin") {
+    const pin = typeof input.password === "string" ? input.password : "";
+    if (!PIN_PATTERN.test(pin)) return response({ error: "Enter an exactly 6-digit PIN." }, 400);
+    const auth = await createSalesAuthClient();
+    const { error } = await auth.auth.updateUser({ password: pin });
+    if (error) return response({ error: "Your PIN could not be changed." }, 503);
+    return response({ success: true });
+  }
+
   if (input.action === "create_rep_invite") {
     try {
       const admin = createSalesAdminClient();
