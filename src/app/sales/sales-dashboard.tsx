@@ -88,6 +88,7 @@ function phoneDigits(value: string | null): string {
 
 export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyAuthenticated: boolean }>) {
   const listScrollY = useRef(0);
+  const openListOrder = useRef<readonly number[] | null>(null);
   const [snapshot, setSnapshot] = useState<SalesSnapshot | null>(null);
   const [ready, setReady] = useState(!initiallyAuthenticated);
   const [loadingData, setLoadingData] = useState(false);
@@ -210,8 +211,17 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       const phoneMatch = Boolean(digits && phoneDigits(door.phone).includes(digits));
       return textMatch || phoneMatch;
     });
+    const order = openListOrder.current;
+    if (order) {
+      const position = new Map(order.map((id, index) => [id, index]));
+      return [...doors].sort(
+        (left, right) =>
+          (position.get(left.id) ?? Number.MAX_SAFE_INTEGER) -
+          (position.get(right.id) ?? Number.MAX_SAFE_INTEGER),
+      );
+    }
     return [...doors].sort((a, b) => compareDoors(a, b, today, myBook));
-  }, [city, dispensaryFilter, myBook, myStars, search, snapshot, today]);
+  }, [activeDoorId, city, dispensaryFilter, myBook, myStars, search, snapshot, today]);
 
   const activeDoor = snapshot?.doors.find((door) => door.id === activeDoorId) ?? null;
   const isSuper = snapshot?.user.role === "super_master";
@@ -220,6 +230,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   function openWorkArea(door: SalesDoor, mode: "log" | "history") {
     if (door.isPurchasing || (mode === "log" && door.doNotCallLocked)) return;
     listScrollY.current = window.scrollY;
+    openListOrder.current = filteredDoors.map((item) => item.id);
     setActiveDoorId(door.id);
     setWorkMode(mode);
     setNotes("");
@@ -239,6 +250,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   }
 
   function closeWorkAreaImmediately() {
+    openListOrder.current = null;
     setActiveDoorId(null);
     setWorkMode(null);
     setLoggedCall(null);
@@ -437,8 +449,28 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       });
       const payload = (await response.json()) as ApiResponse;
       if (!response.ok || !payload.success || !payload.call) throw new Error(payload.error ?? "The call could not be logged.");
-      await loadSnapshot(snapshot.selectedState);
-      setLoggedCall(payload.call);
+      const savedCall = payload.call;
+      setSnapshot((current) => current ? {
+        ...current,
+        user: {
+          ...current.user,
+          stats: {
+            ...current.user.stats,
+            callsToday: current.user.stats.callsToday + 1,
+            callsThisWeek: current.user.stats.callsThisWeek + 1,
+          },
+        },
+        doors: current.doors.map((door) => door.id === activeDoor.id ? {
+          ...door,
+          status: payload.status ?? door.status,
+          nextCallbackAt: payload.nextCallbackAt === undefined ? door.nextCallbackAt : payload.nextCallbackAt,
+          callHistory: [savedCall, ...door.callHistory],
+          lastCall: savedCall,
+          myLastActivityAt: savedCall.calledAt,
+          doNotCallLocked: outcome === "do_not_call",
+        } : door),
+      } : current);
+      setLoggedCall(savedCall);
       setUndoMessage("");
     } catch (error) {
       setPanelError(error instanceof Error ? error.message : "The call could not be logged.");
@@ -477,7 +509,13 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         notes,
         callbackDate: callbackDate || null,
       });
-      await loadSnapshot(snapshot.selectedState);
+      setSnapshot((current) => current ? {
+        ...current,
+        doors: current.doors.map((door) => door.id === activeDoor.id ? {
+          ...door,
+          hasPendingVerification: true,
+        } : door),
+      } : current);
       setNotes("");
       setCallbackDate("");
       setUndoMessage(`${claimLabel} REPORT SUBMITTED. It is awaiting Paulie verification.`);
@@ -722,7 +760,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       ) : null}
 
       <section className={styles.commandBar} aria-label="Sales list controls">
-        <label><span>State</span><select disabled={loadingData} onChange={(event) => { setActiveDoorId(null); setWorkMode(null); setLoggedCall(null); setNotes(""); setCallbackDate(""); setDiscardWarning(false); setPanelError(""); setUndoMessage(""); setCity("ALL CITIES"); setSearch(""); setDispensaryFilter("all"); setMyBook(false); setMyStars(false); void loadSnapshot(event.target.value); }} value={snapshot.selectedState}>{snapshot.states.map((state) => <option key={state}>{state}</option>)}</select></label>
+        <label><span>State</span><select disabled={loadingData} onChange={(event) => { openListOrder.current = null; setActiveDoorId(null); setWorkMode(null); setLoggedCall(null); setNotes(""); setCallbackDate(""); setDiscardWarning(false); setPanelError(""); setUndoMessage(""); setCity("ALL CITIES"); setSearch(""); setDispensaryFilter("all"); setMyBook(false); setMyStars(false); void loadSnapshot(event.target.value); }} value={snapshot.selectedState}>{snapshot.states.map((state) => <option key={state}>{state}</option>)}</select></label>
         <label><span>City</span><select onChange={(event) => setCity(event.target.value)} value={city}><option>ALL CITIES</option>{cities.map((item) => <option key={item}>{item}</option>)}</select></label>
         <label className={styles.searchControl}><span>Search</span><input onChange={(event) => setSearch(event.target.value)} placeholder="Search name, city, or phone" type="search" value={search} /></label>
         <div className={styles.controlGroup}><span>Dispensaries</span><div className={styles.segmentedControl}><button className={dispensaryFilter === "all" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("all")} type="button">ALL DISPENSARIES</button><button className={dispensaryFilter === "purchasing" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("purchasing")} type="button">DISPENSARIES PURCHASING PRESIDENTIAL</button><button className={dispensaryFilter === "not_purchasing" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("not_purchasing")} type="button">DISPENSARIES NOT PURCHASING PRESIDENTIAL</button></div></div>
@@ -733,7 +771,6 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         <strong>{snapshot.purchasingCount} PURCHASING PRESIDENTIAL</strong>
         <strong>{snapshot.opportunityCount} SALES OPPORTUNITIES</strong>
         <strong>{snapshot.activeDispensaryCount} ACTIVE {STATE_NAMES[snapshot.selectedState] ?? snapshot.selectedState} DISPENSARIES</strong>
-        <span>{snapshot.unlinkedCustomerCount} VERIFIED CUSTOMERS NEED LICENSE MATCH · {snapshot.totalSalesRows} TOTAL SALES ROWS</span>
         {city !== "ALL CITIES" || search || myBook || myStars ? <span>{filteredDoors.length} MATCHING CURRENT FILTERS</span> : null}
       </section>
       {pageError ? <p className={styles.errorMessage}>{pageError}</p> : null}

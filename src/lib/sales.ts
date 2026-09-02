@@ -99,7 +99,6 @@ export type SalesDoor = Readonly<{
   operationalStatus: string | null;
   status: DoorStatus;
   isPurchasing: boolean;
-  noLicenseMatch: boolean;
   nextCallbackAt: string | null;
   sourceListDate: string;
   callHistory: readonly SalesCall[];
@@ -127,12 +126,9 @@ export type SalesSnapshot = Readonly<{
   states: readonly string[];
   selectedState: string;
   purchasingCount: number;
-  linkedCustomerCount: number;
-  unlinkedCustomerCount: number;
   opportunityCount: number;
   activeDispensaryCount: number;
   closedCount: number;
-  totalSalesRows: number;
   verificationRequests: readonly SalesVerificationRequest[];
   doors: readonly SalesDoor[];
 }>;

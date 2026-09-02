@@ -73,7 +73,6 @@ export function SalesRow({
         <div className={styles.rowBadges}>
           {door.companyPriority ? <span className={styles.priorityBadge}>★ PRIORITY</span> : null}
           {door.isPurchasing ? <span className={styles.presidentialBadge}>PRESIDENTIAL</span> : null}
-          {door.noLicenseMatch ? <span className={styles.noLicenseBadge}>NO LICENSE MATCH</span> : null}
           {door.doNotCallLocked ? <span className={styles.doNotCallBadge}>DO NOT CALL — LOCKED</span> : null}
           {door.hasPendingVerification ? <span className={styles.pendingBadge}>AWAITING PAULIE VERIFICATION</span> : null}
           {calledToday && lastCall && !door.isPurchasing ? (
