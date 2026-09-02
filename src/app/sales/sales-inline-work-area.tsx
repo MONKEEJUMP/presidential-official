@@ -70,6 +70,8 @@ export function SalesInlineWorkArea({
   onKeepWorking,
 }: SalesInlineWorkAreaProps) {
   const [confirmation, setConfirmation] = useState<SalesVerificationClaim | "do_not_call" | null>(null);
+  const undoableCall = door.callHistory.find((call) => call.undoEligible && !call.undone) ?? null;
+  const undoableRequest = door.pendingVerification?.canWithdraw ? door.pendingVerification : null;
 
   function confirmHighImpactAction() {
     if (!confirmation) return;
@@ -138,20 +140,15 @@ export function SalesInlineWorkArea({
 
           <button className={styles.backToListButton} onClick={onClose} type="button">← BACK TO LIST</button>
         </div>
-      ) : loggedCall ? (
-        <div className={styles.inlineConfirmation} role="status">
-          <strong>{salesOutcome(loggedCall.outcome).label.toUpperCase()} SAVED</strong>
-          {loggedCall.notes ? <p>{loggedCall.notes}</p> : null}
-          {loggedCall.callbackAt ? <span>Callback: {formatSalesDate(loggedCall.callbackAt)}</span> : null}
-          {loggedCall.undoEligible ? (
-            <button disabled={undoing} onClick={() => onUndo(loggedCall)} type="button">
-              {undoing ? "UNDOING…" : undoActionLabel(loggedCall)}
-            </button>
-          ) : null}
-          <button onClick={onClose} type="button">← BACK TO LIST</button>
-        </div>
       ) : (
         <div className={styles.inlineComposer}>
+          {loggedCall ? (
+            <div className={styles.inlineConfirmation} role="status">
+              <strong>{salesOutcome(loggedCall.outcome).label.toUpperCase()} SAVED</strong>
+              {loggedCall.notes ? <p>{loggedCall.notes}</p> : null}
+              {loggedCall.callbackAt ? <span>Callback: {formatSalesDate(loggedCall.callbackAt)}</span> : null}
+            </div>
+          ) : null}
           {door.hasPendingVerification ? (
             <div className={styles.pendingNotice}>
               <strong>AWAITING PAULIE VERIFICATION</strong>
@@ -250,7 +247,21 @@ export function SalesInlineWorkArea({
             )}
           </div>
 
-          <button className={styles.backToListButton} onClick={onClose} type="button">← BACK TO LIST</button>
+          {undoableCall || undoableRequest ? (
+            <div className={styles.undoActionStack}>
+              <span>UNDO LATEST ACTION</span>
+              {undoableRequest ? (
+                <button disabled={undoing} onClick={() => onWithdrawRequest(undoableRequest)} type="button">
+                  {undoing ? "UNDOING…" : `UNDO ${undoableRequest.claimedStatus === "sold" ? "SOLD REPORT" : "ALREADY CARRIES REPORT"}`}
+                </button>
+              ) : null}
+              {undoableCall ? (
+                <button disabled={undoing} onClick={() => onUndo(undoableCall)} type="button">
+                  {undoing ? "UNDOING…" : undoActionLabel(undoableCall)}
+                </button>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       )}
     </section>

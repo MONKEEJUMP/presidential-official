@@ -539,6 +539,41 @@
   color: #07100f !important;
 }
 
+.undoActionStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgb(88 195 182 / 38%);
+}
+
+.undoActionStack > span {
+  width: 100%;
+  color: #58c3b6;
+  font-family: var(--po-font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.undoActionStack button {
+  min-height: 2.7rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid #58c3b6;
+  background: rgb(88 195 182 / 16%);
+  color: #9ce9e0;
+  font-family: var(--po-font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.undoActionStack button:hover,
+.undoActionStack button:focus-visible {
+  background: #58c3b6;
+  color: #07100f;
+}
+
 .doNotCallBadge {
   background: #8c1d25;
   color: #fff;

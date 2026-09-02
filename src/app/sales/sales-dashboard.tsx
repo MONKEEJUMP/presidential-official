@@ -36,6 +36,9 @@ type ApiResponse = Readonly<{
   doorId?: number;
   setupCode?: string;
   onboardingOpen?: boolean;
+  requestId?: number;
+  requestSubmittedAt?: string;
+  requestCallbackAt?: string | null;
 }>;
 
 const STRUCK_OUTCOMES = new Set<SalesOutcome>(["not_interested", "do_not_call"]);
@@ -506,19 +509,39 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     setSavingCall(true);
     setPanelError("");
     try {
-      await postAction({
+      const payload = await postAction({
         action: "submit_verification_request",
         doorId: activeDoor.id,
         claimedStatus: claim,
         notes,
         callbackDate: callbackDate || null,
       });
+      if (!payload.requestId || !payload.requestSubmittedAt) throw new Error("The saved customer report could not be reopened.");
+      const pendingVerification: SalesVerificationRequest = {
+        id: payload.requestId,
+        doorId: activeDoor.id,
+        storeName: displayDoorName(activeDoor),
+        city: activeDoor.city,
+        stateCode: activeDoor.stateCode,
+        submittedBy: snapshot.user.id,
+        submittedByName: snapshot.user.name,
+        claimedStatus: claim,
+        notes: notes.trim() || null,
+        callbackAt: payload.requestCallbackAt ?? null,
+        status: "pending",
+        submittedAt: payload.requestSubmittedAt,
+        decidedAt: null,
+        decisionNote: null,
+        canWithdraw: true,
+      };
       setSnapshot((current) => current ? {
         ...current,
         doors: current.doors.map((door) => door.id === activeDoor.id ? {
           ...door,
           hasPendingVerification: true,
+          pendingVerification,
         } : door),
+        verificationRequests: [pendingVerification, ...current.verificationRequests],
       } : current);
       setNotes("");
       setCallbackDate("");

@@ -1075,7 +1075,12 @@ export async function POST(request: Request) {
         doorId,
         metadata: { request_id: inserted.data.id, claimed_status: claimedStatus },
       });
-      return json({ success: true });
+      return json({
+        success: true,
+        requestId: Number(inserted.data.id),
+        requestSubmittedAt: inserted.data.submitted_at as string,
+        requestCallbackAt: inserted.data.callback_at as string | null,
+      });
     }
 
     if (input.action === "withdraw_verification_request") {
