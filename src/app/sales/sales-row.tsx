@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  SALES_TIME_ZONE,
   displayDoorName,
   formatSalesDate,
   salesOutcome,
@@ -8,6 +9,17 @@ import {
 } from "@/lib/sales";
 
 import styles from "./sales.module.css";
+
+function callbackLabel(value: string | null): string {
+  if (!value) return "";
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: SALES_TIME_ZONE,
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(value));
+}
 
 type SalesRowProps = Readonly<{
   door: SalesDoor;
@@ -148,7 +160,7 @@ export function SalesRow({
 
       <div className={styles.rowField}>
         <span>Callback due</span>
-        <strong>{formatSalesDate(door.nextCallbackAt)}</strong>
+        <strong>{callbackLabel(door.nextCallbackAt)}</strong>
       </div>
     </article>
   );
