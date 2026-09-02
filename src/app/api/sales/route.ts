@@ -760,7 +760,10 @@ export async function GET(request: Request) {
         fetchVerificationRequests(admin),
         fetchVoidedCallIds(admin),
       ]);
-      return json({ activity: buildActivity(profiles, calls.filter((call) => !voids.has(Number(call.id))), requests, chicagoDateKey()) });
+      const visibleProfiles = isSuper(profile)
+        ? profiles
+        : profiles.filter((candidate) => candidate.role !== "super_master");
+      return json({ activity: buildActivity(visibleProfiles, calls.filter((call) => !voids.has(Number(call.id))), requests, chicagoDateKey()) });
     }
     if (resource === "admin_log") {
       if (!isSuper(profile)) return json({ error: "Super Master access is required." }, 403);
