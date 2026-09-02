@@ -536,6 +536,44 @@
   font-size: 1.4rem;
 }
 
+.undoNotice {
+  margin: 1rem 0 0;
+  border: 1px solid #58c3b6;
+  background: rgb(88 195 182 / 12%);
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.45;
+  padding: 0.85rem;
+}
+
+.undoBar {
+  display: grid;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgb(244 227 161 / 55%);
+  background: rgb(244 227 161 / 8%);
+  padding: 0.8rem;
+}
+
+.undoBar > span {
+  color: #f4e3a1;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.undoButton {
+  min-height: 2.8rem !important;
+  border-color: #ff8588 !important;
+  background: transparent !important;
+  color: #ff8588 !important;
+  padding: 0.65rem 0.8rem !important;
+}
+
+.undoButton:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
 .callHistory h3 {
   color: #58c3b6;
   font-size: 1rem;

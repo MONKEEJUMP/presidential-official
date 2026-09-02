@@ -144,6 +144,20 @@ async function fetchCalls(admin: SupabaseClient, state: string): Promise<CallRow
   }
 }
 
+async function fetchVoidedCallIds(admin: SupabaseClient): Promise<Set<number>> {
+  const ids = new Set<number>();
+  for (let offset = 0; ; offset += PAGE_SIZE) {
+    const { data, error } = await admin
+      .from("call_log_voids")
+      .select("call_id")
+      .range(offset, offset + PAGE_SIZE - 1);
+    if (error) throw error;
+    const page = (data ?? []) as Array<{ call_id: number }>;
+    page.forEach((row) => ids.add(Number(row.call_id)));
+    if (page.length < PAGE_SIZE) return ids;
+  }
+}
+
 function mapCall(row: CallRow): SalesCall {
   return {
     id: Number(row.id),
@@ -211,11 +225,15 @@ export async function GET(request: Request) {
     const selectedState = STATE_PATTERN.test(requested) && states.includes(requested)
       ? requested
       : states[0];
-    const [doorRows, callRows] = await Promise.all([
+    const [doorRows, callRows, voidedCallIds] = await Promise.all([
       fetchDoors(admin, selectedState),
       fetchCalls(admin, selectedState),
+      fetchVoidedCallIds(admin),
     ]);
-    const doors = mapDoors(doorRows, callRows);
+    const doors = mapDoors(
+      doorRows,
+      callRows.filter((call) => !voidedCallIds.has(Number(call.id))),
+    );
     const snapshot: SalesSnapshot = {
       authenticated: true,
       user: {
@@ -272,6 +290,36 @@ export async function POST(request: Request) {
 
   const user = await authenticatedUser();
   if (!user) return response({ authenticated: false }, 401);
+
+  if (input.action === "undo_call") {
+    const callId = Number(input.callId);
+    if (!Number.isSafeInteger(callId) || callId <= 0) {
+      return response({ error: "A valid call is required." }, 400);
+    }
+    try {
+      const admin = createSalesAdminClient();
+      const profile = await fetchRepProfile(admin, user.id);
+      const { data, error } = await admin.rpc("undo_sales_call", {
+        p_call_id: callId,
+        p_rep_id: user.id,
+        p_rep_name: repName(user, profile),
+      });
+      if (error) throw error;
+      const result = Array.isArray(data) ? data[0] : data;
+      if (!result) throw new Error("Undo returned no row.");
+      return response({
+        success: true,
+        undoneCallId: Number(result.undone_call_id),
+        doorId: Number(result.result_door_id),
+        status: result.door_status as DoorStatus,
+        nextCallbackAt: result.result_callback_at as string | null,
+      });
+    } catch (error) {
+      console.error("Sales call undo failed", error instanceof Error ? error.message : "unknown");
+      return response({ error: "The last call could not be undone." }, 409);
+    }
+  }
+
   if (input.action !== "log_call") return response({ error: "Invalid sales action." }, 400);
 
   const doorId = Number(input.doorId);

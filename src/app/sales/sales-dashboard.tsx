@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   SALES_OUTCOMES,
@@ -25,6 +25,15 @@ type LogResponse = Readonly<{
   success?: boolean;
   error?: string;
   call?: SalesCall;
+  status?: DoorStatus;
+  nextCallbackAt?: string | null;
+}>;
+
+type UndoResponse = Readonly<{
+  success?: boolean;
+  error?: string;
+  undoneCallId?: number;
+  doorId?: number;
   status?: DoorStatus;
   nextCallbackAt?: string | null;
 }>;
@@ -76,6 +85,7 @@ function csvCell(value: unknown): string {
 }
 
 export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyAuthenticated: boolean }>) {
+  const panelRef = useRef<HTMLElement>(null);
   const [snapshot, setSnapshot] = useState<SalesSnapshot | null>(null);
   const [ready, setReady] = useState(!initiallyAuthenticated);
   const [loadingData, setLoadingData] = useState(false);
@@ -91,7 +101,9 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   const [notes, setNotes] = useState("");
   const [callbackDate, setCallbackDate] = useState("");
   const [savingCall, setSavingCall] = useState(false);
+  const [undoingCall, setUndoingCall] = useState(false);
   const [panelError, setPanelError] = useState("");
+  const [undoMessage, setUndoMessage] = useState("");
   const [loggedCall, setLoggedCall] = useState<SalesCall | null>(null);
   const [nextDoor, setNextDoor] = useState<SalesDoor | null>(null);
 
@@ -163,6 +175,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     setNotes("");
     setCallbackDate("");
     setPanelError("");
+    setUndoMessage("");
     setLoggedCall(null);
     setNextDoor(null);
   }
@@ -171,6 +184,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     setActiveDoorId(null);
     setLoggedCall(null);
     setPanelError("");
+    setUndoMessage("");
   }
 
   async function login(event: FormEvent<HTMLFormElement>) {
@@ -258,10 +272,64 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       );
       setLoggedCall(payload.call);
       setNextDoor(followingDoor);
+      window.requestAnimationFrame(() => {
+        panelRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+      });
     } catch (error) {
       setPanelError(error instanceof Error ? error.message : "The call could not be logged.");
     } finally {
       setSavingCall(false);
+    }
+  }
+
+  async function undoCall(callId: number) {
+    if (!activeDoor || undoingCall) return;
+    setUndoingCall(true);
+    setPanelError("");
+    setUndoMessage("");
+    try {
+      const response = await fetch("/api/sales", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "undo_call", callId }),
+      });
+      const payload = (await response.json()) as UndoResponse;
+      if (!response.ok || !payload.success || !payload.status || payload.doorId !== activeDoor.id) {
+        throw new Error(payload.error ?? "The last call could not be undone.");
+      }
+      setSnapshot((current) => {
+        if (!current) return current;
+        const currentDoor = current.doors.find((door) => door.id === activeDoor.id);
+        const wasStocked = currentDoor?.status === "stocked";
+        const isStocked = payload.status === "stocked";
+        return {
+          ...current,
+          stockedCount: current.stockedCount + (wasStocked === isStocked ? 0 : isStocked ? 1 : -1),
+          doors: current.doors.map((door) => {
+            if (door.id !== activeDoor.id) return door;
+            const callHistory = door.callHistory.filter((call) => call.id !== callId);
+            return {
+              ...door,
+              status: payload.status!,
+              nextCallbackAt: payload.nextCallbackAt ?? null,
+              callHistory,
+              lastCall: callHistory[0] ?? null,
+            };
+          }),
+        };
+      });
+      setLoggedCall(null);
+      setNextDoor(null);
+      setSelectedOutcome(null);
+      setAdvancedLog(false);
+      setUndoMessage("Last call undone. The original CRM record remains in the audit history.");
+      window.requestAnimationFrame(() => {
+        panelRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    } catch (error) {
+      setPanelError(error instanceof Error ? error.message : "The last call could not be undone.");
+    } finally {
+      setUndoingCall(false);
     }
   }
 
@@ -421,7 +489,11 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       </section>
 
       {activeDoor ? (
-        <aside className={styles.callPanel} aria-label={`Call log for ${displayDoorName(activeDoor)}`}>
+        <aside
+          className={styles.callPanel}
+          aria-label={`Call log for ${displayDoorName(activeDoor)}`}
+          ref={panelRef}
+        >
           <div className={styles.panelHeader}>
             <div>
               <span>{activeDoor.stateCode} · {activeDoor.stateLicenseId || "NO LICENSE ID"}</span>
@@ -437,10 +509,21 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
             <div className={styles.extraContacts}><span>Extra contacts</span><pre>{activeDoor.extraContacts}</pre></div>
           ) : null}
 
+          {undoMessage ? <p className={styles.undoNotice} role="status">{undoMessage}</p> : null}
+
           {loggedCall ? (
             <div className={styles.loggedState} role="status">
               <strong>CALL LOGGED</strong>
               <span>{salesOutcome(loggedCall.outcome).label} · {formatSalesDate(loggedCall.calledAt, true)}</span>
+              <span>Saved. This door now moves to ALL because it was called today.</span>
+              <button
+                className={styles.undoButton}
+                disabled={undoingCall}
+                onClick={() => void undoCall(loggedCall.id)}
+                type="button"
+              >
+                {undoingCall ? "UNDOING…" : "UNDO LAST CALL"}
+              </button>
               {nextDoor ? (
                 <button onClick={() => openDoor(nextDoor)} type="button">NEXT: {displayDoorName(nextDoor)}</button>
               ) : (
@@ -449,11 +532,26 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
             </div>
           ) : (
             <div className={styles.logComposer}>
+              {activeDoor.lastCall?.repId === snapshot.user.id ? (
+                <div className={styles.undoBar}>
+                  <span>
+                    Last saved: {salesOutcome(activeDoor.lastCall.outcome).label} · {formatSalesDate(activeDoor.lastCall.calledAt, true)}
+                  </span>
+                  <button
+                    className={styles.undoButton}
+                    disabled={undoingCall}
+                    onClick={() => void undoCall(activeDoor.lastCall!.id)}
+                    type="button"
+                  >
+                    {undoingCall ? "UNDOING…" : "UNDO LAST CALL"}
+                  </button>
+                </div>
+              ) : null}
               <div className={styles.callClock}>
                 <span>Call started</span>
                 <strong>{callStartedAt ? formatSalesDate(callStartedAt.toISOString(), true) : "Now"}</strong>
               </div>
-              <p>Tap an outcome to log immediately.</p>
+              <p><strong>TAP ONCE TO SAVE IMMEDIATELY.</strong> You can undo the last call if you make a mistake.</p>
               <div className={styles.outcomeGrid}>
                 {SALES_OUTCOMES.map((outcome) => (
                   <button
@@ -463,7 +561,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
                     onClick={() => advancedLog ? chooseAdvancedOutcome(outcome.value) : void logCall(outcome.value, false)}
                     type="button"
                   >
-                    {outcome.label}
+                    SAVE: {outcome.label}
                   </button>
                 ))}
               </div>
