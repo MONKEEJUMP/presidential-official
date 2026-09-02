@@ -3,7 +3,7 @@ export const SALES_TIME_ZONE = "America/Chicago";
 export const SALES_OUTCOMES = [
   { value: "no_answer", label: "No answer", callbackDays: 2, stocked: false },
   { value: "left_message", label: "Left message", callbackDays: 4, stocked: false },
-  { value: "talked_to_buyer", label: "Talked to buyer", callbackDays: 7, stocked: false },
+  { value: "talked_to_buyer", label: "Spoke to buyer", callbackDays: 7, stocked: false },
   { value: "interested", label: "Interested", callbackDays: 3, stocked: false },
   { value: "not_interested", label: "Not interested", callbackDays: 30, stocked: false },
   { value: "already_carries_us", label: "Already carries us", callbackDays: null, stocked: true },
@@ -14,6 +14,8 @@ export const SALES_OUTCOMES = [
 export type SalesOutcome = (typeof SALES_OUTCOMES)[number]["value"];
 export type DoorStatus = "stocked" | "prospect" | "review" | "closed";
 export type SalesRole = "super_master" | "master" | "sales_rep";
+export type SalesVerificationClaim = "already_carries_us" | "sold";
+export type SalesVerificationStatus = "pending" | "approved" | "rejected" | "withdrawn";
 
 export type SalesPersonalStats = Readonly<{
   callsToday: number;
@@ -54,6 +56,26 @@ export type SalesCall = Readonly<{
   outcome: SalesOutcome;
   notes: string | null;
   callbackAt: string | null;
+  undone: boolean;
+  undoEligible: boolean;
+}>;
+
+export type SalesVerificationRequest = Readonly<{
+  id: number;
+  doorId: number;
+  storeName: string;
+  city: string | null;
+  stateCode: string;
+  submittedBy: string;
+  submittedByName: string;
+  claimedStatus: SalesVerificationClaim;
+  notes: string | null;
+  callbackAt: string | null;
+  status: SalesVerificationStatus;
+  submittedAt: string;
+  decidedAt: string | null;
+  decisionNote: string | null;
+  canWithdraw: boolean;
 }>;
 
 export type SalesDoor = Readonly<{
@@ -85,6 +107,9 @@ export type SalesDoor = Readonly<{
   personallyStarred: boolean;
   companyPriority: boolean;
   myLastActivityAt: string | null;
+  doNotCallLocked: boolean;
+  hasPendingVerification: boolean;
+  pendingVerification: SalesVerificationRequest | null;
 }>;
 
 export type SalesSnapshot = Readonly<{
@@ -108,6 +133,7 @@ export type SalesSnapshot = Readonly<{
   activeDispensaryCount: number;
   closedCount: number;
   totalSalesRows: number;
+  verificationRequests: readonly SalesVerificationRequest[];
   doors: readonly SalesDoor[];
 }>;
 

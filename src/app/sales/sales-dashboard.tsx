@@ -3,9 +3,7 @@
 import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
-  SALES_OUTCOMES,
   chicagoDateKey,
-  defaultCallbackDate,
   displayDoorName,
   formatSalesDate,
   isClosedDoor,
@@ -18,9 +16,12 @@ import {
   type SalesRepActivity,
   type SalesRole,
   type SalesSnapshot,
+  type SalesVerificationClaim,
+  type SalesVerificationRequest,
 } from "@/lib/sales";
 
 import styles from "./sales.module.css";
+import { SalesInlineWorkArea } from "./sales-inline-work-area";
 import { SalesRow } from "./sales-row";
 
 type DispensaryFilter = "all" | "purchasing" | "not_purchasing";
@@ -86,7 +87,7 @@ function phoneDigits(value: string | null): string {
 }
 
 export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyAuthenticated: boolean }>) {
-  const panelRef = useRef<HTMLElement>(null);
+  const listScrollY = useRef(0);
   const [snapshot, setSnapshot] = useState<SalesSnapshot | null>(null);
   const [ready, setReady] = useState(!initiallyAuthenticated);
   const [loadingData, setLoadingData] = useState(false);
@@ -111,17 +112,15 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   const [myBook, setMyBook] = useState(false);
   const [myStars, setMyStars] = useState(false);
   const [activeDoorId, setActiveDoorId] = useState<number | null>(null);
-  const [callStartedAt, setCallStartedAt] = useState<Date | null>(null);
-  const [advancedLog, setAdvancedLog] = useState(false);
-  const [selectedOutcome, setSelectedOutcome] = useState<SalesOutcome | null>(null);
+  const [workMode, setWorkMode] = useState<"log" | "history" | null>(null);
   const [notes, setNotes] = useState("");
   const [callbackDate, setCallbackDate] = useState("");
+  const [discardWarning, setDiscardWarning] = useState(false);
   const [savingCall, setSavingCall] = useState(false);
   const [undoingCall, setUndoingCall] = useState(false);
   const [panelError, setPanelError] = useState("");
   const [undoMessage, setUndoMessage] = useState("");
   const [loggedCall, setLoggedCall] = useState<SalesCall | null>(null);
-  const [nextDoor, setNextDoor] = useState<SalesDoor | null>(null);
 
   const loadSnapshot = useCallback(async (state?: string) => {
     setLoadingData(true);
@@ -170,8 +169,25 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   }, []);
 
   useEffect(() => {
+    // The authenticated snapshot is the page's initial client-side data source.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void loadSnapshot();
   }, [loadSnapshot]);
+
+  useEffect(() => {
+    if (!activeDoorId || !workMode) return;
+    const mobileWorkArea = window.matchMedia("(max-width: 35rem)");
+    const priorOverflow = document.body.style.overflow;
+    const syncBodyScroll = () => {
+      document.body.style.overflow = mobileWorkArea.matches ? "hidden" : priorOverflow;
+    };
+    syncBodyScroll();
+    mobileWorkArea.addEventListener("change", syncBodyScroll);
+    return () => {
+      mobileWorkArea.removeEventListener("change", syncBodyScroll);
+      document.body.style.overflow = priorOverflow;
+    };
+  }, [activeDoorId, workMode]);
 
   const today = chicagoDateKey();
   const cities = useMemo(() => {
@@ -201,24 +217,37 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   const isSuper = snapshot?.user.role === "super_master";
   const canSeeActivity = snapshot?.user.role === "super_master" || snapshot?.user.role === "master";
 
-  function openDoor(door: SalesDoor) {
+  function openWorkArea(door: SalesDoor, mode: "log" | "history") {
+    if (door.isPurchasing || (mode === "log" && door.doNotCallLocked)) return;
+    listScrollY.current = window.scrollY;
     setActiveDoorId(door.id);
-    setCallStartedAt(new Date());
-    setAdvancedLog(false);
-    setSelectedOutcome(null);
+    setWorkMode(mode);
     setNotes("");
     setCallbackDate("");
     setPanelError("");
     setUndoMessage("");
     setLoggedCall(null);
-    setNextDoor(null);
+    setDiscardWarning(false);
   }
 
-  function closeDoor() {
+  function finishCloseWorkArea() {
+    if (workMode === "log" && !loggedCall && (notes.trim() || callbackDate)) {
+      setDiscardWarning(true);
+      return;
+    }
+    closeWorkAreaImmediately();
+  }
+
+  function closeWorkAreaImmediately() {
     setActiveDoorId(null);
+    setWorkMode(null);
     setLoggedCall(null);
+    setNotes("");
+    setCallbackDate("");
     setPanelError("");
     setUndoMessage("");
+    setDiscardWarning(false);
+    window.requestAnimationFrame(() => window.scrollTo({ top: listScrollY.current }));
   }
 
   async function login(event: FormEvent<HTMLFormElement>) {
@@ -383,57 +412,34 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     }
   }
 
-  async function togglePurchasingVerification(door: SalesDoor) {
-    if (!isSuper || door.marketDoorId === null || door.retailerId !== null) return;
-    const nextVerified = !door.isPurchasing;
-    const message = nextVerified
-      ? `Verify ${displayDoorName(door)} as purchasing Presidential? This becomes team-wide gold customer truth.`
-      : `Remove Paulie's manual purchasing verification from ${displayDoorName(door)}?`;
-    if (!window.confirm(message)) return;
-    setPanelError("");
-    try {
-      await postAction({
-        action: "set_purchasing_verification",
-        doorId: door.id,
-        verified: nextVerified,
-      });
-      await loadSnapshot(snapshot?.selectedState);
-      setUndoMessage(nextVerified
-        ? "Purchasing customer verified by Paulie and recorded in admin history."
-        : "Manual purchasing verification cleared and recorded in admin history.");
-    } catch (error) {
-      setPanelError(error instanceof Error ? error.message : "Purchasing verification could not be changed.");
-    }
-  }
-
   async function logout() {
     await fetch("/api/sales", { method: "DELETE" });
     setSnapshot(null);
-    closeDoor();
+    setActiveDoorId(null);
+    setWorkMode(null);
   }
 
-  function chooseAdvancedOutcome(outcome: SalesOutcome) {
-    setSelectedOutcome(outcome);
-    setCallbackDate(defaultCallbackDate(outcome) ?? "");
-    setPanelError("");
-  }
-
-  async function logCall(outcome: SalesOutcome, custom: boolean) {
+  async function logCall(outcome: SalesOutcome) {
     if (!activeDoor || !snapshot || savingCall) return;
-    const currentIndex = filteredDoors.findIndex((door) => door.id === activeDoor.id);
-    const followingDoor = currentIndex >= 0 ? filteredDoors[currentIndex + 1] ?? null : null;
     setSavingCall(true);
     setPanelError("");
     try {
-      const body: Record<string, unknown> = { action: "log_call", doorId: activeDoor.id, outcome, notes: custom ? notes : "" };
-      if (custom) body.callbackDate = callbackDate || null;
-      const response = await fetch("/api/sales", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const response = await fetch("/api/sales", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "log_call",
+          doorId: activeDoor.id,
+          outcome,
+          notes,
+          callbackDate: outcome === "do_not_call" ? null : callbackDate || null,
+        }),
+      });
       const payload = (await response.json()) as ApiResponse;
       if (!response.ok || !payload.success || !payload.call) throw new Error(payload.error ?? "The call could not be logged.");
       await loadSnapshot(snapshot.selectedState);
       setLoggedCall(payload.call);
-      setNextDoor(followingDoor);
-      window.requestAnimationFrame(() => panelRef.current?.scrollTo({ top: 0, behavior: "smooth" }));
+      setUndoMessage("");
     } catch (error) {
       setPanelError(error instanceof Error ? error.message : "The call could not be logged.");
     } finally {
@@ -441,18 +447,16 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     }
   }
 
-  async function undoCall(callId: number) {
+  async function undoCall(call: SalesCall) {
     if (!activeDoor || !snapshot || undoingCall) return;
     setUndoingCall(true);
     setPanelError("");
     setUndoMessage("");
     try {
-      await postAction({ action: "undo_call", callId });
+      await postAction({ action: "undo_call", callId: call.id });
       await loadSnapshot(snapshot.selectedState);
       setLoggedCall(null);
-      setNextDoor(null);
-      setUndoMessage("Last call undone. The original record remains in immutable history.");
-      window.requestAnimationFrame(() => panelRef.current?.scrollTo({ top: 0, behavior: "smooth" }));
+      setUndoMessage(`${salesOutcome(call.outcome).label.toUpperCase()} UNDONE. The original record remains in immutable history.`);
     } catch (error) {
       setPanelError(error instanceof Error ? error.message : "The last call could not be undone.");
     } finally {
@@ -460,17 +464,108 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     }
   }
 
-  async function correctDoor(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!activeDoor || !snapshot) return;
-    const form = new FormData(event.currentTarget);
+  async function submitVerification(claim: SalesVerificationClaim) {
+    if (!activeDoor || !snapshot || savingCall) return;
+    const claimLabel = claim === "sold" ? "SOLD" : "ALREADY CARRIES PRESIDENTIAL";
+    setSavingCall(true);
     setPanelError("");
     try {
-      await postAction({ action: "correct_door", doorId: activeDoor.id, status: form.get("doorStatus"), callbackDate: form.get("doorCallback") });
+      await postAction({
+        action: "submit_verification_request",
+        doorId: activeDoor.id,
+        claimedStatus: claim,
+        notes,
+        callbackDate: callbackDate || null,
+      });
       await loadSnapshot(snapshot.selectedState);
-      setUndoMessage("Sales target correction saved and added to admin history.");
+      setNotes("");
+      setCallbackDate("");
+      setUndoMessage(`${claimLabel} REPORT SUBMITTED. It is awaiting Paulie verification.`);
     } catch (error) {
-      setPanelError(error instanceof Error ? error.message : "The door correction could not be saved.");
+      setPanelError(error instanceof Error ? error.message : "The verification request could not be submitted.");
+    } finally {
+      setSavingCall(false);
+    }
+  }
+
+  async function withdrawVerification(request: SalesVerificationRequest) {
+    if (!snapshot) return;
+    try {
+      await postAction({ action: "withdraw_verification_request", requestId: request.id });
+      await loadSnapshot(snapshot.selectedState);
+      setUndoMessage(`${request.claimedStatus === "sold" ? "SOLD" : "ALREADY CARRIES"} REPORT WITHDRAWN.`);
+    } catch (error) {
+      setPanelError(error instanceof Error ? error.message : "The request could not be withdrawn.");
+    }
+  }
+
+  async function decideVerification(request: SalesVerificationRequest, decision: "approved" | "rejected") {
+    if (!snapshot || !isSuper) return;
+    let decisionNote: string | null = null;
+    if (decision === "rejected") {
+      decisionNote = window.prompt("Enter the rejection reason:")?.trim() || null;
+      if (!decisionNote) return;
+    } else if (!window.confirm(`Approve ${request.submittedByName}'s customer report? This store becomes gold and locked.`)) {
+      return;
+    }
+    setAdminBusy(true);
+    setAdminMessage("");
+    try {
+      await postAction({
+        action: "decide_verification_request",
+        requestId: request.id,
+        decision,
+        decisionNote,
+      });
+      setAdminMessage(`CUSTOMER REPORT ${decision.toUpperCase()}.`);
+      setActiveDoorId(null);
+      setWorkMode(null);
+      await Promise.all([loadSnapshot(snapshot.selectedState), loadActivity(true)]);
+    } catch (error) {
+      setAdminMessage(error instanceof Error ? error.message : "The request decision could not be saved.");
+    } finally {
+      setAdminBusy(false);
+    }
+  }
+
+  async function correctVerifiedCustomer(door: SalesDoor) {
+    if (!snapshot || !isSuper || !door.verifiedCustomerId) return;
+    const choice = window.prompt(
+      "Type NOTE to attach an administrative note, or REVERT to return this verified customer to a white opportunity.",
+    )?.trim().toUpperCase();
+    if (choice === "NOTE") {
+      const note = window.prompt("Enter the administrative customer note:")?.trim();
+      if (!note) return;
+      try {
+        await postAction({ action: "add_verified_customer_note", verifiedCustomerId: door.verifiedCustomerId, note });
+        setAdminMessage("CUSTOMER ADMINISTRATIVE NOTE RECORDED.");
+      } catch (error) {
+        setPageError(error instanceof Error ? error.message : "The customer note could not be recorded.");
+      }
+      return;
+    }
+    if (choice !== "REVERT") return;
+    const reason = window.prompt("Enter the required reason for returning this customer to a white opportunity:")?.trim();
+    if (!reason || !window.confirm(`REVERT ${displayDoorName(door)} TO A WHITE OPPORTUNITY?`)) return;
+    try {
+      await postAction({ action: "revert_verified_customer", verifiedCustomerId: door.verifiedCustomerId, reason });
+      await loadSnapshot(snapshot.selectedState);
+      setAdminMessage("VERIFIED CUSTOMER RETURNED TO A WHITE OPPORTUNITY. ORIGINAL EVIDENCE PRESERVED.");
+    } catch (error) {
+      setPageError(error instanceof Error ? error.message : "The customer correction could not be completed.");
+    }
+  }
+
+  async function reopenDoNotCall(door: SalesDoor) {
+    if (!snapshot || !isSuper || !door.marketDoorId) return;
+    const reason = window.prompt("Enter the required reason for reopening this Do Not Call store:")?.trim();
+    if (!reason || !window.confirm(`REOPEN ${displayDoorName(door)} FOR SALES ACTIVITY?`)) return;
+    try {
+      await postAction({ action: "reopen_do_not_call", doorId: door.marketDoorId, reason });
+      await loadSnapshot(snapshot.selectedState);
+      setAdminMessage("DO NOT CALL LOCK REOPENED. ORIGINAL ACTIVITY PRESERVED.");
+    } catch (error) {
+      setPageError(error instanceof Error ? error.message : "The Do Not Call lock could not be reopened.");
     }
   }
 
@@ -546,6 +641,27 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       {activityOpen && canSeeActivity ? (
         <section className={styles.activityPanel}>
           <div className={styles.sectionHeading}><div><span>EXECUTIVE VISIBILITY</span><h2>REP ACTIVITY</h2></div><button disabled={adminBusy} onClick={() => void loadActivity(Boolean(isSuper))} type="button">REFRESH</button></div>
+          <section className={styles.verificationRequests}>
+            <h3>CUSTOMER VERIFICATION REQUESTS</h3>
+            {snapshot.verificationRequests.length ? snapshot.verificationRequests.map((request) => (
+              <article key={request.id}>
+                <div>
+                  <strong>{request.storeName} · {request.stateCode}{request.city ? ` · ${request.city}` : ""}</strong>
+                  <span>{request.claimedStatus === "sold" ? "SOLD" : "ALREADY CARRIES PRESIDENTIAL"}</span>
+                  <span>{request.submittedByName} · {formatSalesDate(request.submittedAt, true)} · {request.status.toUpperCase()}</span>
+                </div>
+                {request.notes ? <p>{request.notes}</p> : null}
+                {request.callbackAt ? <span>Callback: {formatSalesDate(request.callbackAt)}</span> : null}
+                {request.decisionNote ? <span>Decision note: {request.decisionNote}</span> : null}
+                {isSuper && request.status === "pending" ? (
+                  <div>
+                    <button disabled={adminBusy} onClick={() => void decideVerification(request, "approved")} type="button">APPROVE</button>
+                    <button disabled={adminBusy} onClick={() => void decideVerification(request, "rejected")} type="button">REJECT</button>
+                  </div>
+                ) : null}
+              </article>
+            )) : <p>No customer-verification requests yet.</p>}
+          </section>
           <div className={styles.tableScroller}>
             <table>
               <thead><tr><th>Rep</th><th>Role</th><th>Status</th><th>Today</th><th>Week</th><th>Month</th><th>Sold month</th><th>Last activity</th>{isSuper ? <th>Paulie controls</th> : null}</tr></thead>
@@ -586,8 +702,27 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         <strong>{snapshot.user.stats.callsToday} calls today</strong><span>·</span><strong>{snapshot.user.stats.callsThisWeek} this week</strong><span>·</span><strong>{snapshot.user.stats.soldThisMonth} sold this month</strong>
       </section>
 
+      {snapshot.user.role === "sales_rep" && snapshot.verificationRequests.length ? (
+        <details className={styles.myVerificationRequests}>
+          <summary>MY CUSTOMER REPORTS ({snapshot.verificationRequests.length})</summary>
+          {snapshot.verificationRequests.map((request) => (
+            <article key={request.id}>
+              <strong>{request.storeName}</strong>
+              <span>{request.claimedStatus === "sold" ? "SOLD" : "ALREADY CARRIES PRESIDENTIAL"} · {request.status.toUpperCase()}</span>
+              <span>{formatSalesDate(request.submittedAt, true)}</span>
+              {request.decisionNote ? <p>{request.decisionNote}</p> : null}
+              {request.canWithdraw ? (
+                <button onClick={() => void withdrawVerification(request)} type="button">
+                  {request.claimedStatus === "sold" ? "WITHDRAW SOLD REPORT" : "WITHDRAW ALREADY CARRIES REPORT"}
+                </button>
+              ) : null}
+            </article>
+          ))}
+        </details>
+      ) : null}
+
       <section className={styles.commandBar} aria-label="Sales list controls">
-        <label><span>State</span><select disabled={loadingData} onChange={(event) => { setCity("ALL CITIES"); setSearch(""); setDispensaryFilter("all"); setMyBook(false); setMyStars(false); void loadSnapshot(event.target.value); }} value={snapshot.selectedState}>{snapshot.states.map((state) => <option key={state}>{state}</option>)}</select></label>
+        <label><span>State</span><select disabled={loadingData} onChange={(event) => { setActiveDoorId(null); setWorkMode(null); setLoggedCall(null); setNotes(""); setCallbackDate(""); setDiscardWarning(false); setPanelError(""); setUndoMessage(""); setCity("ALL CITIES"); setSearch(""); setDispensaryFilter("all"); setMyBook(false); setMyStars(false); void loadSnapshot(event.target.value); }} value={snapshot.selectedState}>{snapshot.states.map((state) => <option key={state}>{state}</option>)}</select></label>
         <label><span>City</span><select onChange={(event) => setCity(event.target.value)} value={city}><option>ALL CITIES</option>{cities.map((item) => <option key={item}>{item}</option>)}</select></label>
         <label className={styles.searchControl}><span>Search</span><input onChange={(event) => setSearch(event.target.value)} placeholder="Search name, city, or phone" type="search" value={search} /></label>
         <div className={styles.controlGroup}><span>Dispensaries</span><div className={styles.segmentedControl}><button className={dispensaryFilter === "all" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("all")} type="button">ALL DISPENSARIES</button><button className={dispensaryFilter === "purchasing" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("purchasing")} type="button">DISPENSARIES PURCHASING PRESIDENTIAL</button><button className={dispensaryFilter === "not_purchasing" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("not_purchasing")} type="button">DISPENSARIES NOT PURCHASING PRESIDENTIAL</button></div></div>
@@ -604,39 +739,50 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       {pageError ? <p className={styles.errorMessage}>{pageError}</p> : null}
 
       <section className={styles.doorList} aria-busy={loadingData} aria-label="Licensed dispensary doors">
-        {filteredDoors.map((door) => <SalesRow callbackDue={callbackDue(door, today)} calledToday={calledToday(door, today)} canSetPriority={Boolean(isSuper)} closed={isClosedDoor(door)} door={door} key={door.id} onOpen={openDoor} onTogglePersonalStar={(item) => void togglePersonalStar(item)} onTogglePriority={(item) => void togglePriority(item)} struck={struck(door)} />)}
+        {filteredDoors.map((door) => (
+          <div className={styles.salesTargetGroup} key={door.id}>
+            <SalesRow
+              callbackDue={callbackDue(door, today)}
+              calledToday={calledToday(door, today)}
+              canCorrectCustomer={Boolean(isSuper)}
+              canSetPriority={Boolean(isSuper)}
+              door={door}
+              onCorrectCustomer={(item) => void correctVerifiedCustomer(item)}
+              onHistory={(item) => openWorkArea(item, "history")}
+              onLogResult={(item) => openWorkArea(item, "log")}
+              onReopenDoNotCall={(item) => void reopenDoNotCall(item)}
+              onTogglePersonalStar={(item) => void togglePersonalStar(item)}
+              onTogglePriority={(item) => void togglePriority(item)}
+              struck={struck(door)}
+            />
+            {activeDoor?.id === door.id && workMode ? (
+              <SalesInlineWorkArea
+                callbackDate={callbackDate}
+                discardWarning={discardWarning}
+                door={activeDoor}
+                error={panelError}
+                loggedCall={loggedCall}
+                message={undoMessage}
+                mode={workMode}
+                notes={notes}
+                onCallbackChange={setCallbackDate}
+                onClose={finishCloseWorkArea}
+                onDiscard={closeWorkAreaImmediately}
+                onKeepWorking={() => setDiscardWarning(false)}
+                onNotesChange={setNotes}
+                onOutcome={(outcome) => void logCall(outcome)}
+                onSubmitVerification={(claim) => void submitVerification(claim)}
+                onUndo={(call) => void undoCall(call)}
+                onWithdrawRequest={(request) => void withdrawVerification(request)}
+                saving={savingCall}
+                undoing={undoingCall}
+              />
+            ) : null}
+          </div>
+        ))}
         {!filteredDoors.length ? <p className={styles.emptyState}>No doors match this view.</p> : null}
       </section>
 
-      {activeDoor ? (
-        <aside className={styles.callPanel} aria-label={`Call log for ${displayDoorName(activeDoor)}`} ref={panelRef}>
-          <div className={styles.panelHeader}><div><span>{activeDoor.stateCode} · {activeDoor.noLicenseMatch ? "NO LICENSE MATCH" : activeDoor.stateLicenseId || "NO LICENSE ID"}</span><h2>{displayDoorName(activeDoor)}</h2><p>{[activeDoor.streetAddress, activeDoor.city, activeDoor.stateCode, activeDoor.zip].filter(Boolean).join(" · ")}</p></div><button aria-label="Close call panel" onClick={closeDoor} type="button">×</button></div>
-          <div className={styles.panelStarControls}><button className={activeDoor.personallyStarred ? styles.starButtonActive : styles.starButton} onClick={() => void togglePersonalStar(activeDoor)} type="button">{activeDoor.personallyStarred ? "★ MY STAR" : "☆ ADD MY STAR"}</button>{isSuper ? <button className={activeDoor.companyPriority ? styles.companyStarActive : styles.companyStarButton} onClick={() => void togglePriority(activeDoor)} type="button">{activeDoor.companyPriority ? "★ COMPANY PRIORITY" : "SET COMPANY PRIORITY"}</button> : null}{isSuper && activeDoor.marketDoorId !== null && activeDoor.retailerId === null ? <button onClick={() => void togglePurchasingVerification(activeDoor)} type="button">{activeDoor.isPurchasing ? "REMOVE MANUAL PURCHASING VERIFICATION" : "VERIFY PURCHASING"}</button> : null}</div>
-          {activeDoor.phone ? <a className={styles.actionLink} href={`tel:${activeDoor.phone}`}>CALL {activeDoor.phone}</a> : null}
-          {activeDoor.email ? <div className={styles.panelEmail}><a className={styles.actionLink} href={`mailto:${activeDoor.email}`}>EMAIL {activeDoor.email}</a><button onClick={() => void navigator.clipboard.writeText(activeDoor.email!)} type="button">COPY EMAIL</button></div> : null}
-          <a className={styles.actionLink} href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([activeDoor.streetAddress, activeDoor.city, activeDoor.stateCode, activeDoor.zip].filter(Boolean).join(", "))}`} rel="noreferrer" target="_blank">OPEN IN GOOGLE MAPS</a>
-          {activeDoor.extraContacts ? <div className={styles.extraContacts}><span>Extra contacts</span><pre>{activeDoor.extraContacts}</pre></div> : null}
-          {undoMessage ? <p className={styles.undoNotice} role="status">{undoMessage}</p> : null}
-
-          {loggedCall ? (
-            <div className={styles.loggedState} role="status"><strong>CALL LOGGED</strong><span>{salesOutcome(loggedCall.outcome).label} · {formatSalesDate(loggedCall.calledAt, true)}</span><span>Saved. Purchasing truth did not change from this call outcome.</span><button className={styles.undoButton} disabled={undoingCall} onClick={() => void undoCall(loggedCall.id)} type="button">{undoingCall ? "UNDOING…" : "UNDO LAST CALL"}</button>{nextDoor ? <button onClick={() => openDoor(nextDoor)} type="button">NEXT: {displayDoorName(nextDoor)}</button> : <button onClick={closeDoor} type="button">BACK TO LIST</button>}</div>
-          ) : (
-            <div className={styles.logComposer}>
-              {activeDoor.lastCall && (activeDoor.lastCall.repId === snapshot.user.id || isSuper) ? <div className={styles.undoBar}><span>Last saved: {salesOutcome(activeDoor.lastCall.outcome).label} · {formatSalesDate(activeDoor.lastCall.calledAt, true)} · {activeDoor.lastCall.repName}</span><button className={styles.undoButton} disabled={undoingCall} onClick={() => void undoCall(activeDoor.lastCall!.id)} type="button">{undoingCall ? "UNDOING…" : "UNDO LAST CALL"}</button></div> : null}
-              <div className={styles.callClock}><span>Call started</span><strong>{callStartedAt ? formatSalesDate(callStartedAt.toISOString(), true) : "Now"}</strong></div>
-              <p><strong>TAP ONCE TO SAVE IMMEDIATELY.</strong> You can undo the last eligible call if you make a mistake.</p>
-              <div className={styles.outcomeGrid}>{SALES_OUTCOMES.map((outcome) => <button className={selectedOutcome === outcome.value ? styles.selectedOutcome : ""} disabled={savingCall} key={outcome.value} onClick={() => advancedLog ? chooseAdvancedOutcome(outcome.value) : void logCall(outcome.value, false)} type="button">SAVE: {outcome.label}</button>)}</div>
-              <button className={styles.advancedToggle} onClick={() => { setAdvancedLog((current) => !current); setSelectedOutcome(null); setCallbackDate(""); }} type="button">{advancedLog ? "CANCEL NOTES / CALLBACK" : "ADD NOTES OR CHANGE CALLBACK"}</button>
-              {advancedLog ? <div className={styles.advancedFields}><label><span>Notes</span><textarea maxLength={4000} onChange={(event) => setNotes(event.target.value)} value={notes} /></label><label><span>Callback date</span><input onChange={(event) => setCallbackDate(event.target.value)} type="date" value={callbackDate} /></label><button disabled={!selectedOutcome || savingCall} onClick={() => selectedOutcome ? void logCall(selectedOutcome, true) : undefined} type="button">{savingCall ? "LOGGING…" : selectedOutcome ? `SAVE: ${salesOutcome(selectedOutcome).label.toUpperCase()}` : "CHOOSE AN OUTCOME"}</button></div> : null}
-              {panelError ? <p className={styles.errorMessage}>{panelError}</p> : null}
-            </div>
-          )}
-
-          {isSuper ? <form className={styles.doorCorrection} onSubmit={correctDoor}><strong>SUPER MASTER CORRECTION</strong>{activeDoor.marketDoorId !== null ? <label><span>License record status — does not control gold</span><select defaultValue={activeDoor.status} name="doorStatus"><option value="stocked">LEGACY STOCKED</option><option value="prospect">ACTIVE PROSPECT</option><option value="review">REVIEW</option><option value="closed">CLOSED</option></select></label> : null}<label><span>Callback date</span><input defaultValue={activeDoor.nextCallbackAt ? chicagoDateKey(activeDoor.nextCallbackAt) : ""} name="doorCallback" type="date" /></label><button type="submit">SAVE CORRECTION</button></form> : null}
-
-          <section className={styles.callHistory}><h3>CALL HISTORY</h3>{activeDoor.callHistory.length ? activeDoor.callHistory.map((call) => <article key={call.id}><strong>{salesOutcome(call.outcome).label}</strong><span>{formatSalesDate(call.calledAt, true)} · {call.repName}</span>{call.callbackAt ? <span>Callback: {formatSalesDate(call.callbackAt)}</span> : null}{call.notes ? <p>{call.notes}</p> : null}</article>) : <p>No calls logged yet.</p>}</section>
-        </aside>
-      ) : null}
     </main>
   );
 }
