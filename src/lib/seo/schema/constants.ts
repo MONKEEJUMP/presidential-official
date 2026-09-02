@@ -8,7 +8,8 @@ export const PRESIDENTIAL_NAME = "Presidential" as const;
 export const PRESIDENTIAL_DESCRIPTION =
   "Official home of Presidential cannabis products for adults 21+ where legal." as const;
 
-// sameAs is whitelist-only. Official client-approved profiles.
+// sameAs is whitelist-only. Owner confirmation 2026-09-02: Everett Smith (CEO)
+// supplied these four profiles as Presidential's official accounts.
 export const APPROVED_SAME_AS = [
   "https://www.instagram.com/presidentialofficial_/",
   "https://www.instagram.com/presidential_medss/",

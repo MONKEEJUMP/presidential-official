@@ -63,6 +63,34 @@ const publicSocialEnvPattern =
 const publicUnlockPattern =
   /outbound links approved|external links approved|social profiles approved|sameas approved|sameAs approved|profile links approved|public seo unlocked|route publication approved|sitemap inclusion approved|index,\s*follow approved|deployment approved/i;
 
+// Owner confirmation 2026-09-02: Everett Smith (CEO, Presidential) supplied these
+// four URLs as the company's official social accounts, unlocking the sameAs
+// whitelist that this gate previously required to stay empty. The gate now
+// requires exactly this list, in this order, and still rejects every other
+// social/marketplace profile URL in source and built output.
+const ownerConfirmedSameAs = [
+  "https://www.instagram.com/presidentialofficial_/",
+  "https://www.instagram.com/presidential_medss/",
+  "https://www.facebook.com/p/Presidential-RX-100069511874496/",
+  "https://www.linkedin.com/in/everett-smith-presidential/",
+];
+
+function extractApprovedSameAs(source) {
+  const match = source.match(/APPROVED_SAME_AS\s*=\s*\[([\s\S]*?)\]\s*as const/);
+  if (!match) {
+    return null;
+  }
+  return [...match[1].matchAll(/"([^"]*)"/g)].map((entry) => entry[1]);
+}
+
+function stripOwnerConfirmedSameAs(text) {
+  let stripped = text;
+  for (const url of ownerConfirmedSameAs) {
+    stripped = stripped.split(url).join("");
+  }
+  return stripped;
+}
+
 function csvEscape(value) {
   return `"${String(value).replaceAll('"', '""')}"`;
 }
@@ -212,12 +240,20 @@ function main() {
   const builtTargetBlankViolations = targetBlankViolations(builtFiles);
   const sourceMailOrTelMatches = collectLineMatches(sourceFiles, mailOrTelPattern);
   const builtMailOrTelMatches = collectLineMatches(builtFiles, mailOrTelPattern);
-  const sourceSocialMatches = collectLineMatches(sourceFiles, socialProfilePattern);
-  const builtSocialMatches = collectLineMatches(builtFiles, socialProfilePattern);
+  const sourceSocialMatches = collectLineMatches(sourceFiles, socialProfilePattern).filter(
+    (match) => socialProfilePattern.test(stripOwnerConfirmedSameAs(match)),
+  );
+  const builtSocialMatches = collectLineMatches(builtFiles, socialProfilePattern).filter(
+    (match) => socialProfilePattern.test(stripOwnerConfirmedSameAs(match)),
+  );
   const sourceBlockedHostMatches = collectLineMatches(sourceFiles, blockedHostPattern);
   const builtBlockedHostMatches = collectLineMatches(builtFiles, blockedHostPattern);
   const sourcePublicSocialEnvMatches = collectLineMatches(sourceFiles, publicSocialEnvPattern);
-  const hasApprovedSameAsEmpty = /APPROVED_SAME_AS\s*=\s*\[\]\s*as const/.test(schemaConstantsText);
+  const approvedSameAs = extractApprovedSameAs(schemaConstantsText);
+  const hasOwnerConfirmedSameAsExactList =
+    approvedSameAs !== null &&
+    approvedSameAs.length === ownerConfirmedSameAs.length &&
+    approvedSameAs.every((url, index) => url === ownerConfirmedSameAs[index]);
   const organizationUsesWhitelist = organizationSchemaText.includes("sameAs: [...APPROVED_SAME_AS]");
   const ctaLinkInternalOnly = ctaLinkText.includes("readonly href: SeoRoutePath;");
   const ctaLinkRegistryGuard = ctaLinkText.includes("getRouteByPath(href)") && ctaLinkText.includes("throw new Error");
@@ -245,12 +281,12 @@ function main() {
     addCheck(rows, "built.targetBlankNoopener", builtTargetBlankViolations.length === 0, builtTargetBlankViolations.length ? builtTargetBlankViolations.slice(0, 10).join(" | ") : "No target=_blank anchors without noopener in built output"),
     addCheck(rows, "source.onlyApprovedContactAndLocatorLinks", sourceHasOnlyApprovedContactAndLocatorLinks, sourceHasOnlyApprovedContactAndLocatorLinks ? "Only the server-validated, explicit-env-gated Contact mailto and sanitized locator tel templates exist in source" : sourceMailOrTelMatches.slice(0, 10).join(" | ") || "Expected gated Contact mailto or sanitized locator tel template is missing"),
     addCheck(rows, "built.noMailtoOrTel", builtMailOrTelMatches.length === 0, builtMailOrTelMatches.length ? builtMailOrTelMatches.slice(0, 10).join(" | ") : "No mailto: or tel: links in built output"),
-    addCheck(rows, "source.noSocialProfileUrls", sourceSocialMatches.length === 0, sourceSocialMatches.length ? sourceSocialMatches.slice(0, 10).join(" | ") : "No social/marketplace profile URLs in public source before client confirmation"),
-    addCheck(rows, "built.noSocialProfileUrls", builtSocialMatches.length === 0, builtSocialMatches.length ? builtSocialMatches.slice(0, 10).join(" | ") : "No social/marketplace profile URLs in built output before client confirmation"),
+    addCheck(rows, "source.noSocialProfileUrls", sourceSocialMatches.length === 0, sourceSocialMatches.length ? sourceSocialMatches.slice(0, 10).join(" | ") : "No social/marketplace profile URLs in public source beyond the four owner-confirmed sameAs entries"),
+    addCheck(rows, "built.noSocialProfileUrls", builtSocialMatches.length === 0, builtSocialMatches.length ? builtSocialMatches.slice(0, 10).join(" | ") : "No social/marketplace profile URLs in built output beyond the four owner-confirmed sameAs entries"),
     addCheck(rows, "source.noBlockedOrAlternateHosts", sourceBlockedHostMatches.length === 0, sourceBlockedHostMatches.length ? sourceBlockedHostMatches.slice(0, 10).join(" | ") : "No threat, preview, noncanonical, alternate, localhost, Vercel, Wix, or Google Drive hosts in public source"),
     addCheck(rows, "built.noBlockedOrAlternateHosts", builtBlockedHostMatches.length === 0, builtBlockedHostMatches.length ? builtBlockedHostMatches.slice(0, 10).join(" | ") : "No threat, preview, noncanonical, alternate, localhost, Vercel, Wix, or Google Drive hosts in built output"),
     addCheck(rows, "source.noPublicSocialProfileEnvNames", sourcePublicSocialEnvMatches.length === 0, sourcePublicSocialEnvMatches.length ? sourcePublicSocialEnvMatches.slice(0, 10).join(" | ") : "No public social/profile environment variable names in public source"),
-    addCheck(rows, "schema.sameAsWhitelistEmpty", hasApprovedSameAsEmpty, "APPROVED_SAME_AS remains an empty whitelist until client-confirmed profiles exist"),
+    addCheck(rows, "schema.sameAsWhitelistOwnerConfirmedExactList", hasOwnerConfirmedSameAsExactList, "APPROVED_SAME_AS contains exactly the four owner-confirmed profiles (Everett Smith, CEO, 2026-09-02) and nothing else"),
     addCheck(rows, "schema.organizationUsesSameAsWhitelistOnly", organizationUsesWhitelist, "Organization schema emits sameAs only from APPROVED_SAME_AS"),
     addCheck(rows, "cta.internalRouteTypeOnly", ctaLinkInternalOnly, "CtaLink href remains typed as SeoRoutePath"),
     addCheck(rows, "cta.routeRegistryGuard", ctaLinkRegistryGuard, "CtaLink validates every destination through the route registry"),
@@ -303,7 +339,9 @@ function main() {
     checks: Object.fromEntries(rows.map((row) => [row.check, row.status === "pass"])),
     outboundLinksApproved: false,
     socialProfilesApproved: false,
-    sameAsApproved: false,
+    sameAsApproved: true,
+    sameAsApprovedBy: "Everett Smith (CEO, Presidential), 2026-09-02",
+    sameAsApprovedUrls: [...ownerConfirmedSameAs],
     alternateDomainsApprovedForPublicSeo: false,
     threatDomainsLeaked: false,
     mailtoOrTelApproved: false,
@@ -313,7 +351,7 @@ function main() {
     indexabilityUnlocked: false,
     deploymentApproved: false,
     guardrail:
-      "Step 10L is outbound link, external URL, and social profile readiness only. It permits canonical production and schema.org URL constants, the exact server-validated and explicit-env-gated Contact mailto template, and sanitized tel links from approved locator results. Other outbound anchors, social profile URLs, sameAs approvals, mailto/tel links, noncanonical alternate hosts, route publication, deployment, sitemap inclusion, indexability, and public SEO remain blocked until approval records exist.",
+      "Step 10L is outbound link, external URL, and social profile readiness only. It permits canonical production and schema.org URL constants, the exact server-validated and explicit-env-gated Contact mailto template, sanitized tel links from approved locator results, and exactly the four sameAs profile URLs owner-confirmed by Everett Smith (CEO) on 2026-09-02. Other outbound anchors, social profile URLs, mailto/tel links, noncanonical alternate hosts, route publication, deployment, sitemap inclusion, indexability, and public SEO remain blocked until approval records exist.",
   };
 
   mkdirSync(workRoot, { recursive: true });

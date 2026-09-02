@@ -45,6 +45,25 @@ const requiredGates = [
   },
 ];
 
+// Owner confirmation 2026-09-02: Everett Smith (CEO, Presidential) supplied these
+// four URLs as the company's official social accounts. The sameAs gate previously
+// required an empty whitelist; it now requires exactly this list, in this order.
+// Any addition, removal, or edit still fails the gate.
+const ownerConfirmedSameAs = [
+  "https://www.instagram.com/presidentialofficial_/",
+  "https://www.instagram.com/presidential_medss/",
+  "https://www.facebook.com/p/Presidential-RX-100069511874496/",
+  "https://www.linkedin.com/in/everett-smith-presidential/",
+];
+
+function extractApprovedSameAs(source) {
+  const match = source.match(/APPROVED_SAME_AS\s*=\s*\[([\s\S]*?)\]\s*as const/);
+  if (!match) {
+    return null;
+  }
+  return [...match[1].matchAll(/"([^"]*)"/g)].map((entry) => entry[1]);
+}
+
 function getGateBlock(source, id) {
   const match = source.match(new RegExp(`\\{[\\s\\S]*?id:\\s*"${id}"[\\s\\S]*?\\n\\s*\\}`));
   return match?.[0] ?? "";
@@ -92,19 +111,26 @@ function main() {
     }),
     requiredGates.map((gate) => `${gate.id}:${gate.status}:${gate.requiredBefore}`).join(" | "),
   );
+  // Route publications were opened by the owner launch commit "Unlock public
+  // indexing on presidentialmoonrocks.com" (06c8cde). The gate now asserts that
+  // publications flow only through the approved publication records pipeline
+  // instead of requiring the list to stay empty.
   addCheck(
     rows,
-    "ownerGates.publicRoutesStillClosed",
-    /APPROVED_ROUTE_PUBLICATIONS\s*=\s*\[\]/.test(routePublicationSource),
-    "route publication list remains empty until per-route approvals are added",
+    "ownerGates.publicRoutesApprovedViaRecordsOnly",
+    /APPROVED_ROUTE_PUBLICATIONS\s*=\s*APPROVED_PUBLICATION_ROUTE_RECORDS/.test(routePublicationSource),
+    "route publications are promoted only from the approved publication records pipeline",
   );
+  const approvedSameAs = extractApprovedSameAs(schemaConstantsSource);
   addCheck(
     rows,
-    "ownerGates.sameAsStillClosed",
-    /APPROVED_SAME_AS\s*=\s*\[\]/.test(schemaConstantsSource) &&
+    "ownerGates.sameAsOwnerConfirmedExactList",
+    approvedSameAs !== null &&
+      approvedSameAs.length === ownerConfirmedSameAs.length &&
+      approvedSameAs.every((url, index) => url === ownerConfirmedSameAs[index]) &&
       sameAsSource.includes("APPROVED_SAME_AS.length > 0") &&
       sameAsSource.includes("sameAs: [...APPROVED_SAME_AS]"),
-    "sameAs whitelist remains empty until official profile ownership is confirmed",
+    "sameAs whitelist contains exactly the four owner-confirmed profiles (Everett Smith, CEO, 2026-09-02) and nothing else",
   );
   addCheck(
     rows,
