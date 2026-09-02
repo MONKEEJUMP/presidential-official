@@ -247,8 +247,8 @@ export async function POST(request: Request) {
   if (input.action === "login") {
     const username = typeof input.username === "string" ? input.username.trim().toLowerCase() : "";
     const password = typeof input.password === "string" ? input.password : "";
-    if (!/^[a-z][a-z0-9]{0,31}$/.test(username) || !/^\d{6,8}$/.test(password)) {
-      return response({ error: "Enter your first-name username and 6–8 digit passcode." }, 400);
+    if (!/^[a-z][a-z0-9]{0,31}$/.test(username) || !/^\d{6}$/.test(password)) {
+      return response({ error: "Enter your first-name username and 6-digit PIN." }, 400);
     }
     const admin = createSalesAdminClient();
     const { data: profile, error: profileError } = await admin

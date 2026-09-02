@@ -337,14 +337,14 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
             />
           </label>
           <label>
-            <span>6–8 digit passcode</span>
+            <span>6-digit PIN</span>
             <input
               autoComplete="current-password"
               inputMode="numeric"
-              maxLength={8}
+              maxLength={6}
               minLength={6}
               name="password"
-              pattern="[0-9]{6,8}"
+              pattern="[0-9]{6}"
               required
               type="password"
             />
