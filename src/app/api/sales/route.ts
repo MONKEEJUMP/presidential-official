@@ -1,6 +1,6 @@
 import "server-only";
 
-import { createHash, randomBytes, randomUUID } from "node:crypto";
+import { randomUUID } from "node:crypto";
 
 import { NextResponse } from "next/server";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
@@ -26,7 +26,7 @@ const STATE_PATTERN = /^[A-Z]{2}$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const USERNAME_PATTERN = /^[a-z][a-z0-9]{0,31}$/;
 const PIN_PATTERN = /^\d{6}$/;
-const SETUP_CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const TEAM_CODE_PATTERN = /^[A-Z0-9]{4,32}$/;
 
 type DoorRow = Readonly<{
   id: number;
@@ -82,13 +82,12 @@ function repName(user: User, profile?: RepProfile | null): string {
   return user.email?.split("@")[0]?.trim() || "Presidential rep";
 }
 
-function hashSetupCode(code: string): string {
-  return createHash("sha256").update(code, "utf8").digest("hex");
+function normalizeTeamCode(code: string): string {
+  return code.toUpperCase().replace(/[^A-Z0-9]/g, "");
 }
 
-function generateSetupCode(): string {
-  const bytes = randomBytes(8);
-  return Array.from(bytes, (byte) => SETUP_CODE_ALPHABET[byte % SETUP_CODE_ALPHABET.length]).join("");
+function displayTeamCode(code: string): string {
+  return code.length === 8 ? `${code.slice(0, 4)}-${code.slice(4)}` : code;
 }
 
 async function fetchRepProfile(admin: SupabaseClient, userId: string): Promise<RepProfile | null> {
@@ -99,6 +98,16 @@ async function fetchRepProfile(admin: SupabaseClient, userId: string): Promise<R
     .maybeSingle();
   if (error) throw error;
   return data as RepProfile | null;
+}
+
+async function fetchTeamSetupCode(admin: SupabaseClient): Promise<string> {
+  const { data, error } = await admin
+    .from("sales_team_settings")
+    .select("setup_code")
+    .eq("singleton", true)
+    .single();
+  if (error || !data?.setup_code) throw error ?? new Error("Sales team code is unavailable.");
+  return data.setup_code as string;
 }
 
 async function authenticatedUser(): Promise<User | null> {
@@ -233,6 +242,7 @@ export async function GET(request: Request) {
       fetchStateCodes(admin),
       fetchRepProfile(admin, user.id),
     ]);
+    const teamSetupCode = profile?.can_invite ? await fetchTeamSetupCode(admin) : null;
     if (states.length === 0) {
       return response({ error: "No sales door data is available." }, 503);
     }
@@ -256,6 +266,7 @@ export async function GET(request: Request) {
         name: repName(user, profile),
         username: profile?.username ?? "",
         canInvite: profile?.can_invite ?? false,
+        teamSetupCode: teamSetupCode ? displayTeamCode(teamSetupCode) : null,
       },
       states,
       selectedState,
@@ -308,10 +319,10 @@ export async function POST(request: Request) {
     const username = typeof input.username === "string" ? input.username.trim().toLowerCase() : "";
     const pin = typeof input.password === "string" ? input.password : "";
     const setupCode = typeof input.setupCode === "string"
-      ? input.setupCode.toUpperCase().replace(/[^A-Z0-9]/g, "")
+      ? normalizeTeamCode(input.setupCode)
       : "";
-    if (!USERNAME_PATTERN.test(username) || !PIN_PATTERN.test(pin) || setupCode.length !== 8) {
-      return response({ error: "Enter a valid setup code, username, and 6-digit PIN." }, 400);
+    if (!USERNAME_PATTERN.test(username) || !PIN_PATTERN.test(pin) || !TEAM_CODE_PATTERN.test(setupCode)) {
+      return response({ error: "Enter the sales team code, username, and 6-digit PIN." }, 400);
     }
 
     const admin = createSalesAdminClient();
@@ -323,16 +334,13 @@ export async function POST(request: Request) {
     if (profileCheckError) return response({ error: "Account setup is temporarily unavailable." }, 503);
     if (existingProfile) return response({ error: "That username is taken. Add a digit or initial." }, 409);
 
-    const codeHash = hashSetupCode(setupCode);
-    const { data: invite, error: inviteError } = await admin
-      .from("sales_rep_invites")
-      .select("id")
-      .eq("code_hash", codeHash)
-      .is("used_at", null)
-      .gt("expires_at", new Date().toISOString())
-      .maybeSingle();
-    if (inviteError || !invite) {
-      return response({ error: "That setup code is invalid, expired, or already used." }, 401);
+    const { data: settings, error: settingsError } = await admin
+      .from("sales_team_settings")
+      .select("setup_code")
+      .eq("singleton", true)
+      .single();
+    if (settingsError || settings?.setup_code !== setupCode) {
+      return response({ error: "That sales team code is not valid." }, 401);
     }
 
     const internalEmail = `${username}.${randomUUID()}@sales.presidential.internal`;
@@ -347,18 +355,18 @@ export async function POST(request: Request) {
       return response({ error: "Account setup is temporarily unavailable." }, 503);
     }
 
-    const { error: claimError } = await admin.rpc("claim_sales_rep_invite", {
-      p_code_hash: codeHash,
-      p_user_id: created.user.id,
-      p_username: username,
-      p_display_name: displayName,
+    const { error: profileCreateError } = await admin.from("sales_rep_profiles").insert({
+      user_id: created.user.id,
+      username,
+      display_name: displayName,
+      can_invite: false,
     });
-    if (claimError) {
+    if (profileCreateError) {
       await admin.auth.admin.deleteUser(created.user.id);
-      const usernameTaken = claimError.code === "23505";
+      const usernameTaken = profileCreateError.code === "23505";
       return response(
-        { error: usernameTaken ? "That username is taken. Add a digit or initial." : "That setup code is invalid, expired, or already used." },
-        usernameTaken ? 409 : 401,
+        { error: usernameTaken ? "That username is taken. Add a digit or initial." : "Account setup is temporarily unavailable." },
+        usernameTaken ? 409 : 503,
       );
     }
 
@@ -380,27 +388,29 @@ export async function POST(request: Request) {
     return response({ success: true });
   }
 
-  if (input.action === "create_rep_invite") {
+  if (input.action === "change_team_code") {
     try {
       const admin = createSalesAdminClient();
       const profile = await fetchRepProfile(admin, user.id);
-      if (!profile?.can_invite) return response({ error: "Only an owner can create setup codes." }, 403);
-      const rawCode = generateSetupCode();
-      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
-      const { error } = await admin.from("sales_rep_invites").insert({
-        code_hash: hashSetupCode(rawCode),
-        created_by: user.id,
-        expires_at: expiresAt,
-      });
+      if (!profile?.can_invite) return response({ error: "Only an owner can change the team code." }, 403);
+      const setupCode = typeof input.setupCode === "string"
+        ? normalizeTeamCode(input.setupCode)
+        : "";
+      if (!TEAM_CODE_PATTERN.test(setupCode)) {
+        return response({ error: "Use 4–32 letters or digits for the team code." }, 400);
+      }
+      const { error } = await admin
+        .from("sales_team_settings")
+        .update({ setup_code: setupCode, updated_by: user.id, updated_at: new Date().toISOString() })
+        .eq("singleton", true);
       if (error) throw error;
       return response({
         success: true,
-        setupCode: `${rawCode.slice(0, 4)}-${rawCode.slice(4)}`,
-        expiresAt,
+        setupCode: displayTeamCode(setupCode),
       });
     } catch (error) {
-      console.error("Sales rep invite failed", error instanceof Error ? error.message : "unknown");
-      return response({ error: "The setup code could not be created." }, 503);
+      console.error("Sales team code update failed", error instanceof Error ? error.message : "unknown");
+      return response({ error: "The team code could not be changed." }, 503);
     }
   }
 

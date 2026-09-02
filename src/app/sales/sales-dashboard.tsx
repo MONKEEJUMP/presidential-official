@@ -38,11 +38,10 @@ type UndoResponse = Readonly<{
   nextCallbackAt?: string | null;
 }>;
 
-type InviteResponse = Readonly<{
+type TeamCodeResponse = Readonly<{
   success?: boolean;
   error?: string;
   setupCode?: string;
-  expiresAt?: string;
 }>;
 
 const STRUCK_OUTCOMES = new Set<SalesOutcome>(["not_interested", "do_not_call"]);
@@ -101,8 +100,9 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   const [loggingIn, setLoggingIn] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "setup">("login");
   const [settingUp, setSettingUp] = useState(false);
-  const [creatingInvite, setCreatingInvite] = useState(false);
-  const [inviteInfo, setInviteInfo] = useState<{ code: string; expiresAt: string } | null>(null);
+  const [teamCodeOpen, setTeamCodeOpen] = useState(false);
+  const [changingTeamCode, setChangingTeamCode] = useState(false);
+  const [teamCodeMessage, setTeamCodeMessage] = useState("");
   const [changePinOpen, setChangePinOpen] = useState(false);
   const [changingPin, setChangingPin] = useState(false);
   const [pinMessage, setPinMessage] = useState("");
@@ -262,25 +262,32 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     }
   }
 
-  async function createRepInvite() {
-    if (creatingInvite) return;
-    setCreatingInvite(true);
+  async function changeTeamCode(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (changingTeamCode) return;
+    const form = new FormData(event.currentTarget);
+    setChangingTeamCode(true);
     setPageError("");
+    setTeamCodeMessage("");
     try {
       const response = await fetch("/api/sales", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "create_rep_invite" }),
+        body: JSON.stringify({ action: "change_team_code", setupCode: form.get("teamCode") }),
       });
-      const payload = (await response.json()) as InviteResponse;
-      if (!response.ok || !payload.success || !payload.setupCode || !payload.expiresAt) {
-        throw new Error(payload.error ?? "The setup code could not be created.");
+      const payload = (await response.json()) as TeamCodeResponse;
+      if (!response.ok || !payload.success || !payload.setupCode) {
+        throw new Error(payload.error ?? "The team code could not be changed.");
       }
-      setInviteInfo({ code: payload.setupCode, expiresAt: payload.expiresAt });
+      setSnapshot((current) => current ? {
+        ...current,
+        user: { ...current.user, teamSetupCode: payload.setupCode! },
+      } : current);
+      setTeamCodeMessage("TEAM CODE UPDATED. Give this same code to every new rep.");
     } catch (error) {
-      setPageError(error instanceof Error ? error.message : "The setup code could not be created.");
+      setTeamCodeMessage(error instanceof Error ? error.message : "The team code could not be changed.");
     } finally {
-      setCreatingInvite(false);
+      setChangingTeamCode(false);
     }
   }
 
@@ -516,15 +523,15 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
           <p>
             {authMode === "login"
               ? "Use your first-name username and 6-digit PIN."
-              : "Enter the one-time setup code from the owner, then choose your username and PIN."}
+              : "Enter the shared sales team code, then choose your username and PIN."}
           </p>
           {authMode === "setup" ? (
             <label>
-              <span>One-time setup code</span>
+              <span>Sales team code</span>
               <input
                 autoCapitalize="characters"
                 autoComplete="one-time-code"
-                maxLength={9}
+                maxLength={40}
                 name="setupCode"
                 placeholder="ABCD-EFGH"
                 required
@@ -594,8 +601,14 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         <div className={styles.repIdentity}>
           <span>{snapshot.user.name}</span>
           {snapshot.user.canInvite ? (
-            <button disabled={creatingInvite} onClick={() => void createRepInvite()} type="button">
-              {creatingInvite ? "CREATING…" : "ADD REP"}
+            <button
+              onClick={() => {
+                setTeamCodeOpen((current) => !current);
+                setTeamCodeMessage("");
+              }}
+              type="button"
+            >
+              TEAM CODE
             </button>
           ) : null}
           <button
@@ -611,18 +624,33 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         </div>
       </header>
 
-      {inviteInfo ? (
-        <section className={styles.invitePanel} aria-live="polite">
+      {teamCodeOpen && snapshot.user.canInvite ? (
+        <form className={styles.invitePanel} onSubmit={changeTeamCode}>
           <div>
-            <span>ONE-TIME REP SETUP CODE</span>
-            <strong>{inviteInfo.code}</strong>
+            <span>CURRENT SALES TEAM CODE</span>
+            <strong>{snapshot.user.teamSetupCode}</strong>
           </div>
           <p>
-            Give this code directly to the rep. They choose their own username and 6-digit PIN.
-            Expires {formatSalesDate(inviteInfo.expiresAt, true)}.
+            One reusable code for the entire sales team. Changing it affects future account creation only;
+            existing reps keep their logins until removed.
           </p>
-          <button onClick={() => setInviteInfo(null)} type="button">DISMISS</button>
-        </section>
+          <label>
+            <span>Change team code</span>
+            <input
+              autoCapitalize="characters"
+              defaultValue={snapshot.user.teamSetupCode ?? ""}
+              maxLength={40}
+              name="teamCode"
+              pattern="[A-Za-z0-9 -]{4,40}"
+              required
+              type="text"
+            />
+          </label>
+          <button disabled={changingTeamCode} type="submit">
+            {changingTeamCode ? "UPDATING…" : "SAVE TEAM CODE"}
+          </button>
+          {teamCodeMessage ? <p className={styles.teamCodeMessage} role="status">{teamCodeMessage}</p> : null}
+        </form>
       ) : null}
 
       {changePinOpen ? (
