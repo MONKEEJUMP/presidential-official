@@ -109,7 +109,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   const [pinMessage, setPinMessage] = useState("");
   const [search, setSearch] = useState("");
   const [city, setCity] = useState("ALL CITIES");
-  const [dispensaryFilter, setDispensaryFilter] = useState<DispensaryFilter>("all");
+  const [dispensaryFilter, setDispensaryFilter] = useState<DispensaryFilter>("not_purchasing");
   const [myBook, setMyBook] = useState(false);
   const [myStars, setMyStars] = useState(false);
   const [activeDoorId, setActiveDoorId] = useState<number | null>(null);
@@ -764,7 +764,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       ) : null}
 
       <section className={styles.commandBar} aria-label="Sales list controls">
-        <label><span>State</span><select disabled={loadingData} onChange={(event) => { openListOrder.current = null; setActiveDoorId(null); setWorkMode(null); setLoggedCall(null); setNotes(""); setCallbackDate(""); setDiscardWarning(false); setPanelError(""); setUndoMessage(""); setCity("ALL CITIES"); setSearch(""); setDispensaryFilter("all"); setMyBook(false); setMyStars(false); void loadSnapshot(event.target.value); }} value={snapshot.selectedState}>{snapshot.states.map((state) => <option key={state}>{state}</option>)}</select></label>
+        <label><span>State</span><select disabled={loadingData} onChange={(event) => { openListOrder.current = null; setActiveDoorId(null); setWorkMode(null); setLoggedCall(null); setNotes(""); setCallbackDate(""); setDiscardWarning(false); setPanelError(""); setUndoMessage(""); setCity("ALL CITIES"); setSearch(""); setDispensaryFilter("not_purchasing"); setMyBook(false); setMyStars(false); void loadSnapshot(event.target.value); }} value={snapshot.selectedState}>{snapshot.states.map((state) => <option key={state}>{state}</option>)}</select></label>
         <label><span>City</span><select onChange={(event) => setCity(event.target.value)} value={city}><option>ALL CITIES</option>{cities.map((item) => <option key={item}>{item}</option>)}</select></label>
         <label className={styles.searchControl}><span>Search</span><input onChange={(event) => setSearch(event.target.value)} placeholder="Search name, city, or phone" type="search" value={search} /></label>
         <div className={styles.controlGroup}><span>Dispensaries</span><div className={styles.segmentedControl}><button className={dispensaryFilter === "not_purchasing" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("not_purchasing")} type="button">DISPENSARIES NOT PURCHASING PRESIDENTIAL</button><button className={dispensaryFilter === "purchasing" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("purchasing")} type="button">DISPENSARIES PURCHASING PRESIDENTIAL</button><button className={dispensaryFilter === "all" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("all")} type="button">ALL DISPENSARIES</button></div></div>
