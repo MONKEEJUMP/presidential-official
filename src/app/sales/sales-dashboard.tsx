@@ -204,7 +204,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       if (city !== "ALL CITIES" && door.city !== city) return false;
       if (dispensaryFilter === "purchasing" && !door.isPurchasing) return false;
       if (dispensaryFilter === "not_purchasing" && door.isPurchasing) return false;
-      if (myBook && !door.myLastActivityAt) return false;
+      if (myBook && (!door.myLastActivityAt || chicagoDateKey(door.myLastActivityAt) !== today)) return false;
       if (myStars && !door.personallyStarred) return false;
       if (!needle) return true;
       const textMatch = [door.dbaName, door.legalName, door.city].filter(Boolean).some((value) => value!.toLowerCase().includes(needle));
@@ -229,6 +229,10 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
 
   function openWorkArea(door: SalesDoor, mode: "log" | "history") {
     if (door.isPurchasing || (mode === "log" && door.doNotCallLocked)) return;
+    if (activeDoorId === door.id && workMode === mode) {
+      closeWorkAreaImmediately();
+      return;
+    }
     listScrollY.current = window.scrollY;
     openListOrder.current = filteredDoors.map((item) => item.id);
     setActiveDoorId(door.id);
@@ -764,8 +768,9 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         <label><span>City</span><select onChange={(event) => setCity(event.target.value)} value={city}><option>ALL CITIES</option>{cities.map((item) => <option key={item}>{item}</option>)}</select></label>
         <label className={styles.searchControl}><span>Search</span><input onChange={(event) => setSearch(event.target.value)} placeholder="Search name, city, or phone" type="search" value={search} /></label>
         <div className={styles.controlGroup}><span>Dispensaries</span><div className={styles.segmentedControl}><button className={dispensaryFilter === "not_purchasing" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("not_purchasing")} type="button">DISPENSARIES NOT PURCHASING PRESIDENTIAL</button><button className={dispensaryFilter === "purchasing" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("purchasing")} type="button">DISPENSARIES PURCHASING PRESIDENTIAL</button><button className={dispensaryFilter === "all" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("all")} type="button">ALL DISPENSARIES</button></div></div>
-        <div className={styles.listToggles}><button className={myBook ? styles.activeToggle : ""} onClick={() => setMyBook((value) => !value)} type="button">MY BOOK</button><button className={myStars ? styles.activeToggle : ""} onClick={() => setMyStars((value) => !value)} type="button">MY STARS</button></div>
+        <div className={styles.listToggles}><button className={myBook ? styles.activeToggle : ""} onClick={() => setMyBook((value) => !value)} type="button">MY WORK TODAY</button><button className={myStars ? styles.activeToggle : ""} onClick={() => setMyStars((value) => !value)} type="button">MY STARRED DISPENSARIES</button></div>
       </section>
+      <p className={styles.controlHelp}>LOG RESULT saves what happened and keeps the dispensary open. HISTORY shows saved activity. MY WORK TODAY shows dispensaries you updated today. MY STARRED DISPENSARIES shows the stores you personally starred.</p>
 
       <section className={styles.countLine} aria-live="polite">
         <strong>{snapshot.purchasingCount} PURCHASING PRESIDENTIAL</strong>
@@ -784,6 +789,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
               canCorrectCustomer={Boolean(isSuper)}
               canSetPriority={Boolean(isSuper)}
               door={door}
+              openMode={activeDoor?.id === door.id ? workMode : null}
               onCorrectCustomer={(item) => void correctVerifiedCustomer(item)}
               onHistory={(item) => openWorkArea(item, "history")}
               onLogResult={(item) => openWorkArea(item, "log")}
@@ -791,6 +797,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
               onTogglePersonalStar={(item) => void togglePersonalStar(item)}
               onTogglePriority={(item) => void togglePriority(item)}
               struck={struck(door)}
+              workedByMeToday={Boolean(door.myLastActivityAt && chicagoDateKey(door.myLastActivityAt) === today)}
             />
             {activeDoor?.id === door.id && workMode ? (
               <SalesInlineWorkArea

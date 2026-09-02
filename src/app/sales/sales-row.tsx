@@ -28,6 +28,8 @@ type SalesRowProps = Readonly<{
   struck: boolean;
   canSetPriority: boolean;
   canCorrectCustomer: boolean;
+  openMode: "log" | "history" | null;
+  workedByMeToday: boolean;
   onLogResult: (door: SalesDoor) => void;
   onHistory: (door: SalesDoor) => void;
   onTogglePersonalStar: (door: SalesDoor) => void;
@@ -43,6 +45,8 @@ export function SalesRow({
   struck,
   canSetPriority,
   canCorrectCustomer,
+  openMode,
+  workedByMeToday,
   onLogResult,
   onHistory,
   onTogglePersonalStar,
@@ -73,6 +77,7 @@ export function SalesRow({
         <div className={styles.rowBadges}>
           {door.companyPriority ? <span className={styles.priorityBadge}>★ PRIORITY</span> : null}
           {door.isPurchasing ? <span className={styles.presidentialBadge}>PRESIDENTIAL</span> : null}
+          {workedByMeToday ? <span className={styles.myWorkBadge}>MY WORK TODAY</span> : null}
           {door.doNotCallLocked ? <span className={styles.doNotCallBadge}>DO NOT CALL — LOCKED</span> : null}
           {door.hasPendingVerification ? <span className={styles.pendingBadge}>AWAITING PAULIE VERIFICATION</span> : null}
           {calledToday && lastCall && !door.isPurchasing ? (
@@ -178,9 +183,9 @@ export function SalesRow({
                 <button onClick={() => onReopenDoNotCall(door)} type="button">REOPEN</button>
               ) : <span>LOCKED</span>
             ) : (
-              <button onClick={() => onLogResult(door)} type="button">LOG RESULT</button>
+              <button className={openMode === "log" ? styles.activeRowAction : undefined} onClick={() => onLogResult(door)} type="button">{openMode === "log" ? "CLOSE LOG RESULT" : "LOG RESULT"}</button>
             )}
-            <button onClick={() => onHistory(door)} type="button">HISTORY</button>
+            <button className={openMode === "history" ? styles.activeRowAction : undefined} onClick={() => onHistory(door)} type="button">{openMode === "history" ? "CLOSE HISTORY" : "HISTORY"}</button>
           </div>
         </>
       )}

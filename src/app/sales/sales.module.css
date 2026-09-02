@@ -519,6 +519,26 @@
   color: #fff;
 }
 
+.myWorkBadge {
+  background: #58c3b6;
+  color: #07100f;
+}
+
+.controlHelp {
+  margin: 0;
+  padding: 0.85rem clamp(0.6rem, 2vw, 1.5rem);
+  border-bottom: 1px solid rgb(255 255 255 / 14%);
+  color: rgb(255 255 255 / 72%);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.activeRowAction {
+  border-color: #58c3b6 !important;
+  background: #58c3b6 !important;
+  color: #07100f !important;
+}
+
 .doNotCallBadge {
   background: #8c1d25;
   color: #fff;
