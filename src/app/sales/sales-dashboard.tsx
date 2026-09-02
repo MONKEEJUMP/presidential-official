@@ -23,8 +23,7 @@ import {
 import styles from "./sales.module.css";
 import { SalesRow } from "./sales-row";
 
-type Worklist = "today" | "week" | "all";
-type StatusFilter = "all" | "purchasing" | "not_purchasing";
+type DispensaryFilter = "all" | "purchasing" | "not_purchasing";
 
 type ApiResponse = Readonly<{
   success?: boolean;
@@ -39,14 +38,14 @@ type ApiResponse = Readonly<{
 }>;
 
 const STRUCK_OUTCOMES = new Set<SalesOutcome>(["not_interested", "do_not_call"]);
+const STATE_NAMES: Readonly<Record<string, string>> = {
+  AZ: "ARIZONA",
+  NY: "NEW YORK",
+  OK: "OKLAHOMA",
+};
 
 function roleLabel(role: SalesRole): string {
   return role === "super_master" ? "SUPER MASTER" : role === "master" ? "MASTER" : "SALES REP";
-}
-
-function dateKeyOffset(dateKey: string, days: number): string {
-  const [year, month, day] = dateKey.split("-").map(Number);
-  return new Date(Date.UTC(year, month - 1, day + days)).toISOString().slice(0, 10);
 }
 
 function calledToday(door: SalesDoor, today: string): boolean {
@@ -108,8 +107,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   const [pinMessage, setPinMessage] = useState("");
   const [search, setSearch] = useState("");
   const [city, setCity] = useState("ALL CITIES");
-  const [worklist, setWorklist] = useState<Worklist>("today");
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [dispensaryFilter, setDispensaryFilter] = useState<DispensaryFilter>("all");
   const [myBook, setMyBook] = useState(false);
   const [myStars, setMyStars] = useState(false);
   const [activeDoorId, setActiveDoorId] = useState<number | null>(null);
@@ -185,10 +183,10 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     if (!snapshot) return [];
     const needle = search.trim().toLowerCase();
     const digits = phoneDigits(search);
-    let doors = snapshot.doors.filter((door) => {
+    const doors = snapshot.doors.filter((door) => {
       if (city !== "ALL CITIES" && door.city !== city) return false;
-      if (statusFilter === "purchasing" && door.status !== "stocked") return false;
-      if (statusFilter === "not_purchasing" && !["prospect", "review"].includes(door.status)) return false;
+      if (dispensaryFilter === "purchasing" && !door.isPurchasing) return false;
+      if (dispensaryFilter === "not_purchasing" && door.isPurchasing) return false;
       if (myBook && !door.myLastActivityAt) return false;
       if (myStars && !door.personallyStarred) return false;
       if (!needle) return true;
@@ -196,26 +194,8 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       const phoneMatch = Boolean(digits && phoneDigits(door.phone).includes(digits));
       return textMatch || phoneMatch;
     });
-
-    if (worklist === "today") {
-      const eligible = doors.filter((door) => !isClosedDoor(door) && !calledToday(door, today));
-      const due = eligible.filter((door) => callbackDue(door, today));
-      const dueIds = new Set(due.map((door) => door.id));
-      const neverCalled = eligible
-        .filter((door) => !door.lastCall && door.status !== "stocked" && !dueIds.has(door.id))
-        .sort((a, b) => (a.city ?? "").localeCompare(b.city ?? "") || displayDoorName(a).localeCompare(displayDoorName(b)))
-        .slice(0, 15);
-      doors = [...due, ...neverCalled];
-    } else if (worklist === "week") {
-      const end = dateKeyOffset(today, 7);
-      doors = doors.filter((door) => {
-        if (!door.nextCallbackAt || isClosedDoor(door)) return false;
-        const key = chicagoDateKey(door.nextCallbackAt);
-        return key >= today && key <= end;
-      });
-    }
     return [...doors].sort((a, b) => compareDoors(a, b, today, myBook));
-  }, [city, myBook, myStars, search, snapshot, statusFilter, today, worklist]);
+  }, [city, dispensaryFilter, myBook, myStars, search, snapshot, today]);
 
   const activeDoor = snapshot?.doors.find((door) => door.id === activeDoorId) ?? null;
   const isSuper = snapshot?.user.role === "super_master";
@@ -403,6 +383,29 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     }
   }
 
+  async function togglePurchasingVerification(door: SalesDoor) {
+    if (!isSuper || door.marketDoorId === null || door.retailerId !== null) return;
+    const nextVerified = !door.isPurchasing;
+    const message = nextVerified
+      ? `Verify ${displayDoorName(door)} as purchasing Presidential? This becomes team-wide gold customer truth.`
+      : `Remove Paulie's manual purchasing verification from ${displayDoorName(door)}?`;
+    if (!window.confirm(message)) return;
+    setPanelError("");
+    try {
+      await postAction({
+        action: "set_purchasing_verification",
+        doorId: door.id,
+        verified: nextVerified,
+      });
+      await loadSnapshot(snapshot?.selectedState);
+      setUndoMessage(nextVerified
+        ? "Purchasing customer verified by Paulie and recorded in admin history."
+        : "Manual purchasing verification cleared and recorded in admin history.");
+    } catch (error) {
+      setPanelError(error instanceof Error ? error.message : "Purchasing verification could not be changed.");
+    }
+  }
+
   async function logout() {
     await fetch("/api/sales", { method: "DELETE" });
     setSnapshot(null);
@@ -465,7 +468,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     try {
       await postAction({ action: "correct_door", doorId: activeDoor.id, status: form.get("doorStatus"), callbackDate: form.get("doorCallback") });
       await loadSnapshot(snapshot.selectedState);
-      setUndoMessage("Door status and callback corrected. The action was added to admin history.");
+      setUndoMessage("Sales target correction saved and added to admin history.");
     } catch (error) {
       setPanelError(error instanceof Error ? error.message : "The door correction could not be saved.");
     }
@@ -584,15 +587,20 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       </section>
 
       <section className={styles.commandBar} aria-label="Sales list controls">
-        <label><span>State</span><select disabled={loadingData} onChange={(event) => { setCity("ALL CITIES"); void loadSnapshot(event.target.value); }} value={snapshot.selectedState}>{snapshot.states.map((state) => <option key={state}>{state}</option>)}</select></label>
+        <label><span>State</span><select disabled={loadingData} onChange={(event) => { setCity("ALL CITIES"); setSearch(""); setDispensaryFilter("all"); setMyBook(false); setMyStars(false); void loadSnapshot(event.target.value); }} value={snapshot.selectedState}>{snapshot.states.map((state) => <option key={state}>{state}</option>)}</select></label>
         <label><span>City</span><select onChange={(event) => setCity(event.target.value)} value={city}><option>ALL CITIES</option>{cities.map((item) => <option key={item}>{item}</option>)}</select></label>
         <label className={styles.searchControl}><span>Search</span><input onChange={(event) => setSearch(event.target.value)} placeholder="Search name, city, or phone" type="search" value={search} /></label>
-        <div className={styles.controlGroup}><span>Worklist</span><div className={styles.segmentedControl}><button className={worklist === "today" ? styles.activeToggle : ""} onClick={() => setWorklist("today")} type="button">TODAY</button><button className={worklist === "week" ? styles.activeToggle : ""} onClick={() => setWorklist("week")} type="button">THIS WEEK</button><button className={worklist === "all" ? styles.activeToggle : ""} onClick={() => setWorklist("all")} type="button">ALL</button></div></div>
-        <div className={styles.controlGroup}><span>Purchasing status</span><div className={styles.segmentedControl}><button className={statusFilter === "all" ? styles.activeToggle : ""} onClick={() => setStatusFilter("all")} type="button">ALL STATUS</button><button className={statusFilter === "purchasing" ? styles.activeToggle : ""} onClick={() => setStatusFilter("purchasing")} type="button">PURCHASING PRESIDENTIAL</button><button className={statusFilter === "not_purchasing" ? styles.activeToggle : ""} onClick={() => setStatusFilter("not_purchasing")} type="button">NOT PURCHASING</button></div></div>
+        <div className={styles.controlGroup}><span>Dispensaries</span><div className={styles.segmentedControl}><button className={dispensaryFilter === "all" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("all")} type="button">ALL DISPENSARIES</button><button className={dispensaryFilter === "purchasing" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("purchasing")} type="button">DISPENSARIES PURCHASING PRESIDENTIAL</button><button className={dispensaryFilter === "not_purchasing" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("not_purchasing")} type="button">DISPENSARIES NOT PURCHASING PRESIDENTIAL</button></div></div>
         <div className={styles.listToggles}><button className={myBook ? styles.activeToggle : ""} onClick={() => setMyBook((value) => !value)} type="button">MY BOOK</button><button className={myStars ? styles.activeToggle : ""} onClick={() => setMyStars((value) => !value)} type="button">MY STARS</button></div>
       </section>
 
-      <section className={styles.countLine} aria-live="polite"><strong>In {snapshot.stockedCount} of {snapshot.licensedDoorCount} licensed doors</strong><span>{filteredDoors.length} shown · {worklist.toUpperCase()}{city !== "ALL CITIES" ? ` · ${city}` : ""}</span></section>
+      <section className={styles.countLine} aria-live="polite">
+        <strong>{snapshot.purchasingCount} PURCHASING PRESIDENTIAL</strong>
+        <strong>{snapshot.opportunityCount} SALES OPPORTUNITIES</strong>
+        <strong>{snapshot.activeDispensaryCount} ACTIVE {STATE_NAMES[snapshot.selectedState] ?? snapshot.selectedState} DISPENSARIES</strong>
+        <span>{snapshot.unlinkedCustomerCount} VERIFIED CUSTOMERS NEED LICENSE MATCH · {snapshot.totalSalesRows} TOTAL SALES ROWS</span>
+        {city !== "ALL CITIES" || search || myBook || myStars ? <span>{filteredDoors.length} MATCHING CURRENT FILTERS</span> : null}
+      </section>
       {pageError ? <p className={styles.errorMessage}>{pageError}</p> : null}
 
       <section className={styles.doorList} aria-busy={loadingData} aria-label="Licensed dispensary doors">
@@ -602,8 +610,8 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
 
       {activeDoor ? (
         <aside className={styles.callPanel} aria-label={`Call log for ${displayDoorName(activeDoor)}`} ref={panelRef}>
-          <div className={styles.panelHeader}><div><span>{activeDoor.stateCode} · {activeDoor.stateLicenseId || "NO LICENSE ID"}</span><h2>{displayDoorName(activeDoor)}</h2><p>{[activeDoor.streetAddress, activeDoor.city, activeDoor.stateCode, activeDoor.zip].filter(Boolean).join(" · ")}</p></div><button aria-label="Close call panel" onClick={closeDoor} type="button">×</button></div>
-          <div className={styles.panelStarControls}><button className={activeDoor.personallyStarred ? styles.starButtonActive : styles.starButton} onClick={() => void togglePersonalStar(activeDoor)} type="button">{activeDoor.personallyStarred ? "★ MY STAR" : "☆ ADD MY STAR"}</button>{isSuper ? <button className={activeDoor.companyPriority ? styles.companyStarActive : styles.companyStarButton} onClick={() => void togglePriority(activeDoor)} type="button">{activeDoor.companyPriority ? "★ COMPANY PRIORITY" : "SET COMPANY PRIORITY"}</button> : null}</div>
+          <div className={styles.panelHeader}><div><span>{activeDoor.stateCode} · {activeDoor.noLicenseMatch ? "NO LICENSE MATCH" : activeDoor.stateLicenseId || "NO LICENSE ID"}</span><h2>{displayDoorName(activeDoor)}</h2><p>{[activeDoor.streetAddress, activeDoor.city, activeDoor.stateCode, activeDoor.zip].filter(Boolean).join(" · ")}</p></div><button aria-label="Close call panel" onClick={closeDoor} type="button">×</button></div>
+          <div className={styles.panelStarControls}><button className={activeDoor.personallyStarred ? styles.starButtonActive : styles.starButton} onClick={() => void togglePersonalStar(activeDoor)} type="button">{activeDoor.personallyStarred ? "★ MY STAR" : "☆ ADD MY STAR"}</button>{isSuper ? <button className={activeDoor.companyPriority ? styles.companyStarActive : styles.companyStarButton} onClick={() => void togglePriority(activeDoor)} type="button">{activeDoor.companyPriority ? "★ COMPANY PRIORITY" : "SET COMPANY PRIORITY"}</button> : null}{isSuper && activeDoor.marketDoorId !== null && activeDoor.retailerId === null ? <button onClick={() => void togglePurchasingVerification(activeDoor)} type="button">{activeDoor.isPurchasing ? "REMOVE MANUAL PURCHASING VERIFICATION" : "VERIFY PURCHASING"}</button> : null}</div>
           {activeDoor.phone ? <a className={styles.actionLink} href={`tel:${activeDoor.phone}`}>CALL {activeDoor.phone}</a> : null}
           {activeDoor.email ? <div className={styles.panelEmail}><a className={styles.actionLink} href={`mailto:${activeDoor.email}`}>EMAIL {activeDoor.email}</a><button onClick={() => void navigator.clipboard.writeText(activeDoor.email!)} type="button">COPY EMAIL</button></div> : null}
           <a className={styles.actionLink} href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([activeDoor.streetAddress, activeDoor.city, activeDoor.stateCode, activeDoor.zip].filter(Boolean).join(", "))}`} rel="noreferrer" target="_blank">OPEN IN GOOGLE MAPS</a>
@@ -611,7 +619,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
           {undoMessage ? <p className={styles.undoNotice} role="status">{undoMessage}</p> : null}
 
           {loggedCall ? (
-            <div className={styles.loggedState} role="status"><strong>CALL LOGGED</strong><span>{salesOutcome(loggedCall.outcome).label} · {formatSalesDate(loggedCall.calledAt, true)}</span><span>Saved. This door now moves to ALL because it was called today.</span><button className={styles.undoButton} disabled={undoingCall} onClick={() => void undoCall(loggedCall.id)} type="button">{undoingCall ? "UNDOING…" : "UNDO LAST CALL"}</button>{nextDoor ? <button onClick={() => openDoor(nextDoor)} type="button">NEXT: {displayDoorName(nextDoor)}</button> : <button onClick={closeDoor} type="button">BACK TO LIST</button>}</div>
+            <div className={styles.loggedState} role="status"><strong>CALL LOGGED</strong><span>{salesOutcome(loggedCall.outcome).label} · {formatSalesDate(loggedCall.calledAt, true)}</span><span>Saved. Purchasing truth did not change from this call outcome.</span><button className={styles.undoButton} disabled={undoingCall} onClick={() => void undoCall(loggedCall.id)} type="button">{undoingCall ? "UNDOING…" : "UNDO LAST CALL"}</button>{nextDoor ? <button onClick={() => openDoor(nextDoor)} type="button">NEXT: {displayDoorName(nextDoor)}</button> : <button onClick={closeDoor} type="button">BACK TO LIST</button>}</div>
           ) : (
             <div className={styles.logComposer}>
               {activeDoor.lastCall && (activeDoor.lastCall.repId === snapshot.user.id || isSuper) ? <div className={styles.undoBar}><span>Last saved: {salesOutcome(activeDoor.lastCall.outcome).label} · {formatSalesDate(activeDoor.lastCall.calledAt, true)} · {activeDoor.lastCall.repName}</span><button className={styles.undoButton} disabled={undoingCall} onClick={() => void undoCall(activeDoor.lastCall!.id)} type="button">{undoingCall ? "UNDOING…" : "UNDO LAST CALL"}</button></div> : null}
@@ -624,7 +632,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
             </div>
           )}
 
-          {isSuper ? <form className={styles.doorCorrection} onSubmit={correctDoor}><strong>SUPER MASTER CORRECTION</strong><label><span>Door status</span><select defaultValue={activeDoor.status} name="doorStatus"><option value="stocked">PURCHASING PRESIDENTIAL</option><option value="prospect">PROSPECT</option><option value="review">REVIEW</option><option value="closed">CLOSED</option></select></label><label><span>Callback date</span><input defaultValue={activeDoor.nextCallbackAt ? chicagoDateKey(activeDoor.nextCallbackAt) : ""} name="doorCallback" type="date" /></label><button type="submit">SAVE CORRECTION</button></form> : null}
+          {isSuper ? <form className={styles.doorCorrection} onSubmit={correctDoor}><strong>SUPER MASTER CORRECTION</strong>{activeDoor.marketDoorId !== null ? <label><span>License record status — does not control gold</span><select defaultValue={activeDoor.status} name="doorStatus"><option value="stocked">LEGACY STOCKED</option><option value="prospect">ACTIVE PROSPECT</option><option value="review">REVIEW</option><option value="closed">CLOSED</option></select></label> : null}<label><span>Callback date</span><input defaultValue={activeDoor.nextCallbackAt ? chicagoDateKey(activeDoor.nextCallbackAt) : ""} name="doorCallback" type="date" /></label><button type="submit">SAVE CORRECTION</button></form> : null}
 
           <section className={styles.callHistory}><h3>CALL HISTORY</h3>{activeDoor.callHistory.length ? activeDoor.callHistory.map((call) => <article key={call.id}><strong>{salesOutcome(call.outcome).label}</strong><span>{formatSalesDate(call.calledAt, true)} · {call.repName}</span>{call.callbackAt ? <span>Callback: {formatSalesDate(call.callbackAt)}</span> : null}{call.notes ? <p>{call.notes}</p> : null}</article>) : <p>No calls logged yet.</p>}</section>
         </aside>

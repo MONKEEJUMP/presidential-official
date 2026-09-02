@@ -11,7 +11,6 @@ import {
   defaultCallbackDate,
   isSalesOutcome,
   type DoorStatus,
-  type MatchConfidence,
   type SalesAdminEvent,
   type SalesCall,
   type SalesDoor,
@@ -51,20 +50,42 @@ type DoorRow = Readonly<{
   website: string | null;
   operational_status: string | null;
   status: DoorStatus;
-  match_confidence: MatchConfidence;
   next_callback_at: string | null;
   source_list_date: string;
 }>;
 
 type CallRow = Readonly<{
   id: number;
-  door_id: number;
+  door_id: number | null;
+  verified_customer_id: number | null;
   rep_id: string;
   rep_name: string;
   called_at: string;
   outcome: SalesOutcome;
   notes: string | null;
   callback_at: string | null;
+}>;
+
+type VerifiedCustomerRow = Readonly<{
+  id: number;
+  retailer_id: number | null;
+  door_id: number | null;
+  verification_source: "exact_address_city_state_zip" | "verified_retailer_unlinked" | "super_master_confirmed";
+  verification_note: string;
+  next_callback_at: string | null;
+  active: boolean;
+}>;
+
+type RetailerRow = Readonly<{
+  id: number;
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  phone: string | null;
+  website: string | null;
+  updated_at: string;
 }>;
 
 type RepProfile = Readonly<{
@@ -188,7 +209,7 @@ async function fetchDoors(admin: SupabaseClient, state: string): Promise<DoorRow
   for (let offset = 0; ; offset += PAGE_SIZE) {
     const { data, error } = await admin
       .from("market_doors")
-      .select("id,state,door_key,state_license_id,legal_name,dba_name,street_address,city,state_code,zip,phone,email,extra_contacts,website,operational_status,status,match_confidence,next_callback_at,source_list_date")
+      .select("id,state,door_key,state_license_id,legal_name,dba_name,street_address,city,state_code,zip,phone,email,extra_contacts,website,operational_status,status,next_callback_at,source_list_date")
       .eq("state_code", state)
       .range(offset, offset + PAGE_SIZE - 1);
     if (error) throw error;
@@ -203,12 +224,43 @@ async function fetchAllCalls(admin: SupabaseClient): Promise<CallRow[]> {
   for (let offset = 0; ; offset += PAGE_SIZE) {
     const { data, error } = await admin
       .from("call_log")
-      .select("id,door_id,rep_id,rep_name,called_at,outcome,notes,callback_at")
+      .select("id,door_id,verified_customer_id,rep_id,rep_name,called_at,outcome,notes,callback_at")
       .order("called_at", { ascending: false })
       .order("id", { ascending: false })
       .range(offset, offset + PAGE_SIZE - 1);
     if (error) throw error;
     const page = (data ?? []) as CallRow[];
+    rows.push(...page);
+    if (page.length < PAGE_SIZE) return rows;
+  }
+}
+
+async function fetchVerifiedCustomers(admin: SupabaseClient): Promise<VerifiedCustomerRow[]> {
+  const rows: VerifiedCustomerRow[] = [];
+  for (let offset = 0; ; offset += PAGE_SIZE) {
+    const { data, error } = await admin
+      .from("sales_verified_customer_doors")
+      .select("id,retailer_id,door_id,verification_source,verification_note,next_callback_at,active")
+      .eq("active", true)
+      .range(offset, offset + PAGE_SIZE - 1);
+    if (error) throw error;
+    const page = (data ?? []) as VerifiedCustomerRow[];
+    rows.push(...page);
+    if (page.length < PAGE_SIZE) return rows;
+  }
+}
+
+async function fetchVerifiedRetailers(admin: SupabaseClient): Promise<RetailerRow[]> {
+  const rows: RetailerRow[] = [];
+  for (let offset = 0; ; offset += PAGE_SIZE) {
+    const { data, error } = await admin
+      .from("retailers")
+      .select("id,name,address,city,state,zip,phone,website,updated_at")
+      .eq("public_locator_status", "approved_public_locator")
+      .in("state", ["AZ", "NY", "OK"])
+      .range(offset, offset + PAGE_SIZE - 1);
+    if (error) throw error;
+    const page = (data ?? []) as RetailerRow[];
     rows.push(...page);
     if (page.length < PAGE_SIZE) return rows;
   }
@@ -232,20 +284,29 @@ async function fetchIdSet(
 ): Promise<Set<number>> {
   const ids = new Set<number>();
   for (let offset = 0; ; offset += PAGE_SIZE) {
-    let query = admin.from(table).select("door_id").range(offset, offset + PAGE_SIZE - 1);
+    let query = admin.from(table).select("door_id,verified_customer_id").range(offset, offset + PAGE_SIZE - 1);
     if (userId) query = query.eq("user_id", userId);
     const { data, error } = await query;
     if (error) throw error;
-    const page = (data ?? []) as Array<{ door_id: number }>;
-    page.forEach((row) => ids.add(Number(row.door_id)));
+    const page = (data ?? []) as Array<{ door_id: number | null; verified_customer_id: number | null }>;
+    page.forEach((row) => {
+      if (row.door_id !== null) ids.add(Number(row.door_id));
+      else if (row.verified_customer_id !== null) ids.add(-Number(row.verified_customer_id));
+    });
     if (page.length < PAGE_SIZE) return ids;
   }
+}
+
+function salesTargetId(doorId: number | null, verifiedCustomerId: number | null): number {
+  if (doorId !== null) return Number(doorId);
+  if (verifiedCustomerId !== null) return -Number(verifiedCustomerId);
+  throw new Error("Sales call has no target.");
 }
 
 function mapCall(row: CallRow): SalesCall {
   return {
     id: Number(row.id),
-    doorId: Number(row.door_id),
+    doorId: salesTargetId(row.door_id, row.verified_customer_id),
     repId: row.rep_id,
     repName: row.rep_name,
     calledAt: row.called_at,
@@ -255,39 +316,66 @@ function mapCall(row: CallRow): SalesCall {
   };
 }
 
-function mapDoors(
+function isClosedDoorRow(row: DoorRow): boolean {
+  const operational = row.operational_status?.toLowerCase() ?? "";
+  return (
+    row.status === "closed" ||
+    operational.includes("non-operational") ||
+    operational.includes("non operational") ||
+    operational.includes("not operating")
+  );
+}
+
+function mapSalesTargets(
   doorRows: DoorRow[],
+  verifiedCustomers: VerifiedCustomerRow[],
+  retailerRows: RetailerRow[],
   calls: CallRow[],
   userId: string,
   personalStars: Set<number>,
   priorities: Set<number>,
 ): SalesDoor[] {
-  const byDoor = new Map<number, SalesCall[]>();
+  const retailerById = new Map(retailerRows.map((row) => [Number(row.id), row]));
+  const verifiedByDoor = new Map<number, VerifiedCustomerRow>();
+  for (const customer of verifiedCustomers) {
+    if (customer.door_id !== null) verifiedByDoor.set(Number(customer.door_id), customer);
+  }
+
+  const callsByTarget = new Map<number, SalesCall[]>();
   for (const row of calls) {
     const call = mapCall(row);
-    byDoor.set(call.doorId, [...(byDoor.get(call.doorId) ?? []), call]);
+    callsByTarget.set(call.doorId, [...(callsByTarget.get(call.doorId) ?? []), call]);
   }
-  return doorRows.map((row) => {
+
+  const licensedTargets = doorRows.filter((row) => !isClosedDoorRow(row)).map((row) => {
     const id = Number(row.id);
-    const callHistory = byDoor.get(id) ?? [];
+    const verified = verifiedByDoor.get(id) ?? null;
+    const retailer = verified?.retailer_id === null || verified?.retailer_id === undefined
+      ? null
+      : retailerById.get(Number(verified.retailer_id)) ?? null;
+    const callHistory = callsByTarget.get(id) ?? [];
     return {
       id,
+      marketDoorId: id,
+      verifiedCustomerId: verified ? Number(verified.id) : null,
+      retailerId: retailer ? Number(retailer.id) : null,
       state: row.state,
       doorKey: row.door_key,
       stateLicenseId: row.state_license_id,
       legalName: row.legal_name,
-      dbaName: row.dba_name,
-      streetAddress: row.street_address,
-      city: row.city,
+      dbaName: retailer?.name ?? row.dba_name,
+      streetAddress: retailer?.address ?? row.street_address,
+      city: retailer?.city ?? row.city,
       stateCode: row.state_code,
-      zip: row.zip,
-      phone: row.phone,
+      zip: retailer?.zip ?? row.zip,
+      phone: retailer?.phone ?? row.phone,
       email: row.email,
       extraContacts: row.extra_contacts,
-      website: row.website,
+      website: retailer?.website ?? row.website,
       operationalStatus: row.operational_status,
       status: row.status,
-      matchConfidence: row.match_confidence,
+      isPurchasing: Boolean(verified),
+      noLicenseMatch: false,
       nextCallbackAt: row.next_callback_at,
       sourceListDate: row.source_list_date,
       callHistory,
@@ -297,6 +385,46 @@ function mapDoors(
       myLastActivityAt: callHistory.find((call) => call.repId === userId)?.calledAt ?? null,
     };
   });
+
+  const unlinkedTargets = verifiedCustomers.flatMap((verified) => {
+    if (verified.door_id !== null || verified.retailer_id === null) return [];
+    const retailer = retailerById.get(Number(verified.retailer_id));
+    if (!retailer) return [];
+    const id = -Number(verified.id);
+    const callHistory = callsByTarget.get(id) ?? [];
+    return [{
+      id,
+      marketDoorId: null,
+      verifiedCustomerId: Number(verified.id),
+      retailerId: Number(retailer.id),
+      state: retailer.state,
+      doorKey: `verified-retailer:${retailer.id}`,
+      stateLicenseId: null,
+      legalName: null,
+      dbaName: retailer.name,
+      streetAddress: retailer.address,
+      city: retailer.city,
+      stateCode: retailer.state,
+      zip: retailer.zip,
+      phone: retailer.phone,
+      email: null,
+      extraContacts: null,
+      website: retailer.website,
+      operationalStatus: "VERIFIED CUSTOMER",
+      status: "review" as const,
+      isPurchasing: true,
+      noLicenseMatch: true,
+      nextCallbackAt: verified.next_callback_at,
+      sourceListDate: retailer.updated_at.slice(0, 10),
+      callHistory,
+      lastCall: callHistory[0] ?? null,
+      personallyStarred: personalStars.has(id),
+      companyPriority: priorities.has(id),
+      myLastActivityAt: callHistory.find((call) => call.repId === userId)?.calledAt ?? null,
+    } satisfies SalesDoor];
+  });
+
+  return [...licensedTargets, ...unlinkedTargets];
 }
 
 function personalStats(calls: CallRow[], userId: string, today: string): SalesPersonalStats {
@@ -391,8 +519,17 @@ async function addAudit(
   if (error) throw error;
 }
 
-async function validDoor(admin: SupabaseClient, doorId: number): Promise<boolean> {
-  const { data, error } = await admin.from("market_doors").select("id").eq("id", doorId).maybeSingle();
+function targetColumns(targetId: number) {
+  return targetId > 0
+    ? { door_id: targetId, verified_customer_id: null }
+    : { door_id: null, verified_customer_id: -targetId };
+}
+
+async function validSalesTarget(admin: SupabaseClient, targetId: number): Promise<boolean> {
+  const table = targetId > 0 ? "market_doors" : "sales_verified_customer_doors";
+  let query = admin.from(table).select("id").eq("id", Math.abs(targetId));
+  if (targetId < 0) query = query.eq("active", true).is("door_id", null);
+  const { data, error } = await query.maybeSingle();
   if (error) throw error;
   return Boolean(data);
 }
@@ -422,8 +559,10 @@ export async function GET(request: Request) {
     if (!states.length) return json({ error: "No sales door data is available." }, 503);
     const requested = url.searchParams.get("state")?.toUpperCase() ?? "";
     const selectedState = STATE_PATTERN.test(requested) && states.includes(requested) ? requested : states[0];
-    const [doorRows, allCalls, voids, personalStars, priorities, settings] = await Promise.all([
+    const [doorRows, verifiedCustomers, retailerRows, allCalls, voids, personalStars, priorities, settings] = await Promise.all([
       fetchDoors(admin, selectedState),
+      fetchVerifiedCustomers(admin),
+      fetchVerifiedRetailers(admin),
       fetchAllCalls(admin),
       fetchVoidedCallIds(admin),
       fetchIdSet(admin, "sales_personal_stars", user.id),
@@ -432,9 +571,25 @@ export async function GET(request: Request) {
     ]);
     const activeCalls = allCalls.filter((call) => !voids.has(Number(call.id)));
     const selectedIds = new Set(doorRows.map((door) => Number(door.id)));
-    const doors = mapDoors(
+    const selectedRetailers = retailerRows.filter((retailer) => retailer.state === selectedState);
+    const selectedRetailerIds = new Set(selectedRetailers.map((retailer) => Number(retailer.id)));
+    const selectedVerifiedCustomers = verifiedCustomers.filter(
+      (customer) =>
+        (customer.door_id !== null && selectedIds.has(Number(customer.door_id))) ||
+        (customer.retailer_id !== null && selectedRetailerIds.has(Number(customer.retailer_id))),
+    );
+    const selectedVerifiedCustomerIds = new Set(
+      selectedVerifiedCustomers.map((customer) => Number(customer.id)),
+    );
+    const doors = mapSalesTargets(
       doorRows,
-      activeCalls.filter((call) => selectedIds.has(Number(call.door_id))),
+      selectedVerifiedCustomers,
+      selectedRetailers,
+      activeCalls.filter(
+        (call) =>
+          (call.door_id !== null && selectedIds.has(Number(call.door_id))) ||
+          (call.verified_customer_id !== null && selectedVerifiedCustomerIds.has(Number(call.verified_customer_id))),
+      ),
       user.id,
       personalStars,
       priorities,
@@ -453,8 +608,13 @@ export async function GET(request: Request) {
       },
       states,
       selectedState,
-      stockedCount: doors.filter((door) => door.status === "stocked").length,
-      licensedDoorCount: doors.filter((door) => door.status !== "closed").length,
+      purchasingCount: doors.filter((door) => door.isPurchasing).length,
+      linkedCustomerCount: doors.filter((door) => door.isPurchasing && !door.noLicenseMatch).length,
+      unlinkedCustomerCount: doors.filter((door) => door.noLicenseMatch).length,
+      opportunityCount: doors.filter((door) => !door.isPurchasing).length,
+      activeDispensaryCount: doorRows.filter((door) => !isClosedDoorRow(door)).length,
+      closedCount: doorRows.filter(isClosedDoorRow).length,
+      totalSalesRows: doors.length,
       doors,
     };
     return json(snapshot);
@@ -667,11 +827,28 @@ export async function POST(request: Request) {
     if (input.action === "toggle_personal_star") {
       const doorId = Number(input.doorId);
       const starred = input.starred === true;
-      if (!Number.isSafeInteger(doorId) || doorId <= 0 || !(await validDoor(admin, doorId))) return json({ error: "A valid licensed door is required." }, 400);
-      const query = starred
-        ? admin.from("sales_personal_stars").upsert({ user_id: user.id, door_id: doorId }, { onConflict: "user_id,door_id" })
-        : admin.from("sales_personal_stars").delete().eq("user_id", user.id).eq("door_id", doorId);
-      const { error } = await query;
+      if (!Number.isSafeInteger(doorId) || doorId === 0 || !(await validSalesTarget(admin, doorId))) {
+        return json({ error: "A valid sales target is required." }, 400);
+      }
+      const columns = targetColumns(doorId);
+      let error;
+      if (starred) {
+        let existingQuery = admin.from("sales_personal_stars").select("id").eq("user_id", user.id);
+        existingQuery = columns.door_id !== null
+          ? existingQuery.eq("door_id", columns.door_id)
+          : existingQuery.eq("verified_customer_id", columns.verified_customer_id!);
+        const existing = await existingQuery.maybeSingle();
+        if (existing.error) throw existing.error;
+        if (!existing.data) {
+          ({ error } = await admin.from("sales_personal_stars").insert({ user_id: user.id, ...columns }));
+        }
+      } else {
+        let deleteQuery = admin.from("sales_personal_stars").delete().eq("user_id", user.id);
+        deleteQuery = columns.door_id !== null
+          ? deleteQuery.eq("door_id", columns.door_id)
+          : deleteQuery.eq("verified_customer_id", columns.verified_customer_id!);
+        ({ error } = await deleteQuery);
+      }
       if (error) throw error;
       return json({ success: true, doorId, starred });
     }
@@ -680,14 +857,95 @@ export async function POST(request: Request) {
       if (!isSuper(profile)) return json({ error: "Only Paulie can set company priorities." }, 403);
       const doorId = Number(input.doorId);
       const priority = input.priority === true;
-      if (!Number.isSafeInteger(doorId) || doorId <= 0 || !(await validDoor(admin, doorId))) return json({ error: "A valid licensed door is required." }, 400);
-      const query = priority
-        ? admin.from("sales_company_priorities").upsert({ door_id: doorId, set_by: user.id }, { onConflict: "door_id" })
-        : admin.from("sales_company_priorities").delete().eq("door_id", doorId);
-      const { error } = await query;
+      if (!Number.isSafeInteger(doorId) || doorId === 0 || !(await validSalesTarget(admin, doorId))) {
+        return json({ error: "A valid sales target is required." }, 400);
+      }
+      const columns = targetColumns(doorId);
+      let error;
+      if (priority) {
+        let existingQuery = admin.from("sales_company_priorities").select("id");
+        existingQuery = columns.door_id !== null
+          ? existingQuery.eq("door_id", columns.door_id)
+          : existingQuery.eq("verified_customer_id", columns.verified_customer_id!);
+        const existing = await existingQuery.maybeSingle();
+        if (existing.error) throw existing.error;
+        if (!existing.data) {
+          ({ error } = await admin.from("sales_company_priorities").insert({ set_by: user.id, ...columns }));
+        }
+      } else {
+        let deleteQuery = admin.from("sales_company_priorities").delete();
+        deleteQuery = columns.door_id !== null
+          ? deleteQuery.eq("door_id", columns.door_id)
+          : deleteQuery.eq("verified_customer_id", columns.verified_customer_id!);
+        ({ error } = await deleteQuery);
+      }
       if (error) throw error;
-      await addAudit(admin, profile, priority ? "company_priority_set" : "company_priority_cleared", { doorId, reason: safeReason(input.reason) });
+      await addAudit(admin, profile, priority ? "company_priority_set" : "company_priority_cleared", {
+        doorId: doorId > 0 ? doorId : null,
+        reason: safeReason(input.reason),
+        metadata: doorId < 0 ? { verified_customer_id: -doorId } : {},
+      });
       return json({ success: true, doorId, priority });
+    }
+
+    if (input.action === "set_purchasing_verification") {
+      if (!isSuper(profile)) return json({ error: "Only Paulie can verify purchasing truth." }, 403);
+      const doorId = Number(input.doorId);
+      const verified = input.verified === true;
+      if (!Number.isSafeInteger(doorId) || doorId <= 0 || !(await validSalesTarget(admin, doorId))) {
+        return json({ error: "A valid licensed door is required." }, 400);
+      }
+      const existing = await admin
+        .from("sales_verified_customer_doors")
+        .select("id,retailer_id,active,verification_source")
+        .eq("door_id", doorId)
+        .maybeSingle();
+      if (existing.error) throw existing.error;
+      if (verified) {
+        if (!existing.data) {
+          const { error } = await admin.from("sales_verified_customer_doors").insert({
+            retailer_id: null,
+            door_id: doorId,
+            verification_source: "super_master_confirmed",
+            verified_by: user.id,
+            verified_at: new Date().toISOString(),
+            verification_note: safeReason(input.reason) ?? "Explicit Super Master customer verification.",
+            active: true,
+          });
+          if (error) throw error;
+        } else if (!existing.data.active) {
+          const { error } = await admin
+            .from("sales_verified_customer_doors")
+            .update({
+              active: true,
+              verified_by: user.id,
+              verified_at: new Date().toISOString(),
+              verification_note: safeReason(input.reason) ?? "Explicit Super Master customer re-verification.",
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", existing.data.id);
+          if (error) throw error;
+        }
+        await addAudit(admin, profile, "purchasing_customer_verified", {
+          doorId,
+          reason: safeReason(input.reason),
+        });
+        return json({ success: true, doorId, verified: true });
+      }
+      if (!existing.data?.active) return json({ success: true, doorId, verified: false });
+      if (existing.data.retailer_id !== null) {
+        return json({ error: "This customer is verified by the official retailer source and cannot be cleared here." }, 409);
+      }
+      const { error } = await admin
+        .from("sales_verified_customer_doors")
+        .update({ active: false, updated_at: new Date().toISOString() })
+        .eq("id", existing.data.id);
+      if (error) throw error;
+      await addAudit(admin, profile, "purchasing_customer_verification_cleared", {
+        doorId,
+        reason: safeReason(input.reason),
+      });
+      return json({ success: true, doorId, verified: false });
     }
 
     if (input.action === "correct_door") {
@@ -695,8 +953,35 @@ export async function POST(request: Request) {
       const doorId = Number(input.doorId);
       const status = typeof input.status === "string" ? input.status as DoorStatus : "" as DoorStatus;
       const callbackDate = typeof input.callbackDate === "string" && input.callbackDate ? input.callbackDate : null;
-      if (!Number.isSafeInteger(doorId) || doorId <= 0 || !VALID_STATUSES.has(status)) return json({ error: "Choose a valid door and status." }, 400);
+      if (!Number.isSafeInteger(doorId) || doorId === 0 || !(await validSalesTarget(admin, doorId))) {
+        return json({ error: "Choose a valid sales target." }, 400);
+      }
       if (callbackDate && !DATE_PATTERN.test(callbackDate)) return json({ error: "Use a valid callback date." }, 400);
+      if (doorId < 0) {
+        const nextCallbackAt = callbackDateToUtc(callbackDate);
+        const verifiedCustomerId = -doorId;
+        const before = await admin
+          .from("sales_verified_customer_doors")
+          .select("next_callback_at")
+          .eq("id", verifiedCustomerId)
+          .single();
+        if (before.error) throw before.error;
+        const { error } = await admin
+          .from("sales_verified_customer_doors")
+          .update({ next_callback_at: nextCallbackAt, updated_at: new Date().toISOString() })
+          .eq("id", verifiedCustomerId);
+        if (error) throw error;
+        await addAudit(admin, profile, "verified_customer_callback_corrected", {
+          reason: safeReason(input.reason),
+          metadata: {
+            verified_customer_id: verifiedCustomerId,
+            previous_callback_at: before.data.next_callback_at,
+            new_callback_at: nextCallbackAt,
+          },
+        });
+        return json({ success: true, doorId, status: "review", nextCallbackAt });
+      }
+      if (!VALID_STATUSES.has(status)) return json({ error: "Choose a valid door status." }, 400);
       const before = await admin.from("market_doors").select("id,status,next_callback_at").eq("id", doorId).maybeSingle();
       if (before.error) throw before.error;
       if (!before.data) return json({ error: "That licensed door was not found." }, 404);
@@ -714,44 +999,90 @@ export async function POST(request: Request) {
     if (input.action === "undo_call") {
       const callId = Number(input.callId);
       if (!Number.isSafeInteger(callId) || callId <= 0) return json({ error: "A valid call is required." }, 400);
-      const result = await admin.rpc("undo_sales_call_as_actor", { p_call_id: callId, p_actor_id: user.id, p_actor_name: repName(user, profile) });
+      const target = await admin
+        .from("call_log")
+        .select("door_id,verified_customer_id")
+        .eq("id", callId)
+        .maybeSingle();
+      if (target.error || !target.data) return json({ error: "That call is unavailable." }, 404);
+      const isVerifiedCustomerCall = target.data.verified_customer_id !== null;
+      const result = isVerifiedCustomerCall
+        ? await admin.rpc("undo_sales_verified_customer_call_as_actor", {
+            p_call_id: callId,
+            p_actor_id: user.id,
+            p_actor_name: repName(user, profile),
+          })
+        : await admin.rpc("undo_sales_call_as_actor", {
+            p_call_id: callId,
+            p_actor_id: user.id,
+            p_actor_name: repName(user, profile),
+          });
       if (result.error) return json({ error: "Only the latest eligible call can be undone." }, 409);
       const row = Array.isArray(result.data) ? result.data[0] : result.data;
       if (!row) throw new Error("Undo returned no row.");
+      const resultTargetId = isVerifiedCustomerCall
+        ? -Number(row.result_verified_customer_id)
+        : Number(row.result_door_id);
       if (row.original_rep_id !== user.id) {
         await addAudit(admin, profile, "administrative_call_undo", {
-          doorId: Number(row.result_door_id),
+          doorId: resultTargetId > 0 ? resultTargetId : null,
           reason: safeReason(input.reason),
-          metadata: { call_id: callId, original_rep_id: row.original_rep_id },
+          metadata: {
+            call_id: callId,
+            original_rep_id: row.original_rep_id,
+            ...(resultTargetId < 0 ? { verified_customer_id: -resultTargetId } : {}),
+          },
         });
       }
-      return json({ success: true, undoneCallId: Number(row.undone_call_id), doorId: Number(row.result_door_id), status: row.door_status as DoorStatus, nextCallbackAt: row.result_callback_at as string | null });
+      return json({
+        success: true,
+        undoneCallId: Number(row.undone_call_id),
+        doorId: resultTargetId,
+        status: isVerifiedCustomerCall ? "review" : row.door_status as DoorStatus,
+        nextCallbackAt: row.result_callback_at as string | null,
+      });
     }
 
     if (input.action !== "log_call") return json({ error: "Invalid sales action." }, 400);
     const doorId = Number(input.doorId);
     const outcome = input.outcome;
     const notes = typeof input.notes === "string" ? input.notes.trim().slice(0, 4000) : "";
-    if (!Number.isSafeInteger(doorId) || doorId <= 0 || !isSalesOutcome(outcome)) return json({ error: "Choose a valid door and outcome." }, 400);
+    if (!Number.isSafeInteger(doorId) || doorId === 0 || !isSalesOutcome(outcome) || !(await validSalesTarget(admin, doorId))) {
+      return json({ error: "Choose a valid sales target and outcome." }, 400);
+    }
     const callbackInput = input.callbackDate;
     let callbackDate: string | null;
     if (callbackInput === undefined) callbackDate = defaultCallbackDate(outcome);
     else if (callbackInput === null || callbackInput === "") callbackDate = null;
     else if (typeof callbackInput === "string" && DATE_PATTERN.test(callbackInput)) callbackDate = callbackInput;
     else return json({ error: "Use a valid callback date." }, 400);
-    const logged = await admin.rpc("log_sales_call", {
-      p_door_id: doorId,
-      p_rep_id: user.id,
-      p_rep_name: repName(user, profile),
-      p_outcome: outcome,
-      p_notes: notes || null,
-      p_callback_at: callbackDateToUtc(callbackDate),
-      p_called_at: null,
-    });
+    const callbackAt = callbackDateToUtc(callbackDate);
+    const logged = doorId > 0
+      ? await admin.rpc("log_sales_call", {
+          p_door_id: doorId,
+          p_rep_id: user.id,
+          p_rep_name: repName(user, profile),
+          p_outcome: outcome,
+          p_notes: notes || null,
+          p_callback_at: callbackAt,
+          p_called_at: null,
+        })
+      : await admin.rpc("log_sales_verified_customer_call", {
+          p_verified_customer_id: -doorId,
+          p_rep_id: user.id,
+          p_rep_name: repName(user, profile),
+          p_outcome: outcome,
+          p_notes: notes || null,
+          p_callback_at: callbackAt,
+          p_called_at: null,
+        });
     if (logged.error || !logged.data) throw logged.error ?? new Error("Call logging returned no row.");
-    const door = await admin.from("market_doors").select("status,next_callback_at").eq("id", doorId).single();
-    if (door.error) throw door.error;
-    return json({ success: true, call: mapCall(logged.data as CallRow), status: door.data.status as DoorStatus, nextCallbackAt: door.data.next_callback_at as string | null });
+    if (doorId > 0) {
+      const door = await admin.from("market_doors").select("status,next_callback_at").eq("id", doorId).single();
+      if (door.error) throw door.error;
+      return json({ success: true, call: mapCall(logged.data as CallRow), status: door.data.status as DoorStatus, nextCallbackAt: door.data.next_callback_at as string | null });
+    }
+    return json({ success: true, call: mapCall(logged.data as CallRow), status: "review", nextCallbackAt: callbackAt });
   } catch (error) {
     console.error("Sales action failed", error instanceof Error ? error.message : "unknown");
     return json({ error: "The sales action could not be completed." }, 503);

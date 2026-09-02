@@ -49,7 +49,7 @@ export function SalesRow({
   const mapHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address || displayDoorName(door))}`;
   const className = [
     styles.doorRow,
-    door.status === "stocked" ? styles.stockedRow : styles.prospectRow,
+    door.isPurchasing ? styles.stockedRow : styles.prospectRow,
     door.companyPriority ? styles.priorityRow : "",
     callbackDue ? styles.callbackRow : "",
     calledToday ? styles.calledTodayRow : "",
@@ -73,7 +73,8 @@ export function SalesRow({
       <div className={styles.storeCell}>
         <div className={styles.rowBadges}>
           {door.companyPriority ? <span className={styles.priorityBadge}>★ PRIORITY</span> : null}
-          {door.status === "stocked" ? <span className={styles.presidentialBadge}>PRESIDENTIAL</span> : null}
+          {door.isPurchasing ? <span className={styles.presidentialBadge}>PRESIDENTIAL</span> : null}
+          {door.noLicenseMatch ? <span className={styles.noLicenseBadge}>NO LICENSE MATCH</span> : null}
           {closed ? <span className={styles.closedBadge}>CLOSED</span> : null}
           {calledToday && lastCall ? <span className={styles.calledBadge}>Called today by {lastCall.repName}</span> : null}
         </div>

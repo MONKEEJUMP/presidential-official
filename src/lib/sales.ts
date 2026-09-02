@@ -13,7 +13,6 @@ export const SALES_OUTCOMES = [
 
 export type SalesOutcome = (typeof SALES_OUTCOMES)[number]["value"];
 export type DoorStatus = "stocked" | "prospect" | "review" | "closed";
-export type MatchConfidence = "zip+name-strong" | "zip+name-weak" | "none";
 export type SalesRole = "super_master" | "master" | "sales_rep";
 
 export type SalesPersonalStats = Readonly<{
@@ -59,6 +58,9 @@ export type SalesCall = Readonly<{
 
 export type SalesDoor = Readonly<{
   id: number;
+  marketDoorId: number | null;
+  verifiedCustomerId: number | null;
+  retailerId: number | null;
   state: string;
   doorKey: string;
   stateLicenseId: string | null;
@@ -74,7 +76,8 @@ export type SalesDoor = Readonly<{
   website: string | null;
   operationalStatus: string | null;
   status: DoorStatus;
-  matchConfidence: MatchConfidence;
+  isPurchasing: boolean;
+  noLicenseMatch: boolean;
   nextCallbackAt: string | null;
   sourceListDate: string;
   callHistory: readonly SalesCall[];
@@ -98,8 +101,13 @@ export type SalesSnapshot = Readonly<{
   }>;
   states: readonly string[];
   selectedState: string;
-  stockedCount: number;
-  licensedDoorCount: number;
+  purchasingCount: number;
+  linkedCustomerCount: number;
+  unlinkedCustomerCount: number;
+  opportunityCount: number;
+  activeDispensaryCount: number;
+  closedCount: number;
+  totalSalesRows: number;
   doors: readonly SalesDoor[];
 }>;
 
