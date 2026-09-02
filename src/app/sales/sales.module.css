@@ -243,7 +243,9 @@
 }
 
 .stockedRow {
-  background: linear-gradient(100deg, rgb(244 227 161 / 42%) 0%, rgb(212 185 106 / 24%) 34%, rgb(255 255 255 / 96%) 78%);
+  background:
+    linear-gradient(rgb(244 227 161 / 30%), rgb(244 227 161 / 30%)),
+    #fff;
 }
 
 .stockedRow::before {
