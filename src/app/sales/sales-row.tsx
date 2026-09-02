@@ -15,7 +15,10 @@ type SalesRowProps = Readonly<{
   callbackDue: boolean;
   closed: boolean;
   struck: boolean;
+  canSetPriority: boolean;
   onOpen: (door: SalesDoor) => void;
+  onTogglePersonalStar: (door: SalesDoor) => void;
+  onTogglePriority: (door: SalesDoor) => void;
 }>;
 
 export function SalesRow({
@@ -24,19 +27,23 @@ export function SalesRow({
   callbackDue,
   closed,
   struck,
+  canSetPriority,
   onOpen,
+  onTogglePersonalStar,
+  onTogglePriority,
 }: SalesRowProps) {
   const lastCall = door.lastCall;
+  const address = [door.streetAddress, door.city, door.stateCode, door.zip].filter(Boolean).join(", ");
+  const mapHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address || displayDoorName(door))}`;
   const className = [
     styles.doorRow,
     door.status === "stocked" ? styles.stockedRow : styles.prospectRow,
+    door.companyPriority ? styles.priorityRow : "",
     callbackDue ? styles.callbackRow : "",
     calledToday ? styles.calledTodayRow : "",
     closed ? styles.closedRow : "",
     struck ? styles.struckRow : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  ].filter(Boolean).join(" ");
 
   return (
     <article
@@ -53,16 +60,42 @@ export function SalesRow({
     >
       <div className={styles.storeCell}>
         <div className={styles.rowBadges}>
+          {door.companyPriority ? <span className={styles.priorityBadge}>★ PRIORITY</span> : null}
           {door.status === "stocked" ? <span className={styles.presidentialBadge}>PRESIDENTIAL</span> : null}
           {closed ? <span className={styles.closedBadge}>CLOSED</span> : null}
-          {calledToday && lastCall ? (
-            <span className={styles.calledBadge}>Called today by {lastCall.repName}</span>
+          {calledToday && lastCall ? <span className={styles.calledBadge}>Called today by {lastCall.repName}</span> : null}
+        </div>
+        <div className={styles.storeTitleLine}>
+          <strong>{displayDoorName(door)}</strong>
+          <button
+            aria-label={door.personallyStarred ? "Remove personal star" : "Add personal star"}
+            className={door.personallyStarred ? styles.starButtonActive : styles.starButton}
+            onClick={(event) => {
+              event.stopPropagation();
+              onTogglePersonalStar(door);
+            }}
+            title="My star"
+            type="button"
+          >
+            {door.personallyStarred ? "★" : "☆"}
+          </button>
+          {canSetPriority ? (
+            <button
+              aria-label={door.companyPriority ? "Clear company priority" : "Set company priority"}
+              className={door.companyPriority ? styles.companyStarActive : styles.companyStarButton}
+              onClick={(event) => {
+                event.stopPropagation();
+                onTogglePriority(door);
+              }}
+              title="Company priority"
+              type="button"
+            >
+              P
+            </button>
           ) : null}
         </div>
-        <strong>{displayDoorName(door)}</strong>
-        {door.dbaName && door.legalName && door.dbaName !== door.legalName ? (
-          <small>{door.legalName}</small>
-        ) : null}
+        {door.dbaName && door.legalName && door.dbaName !== door.legalName ? <small>{door.legalName}</small> : null}
+        {lastCall?.notes ? <p className={styles.notePreview}>{lastCall.notes.split(/\r?\n/, 1)[0]}</p> : null}
       </div>
 
       <div className={styles.rowField}>
@@ -72,30 +105,30 @@ export function SalesRow({
 
       <div className={styles.rowField}>
         <span>Phone</span>
-        {door.phone ? (
-          <a
-            href={`tel:${door.phone}`}
-            onClick={(event) => {
-              event.stopPropagation();
-              onOpen(door);
-            }}
-          >
-            {door.phone}
-          </a>
-        ) : (
-          <strong />
-        )}
+        {door.phone ? <a href={`tel:${door.phone}`} onClick={(event) => event.stopPropagation()}>{door.phone}</a> : <strong />}
       </div>
 
       <div className={styles.rowField}>
         <span>Email</span>
         {door.email ? (
-          <a href={`mailto:${door.email}`} onClick={(event) => event.stopPropagation()}>
-            {door.email}
-          </a>
-        ) : (
-          <strong />
-        )}
+          <div className={styles.emailLine}>
+            <a href={`mailto:${door.email}`} onClick={(event) => event.stopPropagation()}>{door.email}</a>
+            <button
+              onClick={(event) => {
+                event.stopPropagation();
+                void navigator.clipboard.writeText(door.email!);
+              }}
+              type="button"
+            >
+              COPY
+            </button>
+          </div>
+        ) : <strong />}
+      </div>
+
+      <div className={styles.rowField}>
+        <span>Address</span>
+        <a href={mapHref} onClick={(event) => event.stopPropagation()} rel="noreferrer" target="_blank">MAPS</a>
       </div>
 
       <div className={styles.rowField}>
@@ -110,11 +143,7 @@ export function SalesRow({
 
       <div className={styles.rowField}>
         <span>Outcome</span>
-        {lastCall ? (
-          <strong className={styles.outcomeBadge}>{salesOutcome(lastCall.outcome).label}</strong>
-        ) : (
-          <strong />
-        )}
+        {lastCall ? <strong className={styles.outcomeBadge}>{salesOutcome(lastCall.outcome).label}</strong> : <strong />}
       </div>
 
       <div className={styles.rowField}>

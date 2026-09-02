@@ -14,6 +14,37 @@ export const SALES_OUTCOMES = [
 export type SalesOutcome = (typeof SALES_OUTCOMES)[number]["value"];
 export type DoorStatus = "stocked" | "prospect" | "review" | "closed";
 export type MatchConfidence = "zip+name-strong" | "zip+name-weak" | "none";
+export type SalesRole = "super_master" | "master" | "sales_rep";
+
+export type SalesPersonalStats = Readonly<{
+  callsToday: number;
+  callsThisWeek: number;
+  soldThisMonth: number;
+}>;
+
+export type SalesRepActivity = Readonly<{
+  userId: string;
+  username: string;
+  displayName: string;
+  role: SalesRole;
+  active: boolean;
+  callsToday: number;
+  callsThisWeek: number;
+  callsThisMonth: number;
+  soldThisMonth: number;
+  lastActivityAt: string | null;
+}>;
+
+export type SalesAdminEvent = Readonly<{
+  id: number;
+  actorName: string;
+  actorRole: SalesRole;
+  targetUsername: string | null;
+  doorId: number | null;
+  action: string;
+  reason: string | null;
+  createdAt: string;
+}>;
 
 export type SalesCall = Readonly<{
   id: number;
@@ -48,6 +79,9 @@ export type SalesDoor = Readonly<{
   sourceListDate: string;
   callHistory: readonly SalesCall[];
   lastCall: SalesCall | null;
+  personallyStarred: boolean;
+  companyPriority: boolean;
+  myLastActivityAt: string | null;
 }>;
 
 export type SalesSnapshot = Readonly<{
@@ -56,8 +90,11 @@ export type SalesSnapshot = Readonly<{
     id: string;
     name: string;
     username: string;
-    canInvite: boolean;
+    role: SalesRole;
+    active: boolean;
     teamSetupCode: string | null;
+    onboardingOpen: boolean | null;
+    stats: SalesPersonalStats;
   }>;
   states: readonly string[];
   selectedState: string;

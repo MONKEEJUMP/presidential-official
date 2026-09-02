@@ -80,7 +80,13 @@
 .loginCard button,
 .repIdentity button,
 .viewToggle button,
-.exportButton,
+.segmentedControl button,
+.listToggles button,
+.teamAdminPanel button,
+.activityPanel button,
+.panelStarControls button,
+.panelEmail button,
+.doorCorrection button,
 .outcomeGrid button,
 .advancedToggle,
 .advancedFields > button,
@@ -153,7 +159,8 @@
   gap: 1rem;
 }
 
-.repIdentity > span {
+.repIdentity > span,
+.repIdentity > div > span {
   font-family: var(--po-font-display);
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -169,6 +176,32 @@
 .repIdentity button:disabled {
   cursor: wait;
   opacity: 0.55;
+}
+
+.repIdentity > div {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.roleBadge {
+  width: fit-content;
+  border: 1px solid currentColor;
+  font-family: var(--po-font-display);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  padding: 0.26rem 0.4rem;
+}
+
+.super_master {
+  color: #f4e3a1;
+}
+
+.master {
+  color: #58c3b6;
+}
+
+.sales_rep {
+  color: rgb(255 255 255 / 62%);
 }
 
 .invitePanel {
@@ -316,7 +349,7 @@
   top: 0;
   z-index: 20;
   display: grid;
-  grid-template-columns: minmax(7rem, 0.55fr) minmax(14rem, 2fr) auto auto;
+  grid-template-columns: minmax(7rem, 0.55fr) minmax(9rem, 0.75fr) minmax(18rem, 1.8fr);
   align-items: end;
   gap: 0.75rem;
   border-bottom: 1px solid rgb(255 255 255 / 14%);
@@ -331,7 +364,8 @@
 }
 
 .viewToggle button,
-.exportButton {
+.segmentedControl button,
+.listToggles button {
   min-height: 2.85rem;
   background: transparent;
   color: #fff;
@@ -339,7 +373,8 @@
 }
 
 .viewToggle .activeToggle,
-.exportButton {
+.segmentedControl .activeToggle,
+.listToggles .activeToggle {
   background: #58c3b6;
   color: #041412;
 }
@@ -374,7 +409,7 @@
   position: relative;
   display: grid;
   min-height: 6.5rem;
-  grid-template-columns: minmax(14rem, 2fr) minmax(6rem, 0.75fr) minmax(8rem, 1fr) minmax(12rem, 1.45fr) repeat(4, minmax(7rem, 0.8fr));
+  grid-template-columns: minmax(14rem, 2fr) minmax(6rem, 0.7fr) minmax(8rem, 0.9fr) minmax(12rem, 1.35fr) minmax(5rem, 0.55fr) repeat(4, minmax(7rem, 0.75fr));
   align-items: center;
   gap: 0.8rem;
   overflow: hidden;
@@ -414,7 +449,7 @@
 }
 
 .stockedRow::before {
-  background: linear-gradient(180deg, #f4e3a1, #d4b96a 52%, #8f6b24);
+  background: #d4b96a;
 }
 
 .callbackRow {
@@ -774,7 +809,407 @@
   padding: 0.7rem 0.9rem;
 }
 
+.teamAdminPanel,
+.activityPanel {
+  margin: 1rem clamp(1rem, 3vw, 2.5rem) 0;
+  border: 1px solid rgb(88 195 182 / 52%);
+  background: #101113;
+  padding: 1rem;
+}
+
+.teamAdminPanel {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.8fr) minmax(18rem, 1.5fr) minmax(12rem, 0.8fr);
+  align-items: end;
+  gap: 1rem;
+}
+
+.teamCodeBlock,
+.onboardingControl {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.teamCodeBlock > span,
+.teamCodeForm span,
+.onboardingControl > span,
+.controlGroup > span,
+.sectionHeading span,
+.personalCounter strong,
+.doorCorrection span {
+  color: #58c3b6;
+  font-family: var(--po-font-display);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.teamCodeBlock > strong,
+.onboardingControl > strong {
+  color: #f4e3a1;
+  font: 700 clamp(1.25rem, 3vw, 2rem)/1 var(--po-font-display);
+  letter-spacing: 0.1em;
+}
+
+.teamCodeBlock p {
+  margin: 0;
+  color: rgb(255 255 255 / 62%);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.teamCodeForm {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 0.6rem;
+}
+
+.teamCodeForm label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.teamCodeForm input,
+.doorCorrection input,
+.doorCorrection select {
+  min-height: 2.7rem;
+  border: 1px solid rgb(88 195 182 / 48%);
+  background: #070708;
+  color: #fff;
+  font: inherit;
+  padding: 0.65rem 0.75rem;
+}
+
+.teamAdminPanel button,
+.activityPanel button,
+.panelStarControls button,
+.panelEmail button,
+.doorCorrection button {
+  min-height: 2.7rem;
+  border: 1px solid #58c3b6;
+  background: transparent;
+  color: #58c3b6;
+  cursor: pointer;
+  font-family: var(--po-font-display);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.6rem 0.75rem;
+}
+
+.teamAdminPanel button:disabled,
+.activityPanel button:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+
+.adminMessage {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #f4e3a1;
+  font-weight: 700;
+}
+
+.activityPanel {
+  display: grid;
+  gap: 1rem;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sectionHeading h2 {
+  margin: 0.2rem 0 0;
+  font-family: var(--po-font-display);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.tableScroller {
+  overflow-x: auto;
+}
+
+.activityPanel table {
+  width: 100%;
+  min-width: 58rem;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+
+.activityPanel th,
+.activityPanel td {
+  border-bottom: 1px solid rgb(255 255 255 / 12%);
+  padding: 0.65rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.activityPanel th {
+  color: #58c3b6;
+  font-family: var(--po-font-display);
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.activityPanel td > strong,
+.activityPanel td > small {
+  display: block;
+}
+
+.activityPanel td > small {
+  margin-top: 0.2rem;
+  color: rgb(255 255 255 / 48%);
+}
+
+.adminActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.adminActions button {
+  min-height: 1.9rem;
+  font-size: 0.52rem;
+  padding: 0.35rem;
+}
+
+.protectedLabel {
+  color: #f4e3a1;
+  font-family: var(--po-font-display);
+  font-size: 0.6rem;
+}
+
+.auditHistory {
+  border-top: 1px solid rgb(88 195 182 / 32%);
+  padding-top: 0.8rem;
+}
+
+.auditHistory summary {
+  color: #f4e3a1;
+  cursor: pointer;
+  font-family: var(--po-font-display);
+  font-size: 0.7rem;
+}
+
+.auditHistory p {
+  margin: 0.55rem 0 0;
+  color: rgb(255 255 255 / 64%);
+  font-size: 0.72rem;
+}
+
+.auditHistory p strong {
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.personalCounter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  padding: 0.8rem clamp(1rem, 3vw, 2.5rem) 0;
+}
+
+.personalCounter span {
+  color: rgb(255 255 255 / 28%);
+}
+
+.controlGroup {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.segmentedControl,
+.listToggles {
+  display: flex;
+  min-width: 0;
+}
+
+.segmentedControl button,
+.listToggles button {
+  min-height: 2.85rem;
+  flex: 1 1 auto;
+  border: 1px solid rgb(255 255 255 / 28%);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--po-font-display);
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 0.55rem 0.65rem;
+}
+
+.listToggles {
+  align-self: end;
+}
+
+.priorityRow {
+  outline: 2px solid #58c3b6;
+  outline-offset: -2px;
+}
+
+.priorityBadge {
+  border: 1px solid #08776d;
+  background: #dffcf8;
+  color: #075e55;
+}
+
+.storeTitleLine {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.4rem;
+}
+
+.storeTitleLine > strong {
+  overflow: hidden;
+  font-family: var(--po-font-display);
+  font-size: clamp(1.05rem, 1.45vw, 1.35rem);
+  line-height: 1;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.starButton,
+.starButtonActive,
+.companyStarButton,
+.companyStarActive {
+  width: 1.8rem;
+  height: 1.8rem;
+  flex: 0 0 auto;
+  border: 1px solid #111214;
+  background: transparent;
+  color: #111214;
+  cursor: pointer;
+  font: 700 1rem/1 var(--po-font-display);
+  padding: 0;
+}
+
+.starButtonActive {
+  background: #111214;
+  color: #f4e3a1;
+}
+
+.companyStarButton,
+.companyStarActive {
+  border-color: #08776d;
+  color: #075e55;
+  font-size: 0.7rem;
+}
+
+.companyStarActive {
+  background: #58c3b6;
+  color: #041412;
+}
+
+.notePreview {
+  overflow: hidden;
+  margin: 0;
+  color: rgb(17 18 20 / 70%);
+  font-size: 0.72rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.emailLine {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.35rem;
+}
+
+.emailLine a {
+  overflow: hidden;
+  color: #075e55;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.emailLine button {
+  border: 1px solid #075e55;
+  background: transparent;
+  color: #075e55;
+  cursor: pointer;
+  font: 700 0.48rem/1 var(--po-font-display);
+  padding: 0.25rem;
+}
+
+.panelStarControls {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.panelStarControls .starButton,
+.panelStarControls .starButtonActive,
+.panelStarControls .companyStarButton,
+.panelStarControls .companyStarActive {
+  width: auto;
+  height: auto;
+}
+
+.panelEmail {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: stretch;
+  gap: 0.4rem;
+}
+
+.panelEmail .actionLink {
+  margin-top: 0.75rem;
+}
+
+.panelEmail button {
+  margin-top: 0.75rem;
+}
+
+.doorCorrection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  border: 1px solid #d4b96a;
+  background: rgb(244 227 161 / 7%);
+  padding: 1rem;
+}
+
+.doorCorrection > strong {
+  grid-column: 1 / -1;
+  color: #f4e3a1;
+  font-family: var(--po-font-display);
+}
+
+.doorCorrection label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.doorCorrection button {
+  grid-column: 1 / -1;
+}
+
 @media (max-width: 75rem) {
+  .commandBar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .searchControl {
+    grid-column: 1 / -1;
+  }
+
+  .listToggles {
+    grid-column: 1 / -1;
+  }
+
   .doorRow {
     grid-template-columns: minmax(13rem, 2fr) repeat(3, minmax(8rem, 1fr));
   }
@@ -790,6 +1225,18 @@
   .commandBar {
     position: static;
     grid-template-columns: 1fr 1fr;
+  }
+
+  .teamAdminPanel {
+    grid-template-columns: 1fr;
+  }
+
+  .adminMessage {
+    grid-column: 1;
+  }
+
+  .repIdentity {
+    flex-wrap: wrap;
   }
 
   .invitePanel {
@@ -816,7 +1263,7 @@
 
   .searchControl {
     grid-column: 1 / -1;
-    grid-row: 2;
+    grid-row: auto;
   }
 
   .doorRow {
@@ -848,6 +1295,21 @@
     padding: 0.85rem;
   }
 
+  .teamCodeForm,
+  .doorCorrection {
+    grid-template-columns: 1fr;
+  }
+
+  .doorCorrection > strong,
+  .doorCorrection button {
+    grid-column: 1;
+  }
+
+  .sectionHeading {
+    align-items: start;
+    flex-direction: column;
+  }
+
   .pinPanel {
     grid-template-columns: 1fr;
   }
@@ -859,9 +1321,22 @@
 
   .searchControl,
   .viewToggle,
-  .exportButton {
+  .segmentedControl,
+  .listToggles {
     grid-column: 1;
     grid-row: auto;
+  }
+
+  .controlGroup {
+    grid-column: 1;
+  }
+
+  .segmentedControl {
+    flex-wrap: wrap;
+  }
+
+  .segmentedControl button {
+    min-width: 7rem;
   }
 
   .countLine {
