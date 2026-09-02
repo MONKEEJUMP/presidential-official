@@ -8,8 +8,13 @@ export const PRESIDENTIAL_NAME = "Presidential" as const;
 export const PRESIDENTIAL_DESCRIPTION =
   "Official home of Presidential cannabis products for adults 21+ where legal." as const;
 
-// sameAs is whitelist-only. Add official client-approved profiles here later.
-export const APPROVED_SAME_AS = [] as const satisfies readonly string[];
+// sameAs is whitelist-only. Official client-approved profiles.
+export const APPROVED_SAME_AS = [
+  "https://www.instagram.com/presidentialofficial_/",
+  "https://www.instagram.com/presidential_medss/",
+  "https://www.facebook.com/p/Presidential-RX-100069511874496/",
+  "https://www.linkedin.com/in/everett-smith-presidential/",
+] as const satisfies readonly string[];
 
 export function canonicalUrl(path = "/"): string {
   if (path.includes("\\") || path.startsWith("//")) {
