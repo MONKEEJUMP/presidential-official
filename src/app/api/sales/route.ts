@@ -56,6 +56,12 @@ type CallRow = Readonly<{
   callback_at: string | null;
 }>;
 
+type RepProfile = Readonly<{
+  user_id: string;
+  username: string;
+  display_name: string;
+}>;
+
 function response(payload: unknown, status = 200) {
   return NextResponse.json(payload, {
     status,
@@ -63,10 +69,21 @@ function response(payload: unknown, status = 200) {
   });
 }
 
-function repName(user: User): string {
+function repName(user: User, profile?: RepProfile | null): string {
+  if (profile?.display_name.trim()) return profile.display_name.trim();
   const displayName = user.user_metadata?.display_name;
   if (typeof displayName === "string" && displayName.trim()) return displayName.trim();
   return user.email?.split("@")[0]?.trim() || "Presidential rep";
+}
+
+async function fetchRepProfile(admin: SupabaseClient, userId: string): Promise<RepProfile | null> {
+  const { data, error } = await admin
+    .from("sales_rep_profiles")
+    .select("user_id,username,display_name")
+    .eq("user_id", userId)
+    .maybeSingle();
+  if (error) throw error;
+  return data as RepProfile | null;
 }
 
 async function authenticatedUser(): Promise<User | null> {
@@ -183,7 +200,10 @@ export async function GET(request: Request) {
 
   try {
     const admin = createSalesAdminClient();
-    const states = await fetchStateCodes(admin);
+    const [states, profile] = await Promise.all([
+      fetchStateCodes(admin),
+      fetchRepProfile(admin, user.id),
+    ]);
     if (states.length === 0) {
       return response({ error: "No sales door data is available." }, 503);
     }
@@ -200,8 +220,8 @@ export async function GET(request: Request) {
       authenticated: true,
       user: {
         id: user.id,
-        name: repName(user),
-        email: user.email ?? "",
+        name: repName(user, profile),
+        username: profile?.username ?? "",
       },
       states,
       selectedState,
@@ -225,13 +245,29 @@ export async function POST(request: Request) {
   }
 
   if (input.action === "login") {
-    const email = typeof input.email === "string" ? input.email.trim().toLowerCase() : "";
+    const username = typeof input.username === "string" ? input.username.trim().toLowerCase() : "";
     const password = typeof input.password === "string" ? input.password : "";
-    if (!email || !password) return response({ error: "Email and password are required." }, 400);
+    if (!/^[a-z][a-z0-9]{0,31}$/.test(username) || !/^\d{6,8}$/.test(password)) {
+      return response({ error: "Enter your first-name username and 6–8 digit passcode." }, 400);
+    }
+    const admin = createSalesAdminClient();
+    const { data: profile, error: profileError } = await admin
+      .from("sales_rep_profiles")
+      .select("user_id,username,display_name")
+      .eq("username", username)
+      .maybeSingle();
+    if (profileError || !profile) {
+      return response({ error: "Username or passcode was not recognized." }, 401);
+    }
+    const { data: owner, error: ownerError } = await admin.auth.admin.getUserById(profile.user_id);
+    const email = owner.user?.email;
+    if (ownerError || !email) {
+      return response({ error: "Username or passcode was not recognized." }, 401);
+    }
     const auth = await createSalesAuthClient();
     const { data, error } = await auth.auth.signInWithPassword({ email, password });
-    if (error || !data.user) return response({ error: "Email or password was not recognized." }, 401);
-    return response({ authenticated: true, name: repName(data.user) });
+    if (error || !data.user) return response({ error: "Username or passcode was not recognized." }, 401);
+    return response({ authenticated: true, name: profile.display_name, username: profile.username });
   }
 
   const user = await authenticatedUser();
@@ -259,10 +295,11 @@ export async function POST(request: Request) {
 
   try {
     const admin = createSalesAdminClient();
+    const profile = await fetchRepProfile(admin, user.id);
     const { data, error } = await admin.rpc("log_sales_call", {
       p_door_id: doorId,
       p_rep_id: user.id,
-      p_rep_name: repName(user),
+      p_rep_name: repName(user, profile),
       p_outcome: outcome,
       p_notes: notes || null,
       p_callback_at: callbackDateToUtc(callbackDate),

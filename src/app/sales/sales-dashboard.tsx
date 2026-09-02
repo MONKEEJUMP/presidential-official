@@ -185,7 +185,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "login",
-          email: form.get("email"),
+          username: form.get("username"),
           password: form.get("password"),
         }),
       });
@@ -324,12 +324,30 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
           <h1>SALES LOGIN</h1>
           <p>Owner-created rep accounts only. There is no public signup.</p>
           <label>
-            <span>Email</span>
-            <input autoComplete="email" name="email" required type="email" />
+            <span>First name</span>
+            <input
+              autoCapitalize="none"
+              autoComplete="username"
+              maxLength={32}
+              name="username"
+              pattern="[A-Za-z][A-Za-z0-9]*"
+              placeholder="paulie"
+              required
+              type="text"
+            />
           </label>
           <label>
-            <span>Password</span>
-            <input autoComplete="current-password" name="password" required type="password" />
+            <span>6–8 digit passcode</span>
+            <input
+              autoComplete="current-password"
+              inputMode="numeric"
+              maxLength={8}
+              minLength={6}
+              name="password"
+              pattern="[0-9]{6,8}"
+              required
+              type="password"
+            />
           </label>
           <button disabled={loggingIn} type="submit">
             {loggingIn ? "SIGNING IN…" : "SIGN IN"}
