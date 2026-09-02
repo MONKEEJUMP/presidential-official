@@ -52,7 +52,7 @@ export type SalesDoor = Readonly<{
 
 export type SalesSnapshot = Readonly<{
   authenticated: true;
-  user: Readonly<{ id: string; name: string; username: string }>;
+  user: Readonly<{ id: string; name: string; username: string; canInvite: boolean }>;
   states: readonly string[];
   selectedState: string;
   stockedCount: number;

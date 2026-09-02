@@ -1,5 +1,7 @@
 import "server-only";
 
+import { createHash, randomBytes, randomUUID } from "node:crypto";
+
 import { NextResponse } from "next/server";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 
@@ -22,6 +24,9 @@ export const runtime = "nodejs";
 const PAGE_SIZE = 1000;
 const STATE_PATTERN = /^[A-Z]{2}$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const USERNAME_PATTERN = /^[a-z][a-z0-9]{0,31}$/;
+const PIN_PATTERN = /^\d{6}$/;
+const SETUP_CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 type DoorRow = Readonly<{
   id: number;
@@ -60,6 +65,7 @@ type RepProfile = Readonly<{
   user_id: string;
   username: string;
   display_name: string;
+  can_invite: boolean;
 }>;
 
 function response(payload: unknown, status = 200) {
@@ -76,10 +82,19 @@ function repName(user: User, profile?: RepProfile | null): string {
   return user.email?.split("@")[0]?.trim() || "Presidential rep";
 }
 
+function hashSetupCode(code: string): string {
+  return createHash("sha256").update(code, "utf8").digest("hex");
+}
+
+function generateSetupCode(): string {
+  const bytes = randomBytes(8);
+  return Array.from(bytes, (byte) => SETUP_CODE_ALPHABET[byte % SETUP_CODE_ALPHABET.length]).join("");
+}
+
 async function fetchRepProfile(admin: SupabaseClient, userId: string): Promise<RepProfile | null> {
   const { data, error } = await admin
     .from("sales_rep_profiles")
-    .select("user_id,username,display_name")
+    .select("user_id,username,display_name,can_invite")
     .eq("user_id", userId)
     .maybeSingle();
   if (error) throw error;
@@ -240,6 +255,7 @@ export async function GET(request: Request) {
         id: user.id,
         name: repName(user, profile),
         username: profile?.username ?? "",
+        canInvite: profile?.can_invite ?? false,
       },
       states,
       selectedState,
@@ -265,13 +281,13 @@ export async function POST(request: Request) {
   if (input.action === "login") {
     const username = typeof input.username === "string" ? input.username.trim().toLowerCase() : "";
     const password = typeof input.password === "string" ? input.password : "";
-    if (!/^[a-z][a-z0-9]{0,31}$/.test(username) || !/^\d{6}$/.test(password)) {
+    if (!USERNAME_PATTERN.test(username) || !PIN_PATTERN.test(password)) {
       return response({ error: "Enter your first-name username and 6-digit PIN." }, 400);
     }
     const admin = createSalesAdminClient();
     const { data: profile, error: profileError } = await admin
       .from("sales_rep_profiles")
-      .select("user_id,username,display_name")
+      .select("user_id,username,display_name,can_invite")
       .eq("username", username)
       .maybeSingle();
     if (profileError || !profile) {
@@ -288,8 +304,96 @@ export async function POST(request: Request) {
     return response({ authenticated: true, name: profile.display_name, username: profile.username });
   }
 
+  if (input.action === "setup_rep") {
+    const username = typeof input.username === "string" ? input.username.trim().toLowerCase() : "";
+    const pin = typeof input.password === "string" ? input.password : "";
+    const setupCode = typeof input.setupCode === "string"
+      ? input.setupCode.toUpperCase().replace(/[^A-Z0-9]/g, "")
+      : "";
+    if (!USERNAME_PATTERN.test(username) || !PIN_PATTERN.test(pin) || setupCode.length !== 8) {
+      return response({ error: "Enter a valid setup code, username, and 6-digit PIN." }, 400);
+    }
+
+    const admin = createSalesAdminClient();
+    const { data: existingProfile, error: profileCheckError } = await admin
+      .from("sales_rep_profiles")
+      .select("user_id")
+      .eq("username", username)
+      .maybeSingle();
+    if (profileCheckError) return response({ error: "Account setup is temporarily unavailable." }, 503);
+    if (existingProfile) return response({ error: "That username is taken. Add a digit or initial." }, 409);
+
+    const codeHash = hashSetupCode(setupCode);
+    const { data: invite, error: inviteError } = await admin
+      .from("sales_rep_invites")
+      .select("id")
+      .eq("code_hash", codeHash)
+      .is("used_at", null)
+      .gt("expires_at", new Date().toISOString())
+      .maybeSingle();
+    if (inviteError || !invite) {
+      return response({ error: "That setup code is invalid, expired, or already used." }, 401);
+    }
+
+    const internalEmail = `${username}.${randomUUID()}@sales.presidential.internal`;
+    const displayName = `${username.charAt(0).toUpperCase()}${username.slice(1)}`;
+    const { data: created, error: createError } = await admin.auth.admin.createUser({
+      email: internalEmail,
+      password: pin,
+      email_confirm: true,
+      user_metadata: { display_name: displayName },
+    });
+    if (createError || !created.user) {
+      return response({ error: "Account setup is temporarily unavailable." }, 503);
+    }
+
+    const { error: claimError } = await admin.rpc("claim_sales_rep_invite", {
+      p_code_hash: codeHash,
+      p_user_id: created.user.id,
+      p_username: username,
+      p_display_name: displayName,
+    });
+    if (claimError) {
+      await admin.auth.admin.deleteUser(created.user.id);
+      const usernameTaken = claimError.code === "23505";
+      return response(
+        { error: usernameTaken ? "That username is taken. Add a digit or initial." : "That setup code is invalid, expired, or already used." },
+        usernameTaken ? 409 : 401,
+      );
+    }
+
+    const auth = await createSalesAuthClient();
+    const { data, error } = await auth.auth.signInWithPassword({ email: internalEmail, password: pin });
+    if (error || !data.user) return response({ error: "Account created. Please sign in." }, 201);
+    return response({ authenticated: true, name: displayName, username }, 201);
+  }
+
   const user = await authenticatedUser();
   if (!user) return response({ authenticated: false }, 401);
+
+  if (input.action === "create_rep_invite") {
+    try {
+      const admin = createSalesAdminClient();
+      const profile = await fetchRepProfile(admin, user.id);
+      if (!profile?.can_invite) return response({ error: "Only an owner can create setup codes." }, 403);
+      const rawCode = generateSetupCode();
+      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+      const { error } = await admin.from("sales_rep_invites").insert({
+        code_hash: hashSetupCode(rawCode),
+        created_by: user.id,
+        expires_at: expiresAt,
+      });
+      if (error) throw error;
+      return response({
+        success: true,
+        setupCode: `${rawCode.slice(0, 4)}-${rawCode.slice(4)}`,
+        expiresAt,
+      });
+    } catch (error) {
+      console.error("Sales rep invite failed", error instanceof Error ? error.message : "unknown");
+      return response({ error: "The setup code could not be created." }, 503);
+    }
+  }
 
   if (input.action === "undo_call") {
     const callId = Number(input.callId);

@@ -108,6 +108,26 @@
   opacity: 0.55;
 }
 
+.authModeToggle {
+  display: grid;
+  grid-template-columns: 0.75fr 1.25fr;
+  gap: 0.5rem;
+}
+
+.loginCard .authModeToggle button {
+  min-height: 2.9rem;
+  border-color: rgb(88 195 182 / 55%);
+  background: transparent;
+  color: #58c3b6;
+  font-size: 0.66rem;
+  padding: 0.65rem;
+}
+
+.loginCard .authModeToggle .activeAuthMode {
+  background: #58c3b6;
+  color: #041412;
+}
+
 .salesPage {
   padding-bottom: 4rem;
 }
@@ -144,6 +164,57 @@
   background: transparent;
   color: #58c3b6;
   padding: 0.6rem 0.85rem;
+}
+
+.repIdentity button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.invitePanel {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.25rem;
+  margin: 1rem clamp(1rem, 3vw, 2.5rem) 0;
+  border: 1px solid #d4b96a;
+  background: rgb(244 227 161 / 10%);
+  padding: 1rem;
+}
+
+.invitePanel > div {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.invitePanel > div span {
+  color: #f4e3a1;
+  font-family: var(--po-font-display);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+}
+
+.invitePanel > div strong {
+  color: #fff;
+  font: 700 clamp(1.4rem, 4vw, 2rem)/1 var(--po-font-display);
+  letter-spacing: 0.12em;
+}
+
+.invitePanel p {
+  margin: 0;
+  color: rgb(255 255 255 / 72%);
+  line-height: 1.45;
+}
+
+.invitePanel button {
+  min-height: 2.7rem;
+  border: 1px solid #58c3b6;
+  background: transparent;
+  color: #58c3b6;
+  cursor: pointer;
+  font-family: var(--po-font-display);
+  font-weight: 700;
+  padding: 0.65rem 0.8rem;
 }
 
 .commandBar {
@@ -625,6 +696,10 @@
   .commandBar {
     position: static;
     grid-template-columns: 1fr 1fr;
+  }
+
+  .invitePanel {
+    grid-template-columns: 1fr;
   }
 
   .searchControl {

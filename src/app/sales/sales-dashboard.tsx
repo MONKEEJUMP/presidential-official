@@ -38,6 +38,13 @@ type UndoResponse = Readonly<{
   nextCallbackAt?: string | null;
 }>;
 
+type InviteResponse = Readonly<{
+  success?: boolean;
+  error?: string;
+  setupCode?: string;
+  expiresAt?: string;
+}>;
+
 const STRUCK_OUTCOMES = new Set<SalesOutcome>(["not_interested", "do_not_call"]);
 
 function calledToday(door: SalesDoor, today: string): boolean {
@@ -92,6 +99,10 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   const [pageError, setPageError] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
+  const [authMode, setAuthMode] = useState<"login" | "setup">("login");
+  const [settingUp, setSettingUp] = useState(false);
+  const [creatingInvite, setCreatingInvite] = useState(false);
+  const [inviteInfo, setInviteInfo] = useState<{ code: string; expiresAt: string } | null>(null);
   const [search, setSearch] = useState("");
   const [view, setView] = useState<ViewMode>("today");
   const [activeDoorId, setActiveDoorId] = useState<number | null>(null);
@@ -210,6 +221,63 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       setLoginError(error instanceof Error ? error.message : "Login failed.");
     } finally {
       setLoggingIn(false);
+    }
+  }
+
+  async function setupRep(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (settingUp) return;
+    const form = new FormData(event.currentTarget);
+    const pin = String(form.get("password") ?? "");
+    const confirmedPin = String(form.get("confirmPassword") ?? "");
+    if (pin !== confirmedPin) {
+      setLoginError("The two PIN entries do not match.");
+      return;
+    }
+    setSettingUp(true);
+    setLoginError("");
+    try {
+      const response = await fetch("/api/sales", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "setup_rep",
+          setupCode: form.get("setupCode"),
+          username: form.get("username"),
+          password: pin,
+        }),
+      });
+      const payload = (await response.json()) as { authenticated?: boolean; error?: string };
+      if (!response.ok || !payload.authenticated) {
+        throw new Error(payload.error ?? "Account setup failed.");
+      }
+      await loadSnapshot();
+    } catch (error) {
+      setLoginError(error instanceof Error ? error.message : "Account setup failed.");
+    } finally {
+      setSettingUp(false);
+    }
+  }
+
+  async function createRepInvite() {
+    if (creatingInvite) return;
+    setCreatingInvite(true);
+    setPageError("");
+    try {
+      const response = await fetch("/api/sales", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "create_rep_invite" }),
+      });
+      const payload = (await response.json()) as InviteResponse;
+      if (!response.ok || !payload.success || !payload.setupCode || !payload.expiresAt) {
+        throw new Error(payload.error ?? "The setup code could not be created.");
+      }
+      setInviteInfo({ code: payload.setupCode, expiresAt: payload.expiresAt });
+    } catch (error) {
+      setPageError(error instanceof Error ? error.message : "The setup code could not be created.");
+    } finally {
+      setCreatingInvite(false);
     }
   }
 
@@ -387,10 +455,50 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   if (!snapshot) {
     return (
       <main className={styles.loginPage}>
-        <form className={styles.loginCard} onSubmit={login}>
+        <form className={styles.loginCard} onSubmit={authMode === "login" ? login : setupRep}>
           <span>PRESIDENTIAL INTERNAL</span>
-          <h1>SALES LOGIN</h1>
-          <p>Owner-created rep accounts only. There is no public signup.</p>
+          <h1>{authMode === "login" ? "SALES LOGIN" : "CREATE LOGIN"}</h1>
+          <div className={styles.authModeToggle}>
+            <button
+              className={authMode === "login" ? styles.activeAuthMode : ""}
+              onClick={() => {
+                setAuthMode("login");
+                setLoginError("");
+              }}
+              type="button"
+            >
+              SIGN IN
+            </button>
+            <button
+              className={authMode === "setup" ? styles.activeAuthMode : ""}
+              onClick={() => {
+                setAuthMode("setup");
+                setLoginError("");
+              }}
+              type="button"
+            >
+              CREATE USERNAME + PIN
+            </button>
+          </div>
+          <p>
+            {authMode === "login"
+              ? "Use your first-name username and 6-digit PIN."
+              : "Enter the one-time setup code from the owner, then choose your username and PIN."}
+          </p>
+          {authMode === "setup" ? (
+            <label>
+              <span>One-time setup code</span>
+              <input
+                autoCapitalize="characters"
+                autoComplete="one-time-code"
+                maxLength={9}
+                name="setupCode"
+                placeholder="ABCD-EFGH"
+                required
+                type="text"
+              />
+            </label>
+          ) : null}
           <label>
             <span>First name</span>
             <input
@@ -407,7 +515,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
           <label>
             <span>6-digit PIN</span>
             <input
-              autoComplete="current-password"
+              autoComplete={authMode === "setup" ? "new-password" : "current-password"}
               inputMode="numeric"
               maxLength={6}
               minLength={6}
@@ -417,8 +525,25 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
               type="password"
             />
           </label>
-          <button disabled={loggingIn} type="submit">
-            {loggingIn ? "SIGNING IN…" : "SIGN IN"}
+          {authMode === "setup" ? (
+            <label>
+              <span>Confirm 6-digit PIN</span>
+              <input
+                autoComplete="new-password"
+                inputMode="numeric"
+                maxLength={6}
+                minLength={6}
+                name="confirmPassword"
+                pattern="[0-9]{6}"
+                required
+                type="password"
+              />
+            </label>
+          ) : null}
+          <button disabled={loggingIn || settingUp} type="submit">
+            {authMode === "login"
+              ? loggingIn ? "SIGNING IN…" : "SIGN IN"
+              : settingUp ? "CREATING…" : "CREATE MY LOGIN"}
           </button>
           {loginError || pageError ? <p className={styles.errorMessage}>{loginError || pageError}</p> : null}
         </form>
@@ -435,9 +560,28 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         </div>
         <div className={styles.repIdentity}>
           <span>{snapshot.user.name}</span>
+          {snapshot.user.canInvite ? (
+            <button disabled={creatingInvite} onClick={() => void createRepInvite()} type="button">
+              {creatingInvite ? "CREATING…" : "ADD REP"}
+            </button>
+          ) : null}
           <button onClick={() => void logout()} type="button">SIGN OUT</button>
         </div>
       </header>
+
+      {inviteInfo ? (
+        <section className={styles.invitePanel} aria-live="polite">
+          <div>
+            <span>ONE-TIME REP SETUP CODE</span>
+            <strong>{inviteInfo.code}</strong>
+          </div>
+          <p>
+            Give this code directly to the rep. They choose their own username and 6-digit PIN.
+            Expires {formatSalesDate(inviteInfo.expiresAt, true)}.
+          </p>
+          <button onClick={() => setInviteInfo(null)} type="button">DISMISS</button>
+        </section>
+      ) : null}
 
       <section className={styles.commandBar} aria-label="Sales list controls">
         <label>
