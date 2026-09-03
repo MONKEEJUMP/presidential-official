@@ -38,7 +38,7 @@ const proofPoints = [
   },
   {
     title: "Product clarity",
-    body: "Three platforms, one standard. Moon Rocks is the flagship — The Highest Form Of Cannabis, where premium flower, resin, and kief come together as one. Moon Pods and Orbit come next, engineered around flavor. And every platform runs the same three series — Silver, Gold, and Rose Gold — from approachable and flavor-first to solventless connoisseur craft. Whatever you pick up, you'll know exactly what's inside and exactly why it's built that way.",
+    body: "Presidential Moon Rocks are a cannabis product format — flower coated with concentrate or resin and kief — not NASA lunar samples or space rocks. Presidential is the brand; Moon Rocks describes the format, while cultivars such as Skywalker and Cherry Gelato remain distinct.",
     image: {
       alt: "Skywalker Moon Rock product graphic",
       href: "/moon-rocks/skywalker",
@@ -53,6 +53,44 @@ const proofPoints = [
       href: "/moon-rocks/cherry-gelato",
       src: "/media/moonrock-cherrygelato.jpg",
     },
+  },
+] as const;
+
+const homepageMoonRockProducts = [
+  {
+    alt: "Daniel LaRusso Moon Rocks product packaging",
+    name: "Daniel LaRusso",
+    src: "/media/moonrock-daniel-larusso.jpg",
+  },
+  {
+    alt: "Gorilla Goo Moon Rocks product packaging",
+    name: "Gorilla Goo",
+    src: "/media/moonrock-gorilla-goo.jpg",
+  },
+  {
+    alt: "Grape Moon Rocks product packaging",
+    name: "Grape",
+    src: "/media/moonrock-grape.jpg",
+  },
+  {
+    alt: "Laura Charles Moon Rocks product packaging",
+    name: "Laura Charles",
+    src: "/media/moonrock-laura-charles.jpg",
+  },
+  {
+    alt: "Nino Brown Moon Rocks product packaging",
+    name: "Nino Brown",
+    src: "/media/moonrock-nino-brown.jpg",
+  },
+  {
+    alt: "Peach Mango Moon Rocks product packaging",
+    name: "Peach Mango",
+    src: "/media/moonrock-peach-mango.jpg",
+  },
+  {
+    alt: "Waui Moon Rocks product packaging",
+    name: "Waui",
+    src: "/media/moonrock-waui.jpg",
   },
 ] as const;
 
@@ -219,6 +257,35 @@ export function HomepageFoundationShell({
                   </article>
                 ))}
               </div>
+            </div>
+
+            <div className="mt-10 border-t border-po-brand/45 pt-8">
+              <p className="po-home-canvas-accent text-xs font-black uppercase tracking-[0.12em]">
+                Official Presidential Moon Rocks
+              </p>
+              <ul
+                aria-label="Official Presidential Moon Rocks product images"
+                className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4"
+              >
+                {homepageMoonRockProducts.map((product) => (
+                  <li key={product.src}>
+                    <figure>
+                      <div className="relative aspect-square overflow-hidden rounded-[20px] border border-po-brand/55 bg-po-ink">
+                        <Image
+                          alt={product.alt}
+                          className="object-contain"
+                          fill
+                          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                          src={product.src}
+                        />
+                      </div>
+                      <figcaption className="po-home-canvas-muted mt-2 text-sm">
+                        {product.name}
+                      </figcaption>
+                    </figure>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </Scene>
