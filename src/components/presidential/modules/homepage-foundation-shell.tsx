@@ -11,6 +11,7 @@ import { SceneStack } from "../layout/scene-stack";
 import { FindUsNationwideVideo } from "../media/find-us-nationwide-video";
 import { SiteVideo } from "../media/site-video";
 import { CtaLink } from "../primitives/cta-link";
+import { InContentText } from "../primitives/in-content-text";
 import {
   BentolioHeroShell,
   HomepageSpinningCrestFold,
@@ -237,7 +238,7 @@ export function HomepageFoundationShell({
                       {point.title}
                     </h3>
                     <p className="po-home-canvas-muted mt-3 text-sm leading-6">
-                      {point.body}
+                      <InContentText sourcePath="/" value={point.body} />
                     </p>
                     <div className="mt-auto pt-3">
                       <Link

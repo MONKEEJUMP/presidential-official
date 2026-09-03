@@ -10,6 +10,7 @@ import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { SiteVideo } from "../media/site-video";
 import { CtaLink } from "../primitives/cta-link";
+import { InContentText } from "../primitives/in-content-text";
 import { SeriesSelectorShell } from "./catalog-grid-shell";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { FindUsCtaShell } from "./find-us-cta-shell";
@@ -96,7 +97,11 @@ export async function MoonRocksPlatformShell({
           eyebrow="Presidential product platform"
           supportingText={[
             "The Highest Form Of Cannabis.",
-            route.description,
+            <InContentText
+              key="moon-rocks-description"
+              sourcePath="/moon-rocks"
+              value={route.description}
+            />,
             "Moon Rocks is the flagship Presidential product platform for pre-rolls, blunts, learning, and licensed retailer discovery.",
           ]}
           title={route.h1}
