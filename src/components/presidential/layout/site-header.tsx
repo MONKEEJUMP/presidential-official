@@ -115,9 +115,12 @@ export function SiteHeader() {
               {primaryNavItems.map((item) => (
                 <li className="po-primary-nav-item" key={item.href}>
                   <Link
+                    aria-label={item.href === "/sales" ? "Open sales login in a new tab" : undefined}
                     className="po-primary-nav-link"
                     href={item.href}
                     onClick={() => setNavigationOpen(false)}
+                    rel={item.href === "/sales" ? "noopener noreferrer" : undefined}
+                    target={item.href === "/sales" ? "_blank" : undefined}
                   >
                     {item.label}
                   </Link>

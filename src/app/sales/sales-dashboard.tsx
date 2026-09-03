@@ -707,6 +707,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         <div><span>PRESIDENTIAL INTERNAL</span><h1>SALES DOORS</h1></div>
         <div className={styles.repIdentity}>
           <div><span>{snapshot.user.name}</span><strong className={`${styles.roleBadge} ${styles[snapshot.user.role]}`}>{roleLabel(snapshot.user.role)}</strong></div>
+          <a className={styles.websiteLink} href="/">← BACK TO WEBSITE</a>
           {isSuper ? <button onClick={() => { const next = !teamPanelOpen; setTeamPanelOpen(next); setActivityOpen(next); if (next) void loadActivity(true); }} type="button">TEAM ADMIN</button> : null}
           {canSeeActivity && !isSuper ? <button onClick={() => { const next = !activityOpen; setActivityOpen(next); if (next) void loadActivity(false); }} type="button">REP ACTIVITY</button> : null}
           <button onClick={() => { setChangePinOpen((current) => !current); setPinMessage(""); }} type="button">CHANGE PIN</button>

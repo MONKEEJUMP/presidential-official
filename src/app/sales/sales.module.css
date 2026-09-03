@@ -173,6 +173,21 @@
   padding: 0.6rem 0.85rem;
 }
 
+.websiteLink {
+  display: inline-flex;
+  min-height: 2.6rem;
+  align-items: center;
+  border: 1px solid #58c3b6;
+  color: #58c3b6;
+  font-family: var(--po-font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.6rem 0.85rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
 .repIdentity button:disabled {
   cursor: wait;
   opacity: 0.55;
