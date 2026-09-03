@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import type { FAQPage, WithContext } from "schema-dts";
 
 import { buildRouteMetadata } from "@/lib/seo/metadata";
 import {
@@ -267,6 +268,41 @@ const inlineLinkClass =
 const buttonLinkClass =
   "inline-flex w-fit items-center justify-center bg-po-brand px-7 py-4 font-display text-sm font-semibold uppercase text-po-ink transition-transform hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand motion-reduce:transition-none motion-reduce:hover:transform-none";
 
+// Single source for the visible FAQ copy and the FAQPage JSON-LD so the two
+// can never drift apart.
+const PRESIDENTIAL_CANNABIS_FAQ = [
+  {
+    question: "What is Presidential Cannabis?",
+    answer:
+      "Presidential Cannabis is a Los Angeles cannabis company founded in 2012. The company builds infused products around the Presidential Infusion System™, organizes a 47-product catalog across six series, and supplies licensed retailers in seven states. Its official home is presidentialmoonrocks.com.",
+  },
+  {
+    question: "What products does Presidential make?",
+    answer:
+      "Presidential makes infused Moon Rocks, pre-rolls, blunts, and Mini Blunts. The catalog spans 47 products organized into the Silver Flavor Series, Gold Strain Series, Rose Gold Connoisseur Series, Presidential Line, Presidential House Line, and the Presidential x THC Design collaboration.",
+  },
+  {
+    question: "Where can I buy Presidential Cannabis?",
+    answer:
+      "Presidential Cannabis is sold through licensed retailers in California, Oklahoma, New York, Nevada, Michigan, Arizona, and Washington. The official store finder accepts a ZIP code and lists nearby licensed stores by distance. Adults 21+ where legal.",
+  },
+] as const;
+
+function buildPresidentialCannabisFaqSchema(): WithContext<FAQPage> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: PRESIDENTIAL_CANNABIS_FAQ.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+}
+
 function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; route: SeoRouteRecord }) {
   return (
     <>
@@ -443,6 +479,7 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
 function PresidentialCannabisPage({ images, route }: { images: readonly TermImage[]; route: SeoRouteRecord }) {
   return (
     <>
+      <JsonLd data={buildPresidentialCannabisFaqSchema()} />
       <Scene ariaLabelledBy="presidential-cannabis-title" className="py-20 lg:py-28" tone="contrast">
         <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(360px,0.7fr)] lg:items-center lg:gap-16">
           <div>
@@ -520,6 +557,15 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
         <p><strong>Match the package to the catalog.</strong> Product pages show the named releases, series, formats, and packaging artwork associated with the Presidential lineup. That reference makes it easier to recognize the selection before visiting a store.</p>
         <p><strong>Confirm local selection.</strong> Retail teams hold the current details for stock, formats, and fresh arrivals. A quick check with the chosen store completes the path from product research to an informed visit.</p>
         <p>Together, those steps make this website the official starting point for learning the company&apos;s history, exploring its infused cannabis, and finding licensed Presidential retail.</p>
+      </TermSection>
+
+      <TermSection id="presidential-cannabis-faq" title="Presidential Cannabis FAQ">
+        {PRESIDENTIAL_CANNABIS_FAQ.map((item) => (
+          <div key={item.question}>
+            <h3 className="text-xl font-semibold leading-snug text-po-ink">{item.question}</h3>
+            <p className="mt-3">{item.answer}</p>
+          </div>
+        ))}
       </TermSection>
 
       <TermSection id="presidential-cannabis-contact" title="Contact" tone="contrast">

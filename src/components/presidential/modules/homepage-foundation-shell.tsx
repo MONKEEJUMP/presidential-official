@@ -59,7 +59,22 @@ const proofPoints = [
 const brandChapters = [
   {
     title: "Then",
-    body: "It started in 2012, in Los Angeles. Founders Everett Smith and John Zapp set out to build the best product they could — and ended up helping invent a category. Presidential became one of the founding fathers of the infused-product market: the house behind the World's Strongest pre-rolls and the moon rock blunt the whole industry chased. Moon Rocks made the name, and the name built a generation of cannabis culture.",
+    body: (
+      <>
+        It started in 2012, in Los Angeles. Founders Everett Smith and John Zapp
+        set out to build the best product they could — and ended up helping
+        invent a category. Presidential became{" "}
+        <Link
+          className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand"
+          href="/presidential-cannabis"
+        >
+          one of the founding fathers of the infused-product market
+        </Link>
+        : the house behind the World&apos;s Strongest pre-rolls and the moon
+        rock blunt the whole industry chased. Moon Rocks made the name, and the
+        name built a generation of cannabis culture.
+      </>
+    ),
   },
   {
     title: "Now",

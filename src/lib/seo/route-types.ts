@@ -42,6 +42,7 @@ export type SeoSchemaType =
   | "Product"
   | "AboutPage"
   | "ContactPage"
+  | "FAQPage"
   | "LocalBusiness";
 
 export type ChangeFrequency =

@@ -108,6 +108,17 @@ export function OurStoryPrerollGraphicsGrid() {
         >
           Pre-rolls
         </h2>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-po-on-dark-muted">
+          Every pre-roll here carries the same house standard. For the company
+          behind them — founded in Los Angeles in 2012 — read{" "}
+          <Link
+            className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand"
+            href="/presidential-cannabis"
+          >
+            the Presidential Cannabis story
+          </Link>
+          .
+        </p>
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
           {PREROLL_GRAPHICS.map((graphic) => (
             <Link
