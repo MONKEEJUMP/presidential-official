@@ -9,6 +9,7 @@ import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { MediaSlot } from "../media/media-slot";
 import { CtaLink } from "../primitives/cta-link";
+import { InContentText } from "../primitives/in-content-text";
 import { SectionHeading } from "../primitives/section-heading";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { LearnGuideIndex } from "./learn-guide-discovery";
@@ -213,7 +214,7 @@ function EditorialRouteFoundationShell({
                     {panel.title}
                   </h3>
                   <p className="mt-4 text-sm leading-6 text-po-body">
-                    {panel.body}
+                    <InContentText sourcePath={route.path} value={panel.body} />
                   </p>
                 </article>
               ))}

@@ -1,4 +1,7 @@
 import { Fragment, type ReactNode } from "react";
+import Link from "next/link";
+
+import { hardcodeInContentLinks } from "@/lib/seo/in-content-links";
 
 // 6175-FABLE (2026-08-09): the product-page description field
 // (productCatalogItem.internalDescriptionDraft) is a plain-text field. The short
@@ -9,10 +12,12 @@ import { Fragment, type ReactNode } from "react";
 // so no other catalog detail page changes its output.
 
 type ProductDescriptionProps = {
+  readonly sourcePath?: string;
   readonly value?: string;
 };
 
 const SUBHEAD = /^\*\*(.+)\*\*$/;
+const INTERNAL_LINK = /\[([^\]]+)\]\((\/[^)]*)\)/g;
 
 // Single-asterisk *emphasis* -> <em>. Only balanced `*pair*`s match (a lone `*`
 // renders literally), and this runs on the segments left AFTER `**bold**` is
@@ -32,7 +37,7 @@ function renderEmphasis(text: string, keyPrefix: string): ReactNode {
   );
 }
 
-function renderInline(text: string, keyPrefix: string): ReactNode {
+function renderStyledText(text: string, keyPrefix: string): ReactNode {
   return text.split("**").map((segment, index) =>
     index % 2 === 1 ? (
       <strong className="font-black text-po-ink" key={`${keyPrefix}-b${index}`}>
@@ -44,6 +49,43 @@ function renderInline(text: string, keyPrefix: string): ReactNode {
       </Fragment>
     ),
   );
+}
+
+function renderInline(text: string, keyPrefix: string): ReactNode {
+  const nodes: ReactNode[] = [];
+  let cursor = 0;
+
+  for (const match of text.matchAll(INTERNAL_LINK)) {
+    const index = match.index ?? 0;
+    if (index > cursor) {
+      nodes.push(
+        <Fragment key={`${keyPrefix}-text-${cursor}`}>
+          {renderStyledText(text.slice(cursor, index), `${keyPrefix}-text-${cursor}`)}
+        </Fragment>,
+      );
+    }
+
+    nodes.push(
+      <Link
+        className="font-semibold text-po-brand-ink underline decoration-po-brand underline-offset-4 transition-colors hover:text-po-ink focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
+        href={match[2]}
+        key={`${keyPrefix}-link-${index}`}
+      >
+        {match[1]}
+      </Link>,
+    );
+    cursor = index + match[0].length;
+  }
+
+  if (cursor < text.length) {
+    nodes.push(
+      <Fragment key={`${keyPrefix}-text-${cursor}`}>
+        {renderStyledText(text.slice(cursor), `${keyPrefix}-text-${cursor}`)}
+      </Fragment>,
+    );
+  }
+
+  return nodes;
 }
 
 function splitBlocks(value: string): readonly string[] {
@@ -121,14 +163,17 @@ function DescriptionTable({ block, keyPrefix }: { readonly block: string; readon
   );
 }
 
-export function ProductDescription({ value }: ProductDescriptionProps) {
+export function ProductDescription({ sourcePath, value }: ProductDescriptionProps) {
   if (!value || !value.trim()) {
     return null;
   }
 
-  const blocks = splitBlocks(value);
+  const linkedValue = sourcePath
+    ? hardcodeInContentLinks(sourcePath, value)
+    : value;
+  const blocks = splitBlocks(linkedValue);
   const hasStructure =
-    blocks.length > 1 || value.includes("**") || blocks.some(isTableBlock);
+    blocks.length > 1 || linkedValue.includes("**") || blocks.some(isTableBlock);
 
   // Backward-compatible path: the single-paragraph 9947 blurbs render exactly as
   // before, so every catalog detail page that is not one of the 13 long-form
@@ -136,7 +181,7 @@ export function ProductDescription({ value }: ProductDescriptionProps) {
   if (!hasStructure) {
     return (
       <p className="mt-6 max-w-xl text-base leading-7 text-po-body [overflow-wrap:anywhere]">
-        {value}
+        {renderInline(linkedValue, "desc-single")}
       </p>
     );
   }

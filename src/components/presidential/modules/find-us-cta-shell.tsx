@@ -1,11 +1,13 @@
 import Link from "next/link";
 
 import { CtaLink } from "../primitives/cta-link";
+import { InContentText } from "../primitives/in-content-text";
 import { Scene } from "../layout/scene";
 
 type FindUsCtaShellProps = {
   readonly compact?: boolean;
   readonly className?: string;
+  readonly sourcePath?: string;
 };
 
 const FIND_US_STATE_LINKS = [
@@ -21,6 +23,7 @@ const FIND_US_STATE_LINKS = [
 export function FindUsCtaShell({
   compact = false,
   className = "",
+  sourcePath,
 }: FindUsCtaShellProps) {
   return (
     <Scene
@@ -50,8 +53,14 @@ export function FindUsCtaShell({
             Find Presidential products.
           </h2>
           <p className="mt-6 max-w-2xl text-base leading-7 text-po-on-dark-muted">
-            Use the official retail path to connect product interest with
-            verified licensed retailer information. Availability varies by retailer.
+            {sourcePath ? (
+              <InContentText
+                sourcePath={sourcePath}
+                value="Use the official retail path to connect product interest with verified licensed retailer information. Availability varies by retailer."
+              />
+            ) : (
+              "Use the official retail path to connect product interest with verified licensed retailer information. Availability varies by retailer."
+            )}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <CtaLink href="/find-us" variant="primary">

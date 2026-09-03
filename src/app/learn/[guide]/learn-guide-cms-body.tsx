@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { CmsHomepageModuleRenderer, Scene } from "@/components/presidential";
+import { InContentText } from "@/components/presidential/primitives/in-content-text";
 import { SectionHeading } from "@/components/presidential/primitives/section-heading";
 import type {
   SanityHomepageModule,
@@ -11,11 +12,13 @@ import { sanitizePublicCmsModule } from "@/lib/cms/public-content";
 
 type LearnGuideCmsBodyProps = {
   readonly modules: readonly SanityHomepageModule[];
+  readonly sourcePath: string;
 };
 
 type LearnGuideBodyModuleProps = {
   readonly module: SanityHomepageModule;
   readonly index: number;
+  readonly sourcePath: string;
 };
 
 const PUBLIC_PRODUCT_ROUTES = new Set(["moon-rocks", "moon-pods", "orbit"]);
@@ -86,7 +89,7 @@ function RelatedProductLinks({ records }: { readonly records?: readonly SanityLi
   );
 }
 
-function LearnGuideBodyModule({ module, index }: LearnGuideBodyModuleProps) {
+function LearnGuideBodyModule({ module, index, sourcePath }: LearnGuideBodyModuleProps) {
   const id = moduleId(module, index);
   const body = moduleBody(module);
 
@@ -98,14 +101,16 @@ function LearnGuideBodyModule({ module, index }: LearnGuideBodyModuleProps) {
     >
       <article className="mx-auto grid w-full max-w-5xl gap-6">
         <SectionHeading
-          description={body || undefined}
+          description={
+            body ? <InContentText sourcePath={sourcePath} value={body} /> : undefined
+          }
           id={id}
           kicker="Guide section"
           title={module.heading || module.headline || module.title || `Guide section ${index + 1}`}
         />
         {module.callout ? (
           <div className="border-l-4 border-po-brand bg-po-brand-soft p-5 text-sm font-semibold leading-6 text-po-brand-strong">
-            {module.callout}
+            <InContentText sourcePath={sourcePath} value={module.callout} />
           </div>
         ) : null}
         <RelatedProductLinks records={module.relatedProductLinks} />
@@ -114,7 +119,7 @@ function LearnGuideBodyModule({ module, index }: LearnGuideBodyModuleProps) {
   );
 }
 
-export function LearnGuideCmsBody({ modules }: LearnGuideCmsBodyProps) {
+export function LearnGuideCmsBody({ modules, sourcePath }: LearnGuideCmsBodyProps) {
   const publicModules = modules.map(sanitizePublicCmsModule);
   const guideBodyModules = publicModules.filter((module) => module._type === "learnGuideBlock");
   const otherModules = publicModules.filter((module) => module._type !== "learnGuideBlock");
@@ -122,7 +127,12 @@ export function LearnGuideCmsBody({ modules }: LearnGuideCmsBodyProps) {
   return (
     <>
       {guideBodyModules.map((module, index) => (
-        <LearnGuideBodyModule index={index} key={module._key || `${module._type}-${index}`} module={module} />
+        <LearnGuideBodyModule
+          index={index}
+          key={module._key || `${module._type}-${index}`}
+          module={module}
+          sourcePath={sourcePath}
+        />
       ))}
       {otherModules.length ? (
         <CmsHomepageModuleRenderer heroHeadingLevel="h2" modules={otherModules} />

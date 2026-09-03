@@ -5,6 +5,7 @@ import {
   getRepoOwnedPageCopy,
   type RepoOwnedPagePath,
 } from "@/lib/repo-owned-page-copy";
+import { hardcodeInContentLinks } from "@/lib/seo/in-content-links";
 
 import { Scene } from "../layout/scene";
 
@@ -13,7 +14,7 @@ type RepoOwnedPageCopyProps = {
 };
 
 const SUBHEAD = /^\*\*(.+)\*\*$/;
-const INLINE_MARKUP = /(\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\(\/[^)]+\))/g;
+const INLINE_MARKUP = /(\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\(\/[^)]*\))/g;
 
 function renderInline(text: string, keyPrefix: string): ReactNode {
   const nodes: ReactNode[] = [];
@@ -31,7 +32,7 @@ function renderInline(text: string, keyPrefix: string): ReactNode {
 
     const token = match[0];
     const key = `${keyPrefix}-token-${index}`;
-    const link = token.match(/^\[([^\]]+)\]\((\/[^)]+)\)$/);
+    const link = token.match(/^\[([^\]]+)\]\((\/[^)]*)\)$/);
 
     if (link) {
       nodes.push(
@@ -134,6 +135,7 @@ function CopyTable({ block, keyPrefix }: { readonly block: string; readonly keyP
 export function RepoOwnedPageCopy({ path }: RepoOwnedPageCopyProps) {
   const content = getRepoOwnedPageCopy(path);
   if (!content) return null;
+  const linkedMarkdown = hardcodeInContentLinks(path, content.markdown);
 
   return (
     <Scene
@@ -142,7 +144,7 @@ export function RepoOwnedPageCopy({ path }: RepoOwnedPageCopyProps) {
       tone="default"
     >
       <article className="mx-auto w-full max-w-4xl space-y-6">
-        {splitBlocks(content.markdown).map((block, index) => {
+        {splitBlocks(linkedMarkdown).map((block, index) => {
           const key = `${path}-${index}`;
 
           if (isTable(block)) {

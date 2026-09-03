@@ -5,6 +5,7 @@ import { PageFrame } from "../layout/page-frame";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { CtaLink } from "../primitives/cta-link";
+import { InContentText } from "../primitives/in-content-text";
 import { ParentLearnGuideLink } from "./learn-guide-discovery";
 
 const platforms = [
@@ -262,7 +263,10 @@ export function AboutCompanyShell() {
                 titleSize="balanced"
               />
               <p className="mt-7 max-w-3xl text-lg leading-8 text-po-body">
-                A Presidential Moon Rock isn't flower with something dusted on top. It's a system: premium flower, rich resin, and the finest kief brought together so the layers stop behaving like layers. Three components, one product, engineered to burn evenly and finish clean. That process has a name because it took years to earn one. Cannabis Evolved.
+                <InContentText
+                  sourcePath="/about"
+                  value="A Presidential Moon Rock isn't flower with something dusted on top. It's a system: premium flower, rich resin, and the finest kief brought together so the layers stop behaving like layers. Three components, one product, engineered to burn evenly and finish clean. That process has a name because it took years to earn one. Cannabis Evolved."
+                />
               </p>
             </div>
             <AboutImage
@@ -347,7 +351,10 @@ export function AboutCompanyShell() {
             />
             <div className="lg:pt-8">
               <p className="max-w-3xl text-lg leading-8 text-po-body">
-                Presidential doesn't sell here — it points you to the shelf. Drop your zip code and the store finder maps the nearest licensed retailers carrying authentic product, coast to coast. No carts, no checkout, no guesswork. Availability varies by retailer.
+                <InContentText
+                  sourcePath="/about"
+                  value="Presidential doesn't sell here — it points you to the shelf. Drop your zip code and the store finder maps the nearest licensed retailers carrying authentic product, coast to coast. No carts, no checkout, no guesswork. Availability varies by retailer."
+                />
               </p>
               <CtaLink className="mt-8" href="/find-us" variant="primary">
                 Find Presidential near you

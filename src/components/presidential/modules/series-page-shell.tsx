@@ -172,7 +172,11 @@ export async function SeriesPageShell({
 
         <ParentLearnGuideLink parentPath={definition.path} />
 
-        <FindUsCtaShell className="po-gold-thread-inlay" compact />
+        <FindUsCtaShell
+          className="po-gold-thread-inlay"
+          compact
+          sourcePath={route.path}
+        />
         </SceneStack>
       </PageFrame>
     </>

@@ -4,8 +4,10 @@ import {
   readPublicRenderableLearnGuideSummaries,
   type SanityLearnGuideSummaryRecord,
 } from "@/lib/cms/learn-guide";
+import { hardcodeInContentLinks } from "@/lib/seo/in-content-links";
 
 import { Scene } from "../layout/scene";
+import { InContentText } from "../primitives/in-content-text";
 
 const PARENT_GUIDE_SLUGS = {
   "/moon-rocks": "what-are-moon-rocks",
@@ -17,10 +19,40 @@ const PARENT_GUIDE_SLUGS = {
   "/orbit": "different-extracts-need-different-heat",
 } as const;
 
-function GuideCard({ guide }: { readonly guide: SanityLearnGuideSummaryRecord }) {
+function GuideCard({
+  guide,
+  sourcePath,
+}: {
+  readonly guide: SanityLearnGuideSummaryRecord;
+  readonly sourcePath?: string;
+}) {
+  const hasApprovedIntroLink = Boolean(
+    sourcePath && hardcodeInContentLinks(sourcePath, guide.intro) !== guide.intro,
+  );
+  const cardClassName =
+    "po-teal-pinstripe group block rounded-md bg-po-ink p-7 transition-transform duration-200 hover:-translate-y-1 focus-visible:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:focus-visible:transform-none sm:p-9";
+
+  if (hasApprovedIntroLink && sourcePath) {
+    return (
+      <article className={cardClassName}>
+        <Link
+          className="block focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
+          href={`/learn/${guide.slug}`}
+        >
+          <h2 className="font-display text-3xl uppercase leading-[0.92] text-po-on-dark transition-colors group-hover:text-po-brand sm:text-4xl">
+            {guide.title}
+          </h2>
+        </Link>
+        <p className="mt-5 text-base leading-7 text-po-on-dark-muted">
+          <InContentText sourcePath={sourcePath} value={guide.intro} />
+        </p>
+      </article>
+    );
+  }
+
   return (
     <Link
-      className="po-teal-pinstripe group block rounded-md bg-po-ink p-7 transition-transform duration-200 hover:-translate-y-1 focus-visible:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:focus-visible:transform-none sm:p-9"
+      className={cardClassName}
       href={`/learn/${guide.slug}`}
     >
       <h2 className="font-display text-3xl uppercase leading-[0.92] text-po-on-dark transition-colors group-hover:text-po-brand sm:text-4xl">
@@ -86,7 +118,7 @@ export async function ParentLearnGuideLink({
       tone="contrast"
     >
       <div className="mx-auto w-full max-w-7xl">
-        <GuideCard guide={guide} />
+        <GuideCard guide={guide} sourcePath={parentPath} />
       </div>
     </Scene>
   );

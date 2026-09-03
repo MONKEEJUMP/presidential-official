@@ -105,7 +105,10 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
           </div>
         </Scene>
 
-        <LearnGuideCmsBody modules={guide.modules} />
+        <LearnGuideCmsBody
+          modules={guide.modules}
+          sourcePath={`/learn/${slug}`}
+        />
       </SceneStack>
     </PageFrame>
   );

@@ -172,7 +172,7 @@ export default async function CatalogProductDetailPage({
                 >
                   {item.name}
                 </h1>
-                <ProductDescription value={item.description} />
+                <ProductDescription sourcePath={route.path} value={item.description} />
 
                 {chips.length > 0 ? (
                   <div className="mt-8 border-t border-po-ink pt-5">
@@ -224,7 +224,11 @@ export default async function CatalogProductDetailPage({
           </div>
         </Scene>
 
-        <FindUsCtaShell className="po-gold-thread-inlay" compact />
+        <FindUsCtaShell
+          className="po-gold-thread-inlay"
+          compact
+          sourcePath={route.path}
+        />
         </SceneStack>
       </PageFrame>
     </>
