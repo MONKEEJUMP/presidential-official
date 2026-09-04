@@ -1,5 +1,6 @@
 export type RepoOwnedPagePath =
   | "/learn"
+  | "/learn/what-are-moon-rocks"
   | "/vapes"
   | "/find-us/wa"
   | "/find-us/az"
@@ -59,13 +60,15 @@ The build does not change between them. Only the size and the count.
 
 The Silver Flavour Series carries flavour-led releases. The Gold Strain Series carries named strains, including [XXX](/moon-rocks/xxx). The Rose Gold Connoisseur tier sits above both. Running across all three are the collaboration releases, each carrying a partner's mark printed on the front of the pack.
 
-[Presidential x THC Design](/moon-rocks/presidential-x-thc-design) shows how a collaboration keeps the same labeled composition format. [Papaya Punch](/moon-rocks/papaya-punch) puts that label language into product context. [Cosmic Cookies](/moon-rocks/cosmic-cookies) provides another catalog example.
-
-[Presidential OG](/moon-rocks/presidential-og) shows how a cultivar name stays separate from the Presidential brand. [SFV OG](/moon-rocks/sfv-og) extends the same product-first reading path.
-
 **Where to find Presidential**
 
 Presidential is a wholesale brand and sells exclusively through licensed retailers. Availability varies by retailer and stock changes by store and by day. Presidential's seven-state footprint spans California, Oklahoma, New York, Nevada, Michigan, Arizona and Washington. Use the zip search to find the nearest licensed retailer carrying Presidential. For adults 21+ where legal.`,
+  },
+  "/learn/what-are-moon-rocks": {
+    label: "Continue through the Presidential Moon Rocks catalog",
+    markdown: `[Presidential x THC Design](/moon-rocks/presidential-x-thc-design) shows how a collaboration keeps the same labeled composition format. [Papaya Punch](/moon-rocks/papaya-punch) puts that label language into product context. [Cosmic Cookies](/moon-rocks/cosmic-cookies) provides another catalog example.
+
+[Presidential OG](/moon-rocks/presidential-og) shows how a cultivar name stays separate from the Presidential brand. [SFV OG](/moon-rocks/sfv-og) extends the same product-first reading path.`,
   },
   "/find-us/wa": {
     label: "Presidential in Washington",
