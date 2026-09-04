@@ -95,6 +95,13 @@ const homepageMoonRockProducts = [
   },
 ] as const;
 
+const homepageCatalogPathCopy = [
+  "The [Presidential House Line](/moon-rocks/presidential-house-line) collects original house releases under one catalog path.",
+  "[God's Gift](/moon-rocks/gods-gift) sits in the Rose Gold collection.",
+  "[NYC Diesel](/moon-rocks/nyc-diesel) is part of the named-strain catalog.",
+  "[Cereal Milk](/moon-rocks/cereal-milk) has its own place in the wider Moon Rocks lineup.",
+] as const;
+
 const brandChapters = [
   {
     title: "Then",
@@ -262,7 +269,10 @@ export function HomepageFoundationShell({
 
             <div className="mt-10 border-t border-po-brand/45 pt-8">
               <p className="po-home-canvas-accent text-xs font-black uppercase tracking-[0.12em]">
-                Official Presidential Moon Rocks
+                <InContentText
+                  sourcePath="/"
+                  value="Official [Presidential Moon Rocks](/moon-rocks/presidential-moon-rocks)"
+                />
               </p>
               <ul
                 aria-label="Official Presidential Moon Rocks product images"
@@ -287,6 +297,16 @@ export function HomepageFoundationShell({
                   </li>
                 ))}
               </ul>
+              <div className="mt-7 grid gap-3 sm:grid-cols-2">
+                {homepageCatalogPathCopy.map((copy) => (
+                  <p
+                    className="po-home-canvas-muted border-l border-po-brand/45 pl-4 text-sm leading-6"
+                    key={copy}
+                  >
+                    <InContentText sourcePath="/" value={copy} />
+                  </p>
+                ))}
+              </div>
             </div>
           </div>
         </Scene>

@@ -6,6 +6,7 @@ import {
   Scene,
   SceneStack,
 } from "@/components/presidential";
+import { RepoOwnedPageCopy } from "@/components/presidential/modules/repo-owned-page-copy";
 import { CtaLink } from "@/components/presidential/primitives/cta-link";
 import { SectionHeading } from "@/components/presidential/primitives/section-heading";
 import {
@@ -109,6 +110,9 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
           modules={guide.modules}
           sourcePath={`/learn/${slug}`}
         />
+        {slug === "what-are-moon-rocks" ? (
+          <RepoOwnedPageCopy path="/learn/what-are-moon-rocks" />
+        ) : null}
       </SceneStack>
     </PageFrame>
   );

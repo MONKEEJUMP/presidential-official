@@ -338,27 +338,59 @@ summary {
   color: var(--po-color-brand);
 }
 
-@media (min-width: 73.125rem) {
-  .po-primary-nav-item {
+  [data-desktop="true"] .po-primary-nav-item {
     border-bottom: 0;
   }
 
-  .po-primary-nav-link {
+  [data-desktop="true"] .po-primary-nav-link,
+  .po-header-measure .po-primary-nav-link {
     display: inline-flex;
     padding-inline: clamp(0.4rem, 0.65vw, 0.75rem);
     padding-block: 0.5rem;
     font-size: clamp(0.75rem, 0.85vw, 0.875rem);
   }
 
-  .po-primary-nav-link:hover {
+  [data-desktop="true"] .po-primary-nav-link:hover {
     background: transparent;
   }
 
-  .po-primary-nav-link-featured {
+  [data-desktop="true"] .po-primary-nav-link-featured {
     border: 1px solid var(--po-color-brand);
   }
 
-  .po-primary-nav-link-featured:hover {
+  [data-desktop="true"] .po-primary-nav-link-featured:hover {
     background: var(--po-color-brand);
   }
+
+.po-header-measure {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  width: max-content;
+  visibility: hidden;
+  pointer-events: none;
+  white-space: nowrap;
 }
+
+.po-header-store-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: var(--po-color-brand);
+  color: #04342c;
+  font-family: var(--po-font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-transform: uppercase;
+  transition: background-color 150ms ease;
+}
+
+.po-header-store-link:hover { background: var(--po-color-brand-hover); }
+.po-header-store-link:focus-visible { outline: 2px solid var(--po-color-brand); outline-offset: 3px; }

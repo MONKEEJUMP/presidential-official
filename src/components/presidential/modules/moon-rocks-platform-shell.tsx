@@ -42,6 +42,14 @@ const productLanes = [
   },
 ] as const;
 
+const moonRocksCatalogPathCopy = [
+  "The [Presidential Line](/moon-rocks/presidential-line) provides one route through the broader catalog.",
+  "[White Walker](/moon-rocks/white-walker) has its own product entry in the lineup.",
+  "[Iced Lemon](/moon-rocks/presidential-line-iced-lemon) appears among the collaboration releases.",
+  "[Rainbow Belts](/moon-rocks/rainbow-belts) carries another named product path.",
+  "[Guava Haze](/moon-rocks/presidential-line-guava-haze) adds another collaboration product page to explore.",
+] as const;
+
 const ecosystemSteps = [
   "Learn what Moon Rocks are",
   "Explore related Presidential platforms",
@@ -131,6 +139,16 @@ export async function MoonRocksPlatformShell({
                 Choose a series to explore every strain. Availability varies
                 by licensed retailer.
               </p>
+            </div>
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {moonRocksCatalogPathCopy.map((copy) => (
+                <p
+                  className="border-l border-po-brand pl-4 text-sm leading-6 text-po-body"
+                  key={copy}
+                >
+                  <InContentText sourcePath="/moon-rocks" value={copy} />
+                </p>
+              ))}
             </div>
           </div>
         </Scene>

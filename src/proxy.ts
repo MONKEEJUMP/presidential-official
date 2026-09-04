@@ -67,7 +67,8 @@ function buildCanonicalHostRedirect(request: NextRequest): NextResponse | null {
     request.nextUrl.protocol.replace(":", "")
   ).toLowerCase();
   const usesNonCanonicalHost = nonCanonicalHostnames.has(hostname);
-  const usesVercelAlias = hostname.endsWith(".vercel.app");
+  const usesVercelAlias =
+    hostname.endsWith(".vercel.app") && process.env.VERCEL_ENV !== "preview";
   const usesHttpCanonicalHost =
     hostname === canonicalHostname && forwardedProto === "http";
 
@@ -133,6 +134,11 @@ export function proxy(request: NextRequest) {
   });
 
   response.headers.set("Content-Security-Policy", csp);
+
+  // Review deployments must serve their branch while remaining outside Search.
+  if (process.env.VERCEL_ENV === "preview") {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  }
 
   return response;
 }

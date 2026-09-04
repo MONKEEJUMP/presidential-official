@@ -50,6 +50,14 @@ const series = [
   },
 ] as const;
 
+const aboutCatalogPathCopy = [
+  "[Head Cheese](/moon-rocks/presidential-line-head-cheese) appears in the collaboration roster with Polaris Cannabis.",
+  "[Galactic Gas](/moon-rocks/galactic-gas) is one of the named-strain releases in the catalog.",
+  "[Blue Dream](/moon-rocks/blue-dream) is treated as a cultivar, while Presidential remains the brand.",
+  "[Wedding Cake](/moon-rocks/wedding-cake) sits in the Rose Gold collection.",
+  "[King Louis](/moon-rocks/king-louis) carries another familiar cultivar name into the lineup.",
+] as const;
+
 function SectionIntro({
   eyebrow,
   title,
@@ -244,6 +252,16 @@ export function AboutCompanyShell() {
                     {item.body}
                   </p>
                 </article>
+              ))}
+            </div>
+            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {aboutCatalogPathCopy.map((copy) => (
+                <p
+                  className="border-l border-po-brand/60 pl-4 text-sm leading-6 text-po-on-dark-muted"
+                  key={copy}
+                >
+                  <InContentText sourcePath="/about" value={copy} />
+                </p>
               ))}
             </div>
           </div>
