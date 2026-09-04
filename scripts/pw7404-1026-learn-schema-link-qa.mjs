@@ -27,8 +27,13 @@ function decode(value) {
 function textOnly(html) {
   return decode(html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
     .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+    .replace(/<title\b[^>]*>[\s\S]*?<\/title>/gi, " ")
     .replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
 }
+// Next.js can stream <title> after the body. It is metadata, not visible copy.
+// The title itself is still extracted and compared separately below.
+assert.equal(textOnly("<title>Guide title</title><main>Guide body</main>"), "Guide body");
+assert.equal(textOnly("<main>Guide body</main><title>Guide title</title>"), "Guide body");
 function attr(tag, name) {
   return decode(tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, "i"))?.[1] ?? "");
 }
@@ -55,6 +60,7 @@ async function read(path) {
     description: attr(tags.find((t) => attr(t, "name") === "description") ?? "", "content"),
     robots: attr(tags.find((t) => attr(t, "name") === "robots") ?? "", "content"),
     xRobots: response.headers.get("x-robots-tag"),
+    visibleText,
     visibleTextSha256: createHash("sha256").update(visibleText).digest("hex"),
     textWithoutNewLinkSha256: createHash("sha256").update(visibleText.replace("Explore the Presidential Line collection.", "").replace(/\s+/g, " ").trim()).digest("hex"),
     jsonLd,
