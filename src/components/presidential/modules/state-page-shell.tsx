@@ -148,6 +148,7 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
     readCatalogForState(),
     stateCode ? readLocatorStateCount(stateCode) : Promise.resolve(null),
   ]);
+  const hasVerifiedDoors = doorCount !== null && doorCount > 0;
   const repoCopyPath =
     state.slug === "wa"
       ? "/find-us/wa"
@@ -286,9 +287,22 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
                   Licensed retail
                 </p>
                 <p className="mt-3 text-sm leading-6 text-po-body">
-                  Licensed retailer listings for {state.name} publish here once a
-                  verified retailer source is confirmed. No unverified listings
-                  are ever shown. Adults 21+ where legal.
+                  {hasVerifiedDoors ? (
+                    <>
+                      The locator above currently includes{" "}
+                      {doorCount.toLocaleString("en-US")} verified licensed
+                      retailer {doorCount === 1 ? "door" : "doors"} in{" "}
+                      {state.name}. Search by ZIP or location for the current
+                      results. Availability varies by retailer. Adults 21+ where
+                      legal.
+                    </>
+                  ) : (
+                    <>
+                      Licensed retailer listings for {state.name} publish here
+                      once a verified retailer source is confirmed. No
+                      unverified listings are ever shown. Adults 21+ where legal.
+                    </>
+                  )}
                 </p>
               </aside>
             </div>
