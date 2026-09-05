@@ -82,8 +82,8 @@ export async function generateMetadata({
     ...(heroImage ? {
       socialImage: {
         url: heroImage.assetUrl,
-        width: heroImage.width ?? 0,
-        height: heroImage.height ?? 0,
+        width: "width" in heroImage && typeof heroImage.width === "number" ? heroImage.width : 0,
+        height: "height" in heroImage && typeof heroImage.height === "number" ? heroImage.height : 0,
         ...(heroImage.altText ? { alt: heroImage.altText } : {}),
       },
     } : {}),
