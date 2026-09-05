@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import type { FAQPage, WithContext } from "schema-dts";
 
 import { buildRouteMetadata } from "@/lib/seo/metadata";
+import { canonicalUrl } from "@/lib/seo/schema/constants";
 import {
   buildRouteShellBreadcrumbItems,
   buildRouteShellJsonLd,
@@ -166,27 +167,16 @@ function getTermPath(route: SeoRouteRecord): TermPagePath {
 export function buildTermPageMetadata(route: SeoRouteRecord): Metadata {
   const path = getTermPath(route);
   const image = TERM_IMAGES[path][0];
-  const base = buildRouteMetadata({ route });
+  const dimensions = path === "/presidential-cannabis"
+    ? { width: 6322, height: 4896 }
+    : path === "/presidential-blunts"
+      ? { width: 1080, height: 1350 }
+      : { width: 1200, height: 1200 };
 
-  return {
-    ...base,
-    openGraph: {
-      ...(base.openGraph || {}),
-      images: [
-        {
-          alt: image.alt,
-          height: image.height,
-          url: image.src,
-          width: image.width,
-        },
-      ],
-    },
-    twitter: {
-      ...(base.twitter || {}),
-      card: "summary_large_image",
-      images: [image.src],
-    },
-  };
+  return buildRouteMetadata({
+    route,
+    socialImage: { url: canonicalUrl(image.src), ...dimensions, alt: image.alt },
+  });
 }
 
 function ContentImage({ image, priority = false }: { image: TermImage; priority?: boolean }) {

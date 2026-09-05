@@ -15,6 +15,7 @@ import {
 } from "@/lib/cms";
 import { buildLearnGuideSeoRoute } from "@/lib/seo/concrete-routes";
 import { buildRouteMetadata } from "@/lib/seo/metadata";
+import { buildRouteShellJsonLd, JsonLd } from "@/lib/seo/schema";
 
 import { LearnGuideCmsBody } from "./learn-guide-cms-body";
 
@@ -70,8 +71,17 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
     notFound();
   }
 
+  const route = buildLearnGuideSeoRoute(
+    { title: guide.record.title!, intro: guide.record.intro! },
+    slug,
+  );
+  const jsonLdEntries = buildRouteShellJsonLd(route);
+
   return (
     <PageFrame>
+      {jsonLdEntries.map((entry) => (
+        <JsonLd key={`${route.id}-${entry.id}`} data={entry.data} />
+      ))}
       <SceneStack>
         <Scene ariaLabelledBy="presidential-learn-guide-title" tone="default">
           <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(320px,0.5fr)] lg:items-start">

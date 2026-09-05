@@ -14,6 +14,12 @@ export type BuildRouteMetadataInput = RoutePublicationGateInput & {
   title?: string;
   description?: string;
   canonicalPath?: SeoRoutePath;
+  socialImage?: {
+    readonly url: string;
+    readonly width: number;
+    readonly height: number;
+    readonly alt?: string;
+  };
 };
 
 export type RouteMetadataRobotsPolicy = {

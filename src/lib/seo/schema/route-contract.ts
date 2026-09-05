@@ -20,7 +20,7 @@ const ORGANIZATION_SOURCE_FIELD_MAP = {
 function buildOrganizationSourceFieldMap(
   route: SeoRouteRecord,
 ): Readonly<Record<string, string>> {
-  return route.path === "/about"
+  return route.path === "/about" || route.path === "/"
     ? {
         ...ORGANIZATION_SOURCE_FIELD_MAP,
         logo: "schema.routeShell.ABOUT_ORGANIZATION_LOGO_PATH",
