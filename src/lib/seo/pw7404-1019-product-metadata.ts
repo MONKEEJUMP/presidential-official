@@ -233,9 +233,9 @@ export const PRODUCT_METADATA_BY_SLUG: Readonly<
       "Explore Presidential x THC Design Blunts. Review product details and find licensed retailers near you. Availability varies by retailer.",
   },
   "thc-design-moon-rocks": {
-    seoTitle: "Presidential THC Flower | THC Design Moon Rocks",
+    seoTitle: "Presidential x THC Design Moon Rocks | Product Details",
     metaDescription:
-      "Explore the flower-based Presidential x THC Design Moon Rocks format. Review product details and find licensed retailers near you. Availability varies by retailer.",
+      "Explore Presidential x THC Design Moon Rocks. Review product details and find licensed retailers near you. Availability varies by retailer.",
   },
   "thc-design-prerolls": {
     seoTitle: "Presidential x THC Design Prerolls | Product Details",
