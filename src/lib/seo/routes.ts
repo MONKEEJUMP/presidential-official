@@ -344,12 +344,13 @@ export const ROUTE_REGISTRY = [
     priority: 4,
     changeFrequency: "weekly",
     canonicalPath: "/learn",
-    title: "Learn | Presidential Moon Rocks",
+    title: "Learn Presidential Moon Rocks | Official Guides",
     description:
-      "Explore official Presidential guides to Moon Rocks, infused pre-rolls, live resin, live rosin, and liquid diamonds.",
-    h1: "Learn Presidential",
+      "Explore the official Presidential Moon Rocks website's guides to Moon Rocks, infused pre-rolls, live resin, live rosin, and liquid diamonds.",
+    h1: "Learn Presidential Moon Rocks",
     keywords: [
       "moon rocks education",
+      "presidential moon rocks website",
       "infused cannabis guide",
       "live resin",
       "live rosin",
