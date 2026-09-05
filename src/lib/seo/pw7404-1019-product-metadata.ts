@@ -213,9 +213,9 @@ export const PRODUCT_METADATA_BY_SLUG: Readonly<
       "Explore Whoa Si Whoa in the Presidential Line. Review product details and find licensed retailers near you. Availability varies by retailer.",
   },
   "presidential-blunts": {
-    seoTitle: "Presidential Blunts | Presidential House Line",
+    seoTitle: "Presidential Blunts | Tobacco-Free Infused Hemp Wraps",
     metaDescription:
-      "Explore Presidential Blunts in the Presidential House Line. Review product details and find licensed retailers near you. Availability varies by retailer.",
+      "Explore Presidential Blunts, tobacco-free infused hemp-wrap formats in the Presidential House Line. Review product details and find licensed retailers near you. Availability varies by retailer.",
   },
   "presidential-moon-rocks": {
     seoTitle: "Presidential Moon Rocks | Presidential House Line",
