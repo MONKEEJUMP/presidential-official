@@ -217,18 +217,22 @@ export function buildStateSeoRoute(
 ): SeoRouteRecord {
   const template = getRequiredRouteTemplate("find-us-state");
   const path = `/find-us/${state.slug}` as const;
+  const isNewYork = state.slug === "ny";
 
   return {
     ...template,
     id: `find-us-state-${state.slug}`,
     path,
     canonicalPath: path,
-    title: `Presidential in ${state.name} | Official Presidential Site`,
+    title: isNewYork
+      ? "Presidential Near Me in New York | Official Locator"
+      : `Presidential in ${state.name} | Official Presidential Site`,
     description: state.seoLine,
-    h1: state.name,
+    h1: isNewYork ? "Presidential Near Me in New York" : state.name,
     keywords: [
       `presidential moon rocks ${state.name.toLowerCase()}`,
       `where to buy presidential ${state.name.toLowerCase()}`,
+      ...(isNewYork ? ["presidential near me"] : []),
     ],
     linksTo: ["/find-us", "/moon-rocks"],
     sourceArtifact: `${template.sourceArtifact}; src/lib/find-us/states.ts`,

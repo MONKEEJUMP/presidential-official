@@ -149,14 +149,14 @@ Each market carries its own mix. Some collaboration releases are market-specific
 Enter your zip code above to find the licensed Arizona retailers nearest you carrying Presidential. For adults 21+ where legal.`,
   },
   "/find-us/ny": {
-    label: "Presidential in New York",
+    label: "Presidential Near Me in New York",
     markdown: `**Skyscraper High. Presidential Grade.**
 
 The retailer count above is live, pulled from the locator database and updated as new doors come online.
 
 **Finding it**
 
-Enter your zip code. The search returns the nearest licensed New York retailers carrying Presidential, ordered by distance.
+Searching for Presidential near me in New York? Enter your ZIP code above. The search returns the nearest licensed New York retailers carrying Presidential, ordered by distance.
 
 Presidential is wholesale and does not sell direct. Every product reaches you through a licensed New York retailer, and each shop decides independently what to carry. The search finds who stocks the brand; the shop tells you what is on the shelf today.
 
