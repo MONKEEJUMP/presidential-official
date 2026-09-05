@@ -223,9 +223,9 @@ export const PRODUCT_METADATA_BY_SLUG: Readonly<
       "Explore Presidential Moon Rocks in the Presidential House Line. Review product details and find licensed retailers near you. Availability varies by retailer.",
   },
   "presidential-prerolls": {
-    seoTitle: "Presidential Prerolls | Presidential House Line",
+    seoTitle: "Presidential Prerolls | Infused Pre-Rolls",
     metaDescription:
-      "Explore Presidential Prerolls in the Presidential House Line. Review product details and find licensed retailers near you. Availability varies by retailer.",
+      "Explore Presidential Prerolls, the Presidential House Line's infused pre-roll format. Review product details and find licensed retailers near you. Availability varies by retailer.",
   },
   "thc-design-blunts": {
     seoTitle: "Presidential x THC Design Blunts | Product Details",
