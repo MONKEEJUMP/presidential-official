@@ -152,6 +152,9 @@ export function AboutCompanyShell() {
               >
                 BUILT BETTER. ON PURPOSE.
               </h1>
+              <h2 className="mt-6 font-display text-xl uppercase tracking-wide text-po-brand">
+                About the Presidential Cannabis Brand
+              </h2>
               <p className="mt-8 max-w-3xl text-lg leading-8 text-po-on-dark-muted sm:text-xl sm:leading-9">
                 Presidential exists because someone refused to accept what the market called good enough. Not better marketing — better cannabis. That standard has governed every decision since the first batch, and it still does: obsess over the material, engineer the experience, and never ship something that misses. Cannabis Deserves Better. That's not a tagline. It's the assignment. The full story — Los Angeles, 2012, and everything since — lives on the{" "}
                 <Link
