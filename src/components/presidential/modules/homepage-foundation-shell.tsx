@@ -48,7 +48,7 @@ const proofPoints = [
   },
   {
     title: "Licensed retail path",
-    body: "Presidential doesn't sell here — it points you straight to the shelf. Drop your zip and the store finder maps authentic Presidential at licensed retailers near you, across eight priority markets. No carts, no checkout, no guesswork — just the fastest route from screen to store. Availability varies by retailer. Adults 21+ where legal.",
+    body: "Presidential doesn't sell here — it points you straight to the shelf. Drop your zip and the store finder maps participating licensed retailers near you across active markets. No carts, no checkout, no guesswork — just the fastest route from screen to store. Availability varies by retailer. Adults 21+ where legal.",
     image: {
       alt: "Cherry Gelato Moon Rock product graphic",
       href: "/moon-rocks/cherry-gelato",
@@ -107,24 +107,23 @@ const brandChapters = [
     title: "Then",
     body: (
       <>
-        It started in 2012, in Los Angeles. Founders Everett Smith and John Zapp
-        set out to build the best product they could — and ended up helping
-        invent a category. Presidential became{" "}
+        Presidential launched in 2012 and established its brand in Los Angeles,
+        building an identity around infused cannabis and Moon Rocks. The{" "}
         <Link
           className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand"
           href="/presidential-cannabis"
         >
-          one of the founding fathers of the infused-product market
+          official company overview
         </Link>
-        : the house behind the World&apos;s Strongest pre-rolls and the moon
-        rock blunt the whole industry chased. Moon Rocks made the name, and the
-        name built a generation of cannabis culture.
+        {" "}connects that history to today&apos;s product system. World&apos;s
+        Strongest remains the signature brand motto; current product facts stay
+        tied to the package and batch.
       </>
     ),
   },
   {
     title: "Now",
-    body: "That obsession is a full platform today — Moon Rocks, Moon Pods, and Orbit — carried in 1,000+ licensed dispensaries across seven states. The brand, the products, and the learning all live in one official home, straight from the source. Same standard as day one: better flavor, greater consistency, no misses. Because Presidential Doesn't Miss.",
+    body: "That focus is a full platform today — Moon Rocks, Moon Pods, and Orbit — connected to participating licensed retailers across multiple states. The brand, products, and learning live in one official home, straight from the source. The standard remains: Presidential Doesn't Miss.",
   },
   {
     title: "Next",
@@ -193,8 +192,8 @@ export function HomepageFoundationShell({
             </section>
 
             <p className="max-w-xl text-base leading-7 text-po-on-dark-muted">
-              Eight priority markets, each with its own Presidential
-              experience. Choose a state to step inside.
+              Active markets, each with its own Presidential experience.
+              Choose a state to step inside.
             </p>
 
             <div className="w-full max-w-sm xl:max-w-md 2xl:max-w-xl">
