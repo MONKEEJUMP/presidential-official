@@ -132,7 +132,7 @@ const TERM_IMAGES = {
       width: 1280,
     },
     {
-      alt: "The full product catalog across six groupings",
+      alt: "Presidential product catalog artwork",
       height: 720,
       src: "/media/posters/strains-horizontal.jpg",
       width: 1280,
@@ -264,17 +264,17 @@ const PRESIDENTIAL_CANNABIS_FAQ = [
   {
     question: "What is Presidential Cannabis?",
     answer:
-      "Presidential Cannabis is a Los Angeles cannabis company founded in 2012. The company builds infused products around the Presidential Infusion System™, organizes a 47-product catalog across six series, and supplies licensed retailers in seven states. Its official home is presidentialmoonrocks.com.",
+      "Presidential Cannabis is the official brand behind Presidential Moon Rocks, infused pre-rolls, tobacco-free blunts, and minis. Its official company home is presidentialmoonrocks.com.",
   },
   {
     question: "What products does Presidential make?",
     answer:
-      "Presidential makes infused Moon Rocks, pre-rolls, blunts, and Mini Blunts. The catalog spans 47 products organized into the Silver Flavor Series, Gold Strain Series, Rose Gold Connoisseur Series, Presidential Line, Presidential House Line, and the Presidential x THC Design collaboration.",
+      "Presidential makes infused Moon Rocks, pre-rolls, tobacco-free blunts, and minis. The catalog is organized through the Silver Flavor Series, Gold Strain Series, Rose Gold Connoisseur Series, Presidential Line, Presidential House Line, and Presidential x THC Design.",
   },
   {
     question: "Where can I buy Presidential Cannabis?",
     answer:
-      "Presidential Cannabis is sold through licensed retailers in California, Oklahoma, New York, Nevada, Michigan, Arizona, and Washington. The official store finder accepts a ZIP code and lists nearby licensed stores by distance. Adults 21+ where legal.",
+      "Presidential Cannabis is sold through licensed retailers. Use the official Find Us path to locate participating stores, then confirm current product availability with the retailer. Adults 21+ where legal.",
   },
 ] as const;
 
@@ -472,8 +472,8 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
             <h1 className="font-display text-5xl uppercase leading-[0.9] text-po-on-dark sm:text-7xl lg:text-8xl" id="presidential-cannabis-title">{route.h1}</h1>
             <h2 className="mt-10 font-display text-2xl uppercase text-po-brand">Opening</h2>
             <div className="mt-5 grid max-w-2xl gap-5 text-lg leading-8 text-po-on-dark-muted">
-              <p>Presidential was founded in Los Angeles in 2012 with a clear focus: build infused cannabis around disciplined craft, recognizable formats, and a consistent house standard.</p>
-              <p>More than a decade later, that California origin connects a 47-product catalog, six organized groupings, multiple infused formats, and an expanding licensed-retail presence across the United States.</p>
+              <p>Presidential Cannabis builds infused products around disciplined craft, recognizable formats, and a consistent house standard.</p>
+              <p>The official product system connects Moon Rocks, pre-rolls, tobacco-free blunts, and minis with organized collections and a licensed-retailer path.</p>
             </div>
           </div>
           <ImageGrid images={[images[0]]} priority />
@@ -499,21 +499,9 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
       </TermSection>
 
       <TermSection id="presidential-cannabis-catalog" images={[images[3], images[4]]} title="What the company makes">
-        <p><strong>47 products. Six groupings. One standard.</strong></p>
+        <p><strong>Official products. Organized collections. One standard.</strong></p>
         <p>The catalog is organized to make the relationship between extract, profile, and format visible. Each grouping has a clear role while remaining part of the same Presidential product platform.</p>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[32rem] border-collapse text-left text-sm">
-            <thead><tr className="border-b border-po-line"><th className="px-3 py-3 font-display uppercase">Grouping</th><th className="px-3 py-3 font-display uppercase">Products</th></tr></thead>
-            <tbody>
-              <tr className="border-b border-po-line"><td className="px-3 py-3">Silver Flavor Series</td><td className="px-3 py-3">7</td></tr>
-              <tr className="border-b border-po-line"><td className="px-3 py-3">Gold Strain Series</td><td className="px-3 py-3">19</td></tr>
-              <tr className="border-b border-po-line"><td className="px-3 py-3">Rose Gold Connoisseur Series</td><td className="px-3 py-3">5</td></tr>
-              <tr className="border-b border-po-line"><td className="px-3 py-3">Presidential Line</td><td className="px-3 py-3">10</td></tr>
-              <tr className="border-b border-po-line"><td className="px-3 py-3">Presidential House Line</td><td className="px-3 py-3">3</td></tr>
-              <tr><td className="px-3 py-3">Presidential x THC Design</td><td className="px-3 py-3">3</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <p>Collections include the Silver Flavor Series, Gold Strain Series, Rose Gold Connoisseur Series, Presidential Line, Presidential House Line, and Presidential x THC Design. Current product records—not fixed counts in evergreen copy—define the catalog.</p>
         <p>
           Formats:{" "}
           <Link className={inlineLinkClass} href="/presidential-thc">Moon Rocks</Link>,{" "}
