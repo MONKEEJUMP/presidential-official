@@ -357,11 +357,6 @@ export function LocatorConsole({
                 GO!
               </button>
             </div>
-            <style jsx>{`
-              .presidential-locator-zip-input::placeholder {
-                font-size: clamp(0.82rem, 3.6cqi, 1.35rem);
-              }
-            `}</style>
           </form>
 
           <div className={styles.actionRow}>

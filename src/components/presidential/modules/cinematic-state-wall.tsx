@@ -16,9 +16,6 @@ export type CinematicStateWallProps = {
   readonly states: readonly CinematicStateWallState[];
 };
 
-const STATE_WALL_SCRIM_BACKGROUND =
-  "rgb(0 0 0 / var(--cinematic-state-wall-scrim-opacity, 0.50))";
-
 export function CinematicStateWall({ states }: CinematicStateWallProps) {
   return (
     <section
@@ -47,8 +44,7 @@ export function CinematicStateWall({ states }: CinematicStateWallProps) {
 
             <div
               aria-hidden="true"
-              className="absolute inset-0"
-              style={{ backgroundColor: STATE_WALL_SCRIM_BACKGROUND }}
+              className="po-cinematic-state-scrim absolute inset-0"
             />
             <div
               aria-hidden="true"
