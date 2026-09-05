@@ -5,9 +5,15 @@ type ConveyorPack = {
   readonly alt: string;
   readonly href: string;
   readonly name: string;
-  readonly objectPosition: string;
+  readonly objectPosition: "center 54%" | "center 55%" | "center 56%";
   readonly src: string;
 };
+
+const CONVEYOR_IMAGE_POSITION_CLASSES = {
+  "center 54%": "object-[center_54%]",
+  "center 55%": "object-[center_55%]",
+  "center 56%": "object-[center_56%]",
+} as const;
 
 const CONVEYOR_PACKS: readonly ConveyorPack[] = [
   {
@@ -205,11 +211,10 @@ export function GemTicker() {
                   >
                     <Image
                       alt={pack.alt}
-                      className="object-cover"
+                      className={`object-cover ${CONVEYOR_IMAGE_POSITION_CLASSES[pack.objectPosition]}`}
                       fill
                       sizes="142px"
                       src={pack.src}
-                      style={{ objectPosition: pack.objectPosition }}
                     />
                   </Link>
                 </li>
