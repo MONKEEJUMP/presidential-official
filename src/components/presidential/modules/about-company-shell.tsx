@@ -150,7 +150,7 @@ export function AboutCompanyShell() {
                 className="mt-6 max-w-5xl font-display text-5xl uppercase leading-[0.88] text-po-on-dark sm:text-7xl lg:text-7xl xl:text-9xl"
                 id="about-company-title"
               >
-                BUILT BETTER. ON PURPOSE.
+                PRESIDENTIAL CANNABIS. BUILT BETTER. ON PURPOSE.
               </h1>
               <h2 className="mt-6 font-display text-xl uppercase tracking-wide text-po-brand">
                 About the Presidential Cannabis Brand
