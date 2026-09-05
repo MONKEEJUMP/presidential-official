@@ -257,15 +257,16 @@ export const ROUTE_REGISTRY = [
     priority: 5,
     changeFrequency: "monthly",
     canonicalPath: "/our-story",
-    title: "Our Story | Presidential Moon Rocks",
+    title: "Our Story | Presidential Moon Rocks Official Website",
     description:
-      "Learn the official story behind Presidential and Moon Rocks through source-backed company facts.",
+      "Learn the official story behind Presidential Moon Rocks and the official website through source-backed company facts.",
     h1: "The Presidential Story",
     keywords: [
       "presidential cannabis history",
       "presidential cannabis founders",
       "presidential brand heritage",
       "presidential origin story",
+      "presidential moon rocks website",
     ],
     schema: ["AboutPage", "WebPage", "BreadcrumbList"],
     requiredData: ["company_entity", "founder_story", "proof_items", "assets"],
