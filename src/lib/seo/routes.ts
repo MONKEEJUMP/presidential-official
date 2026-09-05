@@ -214,7 +214,7 @@ export const ROUTE_REGISTRY = [
     title: "Presidential Vapes | Moon Pods & Orbit Vape Platforms",
     description:
       "Explore Presidential Vapes, Moon Pods, Orbit hardware, vape cartridge education, and the official path to licensed retailers carrying Presidential products.",
-    h1: "VAPES",
+    h1: "Presidential Vapes",
     keywords: [
       "presidential vapes",
       "how to judge a vape cartridge",
