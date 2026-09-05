@@ -124,9 +124,9 @@ const APPROVED_LEARN_GUIDE_ROUTE_ROWS = [
 export const APPROVED_TERM_ROUTE_ROWS = [
   {
     slug: "presidential-thc",
-    title: "Presidential THC — Infusion, Potency and Extract Science",
+    title: "Presidential THC | Official Infusion and Label Guide",
     description:
-      "How Presidential builds infused cannabis: the distillate, the kief coat, the extracts behind each series, and what the numbers on the label actually mean. Adults 21+.",
+      "Official Presidential THC guide to infusion, flower, kief, distillate, live resin, live rosin, and reading total THC on a cannabis label. Adults 21+.",
     h1: "Presidential THC: Infusion, Potency & Extract Science",
     keywords: [
       "Presidential THC",

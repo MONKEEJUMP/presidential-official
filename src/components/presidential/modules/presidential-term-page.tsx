@@ -305,15 +305,17 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
             >
               {route.h1}
             </h1>
-            <h2 className="mt-10 font-display text-2xl uppercase text-po-brand">Opening</h2>
+            <h2 className="mt-10 font-display text-2xl uppercase text-po-brand">What Presidential THC covers</h2>
             <div className="mt-5 grid max-w-2xl gap-5 text-lg leading-8 text-po-on-dark-muted">
-              <p>Every infused product answers the same three questions: what went into it, how it got in there, and how strong the result is.</p>
               <p>
-                This page answers all three for{" "}
+                Presidential THC is the official guide to the brand&apos;s infused product system, its three extract-led series, and the numbers printed on a cannabis label.
+              </p>
+              <p>
+                It explains flower, concentrate, kief, distillate, live resin, live rosin, THCa, and total THC for{" "}
                 <Link className={inlineLinkClass} href="/presidential-cannabis">
                   Presidential
                 </Link>
-                .
+                , then points readers to the detailed guides and licensed-retailer path.
               </p>
             </div>
           </div>
@@ -321,38 +323,29 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
         </div>
       </Scene>
 
-      <TermSection id="presidential-thc-ingredients" images={[images[1]]} title="What is actually in the product">
-        <p>Three ingredients. Each one does a job.</p>
-        <p><strong>Flower</strong> carries the strain — the genetics and the aromatic backbone. Standard cannabis flower tests between 15% and 25% THC.</p>
-        <p><strong>Concentrate</strong> adds potency and acts as the adhesive for the third layer. Depending on the extract used, the coating alone can run <strong>as high as 90% THC</strong>.</p>
-        <p><strong>Kief</strong> is the finish — collected trichomes, the resin glands holding most of the plant&apos;s cannabinoids and terpenes. It adds another concentrated layer on top.</p>
-        <p>Stack all three and the finished product reaches <strong>as high as 70% THC</strong>, roughly three times the ceiling of top-shelf flower, in something you still smoke like flower.</p>
+      <TermSection id="presidential-thc-ingredients" images={[images[1]]} title="Flower, concentrate, and kief">
+        <p>Presidential brand materials describe the flagship Moon Rocks format through three visible roles: flower as the base, cannabis concentrate as the infused component, and kief as the finish.</p>
+        <p><strong>Flower</strong> supplies the plant material and the named product identity. <strong>Concentrate</strong> supplies the extract component. <strong>Kief</strong> is the collected trichome material used for the exterior finish.</p>
+        <p>Potency is batch-specific. Read the current package label and its associated test results rather than inferring a fixed percentage from a format, series, or product name.</p>
       </TermSection>
 
       <TermSection id="presidential-thc-infusion" images={[images[2], images[3]]} title="The Presidential Infusion System™" tone="contrast">
-        <p>Most infused cannabis is surface-treated. Concentrate goes onto the outside of the flower, where it stays.</p>
         <p>
-          Presidential built a different process. Distillate is{" "}
+          Presidential uses <strong>Presidential Infusion System™</strong> as the name for its product framework: flower and cannabis extracts working together in a finished format. The dedicated THC reference explains the distinction between concentrate placed on a surface and concentrate{" "}
           <a className={inlineLinkClass} href="https://presidentialthc.net/infusion/surface-vs-saturation">
-            carried through the flower rather than applied to the surface
+            carried through the flower
           </a>
-          , and the kief coat goes on last.
+          .
         </p>
-        <p>
-          The difference is not cosmetic. Concentrate is dense and holds heat. Pooled on the outside, it smothers the airflow a{" "}
-          <Link className={inlineLinkClass} href="/presidential-blunts">
-            rolled product
-          </Link>{" "}
-          needs — the burn tunnels, canoes, or dies out. Distributed through the material, it burns evenly from the first third to the last.
-        </p>
-        <p>That is why the process has a name. It took years to earn one.</p>
+        <p>The system name identifies Presidential&apos;s brand architecture. It does not establish a universal potency, burn, or performance result; the specific package and batch record control those facts.</p>
       </TermSection>
 
       <TermSection id="presidential-thc-extracts" images={[images[4], images[5], images[6]]} title="Three extracts, three series">
         <p>The catalog is organized by what goes into the product, not by marketing tier.</p>
-        <p><strong>Distillate</strong> is refined to near-pure cannabinoid, stripped of nearly everything else. Neutral in aroma, which makes it the base where flavor is added deliberately. This is the Silver Flavor Series.</p>
-        <p><strong>Live resin</strong> comes from cannabis frozen at harvest instead of dried and cured — the freeze preserves terpenes that would otherwise evaporate over a weeks-long cure. It carries the strain&apos;s own character. This is the Gold Strain Series.</p>
-        <p><strong>Live rosin</strong> is solventless. Fresh-frozen material is washed in ice water to collect trichomes, and that hash is pressed with heat and pressure into rosin. No chemical solvents at any stage. It is the most expensive way to make a concentrate and the smallest yield. This is the Rose Gold Connoisseur Series.</p>
+        <p><strong>Distillate</strong> is the extract identified with the Silver Flavor Series.</p>
+        <p><strong>Live resin</strong> is the extract identified with the Gold Strain Series and is made from cannabis frozen at harvest rather than first dried and cured.</p>
+        <p><strong>Live rosin</strong> is the solventless extract identified with the Rose Gold Connoisseur Series. Ice water, heat, and pressure are used instead of chemical solvents.</p>
+        <p>These series descriptions explain the catalog structure. The current package label and batch documentation remain authoritative for a specific product.</p>
         <p>
           That same infused framework appears in the collaboration catalog as{" "}
           <Link className={inlineLinkClass} href="/moon-rocks/thc-design-moon-rocks">Presidential x THC Design Moon Rocks</Link>,{" "}
@@ -362,18 +355,21 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
       </TermSection>
 
       <TermSection id="presidential-thc-label" title="Reading the numbers on a label" tone="contrast">
-        <p>Cannabis labels confuse people, and the confusion is chemistry.</p>
-        <p>The plant does not produce THC. It produces <strong>THCa</strong> — tetrahydrocannabinolic acid, which is not intoxicating on its own. Heat converts it to THC through a reaction called decarboxylation. That is what a lighter does.</p>
-        <p>The conversion is not one-for-one. THCa weighs 358.47 g/mol, THC weighs 314.46, and the difference leaves as carbon dioxide. Divide one by the other and you get <strong>0.877</strong>.</p>
-        <p>Which is why every lab report in the industry uses the same formula:</p>
+        <p>A cannabis label may show delta-9 THC, THCa, and a calculated total THC value. Those numbers describe different measurements and should be read with their units and the batch&apos;s testing record.</p>
+        <p>Heat can convert THCa into delta-9 THC through decarboxylation. The conventional total-THC calculation applies a <strong>0.877</strong> conversion factor based on the compounds&apos; molar-mass ratio.</p>
         <p><strong>Total THC = (THCa × 0.877) + THC</strong></p>
-        <p>A concentrate testing 99% THCa carries a theoretical maximum of about 87% THC after full conversion. Two very different numbers describing the same jar. Knowing which one you are reading is the whole skill.</p>
+        <p>
+          This formula is documented by{" "}
+          <a className={inlineLinkClass} href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.260-248.pdf">
+            NIST&apos;s hemp reference-material guidance
+          </a>
+          . It explains the calculation; it does not supply the potency of any Presidential product. Use the product&apos;s current label and test record for that.
+        </p>
       </TermSection>
 
-      <TermSection id="presidential-thc-terpenes" title="Why terpenes decide the experience">
-        <p>Cannabinoids set potency. Terpenes set everything else — smell, taste, and the character people describe when they say two strains at the same number feel different.</p>
-        <p>Terpenes are volatile. Heat, light and time degrade them, and processing can cost 30 to 50 percent of what the plant produced. Every technique in premium cannabis exists to lose less: freezing at harvest, cold extraction, pressing at low temperature, storing dark.</p>
-        <p>Nothing downstream puts terpenes back. The ceiling is set at harvest.</p>
+      <TermSection id="presidential-thc-terpenes" title="What terpenes contribute to aroma">
+        <p>Terpenes are volatile aromatic compounds that contribute to how cannabis smells and tastes. Their presence does not support a medical, therapeutic, or guaranteed experience claim.</p>
+        <p>Heat, light, air, and time can change an aromatic profile. Read product-specific descriptions as sensory information and use the package or approved product record for the current batch.</p>
       </TermSection>
 
       <TermSection id="presidential-thc-learn" title="Learn more" tone="contrast">
