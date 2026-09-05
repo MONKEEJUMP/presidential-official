@@ -38,6 +38,11 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     { href: "/", anchor: "retail", context: "the retail path" },
   ],
   "/learn/what-are-liquid-diamonds": [
+    {
+      href: "/moon-rocks/silver",
+      anchor: "Silver lane",
+      context: "Liquid diamonds anchor the Silver lane of the Presidential catalog",
+    },
     { href: "/", anchor: "retailer", context: "Availability varies by licensed retailer" },
   ],
   "/learn/what-are-moon-rocks": [
@@ -48,10 +53,41 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     },
   ],
   "/learn/what-is-live-resin": [
+    {
+      href: "/moon-rocks/gold",
+      anchor: "Gold Strain Series",
+      context: "live resin defines the Gold Strain Series",
+    },
     { href: "/", anchor: "retailer", context: "Availability varies by licensed retailer" },
   ],
   "/learn/what-is-live-rosin": [
+    {
+      href: "/moon-rocks/rose-gold",
+      anchor: "Rose Gold Connoisseur Series",
+      context: "Live rosin defines the Rose Gold Connoisseur Series",
+    },
     { href: "/", anchor: "retailer", context: "Availability varies by licensed retailer" },
+  ],
+  "/learn/infusion-science": [
+    {
+      href: "/moon-rocks/presidential-house-line",
+      anchor: "Moon Rocks, infused prerolls, and infused blunts",
+      context: "Presidential builds its Moon Rocks, infused prerolls, and infused blunts around deep infusion",
+    },
+  ],
+  "/learn/flavor-science": [
+    {
+      href: "/moon-rocks/silver",
+      anchor: "Silver strains",
+      context: "fruit-forward Silver strains like Blue Raspberry and Watermelon",
+    },
+  ],
+  "/learn/different-extracts-need-different-heat": [
+    {
+      href: "/orbit",
+      anchor: "Orbit",
+      context: "Orbit, the Presidential technology platform",
+    },
   ],
   "/moon-rocks": [
     {

@@ -145,6 +145,18 @@ type ConcreteLearnGuide = {
   readonly intro: string;
 };
 
+const LEARN_GUIDE_RELATED_PATHS: Readonly<
+  Record<string, readonly SeoRoutePath[]>
+> = {
+  "what-are-moon-rocks": ["/moon-rocks/24k"],
+  "what-is-live-resin": ["/moon-rocks/gold"],
+  "what-is-live-rosin": ["/moon-rocks/rose-gold"],
+  "what-are-liquid-diamonds": ["/moon-rocks/silver"],
+  "infusion-science": ["/moon-rocks/presidential-house-line"],
+  "flavor-science": ["/moon-rocks/silver"],
+  "different-extracts-need-different-heat": ["/orbit"],
+};
+
 export type ConcreteTermPage = {
   readonly slug: "presidential-thc" | "presidential-blunts" | "presidential-cannabis";
   readonly title: string;
@@ -205,7 +217,12 @@ export function buildLearnGuideSeoRoute(
     description: guide.intro.trim(),
     h1: guide.title.trim(),
     schema: ["WebPage", "BreadcrumbList"],
-    linksTo: ["/learn", "/moon-rocks", "/find-us"],
+    linksTo: [
+      "/learn",
+      "/moon-rocks",
+      ...(LEARN_GUIDE_RELATED_PATHS[slug] ?? []),
+      "/find-us",
+    ],
     blocks: [],
     sourceArtifact:
       `${template.sourceArtifact}; approved Sanity learnGuide:${slug}; ` +
