@@ -162,9 +162,9 @@ export const APPROVED_TERM_ROUTE_ROWS = [
   },
   {
     slug: "presidential-cannabis",
-    title: "Presidential Cannabis — The Company, Los Angeles 2012",
+    title: "Presidential Cannabis | Official Company Overview",
     description:
-      "Who Presidential is: founded in Los Angeles in 2012, wholesale only, 47 products across six series, sold through licensed retail in seven states.",
+      "Meet Presidential Cannabis, the official brand behind Moon Rocks, infused pre-rolls, tobacco-free blunts, and minis. Explore the product system and licensed-retailer path.",
     h1: "Presidential Cannabis",
     keywords: [
       "Presidential cannabis",
