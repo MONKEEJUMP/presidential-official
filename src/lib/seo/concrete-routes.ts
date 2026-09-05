@@ -68,8 +68,11 @@ const SERIES_PATH_BY_NAME: Readonly<Record<string, SeoRoutePath>> = {
 
 const PRODUCT_H1_OVERRIDE_BY_SLUG: Readonly<Record<string, string>> = {
   "blue-dream": "Blue Dream Moon Rocks",
+  "gorilla-goo": "Gorilla Goo Moon Rocks",
+  "pink-cookies": "Pink Cookies Moon Rocks",
   "presidential-blunts": "Presidential Blunts — House Line",
   "presidential-moon-rocks": "Presidential House Line Moon Rocks",
+  skywalker: "Skywalker Moon Rocks",
   strawberry: "Strawberry Moon Rocks",
   watermelon: "Watermelon Moon Rocks",
 };
