@@ -140,6 +140,10 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
   const heroImage = STATE_HERO_IMAGES[state.slug];
   const displayName =
     atmosphere.nameCase === "upper" ? state.name.toUpperCase() : state.name;
+  const isNewYork = state.slug === "ny";
+  const heroHeading = isNewYork
+    ? "Presidential Near Me in New York"
+    : displayName;
   const otherStates = PRESIDENTIAL_STATES
     .filter((candidate) => candidate.slug !== state.slug)
     .toSorted((left, right) => left.name.localeCompare(right.name));
@@ -208,13 +212,13 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
           <div className="relative mx-auto flex w-full max-w-7xl flex-col justify-start gap-10 px-6 py-8 sm:px-10 lg:px-16">
             <div className="my-auto pb-4">
               <p className="text-xs font-black uppercase tracking-wide text-po-canvas/90">
-                Presidential in
+                {isNewYork ? "Official New York retailer guide" : "Presidential in"}
               </p>
               <h1
-                className={`mt-4 text-6xl leading-none sm:text-8xl lg:text-9xl ${stateFontClass(state.slug)} ${atmosphere.nameClass}`}
+                className={`mt-4 leading-none ${isNewYork ? "max-w-5xl text-5xl sm:text-7xl lg:text-8xl" : "text-6xl sm:text-8xl lg:text-9xl"} ${stateFontClass(state.slug)} ${atmosphere.nameClass}`}
                 id="presidential-state-title"
               >
-                {displayName}
+                {heroHeading}
               </h1>
               <p className="mt-6 max-w-2xl font-display text-2xl uppercase leading-tight text-po-canvas sm:text-3xl">
                 {state.tagline}
