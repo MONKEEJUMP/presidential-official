@@ -175,8 +175,9 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
                 alt=""
                 aria-hidden="true"
                 className={`absolute inset-0 h-full w-full object-cover ${heroImage.position}`}
+                fetchPriority="high"
                 fill
-                priority
+                loading="eager"
                 sizes="100vw"
                 src={heroImage.src}
               />
