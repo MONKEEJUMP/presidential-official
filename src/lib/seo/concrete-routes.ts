@@ -64,6 +64,11 @@ const SERIES_PATH_BY_NAME: Readonly<Record<string, SeoRoutePath>> = {
   "Presidential x THC Design": "/moon-rocks/presidential-x-thc-design",
 };
 
+const PRODUCT_H1_OVERRIDE_BY_SLUG: Readonly<Record<string, string>> = {
+  "presidential-blunts": "Presidential House Line Blunts",
+  "presidential-moon-rocks": "Presidential House Line Moon Rocks",
+};
+
 function getRequiredRouteTemplate(id: string): SeoRouteRecord {
   const route = getRouteById(id);
 
@@ -109,7 +114,7 @@ export function buildCatalogProductSeoRoute(
     canonicalPath: path,
     title: metadata?.seoTitle ?? `${name} | Presidential Moon Rocks`,
     description: metadata?.metaDescription ?? generatedDescription,
-    h1: name,
+    h1: PRODUCT_H1_OVERRIDE_BY_SLUG[slug] ?? name,
     keywords: [
       `${name.toLowerCase()} presidential`,
       `${name.toLowerCase()} moon rocks`,

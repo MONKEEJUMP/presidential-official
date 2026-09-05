@@ -73,7 +73,7 @@ export const ROUTE_REGISTRY = [
     title: "Presidential Moon Rocks | Infused Pre-Rolls and Blunts",
     description:
       "Explore the Presidential Moon Rocks product platform. Availability varies by licensed retailer.",
-    h1: "Presidential Moon Rocks",
+    h1: "Presidential Moon Rocks Collection",
     keywords: [
       "presidential moon rocks",
       "moon rock pre-rolls",
