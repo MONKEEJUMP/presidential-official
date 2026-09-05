@@ -181,7 +181,7 @@ export default async function CatalogProductDetailPage({
                   className="mt-3 max-w-full font-display text-4xl uppercase leading-[0.92] text-po-ink [overflow-wrap:anywhere] sm:text-6xl"
                   id="presidential-product-title"
                 >
-                  {item.name}
+                  {route.h1}
                 </h1>
                 <ProductDescription sourcePath={route.path} value={item.description} />
 
