@@ -6,6 +6,7 @@ import {
   Scene,
   SceneStack,
 } from "@/components/presidential";
+import { FindUsCtaShell } from "@/components/presidential/modules/find-us-cta-shell";
 import { RepoOwnedPageCopy } from "@/components/presidential/modules/repo-owned-page-copy";
 import { CtaLink } from "@/components/presidential/primitives/cta-link";
 import { SectionHeading } from "@/components/presidential/primitives/section-heading";
@@ -123,6 +124,11 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
         {slug === "what-are-moon-rocks" ? (
           <RepoOwnedPageCopy path="/learn/what-are-moon-rocks" />
         ) : null}
+        <FindUsCtaShell
+          className="po-gold-thread-inlay"
+          compact
+          sourcePath={`/learn/${slug}`}
+        />
       </SceneStack>
     </PageFrame>
   );
