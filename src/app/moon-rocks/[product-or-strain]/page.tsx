@@ -14,6 +14,7 @@ import {
   parseFormatChips,
   seriesMetaFor,
 } from "@/components/presidential/modules/catalog-grid-shell";
+import { relatedGuideForCatalogItem } from "@/lib/catalog/series-registry";
 import { FindUsCtaShell } from "@/components/presidential/modules/find-us-cta-shell";
 import { ProductDescription } from "@/components/presidential/modules/product-description";
 import {
@@ -105,6 +106,7 @@ export default async function CatalogProductDetailPage({
   const meta = seriesMetaFor(item.series);
   const seriesPath = CONCRETE_SEO_SERIES_PATHS.find((path) => route.linksTo.includes(path));
   const chips = parseFormatChips(item.productType);
+  const relatedGuide = relatedGuideForCatalogItem(item);
   const approvedImages = (item.images || []).filter(hasAssetUrl);
   const [heroImage, ...galleryImages] = approvedImages;
   const jsonLdEntries = buildProductRouteJsonLd({
@@ -195,6 +197,20 @@ export default async function CatalogProductDetailPage({
                         <li key={chip}>{chip}</li>
                       ))}
                     </ul>
+                  </div>
+                ) : null}
+
+                {relatedGuide ? (
+                  <div className="mt-8 border-t border-po-line pt-5">
+                    <p className="text-xs font-black uppercase text-po-brand-ink">
+                      Related guide
+                    </p>
+                    <Link
+                      className="mt-3 inline-block font-semibold text-po-ink underline decoration-po-brand underline-offset-4 transition-colors hover:text-po-brand-ink focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
+                      href={relatedGuide.path}
+                    >
+                      {relatedGuide.label}
+                    </Link>
                   </div>
                 ) : null}
 

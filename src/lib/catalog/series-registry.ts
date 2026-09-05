@@ -22,6 +22,89 @@ export type CatalogSeriesDefinition = {
   readonly accentText: string;
 };
 
+export type CatalogRelatedGuide = {
+  readonly path: SeoRoutePath;
+  readonly label: string;
+};
+
+const FORMAT_GUIDE_BY_PRODUCT_NAME: Readonly<
+  Record<string, CatalogRelatedGuide>
+> = {
+  "Presidential Blunts": {
+    path: "/learn/infusion-science",
+    label: "Infusion Science",
+  },
+  "Presidential Moon Rocks": {
+    path: "/learn/what-are-moon-rocks",
+    label: "What Are Moon Rocks",
+  },
+  "Presidential Prerolls": {
+    path: "/learn/infusion-science",
+    label: "Infusion Science",
+  },
+  "Presidential x THC Design Blunts": {
+    path: "/learn/infusion-science",
+    label: "Infusion Science",
+  },
+  "Presidential x THC Design Moon Rocks": {
+    path: "/learn/what-are-moon-rocks",
+    label: "What Are Moon Rocks",
+  },
+  "Presidential x THC Design Prerolls": {
+    path: "/learn/infusion-science",
+    label: "Infusion Science",
+  },
+};
+
+const FLAVOR_SCIENCE_SERIES = new Set([
+  "Silver Flavor Series",
+  "Gold Strain Series",
+  "Presidential Line",
+]);
+
+export function relatedGuideForCatalogItem(
+  item: Pick<SanityCatalogItem, "name" | "series" | "productType">,
+): CatalogRelatedGuide | null {
+  const productType = item.productType?.trim().toLowerCase();
+
+  if (productType === "moon rocks") {
+    return {
+      path: "/learn/what-are-moon-rocks",
+      label: "What Are Moon Rocks",
+    };
+  }
+
+  if (productType === "blunts" || productType === "prerolls") {
+    return {
+      path: "/learn/infusion-science",
+      label: "Infusion Science",
+    };
+  }
+
+  const namedFormatGuide = item.name
+    ? FORMAT_GUIDE_BY_PRODUCT_NAME[item.name]
+    : undefined;
+  if (namedFormatGuide) {
+    return namedFormatGuide;
+  }
+
+  if (item.series === "Rose Gold Connoisseur Series") {
+    return {
+      path: "/learn/what-is-live-rosin",
+      label: "What Is Live Rosin",
+    };
+  }
+
+  if (item.series && FLAVOR_SCIENCE_SERIES.has(item.series)) {
+    return {
+      path: "/learn/flavor-science",
+      label: "Flavor Science",
+    };
+  }
+
+  return null;
+}
+
 export const CATALOG_SERIES_REGISTRY = [
   {
     slug: "silver",

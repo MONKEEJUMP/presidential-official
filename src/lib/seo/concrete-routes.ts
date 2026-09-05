@@ -1,6 +1,7 @@
 import { getRouteById, getRouteByPath } from "./route-helpers";
 import type { SeoRoutePath, SeoRouteRecord } from "./route-types";
 import { PRODUCT_METADATA_BY_SLUG } from "./pw7404-1019-product-metadata";
+import { relatedGuideForCatalogItem } from "@/lib/catalog/series-registry";
 
 export const CONCRETE_SEO_DOCUMENT_PATHS = [
   "/",
@@ -45,6 +46,7 @@ type ConcreteCatalogItem = {
   readonly _id: string;
   readonly name: string;
   readonly series?: string;
+  readonly productType?: string;
   readonly description?: string;
   readonly sourceArtifact?: string;
 };
@@ -101,6 +103,7 @@ export function buildCatalogProductSeoRoute(
   const name = item.name.trim();
   const series = item.series?.trim();
   const seriesPath = series ? SERIES_PATH_BY_NAME[series] : undefined;
+  const relatedGuide = relatedGuideForCatalogItem(item);
   const path = `/moon-rocks/${slug}` as const;
   const metadata = PRODUCT_METADATA_BY_SLUG[slug];
   const generatedDescription =
@@ -123,6 +126,7 @@ export function buildCatalogProductSeoRoute(
     linksTo: [
       "/moon-rocks",
       ...(seriesPath ? [seriesPath] : []),
+      ...(relatedGuide ? [relatedGuide.path] : []),
       "/find-us",
     ],
     sourceArtifact:
