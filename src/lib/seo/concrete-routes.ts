@@ -192,6 +192,7 @@ export function buildLearnGuideSeoRoute(
     title: `${guide.title.trim()} | Presidential Learn`,
     description: guide.intro.trim(),
     h1: guide.title.trim(),
+    schema: ["WebPage", "BreadcrumbList"],
     linksTo: ["/learn", "/moon-rocks", "/find-us"],
     blocks: [],
     sourceArtifact:

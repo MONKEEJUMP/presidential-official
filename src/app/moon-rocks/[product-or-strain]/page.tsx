@@ -20,7 +20,7 @@ import {
   readCatalogItemBySlug,
   readCatalogProductParams,
 } from "@/lib/cms/catalog";
-import { buildCatalogProductSeoRoute } from "@/lib/seo/concrete-routes";
+import { buildCatalogProductSeoRoute, CONCRETE_SEO_SERIES_PATHS } from "@/lib/seo/concrete-routes";
 import {
   buildRouteMetadata,
   isRouteMetadataIndexable,
@@ -73,10 +73,20 @@ export async function generateMetadata({
     };
   }
 
+  const heroImage = (detail.item.images || []).filter(hasAssetUrl)[0];
+
   return buildRouteMetadata({
     route: buildCatalogProductSeoRoute(detail.item as typeof detail.item & {
       readonly name: string;
     }, slug),
+    ...(heroImage ? {
+      socialImage: {
+        url: heroImage.assetUrl,
+        width: "width" in heroImage && typeof heroImage.width === "number" ? heroImage.width : 0,
+        height: "height" in heroImage && typeof heroImage.height === "number" ? heroImage.height : 0,
+        ...(heroImage.altText ? { alt: heroImage.altText } : {}),
+      },
+    } : {}),
   });
 }
 
@@ -93,6 +103,7 @@ export default async function CatalogProductDetailPage({
   const item = detail.item as typeof detail.item & { readonly name: string };
   const route = buildCatalogProductSeoRoute(item, slug);
   const meta = seriesMetaFor(item.series);
+  const seriesPath = CONCRETE_SEO_SERIES_PATHS.find((path) => route.linksTo.includes(path));
   const chips = parseFormatChips(item.productType);
   const approvedImages = (item.images || []).filter(hasAssetUrl);
   const [heroImage, ...galleryImages] = approvedImages;
@@ -164,7 +175,7 @@ export default async function CatalogProductDetailPage({
               <div className="min-w-0">
                 <span aria-hidden="true" className={`block h-2 w-16 ${meta.accentBar}`} />
                 <p className={`mt-4 text-xs font-black uppercase ${meta.accentText}`}>
-                  {item.series}
+                  {seriesPath ? <Link href={seriesPath}>{item.series}</Link> : item.series}
                 </p>
                 <h1
                   className="mt-3 max-w-full font-display text-4xl uppercase leading-[0.92] text-po-ink [overflow-wrap:anywhere] sm:text-6xl"

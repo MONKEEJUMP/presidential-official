@@ -21,7 +21,14 @@ import type { SeoRouteRecord } from "./route-types";
 // collapsing the homepage's canonical trailing slash.
 export const METADATA_BASE = null;
 export const OPEN_GRAPH_SITE_NAME = PRESIDENTIAL_NAME;
-export const TWITTER_CARD_TYPE = "summary" as const;
+export const TWITTER_CARD_TYPE = "summary_large_image" as const;
+
+const DEFAULT_SOCIAL_IMAGE = {
+  url: `${PRODUCTION_ORIGIN}/social/og-default.png`,
+  width: 1200,
+  height: 630,
+  alt: "Presidential logo",
+} as const;
 
 export function isRouteMetadataIndexable(
   route: SeoRouteRecord,
@@ -75,6 +82,18 @@ export function buildRouteMetadata(input: BuildRouteMetadataInput): Metadata {
     routePublicationContext: input.routePublicationContext,
   };
   const socialPreviewApproved = isRouteMetadataIndexable(route, gateInput);
+  const socialImage = input.socialImage ?? DEFAULT_SOCIAL_IMAGE;
+  if (socialPreviewApproved) {
+    const imageUrl = new URL(socialImage.url);
+    const approvedHost = imageUrl.origin === PRODUCTION_ORIGIN ||
+      (imageUrl.origin === "https://cdn.sanity.io" &&
+        imageUrl.pathname.startsWith("/images/4bl3xvem/production/"));
+    if (!approvedHost || imageUrl.username || imageUrl.password ||
+      !Number.isInteger(socialImage.width) || socialImage.width <= 0 ||
+      !Number.isInteger(socialImage.height) || socialImage.height <= 0) {
+      throw new Error(`Invalid approved social image or dimensions for ${route.path}`);
+    }
+  }
   const robots = buildRouteRobots(route, gateInput);
   const metadataEmissionBlockReasons =
     getApprovedRouteMetadataEmissionBlockReasons(
@@ -115,11 +134,13 @@ export function buildRouteMetadata(input: BuildRouteMetadataInput): Metadata {
             url: openGraphUrl,
             siteName: OPEN_GRAPH_SITE_NAME,
             type: "website",
+            images: [socialImage],
           },
           twitter: {
             card: TWITTER_CARD_TYPE,
             title,
             description,
+            images: [socialImage.url],
           },
         }
       : {}),

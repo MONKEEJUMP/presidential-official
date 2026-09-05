@@ -113,7 +113,7 @@ export function buildRouteShellJsonLd(
       {
         id: "organization",
         data: buildOrganizationSchema(
-          route.path === "/about"
+          route.path === "/about" || route.path === "/"
             ? { logoPath: ABOUT_ORGANIZATION_LOGO_PATH }
             : {},
         ),
