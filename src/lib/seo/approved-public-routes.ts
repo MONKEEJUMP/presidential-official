@@ -143,7 +143,7 @@ export const APPROVED_TERM_ROUTE_ROWS = [
   },
   {
     slug: "presidential-blunts",
-    title: "Presidential Blunts — Tobacco-Free Infused Hemp Wraps",
+    title: "Presidential Blunts Guide | Formats, Sizes & Construction",
     description:
       "Infused blunts and minis rolled in tobacco-free hemp. Sizes, strains, how they burn, and how to smoke one properly. Through licensed retailers, adults 21+.",
     h1: "Presidential Blunts",
