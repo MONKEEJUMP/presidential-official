@@ -106,7 +106,7 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     tagline: "Skyscraper High. Presidential Grade.",
     world: "Manhattan at night — skyline grids and avenue light.",
     seoLine:
-      "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in New York — through licensed retailers, adults 21+.",
+      "Find Presidential Moon Rocks, infused prerolls, and tobacco-free blunts near you in New York through licensed retailers. Adults 21+ where legal.",
     siteLink: {
       before: "New York has its own Presidential site at ",
       anchor: "Presidential THC New York",
