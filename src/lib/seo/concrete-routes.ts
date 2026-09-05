@@ -75,6 +75,7 @@ const PRODUCT_H1_OVERRIDE_BY_SLUG: Readonly<Record<string, string>> = {
   skywalker: "Skywalker Moon Rocks",
   strawberry: "Strawberry Moon Rocks",
   watermelon: "Watermelon Moon Rocks",
+  xxx: "XXX Moon Rocks",
 };
 
 function getRequiredRouteTemplate(id: string): SeoRouteRecord {
