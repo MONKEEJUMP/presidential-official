@@ -65,10 +65,28 @@ The Silver Flavour Series carries flavour-led releases. The Gold Strain Series c
 Presidential is a wholesale brand and sells exclusively through licensed retailers. Availability varies by retailer and stock changes by store and by day. Presidential's seven-state footprint spans California, Oklahoma, New York, Nevada, Michigan, Arizona and Washington. Use the zip search to find the nearest licensed retailer carrying Presidential. For adults 21+ where legal.`,
   },
   "/learn/what-are-moon-rocks": {
-    label: "Continue through the Presidential Moon Rocks catalog",
-    markdown: `[Presidential x THC Design](/moon-rocks/presidential-x-thc-design) shows how a collaboration keeps the same labeled composition format. [Papaya Punch](/moon-rocks/papaya-punch) puts that label language into product context. [Cosmic Cookies](/moon-rocks/cosmic-cookies) provides another catalog example.
+    label: "What Moon Rocks are and how to read the format",
+    markdown: `Moon rock weed is a layered cannabis format made from flower, concentrate, and kief. It is a product category, not one strain and not a reference to material from the Moon. The flower provides the plant structure, concentrate adds the infused layer, and kief finishes the exterior with collected trichome material.
 
-[Presidential OG](/moon-rocks/presidential-og) shows how a cultivar name stays separate from the Presidential brand. [SFV OG](/moon-rocks/sfv-og) extends the same product-first reading path.`,
+**Flower, concentrate, and kief**
+
+Those three components explain why Moon Rocks look and handle differently from plain flower. The concentrate and kief change the surface and density, but the finished product should still be identified from its own package and batch information. A percentage reported for one ingredient is not automatically the percentage of the complete Moon Rock. Use the finished-product label and associated test record for cannabinoid information.
+
+**A format, not a strain name**
+
+Presidential Moon Rocks can use different named cultivars and product identities while retaining the same broad layered format. [Presidential OG](/moon-rocks/presidential-og), [SFV OG](/moon-rocks/sfv-og), [Papaya Punch](/moon-rocks/papaya-punch), and [Cosmic Cookies](/moon-rocks/cosmic-cookies) are product examples; their names do not redefine what the Moon Rocks category means.
+
+The main [Presidential Moon Rocks collection](/moon-rocks) organizes the approved products and series. A product page supplies the exact name, series, packaging, visible composition language, and approved retailer path for that item. This guide supplies the definition shared across the category.
+
+**How Moon Rocks relate to other Presidential formats**
+
+Loose Moon Rocks show the layered construction directly. Infused pre-rolls place prepared cannabis material inside paper, while [Presidential Blunts](/presidential-blunts) use a tobacco-free hemp-wrap format. These products can share brand and infusion context without becoming interchangeable names for the same physical format.
+
+For deeper technical vocabulary, the [Presidential THC guide](/presidential-thc) explains infusion, extracts, and label reading. [Presidential Cannabis](/presidential-cannabis) provides the parent-brand context. [Presidential x THC Design](/moon-rocks/presidential-x-thc-design) shows how a collaboration remains part of the same official product system.
+
+**Where to find Presidential Moon Rocks**
+
+Presidential operates through licensed retailers rather than direct online cannabis sales. Availability varies by market, retailer, product, and date. Use the official [Find Us](/find-us) path, then confirm the current product and package with the licensed retailer. For adults 21+ where legal.`,
   },
   "/find-us/wa": {
     label: "Presidential in Washington",
