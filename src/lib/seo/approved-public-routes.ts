@@ -127,7 +127,7 @@ export const APPROVED_TERM_ROUTE_ROWS = [
     title: "Presidential THC — Infusion, Potency and Extract Science",
     description:
       "How Presidential builds infused cannabis: the distillate, the kief coat, the extracts behind each series, and what the numbers on the label actually mean. Adults 21+.",
-    h1: "Presidential THC",
+    h1: "Presidential THC: Infusion, Potency & Extract Science",
     keywords: [
       "Presidential THC",
       "infused cannabis science",
