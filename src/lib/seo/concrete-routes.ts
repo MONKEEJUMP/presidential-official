@@ -67,7 +67,7 @@ const SERIES_PATH_BY_NAME: Readonly<Record<string, SeoRoutePath>> = {
 };
 
 const PRODUCT_H1_OVERRIDE_BY_SLUG: Readonly<Record<string, string>> = {
-  "presidential-blunts": "Presidential House Line Blunts",
+  "presidential-blunts": "Presidential Blunts — House Line",
   "presidential-moon-rocks": "Presidential House Line Moon Rocks",
 };
 
