@@ -9,8 +9,9 @@ const CREST_SPINNING_POSTER = "/media/posters/crest-spinning.jpg";
 export function CrestSpinningVideo() {
   const mountRef = useRef<HTMLDivElement>(null);
   const [videoFailed, setVideoFailed] = useState(false);
+  const [posterLoaded, setPosterLoaded] = useState(false);
   const { canStream, videoRef } = useAdultVideoPlayback(mountRef);
-  const shouldPlayVideo = canStream && !videoFailed;
+  const shouldPlayVideo = canStream && posterLoaded && !videoFailed;
 
   return (
     <div
@@ -21,8 +22,10 @@ export function CrestSpinningVideo() {
         alt=""
         aria-hidden="true"
         className="object-contain"
+        fetchPriority="high"
         fill
-        priority
+        loading="eager"
+        onLoad={() => setPosterLoaded(true)}
         sizes="(min-width: 1536px) 1392px, 100vw"
         src={CREST_SPINNING_POSTER}
       />

@@ -53,6 +53,26 @@ function hasAssetUrl<T extends { readonly assetUrl?: string }>(
   return Boolean(image.assetUrl?.trim());
 }
 
+function containedImageSizes(
+  image: object,
+  placement: "hero" | "gallery",
+): string {
+  const width = "width" in image && typeof image.width === "number" ? image.width : 0;
+  const height = "height" in image && typeof image.height === "number" ? image.height : 0;
+  const isExtremePortrait =
+    width > 0 && height > 0 && width / height <= 0.5;
+
+  if (!isExtremePortrait) {
+    return placement === "hero"
+      ? "(min-width: 1024px) 55vw, 100vw"
+      : "(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw";
+  }
+
+  return placement === "hero"
+    ? "(min-width: 1024px) 30vw, 50vw"
+    : "(min-width: 1024px) 14vw, (min-width: 640px) 28vw, 50vw";
+}
+
 export async function generateStaticParams() {
   const slugs = await readCatalogProductParams(CATALOG_ROUTE);
 
@@ -162,9 +182,10 @@ export default async function CatalogProductDetailPage({
                       `${item.name} — ${item.series} product photography`
                     }
                     className="object-contain p-10"
+                    fetchPriority="high"
                     fill
-                    priority
-                    sizes="(min-width: 1024px) 55vw, 100vw"
+                    loading="eager"
+                    sizes={containedImageSizes(heroImage, "hero")}
                     src={heroImage.assetUrl}
                   />
                 ) : (
@@ -240,7 +261,7 @@ export default async function CatalogProductDetailPage({
                         className="object-contain p-6"
                         fill
                         loading="lazy"
-                        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                        sizes={containedImageSizes(image, "gallery")}
                         src={image.assetUrl}
                       />
                     </div>
