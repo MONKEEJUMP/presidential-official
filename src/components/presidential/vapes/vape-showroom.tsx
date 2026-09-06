@@ -5,6 +5,7 @@ import type { VapePage } from '@/lib/vapes/catalog';
 import { PageFrame } from '../layout/page-frame';
 import { VapeExperience } from './vape-experience';
 import { VapeIcon } from './vape-icon';
+import { OrbitHeroFilm } from './orbit-hero-film';
 import s from './showroom.module.css';
 
 const introductions = {
@@ -21,7 +22,7 @@ export function VapeShowroom({ route, breadcrumbs }: { route: SeoRouteRecord; br
       <div className={s.heroInner}>
         <nav className={s.breadcrumb} aria-label="Breadcrumb"><ol>{breadcrumbs.map((item, index) => <li key={item.path}>{index > 0 ? <span aria-hidden="true">/</span> : null}{index === breadcrumbs.length - 1 ? <span aria-current="page">{item.name}</span> : <Link href={item.path}>{item.name}</Link>}</li>)}</ol></nav>
         <div className={s.heroCopy}><p className={s.eyebrow}>{page === 'vapes' ? 'Presidential / Moon Pods + Orbit' : 'Presidential / Vape collection'}</p><h1 id="vape-page-heading" aria-label={route.h1}>{content.title}</h1><p className={s.heroIntro}>{content.text}</p><div className={s.heroCtas}><a href="#explore" className={s.primaryButton}>Explore the system <VapeIcon name="arrow" /></a><Link href="/find-us" className={s.heroRetail}>Find a retailer</Link></div></div>
-        <div className={s.heroArt}><span className={s.orbitRing} aria-hidden="true" /><span className={s.heroWord} aria-hidden="true">ORBIT</span><Image src="/media/vapes/showroom/hero-teal.webp" alt="Teal Presidential Orbit device with LD Moon Pod, angled product rendering" width={395} height={657} sizes="(min-width: 1100px) 420px, (min-width: 700px) 40vw, 64vw" loading="eager" fetchPriority="high" /><p>THE PRESIDENTIAL VAPE EXPERIENCE</p></div>
+        <div className={s.heroArt}><OrbitHeroFilm /></div>
         <div className={s.heroFooter}><span>One system. Every perspective.</span><a href="#explore">Discover the collection <VapeIcon name="arrow" /></a></div>
       </div>
     </section>
