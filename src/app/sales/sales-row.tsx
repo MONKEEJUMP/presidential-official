@@ -79,7 +79,7 @@ export function SalesRow({
           {door.isPurchasing ? <span className={styles.presidentialBadge}>PRESIDENTIAL</span> : null}
           {workedByMeToday ? <span className={styles.myWorkBadge}>MY WORK TODAY</span> : null}
           {door.doNotCallLocked ? <span className={styles.doNotCallBadge}>DO NOT CALL — LOCKED</span> : null}
-          {door.hasPendingVerification ? <span className={styles.pendingBadge}>AWAITING PAULIE VERIFICATION</span> : null}
+          {door.hasPendingVerification ? <span className={styles.pendingBadge}>AWAITING OWNER REVIEW</span> : null}
           {calledToday && lastCall && !door.isPurchasing ? (
             <span className={styles.calledBadge}>Called today by {lastCall.repName}</span>
           ) : null}
@@ -124,7 +124,7 @@ export function SalesRow({
 
       <div className={styles.rowField}>
         <span>Phone</span>
-        {door.phone ? <a href={`tel:${door.phone}`}>CALL {door.phone}</a> : <strong />}
+        {door.phone ? door.doNotCallLocked ? <strong>Do not call</strong> : door.isPurchasing ? <a href={`tel:${door.phone}`}>{door.phone}</a> : <button className={styles.phoneAction} onClick={() => onLogResult(door)} type="button" title="Open this store to call">{door.phone}</button> : <strong>Not on file</strong>}
       </div>
 
       <div className={styles.rowField}>
@@ -132,8 +132,8 @@ export function SalesRow({
         {door.email ? (
           <div className={styles.emailLine}>
             <a href={`mailto:${door.email}`}>{door.email}</a>
-            <button onClick={() => void navigator.clipboard.writeText(door.email!)} type="button">
-              COPY
+            <button onClick={async (event) => { const button = event.currentTarget; try { await navigator.clipboard.writeText(door.email!); button.textContent = "COPIED"; } catch { button.textContent = "SELECT EMAIL TO COPY"; } }} type="button">
+              Copy
             </button>
           </div>
         ) : <strong />}
@@ -141,12 +141,13 @@ export function SalesRow({
 
       <div className={styles.rowField}>
         <span>Address</span>
-        <a href={mapHref} rel="noreferrer" target="_blank">MAPS</a>
+        <a href={mapHref} rel="noreferrer" target="_blank">{door.streetAddress || "Open map"}</a>
       </div>
 
       {door.isPurchasing ? (
         <div className={styles.customerLockCell}>
           <strong>CURRENT PRESIDENTIAL CUSTOMER</strong>
+          <button onClick={() => onHistory(door)} type="button">View customer / request correction</button>
           {canCorrectCustomer ? (
             <button onClick={() => onCorrectCustomer(door)} type="button">
               CUSTOMER CORRECTION

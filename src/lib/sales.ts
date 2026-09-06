@@ -129,6 +129,13 @@ export type SalesSnapshot = Readonly<{
   opportunityCount: number;
   activeDispensaryCount: number;
   closedCount: number;
+  totalMatching: number;
+  totalTargets: number;
+  page: number;
+  pageSize: number;
+  cities: readonly string[];
+  unlinkedCustomerCount: number;
+  excludedNonRetailCount: number;
   verificationRequests: readonly SalesVerificationRequest[];
   doors: readonly SalesDoor[];
 }>;

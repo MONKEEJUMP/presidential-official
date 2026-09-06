@@ -1,4 +1,28 @@
 .loginPage,
+.phoneAction {
+  font-family: var(--po-font-body);
+}
+
+.commandBar .queueSelect { display: none; }
+
+@media (max-width: 48rem) {
+  .commandBar .listToggles { display: none; }
+  .commandBar .queueSelect { display: grid; grid-column: 1 / -1; }
+}
+
+.phoneAction {
+  min-height: 44px;
+  border: 0;
+  padding: 0;
+  color: #075e55;
+  background: transparent;
+  text-decoration: underline;
+  text-align: left;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.loginPage,
 .salesPage {
   min-height: 100svh;
   background: #070708;
@@ -135,28 +159,35 @@
 }
 
 .salesPage {
+  --crm-body-font: Arial, Helvetica, sans-serif;
+  font-family: var(--crm-body-font);
+  font-size: 0.9375rem;
+  line-height: 1.45;
   padding-bottom: 4rem;
 }
 
 .salesHeader {
   display: flex;
-  align-items: end;
+  align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 1.5rem;
+  gap: 0.75rem 1.25rem;
   border-bottom: 1px solid rgb(88 195 182 / 55%);
-  padding: clamp(1.25rem, 3vw, 2.5rem);
+  padding: 1rem clamp(1rem, 2vw, 1.75rem);
 }
 
 .salesHeader h1 {
   margin-top: 0.25rem;
-  font-size: clamp(2.4rem, 6vw, 5.5rem);
-  line-height: 0.82;
+  font-size: clamp(1.65rem, 2.6vw, 2.35rem);
+  line-height: 1.05;
+  letter-spacing: 0;
 }
 
 .repIdentity {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .repIdentity > span,
@@ -202,8 +233,8 @@
   width: fit-content;
   border: 1px solid currentColor;
   font-family: var(--po-font-display);
-  font-size: 0.58rem;
-  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
   padding: 0.26rem 0.4rem;
 }
 
@@ -399,41 +430,40 @@
   align-items: baseline;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem clamp(1rem, 3vw, 2.5rem);
+  gap: 0.4rem 1.25rem;
+  padding: 0.7rem clamp(1rem, 2vw, 1.75rem);
 }
 
 .countLine strong {
   color: #f4e3a1;
   font-family: var(--po-font-display);
-  font-size: clamp(1.05rem, 2vw, 1.5rem);
+  font-size: clamp(0.875rem, 1.1vw, 1rem);
   text-transform: uppercase;
 }
 
 .countLine span {
-  color: rgb(255 255 255 / 58%);
-  font-size: 0.82rem;
+  color: #bfc9c7;
+  font-size: 0.875rem;
 }
 
 .doorList {
   display: grid;
-  gap: 0.5rem;
-  padding: 0 clamp(0.6rem, 2vw, 1.5rem);
+  gap: 0.75rem;
+  padding: 0 clamp(0.75rem, 2vw, 1.75rem);
 }
 
 .doorRow {
   position: relative;
   display: grid;
-  min-height: 9rem;
-  grid-template-columns: repeat(9, minmax(7rem, 1fr));
-  align-items: center;
-  gap: 0.8rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: 0.7rem 1rem;
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 18%);
   color: #111214;
-  padding: 0.9rem 1rem 0.9rem 1.35rem;
+  padding: 0.9rem 1rem 0.9rem 1.25rem;
   content-visibility: auto;
-  contain-intrinsic-size: auto 6.5rem;
+  contain-intrinsic-size: auto 13rem;
   transition: box-shadow 120ms ease, opacity 120ms ease;
 }
 
@@ -450,9 +480,7 @@
 }
 
 .stockedRow {
-  background:
-    linear-gradient(rgb(244 227 161 / 30%), rgb(244 227 161 / 30%)),
-    #fff;
+  background: #fcf7e3;
 }
 
 .stockedRow::before {
@@ -496,11 +524,9 @@
 }
 
 .storeCell > small {
-  overflow: hidden;
-  color: rgb(17 18 20 / 62%);
-  font-size: 0.72rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: #56595b;
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
 }
 
 .rowBadges {
@@ -1911,5 +1937,678 @@
 @media (prefers-reduced-motion: reduce) {
   .doorRow {
     transition: none;
+  }
+}
+
+/* CRM workbench: readable controls, compact overview, and in-place sales tools. */
+.salesPage :is(button, .websiteLink) {
+  min-height: 2.75rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  letter-spacing: 0.015em;
+}
+
+.salesPage :is(input, select, textarea) {
+  min-width: 0;
+  font-family: var(--crm-body-font);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.salesPage :is(button, a, input, select, textarea, summary):focus-visible {
+  outline: 3px solid #9ce9e0;
+  outline-offset: 3px;
+}
+
+.salesPage button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.salesHeader > div > span,
+.commandBar label > span,
+.controlGroup > span,
+.inlineWorkHeader span,
+.alwaysOpenFields span,
+.normalOutcomes > span,
+.highImpactActions > span,
+.sectionHeading span,
+.doorCorrection span,
+.pinPanel label span,
+.teamCodeForm span,
+.teamCodeBlock > span,
+.onboardingControl > span {
+  font-size: 0.75rem;
+  line-height: 1.3;
+  letter-spacing: 0.035em;
+}
+
+.commandBar {
+  gap: 0.65rem 0.75rem;
+  padding: 0.85rem clamp(1rem, 2vw, 1.75rem);
+}
+
+.commandBar input,
+.commandBar select {
+  min-height: 2.75rem;
+  padding: 0.55rem 0.75rem;
+}
+
+.personalCounter {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem 0.75rem;
+  padding: 0.75rem clamp(1rem, 2vw, 1.75rem) 0;
+}
+
+.personalMetric {
+  min-height: 0;
+  gap: 0.35rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid rgb(88 195 182 / 25%);
+  background: #101918;
+}
+
+.personalMetric > strong,
+.personalMetric .metricButton {
+  font-size: clamp(0.9375rem, 1.3vw, 1.25rem);
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+.personalCounter small {
+  grid-column: 1 / -1;
+  color: #b8c4c2;
+  font-size: 0.8125rem;
+}
+
+.controlHelp {
+  padding: 0.6rem clamp(1rem, 2vw, 1.75rem);
+  font-size: 0.875rem;
+}
+
+.doorRow {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.doorRow :is(button, a):focus-visible {
+  outline-color: #075e55;
+}
+
+.rowBadges span,
+.outcomeBadge {
+  font-size: 0.75rem;
+  line-height: 1.3;
+  letter-spacing: 0.015em;
+}
+
+.storeTitleLine {
+  align-items: start;
+}
+
+.storeTitleLine > strong {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: clamp(1.125rem, 1.5vw, 1.4rem);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.starButton,
+.starButtonActive,
+.companyStarButton,
+.companyStarActive {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.notePreview {
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.rowField > span {
+  color: #575c5d;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  letter-spacing: 0.025em;
+}
+
+.rowField > strong,
+.rowField > a,
+.emailLine a {
+  overflow: visible;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.emailLine {
+  flex-wrap: wrap;
+}
+
+.rowActions,
+.customerLockCell {
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border-top: 1px solid rgb(17 18 20 / 12%);
+  border-left: 0;
+  padding: 0.65rem 0 0;
+}
+
+.rowActions button {
+  flex: 0 1 auto;
+  min-width: 8rem;
+}
+
+.rowActions > span {
+  font-size: 0.8125rem;
+}
+
+.inlineWorkArea {
+  padding: clamp(1rem, 2vw, 1.4rem);
+}
+
+.inlineWorkHeader {
+  gap: 0.75rem;
+}
+
+.inlineWorkHeader strong {
+  font-size: clamp(1.125rem, 1.7vw, 1.5rem);
+  line-height: 1.15;
+}
+
+.alwaysOpenFields {
+  align-items: start;
+}
+
+.alwaysOpenFields textarea {
+  min-height: 7rem;
+}
+
+.inlineHistory article > span,
+.inlineHistory article > p,
+.verificationRequests article > span,
+.verificationRequests article > p,
+.myVerificationRequests article > span,
+.myVerificationRequests article > p {
+  color: #c6cecc;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.inlineHistory article > p {
+  white-space: pre-wrap;
+}
+
+.highImpactActions > :is(.customerConfirmation, .doNotCallConfirmation) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.activityPanel table {
+  font-size: 0.875rem;
+}
+
+.activityPanel th,
+.protectedLabel,
+.auditHistory summary,
+.myVerificationRequests summary {
+  font-size: 0.75rem;
+}
+
+.toolkit,
+.savedNotes,
+.dataReviewPanel {
+  display: grid;
+  min-width: 0;
+  gap: 0.85rem;
+}
+
+.toolkit {
+  border-top: 1px solid rgb(88 195 182 / 30%);
+  padding-top: 1rem;
+}
+
+.toolkitHeader,
+.toolkitActions,
+.nextNavigation,
+.listPagination,
+.filterSummary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+}
+
+.toolkitHeader,
+.nextNavigation {
+  justify-content: space-between;
+}
+
+.toolkitHeader :is(h2, h3, p),
+.dataReviewPanel :is(h2, h3),
+.welcomeHelp h3 {
+  margin: 0;
+}
+
+.toolkitHeader :is(h2, h3),
+.savedNotes > h3,
+.dataReviewPanel :is(h2, h3),
+.welcomeHelp h3 {
+  color: #9ce9e0;
+  font-family: var(--po-font-display);
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.toolkitHeader > p,
+.filterSummary,
+.listPagination > span {
+  color: #c6cecc;
+  font-size: 0.875rem;
+}
+
+.toolkitActions button,
+.callbackForm button,
+.claimNotice button,
+.nextNavigation button,
+.listPagination button,
+.filterSummary button,
+.dataReviewPanel button,
+.welcomeHelp button,
+.noteEntry button,
+.discardWarning button,
+.customerConfirmation button,
+.doNotCallConfirmation button {
+  border: 1px solid #58c3b6;
+  background: transparent;
+  color: #9ce9e0;
+  cursor: pointer;
+  font-family: var(--po-font-display);
+  font-weight: 700;
+  padding: 0.6rem 0.85rem;
+}
+
+.salesPage .doNotCallAction {
+  border-color: #d44a55;
+  background: transparent;
+  color: #ff8588;
+}
+
+.salesPage .doNotCallAction:hover:not(:disabled) {
+  border-color: #ff8588;
+  background: #58222a;
+  color: #fff;
+}
+
+.toolkitActions button:hover:not(:disabled),
+.callbackForm button:hover:not(:disabled),
+.nextNavigation button:hover:not(:disabled),
+.listPagination button:hover:not(:disabled),
+.filterSummary button:hover:not(:disabled) {
+  background: #58c3b6;
+  color: #041412;
+}
+
+.toolkitActions button[aria-pressed="true"],
+.listPagination button[aria-current="page"] {
+  background: #58c3b6;
+  color: #041412;
+}
+
+.contextDetails {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1.5rem;
+  border: 1px solid rgb(88 195 182 / 24%);
+  background: #101918;
+  padding: 0.85rem;
+  font-size: 0.9375rem;
+}
+
+.contextDetails :is(div, dl) {
+  min-width: 0;
+}
+
+.contextDetails :is(p, dl, dd) {
+  margin: 0;
+}
+
+.contextDetails dt,
+.contextDetails > div > span,
+.callbackForm label > span {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #9ce9e0;
+  font-family: var(--po-font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.contextDetails :is(a, p, dd, strong),
+.sourceReviewItem :is(p, a, strong, span) {
+  overflow-wrap: anywhere;
+}
+
+.contextDetails a,
+.sourceReviewItem a {
+  color: #9ce9e0;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.contextDetails pre {
+  grid-column: 1 / -1;
+  margin: 0;
+  font: inherit;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.savedNotes {
+  gap: 0;
+}
+
+.savedNotes > h3 {
+  margin: 0 0 0.35rem;
+}
+
+.noteEntry {
+  display: grid;
+  min-width: 0;
+  gap: 0.45rem;
+  border-top: 1px solid rgb(255 255 255 / 14%);
+  padding: 0.85rem 0;
+}
+
+.noteEntry > :is(header, div) {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.75rem;
+}
+
+.noteEntry :is(time, small, span) {
+  color: #b8c4c2;
+  font-size: 0.8125rem;
+}
+
+.noteEntry p {
+  margin: 0;
+  color: #f7f7f5;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.noteEntry > button {
+  justify-self: start;
+}
+
+.callbackForm {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.callbackForm label {
+  display: grid;
+  flex: 1 1 12rem;
+  min-width: 0;
+  gap: 0.25rem;
+}
+
+.callbackForm :is(input, select, textarea),
+.dataReviewPanel :is(input, select, textarea) {
+  width: 100%;
+  min-height: 2.75rem;
+  border: 1px solid rgb(88 195 182 / 48%);
+  background: #070708;
+  color: #fff;
+  padding: 0.55rem 0.75rem;
+}
+
+.claimNotice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  border-left: 3px solid #58c3b6;
+  background: #142724;
+  color: #dbefeb;
+  padding: 0.75rem 0.85rem;
+  font-size: 0.875rem;
+}
+
+.claimNotice p {
+  margin: 0;
+}
+
+.nextNavigation {
+  border-top: 1px solid rgb(88 195 182 / 28%);
+  padding-top: 0.75rem;
+}
+
+.nextNavigation button {
+  min-width: 9rem;
+}
+
+.listPagination {
+  justify-content: center;
+  padding: 1rem;
+}
+
+.filterSummary {
+  justify-content: space-between;
+  margin: 0;
+  padding: 0.65rem clamp(1rem, 2vw, 1.75rem);
+}
+
+.filterSummary p {
+  margin: 0;
+}
+
+.dataReviewPanel {
+  margin: 1rem clamp(1rem, 2vw, 1.75rem);
+  border: 1px solid rgb(244 227 161 / 45%);
+  background: #151611;
+  padding: 1rem;
+}
+
+.dataReviewPanel > p {
+  margin: 0;
+  color: #d1d3c7;
+  font-size: 0.9375rem;
+}
+
+.sourceReviewItem {
+  display: grid;
+  min-width: 0;
+  gap: 0.55rem;
+  border-top: 1px solid rgb(244 227 161 / 22%);
+  padding: 0.9rem 0;
+  font-size: 0.875rem;
+}
+
+.sourceReviewItem p {
+  margin: 0;
+  color: #d1d3c7;
+}
+
+.sourceReviewItem > :is(form, div) {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.sourceReviewItem label {
+  display: grid;
+  flex: 1 1 12rem;
+  min-width: 0;
+  gap: 0.35rem;
+}
+
+.welcomeHelp {
+  margin: 0.65rem clamp(1rem, 2vw, 1.75rem);
+  border: 1px solid rgb(88 195 182 / 25%);
+  background: #101918;
+  padding: 0.75rem 0.9rem;
+  color: #c6cecc;
+  font-size: 0.875rem;
+}
+
+.welcomeHelp summary {
+  color: #9ce9e0;
+  cursor: pointer;
+  font-family: var(--po-font-display);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.welcomeHelp :is(p, ol, ul) {
+  margin-block: 0.65rem 0;
+}
+
+.welcomeHelp :is(ol, ul) {
+  padding-left: 1.3rem;
+}
+
+.welcomeHelp li + li {
+  margin-top: 0.3rem;
+}
+
+@media (max-width: 52rem) {
+  .doorRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .personalMetric {
+    padding: 0.55rem;
+  }
+
+  .personalMetric > strong,
+  .personalMetric .metricButton {
+    font-size: 0.8125rem;
+  }
+
+  .contextDetails {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 35rem) {
+  .salesHeader h1 {
+    font-size: 1.65rem;
+  }
+
+  .repIdentity {
+    justify-content: flex-start;
+    gap: 0.4rem;
+  }
+
+  .repIdentity > div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .repIdentity :is(button, .websiteLink) {
+    flex: 1 1 calc(50% - 0.4rem);
+    justify-content: center;
+    padding-inline: 0.45rem;
+    text-align: center;
+  }
+
+  .personalCounter {
+    gap: 0.4rem;
+  }
+
+  .commandBar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 0.75rem;
+  }
+
+  .searchControl,
+  .controlGroup,
+  .listToggles {
+    grid-column: 1 / -1;
+  }
+
+  .segmentedControl {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .segmentedControl button {
+    min-width: 0;
+    padding: 0.5rem 0.3rem;
+  }
+
+  .listToggles button {
+    flex-basis: 0;
+    min-width: 0;
+    padding: 0.5rem 0.3rem;
+  }
+
+  .doorList {
+    padding-inline: 0.75rem;
+  }
+
+  .rowField > strong,
+  .rowField > a,
+  .emailLine a {
+    font-size: 0.875rem;
+  }
+
+  .rowActions button {
+    flex: 1 1 auto;
+  }
+
+  .inlineWorkArea {
+    overscroll-behavior: contain;
+    padding: 0 0.85rem max(1.25rem, env(safe-area-inset-bottom));
+  }
+
+  .inlineWorkHeader {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: max(0.65rem, env(safe-area-inset-top)) 0 0.65rem;
+  }
+
+  .inlineWorkHeader > div {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .inlineWorkHeader > button {
+    width: fit-content;
+  }
+
+  .normalOutcomes > div,
+  .highImpactActions > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .callbackForm button,
+  .toolkitActions button {
+    flex: 1 1 auto;
+  }
+
+  .nextNavigation button {
+    flex: 1 1 8rem;
+    min-width: 0;
+  }
+
+  .filterSummary {
+    align-items: flex-start;
   }
 }

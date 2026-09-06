@@ -1,12 +1,12 @@
 "use client";
 
-import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { type FormEvent, useCallback, useEffect, useRef, useState } from "react";
 
 import {
   chicagoDateKey,
   displayDoorName,
   formatSalesDate,
-  isClosedDoor,
   salesOutcome,
   type DoorStatus,
   type SalesAdminEvent,
@@ -23,8 +23,12 @@ import {
 import styles from "./sales.module.css";
 import { SalesInlineWorkArea } from "./sales-inline-work-area";
 import { SalesRow } from "./sales-row";
+import { SalesToolkit } from "./sales-toolkit";
+import { SalesDataReview } from "./sales-data-review";
 
 type DispensaryFilter = "all" | "purchasing" | "not_purchasing";
+type WorkQueue = "all" | "worked" | "stars" | "callbacks" | "upcoming";
+type BrowseFilters = { city: string; search: string; filter: DispensaryFilter; queue: WorkQueue; page: number };
 
 type ApiResponse = Readonly<{
   success?: boolean;
@@ -65,32 +69,23 @@ function struck(door: SalesDoor): boolean {
   return Boolean(door.lastCall && STRUCK_OUTCOMES.has(door.lastCall.outcome));
 }
 
-function compareDoors(left: SalesDoor, right: SalesDoor, today: string, myBook: boolean): number {
-  if (left.companyPriority !== right.companyPriority) return left.companyPriority ? -1 : 1;
-  if (myBook) {
-    const activityDifference = new Date(right.myLastActivityAt ?? 0).getTime() - new Date(left.myLastActivityAt ?? 0).getTime();
-    if (activityDifference) return activityDifference;
-  }
-  const rank = (door: SalesDoor) => {
-    if (struck(door)) return 5;
-    if (isClosedDoor(door)) return 4;
-    if (callbackDue(door, today)) return 0;
-    if (!door.lastCall) return 1;
-    return 2;
-  };
-  return (
-    rank(left) - rank(right) ||
-    new Date(left.lastCall?.calledAt ?? 0).getTime() - new Date(right.lastCall?.calledAt ?? 0).getTime() ||
-    (left.city ?? "").localeCompare(right.city ?? "") ||
-    displayDoorName(left).localeCompare(displayDoorName(right))
-  );
-}
 
-function phoneDigits(value: string | null): string {
-  return (value ?? "").replace(/\D/g, "");
-}
 
 export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyAuthenticated: boolean }>) {
+  const requestSequence = useRef(0);
+  const activitySequence = useRef(0);
+  const historySequence = useRef(0);
+  const browseAbort = useRef<AbortController | null>(null);
+  const browseFilters = useRef<BrowseFilters>({ city: "", search: "", filter: "not_purchasing", queue: "all", page: 0 });
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingMove = useRef<(() => void) | null>(null);
+  const callRequest = useRef<{ signature: string; id: string } | null>(null);
+  const [queue, setQueue] = useState<WorkQueue>("all");
+  const [canWork, setCanWork] = useState(false);
+  const [toolkitDirty, setToolkitDirty] = useState(false);
+  const [toolkitBusy, setToolkitBusy] = useState(false);
+  const [hasMoreHistory, setHasMoreHistory] = useState(false);
+  const [dataReviewOpen, setDataReviewOpen] = useState(false);
   const listScrollY = useRef(0);
   const openListOrder = useRef<readonly number[] | null>(null);
   const [snapshot, setSnapshot] = useState<SalesSnapshot | null>(null);
@@ -114,8 +109,6 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   const [search, setSearch] = useState("");
   const [city, setCity] = useState("ALL CITIES");
   const [dispensaryFilter, setDispensaryFilter] = useState<DispensaryFilter>("not_purchasing");
-  const [myBook, setMyBook] = useState(false);
-  const [myStars, setMyStars] = useState(false);
   const [activeDoorId, setActiveDoorId] = useState<number | null>(null);
   const [workMode, setWorkMode] = useState<"log" | "history" | null>(null);
   const [notes, setNotes] = useState("");
@@ -127,49 +120,68 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   const [undoMessage, setUndoMessage] = useState("");
   const [loggedCall, setLoggedCall] = useState<SalesCall | null>(null);
 
-  const loadSnapshot = useCallback(async (state?: string) => {
-    setLoadingData(true);
+  const loadSnapshot = useCallback(async (state?: string, filters = browseFilters.current, quiet = false) => {
+    const sequence = ++requestSequence.current;
+    browseAbort.current?.abort();
+    const controller = new AbortController();
+    browseAbort.current = controller;
+    if (!quiet) setLoadingData(true);
     setPageError("");
     try {
-      const query = state ? `?state=${encodeURIComponent(state)}` : "";
-      const response = await fetch(`/api/sales${query}`, { cache: "no-store" });
+      let selectedState = state;
+      if (!selectedState) { try { selectedState = localStorage.getItem(`presidential.sales.state:${sessionStorage.getItem("presidential.sales.user") ?? ""}`) ?? undefined; } catch { /* Preferences are optional. */ } }
+      const query = new URLSearchParams({ state: selectedState ?? "AZ", city: filters.city, search: filters.search, filter: filters.filter, queue: filters.queue, page: String(filters.page), tz: Intl.DateTimeFormat().resolvedOptions().timeZone });
+      const response = await fetch(`/api/sales?${query}`, { cache: "no-store", signal: controller.signal });
+      if (sequence !== requestSequence.current) return null;
       if (response.status === 401 || response.status === 403) {
         setSnapshot(null);
+        setActivity([]); setAdminEvents([]); setTeamPanelOpen(false); setActivityOpen(false); setDataReviewOpen(false);
         if (response.status === 403) {
           const payload = (await response.json()) as { error?: string };
           setLoginError(payload.error ?? "This sales account is inactive.");
         }
-        return;
+        return null;
       }
       const payload = (await response.json()) as SalesSnapshot & { error?: string };
       if (!response.ok || !payload.authenticated) throw new Error(payload.error ?? "Sales data is temporarily unavailable.");
+      if (sequence !== requestSequence.current) return null;
       setSnapshot(payload);
+      try { sessionStorage.setItem("presidential.sales.user", payload.user.username); localStorage.setItem(`presidential.sales.state:${payload.user.username}`, payload.selectedState); } catch { /* Preferences are optional. */ }
+      return payload;
     } catch (error) {
+      if (sequence !== requestSequence.current || controller.signal.aborted) return null;
       setPageError(error instanceof Error ? error.message : "Sales data is temporarily unavailable.");
+      return null;
     } finally {
-      setReady(true);
-      setLoadingData(false);
+      if (sequence === requestSequence.current) { setReady(true); setLoadingData(false); }
     }
   }, []);
 
   const loadActivity = useCallback(async (includeAudit: boolean) => {
+    const sequence = ++activitySequence.current;
     setAdminBusy(true);
     setAdminMessage("");
     try {
       const activityResponse = await fetch("/api/sales?resource=activity", { cache: "no-store" });
       const activityPayload = (await activityResponse.json()) as { activity?: SalesRepActivity[]; error?: string };
+      if (sequence !== activitySequence.current) return;
       if (!activityResponse.ok || !activityPayload.activity) throw new Error(activityPayload.error ?? "Rep activity is unavailable.");
       setActivity(activityPayload.activity);
+      const requestsResponse = await fetch("/api/sales?resource=verification_requests", { cache: "no-store" });
+      const requestsPayload = await requestsResponse.json();
+      if (sequence !== activitySequence.current) return;
+      if (requestsResponse.ok) setSnapshot((current) => current ? { ...current, verificationRequests: requestsPayload.requests ?? [] } : current);
       if (includeAudit) {
         const auditResponse = await fetch("/api/sales?resource=admin_log", { cache: "no-store" });
         const auditPayload = (await auditResponse.json()) as { events?: SalesAdminEvent[]; error?: string };
+        if (sequence !== activitySequence.current) return;
         if (!auditResponse.ok || !auditPayload.events) throw new Error(auditPayload.error ?? "Admin history is unavailable.");
         setAdminEvents(auditPayload.events);
       }
     } catch (error) {
       setAdminMessage(error instanceof Error ? error.message : "Account information is unavailable.");
     } finally {
-      setAdminBusy(false);
+      if (sequence === activitySequence.current) setAdminBusy(false);
     }
   }, []);
 
@@ -178,6 +190,22 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void loadSnapshot();
   }, [loadSnapshot]);
+
+  useEffect(() => {
+    if (!snapshot?.user.id || !activeDoorId || workMode !== "log") return;
+    try {
+      const key = `presidential.sales.draft:${snapshot.user.id}:${activeDoorId}`;
+      if (notes) sessionStorage.setItem(key, notes); else sessionStorage.removeItem(key);
+    } catch { /* Draft protection still applies when storage is disabled. */ }
+  }, [notes, activeDoorId, workMode, snapshot?.user.id]);
+
+  useEffect(() => {
+    const warn = (event: BeforeUnloadEvent) => {
+      if (notes.trim() || toolkitDirty || savingCall || toolkitBusy) { event.preventDefault(); event.returnValue = ""; }
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [notes, toolkitDirty, savingCall, toolkitBusy]);
 
   useEffect(() => {
     if (!activeDoorId || !workMode) return;
@@ -195,37 +223,8 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   }, [activeDoorId, workMode]);
 
   const today = chicagoDateKey();
-  const cities = useMemo(() => {
-    if (!snapshot) return [];
-    return [...new Set(snapshot.doors.map((door) => door.city?.trim()).filter((value): value is string => Boolean(value)))].sort((a, b) => a.localeCompare(b));
-  }, [snapshot]);
-
-  const filteredDoors = useMemo(() => {
-    if (!snapshot) return [];
-    const needle = search.trim().toLowerCase();
-    const digits = phoneDigits(search);
-    const doors = snapshot.doors.filter((door) => {
-      if (city !== "ALL CITIES" && door.city !== city) return false;
-      if (dispensaryFilter === "purchasing" && !door.isPurchasing) return false;
-      if (dispensaryFilter === "not_purchasing" && door.isPurchasing) return false;
-      if (myBook && (!door.myLastActivityAt || chicagoDateKey(door.myLastActivityAt) !== today)) return false;
-      if (myStars && !door.personallyStarred) return false;
-      if (!needle) return true;
-      const textMatch = [door.dbaName, door.legalName, door.city].filter(Boolean).some((value) => value!.toLowerCase().includes(needle));
-      const phoneMatch = Boolean(digits && phoneDigits(door.phone).includes(digits));
-      return textMatch || phoneMatch;
-    });
-    const order = openListOrder.current;
-    if (order) {
-      const position = new Map(order.map((id, index) => [id, index]));
-      return [...doors].sort(
-        (left, right) =>
-          (position.get(left.id) ?? Number.MAX_SAFE_INTEGER) -
-          (position.get(right.id) ?? Number.MAX_SAFE_INTEGER),
-      );
-    }
-    return [...doors].sort((a, b) => compareDoors(a, b, today, myBook));
-  }, [activeDoorId, city, dispensaryFilter, myBook, myStars, search, snapshot, today]);
+  const cities = snapshot?.cities ?? [];
+  const filteredDoors = snapshot?.doors ?? [];
 
   const activeDoor = snapshot?.doors.find((door) => door.id === activeDoorId) ?? null;
   const isSuper = snapshot?.user.role === "super_master";
@@ -238,32 +237,97 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     : (snapshot?.verificationRequests ?? []).filter((request) => request.submittedByName.trim().toLowerCase() !== "paulie");
 
   function openWorkArea(door: SalesDoor, mode: "log" | "history") {
-    if (door.isPurchasing || (mode === "log" && door.doNotCallLocked)) return;
+    if (mode === "log" && (door.isPurchasing || door.doNotCallLocked)) return;
     if (activeDoorId === door.id && workMode === mode) {
-      closeWorkAreaImmediately();
+      finishCloseWorkArea();
       return;
     }
+    requestMove(() => {
     listScrollY.current = window.scrollY;
     openListOrder.current = filteredDoors.map((item) => item.id);
     setActiveDoorId(door.id);
     setWorkMode(mode);
-    setNotes("");
+    let draft = "";
+    try { draft = sessionStorage.getItem(`presidential.sales.draft:${snapshot?.user.id}:${door.id}`) ?? ""; } catch { /* Optional draft recovery. */ }
+    setNotes(mode === "log" ? draft : "");
     setCallbackDate("");
     setPanelError("");
     setUndoMessage("");
     setLoggedCall(null);
     setDiscardWarning(false);
+    setCanWork(false); setToolkitDirty(false); setToolkitBusy(false); setHasMoreHistory(false);
+    void loadDoorHistory(door.id);
+    });
   }
 
-  function finishCloseWorkArea() {
-    if (workMode === "log" && !loggedCall && (notes.trim() || callbackDate)) {
+  function requestMove(action: () => void) {
+    if (savingCall || undoingCall || toolkitBusy) return;
+    if (activeDoorId && (notes.trim() || toolkitDirty)) {
+      pendingMove.current = action;
       setDiscardWarning(true);
       return;
     }
+    if (activeDoorId) closeWorkAreaImmediately();
+    action();
+  }
+
+  function finishCloseWorkArea() {
+    requestMove(() => { if (snapshot) void loadSnapshot(snapshot.selectedState, browseFilters.current, true); });
+  }
+
+  function discardAndMove() {
+    const next = pendingMove.current;
+    pendingMove.current = null;
+    try { sessionStorage.removeItem(`presidential.sales.draft:${snapshot?.user.id}:${activeDoorId}`); } catch { /* Optional storage. */ }
     closeWorkAreaImmediately();
+    next?.();
+  }
+
+  async function loadDoorHistory(doorId: number, before?: number) {
+    const sequence = requestSequence.current;
+    const historyRequest = ++historySequence.current;
+    try {
+      const response = await fetch(`/api/sales?resource=history&doorId=${doorId}${before ? `&before=${before}` : ""}`, { cache: "no-store" });
+      const data = await response.json() as { calls: SalesCall[]; hasMore: boolean; error?: string };
+      if (sequence !== requestSequence.current || historyRequest !== historySequence.current) return;
+      if (!response.ok) throw new Error(data.error ?? "History unavailable.");
+      setSnapshot((current) => current ? { ...current, doors: current.doors.map((door) => door.id === doorId ? { ...door, callHistory: before ? [...door.callHistory, ...data.calls] : data.calls } : door) } : current);
+      setHasMoreHistory(data.hasMore);
+    } catch (cause) { setPanelError(cause instanceof Error ? cause.message : "History unavailable."); }
+  }
+
+  function changeFilters(update: Partial<BrowseFilters>, state?: string) {
+    requestMove(() => {
+      const next = { ...browseFilters.current, ...update, page: update.page ?? 0 };
+      browseFilters.current = next;
+      setCity(next.city || "ALL CITIES"); setSearch(next.search); setDispensaryFilter(next.filter); setQueue(next.queue);
+      if (searchTimer.current) clearTimeout(searchTimer.current);
+      if (update.search !== undefined) searchTimer.current = setTimeout(() => void loadSnapshot(state ?? snapshot?.selectedState, next), 250);
+      else void loadSnapshot(state ?? snapshot?.selectedState, next).then(() => { if (update.page !== undefined) document.querySelector('[aria-label="Licensed dispensary doors"]')?.scrollIntoView({ block: "start" }); });
+    });
+  }
+
+  function moveToDoor(direction: -1 | 1) {
+    const index = filteredDoors.findIndex((door) => door.id === activeDoorId);
+    const next = filteredDoors[index + direction];
+    if (next) { openWorkArea(next, next.isPurchasing || next.doNotCallLocked ? "history" : "log"); return; }
+    if (!snapshot) return;
+    const nextPage = snapshot.page + direction;
+    if (nextPage < 0 || nextPage * snapshot.pageSize >= snapshot.totalMatching) return;
+    requestMove(() => {
+      const filters = { ...browseFilters.current, page: nextPage };
+      browseFilters.current = filters;
+      void loadSnapshot(snapshot.selectedState, filters).then((data) => {
+        const available = data?.doors ?? [];
+        const candidate = direction > 0 ? available[0] : available.at(-1);
+        if (candidate) openWorkArea(candidate, candidate.isPurchasing || candidate.doNotCallLocked ? "history" : "log");
+      });
+    });
   }
 
   function closeWorkAreaImmediately() {
+    ++historySequence.current;
+    if (activeDoorId) void fetch("/api/sales/workflow", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "release_claim", doorId: activeDoorId }), keepalive: true }).catch(() => {});
     openListOrder.current = null;
     setActiveDoorId(null);
     setWorkMode(null);
@@ -273,6 +337,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     setPanelError("");
     setUndoMessage("");
     setDiscardWarning(false);
+    setToolkitDirty(false); setToolkitBusy(false); setCanWork(false); callRequest.current = null;
     window.requestAnimationFrame(() => window.scrollTo({ top: listScrollY.current }));
   }
 
@@ -290,6 +355,10 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       });
       const payload = (await response.json()) as ApiResponse;
       if (!response.ok) throw new Error(payload.error ?? "Login failed.");
+      ++activitySequence.current;
+      browseFilters.current = { city: "", search: "", filter: "not_purchasing", queue: "all", page: 0 };
+      setCity("ALL CITIES"); setSearch(""); setDispensaryFilter("not_purchasing"); setQueue("all");
+      try { sessionStorage.setItem("presidential.sales.user", String(form.get("username") ?? "").trim().toLowerCase()); } catch { /* Optional preferences. */ }
       setActivity([]);
       setAdminEvents([]);
       setActivityOpen(false);
@@ -321,6 +390,8 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       });
       const payload = (await response.json()) as ApiResponse;
       if (!response.ok || !payload.authenticated) throw new Error(payload.error ?? "Account setup failed.");
+      browseFilters.current = { city: "", search: "", filter: "not_purchasing", queue: "all", page: 0 };
+      try { sessionStorage.setItem("presidential.sales.user", String(form.get("username") ?? "").trim().toLowerCase()); } catch { /* Optional preferences. */ }
       await loadSnapshot();
     } catch (error) {
       setLoginError(error instanceof Error ? error.message : "Account setup failed.");
@@ -443,7 +514,11 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   }
 
   async function logout() {
+    ++requestSequence.current; ++activitySequence.current;
+    browseAbort.current?.abort();
+    if (searchTimer.current) clearTimeout(searchTimer.current);
     await fetch("/api/sales", { method: "DELETE" });
+    try { const prefix = `presidential.sales.draft:${snapshot?.user.id}:`; for (const key of Object.keys(sessionStorage)) if (key.startsWith(prefix)) sessionStorage.removeItem(key); } catch { /* Optional drafts. */ }
     setSnapshot(null);
     setActivity([]);
     setAdminEvents([]);
@@ -451,6 +526,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     setTeamPanelOpen(false);
     setActiveDoorId(null);
     setWorkMode(null);
+    setNotes(""); setToolkitDirty(false); setDataReviewOpen(false); setReady(true); setLoadingData(false);
   }
 
   async function resetMyDailyCalls() {
@@ -466,7 +542,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         },
         doors: current.doors.map((door) => ({ ...door, myLastActivityAt: null })),
       } : current);
-      setMyBook(false);
+      setQueue("all"); browseFilters.current.queue = "all";
     } catch (error) {
       setPageError(error instanceof Error ? error.message : "Your counters could not be reset.");
     }
@@ -480,10 +556,12 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   }
 
   async function logCall(outcome: SalesOutcome) {
-    if (!activeDoor || !snapshot || savingCall) return;
+    if (!activeDoor || !snapshot || savingCall || toolkitBusy || !canWork) return;
     setSavingCall(true);
     setPanelError("");
     try {
+      const signature = JSON.stringify({ doorId: activeDoor.id, outcome, notes });
+      if (callRequest.current?.signature !== signature) callRequest.current = { signature, id: crypto.randomUUID() };
       const response = await fetch("/api/sales", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -493,6 +571,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
           outcome,
           notes,
           callbackDate: outcome === "do_not_call" ? null : callbackDate || null,
+          requestId: callRequest.current.id,
         }),
       });
       const payload = (await response.json()) as ApiResponse;
@@ -512,13 +591,14 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
           ...door,
           status: payload.status ?? door.status,
           nextCallbackAt: payload.nextCallbackAt === undefined ? door.nextCallbackAt : payload.nextCallbackAt,
-          callHistory: [savedCall, ...door.callHistory],
+          callHistory: [savedCall, ...door.callHistory.map((call) => ({ ...call, undoEligible: false }))],
           lastCall: savedCall,
           myLastActivityAt: savedCall.calledAt,
           doNotCallLocked: outcome === "do_not_call",
         } : door),
       } : current);
       setLoggedCall(savedCall);
+      setNotes(""); setCallbackDate(""); callRequest.current = null;
       setUndoMessage("");
     } catch (error) {
       setPanelError(error instanceof Error ? error.message : "The call could not be logged.");
@@ -535,6 +615,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     try {
       await postAction({ action: "undo_call", callId: call.id });
       await loadSnapshot(snapshot.selectedState);
+      await loadDoorHistory(activeDoor.id);
       setLoggedCall(null);
       setUndoMessage(`${salesOutcome(call.outcome).label.toUpperCase()} UNDONE. The original record remains in immutable history.`);
     } catch (error) {
@@ -586,7 +667,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       } : current);
       setNotes("");
       setCallbackDate("");
-      setUndoMessage(`${claimLabel} REPORT SUBMITTED. It is awaiting Paulie verification.`);
+      setUndoMessage(`${claimLabel} REPORT SUBMITTED. It is awaiting owner verification.`);
     } catch (error) {
       setPanelError(error instanceof Error ? error.message : "The verification request could not be submitted.");
     } finally {
@@ -681,6 +762,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     return (
       <main className={styles.loginPage}>
         <form className={styles.loginCard} onSubmit={authMode === "login" ? login : setupRep}>
+          <Link href="/">← Back to website</Link>
           <span>PRESIDENTIAL INTERNAL</span>
           <h1>{authMode === "login" ? "SALES LOGIN" : "CREATE LOGIN"}</h1>
           <div className={styles.authModeToggle}>
@@ -707,11 +789,12 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         <div><span>PRESIDENTIAL INTERNAL</span><h1>SALES DOORS</h1></div>
         <div className={styles.repIdentity}>
           <div><span>{snapshot.user.name}</span><strong className={`${styles.roleBadge} ${styles[snapshot.user.role]}`}>{roleLabel(snapshot.user.role)}</strong></div>
-          <a className={styles.websiteLink} href="/">← BACK TO WEBSITE</a>
+          <Link className={styles.websiteLink} href="/" onClick={(event) => { event.preventDefault(); requestMove(() => window.location.assign("/")); }}>← BACK TO WEBSITE</Link>
           {isSuper ? <button onClick={() => { const next = !teamPanelOpen; setTeamPanelOpen(next); setActivityOpen(next); if (next) void loadActivity(true); }} type="button">TEAM ADMIN</button> : null}
           {canSeeActivity && !isSuper ? <button onClick={() => { const next = !activityOpen; setActivityOpen(next); if (next) void loadActivity(false); }} type="button">REP ACTIVITY</button> : null}
           <button onClick={() => { setChangePinOpen((current) => !current); setPinMessage(""); }} type="button">CHANGE PIN</button>
-          <button onClick={() => void logout()} type="button">SIGN OUT</button>
+          {isSuper ? <button onClick={() => requestMove(() => setDataReviewOpen((open) => !open))} type="button">DATA REVIEW ({snapshot.unlinkedCustomerCount})</button> : null}
+          <button disabled={savingCall || toolkitBusy} onClick={() => requestMove(() => void logout())} type="button">SIGN OUT</button>
         </div>
       </header>
 
@@ -805,10 +888,11 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         </section>
       ) : null}
 
+      {isSuper && dataReviewOpen ? <SalesDataReview state={snapshot.selectedState} onChanged={() => void loadSnapshot(snapshot.selectedState)} /> : null}
       <section className={styles.personalCounter} aria-label="Your sales activity">
         <div className={styles.personalMetric}>
           {canSeeActivity ? <button className={styles.metricButton} onClick={showTeamActivityReport} type="button">{snapshot.user.stats.callsToday} CALLS TODAY</button> : <strong>{snapshot.user.stats.callsToday} CALLS TODAY</strong>}
-          <button className={styles.dailyResetButton} onClick={() => void resetMyDailyCalls()} type="button">RESET DAILY CALLS</button>
+          <button className={styles.dailyResetButton} onClick={() => void resetMyDailyCalls()} type="button">RESET TODAY</button>
         </div>
         <div className={styles.personalMetric}>
           {canSeeActivity ? <button className={styles.metricButton} onClick={showTeamActivityReport} type="button">{snapshot.user.stats.callsThisWeek} THIS WEEK</button> : <strong>{snapshot.user.stats.callsThisWeek} THIS WEEK</strong>}
@@ -816,7 +900,6 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         <div className={styles.personalMetric}>
           {canSeeActivity ? <button className={styles.metricButton} onClick={showTeamActivityReport} type="button">{snapshot.user.stats.soldThisMonth} SOLD THIS MONTH</button> : <strong>{snapshot.user.stats.soldThisMonth} SOLD THIS MONTH</strong>}
         </div>
-        <small>Daily reset affects only your Calls Today and My Work Today. Master accounts can click any total to open the permanent team report.</small>
       </section>
 
       {snapshot.user.role === "sales_rep" && snapshot.verificationRequests.length ? (
@@ -839,20 +922,30 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       ) : null}
 
       <section className={styles.commandBar} aria-label="Sales list controls">
-        <label><span>State</span><select disabled={loadingData} onChange={(event) => { openListOrder.current = null; setActiveDoorId(null); setWorkMode(null); setLoggedCall(null); setNotes(""); setCallbackDate(""); setDiscardWarning(false); setPanelError(""); setUndoMessage(""); setCity("ALL CITIES"); setSearch(""); setDispensaryFilter("not_purchasing"); setMyBook(false); setMyStars(false); void loadSnapshot(event.target.value); }} value={snapshot.selectedState}>{snapshot.states.map((state) => <option key={state}>{state}</option>)}</select></label>
-        <label><span>City</span><select onChange={(event) => setCity(event.target.value)} value={city}><option>ALL CITIES</option>{cities.map((item) => <option key={item}>{item}</option>)}</select></label>
-        <label className={styles.searchControl}><span>Search</span><input onChange={(event) => setSearch(event.target.value)} placeholder="Search name, city, or phone" type="search" value={search} /></label>
-        <div className={styles.controlGroup}><span>Dispensaries</span><div className={styles.segmentedControl}><button className={dispensaryFilter === "not_purchasing" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("not_purchasing")} type="button">DISPENSARIES NOT PURCHASING PRESIDENTIAL</button><button className={dispensaryFilter === "purchasing" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("purchasing")} type="button">DISPENSARIES PURCHASING PRESIDENTIAL</button><button className={dispensaryFilter === "all" ? styles.activeToggle : ""} onClick={() => setDispensaryFilter("all")} type="button">ALL DISPENSARIES</button></div></div>
-        <div className={styles.listToggles}><button className={myBook ? styles.activeToggle : ""} onClick={() => setMyBook((value) => !value)} type="button">MY WORK TODAY</button><button className={myStars ? styles.activeToggle : ""} onClick={() => setMyStars((value) => !value)} type="button">MY STARRED DISPENSARIES</button></div>
+        <label><span>State</span><select disabled={loadingData || savingCall || toolkitBusy} onChange={(event) => changeFilters({ city: "", search: "", filter: "not_purchasing", queue: "all" }, event.target.value)} value={snapshot.selectedState}>{snapshot.states.map((state) => <option key={state}>{state}</option>)}</select></label>
+        <label><span>City</span><select onChange={(event) => changeFilters({ city: event.target.value === "ALL CITIES" ? "" : event.target.value })} value={city}><option>ALL CITIES</option>{cities.map((item) => <option key={item}>{item}</option>)}</select></label>
+        <label className={styles.searchControl}><span>Search stores</span><input onChange={(event) => changeFilters({ search: event.target.value })} placeholder="Name, city, phone, address or email" type="search" value={search} /></label>
+        <div className={styles.controlGroup}><span>Dispensaries</span><div className={styles.segmentedControl}>
+          <button aria-pressed={dispensaryFilter === "not_purchasing"} className={dispensaryFilter === "not_purchasing" ? styles.activeToggle : ""} onClick={() => changeFilters({ filter: "not_purchasing", queue: "all" })} type="button">Dispensaries not purchasing Presidential</button>
+          <button aria-pressed={dispensaryFilter === "purchasing"} className={dispensaryFilter === "purchasing" ? styles.activeToggle : ""} onClick={() => changeFilters({ filter: "purchasing", queue: "all" })} type="button">Dispensaries purchasing Presidential</button>
+          <button aria-pressed={dispensaryFilter === "all"} className={dispensaryFilter === "all" ? styles.activeToggle : ""} onClick={() => changeFilters({ filter: "all", queue: "all" })} type="button">All dispensaries</button>
+        </div></div>
+        <div className={styles.listToggles}>
+          {([["all", "Browse all"], ["callbacks", "My callbacks due"], ["upcoming", "My upcoming callbacks"], ["worked", "My work today"], ["stars", "My starred stores"]] as const).map(([value, label]) => <button key={value} aria-pressed={queue === value} className={queue === value ? styles.activeToggle : ""} onClick={() => changeFilters({ queue: value, ...(value === "callbacks" || value === "upcoming" ? { filter: "not_purchasing" as const } : {}) })} type="button">{label}</button>)}
+        </div>
+        <label className={styles.queueSelect}><span>Work view</span><select value={queue} onChange={(event) => changeFilters({ queue: event.target.value as WorkQueue, ...(event.target.value === "callbacks" || event.target.value === "upcoming" ? { filter: "not_purchasing" as const } : {}) })}><option value="all">Browse stores</option><option value="callbacks">My callbacks due</option><option value="upcoming">My upcoming callbacks</option><option value="worked">My work today</option><option value="stars">My starred stores</option></select></label>
       </section>
-      <p className={styles.controlHelp}>LOG RESULT saves what happened and keeps the dispensary open. HISTORY shows saved activity. MY WORK TODAY shows dispensaries you updated today. MY STARRED DISPENSARIES shows the stores you personally starred.</p>
-
-      <section className={styles.countLine} aria-live="polite">
-        <strong>{snapshot.purchasingCount} PURCHASING PRESIDENTIAL</strong>
-        <strong>{snapshot.opportunityCount} SALES OPPORTUNITIES</strong>
-        <strong>{snapshot.activeDispensaryCount} ACTIVE {STATE_NAMES[snapshot.selectedState] ?? snapshot.selectedState} DISPENSARIES</strong>
-        {city !== "ALL CITIES" || search || myBook || myStars ? <span>{filteredDoors.length} MATCHING CURRENT FILTERS</span> : null}
+      <section className={styles.filterSummary} aria-live="polite">
+        <strong>{loadingData ? "Updating…" : `${snapshot.totalMatching} matching ${dispensaryFilter === "purchasing" ? "customers" : dispensaryFilter === "not_purchasing" ? "prospect records" : "store records"}`}</strong>
+        <span>{STATE_NAMES[snapshot.selectedState] ?? snapshot.selectedState}{city !== "ALL CITIES" ? ` · ${city}` : ""}{search ? ` · “${search}”` : ""} · {queue === "all" ? "Browsing" : queue === "callbacks" ? "Your due callbacks" : queue === "upcoming" ? "Your upcoming callbacks" : queue === "worked" ? "Your work today" : "Your stars"}</span>
+        <button type="button" onClick={() => changeFilters({ city: "", search: "", filter: "not_purchasing", queue: "all" })}>Clear filters</button>
+        <button type="button" disabled={loadingData} onClick={() => requestMove(() => void loadSnapshot(snapshot.selectedState))}>Refresh list</button>
       </section>
+      <details className={styles.welcomeHelp}>
+        <summary>{snapshot.purchasingCount} verified Presidential customers · How this list works</summary>
+        <p>Champagne cards are protected customers. White cards are prospects whose purchasing status is not confirmed; ask before pitching. These are source records, not a claim that every record is a different store. Notes and call history stay with each store. Log Result reserves a workspace for you; choose a call outcome, then use Next dispensary.</p>
+        <p>Your callbacks due and upcoming callbacks are separate from My Work Today, which shows calls you already recorded today. Reset Daily Calls affects only your personal daily view, not the permanent team report.</p>
+      </details>
       {pageError ? <p className={styles.errorMessage}>{pageError}</p> : null}
 
       <section className={styles.doorList} aria-busy={loadingData} aria-label="Licensed dispensary doors">
@@ -886,7 +979,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
                 notes={notes}
                 onCallbackChange={setCallbackDate}
                 onClose={finishCloseWorkArea}
-                onDiscard={closeWorkAreaImmediately}
+              onDiscard={discardAndMove}
                 onKeepWorking={() => setDiscardWarning(false)}
                 onNotesChange={setNotes}
                 onOutcome={(outcome) => void logCall(outcome)}
@@ -895,12 +988,27 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
                 onWithdrawRequest={(request) => void withdrawVerification(request)}
                 saving={savingCall}
                 undoing={undoingCall}
+                canWork={canWork}
+                toolkitBusy={toolkitBusy}
+                onPrevious={() => moveToDoor(-1)}
+                onNext={() => moveToDoor(1)}
+                hasPrevious={snapshot.page > 0 || filteredDoors.findIndex((item) => item.id === activeDoor.id) > 0}
+                hasNext={snapshot.page * snapshot.pageSize + filteredDoors.findIndex((item) => item.id === activeDoor.id) + 1 < snapshot.totalMatching}
+                positionLabel={`Store ${snapshot.page * snapshot.pageSize + filteredDoors.findIndex((item) => item.id === activeDoor.id) + 1} of ${snapshot.totalMatching}`}
+                hasMoreHistory={hasMoreHistory}
+                onMoreHistory={() => void loadDoorHistory(activeDoor.id, activeDoor.callHistory.at(-1)?.id)}
+                tools={<SalesToolkit key={`${snapshot.user.id}:${activeDoor.id}:${workMode}`} door={activeDoor} userId={snapshot.user.id} isSuper={Boolean(isSuper)} mode={workMode} notes={notes} externalBusy={savingCall || undoingCall} onNoteSaved={() => { setNotes(""); setLoggedCall(null); }} onAvailability={setCanWork} onDirtyChange={setToolkitDirty} onBusyChange={setToolkitBusy} />}
               />
             ) : null}
           </div>
         ))}
-        {!filteredDoors.length ? <p className={styles.emptyState}>No doors match this view.</p> : null}
+        {!filteredDoors.length ? <p className={styles.emptyState}>{queue === "callbacks" ? "You're caught up—no callbacks are due in this view." : queue === "upcoming" ? "No upcoming callbacks in this view." : queue === "stars" ? "No starred stores in this view. Use the star on a store you want to return to." : "No stores match these filters. Try Clear filters or another city."}</p> : null}
       </section>
+      <nav className={styles.listPagination} aria-label="Store list pages">
+        <button type="button" disabled={loadingData || snapshot.page === 0} onClick={() => changeFilters({ page: snapshot.page - 1 })}>← Previous page</button>
+        <span>{snapshot.totalMatching ? snapshot.page * snapshot.pageSize + 1 : 0}–{Math.min((snapshot.page + 1) * snapshot.pageSize, snapshot.totalMatching)} of {snapshot.totalMatching}</span>
+        <button type="button" disabled={loadingData || (snapshot.page + 1) * snapshot.pageSize >= snapshot.totalMatching} onClick={() => changeFilters({ page: snapshot.page + 1 })}>Next page →</button>
+      </nav>
 
     </main>
   );

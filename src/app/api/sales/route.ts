@@ -1,62 +1,35 @@
 import "server-only";
 
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 import { NextResponse } from "next/server";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 
 import {
   callbackDateToUtc,
-  chicagoDateKey,
   defaultCallbackDate,
   isSalesOutcome,
   type DoorStatus,
   type SalesAdminEvent,
   type SalesCall,
-  type SalesDoor,
   type SalesOutcome,
-  type SalesPersonalStats,
-  type SalesRepActivity,
   type SalesRole,
   type SalesSnapshot,
-  type SalesVerificationClaim,
-  type SalesVerificationRequest,
-  type SalesVerificationStatus,
 } from "@/lib/sales";
 import { createSalesAdminClient, createSalesAuthClient } from "@/lib/supabase/sales-server";
+import { browseSales, readSalesActivity, readSalesHistory, readSalesRequests } from "@/lib/sales-browse-server";
+import { consumeSalesAttempt, requireSalesClaim, SalesWorkflowError } from "@/lib/sales-workflow-server";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 const PAGE_SIZE = 1000;
-const STATE_PATTERN = /^[A-Z]{2}$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const USERNAME_PATTERN = /^[a-z][a-z0-9]{0,31}$/;
 const PIN_PATTERN = /^\d{6}$/;
 const TEAM_CODE_PATTERN = /^[A-Z0-9]{4,32}$/;
 const VALID_STATUSES = new Set<DoorStatus>(["stocked", "prospect", "review", "closed"]);
-const SALES_REPORTING_START_AT = new Date("2026-09-02T22:18:00.000Z").getTime();
 
-type DoorRow = Readonly<{
-  id: number;
-  state: string;
-  door_key: string;
-  state_license_id: string | null;
-  legal_name: string | null;
-  dba_name: string | null;
-  street_address: string | null;
-  city: string | null;
-  state_code: string;
-  zip: string | null;
-  phone: string | null;
-  email: string | null;
-  extra_contacts: string | null;
-  website: string | null;
-  operational_status: string | null;
-  status: DoorStatus;
-  next_callback_at: string | null;
-  source_list_date: string;
-}>;
 
 type CallRow = Readonly<{
   id: number;
@@ -70,47 +43,8 @@ type CallRow = Readonly<{
   callback_at: string | null;
 }>;
 
-type VerifiedCustomerRow = Readonly<{
-  id: number;
-  retailer_id: number | null;
-  door_id: number | null;
-  verification_source: "exact_address_city_state_zip" | "verified_retailer_unlinked" | "super_master_confirmed";
-  verification_note: string;
-  next_callback_at: string | null;
-  active: boolean;
-}>;
 
-type RetailerRow = Readonly<{
-  id: number;
-  name: string;
-  address: string;
-  city: string;
-  state: string;
-  zip: string;
-  phone: string | null;
-  website: string | null;
-  updated_at: string;
-}>;
 
-type VerificationRequestRow = Readonly<{
-  id: number;
-  door_id: number;
-  submitted_by: string;
-  submitted_by_name: string;
-  claimed_status: SalesVerificationClaim;
-  notes: string | null;
-  callback_at: string | null;
-  status: SalesVerificationStatus;
-  submitted_at: string;
-  decided_at: string | null;
-  decision_note: string | null;
-  market_doors: Readonly<{
-    dba_name: string | null;
-    legal_name: string | null;
-    city: string | null;
-    state_code: string;
-  }>;
-}>;
 
 type RepProfile = Readonly<{
   user_id: string;
@@ -166,16 +100,7 @@ function safeReason(value: unknown): string | null {
   return value.trim().slice(0, 500) || null;
 }
 
-function dateKeyOffset(dateKey: string, days: number): string {
-  const [year, month, day] = dateKey.split("-").map(Number);
-  return new Date(Date.UTC(year, month - 1, day + days)).toISOString().slice(0, 10);
-}
 
-function startOfWeek(dateKey: string): string {
-  const [year, month, day] = dateKey.split("-").map(Number);
-  const weekday = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
-  return dateKeyOffset(dateKey, weekday === 0 ? -6 : 1 - weekday);
-}
 
 async function authenticatedUser(): Promise<User | null> {
   const client = await createSalesAuthClient();
@@ -193,20 +118,6 @@ async function fetchRepProfile(admin: SupabaseClient, userId: string): Promise<R
   return data as RepProfile | null;
 }
 
-async function fetchProfiles(admin: SupabaseClient): Promise<RepProfile[]> {
-  const rows: RepProfile[] = [];
-  for (let offset = 0; ; offset += PAGE_SIZE) {
-    const { data, error } = await admin
-      .from("sales_rep_profiles")
-      .select("user_id,username,display_name,can_invite,role,active,deactivated_at,activity_counters_reset_at")
-      .order("display_name")
-      .range(offset, offset + PAGE_SIZE - 1);
-    if (error) throw error;
-    const page = (data ?? []) as RepProfile[];
-    rows.push(...page);
-    if (page.length < PAGE_SIZE) return rows;
-  }
-}
 
 async function fetchTeamSettings(admin: SupabaseClient): Promise<TeamSettings> {
   const { data, error } = await admin
@@ -218,109 +129,12 @@ async function fetchTeamSettings(admin: SupabaseClient): Promise<TeamSettings> {
   return data as TeamSettings;
 }
 
-async function fetchStateCodes(admin: SupabaseClient): Promise<string[]> {
-  const stateCodes = new Set<string>();
-  for (let offset = 0; ; offset += PAGE_SIZE) {
-    const { data, error } = await admin.from("market_doors").select("state_code").range(offset, offset + PAGE_SIZE - 1);
-    if (error) throw error;
-    const page = (data ?? []) as Array<{ state_code: string }>;
-    page.forEach((row) => stateCodes.add(row.state_code));
-    if (page.length < PAGE_SIZE) return [...stateCodes].sort();
-  }
-}
 
-async function fetchDoors(admin: SupabaseClient, state: string): Promise<DoorRow[]> {
-  const rows: DoorRow[] = [];
-  for (let offset = 0; ; offset += PAGE_SIZE) {
-    const { data, error } = await admin
-      .from("market_doors")
-      .select("id,state,door_key,state_license_id,legal_name,dba_name,street_address,city,state_code,zip,phone,email,extra_contacts,website,operational_status,status,next_callback_at,source_list_date")
-      .eq("state_code", state)
-      .range(offset, offset + PAGE_SIZE - 1);
-    if (error) throw error;
-    const page = (data ?? []) as DoorRow[];
-    rows.push(...page);
-    if (page.length < PAGE_SIZE) return rows;
-  }
-}
 
-async function fetchAllCalls(admin: SupabaseClient): Promise<CallRow[]> {
-  const rows: CallRow[] = [];
-  for (let offset = 0; ; offset += PAGE_SIZE) {
-    const { data, error } = await admin
-      .from("call_log")
-      .select("id,door_id,verified_customer_id,rep_id,rep_name,called_at,outcome,notes,callback_at")
-      .order("called_at", { ascending: false })
-      .order("id", { ascending: false })
-      .range(offset, offset + PAGE_SIZE - 1);
-    if (error) throw error;
-    const page = (data ?? []) as CallRow[];
-    rows.push(...page);
-    if (page.length < PAGE_SIZE) return rows;
-  }
-}
 
-async function fetchVerifiedCustomers(admin: SupabaseClient): Promise<VerifiedCustomerRow[]> {
-  const rows: VerifiedCustomerRow[] = [];
-  for (let offset = 0; ; offset += PAGE_SIZE) {
-    const { data, error } = await admin
-      .from("sales_verified_customer_doors")
-      .select("id,retailer_id,door_id,verification_source,verification_note,next_callback_at,active")
-      .eq("active", true)
-      .range(offset, offset + PAGE_SIZE - 1);
-    if (error) throw error;
-    const page = (data ?? []) as VerifiedCustomerRow[];
-    rows.push(...page);
-    if (page.length < PAGE_SIZE) return rows;
-  }
-}
 
-async function fetchVerifiedRetailers(admin: SupabaseClient): Promise<RetailerRow[]> {
-  const rows: RetailerRow[] = [];
-  for (let offset = 0; ; offset += PAGE_SIZE) {
-    const { data, error } = await admin
-      .from("retailers")
-      .select("id,name,address,city,state,zip,phone,website,updated_at")
-      .eq("public_locator_status", "approved_public_locator")
-      .in("state", ["AZ", "NY", "OK"])
-      .range(offset, offset + PAGE_SIZE - 1);
-    if (error) throw error;
-    const page = (data ?? []) as RetailerRow[];
-    rows.push(...page);
-    if (page.length < PAGE_SIZE) return rows;
-  }
-}
 
-async function fetchVoidedCallIds(admin: SupabaseClient): Promise<Set<number>> {
-  const ids = new Set<number>();
-  for (let offset = 0; ; offset += PAGE_SIZE) {
-    const { data, error } = await admin.from("call_log_voids").select("call_id").range(offset, offset + PAGE_SIZE - 1);
-    if (error) throw error;
-    const page = (data ?? []) as Array<{ call_id: number }>;
-    page.forEach((row) => ids.add(Number(row.call_id)));
-    if (page.length < PAGE_SIZE) return ids;
-  }
-}
 
-async function fetchIdSet(
-  admin: SupabaseClient,
-  table: "sales_personal_stars" | "sales_company_priorities",
-  userId?: string,
-): Promise<Set<number>> {
-  const ids = new Set<number>();
-  for (let offset = 0; ; offset += PAGE_SIZE) {
-    let query = admin.from(table).select("door_id,verified_customer_id").range(offset, offset + PAGE_SIZE - 1);
-    if (userId) query = query.eq("user_id", userId);
-    const { data, error } = await query;
-    if (error) throw error;
-    const page = (data ?? []) as Array<{ door_id: number | null; verified_customer_id: number | null }>;
-    page.forEach((row) => {
-      if (row.door_id !== null) ids.add(Number(row.door_id));
-      else if (row.verified_customer_id !== null) ids.add(-Number(row.verified_customer_id));
-    });
-    if (page.length < PAGE_SIZE) return ids;
-  }
-}
 
 function salesTargetId(doorId: number | null, verifiedCustomerId: number | null): number {
   if (doorId !== null) return Number(doorId);
@@ -343,298 +157,13 @@ function mapCall(row: CallRow, undone: boolean, undoEligible: boolean): SalesCal
   };
 }
 
-function withinUndoWindow(value: string): boolean {
-  const age = Date.now() - new Date(value).getTime();
-  return age >= 0 && age <= 24 * 60 * 60 * 1000;
-}
 
-function mapVerificationRequest(
-  row: VerificationRequestRow,
-  userId: string,
-  calls: CallRow[],
-  requests: VerificationRequestRow[],
-): SalesVerificationRequest {
-  const newerCallExists = calls.some(
-    (call) =>
-      call.door_id === row.door_id &&
-      new Date(call.called_at).getTime() > new Date(row.submitted_at).getTime(),
-  );
-  const newerRequestExists = requests.some(
-    (request) =>
-      request.door_id === row.door_id &&
-      request.id !== row.id &&
-      new Date(request.submitted_at).getTime() > new Date(row.submitted_at).getTime(),
-  );
-  return {
-    id: Number(row.id),
-    doorId: Number(row.door_id),
-    storeName: row.market_doors.dba_name || row.market_doors.legal_name || "Unnamed licensed door",
-    city: row.market_doors.city,
-    stateCode: row.market_doors.state_code,
-    submittedBy: row.submitted_by,
-    submittedByName: row.submitted_by_name,
-    claimedStatus: row.claimed_status,
-    notes: row.notes,
-    callbackAt: row.callback_at,
-    status: row.status,
-    submittedAt: row.submitted_at,
-    decidedAt: row.decided_at,
-    decisionNote: row.decision_note,
-    canWithdraw:
-      row.status === "pending" &&
-      row.submitted_by === userId &&
-      withinUndoWindow(row.submitted_at) &&
-      !newerCallExists &&
-      !newerRequestExists,
-  };
-}
 
-function callHistoryForTarget(
-  targetId: number,
-  calls: CallRow[],
-  requests: VerificationRequestRow[],
-  voidedCallIds: Set<number>,
-  userId: string,
-  role: SalesRole,
-  activityResetAt: string | null,
-): { history: SalesCall[]; lastCall: SalesCall | null; myLastActivityAt: string | null } {
-  const targetCalls = calls.filter(
-    (call) => salesTargetId(call.door_id, call.verified_customer_id) === targetId,
-  );
-  const latestRecorded = targetCalls[0] ?? null;
-  const latestActive = targetCalls.find((call) => !voidedCallIds.has(Number(call.id))) ?? null;
-  const latestRequestAt = targetId > 0
-    ? requests
-        .filter((request) => request.door_id === targetId)
-        .reduce((latest, request) => Math.max(latest, new Date(request.submitted_at).getTime()), 0)
-    : 0;
-  const history = targetCalls.map((call) => {
-    const undone = voidedCallIds.has(Number(call.id));
-    const undoEligible =
-      !undone &&
-      latestRecorded?.id === call.id &&
-      withinUndoWindow(call.called_at) &&
-      latestRequestAt <= new Date(call.called_at).getTime() &&
-      (call.rep_id === userId || role === "super_master");
-    return mapCall(call, undone, undoEligible);
-  });
-  return {
-    history,
-    lastCall: latestActive
-      ? history.find((call) => call.id === Number(latestActive.id)) ?? null
-      : null,
-    myLastActivityAt: targetCalls.find(
-      (call) =>
-        call.rep_id === userId &&
-        !voidedCallIds.has(Number(call.id)) &&
-        new Date(call.called_at).getTime() >= SALES_REPORTING_START_AT &&
-        (!activityResetAt || new Date(call.called_at).getTime() > new Date(activityResetAt).getTime()),
-    )?.called_at ?? null,
-  };
-}
 
-function isClosedDoorRow(row: DoorRow): boolean {
-  const operational = row.operational_status?.toLowerCase() ?? "";
-  return (
-    row.status === "closed" ||
-    operational.includes("non-operational") ||
-    operational.includes("non operational") ||
-    operational.includes("not operating")
-  );
-}
 
-function mapSalesTargets(
-  doorRows: DoorRow[],
-  verifiedCustomers: VerifiedCustomerRow[],
-  retailerRows: RetailerRow[],
-  calls: CallRow[],
-  requests: VerificationRequestRow[],
-  voidedCallIds: Set<number>,
-  userId: string,
-  role: SalesRole,
-  activityResetAt: string | null,
-  personalStars: Set<number>,
-  priorities: Set<number>,
-): SalesDoor[] {
-  const retailerById = new Map(retailerRows.map((row) => [Number(row.id), row]));
-  const verifiedByDoor = new Map<number, VerifiedCustomerRow>();
-  for (const customer of verifiedCustomers) {
-    if (customer.door_id !== null) verifiedByDoor.set(Number(customer.door_id), customer);
-  }
 
-  const pendingRequestByDoor = new Map<number, VerificationRequestRow>();
-  for (const request of requests) {
-    if (request.status === "pending" && !pendingRequestByDoor.has(Number(request.door_id))) {
-      pendingRequestByDoor.set(Number(request.door_id), request);
-    }
-  }
 
-  const licensedTargets = doorRows.filter((row) => !isClosedDoorRow(row)).map((row) => {
-    const id = Number(row.id);
-    const verified = verifiedByDoor.get(id) ?? null;
-    const retailer = verified?.retailer_id === null || verified?.retailer_id === undefined
-      ? null
-      : retailerById.get(Number(verified.retailer_id)) ?? null;
-    const activity = callHistoryForTarget(id, calls, requests, voidedCallIds, userId, role, activityResetAt);
-    const pendingRow = pendingRequestByDoor.get(id) ?? null;
-    return {
-      id,
-      marketDoorId: id,
-      verifiedCustomerId: verified ? Number(verified.id) : null,
-      retailerId: retailer ? Number(retailer.id) : null,
-      state: row.state,
-      doorKey: row.door_key,
-      stateLicenseId: row.state_license_id,
-      legalName: row.legal_name,
-      dbaName: retailer?.name ?? row.dba_name,
-      streetAddress: retailer?.address ?? row.street_address,
-      city: retailer?.city ?? row.city,
-      stateCode: row.state_code,
-      zip: retailer?.zip ?? row.zip,
-      phone: retailer?.phone ?? row.phone,
-      email: row.email,
-      extraContacts: row.extra_contacts,
-      website: retailer?.website ?? row.website,
-      operationalStatus: row.operational_status,
-      status: row.status,
-      isPurchasing: Boolean(verified),
-      nextCallbackAt: row.next_callback_at,
-      sourceListDate: row.source_list_date,
-      callHistory: activity.history,
-      lastCall: activity.lastCall,
-      personallyStarred: personalStars.has(id),
-      companyPriority: priorities.has(id),
-      myLastActivityAt: activity.myLastActivityAt,
-      doNotCallLocked: activity.lastCall?.outcome === "do_not_call",
-      hasPendingVerification: Boolean(pendingRow),
-      pendingVerification: pendingRow && (role !== "sales_rep" || pendingRow.submitted_by === userId)
-        ? mapVerificationRequest(pendingRow, userId, calls, requests)
-        : null,
-    };
-  });
 
-  const unlinkedTargets = verifiedCustomers.flatMap((verified) => {
-    if (verified.door_id !== null || verified.retailer_id === null) return [];
-    const retailer = retailerById.get(Number(verified.retailer_id));
-    if (!retailer) return [];
-    const id = -Number(verified.id);
-    const activity = callHistoryForTarget(id, calls, requests, voidedCallIds, userId, role, activityResetAt);
-    return [{
-      id,
-      marketDoorId: null,
-      verifiedCustomerId: Number(verified.id),
-      retailerId: Number(retailer.id),
-      state: retailer.state,
-      doorKey: `verified-retailer:${retailer.id}`,
-      stateLicenseId: null,
-      legalName: null,
-      dbaName: retailer.name,
-      streetAddress: retailer.address,
-      city: retailer.city,
-      stateCode: retailer.state,
-      zip: retailer.zip,
-      phone: retailer.phone,
-      email: null,
-      extraContacts: null,
-      website: retailer.website,
-      operationalStatus: "VERIFIED CUSTOMER",
-      status: "review" as const,
-      isPurchasing: true,
-      nextCallbackAt: verified.next_callback_at,
-      sourceListDate: retailer.updated_at.slice(0, 10),
-      callHistory: activity.history,
-      lastCall: activity.lastCall,
-      personallyStarred: personalStars.has(id),
-      companyPriority: priorities.has(id),
-      myLastActivityAt: activity.myLastActivityAt,
-      doNotCallLocked: false,
-      hasPendingVerification: false,
-      pendingVerification: null,
-    } satisfies SalesDoor];
-  });
-
-  return [...licensedTargets, ...unlinkedTargets];
-}
-
-function approvedSoldReports(requests: VerificationRequestRow[], userId: string, month: string): number {
-  return requests.filter(
-    (request) =>
-      request.submitted_by === userId &&
-      request.claimed_status === "sold" &&
-      request.status === "approved" &&
-      chicagoDateKey(request.submitted_at) >= month &&
-      new Date(request.submitted_at).getTime() >= SALES_REPORTING_START_AT,
-  ).length;
-}
-
-function personalStats(
-  calls: CallRow[],
-  requests: VerificationRequestRow[],
-  userId: string,
-  today: string,
-  resetAt: string | null,
-): SalesPersonalStats {
-  const week = startOfWeek(today);
-  const month = `${today.slice(0, 7)}-01`;
-  const mine = calls.filter(
-    (call) =>
-      call.rep_id === userId &&
-      new Date(call.called_at).getTime() >= SALES_REPORTING_START_AT,
-  );
-  return {
-    callsToday: mine.filter(
-      (call) =>
-        chicagoDateKey(call.called_at) === today &&
-        (!resetAt || new Date(call.called_at).getTime() > new Date(resetAt).getTime()),
-    ).length,
-    callsThisWeek: mine.filter((call) => {
-      const key = chicagoDateKey(call.called_at);
-      return key >= week && key <= today;
-    }).length,
-    soldThisMonth:
-      mine.filter((call) => call.outcome === "sold" && chicagoDateKey(call.called_at) >= month).length +
-      approvedSoldReports(requests, userId, month),
-  };
-}
-
-function buildActivity(
-  profiles: RepProfile[],
-  calls: CallRow[],
-  requests: VerificationRequestRow[],
-  today: string,
-): SalesRepActivity[] {
-  const week = startOfWeek(today);
-  const month = `${today.slice(0, 7)}-01`;
-  return profiles.map((profile) => {
-    const mine = calls.filter(
-      (call) =>
-        call.rep_id === profile.user_id &&
-        new Date(call.called_at).getTime() >= SALES_REPORTING_START_AT,
-    );
-    const latestRequest = requests.find((request) => request.submitted_by === profile.user_id)?.submitted_at ?? null;
-    const latestCall = mine[0]?.called_at ?? null;
-    return {
-      userId: profile.user_id,
-      username: profile.username,
-      displayName: profile.display_name,
-      role: profile.role,
-      active: profile.active,
-      callsToday: mine.filter((call) => chicagoDateKey(call.called_at) === today).length,
-      callsThisWeek: mine.filter((call) => {
-        const key = chicagoDateKey(call.called_at);
-        return key >= week && key <= today;
-      }).length,
-      callsThisMonth: mine.filter((call) => chicagoDateKey(call.called_at) >= month).length,
-      soldThisMonth:
-        mine.filter((call) => call.outcome === "sold" && chicagoDateKey(call.called_at) >= month).length +
-        approvedSoldReports(requests, profile.user_id, month),
-      lastActivityAt:
-        latestRequest && (!latestCall || new Date(latestRequest).getTime() > new Date(latestCall).getTime())
-          ? latestRequest
-          : latestCall,
-    };
-  }).sort((a, b) => b.callsThisWeek - a.callsThisWeek || a.displayName.localeCompare(b.displayName));
-}
 
 async function fetchAdminEvents(admin: SupabaseClient): Promise<SalesAdminEvent[]> {
   const rows: SalesAdminEvent[] = [];
@@ -661,21 +190,6 @@ async function fetchAdminEvents(admin: SupabaseClient): Promise<SalesAdminEvent[
   }
 }
 
-async function fetchVerificationRequests(admin: SupabaseClient): Promise<VerificationRequestRow[]> {
-  const rows: VerificationRequestRow[] = [];
-  for (let offset = 0; ; offset += PAGE_SIZE) {
-    const { data, error } = await admin
-      .from("sales_customer_verification_requests")
-      .select("id,door_id,submitted_by,submitted_by_name,claimed_status,notes,callback_at,status,submitted_at,decided_at,decision_note,market_doors!inner(dba_name,legal_name,city,state_code)")
-      .order("submitted_at", { ascending: false })
-      .order("id", { ascending: false })
-      .range(offset, offset + PAGE_SIZE - 1);
-    if (error) throw error;
-    const page = (data ?? []) as unknown as VerificationRequestRow[];
-    rows.push(...page);
-    if (page.length < PAGE_SIZE) return rows;
-  }
-}
 
 function isSuper(profile: RepProfile): boolean {
   return profile.active && profile.role === "super_master" && profile.username === "paulie";
@@ -714,10 +228,7 @@ function targetColumns(targetId: number) {
 }
 
 async function validSalesTarget(admin: SupabaseClient, targetId: number): Promise<boolean> {
-  const table = targetId > 0 ? "market_doors" : "sales_verified_customer_doors";
-  let query = admin.from(table).select("id").eq("id", Math.abs(targetId));
-  if (targetId < 0) query = query.eq("active", true).is("door_id", null);
-  const { data, error } = await query.maybeSingle();
+  const { data, error } = await admin.from("sales_target_directory").select("id").eq("id", targetId).maybeSingle();
   if (error) throw error;
   return Boolean(data);
 }
@@ -735,140 +246,65 @@ async function isVerifiedCustomerTarget(admin: SupabaseClient, targetId: number)
 }
 
 async function latestEffectiveDoorCall(admin: SupabaseClient, doorId: number): Promise<CallRow | null> {
-  const [calls, voidedIds] = await Promise.all([fetchAllCalls(admin), fetchVoidedCallIds(admin)]);
-  return calls.find(
-    (call) => call.door_id === doorId && !voidedIds.has(Number(call.id)),
-  ) ?? null;
+  const { data, error } = await admin.rpc("latest_sales_target_call", { p_door_id: doorId });
+  if (error) throw error;
+  return (data?.[0] as CallRow | undefined) ?? null;
 }
 
 export async function GET(request: Request) {
   const user = await authenticatedUser();
   if (!user) return json({ authenticated: false }, 401);
-
   try {
     const admin = createSalesAdminClient();
     const profile = await fetchRepProfile(admin, user.id);
     if (!profile?.active) return json({ error: "This sales account is inactive." }, 403);
-
-    const url = new URL(request.url);
-    const resource = url.searchParams.get("resource");
+    const params = new URL(request.url).searchParams;
+    const resource = params.get("resource");
     if (resource === "activity") {
       if (profile.role === "sales_rep") return json({ error: "Master access is required." }, 403);
-      const [profiles, calls, requests, voids] = await Promise.all([
-        fetchProfiles(admin),
-        fetchAllCalls(admin),
-        fetchVerificationRequests(admin),
-        fetchVoidedCallIds(admin),
-      ]);
-      const visibleProfiles = isSuper(profile)
-        ? profiles
-        : profiles.filter((candidate) => candidate.role !== "super_master" && candidate.username !== "paulie");
-      return json({ activity: buildActivity(visibleProfiles, calls.filter((call) => !voids.has(Number(call.id))), requests, chicagoDateKey()) });
+      return json({ activity: await readSalesActivity(admin, user.id) });
     }
     if (resource === "admin_log") {
       if (!isSuper(profile)) return json({ error: "Super Master access is required." }, 403);
       return json({ events: await fetchAdminEvents(admin) });
     }
-    if (resource === "verification_requests") {
-      const [requests, calls, profiles] = await Promise.all([
-        fetchVerificationRequests(admin),
-        fetchAllCalls(admin),
-        fetchProfiles(admin),
-      ]);
-      const superMasterIds = new Set(
-        profiles.filter((candidate) => candidate.role === "super_master" || candidate.username === "paulie").map((candidate) => candidate.user_id),
-      );
-      const visibleRequests = isSuper(profile)
-        ? requests
-        : profile.role === "sales_rep"
-          ? requests.filter((request) => request.submitted_by === user.id)
-          : requests.filter((request) => !superMasterIds.has(request.submitted_by));
-      return json({
-        requests: visibleRequests.map((request) =>
-          mapVerificationRequest(request, user.id, calls, requests)),
-        readOnly: profile.role === "master",
-      });
+    if (resource === "history") {
+      const doorId = Number(params.get("doorId"));
+      if (!Number.isSafeInteger(doorId) || !doorId) return json({ error: "Choose a store." }, 400);
+      return json(await readSalesHistory(admin, user.id, doorId, Number(params.get("before")) || undefined));
     }
-
-    const states = await fetchStateCodes(admin);
-    if (!states.length) return json({ error: "No sales door data is available." }, 503);
-    const requested = url.searchParams.get("state")?.toUpperCase() ?? "";
-    const selectedState = STATE_PATTERN.test(requested) && states.includes(requested) ? requested : states[0];
-    const [doorRows, verifiedCustomers, retailerRows, allCalls, requests, profiles, voids, personalStars, priorities, settings] = await Promise.all([
-      fetchDoors(admin, selectedState),
-      fetchVerifiedCustomers(admin),
-      fetchVerifiedRetailers(admin),
-      fetchAllCalls(admin),
-      fetchVerificationRequests(admin),
-      fetchProfiles(admin),
-      fetchVoidedCallIds(admin),
-      fetchIdSet(admin, "sales_personal_stars", user.id),
-      fetchIdSet(admin, "sales_company_priorities"),
-      isSuper(profile) ? fetchTeamSettings(admin) : Promise.resolve(null),
-    ]);
-    const activeCalls = allCalls.filter((call) => !voids.has(Number(call.id)));
-    const superMasterIds = new Set(
-      profiles.filter((candidate) => candidate.role === "super_master" || candidate.username === "paulie").map((candidate) => candidate.user_id),
-    );
-    const visibleVerificationRequests = isSuper(profile)
-      ? requests
-      : profile.role === "sales_rep"
-        ? requests.filter((request) => request.submitted_by === user.id)
-        : requests.filter((request) => !superMasterIds.has(request.submitted_by));
-    const selectedIds = new Set(doorRows.map((door) => Number(door.id)));
-    const selectedRetailers = retailerRows.filter((retailer) => retailer.state === selectedState);
-    const selectedRetailerIds = new Set(selectedRetailers.map((retailer) => Number(retailer.id)));
-    const selectedVerifiedCustomers = verifiedCustomers.filter(
-      (customer) =>
-        (customer.door_id !== null && selectedIds.has(Number(customer.door_id))) ||
-        (customer.retailer_id !== null && selectedRetailerIds.has(Number(customer.retailer_id))),
-    );
-    const selectedVerifiedCustomerIds = new Set(
-      selectedVerifiedCustomers.map((customer) => Number(customer.id)),
-    );
-    const selectedRequests = requests.filter((request) => selectedIds.has(Number(request.door_id)));
-    const doors = mapSalesTargets(
-      doorRows,
-      selectedVerifiedCustomers,
-      selectedRetailers,
-      allCalls.filter(
-        (call) =>
-          (call.door_id !== null && selectedIds.has(Number(call.door_id))) ||
-          (call.verified_customer_id !== null && selectedVerifiedCustomerIds.has(Number(call.verified_customer_id))),
-      ),
-      selectedRequests,
-      voids,
-      user.id,
-      profile.role,
-      profile.activity_counters_reset_at,
-      personalStars,
-      priorities,
-    );
-    const snapshot: SalesSnapshot = {
+    if (resource === "data_review") {
+      if (!isSuper(profile)) return json({ error: "Super Master access is required." }, 403);
+      const state = ["AZ", "NY", "OK"].includes(params.get("state") ?? "") ? params.get("state")! : "AZ";
+      const [customers, excluded] = await Promise.all([
+        admin.from("sales_target_directory").select("id,verified_customer_id,dba_name,street_address,city,zip")
+          .eq("state_code", state).is("market_door_id", null).order("city").limit(200),
+        admin.from("market_doors").select("id,legal_name,street_address,city,sales_classification_source")
+          .eq("state_code", state).eq("sales_business_type", "non_retail").limit(100),
+      ]);
+      if (customers.error || excluded.error) throw customers.error ?? excluded.error;
+      const lookupId = Number(params.get("lookup"));
+      const lookup = Number.isSafeInteger(lookupId) && lookupId > 0
+        ? await admin.from("market_doors").select("id,legal_name,dba_name,street_address,city,state_code,zip,state_license_id,sales_business_type").eq("id", lookupId).maybeSingle()
+        : null;
+      const search = (params.get("search") ?? "").replace(/[,()%.*]/g, " ").trim().slice(0, 100);
+      const candidates = search.length >= 2 ? await admin.from("market_doors").select("id,legal_name,dba_name,street_address,city,state_code,zip,state_license_id")
+        .eq("state_code", state).neq("sales_business_type", "non_retail").or(`legal_name.ilike.%${search}%,dba_name.ilike.%${search}%`).limit(30) : null;
+      return json({ customers: customers.data, excluded: excluded.data, lookup: lookup?.data ?? null, candidates: candidates?.data ?? [] });
+    }
+    if (resource === "verification_requests") return json({ requests: await readSalesRequests(admin, user.id), readOnly: profile.role === "master" });
+    const [browse, settings, requests] = await Promise.all([browseSales(admin, user.id, params), isSuper(profile) ? fetchTeamSettings(admin) : Promise.resolve(null), readSalesRequests(admin, user.id)]);
+    return json({
+      ...browse,
       authenticated: true,
-      user: {
-        id: user.id,
-        name: repName(user, profile),
-        username: profile.username,
-        role: profile.role,
-        active: profile.active,
-        teamSetupCode: settings ? displayTeamCode(settings.setup_code) : null,
-        onboardingOpen: settings?.onboarding_open ?? null,
-        stats: personalStats(activeCalls, requests, user.id, chicagoDateKey(), profile.activity_counters_reset_at),
-      },
-      states,
-      selectedState,
-      purchasingCount: doors.filter((door) => door.isPurchasing).length,
-      opportunityCount: doors.filter((door) => !door.isPurchasing).length,
-      activeDispensaryCount: doorRows.filter((door) => !isClosedDoorRow(door)).length,
-      closedCount: doorRows.filter(isClosedDoorRow).length,
-      verificationRequests: visibleVerificationRequests.map((request) => mapVerificationRequest(request, user.id, allCalls, requests)),
-      doors,
-    };
-    return json(snapshot);
+      user: { id: user.id, name: repName(user, profile), username: profile.username, role: profile.role, active: profile.active,
+        teamSetupCode: settings ? displayTeamCode(settings.setup_code) : null, onboardingOpen: settings?.onboarding_open ?? null, stats: browse.stats },
+      states: ["AZ", "NY", "OK"], activeDispensaryCount: browse.totalTargets, closedCount: 0, verificationRequests: requests,
+      doors: browse.doors.map((door) => ({ ...door, pendingVerification: requests.find((item) => item.doorId === door.id && item.status === "pending") ?? null })),
+    } satisfies SalesSnapshot);
   } catch (error) {
     console.error("Sales snapshot failed", error instanceof Error ? error.message : "unknown");
-    return json({ error: "Sales data is temporarily unavailable." }, 503);
+    return json({ error: "Sales data is temporarily unavailable. Please refresh." }, 503);
   }
 }
 
@@ -957,11 +393,30 @@ async function manageAccount(admin: SupabaseClient, actor: RepProfile, input: Re
 }
 
 export async function POST(request: Request) {
+  const origin = request.headers.get("origin");
+  if (origin && origin !== new URL(request.url).origin) return json({ error: "Use the Presidential sales page to make changes." }, 403);
   let input: Record<string, unknown>;
   try {
     input = (await request.json()) as Record<string, unknown>;
   } catch {
     return json({ error: "Invalid request." }, 400);
+  }
+
+  if (input.action === "login" || input.action === "setup_rep") {
+    try {
+      const admin = createSalesAdminClient();
+      const ip = request.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown";
+      const username = String(input.username ?? "").trim().toLowerCase().slice(0, 64);
+      const bucket = (value: string) => createHash("sha256").update(value).digest("hex");
+      const limits = await Promise.all([
+        consumeSalesAttempt(admin, bucket(`${input.action}:ip:${ip}`), input.action === "login" ? 80 : 15, 300),
+        consumeSalesAttempt(admin, bucket(`${input.action}:account:${username}`), 12, 300),
+      ]);
+      const blocked = limits.find((limit) => !limit.allowed);
+      if (blocked) return NextResponse.json({ error: "Too many attempts. Please wait a few minutes, then try again." }, { status: 429, headers: { "Retry-After": String(blocked.retryAfter), "Cache-Control": "no-store" } });
+    } catch {
+      return json({ error: "Sign-in is temporarily unavailable. Please try again shortly." }, 503);
+    }
   }
 
   if (input.action === "login") {
@@ -1034,6 +489,12 @@ export async function POST(request: Request) {
     const admin = createSalesAdminClient();
     const profile = await fetchRepProfile(admin, user.id);
     if (!profile?.active) return json({ error: "This sales account is inactive." }, 403);
+
+    if (input.action === "link_customer_source") {
+      if (!isSuper(profile)) return json({ error: "Only Paulie can link customer source records." }, 403);
+      const { error } = await admin.rpc("link_sales_customer_source", { p_actor_id: user.id, p_customer_id: Number(input.customerId), p_door_id: Number(input.doorId), p_evidence: safeReason(input.evidence) ?? "" });
+      return error ? json({ error: "The source link could not be made. Check both records, their state and your evidence." }, 409) : json({ success: true });
+    }
 
     if (input.action === "change_pin") {
       const pin = typeof input.password === "string" ? input.password : "";
@@ -1441,27 +902,23 @@ export async function POST(request: Request) {
     else if (callbackInput === null || callbackInput === "") callbackDate = null;
     else if (typeof callbackInput === "string" && DATE_PATTERN.test(callbackInput)) callbackDate = callbackInput;
     else return json({ error: "Use a valid callback date." }, 400);
-    const callbackAt = callbackDateToUtc(callbackDate);
-    const logged = await admin.rpc("log_sales_call", {
-      p_door_id: doorId,
-      p_rep_id: user.id,
-      p_rep_name: repName(user, profile),
-      p_outcome: outcome,
-      p_notes: notes || null,
-      p_callback_at: callbackAt,
-      p_called_at: null,
-    });
+    const callbackAt = outcome === "do_not_call" ? null : callbackDateToUtc(callbackDate) ?? latestCall?.callback_at ?? null;
+    await requireSalesClaim(admin, doorId, user.id);
+    const requestId = typeof input.requestId === "string" && /^[0-9a-f-]{36}$/i.test(input.requestId) ? input.requestId : null;
+    if (!requestId) return json({ error: "Refresh the page before recording this call." }, 400);
+    const logged = await admin.rpc("log_sales_call_once", { p_actor_id: user.id, p_door_id: doorId, p_request_id: requestId, p_outcome: outcome, p_notes: notes || null, p_callback_at: callbackAt });
     if (logged.error || !logged.data) throw logged.error ?? new Error("Call logging returned no row.");
     const door = await admin.from("market_doors").select("status,next_callback_at").eq("id", doorId).single();
     if (door.error) throw door.error;
     return json({
       success: true,
-      call: mapCall(logged.data as CallRow, false, true),
+      call: mapCall(logged.data.call as CallRow, false, true),
       status: door.data.status as DoorStatus,
       nextCallbackAt: door.data.next_callback_at as string | null,
     });
   } catch (error) {
     console.error("Sales action failed", error instanceof Error ? error.message : "unknown");
+    if (error instanceof SalesWorkflowError) return json({ error: error.message }, error.status);
     return json({ error: "The sales action could not be completed." }, 503);
   }
 }
