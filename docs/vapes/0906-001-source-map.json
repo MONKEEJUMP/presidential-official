@@ -1,0 +1,1324 @@
+{
+  "source": "Owner supplied Product Models and Product Photos, September 6 2026",
+  "uniqueAssets": 96,
+  "assets": [
+    {
+      "sourceId": "P001",
+      "source": "Black Battery\\LD BACK FACE.jpg",
+      "color": "Black",
+      "family": "LD",
+      "view": "back",
+      "src": "/media/vapes/showroom/black-ld-back.webp",
+      "crop": {
+        "left": 1037,
+        "top": 815,
+        "width": 1694,
+        "height": 2118
+      }
+    },
+    {
+      "sourceId": "P002",
+      "source": "Black Battery\\LD BACK LS.jpg",
+      "color": "Black",
+      "family": "LD",
+      "view": "back-left",
+      "src": "/media/vapes/showroom/black-ld-back-left.webp",
+      "crop": {
+        "left": 1148,
+        "top": 935,
+        "width": 1705,
+        "height": 2131
+      }
+    },
+    {
+      "sourceId": "P003",
+      "source": "Black Battery\\LD BACK RS.jpg",
+      "color": "Black",
+      "family": "LD",
+      "view": "back-right",
+      "src": "/media/vapes/showroom/black-ld-back-right.webp",
+      "crop": {
+        "left": 1146,
+        "top": 938,
+        "width": 1689,
+        "height": 2111
+      }
+    },
+    {
+      "sourceId": "P004",
+      "source": "Black Battery\\LD FACE HOME.jpg",
+      "color": "Black",
+      "family": "LD",
+      "view": "home",
+      "src": "/media/vapes/showroom/black-ld-home.webp",
+      "crop": {
+        "left": 1096,
+        "top": 867,
+        "width": 1680,
+        "height": 2100
+      }
+    },
+    {
+      "sourceId": "P005",
+      "source": "Black Battery\\LD FACE LD TEMP.jpg",
+      "color": "Black",
+      "family": "LD",
+      "view": "screen",
+      "src": "/media/vapes/showroom/black-ld-screen.webp",
+      "crop": {
+        "left": 1096,
+        "top": 867,
+        "width": 1680,
+        "height": 2100
+      }
+    },
+    {
+      "sourceId": "P006",
+      "source": "Black Battery\\LD FACE LS.jpg",
+      "color": "Black",
+      "family": "LD",
+      "view": "front-left",
+      "src": "/media/vapes/showroom/black-ld-front-left.webp",
+      "crop": {
+        "left": 1089,
+        "top": 852,
+        "width": 1705,
+        "height": 2132
+      }
+    },
+    {
+      "sourceId": "P007",
+      "source": "Black Battery\\LD FACE RS.jpg",
+      "color": "Black",
+      "family": "LD",
+      "view": "front-right",
+      "src": "/media/vapes/showroom/black-ld-front-right.webp",
+      "crop": {
+        "left": 1078,
+        "top": 807,
+        "width": 1662,
+        "height": 2076
+      }
+    },
+    {
+      "sourceId": "M001",
+      "source": "LD Black.png",
+      "color": "Black",
+      "family": "LD",
+      "view": "model",
+      "src": "/media/vapes/showroom/black-ld-model.webp",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "sourceId": "P008",
+      "source": "Black Battery\\LRE BACK FACE.jpg",
+      "color": "Black",
+      "family": "LRE",
+      "view": "back",
+      "src": "/media/vapes/showroom/black-lre-back.webp",
+      "crop": {
+        "left": 1090,
+        "top": 885,
+        "width": 1690,
+        "height": 2113
+      }
+    },
+    {
+      "sourceId": "P009",
+      "source": "Black Battery\\LRE BACK LS .jpg",
+      "color": "Black",
+      "family": "LRE",
+      "view": "back-left",
+      "src": "/media/vapes/showroom/black-lre-back-left.webp",
+      "crop": {
+        "left": 1172,
+        "top": 978,
+        "width": 1689,
+        "height": 2111
+      }
+    },
+    {
+      "sourceId": "P010",
+      "source": "Black Battery\\LRE BACK RS.jpg",
+      "color": "Black",
+      "family": "LRE",
+      "view": "back-right",
+      "src": "/media/vapes/showroom/black-lre-back-right.webp",
+      "crop": {
+        "left": 1083,
+        "top": 884,
+        "width": 1668,
+        "height": 2085
+      }
+    },
+    {
+      "sourceId": "P011",
+      "source": "Black Battery\\LRE FACE HOME.jpg",
+      "color": "Black",
+      "family": "LRE",
+      "view": "home",
+      "src": "/media/vapes/showroom/black-lre-home.webp",
+      "crop": {
+        "left": 1129,
+        "top": 899,
+        "width": 1677,
+        "height": 2097
+      }
+    },
+    {
+      "sourceId": "P012",
+      "source": "Black Battery\\LRE FACE LRE TEMP.jpg",
+      "color": "Black",
+      "family": "LRE",
+      "view": "screen",
+      "src": "/media/vapes/showroom/black-lre-screen.webp",
+      "crop": {
+        "left": 1129,
+        "top": 899,
+        "width": 1677,
+        "height": 2097
+      }
+    },
+    {
+      "sourceId": "P013",
+      "source": "Black Battery\\LRE FACE LS.jpg",
+      "color": "Black",
+      "family": "LRE",
+      "view": "front-left",
+      "src": "/media/vapes/showroom/black-lre-front-left.webp",
+      "crop": {
+        "left": 1051,
+        "top": 812,
+        "width": 1701,
+        "height": 2127
+      }
+    },
+    {
+      "sourceId": "P014",
+      "source": "Black Battery\\LRE FACE RS.jpg",
+      "color": "Black",
+      "family": "LRE",
+      "view": "front-right",
+      "src": "/media/vapes/showroom/black-lre-front-right.webp",
+      "crop": {
+        "left": 1008,
+        "top": 743,
+        "width": 1676,
+        "height": 2095
+      }
+    },
+    {
+      "sourceId": "M005",
+      "source": "LRE Black.png",
+      "color": "Black",
+      "family": "LRE",
+      "view": "model",
+      "src": "/media/vapes/showroom/black-lre-model.webp",
+      "width": 1224,
+      "height": 1285
+    },
+    {
+      "sourceId": "P015",
+      "source": "Black Battery\\LRO BACK FACE.jpg",
+      "color": "Black",
+      "family": "LRO",
+      "view": "back",
+      "src": "/media/vapes/showroom/black-lro-back.webp",
+      "crop": {
+        "left": 1086,
+        "top": 877,
+        "width": 1698,
+        "height": 2122
+      }
+    },
+    {
+      "sourceId": "P016",
+      "source": "Black Battery\\LRO BACK LS.jpg",
+      "color": "Black",
+      "family": "LRO",
+      "view": "back-left",
+      "src": "/media/vapes/showroom/black-lro-back-left.webp",
+      "crop": {
+        "left": 1172,
+        "top": 978,
+        "width": 1689,
+        "height": 2111
+      }
+    },
+    {
+      "sourceId": "P017",
+      "source": "Black Battery\\LRO BACK RS.jpg",
+      "color": "Black",
+      "family": "LRO",
+      "view": "back-right",
+      "src": "/media/vapes/showroom/black-lro-back-right.webp",
+      "crop": {
+        "left": 1079,
+        "top": 876,
+        "width": 1675,
+        "height": 2095
+      }
+    },
+    {
+      "sourceId": "P018",
+      "source": "Black Battery\\LRO FACE HOME.jpg",
+      "color": "Black",
+      "family": "LRO",
+      "view": "home",
+      "src": "/media/vapes/showroom/black-lro-home.webp",
+      "crop": {
+        "left": 1121,
+        "top": 883,
+        "width": 1693,
+        "height": 2116
+      }
+    },
+    {
+      "sourceId": "P019",
+      "source": "Black Battery\\LRO FACE LRO TEMP.jpg",
+      "color": "Black",
+      "family": "LRO",
+      "view": "screen",
+      "src": "/media/vapes/showroom/black-lro-screen.webp",
+      "crop": {
+        "left": 1121,
+        "top": 883,
+        "width": 1693,
+        "height": 2116
+      }
+    },
+    {
+      "sourceId": "P020",
+      "source": "Black Battery\\LRO FACE LS.jpg",
+      "color": "Black",
+      "family": "LRO",
+      "view": "front-left",
+      "src": "/media/vapes/showroom/black-lro-front-left.webp",
+      "crop": {
+        "left": 1047,
+        "top": 805,
+        "width": 1709,
+        "height": 2136
+      }
+    },
+    {
+      "sourceId": "P021",
+      "source": "Black Battery\\LRO FACE RS.jpg",
+      "color": "Black",
+      "family": "LRO",
+      "view": "front-right",
+      "src": "/media/vapes/showroom/black-lro-front-right.webp",
+      "crop": {
+        "left": 1008,
+        "top": 743,
+        "width": 1676,
+        "height": 2095
+      }
+    },
+    {
+      "sourceId": "M009",
+      "source": "LRO Black.png",
+      "color": "Black",
+      "family": "LRO",
+      "view": "model",
+      "src": "/media/vapes/showroom/black-lro-model.webp",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "sourceId": "P022",
+      "source": "Silver Battery\\LD BACK FACE.jpg",
+      "color": "Silver",
+      "family": "LD",
+      "view": "back",
+      "src": "/media/vapes/showroom/silver-ld-back.webp",
+      "crop": {
+        "left": 1170,
+        "top": 953,
+        "width": 2037,
+        "height": 2546
+      }
+    },
+    {
+      "sourceId": "P023",
+      "source": "Silver Battery\\LD BACK LS.jpg",
+      "color": "Silver",
+      "family": "LD",
+      "view": "back-left",
+      "src": "/media/vapes/showroom/silver-ld-back-left.webp",
+      "crop": {
+        "left": 1275,
+        "top": 1087,
+        "width": 1998,
+        "height": 2498
+      }
+    },
+    {
+      "sourceId": "P024",
+      "source": "Silver Battery\\LD BACK RS.jpg",
+      "color": "Silver",
+      "family": "LD",
+      "view": "back-right",
+      "src": "/media/vapes/showroom/silver-ld-back-right.webp",
+      "crop": {
+        "left": 1269,
+        "top": 1009,
+        "width": 2009,
+        "height": 2512
+      }
+    },
+    {
+      "sourceId": "P025",
+      "source": "Silver Battery\\LD FACE FRONT HOME.jpg",
+      "color": "Silver",
+      "family": "LD",
+      "view": "home",
+      "src": "/media/vapes/showroom/silver-ld-home.webp",
+      "crop": {
+        "left": 1333,
+        "top": 1090,
+        "width": 2040,
+        "height": 2550
+      }
+    },
+    {
+      "sourceId": "P026",
+      "source": "Silver Battery\\LD FACE LD TEMP.jpg",
+      "color": "Silver",
+      "family": "LD",
+      "view": "screen",
+      "src": "/media/vapes/showroom/silver-ld-screen.webp",
+      "crop": {
+        "left": 1333,
+        "top": 1090,
+        "width": 2040,
+        "height": 2550
+      }
+    },
+    {
+      "sourceId": "P027",
+      "source": "Silver Battery\\LD FACE LS.jpg",
+      "color": "Silver",
+      "family": "LD",
+      "view": "front-left",
+      "src": "/media/vapes/showroom/silver-ld-front-left.webp",
+      "crop": {
+        "left": 1246,
+        "top": 989,
+        "width": 2022,
+        "height": 2528
+      }
+    },
+    {
+      "sourceId": "P028",
+      "source": "Silver Battery\\LD FACE RS.jpg",
+      "color": "Silver",
+      "family": "LD",
+      "view": "front-right",
+      "src": "/media/vapes/showroom/silver-ld-front-right.webp",
+      "crop": {
+        "left": 1357,
+        "top": 1117,
+        "width": 2021,
+        "height": 2526
+      }
+    },
+    {
+      "sourceId": "M002",
+      "source": "LD Silver.png",
+      "color": "Silver",
+      "family": "LD",
+      "view": "model",
+      "src": "/media/vapes/showroom/silver-ld-model.webp",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "sourceId": "P029",
+      "source": "Silver Battery\\LRE BACK FACE.jpg",
+      "color": "Silver",
+      "family": "LRE",
+      "view": "back",
+      "src": "/media/vapes/showroom/silver-lre-back.webp",
+      "crop": {
+        "left": 1238,
+        "top": 1008,
+        "width": 2022,
+        "height": 2527
+      }
+    },
+    {
+      "sourceId": "P030",
+      "source": "Silver Battery\\LRE BACK LS.jpg",
+      "color": "Silver",
+      "family": "LRE",
+      "view": "back-left",
+      "src": "/media/vapes/showroom/silver-lre-back-left.webp",
+      "crop": {
+        "left": 1290,
+        "top": 990,
+        "width": 2003,
+        "height": 2504
+      }
+    },
+    {
+      "sourceId": "P031",
+      "source": "Silver Battery\\LRE BACK RS.jpg",
+      "color": "Silver",
+      "family": "LRE",
+      "view": "back-right",
+      "src": "/media/vapes/showroom/silver-lre-back-right.webp",
+      "crop": {
+        "left": 1328,
+        "top": 1051,
+        "width": 2004,
+        "height": 2504
+      }
+    },
+    {
+      "sourceId": "P032",
+      "source": "Silver Battery\\LRE FACE FRONT HOME.jpg",
+      "color": "Silver",
+      "family": "LRE",
+      "view": "home",
+      "src": "/media/vapes/showroom/silver-lre-home.webp",
+      "crop": {
+        "left": 1229,
+        "top": 966,
+        "width": 2015,
+        "height": 2519
+      }
+    },
+    {
+      "sourceId": "P033",
+      "source": "Silver Battery\\LRE FACE LRE TEMP.jpg",
+      "color": "Silver",
+      "family": "LRE",
+      "view": "screen",
+      "src": "/media/vapes/showroom/silver-lre-screen.webp",
+      "crop": {
+        "left": 1229,
+        "top": 966,
+        "width": 2015,
+        "height": 2519
+      }
+    },
+    {
+      "sourceId": "P034",
+      "source": "Silver Battery\\LRE FACE LS.jpg",
+      "color": "Silver",
+      "family": "LRE",
+      "view": "front-left",
+      "src": "/media/vapes/showroom/silver-lre-front-left.webp",
+      "crop": {
+        "left": 1187,
+        "top": 1068,
+        "width": 1894,
+        "height": 2367
+      }
+    },
+    {
+      "sourceId": "P035",
+      "source": "Silver Battery\\LRE FACE RS.jpg",
+      "color": "Silver",
+      "family": "LRE",
+      "view": "front-right",
+      "src": "/media/vapes/showroom/silver-lre-front-right.webp",
+      "crop": {
+        "left": 1364,
+        "top": 1038,
+        "width": 2025,
+        "height": 2531
+      }
+    },
+    {
+      "sourceId": "M006",
+      "source": "LRE Silver.png",
+      "color": "Silver",
+      "family": "LRE",
+      "view": "model",
+      "src": "/media/vapes/showroom/silver-lre-model.webp",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "sourceId": "P036",
+      "source": "Silver Battery\\LRO BACK FACE.jpg",
+      "color": "Silver",
+      "family": "LRO",
+      "view": "back",
+      "src": "/media/vapes/showroom/silver-lro-back.webp",
+      "crop": {
+        "left": 1237,
+        "top": 998,
+        "width": 2031,
+        "height": 2539
+      }
+    },
+    {
+      "sourceId": "P037",
+      "source": "Silver Battery\\LRO BACK LS.jpg",
+      "color": "Silver",
+      "family": "LRO",
+      "view": "back-left",
+      "src": "/media/vapes/showroom/silver-lro-back-left.webp",
+      "crop": {
+        "left": 1290,
+        "top": 990,
+        "width": 2003,
+        "height": 2504
+      }
+    },
+    {
+      "sourceId": "P038",
+      "source": "Silver Battery\\LRO BACK RS.jpg",
+      "color": "Silver",
+      "family": "LRO",
+      "view": "back-right",
+      "src": "/media/vapes/showroom/silver-lro-back-right.webp",
+      "crop": {
+        "left": 1323,
+        "top": 1041,
+        "width": 2013,
+        "height": 2516
+      }
+    },
+    {
+      "sourceId": "P039",
+      "source": "Silver Battery\\LRO FACE FRONT HOME.jpg",
+      "color": "Silver",
+      "family": "LRO",
+      "view": "home",
+      "src": "/media/vapes/showroom/silver-lro-home.webp",
+      "crop": {
+        "left": 1220,
+        "top": 948,
+        "width": 2033,
+        "height": 2541
+      }
+    },
+    {
+      "sourceId": "P040",
+      "source": "Silver Battery\\LRO FACE LRO TEMP.jpg",
+      "color": "Silver",
+      "family": "LRO",
+      "view": "screen",
+      "src": "/media/vapes/showroom/silver-lro-screen.webp",
+      "crop": {
+        "left": 1220,
+        "top": 948,
+        "width": 2033,
+        "height": 2541
+      }
+    },
+    {
+      "sourceId": "P041",
+      "source": "Silver Battery\\LRO FACE LS.jpg",
+      "color": "Silver",
+      "family": "LRO",
+      "view": "front-left",
+      "src": "/media/vapes/showroom/silver-lro-front-left.webp",
+      "crop": {
+        "left": 1113,
+        "top": 913,
+        "width": 2042,
+        "height": 2552
+      }
+    },
+    {
+      "sourceId": "P042",
+      "source": "Silver Battery\\LRO FACE RS.jpg",
+      "color": "Silver",
+      "family": "LRO",
+      "view": "front-right",
+      "src": "/media/vapes/showroom/silver-lro-front-right.webp",
+      "crop": {
+        "left": 1364,
+        "top": 1038,
+        "width": 2025,
+        "height": 2531
+      }
+    },
+    {
+      "sourceId": "M010",
+      "source": "LRO Silver.png",
+      "color": "Silver",
+      "family": "LRO",
+      "view": "model",
+      "src": "/media/vapes/showroom/silver-lro-model.webp",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "sourceId": "P043",
+      "source": "Teal Battery\\LD BACK FACE.jpg",
+      "color": "Teal",
+      "family": "LD",
+      "view": "back",
+      "src": "/media/vapes/showroom/teal-ld-back.webp",
+      "crop": {
+        "left": 1019,
+        "top": 690,
+        "width": 2452,
+        "height": 3065
+      }
+    },
+    {
+      "sourceId": "P044",
+      "source": "Teal Battery\\LD BACK LS.jpg",
+      "color": "Teal",
+      "family": "LD",
+      "view": "back-left",
+      "src": "/media/vapes/showroom/teal-ld-back-left.webp",
+      "crop": {
+        "left": 1476,
+        "top": 1127,
+        "width": 2439,
+        "height": 3049
+      }
+    },
+    {
+      "sourceId": "P045",
+      "source": "Teal Battery\\LD BACK RS.jpg",
+      "color": "Teal",
+      "family": "LD",
+      "view": "back-right",
+      "src": "/media/vapes/showroom/teal-ld-back-right.webp",
+      "crop": {
+        "left": 1329,
+        "top": 869,
+        "width": 2436,
+        "height": 3045
+      }
+    },
+    {
+      "sourceId": "P046",
+      "source": "Teal Battery\\LD FACE HOME.jpg",
+      "color": "Teal",
+      "family": "LD",
+      "view": "home",
+      "src": "/media/vapes/showroom/teal-ld-home.webp",
+      "crop": {
+        "left": 1383,
+        "top": 1062,
+        "width": 2302,
+        "height": 2877
+      }
+    },
+    {
+      "sourceId": "P047",
+      "source": "Teal Battery\\LD FACE LD TEMP.jpg",
+      "color": "Teal",
+      "family": "LD",
+      "view": "screen",
+      "src": "/media/vapes/showroom/teal-ld-screen.webp",
+      "crop": {
+        "left": 1383,
+        "top": 1062,
+        "width": 2302,
+        "height": 2877
+      }
+    },
+    {
+      "sourceId": "P048",
+      "source": "Teal Battery\\LD FACE LS.jpg",
+      "color": "Teal",
+      "family": "LD",
+      "view": "front-left",
+      "src": "/media/vapes/showroom/teal-ld-front-left.webp",
+      "crop": {
+        "left": 1159,
+        "top": 971,
+        "width": 2253,
+        "height": 2817
+      }
+    },
+    {
+      "sourceId": "P049",
+      "source": "Teal Battery\\LD FACE RS.jpg",
+      "color": "Teal",
+      "family": "LD",
+      "view": "front-right",
+      "src": "/media/vapes/showroom/teal-ld-front-right.webp",
+      "crop": {
+        "left": 1156,
+        "top": 859,
+        "width": 2250,
+        "height": 2813
+      }
+    },
+    {
+      "sourceId": "M003",
+      "source": "LD Teal.png",
+      "color": "Teal",
+      "family": "LD",
+      "view": "model",
+      "src": "/media/vapes/showroom/teal-ld-model.webp",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "sourceId": "P050",
+      "source": "Teal Battery\\LRE BACK FACE.jpg",
+      "color": "Teal",
+      "family": "LRE",
+      "view": "back",
+      "src": "/media/vapes/showroom/teal-lre-back.webp",
+      "crop": {
+        "left": 1145,
+        "top": 922,
+        "width": 2202,
+        "height": 2753
+      }
+    },
+    {
+      "sourceId": "P051",
+      "source": "Teal Battery\\LRE BACK LS.jpg",
+      "color": "Teal",
+      "family": "LRE",
+      "view": "back-left",
+      "src": "/media/vapes/showroom/teal-lre-back-left.webp",
+      "crop": {
+        "left": 1074,
+        "top": 1054,
+        "width": 2185,
+        "height": 2731
+      }
+    },
+    {
+      "sourceId": "P052",
+      "source": "Teal Battery\\LRE BACK RS.jpg",
+      "color": "Teal",
+      "family": "LRE",
+      "view": "back-right",
+      "src": "/media/vapes/showroom/teal-lre-back-right.webp",
+      "crop": {
+        "left": 1224,
+        "top": 983,
+        "width": 2202,
+        "height": 2753
+      }
+    },
+    {
+      "sourceId": "P053",
+      "source": "Teal Battery\\LRE FACE LRE TEMP.jpg",
+      "color": "Teal",
+      "family": "LRE",
+      "view": "screen",
+      "src": "/media/vapes/showroom/teal-lre-screen.webp",
+      "crop": {
+        "left": 1243,
+        "top": 1018,
+        "width": 2287,
+        "height": 2859
+      }
+    },
+    {
+      "sourceId": "P054",
+      "source": "Teal Battery\\LRE FACE LS.jpg",
+      "color": "Teal",
+      "family": "LRE",
+      "view": "front-left",
+      "src": "/media/vapes/showroom/teal-lre-front-left.webp",
+      "crop": {
+        "left": 1390,
+        "top": 1219,
+        "width": 2286,
+        "height": 2858
+      }
+    },
+    {
+      "sourceId": "P055",
+      "source": "Teal Battery\\LRE FACE RS.jpg",
+      "color": "Teal",
+      "family": "LRE",
+      "view": "front-right",
+      "src": "/media/vapes/showroom/teal-lre-front-right.webp",
+      "crop": {
+        "left": 1315,
+        "top": 1007,
+        "width": 2204,
+        "height": 2755
+      }
+    },
+    {
+      "sourceId": "P056",
+      "source": "Teal Battery\\LRE HOME.jpg",
+      "color": "Teal",
+      "family": "LRE",
+      "view": "home",
+      "src": "/media/vapes/showroom/teal-lre-home.webp",
+      "crop": {
+        "left": 1243,
+        "top": 1018,
+        "width": 2287,
+        "height": 2859
+      }
+    },
+    {
+      "sourceId": "M007",
+      "source": "LRE Teal.png",
+      "color": "Teal",
+      "family": "LRE",
+      "view": "model",
+      "src": "/media/vapes/showroom/teal-lre-model.webp",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "sourceId": "P057",
+      "source": "Teal Battery\\LRO BACK FACE.jpg",
+      "color": "Teal",
+      "family": "LRO",
+      "view": "back",
+      "src": "/media/vapes/showroom/teal-lro-back.webp",
+      "crop": {
+        "left": 1145,
+        "top": 922,
+        "width": 2202,
+        "height": 2753
+      }
+    },
+    {
+      "sourceId": "P058",
+      "source": "Teal Battery\\LRO BACK LS.jpg",
+      "color": "Teal",
+      "family": "LRO",
+      "view": "back-left",
+      "src": "/media/vapes/showroom/teal-lro-back-left.webp",
+      "crop": {
+        "left": 1070,
+        "top": 1045,
+        "width": 2193,
+        "height": 2742
+      }
+    },
+    {
+      "sourceId": "P059",
+      "source": "Teal Battery\\LRO BACK RS.jpg",
+      "color": "Teal",
+      "family": "LRO",
+      "view": "back-right",
+      "src": "/media/vapes/showroom/teal-lro-back-right.webp",
+      "crop": {
+        "left": 1220,
+        "top": 973,
+        "width": 2211,
+        "height": 2764
+      }
+    },
+    {
+      "sourceId": "P060",
+      "source": "Teal Battery\\LRO FACE HOME.jpg",
+      "color": "Teal",
+      "family": "LRO",
+      "view": "home",
+      "src": "/media/vapes/showroom/teal-lro-home.webp",
+      "crop": {
+        "left": 1233,
+        "top": 998,
+        "width": 2307,
+        "height": 2883
+      }
+    },
+    {
+      "sourceId": "P061",
+      "source": "Teal Battery\\LRO FACE LRO TEMP.jpg",
+      "color": "Teal",
+      "family": "LRO",
+      "view": "screen",
+      "src": "/media/vapes/showroom/teal-lro-screen.webp",
+      "crop": {
+        "left": 1233,
+        "top": 998,
+        "width": 2307,
+        "height": 2883
+      }
+    },
+    {
+      "sourceId": "P062",
+      "source": "Teal Battery\\LRO FACE LS.jpg",
+      "color": "Teal",
+      "family": "LRO",
+      "view": "front-left",
+      "src": "/media/vapes/showroom/teal-lro-front-left.webp",
+      "crop": {
+        "left": 1385,
+        "top": 1208,
+        "width": 2296,
+        "height": 2871
+      }
+    },
+    {
+      "sourceId": "P063",
+      "source": "Teal Battery\\LRO FACE RS.jpg",
+      "color": "Teal",
+      "family": "LRO",
+      "view": "front-right",
+      "src": "/media/vapes/showroom/teal-lro-front-right.webp",
+      "crop": {
+        "left": 1300,
+        "top": 976,
+        "width": 2233,
+        "height": 2791
+      }
+    },
+    {
+      "sourceId": "M011",
+      "source": "LRO Teal.png",
+      "color": "Teal",
+      "family": "LRO",
+      "view": "model",
+      "src": "/media/vapes/showroom/teal-lro-model.webp",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "sourceId": "P065",
+      "source": "White Battery\\LD BACK FACE.jpg",
+      "color": "White",
+      "family": "LD",
+      "view": "back",
+      "src": "/media/vapes/showroom/white-ld-back.webp",
+      "crop": {
+        "left": 1166,
+        "top": 860,
+        "width": 1550,
+        "height": 1938
+      }
+    },
+    {
+      "sourceId": "P066",
+      "source": "White Battery\\LD BACK LS.jpg",
+      "color": "White",
+      "family": "LD",
+      "view": "back-left",
+      "src": "/media/vapes/showroom/white-ld-back-left.webp",
+      "crop": {
+        "left": 1130,
+        "top": 818,
+        "width": 1474,
+        "height": 1842
+      }
+    },
+    {
+      "sourceId": "P068",
+      "source": "White Battery\\LD BACK RS.jpg",
+      "color": "White",
+      "family": "LD",
+      "view": "back-right",
+      "src": "/media/vapes/showroom/white-ld-back-right.webp",
+      "crop": {
+        "left": 1152,
+        "top": 785,
+        "width": 1454,
+        "height": 1817
+      }
+    },
+    {
+      "sourceId": "P070",
+      "source": "White Battery\\LD FACE HOME.jpg",
+      "color": "White",
+      "family": "LD",
+      "view": "home",
+      "src": "/media/vapes/showroom/white-ld-home.webp",
+      "crop": {
+        "left": 1162,
+        "top": 1028,
+        "width": 1696,
+        "height": 2119
+      }
+    },
+    {
+      "sourceId": "P071",
+      "source": "White Battery\\LD FACE LD TEMP.jpg",
+      "color": "White",
+      "family": "LD",
+      "view": "screen",
+      "src": "/media/vapes/showroom/white-ld-screen.webp",
+      "crop": {
+        "left": 1162,
+        "top": 1028,
+        "width": 1696,
+        "height": 2119
+      }
+    },
+    {
+      "sourceId": "P073",
+      "source": "White Battery\\LD LS.jpg",
+      "color": "White",
+      "family": "LD",
+      "view": "front-left",
+      "src": "/media/vapes/showroom/white-ld-front-left.webp",
+      "crop": {
+        "left": 1141,
+        "top": 928,
+        "width": 1705,
+        "height": 2131
+      }
+    },
+    {
+      "sourceId": "P074",
+      "source": "White Battery\\LD RS.jpg",
+      "color": "White",
+      "family": "LD",
+      "view": "front-right",
+      "src": "/media/vapes/showroom/white-ld-front-right.webp",
+      "crop": {
+        "left": 1180,
+        "top": 1014,
+        "width": 1673,
+        "height": 2092
+      }
+    },
+    {
+      "sourceId": "M004",
+      "source": "LD White.png",
+      "color": "White",
+      "family": "LD",
+      "view": "model",
+      "src": "/media/vapes/showroom/white-ld-model.webp",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "sourceId": "P075",
+      "source": "White Battery\\LRE BACK FACE.jpg",
+      "color": "White",
+      "family": "LRE",
+      "view": "back",
+      "src": "/media/vapes/showroom/white-lre-back.webp",
+      "crop": {
+        "left": 1214,
+        "top": 882,
+        "width": 1615,
+        "height": 2019
+      }
+    },
+    {
+      "sourceId": "P076",
+      "source": "White Battery\\LRE BACK LS.jpg",
+      "color": "White",
+      "family": "LRE",
+      "view": "back-left",
+      "src": "/media/vapes/showroom/white-lre-back-left.webp",
+      "crop": {
+        "left": 1179,
+        "top": 857,
+        "width": 1568,
+        "height": 1960
+      }
+    },
+    {
+      "sourceId": "P077",
+      "source": "White Battery\\LRE BACK RS.jpg",
+      "color": "White",
+      "family": "LRE",
+      "view": "back-right",
+      "src": "/media/vapes/showroom/white-lre-back-right.webp",
+      "crop": {
+        "left": 1152,
+        "top": 833,
+        "width": 1537,
+        "height": 1921
+      }
+    },
+    {
+      "sourceId": "P078",
+      "source": "White Battery\\LRE FACE HOME .jpg",
+      "color": "White",
+      "family": "LRE",
+      "view": "home",
+      "src": "/media/vapes/showroom/white-lre-home.webp",
+      "crop": {
+        "left": 1174,
+        "top": 803,
+        "width": 1689,
+        "height": 2111
+      }
+    },
+    {
+      "sourceId": "P079",
+      "source": "White Battery\\LRE FACE LRE TEMP.jpg",
+      "color": "White",
+      "family": "LRE",
+      "view": "screen",
+      "src": "/media/vapes/showroom/white-lre-screen.webp",
+      "crop": {
+        "left": 1174,
+        "top": 803,
+        "width": 1689,
+        "height": 2111
+      }
+    },
+    {
+      "sourceId": "P080",
+      "source": "White Battery\\LRE LS.jpg",
+      "color": "White",
+      "family": "LRE",
+      "view": "front-left",
+      "src": "/media/vapes/showroom/white-lre-front-left.webp",
+      "crop": {
+        "left": 1094,
+        "top": 777,
+        "width": 1792,
+        "height": 2240
+      }
+    },
+    {
+      "sourceId": "P081",
+      "source": "White Battery\\LRE RS .jpg",
+      "color": "White",
+      "family": "LRE",
+      "view": "front-right",
+      "src": "/media/vapes/showroom/white-lre-front-right.webp",
+      "crop": {
+        "left": 1123,
+        "top": 897,
+        "width": 1760,
+        "height": 2200
+      }
+    },
+    {
+      "sourceId": "M008",
+      "source": "LRE White.png",
+      "color": "White",
+      "family": "LRE",
+      "view": "model",
+      "src": "/media/vapes/showroom/white-lre-model.webp",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "sourceId": "P082",
+      "source": "White Battery\\LRO BACK FACE.jpg",
+      "color": "White",
+      "family": "LRO",
+      "view": "back",
+      "src": "/media/vapes/showroom/white-lro-back.webp",
+      "crop": {
+        "left": 1218,
+        "top": 879,
+        "width": 1615,
+        "height": 2019
+      }
+    },
+    {
+      "sourceId": "P083",
+      "source": "White Battery\\LRO BACK LS.jpg",
+      "color": "White",
+      "family": "LRO",
+      "view": "back-left",
+      "src": "/media/vapes/showroom/white-lro-back-left.webp",
+      "crop": {
+        "left": 1193,
+        "top": 853,
+        "width": 1568,
+        "height": 1960
+      }
+    },
+    {
+      "sourceId": "P084",
+      "source": "White Battery\\LRO BACK RS.jpg",
+      "color": "White",
+      "family": "LRO",
+      "view": "back-right",
+      "src": "/media/vapes/showroom/white-lro-back-right.webp",
+      "crop": {
+        "left": 1152,
+        "top": 830,
+        "width": 1537,
+        "height": 1921
+      }
+    },
+    {
+      "sourceId": "P085",
+      "source": "White Battery\\LRO FACE HOME.jpg",
+      "color": "White",
+      "family": "LRO",
+      "view": "home",
+      "src": "/media/vapes/showroom/white-lro-home.webp",
+      "crop": {
+        "left": 1167,
+        "top": 786,
+        "width": 1704,
+        "height": 2131
+      }
+    },
+    {
+      "sourceId": "P086",
+      "source": "White Battery\\LRO FACE LRO TEMP.jpg",
+      "color": "White",
+      "family": "LRO",
+      "view": "screen",
+      "src": "/media/vapes/showroom/white-lro-screen.webp",
+      "crop": {
+        "left": 1167,
+        "top": 786,
+        "width": 1704,
+        "height": 2131
+      }
+    },
+    {
+      "sourceId": "P087",
+      "source": "White Battery\\LRO LS.jpg",
+      "color": "White",
+      "family": "LRO",
+      "view": "front-left",
+      "src": "/media/vapes/showroom/white-lro-front-left.webp",
+      "crop": {
+        "left": 978,
+        "top": 870,
+        "width": 1701,
+        "height": 2126
+      }
+    },
+    {
+      "sourceId": "P088",
+      "source": "White Battery\\LRO RS.jpg",
+      "color": "White",
+      "family": "LRO",
+      "view": "front-right",
+      "src": "/media/vapes/showroom/white-lro-front-right.webp",
+      "crop": {
+        "left": 1190,
+        "top": 854,
+        "width": 1673,
+        "height": 2092
+      }
+    },
+    {
+      "sourceId": "M012",
+      "source": "LRO White.png",
+      "color": "White",
+      "family": "LRO",
+      "view": "model",
+      "src": "/media/vapes/showroom/white-lro-model.webp",
+      "width": 1536,
+      "height": 1024
+    }
+  ],
+  "duplicateAliases": [
+    {
+      "sourceId": "P064",
+      "source": "White Battery\\LD BACK FACE - Copy.jpg",
+      "aliasOf": "P065"
+    },
+    {
+      "sourceId": "P067",
+      "source": "White Battery\\LD BACK RS - Copy.jpg",
+      "aliasOf": "P068"
+    },
+    {
+      "sourceId": "P069",
+      "source": "White Battery\\LD FACE HOME - Copy.jpg",
+      "aliasOf": "P070"
+    },
+    {
+      "sourceId": "P072",
+      "source": "White Battery\\LD LS - Copy.jpg",
+      "aliasOf": "P073"
+    }
+  ]
+}
