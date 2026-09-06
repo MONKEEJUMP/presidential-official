@@ -6,6 +6,7 @@ import { SceneStack } from "../layout/scene-stack";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { FindUsCtaShell } from "./find-us-cta-shell";
 import { ParentLearnGuideLink } from "./learn-guide-discovery";
+import { VapeCampaignMedia, VapePillarVisualStory } from "./vape-product-visuals";
 
 type PillarBreadcrumb = {
   readonly name: string;
@@ -94,22 +95,16 @@ const pillarContent: Record<PillarRouteId, PillarContent> = {
   },
 };
 
-function getPillarContent(route: SeoRouteRecord): PillarContent {
-  if (
-    route.id !== "moon-pods" &&
-    route.id !== "orbit"
-  ) {
-    throw new Error(`PillarPlatformShell does not support route id: ${route.id}`);
-  }
-
-  return pillarContent[route.id];
-}
-
 export function PillarPlatformShell({
   route,
   breadcrumbs,
 }: PillarPlatformShellProps) {
-  const content = getPillarContent(route);
+  if (route.id !== "moon-pods" && route.id !== "orbit") {
+    throw new Error(`PillarPlatformShell does not support route id: ${route.id}`);
+  }
+
+  const routeId = route.id;
+  const content = pillarContent[routeId];
   return (
     <PageFrame>
       <SceneStack>
@@ -135,8 +130,11 @@ export function PillarPlatformShell({
             route.description,
             content.intro,
           ]}
+          leadMedia={<VapeCampaignMedia route={routeId} />}
           title={route.h1}
         />
+
+        <VapePillarVisualStory route={routeId} />
 
         {content.lanes.length > 0 ? (
           <Scene
