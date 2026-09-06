@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 
 import {
   formatSalesDate,
@@ -37,6 +37,16 @@ type SalesInlineWorkAreaProps = Readonly<{
   error: string;
   saving: boolean;
   undoing: boolean;
+  canWork: boolean;
+  tools: ReactNode;
+  toolkitBusy: boolean;
+  onPrevious: () => void;
+  onNext: () => void;
+  hasPrevious: boolean;
+  hasNext: boolean;
+  positionLabel: string;
+  onMoreHistory: () => void;
+  hasMoreHistory: boolean;
   onNotesChange: (value: string) => void;
   onCallbackChange: (value: string) => void;
   onOutcome: (outcome: SalesOutcome) => void;
@@ -52,7 +62,6 @@ export function SalesInlineWorkArea({
   door,
   mode,
   notes,
-  callbackDate,
   discardWarning,
   loggedCall,
   message,
@@ -60,7 +69,6 @@ export function SalesInlineWorkArea({
   saving,
   undoing,
   onNotesChange,
-  onCallbackChange,
   onOutcome,
   onSubmitVerification,
   onWithdrawRequest,
@@ -68,10 +76,12 @@ export function SalesInlineWorkArea({
   onClose,
   onDiscard,
   onKeepWorking,
+  canWork, tools, toolkitBusy, onPrevious, onNext, hasPrevious, hasNext, positionLabel, onMoreHistory, hasMoreHistory,
 }: SalesInlineWorkAreaProps) {
   const [confirmation, setConfirmation] = useState<SalesVerificationClaim | "do_not_call" | null>(null);
   const undoableCall = door.callHistory.find((call) => call.undoEligible && !call.undone) ?? null;
   const undoableRequest = door.pendingVerification?.canWithdraw ? door.pendingVerification : null;
+  const busy = saving || undoing || toolkitBusy;
 
   function confirmHighImpactAction() {
     if (!confirmation) return;
@@ -82,16 +92,21 @@ export function SalesInlineWorkArea({
   }
 
   return (
-    <section className={styles.inlineWorkArea} aria-label={`${mode === "log" ? "Log result" : "History"} for ${door.dbaName || door.legalName}`}>
+    <section className={styles.inlineWorkArea} onKeyDown={(event) => { if (event.key === "Escape" && !event.defaultPrevented && !busy) { event.stopPropagation(); if (confirmation) setConfirmation(null); else onClose(); } }} aria-label={`${mode === "log" ? "Log result" : "History"} for ${door.dbaName || door.legalName}`}>
       <header className={styles.inlineWorkHeader}>
-        <button onClick={onClose} type="button">← BACK TO LIST</button>
+        <button disabled={busy} onClick={onClose} type="button">← BACK TO LIST</button>
         <div>
           <span>{mode === "log" ? "LOG RESULT" : "CALL HISTORY"}</span>
           <strong>{door.dbaName || door.legalName}</strong>
-          {door.phone ? <a href={`tel:${door.phone}`}>CALL {door.phone}</a> : null}
+          {door.phone && canWork && !door.doNotCallLocked ? <a href={`tel:${door.phone}`}>CALL {door.phone}</a> : <span>{door.doNotCallLocked ? "DO NOT CALL — LOCKED" : door.phone ? "Open Log Result to reserve this store before calling" : "Phone number not on file"}</span>}
         </div>
-        <button onClick={onClose} type="button">CLOSE</button>
+        <button disabled={busy} onClick={onClose} type="button">CLOSE</button>
       </header>
+      <nav className={styles.nextNavigation} aria-label="Move through dispensaries">
+        <button disabled={busy || !hasPrevious} onClick={onPrevious} type="button">← Previous</button>
+        <span>{positionLabel}</span>
+        <button disabled={busy || !hasNext} onClick={onNext} type="button">Next dispensary →</button>
+      </nav>
 
       {message ? <p className={styles.inlineMessage} role="status">{message}</p> : null}
       {error ? <p className={styles.inlineError} role="alert">{error}</p> : null}
@@ -99,10 +114,10 @@ export function SalesInlineWorkArea({
       {discardWarning ? (
         <div className={styles.discardWarning} role="alertdialog" aria-modal="true" aria-labelledby="discard-warning-title">
           <strong id="discard-warning-title">YOU HAVE UNSAVED CALL INFORMATION.</strong>
-          <p>DISCARD IT AND RETURN TO THE LIST?</p>
+          <p>DISCARD UNSAVED CHANGES AND CONTINUE?</p>
           <div>
             <button onClick={onKeepWorking} type="button">KEEP WORKING</button>
-            <button onClick={onDiscard} type="button">DISCARD AND RETURN</button>
+            <button onClick={onDiscard} type="button">DISCARD AND CONTINUE</button>
           </div>
         </div>
       ) : mode === "history" ? (
@@ -113,7 +128,7 @@ export function SalesInlineWorkArea({
                 <strong>{salesOutcome(call.outcome).label}</strong>
                 {call.undone ? <span className={styles.undoneBadge}>UNDONE</span> : null}
               </div>
-              <span>{formatSalesDate(call.calledAt, true)} · {call.repName}</span>
+              <span>{formatSalesDate(call.calledAt, true)} · {call.repName}{new Date(call.calledAt).getTime() < Date.parse("2026-09-02T22:18:00Z") ? " · PRELAUNCH ARCHIVE" : ""}</span>
               {call.callbackAt ? <span>Callback: {formatSalesDate(call.callbackAt)}</span> : null}
               {call.notes ? <p>{call.notes}</p> : null}
               {call.undoEligible ? (
@@ -123,12 +138,14 @@ export function SalesInlineWorkArea({
               ) : null}
             </article>
           )) : <p>No call activity yet.</p>}
+          {hasMoreHistory ? <button type="button" onClick={onMoreHistory}>Older call history</button> : null}
+          <small>Undo is available for your latest eligible action for 24 hours. If it is no longer available, use Request a correction below.</small>
 
           {door.pendingVerification ? (
             <article className={styles.pendingRequestCard}>
               <strong>{door.pendingVerification.claimedStatus === "sold" ? "SOLD REPORT" : "ALREADY CARRIES REPORT"}</strong>
               <span>Submitted {formatSalesDate(door.pendingVerification.submittedAt, true)}</span>
-              <span>AWAITING PAULIE VERIFICATION</span>
+              <span>AWAITING OWNER REVIEW</span>
               {door.pendingVerification.notes ? <p>{door.pendingVerification.notes}</p> : null}
               {door.pendingVerification.canWithdraw ? (
                 <button onClick={() => onWithdrawRequest(door.pendingVerification!)} type="button">
@@ -151,7 +168,7 @@ export function SalesInlineWorkArea({
           ) : null}
           {door.hasPendingVerification ? (
             <div className={styles.pendingNotice}>
-              <strong>AWAITING PAULIE VERIFICATION</strong>
+              <strong>AWAITING OWNER REVIEW</strong>
               {door.pendingVerification?.canWithdraw ? (
                 <button onClick={() => onWithdrawRequest(door.pendingVerification!)} type="button">
                   {door.pendingVerification.claimedStatus === "sold" ? "WITHDRAW SOLD REPORT" : "WITHDRAW ALREADY CARRIES REPORT"}
@@ -165,27 +182,20 @@ export function SalesInlineWorkArea({
               <span>Notes</span>
               <textarea
                 autoFocus
+                disabled={busy}
                 maxLength={4000}
                 onChange={(event) => onNotesChange(event.target.value)}
                 placeholder="Write the useful details from this call…"
                 value={notes}
               />
             </label>
-            <label>
-              <span>Callback date</span>
-              <input
-                onChange={(event) => onCallbackChange(event.target.value)}
-                type="date"
-                value={callbackDate}
-              />
-            </label>
           </div>
 
           <div className={styles.normalOutcomes}>
-            <span>CALL OUTCOME — ONE CLICK SAVES EVERYTHING ABOVE</span>
+            <span>CALL OUTCOME — SAVES THIS CALL AND YOUR NOTES</span>
             <div>
               {NORMAL_OUTCOMES.map((outcome) => (
-                <button disabled={saving} key={outcome} onClick={() => onOutcome(outcome)} type="button">
+                <button disabled={busy || !canWork || door.doNotCallLocked} key={outcome} onClick={() => onOutcome(outcome)} type="button">
                   {salesOutcome(outcome).label}
                 </button>
               ))}
@@ -206,11 +216,11 @@ export function SalesInlineWorkArea({
                 <p>
                   {confirmation === "do_not_call"
                     ? "This removes it from normal calling activity."
-                    : "This sends the information to Paulie for verification. It does not immediately change verified customer truth."}
+                    : "This sends the information to the owner for verification. It does not immediately change verified customer truth."}
                 </p>
                 <div>
                   <button onClick={() => setConfirmation(null)} type="button">CANCEL</button>
-                  <button disabled={saving} onClick={confirmHighImpactAction} type="button">
+                  <button disabled={busy || !canWork} onClick={confirmHighImpactAction} type="button">
                     {confirmation === "do_not_call"
                       ? "CONFIRM DO NOT CALL"
                       : confirmation === "sold"
@@ -222,14 +232,14 @@ export function SalesInlineWorkArea({
             ) : (
               <div>
                 <button
-                  disabled={saving || door.hasPendingVerification}
+                  disabled={busy || !canWork || door.hasPendingVerification}
                   onClick={() => setConfirmation("already_carries_us")}
                   type="button"
                 >
                   ALREADY CARRIES PRESIDENTIAL
                 </button>
                 <button
-                  disabled={saving || door.hasPendingVerification}
+                  disabled={busy || !canWork || door.hasPendingVerification}
                   onClick={() => setConfirmation("sold")}
                   type="button"
                 >
@@ -237,7 +247,7 @@ export function SalesInlineWorkArea({
                 </button>
                 <button
                   className={styles.doNotCallAction}
-                  disabled={saving}
+                  disabled={busy || !canWork}
                   onClick={() => setConfirmation("do_not_call")}
                   type="button"
                 >
@@ -264,6 +274,7 @@ export function SalesInlineWorkArea({
           ) : null}
         </div>
       )}
+      {tools}
     </section>
   );
 }
