@@ -9,6 +9,7 @@ import { CtaLink } from "../primitives/cta-link";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { ParentLearnGuideLink } from "./learn-guide-discovery";
 import { RepoOwnedPageCopy } from "./repo-owned-page-copy";
+import { VapeCampaignMedia, VapeCollectionStory } from "./vape-product-visuals";
 
 type VapesBreadcrumb = {
   readonly name: string;
@@ -134,10 +135,13 @@ export function VapesPlatformShell({
           supportingText={[
             "Presidential built its name on making cannabis better than it had to be. The vape platform carries the same assignment: real extract, real flavor, and hardware that does the material justice. Two platforms, one standard — engineered for the way people actually move.",
           ]}
+          leadMedia={<VapeCampaignMedia route="vapes" />}
           title={route.h1}
         />
 
         <RepoOwnedPageCopy path="/vapes" />
+
+        <VapeCollectionStory />
 
         <Scene
           ariaLabelledBy="vapes-platforms-title"
