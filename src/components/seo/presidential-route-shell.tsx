@@ -11,7 +11,6 @@ import { OurStoryPrerollGraphicsGrid } from "@/components/presidential/modules/o
 import { AboutCompanyShell } from "@/components/presidential/modules/about-company-shell";
 import { VapesPlatformShell } from "@/components/presidential/modules/vapes-platform-shell";
 import { RepoOwnedPageCopy } from "@/components/presidential/modules/repo-owned-page-copy";
-import { VapePillarVisualStory } from "@/components/presidential/modules/vape-product-visuals";
 import {
   LearnGuideIndex,
   ParentLearnGuideLink,
@@ -36,8 +35,6 @@ type CmsSupportRoute = "contact" | "find-us";
 
 const cmsSiteRouteIds = new Set([
   "moon-rocks",
-  "moon-pods",
-  "orbit",
   "our-story",
   "learn",
   "find-us",
@@ -115,9 +112,6 @@ export async function PresidentialRouteShell({
               />
             )}
             {route.id === "our-story" ? <OurStoryPrerollGraphicsGrid /> : null}
-            {route.id === "moon-pods" || route.id === "orbit" ? (
-              <VapePillarVisualStory route={route.id} />
-            ) : null}
             {route.id === "find-us" && findUsLocatorModuleIndex < 0 ? (
               <FindUsMiniBluntsGrid />
             ) : null}
