@@ -44,7 +44,7 @@ function FilmPlayer({ mobile, videoRef, paused, onPausedChange }: {
       <source src={`${source}.webm`} type="video/webm" />
       <source src={`${source}.mp4`} type="video/mp4" />
     </video>
-    <button type="button" className={s.control} onClick={togglePlayback} aria-label={playing ? 'Pause hero film' : 'Play hero film'}>
+    <button type="button" className={s.control} onClick={togglePlayback} aria-label={playing ? 'Pause product film' : 'Play product film'}>
       <svg aria-hidden="true" width="14" height="14" viewBox="0 0 20 20" fill="currentColor">{playing ? <path d="M5 3h3v14H5zM12 3h3v14h-3z" /> : <path d="m6 3 11 7-11 7z" />}</svg>
       <span>{playing ? 'Pause film' : 'Play film'}</span>
     </button>
@@ -58,7 +58,7 @@ export function OrbitHeroFilm() {
   const [posterReady, setPosterReady] = useState(false);
   const [paused, setPaused] = useState(false);
   return <div className={s.film} ref={container}>
-    <Image className={s.poster} src="/media/vapes/film/orbit-in-motion-poster-v1.jpg" alt="Teal Presidential Orbit with Moon Pod, from the Orbit in Motion product film" width={1080} height={1080} sizes="(min-width: 1100px) 720px, (min-width: 760px) 56vw, 100vw" loading="eager" fetchPriority="high" onLoad={() => setPosterReady(true)} />
+    <Image className={s.poster} src="/media/vapes/film/orbit-in-motion-poster-v1.jpg" alt="Teal Presidential Orbit with Moon Pod, from the Orbit in Motion product film" width={1080} height={1080} sizes="(min-width: 1100px) 580px, (min-width: 760px) 44vw, 90vw" loading="lazy" onLoad={() => setPosterReady(true)} />
     {posterReady && canStream ? <FilmPlayer key={mobile ? 'mobile' : 'desktop'} mobile={mobile} videoRef={videoRef} paused={paused} onPausedChange={setPaused} /> : null}
   </div>;
 }
