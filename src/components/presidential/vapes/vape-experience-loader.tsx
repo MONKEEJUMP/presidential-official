@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { VapePage } from '@/lib/vapes/catalog';
+import { decodeVapeFragment } from './vape-fragment';
 import s from './showroom.module.css';
 
 const VapeExperience = dynamic(
@@ -35,7 +36,7 @@ export function VapeExperienceLoader({ page }: { page: VapePage }) {
   useEffect(() => {
     const target = boundary.current;
     if (!target || ready) return;
-    const fragment = decodeURIComponent(window.location.hash.slice(1));
+    const fragment = decodeVapeFragment(window.location.hash);
     if (DEFERRED_SECTION_IDS.some((id) => id === fragment)) {
       queueMicrotask(() => setReady(true));
       return;

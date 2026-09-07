@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { getVapeGallery, getVapeImage, VAPE_FAMILIES, VAPE_FINISHES, VAPE_MODEL_SETS, VAPE_VIEWS, type VapeFamily, type VapeFinish, type VapePage } from '@/lib/vapes/catalog';
 import { VapeGalleryDialog } from './vape-gallery-dialog';
+import { decodeVapeFragment } from './vape-fragment';
 import { VapeIcon } from './vape-icon';
 import s from './showroom.module.css';
 
@@ -34,7 +35,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
   const model = getVapeImage(selectedModel.finish, selectedModel.family, 'model');
 
   useLayoutEffect(() => {
-    const targetId = decodeURIComponent(window.location.hash.slice(1));
+    const targetId = decodeVapeFragment(window.location.hash);
     if (!targetId) return;
     const frame = window.requestAnimationFrame(() => {
       document.getElementById(targetId)?.scrollIntoView({ block: 'start' });

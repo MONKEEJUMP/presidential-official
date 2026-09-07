@@ -23,3 +23,4 @@ Required order for every PR:
 Never merge while Codex Review is pending. A newly pushed commit invalidates an earlier review until Codex reviews the new head. If repository rules cannot enforce the gate, this instruction remains mandatory and the missing GitHub setting must be reported to PAULIEWOOD.
 
 GitHub Actions does not expose the review-thread `resolved` webhook as a workflow trigger. After resolving the final Codex thread, rerun the failed Codex Review Gate on the unchanged head and require it to pass before merge.
+Where branch rules are supported, require both `Codex Review Gate` and `Codex Review Ready`; the latter turns pending when `@codex review` requests another same-head review.
