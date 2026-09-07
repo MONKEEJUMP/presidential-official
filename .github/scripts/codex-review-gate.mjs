@@ -40,6 +40,8 @@ async function requestGraphql(fetchImpl, token, variables) {
 export async function readReviewState({ fetchImpl = fetch, name, owner, pullRequestNumber, token }) {
   let reviewsCursor = null;
   let threadsCursor = null;
+  let reviewsComplete = false;
+  let threadsComplete = false;
   let headRefOid = null;
   const reviews = [];
   const reviewThreads = [];
@@ -54,15 +56,17 @@ export async function readReviewState({ fetchImpl = fetch, name, owner, pullRequ
     });
     if (!pullRequest) return null;
     headRefOid ??= pullRequest.headRefOid;
-    reviews.push(...pullRequest.reviews.nodes);
-    reviewThreads.push(...pullRequest.reviewThreads.nodes);
-    reviewsCursor = pullRequest.reviews.pageInfo.hasNextPage
-      ? pullRequest.reviews.pageInfo.endCursor
-      : null;
-    threadsCursor = pullRequest.reviewThreads.pageInfo.hasNextPage
-      ? pullRequest.reviewThreads.pageInfo.endCursor
-      : null;
-  } while (reviewsCursor || threadsCursor);
+    if (!reviewsComplete) {
+      reviews.push(...pullRequest.reviews.nodes);
+      reviewsComplete = !pullRequest.reviews.pageInfo.hasNextPage;
+      if (!reviewsComplete) reviewsCursor = pullRequest.reviews.pageInfo.endCursor;
+    }
+    if (!threadsComplete) {
+      reviewThreads.push(...pullRequest.reviewThreads.nodes);
+      threadsComplete = !pullRequest.reviewThreads.pageInfo.hasNextPage;
+      if (!threadsComplete) threadsCursor = pullRequest.reviewThreads.pageInfo.endCursor;
+    }
+  } while (!reviewsComplete || !threadsComplete);
 
   return { headRefOid, reviews, reviewThreads };
 }

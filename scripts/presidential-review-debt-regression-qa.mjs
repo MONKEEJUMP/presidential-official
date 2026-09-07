@@ -29,9 +29,9 @@ const sanityReadClient = read("src/lib/cms/sanity-read-client.ts");
 const approvedRoutes = read("src/lib/seo/approved-public-routes.ts");
 const productMetadata = read("src/lib/seo/pw7404-1019-product-metadata.ts");
 
-check("vapes.pageshowPreservesHash", /const resetScroll = \(\) => \{\s*if \(!window\.location\.hash\)/s.test(experience), "pageshow reset re-checks the current hash");
+check("vapes.pageshowPreservesHash", /const resetScroll = \(\) => \{\s*if \(!window\.location\.hash\)/s.test(experienceLoader), "initial pageshow reset re-checks the current hash before the explorer mounts");
 check("vapes.archiveDeferred", experience.includes("archiveOpened ? <div") && experience.includes("setArchiveOpened(true)"), "96-image archive is absent until first open");
-check("vapes.explorerDeferred", experienceLoader.includes("IntersectionObserver") && experienceLoader.includes("rootMargin: '600px 0px'") && experienceLoader.includes("dynamic(") && showroom.includes("<VapeExperienceLoader"), "below-fold interactive explorer and its JavaScript load near the viewport instead of inflating the initial response");
+check("vapes.explorerDeferred", experienceLoader.includes("IntersectionObserver") && experienceLoader.includes("rootMargin: '600px 0px'") && experienceLoader.includes("dynamic(") && experienceLoader.includes("DEFERRED_SECTION_IDS") && showroom.includes("<VapeExperienceLoader"), "below-fold interactive explorer and its JavaScript load near the viewport while advertised fragment targets remain reachable");
 check("vapes.educationControls", film.includes("controls={!blueprint}"), "education film retains controls while blueprint remains control-free");
 check("vapes.posterFailureFallback", film.includes("onError={() => setPosterReady(true)}"), "poster failure no longer blocks video mounting");
 check("vapes.heroCaption", showroom.includes("THE PRESIDENTIAL VAPE EXPERIENCE"), "non-blueprint hero caption is restored");

@@ -34,20 +34,12 @@ export function VapeExperience({ page }: { page: VapePage }) {
   const model = getVapeImage(selectedModel.finish, selectedModel.family, 'model');
 
   useLayoutEffect(() => {
-    if (page !== 'vapes' || window.location.hash) return;
-    const previousRestoration = window.history.scrollRestoration;
-    const resetScroll = () => {
-      if (!window.location.hash) window.scrollTo(0, 0);
-    };
-    window.history.scrollRestoration = 'manual';
-    resetScroll();
-    const frame = window.requestAnimationFrame(resetScroll);
-    window.addEventListener('pageshow', resetScroll);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener('pageshow', resetScroll);
-      window.history.scrollRestoration = previousRestoration;
-    };
+    const targetId = decodeURIComponent(window.location.hash.slice(1));
+    if (!targetId) return;
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById(targetId)?.scrollIntoView({ block: 'start' });
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, [page]);
 
   function moveView(delta: number) { setViewIndex(value => (value + delta + 8) % 8); }

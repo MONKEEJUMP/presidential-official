@@ -11,21 +11,25 @@ test("paginates reviews and review threads", async () => {
   const fetchImpl = async (_url, init) => {
     const variables = JSON.parse(init.body).variables;
     calls.push(variables);
-    const second = variables.reviewsCursor === "reviews-2";
+    const reviewsSecond = variables.reviewsCursor === "reviews-2";
+    const threadsThird = variables.threadsCursor === "threads-3";
     return response({
       headRefOid: "head",
       reviews: {
-        nodes: second ? [{ author: { login: CODEX_LOGIN }, commit: { oid: "head" }, state: "COMMENTED", submittedAt: "2026-09-07T00:00:00Z" }] : [],
-        pageInfo: { hasNextPage: !second, endCursor: second ? null : "reviews-2" },
+        nodes: reviewsSecond ? [{ author: { login: CODEX_LOGIN }, commit: { oid: "head" }, state: "COMMENTED", submittedAt: "2026-09-07T00:00:00Z" }] : [],
+        pageInfo: { hasNextPage: !reviewsSecond, endCursor: reviewsSecond ? null : "reviews-2" },
       },
       reviewThreads: {
-        nodes: second ? [{ isResolved: false, comments: { nodes: [{ author: { login: CODEX_LOGIN }, url: "https://example.test/thread" }] } }] : [],
-        pageInfo: { hasNextPage: !second, endCursor: second ? null : "threads-2" },
+        nodes: threadsThird ? [{ isResolved: false, comments: { nodes: [{ author: { login: CODEX_LOGIN }, url: "https://example.test/thread" }] } }] : [],
+        pageInfo: {
+          hasNextPage: !threadsThird,
+          endCursor: variables.threadsCursor === null ? "threads-2" : threadsThird ? null : "threads-3",
+        },
       },
     });
   };
   const state = await readReviewState({ fetchImpl, name: "repo", owner: "owner", pullRequestNumber: 1, token: "token" });
-  assert.equal(calls.length, 2);
+  assert.equal(calls.length, 3);
   assert.equal(state.reviews.length, 1);
   assert.equal(state.reviewThreads.length, 1);
 });
