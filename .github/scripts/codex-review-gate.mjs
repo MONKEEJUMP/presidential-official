@@ -72,13 +72,19 @@ export async function readReviewState({ fetchImpl = fetch, name, owner, pullRequ
 }
 
 export function evaluateReviewState(pullRequest) {
-  const currentReview = pullRequest.reviews.some(
+  const currentHeadReviews = pullRequest.reviews.filter(
     (review) =>
       review.author?.login === CODEX_LOGIN &&
-      review.commit?.oid === pullRequest.headRefOid &&
-      Boolean(review.submittedAt) &&
+      review.commit?.oid === pullRequest.headRefOid,
+  );
+  const pendingCurrentReview = currentHeadReviews.some(
+    (review) => review.state === "PENDING" || !review.submittedAt,
+  );
+  const currentReview = !pendingCurrentReview && currentHeadReviews.some(
+    (review) =>
       review.state !== "DISMISSED" &&
-      review.state !== "PENDING",
+      review.state !== "PENDING" &&
+      Boolean(review.submittedAt),
   );
   const unresolved = pullRequest.reviewThreads.filter(
     (thread) =>

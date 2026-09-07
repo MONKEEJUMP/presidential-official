@@ -52,3 +52,15 @@ test("submitted current-head review passes only with resolved threads", () => {
   };
   assert.deepEqual(evaluateReviewState(pullRequest), { currentReview: true, unresolved: [] });
 });
+
+test("pending same-head rerun vetoes an earlier completed review", () => {
+  const result = evaluateReviewState({
+    headRefOid: "head",
+    reviews: [
+      { author: { login: CODEX_LOGIN }, commit: { oid: "head" }, state: "COMMENTED", submittedAt: "2026-09-07T00:00:00Z" },
+      { author: { login: CODEX_LOGIN }, commit: { oid: "head" }, state: "PENDING", submittedAt: null },
+    ],
+    reviewThreads: [],
+  });
+  assert.equal(result.currentReview, false);
+});
