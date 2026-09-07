@@ -1,4 +1,5 @@
 import type { SeoRouteRecord, SeoRoutePath } from "./route-types";
+import { PARTNER_ROUTES } from './partners-routes';
 
 export const MANDATORY_ROUTE_PATHS = [
   "/",
@@ -14,6 +15,7 @@ export const MANDATORY_ROUTE_PATHS = [
 ] as const satisfies readonly SeoRoutePath[];
 
 export const ROUTE_REGISTRY = [
+  ...PARTNER_ROUTES,
   {
     id: "home",
     path: "/",

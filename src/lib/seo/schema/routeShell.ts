@@ -81,6 +81,10 @@ export function buildRouteShellBreadcrumbItems(
     return [{ name: "Presidential", path: "/" }];
   }
 
+  if (route.path === '/partners' || route.path.startsWith('/partners/')) {
+    return [{name:'Home',path:'/'},{name:'Partners',path:'/partners'},...(route.path==='/partners'?[]:[{name:route.h1.replace(/ Partners$/,''),path:route.path}])];
+  }
+
   return [
     { name: "Presidential", path: "/" },
     { name: getSafeRouteShellName(route), path: route.canonicalPath },
