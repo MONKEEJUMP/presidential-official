@@ -41,7 +41,7 @@ export function FindUsCtaShell({
           .filter(Boolean)
           .join(" ")}
       >
-        <div>
+        <div className="min-w-0">
           <h2
             className={
               compact
