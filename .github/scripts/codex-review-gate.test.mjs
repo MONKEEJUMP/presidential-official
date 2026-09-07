@@ -8,7 +8,10 @@ function response(pullRequest) {
 
 test("paginates reviews and review threads", async () => {
   const calls = [];
-  const fetchImpl = async (_url, init) => {
+  const fetchImpl = async (url, init) => {
+    if (url.includes("/statuses?")) {
+      return { ok: true, json: async () => [] };
+    }
     const variables = JSON.parse(init.body).variables;
     calls.push(variables);
     const reviewsSecond = variables.reviewsCursor === "reviews-2";
@@ -63,4 +66,20 @@ test("pending same-head rerun vetoes an earlier completed review", () => {
     reviewThreads: [],
   });
   assert.equal(result.currentReview, false);
+});
+
+test("completed review must postdate a pending same-head request", () => {
+  const base = {
+    headRefOid: "head",
+    reviewRequestStatus: { context: "Codex Review Ready", state: "pending", created_at: "2026-09-07T01:00:00Z" },
+    reviewThreads: [],
+  };
+  assert.equal(evaluateReviewState({
+    ...base,
+    reviews: [{ author: { login: CODEX_LOGIN }, commit: { oid: "head" }, state: "COMMENTED", submittedAt: "2026-09-07T00:00:00Z" }],
+  }).currentReview, false);
+  assert.equal(evaluateReviewState({
+    ...base,
+    reviews: [{ author: { login: CODEX_LOGIN }, commit: { oid: "head" }, state: "COMMENTED", submittedAt: "2026-09-07T02:00:00Z" }],
+  }).currentReview, true);
 });

@@ -20,14 +20,18 @@ const query = `
   }
 `;
 
+function githubHeaders(token) {
+  return {
+    authorization: `Bearer ${token}`,
+    "content-type": "application/json",
+    "user-agent": "presidential-codex-review-gate",
+  };
+}
+
 async function requestGraphql(fetchImpl, token, variables) {
   const response = await fetchImpl("https://api.github.com/graphql", {
     method: "POST",
-    headers: {
-      authorization: `Bearer ${token}`,
-      "content-type": "application/json",
-      "user-agent": "presidential-codex-review-gate",
-    },
+    headers: githubHeaders(token),
     body: JSON.stringify({ query, variables }),
   });
   const payload = await response.json();
@@ -35,6 +39,21 @@ async function requestGraphql(fetchImpl, token, variables) {
     throw new Error(JSON.stringify(payload.errors ?? payload, null, 2));
   }
   return payload.data?.repository?.pullRequest ?? null;
+}
+
+async function readLatestReviewRequestStatus(fetchImpl, token, owner, name, headRefOid) {
+  for (let page = 1; ; page += 1) {
+    const response = await fetchImpl(
+      `https://api.github.com/repos/${owner}/${name}/commits/${headRefOid}/statuses?per_page=100&page=${page}`,
+      { headers: githubHeaders(token) },
+    );
+    const statuses = await response.json();
+    if (!response.ok || !Array.isArray(statuses)) {
+      throw new Error(JSON.stringify(statuses, null, 2));
+    }
+    const reviewStatus = statuses.find((status) => status.context === "Codex Review Ready");
+    if (reviewStatus || statuses.length < 100) return reviewStatus ?? null;
+  }
 }
 
 export async function readReviewState({ fetchImpl = fetch, name, owner, pullRequestNumber, token }) {
@@ -68,7 +87,14 @@ export async function readReviewState({ fetchImpl = fetch, name, owner, pullRequ
     }
   } while (!reviewsComplete || !threadsComplete);
 
-  return { headRefOid, reviews, reviewThreads };
+  const reviewRequestStatus = await readLatestReviewRequestStatus(
+    fetchImpl,
+    token,
+    owner,
+    name,
+    headRefOid,
+  );
+  return { headRefOid, reviewRequestStatus, reviews, reviewThreads };
 }
 
 export function evaluateReviewState(pullRequest) {
@@ -80,11 +106,16 @@ export function evaluateReviewState(pullRequest) {
   const pendingCurrentReview = currentHeadReviews.some(
     (review) => review.state === "PENDING" || !review.submittedAt,
   );
+  const requestCreatedAt =
+    pullRequest.reviewRequestStatus?.state === "pending"
+      ? Date.parse(pullRequest.reviewRequestStatus.created_at)
+      : null;
   const currentReview = !pendingCurrentReview && currentHeadReviews.some(
     (review) =>
       review.state !== "DISMISSED" &&
       review.state !== "PENDING" &&
-      Boolean(review.submittedAt),
+      Boolean(review.submittedAt) &&
+      (requestCreatedAt === null || Date.parse(review.submittedAt) > requestCreatedAt),
   );
   const unresolved = pullRequest.reviewThreads.filter(
     (thread) =>
@@ -121,6 +152,7 @@ export async function main(env = process.env, fetchImpl = fetch) {
     pullRequest: pullRequestNumber,
     headRefOid: pullRequest.headRefOid,
     currentCodexReviewCompleted: currentReview,
+    latestReviewRequestStatus: pullRequest.reviewRequestStatus,
     unresolvedCodexThreads: unresolved.map((thread) => thread.comments.nodes[0]?.url).filter(Boolean),
   }, null, 2));
 
