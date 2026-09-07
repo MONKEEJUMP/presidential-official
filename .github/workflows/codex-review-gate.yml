@@ -1,5 +1,9 @@
 name: Codex Review Gate
 
+concurrency:
+  group: codex-review-gate-${{ github.event.pull_request.number || github.event.issue.number }}
+  cancel-in-progress: true
+
 on:
   issue_comment:
     types: [created]

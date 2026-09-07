@@ -20,6 +20,7 @@ function websiteHref(value: string | null) {
 
 type Props = {
   door: SalesDoor;
+  timeZone: string;
   userId: string;
   isSuper: boolean;
   mode: "log" | "history";
@@ -31,7 +32,7 @@ type Props = {
   onBusyChange: (busy: boolean) => void;
 };
 
-export function SalesToolkit({ door, userId, isSuper, mode, notes, externalBusy, onNoteSaved, onAvailability, onDirtyChange, onBusyChange }: Props) {
+export function SalesToolkit({ door, timeZone, userId, isSuper, mode, notes, externalBusy, onNoteSaved, onAvailability, onDirtyChange, onBusyChange }: Props) {
   const [detail, setDetail] = useState<WorkflowDetail | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -40,7 +41,6 @@ export function SalesToolkit({ door, userId, isSuper, mode, notes, externalBusy,
   const [callbackNote, setCallbackNote] = useState("");
   const [correction, setCorrection] = useState("");
   const [reportOpen, setReportOpen] = useState(false);
-  const [timeZone, setTimeZone] = useState("your device time");
   const [ownerReason, setOwnerReason] = useState("");
   const requestRef = useRef<{ signature: string; id: string } | null>(null);
   const controller = useRef<AbortController | null>(null);
@@ -61,7 +61,6 @@ export function SalesToolkit({ door, userId, isSuper, mode, notes, externalBusy,
     if (!response.ok) throw new Error(data.error ?? "Unable to open the workspace.");
     if (abort.signal.aborted || !mounted.current) return;
     setDetail(data);
-    setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
     if (!callbackDirtyRef.current) {
       setDueDraft(data.callback ? localInput(data.callback.dueAt) : "");
       setCallbackNote(data.callback?.note ?? "");
@@ -139,7 +138,7 @@ export function SalesToolkit({ door, userId, isSuper, mode, notes, externalBusy,
     <div className={styles.savedNotes}>
       <h3>Team notes</h3>
       {!detail ? <p>Loading notes…</p> : !detail.notes.length ? <p>No saved team notes yet. Call notes appear in call history.</p> : detail.notes.map((note) => <article className={styles.noteEntry} key={note.id}>
-        <small>{note.repName} · {formatSalesDate(note.createdAt, true)}{note.undone ? " · UNDONE" : ""}</small>
+        <small>{note.repName} · {formatSalesDate(note.createdAt, true, timeZone)}{note.undone ? " · UNDONE" : ""}</small>
         <p>{note.text}</p>
         {note.canUndo ? <button disabled={busy || externalBusy} type="button" onClick={() => void act({ action: "undo_note", noteId: note.id }, "Note undone. Its history is preserved.")}>Undo this note</button> : null}
       </article>)}

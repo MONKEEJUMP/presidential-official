@@ -212,10 +212,14 @@ export function isClosedDoor(door: Pick<SalesDoor, "status" | "operationalStatus
   );
 }
 
-export function formatSalesDate(value: string | null, includeTime = false): string {
+export function formatSalesDate(
+  value: string | null,
+  includeTime = false,
+  timeZone = SALES_TIME_ZONE,
+): string {
   if (!value) return "";
   return new Intl.DateTimeFormat("en-US", {
-    timeZone: SALES_TIME_ZONE,
+    timeZone,
     month: "short",
     day: "numeric",
     year: "numeric",
