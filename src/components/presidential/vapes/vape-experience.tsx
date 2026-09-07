@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { getVapeGallery, getVapeImage, VAPE_FAMILIES, VAPE_FINISHES, VAPE_MODEL_SETS, VAPE_VIEWS, type VapeFamily, type VapeFinish, type VapePage } from '@/lib/vapes/catalog';
 import { VapeGalleryDialog } from './vape-gallery-dialog';
 import { VapeIcon } from './vape-icon';
@@ -31,6 +31,21 @@ export function VapeExperience({ page }: { page: VapePage }) {
   const selectedFamily = VAPE_FAMILIES.find(item => item.id === family)!;
   const selectedModel = VAPE_MODEL_SETS[modelIndex];
   const model = getVapeImage(selectedModel.finish, selectedModel.family, 'model');
+
+  useLayoutEffect(() => {
+    if (page !== 'vapes' || window.location.hash) return;
+    const previousRestoration = window.history.scrollRestoration;
+    const resetScroll = () => window.scrollTo(0, 0);
+    window.history.scrollRestoration = 'manual';
+    resetScroll();
+    const frame = window.requestAnimationFrame(resetScroll);
+    window.addEventListener('pageshow', resetScroll);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener('pageshow', resetScroll);
+      window.history.scrollRestoration = previousRestoration;
+    };
+  }, [page]);
 
   function moveView(delta: number) { setViewIndex(value => (value + delta + 8) % 8); }
   function explore(color: VapeFinish, type: VapeFamily, index = viewIndex, open = false) {
