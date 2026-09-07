@@ -240,7 +240,7 @@ export function PopUpBooking({
 
   useEffect(() => {
     const controller = new AbortController();
-    void loadAvailability(month, controller.signal);
+    queueMicrotask(() => void loadAvailability(month, controller.signal));
     return () => controller.abort();
   }, [loadAvailability, month]);
 
@@ -255,7 +255,7 @@ export function PopUpBooking({
     if (hashToken) {
       window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
     }
-    void loadManagedBooking(token);
+    queueMicrotask(() => void loadManagedBooking(token));
   }, [loadManagedBooking]);
 
   const calendarCells = useMemo(() => {

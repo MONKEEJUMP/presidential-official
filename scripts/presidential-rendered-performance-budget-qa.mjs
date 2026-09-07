@@ -50,8 +50,11 @@ const routeOutputs = [
     rscPath: `${seriesRoute.path.slice(1)}.rsc`,
     rscBudgetBytes: 35000,
   })),
-  { label: "moonPods", route: "/moon-pods", htmlPath: "moon-pods.html", htmlBudgetBytes: 50000, rscPath: "moon-pods.rsc", rscBudgetBytes: 30000 },
-  { label: "orbit", route: "/orbit", htmlPath: "orbit.html", htmlBudgetBytes: 50000, rscPath: "orbit.rsc", rscBudgetBytes: 30000 },
+  // The approved showroom shell is 56 KB after the 96-image archive and interactive
+  // explorer were removed from response HTML. Keep a tight 60 KB ceiling so those
+  // payloads cannot silently return while preserving the server-rendered narrative.
+  { label: "moonPods", route: "/moon-pods", htmlPath: "moon-pods.html", htmlBudgetBytes: 60000, rscPath: "moon-pods.rsc", rscBudgetBytes: 30000 },
+  { label: "orbit", route: "/orbit", htmlPath: "orbit.html", htmlBudgetBytes: 60000, rscPath: "orbit.rsc", rscBudgetBytes: 30000 },
   { label: "ourStory", route: "/our-story", htmlPath: "our-story.html", htmlBudgetBytes: 50000, rscPath: "our-story.rsc", rscBudgetBytes: 25000 },
   { label: "learn", route: "/learn", htmlPath: "learn.html", htmlBudgetBytes: 55000, rscPath: "learn.rsc", rscBudgetBytes: 30000 },
   // findUs HTML budget raised 55000 -> 72000 for the owner-ordered US map

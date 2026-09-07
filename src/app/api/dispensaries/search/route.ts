@@ -10,7 +10,6 @@ const ALLOWED_ORIGINS = new Set([
   "https://presidentialthcoklahoma.com",
   "https://www.presidentialthcoklahoma.com",
   "https://presidentialmoonrocks.com",
-  "https://presidential-thc-oklahoma.vercel.app",
 ]);
 const ALLOWED_QUERY_FIELDS = new Set(["state", "zip", "lat", "lng", "limit"]);
 const ZIP_PATTERN = /^\d{5}$/;

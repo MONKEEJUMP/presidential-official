@@ -181,7 +181,6 @@ export function SalesInlineWorkArea({
             <label>
               <span>Notes</span>
               <textarea
-                autoFocus
                 disabled={busy}
                 maxLength={4000}
                 onChange={(event) => onNotesChange(event.target.value)}

@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { type FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
-  chicagoDateKey,
+  createSalesDateKey,
   displayDoorName,
   formatSalesDate,
   salesOutcome,
@@ -18,6 +18,7 @@ import {
   type SalesSnapshot,
   type SalesVerificationClaim,
   type SalesVerificationRequest,
+  SALES_TIME_ZONE,
 } from "@/lib/sales";
 
 import styles from "./sales.module.css";
@@ -57,12 +58,14 @@ function roleLabel(role: SalesRole): string {
   return role === "super_master" ? "SUPER MASTER" : role === "master" ? "MASTER" : "SALES REP";
 }
 
-function calledToday(door: SalesDoor, today: string): boolean {
-  return Boolean(door.lastCall && chicagoDateKey(door.lastCall.calledAt) === today);
+type SalesDateKey = ReturnType<typeof createSalesDateKey>;
+
+function calledToday(door: SalesDoor, today: string, dateKey: SalesDateKey): boolean {
+  return Boolean(door.lastCall && dateKey(door.lastCall.calledAt) === today);
 }
 
-function callbackDue(door: SalesDoor, today: string): boolean {
-  return Boolean(door.nextCallbackAt && chicagoDateKey(door.nextCallbackAt) <= today);
+function callbackDue(door: SalesDoor, today: string, dateKey: SalesDateKey): boolean {
+  return Boolean(door.nextCallbackAt && dateKey(door.nextCallbackAt) <= today);
 }
 
 function struck(door: SalesDoor): boolean {
@@ -222,7 +225,9 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     };
   }, [activeDoorId, workMode]);
 
-  const today = chicagoDateKey();
+  const timeZone = snapshot?.timeZone ?? SALES_TIME_ZONE;
+  const dateKey = useMemo(() => createSalesDateKey(timeZone), [timeZone]);
+  const today = dateKey();
   const cities = snapshot?.cities ?? [];
   const filteredDoors = snapshot?.doors ?? [];
 
@@ -327,7 +332,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
 
   function closeWorkAreaImmediately() {
     ++historySequence.current;
-    if (activeDoorId) void fetch("/api/sales/workflow", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "release_claim", doorId: activeDoorId }), keepalive: true }).catch(() => {});
+    if (activeDoorId && workMode === "log") void fetch("/api/sales/workflow", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "release_claim", doorId: activeDoorId }), keepalive: true }).catch(() => {});
     openListOrder.current = null;
     setActiveDoorId(null);
     setWorkMode(null);
@@ -952,8 +957,8 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         {filteredDoors.map((door) => (
           <div className={styles.salesTargetGroup} key={door.id}>
             <SalesRow
-              callbackDue={callbackDue(door, today)}
-              calledToday={calledToday(door, today)}
+              callbackDue={callbackDue(door, today, dateKey)}
+              calledToday={calledToday(door, today, dateKey)}
               canCorrectCustomer={Boolean(isSuper)}
               canSetPriority={Boolean(isSuper)}
               door={door}
@@ -965,7 +970,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
               onTogglePersonalStar={(item) => void togglePersonalStar(item)}
               onTogglePriority={(item) => void togglePriority(item)}
               struck={struck(door)}
-              workedByMeToday={Boolean(door.myLastActivityAt && chicagoDateKey(door.myLastActivityAt) === today)}
+              workedByMeToday={Boolean(door.myLastActivityAt && dateKey(door.myLastActivityAt) === today)}
             />
             {activeDoor?.id === door.id && workMode ? (
               <SalesInlineWorkArea

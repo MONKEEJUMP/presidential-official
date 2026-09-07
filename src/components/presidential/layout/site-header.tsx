@@ -137,7 +137,7 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
       closeNavigation();
     };
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
+      if (event.key === "Escape" && (navigationOpen || openGroup !== null)) {
         closeNavigation();
         if (desktop) activeGroupTriggerRef.current?.focus();
         else hamburgerRef.current?.focus();

@@ -22,6 +22,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
   const [viewIndex, setViewIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [modelIndex, setModelIndex] = useState(2);
+  const [archiveOpened, setArchiveOpened] = useState(false);
   const explorerRef = useRef<HTMLElement>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const swiped = useRef(false);
@@ -35,7 +36,9 @@ export function VapeExperience({ page }: { page: VapePage }) {
   useLayoutEffect(() => {
     if (page !== 'vapes' || window.location.hash) return;
     const previousRestoration = window.history.scrollRestoration;
-    const resetScroll = () => window.scrollTo(0, 0);
+    const resetScroll = () => {
+      if (!window.location.hash) window.scrollTo(0, 0);
+    };
     window.history.scrollRestoration = 'manual';
     resetScroll();
     const frame = window.requestAnimationFrame(resetScroll);
@@ -56,7 +59,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
   function openImage(index: number) { setViewIndex(index); setLightboxOpen(true); }
 
   return <>
-    <section className={`${s.section} ${s.explorer}`} id="explore" ref={explorerRef} aria-labelledby="vape-explorer-heading">
+    <section className={`${s.section} ${s.explorer}`} id="vape-explorer" ref={explorerRef} aria-labelledby="vape-explorer-heading">
       <div className={s.sectionHeading}>
         <div><p className={s.eyebrow}>The product explorer</p><h2 id="vape-explorer-heading">Your Orbit.<br /><span>Your perspective.</span></h2></div>
         <p>Find your finish. Explore the pod families.<br />See the details from every side.</p>
@@ -177,14 +180,16 @@ export function VapeExperience({ page }: { page: VapePage }) {
           <p>Design renderings show the product from multiple viewpoints. Explore the studio photography above for a closer look at the photographed devices.</p>
         </div>
       </div>
-      <details className={s.archive}>
+      <details className={s.archive} onToggle={(event) => {
+        if (event.currentTarget.open) setArchiveOpened(true);
+      }}>
         <summary>Browse the complete photo library <span>96 views <VapeIcon name="plus" /></span></summary>
-        <div className={s.archiveContents}>
+        {archiveOpened ? <div className={s.archiveContents}>
           {VAPE_MODEL_SETS.map(set => <section key={`${set.finish}-${set.family}`} aria-label={`${set.finish} ${set.family.toUpperCase()} photo collection`}>
             <h3>{VAPE_FINISHES.find(item => item.id === set.finish)!.name} <span>/ {VAPE_FAMILIES.find(item => item.id === set.family)!.name}</span></h3>
             <div>{getVapeGallery(set.finish, set.family).map((image, index) => <button key={image.view} type="button" onClick={() => explore(set.finish, set.family, index, true)} aria-label={`Open ${image.alt}`}><Image src={image.src} alt={image.alt} width={image.width} height={image.height} sizes="(min-width: 1000px) 140px, (min-width: 650px) 22vw, 42vw" loading="lazy" /><span>{image.label}</span></button>)}</div>
           </section>)}
-        </div>
+        </div> : null}
       </details>
     </section>
     <VapeGalleryDialog open={lightboxOpen} onClose={() => setLightboxOpen(false)} images={gallery} index={viewIndex} onIndex={setViewIndex} title={`${selectedFinish.name} / ${selectedFamily.name}`} />

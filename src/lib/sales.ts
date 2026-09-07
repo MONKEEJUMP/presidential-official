@@ -113,6 +113,7 @@ export type SalesDoor = Readonly<{
 
 export type SalesSnapshot = Readonly<{
   authenticated: true;
+  timeZone: string;
   user: Readonly<{
     id: string;
     name: string;
@@ -148,29 +149,45 @@ export function salesOutcome(value: SalesOutcome) {
   return SALES_OUTCOMES.find((outcome) => outcome.value === value)!;
 }
 
-function chicagoParts(date: Date) {
+function salesDateFormatter(timeZone: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+}
+
+function datePartsInTimeZone(date: Date, formatter: Intl.DateTimeFormat) {
   return Object.fromEntries(
-    new Intl.DateTimeFormat("en-US", {
-      timeZone: SALES_TIME_ZONE,
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    })
-      .formatToParts(date)
-      .map((part) => [part.type, part.value]),
+    formatter.formatToParts(date).map((part) => [part.type, part.value]),
   );
 }
 
+export function createSalesDateKey(timeZone = SALES_TIME_ZONE) {
+  const formatter = salesDateFormatter(timeZone);
+  return (value: string | Date = new Date()): string => {
+    const date = typeof value === "string" ? new Date(value) : value;
+    const parts = datePartsInTimeZone(date, formatter);
+    return `${parts.year}-${parts.month}-${parts.day}`;
+  };
+}
+
 export function chicagoDateKey(value: string | Date = new Date()): string {
-  const date = typeof value === "string" ? new Date(value) : value;
-  const parts = chicagoParts(date);
-  return `${parts.year}-${parts.month}-${parts.day}`;
+  return salesDateKey(value, SALES_TIME_ZONE);
+}
+
+export function salesDateKey(
+  value: string | Date = new Date(),
+  timeZone = SALES_TIME_ZONE,
+): string {
+  return createSalesDateKey(timeZone)(value);
 }
 
 export function defaultCallbackDate(outcome: SalesOutcome, from = new Date()): string | null {
   const days = salesOutcome(outcome).callbackDays;
   if (days === null) return null;
-  const parts = chicagoParts(from);
+  const parts = datePartsInTimeZone(from, salesDateFormatter(SALES_TIME_ZONE));
   const shifted = new Date(
     Date.UTC(Number(parts.year), Number(parts.month) - 1, Number(parts.day) + days, 15, 0, 0),
   );

@@ -15,6 +15,7 @@ import {
   readPublicRenderableLearnGuideSlugs,
 } from "@/lib/cms";
 import { buildLearnGuideSeoRoute } from "@/lib/seo/concrete-routes";
+import { APPROVED_PUBLIC_LEARN_GUIDE_ROUTES } from "@/lib/seo/approved-public-routes";
 import { buildRouteMetadata } from "@/lib/seo/metadata";
 import { buildRouteShellJsonLd, JsonLd } from "@/lib/seo/schema";
 
@@ -26,14 +27,17 @@ type LearnGuidePageProps = {
   }>;
 };
 
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
   const slugs = await readPublicRenderableLearnGuideSlugs({
     next: { tags: ["sanity-learn-guide-slugs"] },
   });
 
-  return slugs.map((guide) => ({ guide }));
+  const approvedRepoSlugs = APPROVED_PUBLIC_LEARN_GUIDE_ROUTES.map((route) =>
+    route.path.replace(/^\/learn\//, ""),
+  );
+  return Array.from(new Set([...approvedRepoSlugs, ...slugs])).map((guide) => ({ guide }));
 }
 
 export async function generateMetadata({ params }: LearnGuidePageProps): Promise<Metadata> {
