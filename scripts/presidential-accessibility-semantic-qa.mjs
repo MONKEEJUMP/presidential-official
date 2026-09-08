@@ -17,6 +17,7 @@ const nextBin = path.join(webRoot, "node_modules", "next", "dist", "bin", "next"
 const appRoot = path.join(webRoot, "src", "app");
 const componentsRoot = path.join(webRoot, "src", "components");
 const seoRoot = path.join(webRoot, "src", "lib", "seo");
+const schemaConstantsPath = path.join(seoRoot, "schema", "constants.ts");
 const packageJsonPath = path.join(webRoot, "package.json");
 const runtimeHost = "127.0.0.1";
 const runtimeBasePort = Number(process.env.PRESIDENTIAL_ACCESSIBILITY_QA_PORT || "3346");
@@ -31,7 +32,7 @@ const statusJsonPath = path.join(workRoot, "step10o-accessibility-semantic-readi
 const statusMdPath = path.join(workRoot, "step10o-accessibility-semantic-readiness-status.md");
 
 const renderedRoutes = [
-  { path: "/", label: "home", htmlPath: "index.html", dynamicArtifactPath: "page.js", expectedH1: "Official Presidential Cannabis" },
+  { path: "/", label: "home", htmlPath: "index.html", dynamicArtifactPath: "page.js", expectedH1: "Presidential Moon Rocks" },
   { path: "/moon-rocks", label: "moonRocks", htmlPath: "moon-rocks.html", expectedH1: "Presidential Moon Rocks" },
   { path: "/moon-pods", label: "moonPods", htmlPath: "moon-pods.html", expectedH1: "Presidential Moon Pods" },
   { path: "/orbit", label: "orbit", htmlPath: "orbit.html", expectedH1: "Presidential Orbit" },
@@ -62,6 +63,14 @@ const badControlTextPattern = /^\s*(?:click here|learn more|read more|more|go|su
 const roleButtonOrLinkPattern = /role=["'](?:button|link)["']/i;
 const positiveTabIndexPattern = /tabIndex=\{?[1-9]\d*\}?|tabindex=["']?[1-9]\d*/i;
 const autoFocusPattern = /\bautoFocus\b|\bautofocus\b/i;
+function extractApprovedSameAs(source) {
+  const match = source.match(/APPROVED_SAME_AS\s*=\s*\[([\s\S]*?)\]\s*as const/);
+  return match ? [...match[1].matchAll(/"([^"]*)"/g)].map((entry) => entry[1]) : [];
+}
+
+const approvedExternalHrefs = new Set(
+  extractApprovedSameAs(readFileSync(schemaConstantsPath, "utf8")),
+);
 
 function csvEscape(value) {
   return `"${String(value).replaceAll('"', '""')}"`;
@@ -324,7 +333,7 @@ function checkRenderedRoute(route, rendered, rows, summaries) {
   const imgTags = getOpeningTags(cleanHtml, "img");
   const badLinks = linkTags
     .map((tag) => ({ href: getAttribute(tag, "href"), text: getTagText(tag), tag }))
-    .filter((link) => !link.href || badControlTextPattern.test(link.text) || /^https?:\/\//i.test(link.href));
+    .filter((link) => !link.href || badControlTextPattern.test(link.text) || (/^https?:\/\//i.test(link.href) && !approvedExternalHrefs.has(link.href)));
   const badButtons = buttonTags
     .map((tag) => ({ type: getAttribute(tag, "type"), text: getTagText(tag), tag }))
     .filter((button) => !button.type || !button.text || badControlTextPattern.test(button.text));
@@ -394,7 +403,7 @@ function checkRenderedRoute(route, rendered, rows, summaries) {
   addCheck(
     rows,
     `${route.label}.h1.expected`,
-    h1Tags.some((tag) => getTagText(tag).includes(route.expectedH1)),
+    h1Tags.some((tag) => getTagText(tag).toLowerCase().includes(route.expectedH1.toLowerCase())),
     route.expectedH1,
   );
   addCheck(

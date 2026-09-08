@@ -215,7 +215,7 @@ export const PRODUCT_METADATA_BY_SLUG: Readonly<
   "presidential-blunts": {
     seoTitle: "Presidential Blunts | Tobacco-Free Infused Hemp Wraps",
     metaDescription:
-      "Explore Presidential Blunts, tobacco-free infused hemp-wrap formats in the Presidential House Line. Review product details and find licensed retailers near you. Availability varies by retailer.",
+      "Explore Presidential Blunts, tobacco-free infused hemp wraps in the House Line. Review product details and find licensed retailers. Availability varies.",
   },
   "presidential-moon-rocks": {
     seoTitle: "Presidential Moon Rocks | Presidential House Line",
@@ -225,7 +225,7 @@ export const PRODUCT_METADATA_BY_SLUG: Readonly<
   "presidential-prerolls": {
     seoTitle: "Presidential Prerolls | Infused Pre-Rolls",
     metaDescription:
-      "Explore Presidential Prerolls, the Presidential House Line's infused pre-roll format. Review product details and find licensed retailers near you. Availability varies by retailer.",
+      "Explore Presidential Prerolls, the House Line infused pre-roll format. Review product details and find licensed retailers. Availability varies.",
   },
   "thc-design-blunts": {
     seoTitle: "Presidential x THC Design Blunts | Product Details",

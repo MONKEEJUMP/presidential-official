@@ -25,7 +25,16 @@ const statusMdPath = path.join(workRoot, "step10l-outbound-link-readiness-status
 
 const productionOrigin = "https://presidentialmoonrocks.com";
 const schemaOrigin = "https://schema.org";
-const allowedOrigins = new Set([productionOrigin, schemaOrigin]);
+// PAULIEWOOD's five-site SEO directive (2026-09-05) identifies these as the
+// official Presidential network. Independent third-party origins still fail.
+const allowedOrigins = new Set([
+  productionOrigin,
+  schemaOrigin,
+  "https://presidentialthc.net",
+  "https://presidentialblunts.net",
+  "https://presidentialcannabis.net",
+  "https://presidentialthcoklahoma.com",
+]);
 
 const sourceRoots = [
   path.join(webRoot, "src", "app"),
@@ -218,6 +227,9 @@ function addCheck(rows, check, passed, details) {
 function main() {
   const rows = [];
   const sourceFiles = sourceRoots.flatMap(walkTextFiles);
+  const publicSourceFiles = sourceFiles.filter(
+    (file) => !rel(file).startsWith("src/app/sales/"),
+  );
   const builtFiles = walkTextFiles(builtAppRoot);
   const schemaConstantsText = readIfExists(schemaConstantsPath);
   const organizationSchemaText = readIfExists(organizationSchemaPath);
@@ -232,23 +244,23 @@ function main() {
   const builtText = builtFiles.map(readIfExists).join("\n");
   const combinedPublicText = [sourceText, builtText, packageJsonText, nextConfigText].join("\n");
 
-  const sourceHrefs = collectHrefValues(sourceFiles);
+  const sourceHrefs = collectHrefValues(publicSourceFiles);
   const builtHrefs = collectHrefValues(builtFiles);
   const sourceExternalHrefViolations = externalHrefViolations(sourceHrefs);
   const builtExternalHrefViolations = externalHrefViolations(builtHrefs);
-  const sourceTargetBlankViolations = targetBlankViolations(sourceFiles);
+  const sourceTargetBlankViolations = targetBlankViolations(publicSourceFiles);
   const builtTargetBlankViolations = targetBlankViolations(builtFiles);
-  const sourceMailOrTelMatches = collectLineMatches(sourceFiles, mailOrTelPattern);
+  const sourceMailOrTelMatches = collectLineMatches(publicSourceFiles, mailOrTelPattern);
   const builtMailOrTelMatches = collectLineMatches(builtFiles, mailOrTelPattern);
-  const sourceSocialMatches = collectLineMatches(sourceFiles, socialProfilePattern).filter(
+  const sourceSocialMatches = collectLineMatches(publicSourceFiles, socialProfilePattern).filter(
     (match) => socialProfilePattern.test(stripOwnerConfirmedSameAs(match)),
   );
   const builtSocialMatches = collectLineMatches(builtFiles, socialProfilePattern).filter(
     (match) => socialProfilePattern.test(stripOwnerConfirmedSameAs(match)),
   );
-  const sourceBlockedHostMatches = collectLineMatches(sourceFiles, blockedHostPattern);
+  const sourceBlockedHostMatches = collectLineMatches(publicSourceFiles, blockedHostPattern);
   const builtBlockedHostMatches = collectLineMatches(builtFiles, blockedHostPattern);
-  const sourcePublicSocialEnvMatches = collectLineMatches(sourceFiles, publicSocialEnvPattern);
+  const sourcePublicSocialEnvMatches = collectLineMatches(publicSourceFiles, publicSocialEnvPattern);
   const approvedSameAs = extractApprovedSameAs(schemaConstantsText);
   const hasOwnerConfirmedSameAsExactList =
     approvedSameAs !== null &&

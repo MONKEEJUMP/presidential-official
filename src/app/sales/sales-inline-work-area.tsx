@@ -28,6 +28,7 @@ export function undoActionLabel(call: SalesCall): string {
 
 type SalesInlineWorkAreaProps = Readonly<{
   door: SalesDoor;
+  timeZone: string;
   mode: "log" | "history";
   notes: string;
   callbackDate: string;
@@ -60,6 +61,7 @@ type SalesInlineWorkAreaProps = Readonly<{
 
 export function SalesInlineWorkArea({
   door,
+  timeZone,
   mode,
   notes,
   discardWarning,
@@ -128,8 +130,8 @@ export function SalesInlineWorkArea({
                 <strong>{salesOutcome(call.outcome).label}</strong>
                 {call.undone ? <span className={styles.undoneBadge}>UNDONE</span> : null}
               </div>
-              <span>{formatSalesDate(call.calledAt, true)} · {call.repName}{new Date(call.calledAt).getTime() < Date.parse("2026-09-02T22:18:00Z") ? " · PRELAUNCH ARCHIVE" : ""}</span>
-              {call.callbackAt ? <span>Callback: {formatSalesDate(call.callbackAt)}</span> : null}
+              <span>{formatSalesDate(call.calledAt, true, timeZone)} · {call.repName}{new Date(call.calledAt).getTime() < Date.parse("2026-09-02T22:18:00Z") ? " · PRELAUNCH ARCHIVE" : ""}</span>
+              {call.callbackAt ? <span>Callback: {formatSalesDate(call.callbackAt, false, timeZone)}</span> : null}
               {call.notes ? <p>{call.notes}</p> : null}
               {call.undoEligible ? (
                 <button disabled={undoing} onClick={() => onUndo(call)} type="button">
@@ -144,7 +146,7 @@ export function SalesInlineWorkArea({
           {door.pendingVerification ? (
             <article className={styles.pendingRequestCard}>
               <strong>{door.pendingVerification.claimedStatus === "sold" ? "SOLD REPORT" : "ALREADY CARRIES REPORT"}</strong>
-              <span>Submitted {formatSalesDate(door.pendingVerification.submittedAt, true)}</span>
+              <span>Submitted {formatSalesDate(door.pendingVerification.submittedAt, true, timeZone)}</span>
               <span>AWAITING OWNER REVIEW</span>
               {door.pendingVerification.notes ? <p>{door.pendingVerification.notes}</p> : null}
               {door.pendingVerification.canWithdraw ? (
@@ -163,7 +165,7 @@ export function SalesInlineWorkArea({
             <div className={styles.inlineConfirmation} role="status">
               <strong>{salesOutcome(loggedCall.outcome).label.toUpperCase()} SAVED</strong>
               {loggedCall.notes ? <p>{loggedCall.notes}</p> : null}
-              {loggedCall.callbackAt ? <span>Callback: {formatSalesDate(loggedCall.callbackAt)}</span> : null}
+              {loggedCall.callbackAt ? <span>Callback: {formatSalesDate(loggedCall.callbackAt, false, timeZone)}</span> : null}
             </div>
           ) : null}
           {door.hasPendingVerification ? (
@@ -181,7 +183,6 @@ export function SalesInlineWorkArea({
             <label>
               <span>Notes</span>
               <textarea
-                autoFocus
                 disabled={busy}
                 maxLength={4000}
                 onChange={(event) => onNotesChange(event.target.value)}

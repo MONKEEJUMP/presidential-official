@@ -24,9 +24,9 @@ export const OPEN_GRAPH_SITE_NAME = PRESIDENTIAL_NAME;
 export const TWITTER_CARD_TYPE = "summary_large_image" as const;
 
 const DEFAULT_SOCIAL_IMAGE = {
-  url: `${PRODUCTION_ORIGIN}/social/og-default.png`,
-  width: 1200,
-  height: 630,
+  url: `${PRODUCTION_ORIGIN}/media/brand/presidential-banner.png`,
+  width: 1839,
+  height: 604,
   alt: "Presidential logo",
 } as const;
 

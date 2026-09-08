@@ -290,7 +290,7 @@ function learnGuideSlugResults() {
   ];
 }
 
-globalThis.fetch = async function mockedSanityFetch(input, init) {
+async function mockedSanityFetch(input, init) {
   const url = typeof input === "string"
     ? input
     : input instanceof URL
@@ -315,4 +315,6 @@ globalThis.fetch = async function mockedSanityFetch(input, init) {
   }
 
   return originalFetch(input, init);
-};
+}
+
+module.exports = {mockedSanityFetch};

@@ -17,6 +17,7 @@ type Props = {
 
 export function VapeGalleryDialog({ open, images, index, title, onIndex, onClose }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [zoomed, setZoomed] = useState(false);
   const current = images[index];
   useEffect(() => {
@@ -25,9 +26,11 @@ export function VapeGalleryDialog({ open, images, index, title, onIndex, onClose
     const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const oldOverflow = document.body.style.overflow;
     dialog.showModal();
+    const focusFrame = window.requestAnimationFrame(() => closeButtonRef.current?.focus());
     document.body.style.overflow = 'hidden';
     return () => {
       dialog.close();
+      window.cancelAnimationFrame(focusFrame);
       document.body.style.overflow = oldOverflow;
       previousFocus?.focus({ preventScroll: true });
     };
@@ -50,7 +53,7 @@ export function VapeGalleryDialog({ open, images, index, title, onIndex, onClose
           <div><p className={s.label}>{title}</p><p>{current.label}</p></div>
           <div className={s.lightboxActions}>
             <button type="button" onClick={() => setZoomed(value => !value)} aria-pressed={zoomed} aria-label={zoomed ? 'Fit image to screen' : 'Zoom image'}><VapeIcon name={zoomed ? 'minus' : 'plus'} /></button>
-            <button type="button" autoFocus onClick={close} aria-label="Close gallery"><VapeIcon name="close" /></button>
+            <button type="button" ref={closeButtonRef} onClick={close} aria-label="Close gallery"><VapeIcon name="close" /></button>
           </div>
         </header>
         <div className={`${s.lightboxImage} ${zoomed ? s.zoomed : ''}`}>

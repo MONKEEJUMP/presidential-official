@@ -39,7 +39,7 @@ const proofPoints = [
   },
   {
     title: "Product clarity",
-    body: "Presidential Moon Rocks are a cannabis product format — flower coated with concentrate or resin and kief — not NASA lunar samples or space rocks. Presidential is the brand; Moon Rocks describes the format, while cultivars such as Skywalker and Cherry Gelato remain distinct.",
+    body: "Presidential Moon Rocks are a cannabis product format — flower coated with concentrate or resin and finished with kief or diamonds, as identified on the package — not NASA lunar samples or space rocks. Presidential is the brand; Moon Rocks describes the format, while cultivars such as Skywalker and Cherry Gelato remain distinct.",
     image: {
       alt: "Skywalker Moon Rock product graphic",
       href: "/moon-rocks/skywalker",

@@ -1,6 +1,6 @@
 const originalFetch = globalThis.fetch;
 
-globalThis.fetch = async function mockedSanityFetch(input, init) {
+async function mockedSanityFetch(input, init) {
   const url = typeof input === "string" ? input : input?.url || "";
 
   if (/\.apicdn\.sanity\.io\/v\d{4}-\d{2}-\d{2}\/data\/query\//.test(url)) {
@@ -8,4 +8,6 @@ globalThis.fetch = async function mockedSanityFetch(input, init) {
   }
 
   return originalFetch(input, init);
-};
+}
+
+module.exports = {mockedSanityFetch};
