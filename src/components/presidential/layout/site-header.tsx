@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { PARTNERS_LABEL } from '@/content/partners-copy';
 
 
 
@@ -238,7 +239,7 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
       >
         <div className="relative mx-auto flex min-h-18 w-full max-w-7xl items-center justify-between gap-6 px-5 py-3 sm:px-8 lg:px-12" ref={rowRef}>
           <Link
-            aria-label="Presidential — home"
+            aria-label="Presidential - home"
             ref={brandRef}
             className="inline-flex shrink-0 cursor-pointer items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
             href="/"
@@ -247,7 +248,7 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
 
               if (pathname === "/") {
                 event.preventDefault();
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                window.scrollTo({ top: 0, behavior: "auto" });
               }
             }}
           >
@@ -370,6 +371,7 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
                 );
               })}
 
+              <li className="po-primary-nav-item"><Link className="po-primary-nav-link" href="/partners" onClick={closeMenus}>{PARTNERS_LABEL}</Link></li>
               <li className="po-primary-nav-item group-data-[desktop=true]/header:ml-3">
                 <Link
                   className="po-header-store-link"
@@ -402,6 +404,7 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
                 </span>
               </li>
             ))}
+            <li><span className="po-primary-nav-link">{PARTNERS_LABEL}</span></li>
             <li className="ml-3"><span className="po-header-store-link">Find a Store</span></li>
             <li className="ml-1"><span className="po-primary-nav-link">Login</span></li>
           </ul>

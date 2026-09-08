@@ -17,6 +17,9 @@ import type {
 const OWNER_APPROVAL_SOURCE_ID = "source-owner-7734-publication-approval";
 const SHARED_BRAND_ASSET_ID = "asset-presidential-header-banner";
 const OWNER_APPROVAL_DATE = "2026-08-04";
+const isPartners = (route: {path:string}) => route.path === '/partners' || route.path.startsWith('/partners/');
+const approvalSource = (route: {path:string}) => isPartners(route) ? 'source-owner-0907-pres-kvrt-0010' : OWNER_APPROVAL_SOURCE_ID;
+const approvalDate = (route: {path:string}) => isPartners(route) ? '2026-09-07' : OWNER_APPROVAL_DATE;
 
 function recordId(prefix: string, routeId: string): string {
   return `${prefix}-${routeId}`;
@@ -35,6 +38,7 @@ function proofId(routeId: string): string {
 }
 
 export const APPROVED_PUBLICATION_SOURCE_RECORDS = [
+  {sourceId:'source-owner-0907-pres-kvrt-0010',sourceName:'0907-PRES-KVRT-0010 owner publication ruling',sourceType:'client_provided',sourceLocator:'0907-PRES-KVRT-0010 and owner count ruling, 2026-09-07',allowedUsage:'production',confidentialityStatus:'public',publisherOrProvider:'PAULIEWOOD',confidenceScore:100,verifiedBy:'PAULIEWOOD',verifiedAt:'2026-09-07',notes:'Owner approved partners copy, staged logos, exclusions, production deployment, and indexing. Published headline totals intentionally differ from tile totals.'},
   {
     sourceId: OWNER_APPROVAL_SOURCE_ID,
     sourceName: "7734-SPUD owner publication and indexing approval",
@@ -116,7 +120,7 @@ export const APPROVED_PUBLICATION_METADATA_RECORDS =
       ogDescription: route.description,
       primaryKeyword: route.keywords[0] ?? route.h1.toLowerCase(),
       secondaryKeywords: route.keywords.slice(1),
-      reviewedAt: OWNER_APPROVAL_DATE,
+      reviewedAt: approvalDate(route),
       approvalStatus: "approved",
     }),
   );
@@ -145,17 +149,17 @@ export const APPROVED_PUBLICATION_PROOF_RECORDS =
   APPROVED_PUBLIC_SEO_ROUTES.map(
     (route): ProofRecord => ({
       proofId: proofId(route.id),
-      sourceId: OWNER_APPROVAL_SOURCE_ID,
+      sourceId: approvalSource(route),
       relatedRecordType: "route_publication",
       relatedRecordId: publicationId(route.id),
       evidenceType: "client_confirmation",
-      evidenceLocator: "7734-SPUD owner directive dated 2026-08-04",
+      evidenceLocator: isPartners(route) ? '0907-PRES-KVRT-0010 and owner count ruling, 2026-09-07' : "7734-SPUD owner directive dated 2026-08-04",
       proofSummary:
         `PAULIEWOOD approved the current ${route.path} copy, metadata, compliance posture, and public indexing as owner, CTO, and legal authority.`,
       proofLevel: "client_confirmed",
       confidenceScore: 100,
       verifiedBy: "PAULIEWOOD",
-      verifiedAt: OWNER_APPROVAL_DATE,
+      verifiedAt: approvalDate(route),
       approvalStatus: "approved",
     }),
   );
@@ -188,7 +192,7 @@ export const APPROVED_PUBLICATION_ROUTE_RECORDS =
       ),
       assetRecordIds: [SHARED_BRAND_ASSET_ID],
       claimRecordIds: [claimId(route.id)],
-      sourceRecordIds: [OWNER_APPROVAL_SOURCE_ID],
+      sourceRecordIds: [approvalSource(route)],
       proofRecordIds: [proofId(route.id)],
       complianceRecordIds: [proofId(route.id)],
       publicationStatus: "published",
@@ -203,7 +207,7 @@ export const APPROVED_PUBLICATION_ROUTE_RECORDS =
       assetApprovalStatus: "approved",
       proofStatus: "verified",
       complianceStatus: "approved",
-      lastReviewedAt: OWNER_APPROVAL_DATE,
+      lastReviewedAt: approvalDate(route),
       launchBlockers: [],
     }),
   );

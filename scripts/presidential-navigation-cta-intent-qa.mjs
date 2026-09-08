@@ -106,8 +106,13 @@ for (const route of [...publicRoutes, ...fallbackRoutes]) {
 
 const mandatoryStaticPaths = publicRoutes.map((route) => route.route);
 const requiredHomePaths = mandatoryStaticPaths.filter((routePath) => routePath !== "/dispensaries");
+const partnerRoutePaths = [
+  "/partners", "/partners/az", "/partners/ca", "/partners/mi",
+  "/partners/nv", "/partners/ny", "/partners/ok", "/partners/wa",
+];
 const allowedInternalHrefs = new Set([
-  ...mandatoryStaticPaths,
+   ...mandatoryStaticPaths,
+  ...partnerRoutePaths,
   ...OWNER_PREVIEW_SERIES_ROUTES.map((route) => route.path),
   ...OWNER_PREVIEW_PRODUCT_ROUTES.map((route) => route.path),
   // 9083-CODE P4 (owner 8-state ruling, 2026-07-11): themed priority-market
@@ -130,6 +135,7 @@ const allowedSamePageFragmentHrefs = new Set([
 ]);
 const globalNavigationHrefs = new Set([
   ...mandatoryStaticPaths,
+  "/partners",
   // 9083-CODE P3.1 (owner directive, 2026-07-10): the sticky header's
   // Moon Rocks mega-menu carries the series links globally, so pages that
   // also link a series in their own content legitimately duplicate them.

@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 
 const root = process.cwd();
@@ -29,6 +30,21 @@ const learnGuidePage = read("src/app/learn/[guide]/page.tsx");
 const sanityReadClient = read("src/lib/cms/sanity-read-client.ts");
 const approvedRoutes = read("src/lib/seo/approved-public-routes.ts");
 const productMetadata = read("src/lib/seo/pw7404-1019-product-metadata.ts");
+const partnersShell = read("src/components/presidential/modules/partners-page-shell.tsx");
+const partnersGenerator = read("scripts/build-partners-snapshot.mjs");
+const partnersSnapshot = JSON.parse(read("src/content/partners.json"));
+const partnersStatePage = read("src/app/partners/[state]/page.tsx");
+const itemListSchema = read("src/lib/seo/schema/itemList.ts");
+const outboundGate = read("scripts/presidential-outbound-link-readiness-qa.mjs");
+const internalLinkGate = read("scripts/presidential-internal-link-graph-qa.mjs");
+const linkIntentGate = read("scripts/presidential-navigation-cta-intent-qa.mjs");
+const blockedLogoHashes = new Set([...partnersGenerator.matchAll(/'([0-9a-f]{64})'/g)].map((match) => match[1]));
+const invalidPartnerLogos = partnersSnapshot.brands.filter((brand) => {
+  if (!brand.logo) return false;
+  const content = readFileSync(path.join(root, "public", brand.logo));
+  const hash = createHash("sha256").update(content).digest("hex");
+  return blockedLogoHashes.has(hash) || (brand.logo.endsWith(".svg") && /data-icon=["'](?:instagram|facebook|tiktok|youtube|twitter)["']/i.test(content.toString("utf8")));
+});
 
 check("vapes.pageshowPreservesHash", /const resetScroll = \(\) => \{\s*if \(!window\.location\.hash\)/s.test(experienceLoader), "initial pageshow reset re-checks the current hash before the explorer mounts");
 check("vapes.malformedFragmentSafe", vapeFragment.includes("catch") && vapeFragment.includes("return rawFragment"), "malformed percent escapes fall back to the raw fragment");
@@ -49,6 +65,13 @@ check("homepage.moonRockFinishes", homepage.includes("finished with kief or diam
 check("authority.linksFailClosed", !authority.includes("href={source.href}"), "unapproved independent-coverage URLs are not public anchors");
 check("metadata.approvedSocialAsset", metadata.includes("/media/brand/presidential-banner.png") && !metadata.includes("/social/og-default.png"), "default social metadata uses the registered approved banner");
 check("metadata.unapprovedCtrClaimRemoved", !routes.includes("six product groupings"), "post-approval CTR claim no longer inherits the August approval record");
+check("partners.distinctVisitNames", partnersShell.includes('aria-label={`Visit ${brand.name} site`}'), "every Visit link includes its partner name for assistive technology");
+check("partners.websiteValidation", partnersGenerator.includes("Invalid concatenated website") && partnersSnapshot.brands.every((brand) => !brand.website || ((brand.website.match(/https?:\/\//gi) ?? []).length === 1 && ["http:", "https:"].includes(new URL(brand.website).protocol))), "snapshot generation rejects concatenated or non-HTTP partner destinations");
+check("partners.outboundApprovalBound", outboundGate.includes("partnerWebsiteListSha256") && outboundGate.includes("partners.snapshotOutboundApproval") && outboundGate.includes("approvedPartnerUrls.has(parsed.href)"), "partner links are allowed only when the exact owner-approved snapshot digest matches");
+check("partners.schemaOmitsGenericRetailerUrl", !partnersStatePage.includes("path:`/find-us/${state}`") && itemListSchema.includes("...(item.path ? {url: canonicalUrl(item.path)} : {})"), "partner Organizations omit URL when no unique retailer page exists");
+check("partners.placeholderLogosBlocked", blockedLogoHashes.size >= 9 && invalidPartnerLogos.length === 0, `${invalidPartnerLogos.length} blocked or social-icon logo assignment(s) remain`);
+check("partners.encodedOutboundHrefs", outboundGate.includes('replace(/&amp;/gi, "&")') && outboundGate.includes("approvedPartnerUrls.has(decodedValue)"), "built HTML entities are decoded before exact partner-link approval checks");
+check("partners.internalLinkInventories", internalLinkGate.includes("...partnerRoutePaths") && linkIntentGate.includes("...partnerRoutePaths") && linkIntentGate.includes('"/partners",'), "Partners hub and state routes are registered in internal-link QA inventories");
 for (const [name, value] of [
   ["presidentialCannabis", "Meet Presidential Cannabis, the official brand behind Moon Rocks, infused pre-rolls, tobacco-free blunts and minis. Find licensed retailers."],
   ["presidentialBlunts", "Explore Presidential Blunts, tobacco-free infused hemp wraps in the House Line. Review product details and find licensed retailers. Availability varies."],

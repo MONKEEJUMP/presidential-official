@@ -1,4 +1,5 @@
 import { PRESIDENTIAL_STATES } from "../find-us/states";
+import { PARTNER_ROUTES } from './partners-routes';
 
 import {
   buildCatalogProductSeoRoute,
@@ -256,6 +257,7 @@ export const APPROVED_PUBLIC_STATE_ROUTES = PRESIDENTIAL_STATES.map(
 );
 
 export const APPROVED_PUBLIC_SEO_ROUTES = [
+  ...PARTNER_ROUTES,
   ...APPROVED_PUBLIC_STATIC_ROUTES,
   ...getConcreteSeriesSeoRoutes(),
   ...APPROVED_PUBLIC_PRODUCT_ROUTES,
@@ -264,7 +266,7 @@ export const APPROVED_PUBLIC_SEO_ROUTES = [
   ...APPROVED_PUBLIC_STATE_ROUTES,
 ] as const satisfies readonly SeoRouteRecord[];
 
-export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 81 as const;
+export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 89 as const;
 
 if (APPROVED_PUBLIC_SEO_ROUTES.length !== APPROVED_PUBLIC_SEO_ROUTE_COUNT) {
   throw new Error(

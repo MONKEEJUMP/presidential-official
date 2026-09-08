@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { PARTNERS_LABEL } from '@/content/partners-copy';
 
 const footerLinks = [
+  { href: '/partners', label: PARTNERS_LABEL },
   { href: "/moon-rocks", label: "Moon Rocks" },
   { href: "/moon-pods", label: "Moon Pods" },
   { href: "/orbit", label: "Orbit" },

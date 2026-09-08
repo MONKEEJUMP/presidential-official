@@ -1,0 +1,2 @@
+# Preserve owner-approved SVG asset bytes across Windows and Linux checkouts.
+/public/partners/logos/*.svg -text
