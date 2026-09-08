@@ -1,4 +1,5 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 
 const webRoot = process.cwd();
@@ -13,6 +14,8 @@ const contactInquiryFormPath = path.join(webRoot, "src", "app", "contact", "cont
 const contactInquiryConfigPath = path.join(webRoot, "src", "app", "contact", "contact-inquiry-config.ts");
 const locatorConsolePath = path.join(webRoot, "src", "components", "presidential", "locator", "locator-console.tsx");
 const locatorRoutePath = path.join(webRoot, "src", "app", "api", "dispensaries", "route.ts");
+const partnersSnapshotPath = path.join(webRoot, "src", "content", "partners.json");
+const partnersOutboundApprovalPath = path.join(webRoot, "src", "content", "partners-outbound-approval.json");
 const docsResultsPath = path.join(
   root,
   "docs",
@@ -84,6 +87,18 @@ const ownerConfirmedSameAs = [
   "https://www.linkedin.com/in/everett-smith-presidential/",
 ];
 
+const partnersSnapshot = JSON.parse(readFileSync(partnersSnapshotPath, "utf8"));
+const partnersOutboundApproval = JSON.parse(readFileSync(partnersOutboundApprovalPath, "utf8"));
+const partnerWebsiteList = [...new Set(partnersSnapshot.brands.map((brand) => brand.website).filter(Boolean))].sort();
+const partnerWebsiteListSha256 = createHash("sha256").update(JSON.stringify(partnerWebsiteList)).digest("hex");
+const partnerOutboundApprovalValid =
+  partnersOutboundApproval.sourceId === "source-owner-0907-pres-kvrt-0010" &&
+  partnersOutboundApproval.snapshotStamp === partnersSnapshot.stamp &&
+  partnersOutboundApproval.websiteCount === partnerWebsiteList.length &&
+  partnersOutboundApproval.websiteListSha256 === partnerWebsiteListSha256;
+const approvedPartnerUrls = new Set(partnerOutboundApprovalValid ? partnerWebsiteList : []);
+const approvedPartnerHosts = new Set([...approvedPartnerUrls].map((url) => new URL(url).hostname));
+
 function extractApprovedSameAs(source) {
   const match = source.match(/APPROVED_SAME_AS\s*=\s*\[([\s\S]*?)\]\s*as const/);
   if (!match) {
@@ -96,6 +111,9 @@ function stripOwnerConfirmedSameAs(text) {
   let stripped = text;
   for (const url of ownerConfirmedSameAs) {
     stripped = stripped.split(url).join("");
+  }
+  for (const host of approvedPartnerHosts) {
+    stripped = stripped.split(host).join("");
   }
   return stripped;
 }
@@ -187,7 +205,7 @@ function externalHrefViolations(hrefs) {
 
     try {
       const parsed = new URL(href.value);
-      if (allowedOrigins.has(parsed.origin)) {
+      if (allowedOrigins.has(parsed.origin) || approvedPartnerUrls.has(href.value) || approvedPartnerUrls.has(parsed.href)) {
         continue;
       }
       violations.push(`${href.file}:${href.line}:${href.value}`);
@@ -295,6 +313,7 @@ function main() {
     addCheck(rows, "built.noMailtoOrTel", builtMailOrTelMatches.length === 0, builtMailOrTelMatches.length ? builtMailOrTelMatches.slice(0, 10).join(" | ") : "No mailto: or tel: links in built output"),
     addCheck(rows, "source.noSocialProfileUrls", sourceSocialMatches.length === 0, sourceSocialMatches.length ? sourceSocialMatches.slice(0, 10).join(" | ") : "No social/marketplace profile URLs in public source beyond the four owner-confirmed sameAs entries"),
     addCheck(rows, "built.noSocialProfileUrls", builtSocialMatches.length === 0, builtSocialMatches.length ? builtSocialMatches.slice(0, 10).join(" | ") : "No social/marketplace profile URLs in built output beyond the four owner-confirmed sameAs entries"),
+    addCheck(rows, "partners.snapshotOutboundApproval", partnerOutboundApprovalValid, partnerOutboundApprovalValid ? `${partnerWebsiteList.length} exact partner destinations match owner source ${partnersOutboundApproval.sourceId}` : `Partner destination digest mismatch: ${partnerWebsiteListSha256}`),
     addCheck(rows, "source.noBlockedOrAlternateHosts", sourceBlockedHostMatches.length === 0, sourceBlockedHostMatches.length ? sourceBlockedHostMatches.slice(0, 10).join(" | ") : "No threat, preview, noncanonical, alternate, localhost, Vercel, Wix, or Google Drive hosts in public source"),
     addCheck(rows, "built.noBlockedOrAlternateHosts", builtBlockedHostMatches.length === 0, builtBlockedHostMatches.length ? builtBlockedHostMatches.slice(0, 10).join(" | ") : "No threat, preview, noncanonical, alternate, localhost, Vercel, Wix, or Google Drive hosts in built output"),
     addCheck(rows, "source.noPublicSocialProfileEnvNames", sourcePublicSocialEnvMatches.length === 0, sourcePublicSocialEnvMatches.length ? sourcePublicSocialEnvMatches.slice(0, 10).join(" | ") : "No public social/profile environment variable names in public source"),
@@ -354,6 +373,11 @@ function main() {
     sameAsApproved: true,
     sameAsApprovedBy: "Everett Smith (CEO, Presidential), 2026-09-02",
     sameAsApprovedUrls: [...ownerConfirmedSameAs],
+    partnerOutboundLinksApproved: partnerOutboundApprovalValid,
+    partnerOutboundApprovedBy: partnerOutboundApproval.approvedBy,
+    partnerOutboundApprovedAt: partnerOutboundApproval.approvedAt,
+    partnerOutboundWebsiteCount: partnerWebsiteList.length,
+    partnerOutboundWebsiteListSha256,
     alternateDomainsApprovedForPublicSeo: false,
     threatDomainsLeaked: false,
     mailtoOrTelApproved: false,
@@ -363,7 +387,7 @@ function main() {
     indexabilityUnlocked: false,
     deploymentApproved: false,
     guardrail:
-      "Step 10L is outbound link, external URL, and social profile readiness only. It permits canonical production and schema.org URL constants, the exact server-validated and explicit-env-gated Contact mailto template, sanitized tel links from approved locator results, and exactly the four sameAs profile URLs owner-confirmed by Everett Smith (CEO) on 2026-09-02. Other outbound anchors, social profile URLs, mailto/tel links, noncanonical alternate hosts, route publication, deployment, sitemap inclusion, indexability, and public SEO remain blocked until approval records exist.",
+      "Step 10L is outbound link, external URL, and social profile readiness only. It permits canonical production and schema.org URL constants, the exact server-validated and explicit-env-gated Contact mailto template, sanitized tel links from approved locator results, exactly the four sameAs profile URLs owner-confirmed by Everett Smith (CEO) on 2026-09-02, and the exact digest-bound partner destinations from owner source 0907-PRES-KVRT-0010. All other outbound anchors, profile URLs, mailto/tel links, noncanonical alternate hosts, route publication, deployment, sitemap inclusion, indexability, and public SEO remain blocked.",
   };
 
   mkdirSync(workRoot, { recursive: true });

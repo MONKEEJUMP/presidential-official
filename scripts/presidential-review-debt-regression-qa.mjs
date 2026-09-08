@@ -32,6 +32,9 @@ const productMetadata = read("src/lib/seo/pw7404-1019-product-metadata.ts");
 const partnersShell = read("src/components/presidential/modules/partners-page-shell.tsx");
 const partnersGenerator = read("scripts/build-partners-snapshot.mjs");
 const partnersSnapshot = JSON.parse(read("src/content/partners.json"));
+const partnersStatePage = read("src/app/partners/[state]/page.tsx");
+const itemListSchema = read("src/lib/seo/schema/itemList.ts");
+const outboundGate = read("scripts/presidential-outbound-link-readiness-qa.mjs");
 
 check("vapes.pageshowPreservesHash", /const resetScroll = \(\) => \{\s*if \(!window\.location\.hash\)/s.test(experienceLoader), "initial pageshow reset re-checks the current hash before the explorer mounts");
 check("vapes.malformedFragmentSafe", vapeFragment.includes("catch") && vapeFragment.includes("return rawFragment"), "malformed percent escapes fall back to the raw fragment");
@@ -54,6 +57,8 @@ check("metadata.approvedSocialAsset", metadata.includes("/media/brand/presidenti
 check("metadata.unapprovedCtrClaimRemoved", !routes.includes("six product groupings"), "post-approval CTR claim no longer inherits the August approval record");
 check("partners.distinctVisitNames", partnersShell.includes('aria-label={`Visit ${brand.name} site`}'), "every Visit link includes its partner name for assistive technology");
 check("partners.websiteValidation", partnersGenerator.includes("Invalid concatenated website") && partnersSnapshot.brands.every((brand) => !brand.website || ((brand.website.match(/https?:\/\//gi) ?? []).length === 1 && ["http:", "https:"].includes(new URL(brand.website).protocol))), "snapshot generation rejects concatenated or non-HTTP partner destinations");
+check("partners.outboundApprovalBound", outboundGate.includes("partnerWebsiteListSha256") && outboundGate.includes("partners.snapshotOutboundApproval") && outboundGate.includes("approvedPartnerUrls.has(parsed.href)"), "partner links are allowed only when the exact owner-approved snapshot digest matches");
+check("partners.schemaOmitsGenericRetailerUrl", !partnersStatePage.includes("path:`/find-us/${state}`") && itemListSchema.includes("...(item.path ? {url: canonicalUrl(item.path)} : {})"), "partner Organizations omit URL when no unique retailer page exists");
 for (const [name, value] of [
   ["presidentialCannabis", "Meet Presidential Cannabis, the official brand behind Moon Rocks, infused pre-rolls, tobacco-free blunts and minis. Find licensed retailers."],
   ["presidentialBlunts", "Explore Presidential Blunts, tobacco-free infused hemp wraps in the House Line. Review product details and find licensed retailers. Availability varies."],
