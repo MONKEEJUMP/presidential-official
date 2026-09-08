@@ -35,7 +35,8 @@
             "San Jose"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "1841-el-camino",
@@ -50,7 +51,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "31-cannabis",
@@ -65,7 +67,8 @@
             "Krebs"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "365-recreational-cannnabis",
@@ -80,7 +83,8 @@
             "Santa Rosa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "405-gas-station-3",
@@ -95,7 +99,8 @@
             "Norman"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "420-central",
@@ -110,7 +115,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "420-dank",
@@ -126,7 +132,8 @@
             "Jackson"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "420-expressway",
@@ -141,7 +148,8 @@
             "Little Neck"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "420-flower-factory",
@@ -156,7 +164,8 @@
             "Costa Mesa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "8888-wonderland",
@@ -171,7 +180,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "a-cannaful-life",
@@ -186,7 +196,8 @@
             "Staten Island"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "a-green-alternative",
@@ -201,7 +212,8 @@
             "San Diego"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "alpha",
@@ -216,7 +228,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "altcare-4llc",
@@ -231,7 +244,8 @@
             "Guthrie"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "alto",
@@ -246,7 +260,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "altrd-vizion-cannabis-company",
@@ -261,7 +276,8 @@
             "Lawton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "amped",
@@ -276,7 +292,8 @@
             "Amherst"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "antidote",
@@ -291,7 +308,8 @@
             "Inkster"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "arbuckle-farmacy",
@@ -306,7 +324,8 @@
             "Sulphur"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "aroma",
@@ -322,7 +341,8 @@
             "Winterhaven"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "aroma-farms",
@@ -337,7 +357,8 @@
             "Bayside"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "arts-district-cannabis",
@@ -352,7 +373,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "ascensions-flower-thc",
@@ -367,7 +389,8 @@
             "Ardmore"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "ashe",
@@ -383,7 +406,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "attitude-organics",
@@ -398,7 +422,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "b-b-s-empire",
@@ -413,7 +438,8 @@
             "Enid"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "b-k-buds",
@@ -428,7 +454,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "backpack-boyz",
@@ -445,7 +472,8 @@
             "San Bernardino"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "banyan-tree",
@@ -460,7 +488,8 @@
             "Fresno"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "barbary-coast",
@@ -475,7 +504,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "battle-born-dispensary",
@@ -491,7 +521,8 @@
             "Reno"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bayside-cannabis",
@@ -506,7 +537,8 @@
             "Oakland Gardens"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bca",
@@ -521,7 +553,8 @@
             "Henryetta"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bee-s-knees-dispensary",
@@ -536,7 +569,8 @@
             "Duncan"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "beleaf",
@@ -553,7 +587,8 @@
             "Medford"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "benzeen",
@@ -568,7 +603,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "berkeley-patients-group",
@@ -583,7 +619,8 @@
             "Berkeley"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "beyond-hello",
@@ -598,7 +635,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "beyond-rooted",
@@ -613,7 +651,8 @@
             "Fresno"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "beyond-the-pines",
@@ -628,7 +667,8 @@
             "Shawnee"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bijoy",
@@ -643,7 +683,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bishop-boyz",
@@ -658,7 +699,8 @@
             "Van Nuys"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "black-market",
@@ -673,7 +715,8 @@
             "Poughkeepsie"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "black-rain",
@@ -688,7 +731,8 @@
             "Oakland"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "blazed-utopia",
@@ -704,7 +748,8 @@
             "San Jacinto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bleu-leaf-dispensary",
@@ -719,7 +764,8 @@
             "Bronx"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "blissful-buds",
@@ -734,7 +780,8 @@
             "Binghamton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "blissful-moments-healing-center",
@@ -749,7 +796,8 @@
             "Corcoran"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bloom-brother",
@@ -764,7 +812,8 @@
             "Menands"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bloom-room",
@@ -779,7 +828,8 @@
             "Pacifica"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bloomerang",
@@ -794,7 +844,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bloomery-cannabis",
@@ -809,7 +860,8 @@
             "Mount Clemens"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "blow-cannabis",
@@ -824,7 +876,8 @@
             "New Buffalo"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "blue-fire",
@@ -839,7 +892,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "blue-forest-farms",
@@ -854,7 +908,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "blue-sky-cannabis-company",
@@ -869,7 +924,8 @@
             "Belleville"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bmc",
@@ -884,7 +940,8 @@
             "San Andreas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bon-bons-sf-sweet-spot",
@@ -899,7 +956,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bored-n-stone",
@@ -914,7 +972,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bowdega",
@@ -929,7 +988,8 @@
             "New Buffalo"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bowz",
@@ -944,7 +1004,8 @@
             "Warren"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bract-house",
@@ -959,7 +1020,8 @@
             "Sonora"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "brentwood-greens",
@@ -974,7 +1036,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "broadway",
@@ -989,7 +1052,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bronx-joint",
@@ -1004,7 +1068,8 @@
             "Bronx"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "brooklyn-urban",
@@ -1019,7 +1084,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bubblegum-dispensary",
@@ -1034,7 +1100,8 @@
             "Tujunga"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bud-city",
@@ -1049,7 +1116,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "bud-n-bloom-farmacy",
@@ -1064,7 +1132,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "budology",
@@ -1079,7 +1148,8 @@
             "Hemet"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "budz-dispensary",
@@ -1094,7 +1164,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "buzz-cannabis",
@@ -1112,7 +1183,8 @@
             "Wildomar"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "buzzn-dispensary",
@@ -1127,7 +1199,8 @@
             "Broken Arrow"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "buzzwick",
@@ -1142,7 +1215,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "bx-buddies",
@@ -1157,7 +1231,8 @@
             "Bronx"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "by-any-other-name",
@@ -1172,7 +1247,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "ca-collective",
@@ -1187,7 +1263,8 @@
             "San Jose"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cake-house",
@@ -1216,7 +1293,8 @@
             "Pleasant Ridge"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cali-kosher",
@@ -1232,7 +1310,8 @@
             "Turlock"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "california-caregivers-alliance",
@@ -1247,7 +1326,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "california-city-supply",
@@ -1262,7 +1342,8 @@
             "California City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "california-holistics",
@@ -1277,7 +1358,8 @@
             "Chula Vista"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "california-street-cannabis",
@@ -1292,7 +1374,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "calm-and-collective",
@@ -1307,7 +1390,8 @@
             "Long Beach"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "calyx-peack",
@@ -1322,7 +1406,8 @@
             "Santa Monica"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cana",
@@ -1338,7 +1423,8 @@
             "Sylmar"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "canaharbor",
@@ -1353,7 +1439,8 @@
             "Harbor City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "canna-blooms",
@@ -1368,7 +1455,8 @@
             "Farmingville"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "canna-cure",
@@ -1384,7 +1472,8 @@
             "Stillwater"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "canna-family",
@@ -1399,7 +1488,8 @@
             "Howard Beach"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "canna-health",
@@ -1414,7 +1504,8 @@
             "Rush"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "canna-planet",
@@ -1430,7 +1521,8 @@
             "Monticello"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cannabees",
@@ -1445,7 +1537,8 @@
             "Maspeth"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cannabis-buyers-club-of",
@@ -1460,7 +1553,8 @@
             "Berkeley"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cannabis-house",
@@ -1475,7 +1569,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cannabis-king",
@@ -1490,7 +1585,8 @@
             "Burton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cannable",
@@ -1506,7 +1602,8 @@
             "Parlier"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cannaco-research",
@@ -1521,7 +1618,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cannatopia",
@@ -1536,7 +1634,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cannavita",
@@ -1551,7 +1650,8 @@
             "Astoria"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "canntinas-ohana",
@@ -1566,7 +1666,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "capital-dank",
@@ -1587,7 +1688,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "capital-district-cannabis-wellness",
@@ -1602,7 +1704,8 @@
             "Albany"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "captain-jacks",
@@ -1617,7 +1720,8 @@
             "San Bernardino"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "carnegie-hill-cannabis-co",
@@ -1632,7 +1736,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "catalyst",
@@ -1668,7 +1773,8 @@
             "Watsonville"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "central-tree-collection",
@@ -1683,7 +1789,8 @@
             "Lake Elsinore"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "chesterfield-cannabis-co",
@@ -1698,7 +1805,8 @@
             "Keeseville"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "city-heights",
@@ -1713,7 +1821,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cloud-7",
@@ -1728,7 +1837,8 @@
             "Oakland"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "clouditude-dispensary",
@@ -1743,7 +1853,8 @@
             "Staten Island"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "club-78",
@@ -1758,7 +1869,8 @@
             "Reseda"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "club-w",
@@ -1773,7 +1885,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "coachella-greenery",
@@ -1788,7 +1901,8 @@
             "Coachella"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "coachella-releaf",
@@ -1803,7 +1917,8 @@
             "Coachella"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "coastside-cannabis",
@@ -1818,7 +1933,8 @@
             "Pacifica"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "connected",
@@ -1833,7 +1949,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "connected-cannabis-co",
@@ -1848,7 +1965,8 @@
             "Stockton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "connected-sf",
@@ -1863,7 +1981,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cookies",
@@ -1878,7 +1997,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cosmic-nugget-dispensary",
@@ -1893,7 +2013,8 @@
             "Prague"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "county-road-cannabis",
@@ -1908,7 +2029,8 @@
             "New Hampton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cowboy-cannabis-dispensary",
@@ -1923,7 +2045,8 @@
             "Stillwater"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cowboy-kush-dispensary",
@@ -1938,7 +2061,8 @@
             "Broken Arrow"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "craft-cannabis-company",
@@ -1954,7 +2078,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "creative-chaos",
@@ -1969,7 +2094,8 @@
             "Corona"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "crescent-city-cannabis-company",
@@ -1984,7 +2110,8 @@
             "Crescent City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "crystal-nugs-shop",
@@ -1999,7 +2126,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cultivate-durango",
@@ -2014,7 +2142,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cultivate-spring-mountain",
@@ -2029,7 +2158,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "culture-cannabis-club",
@@ -2050,7 +2180,8 @@
             "Stanton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "culture-club",
@@ -2065,7 +2196,8 @@
             "Porterville"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "culture-fresno-bullard",
@@ -2080,7 +2212,8 @@
             "Fresno"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "culture-limonite",
@@ -2095,7 +2228,8 @@
             "Jurupa Valley"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "curaleaf",
@@ -2127,7 +2261,8 @@
             "Youngtown"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "cure-company-crenshaw",
@@ -2142,7 +2277,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "daily-greens",
@@ -2157,7 +2293,8 @@
             "Bartlesville"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "dank-depot",
@@ -2172,7 +2309,8 @@
             "Cathedral City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "dankley-fidi",
@@ -2187,7 +2325,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "dark-cloud-cannabis-co",
@@ -2202,7 +2341,8 @@
             "Oolagah"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "david-s-cloud",
@@ -2217,7 +2357,8 @@
             "Newalla"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "davis-cannabis-collective",
@@ -2232,7 +2373,8 @@
             "Davis"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "dazed",
@@ -2248,7 +2390,8 @@
             "Syracuse"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "dc-collective",
@@ -2263,7 +2406,8 @@
             "Canoga Park"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "deep-roots",
@@ -2278,7 +2422,8 @@
             "Mesquite"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "deep-roots-blue-diamond",
@@ -2293,7 +2438,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "deep-roots-cheyenne",
@@ -2308,7 +2454,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "deep-roots-harvest-nlv",
@@ -2323,7 +2470,8 @@
             "North Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "deep-roots-harvest-parkson",
@@ -2338,7 +2486,8 @@
             "Henderson"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "deep-roots-wendover",
@@ -2353,7 +2502,8 @@
             "West Wendover"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "delirium-dispensary",
@@ -2368,7 +2518,8 @@
             "Vinita"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "delta-health-wellness",
@@ -2383,7 +2534,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "desert-kush",
@@ -2399,7 +2551,8 @@
             "Indio"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "diamond-tree",
@@ -2414,7 +2567,8 @@
             "Syracuse"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "dispensary-near-me",
@@ -2429,7 +2583,8 @@
             "Arcadia"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "dope-sugar",
@@ -2444,7 +2599,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "double-eye",
@@ -2459,7 +2615,8 @@
             "Cathedral City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "dr-dank",
@@ -2474,7 +2631,8 @@
             "Seminole"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "dr-greenthumb-s",
@@ -2490,7 +2648,8 @@
             "Cathedral"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "dream-dazed",
@@ -2505,7 +2664,8 @@
             "Depew"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "dryden",
@@ -2520,7 +2680,8 @@
             "Dryden"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "dtpg-collective",
@@ -2535,7 +2696,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "east-bay-ohana",
@@ -2550,7 +2712,8 @@
             "Emeryville"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "easy-times",
@@ -2565,7 +2728,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "eaze",
@@ -2580,7 +2744,8 @@
             "San Diego"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "eaze-orange-county",
@@ -2595,7 +2760,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "electric-ave",
@@ -2610,7 +2776,8 @@
             "Jurupa Valley"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "elemental-progress",
@@ -2625,7 +2792,8 @@
             "Yukon"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "elevate",
@@ -2640,7 +2808,8 @@
             "Woodland Hills"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "elevate-mt-vernon",
@@ -2655,7 +2824,8 @@
             "Mount Vernon"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "elevated-sf",
@@ -2670,7 +2840,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "elevation-hq",
@@ -2685,7 +2856,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "elite-cannabis-company",
@@ -2700,7 +2872,8 @@
             "Wetumka"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "embr",
@@ -2715,7 +2888,8 @@
             "Lake Elsinore"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "emerald",
@@ -2730,7 +2904,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "emerald-alley-dispensary",
@@ -2745,7 +2920,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "emerald-bison-llc-humboldt-cannabis",
@@ -2760,7 +2936,8 @@
             "Owasso"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "emerald-carrol-gardens",
@@ -2775,7 +2952,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "emerald-elite-ii",
@@ -2790,7 +2968,8 @@
             "Chickasha"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "emerald-elite-thc",
@@ -2805,7 +2984,8 @@
             "Del City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "emerald-manhattan",
@@ -2820,7 +3000,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "empire-gardens",
@@ -2836,7 +3017,8 @@
             "Perris"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "endo",
@@ -2851,7 +3033,8 @@
             "Adrian"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "enflor",
@@ -2866,7 +3049,8 @@
             "East Elmhurst"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "erb-arbor",
@@ -2881,7 +3065,8 @@
             "Van Nuys"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "erba-markets",
@@ -2896,7 +3081,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "essential",
@@ -2911,7 +3097,8 @@
             "Torrance"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "estd",
@@ -2926,7 +3113,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "ether-cannabis",
@@ -2941,7 +3129,8 @@
             "Buffalo"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "euflora-dispensary",
@@ -2956,7 +3145,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "euphoria-wellness",
@@ -2971,7 +3161,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "euphoros-la",
@@ -2986,7 +3177,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "eureka-sky",
@@ -3001,7 +3193,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "evergreen-market",
@@ -3016,7 +3209,8 @@
             "Turlock"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "exclusive",
@@ -3031,7 +3225,8 @@
             "Muskegon"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "exit-31-exotics",
@@ -3046,7 +3241,8 @@
             "Utica"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "exotic-kingdom",
@@ -3061,7 +3257,8 @@
             "Troy"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "exotics",
@@ -3077,7 +3274,8 @@
             "Pontiac"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "exotix-weed-dispensary",
@@ -3093,7 +3291,8 @@
             "San Jose"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "fabulous-cannabis-co",
@@ -3108,7 +3307,8 @@
             "Edmond"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "famous-dispensary",
@@ -3123,7 +3323,8 @@
             "Bristow"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "farm-fresh",
@@ -3138,7 +3339,8 @@
             "Lake Havasu City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "farmacy",
@@ -3155,7 +3357,8 @@
             "Santa Ynez"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "farmacy-isla-vista",
@@ -3170,7 +3373,8 @@
             "Goleta"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "farmacy-sb",
@@ -3185,7 +3389,8 @@
             "Santa Barbara"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "farmers-choice",
@@ -3200,7 +3405,8 @@
             "Fishkill"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "fat-bunny",
@@ -3215,7 +3421,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "federal-college",
@@ -3230,7 +3437,8 @@
             "Lemon Grove"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "fig-tree",
@@ -3245,7 +3453,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "firehouse",
@@ -3260,7 +3469,8 @@
             "Turlock"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "firehouse-365",
@@ -3275,7 +3485,8 @@
             "Maywood"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "flavors",
@@ -3291,7 +3502,8 @@
             "Riverbank"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "flavors-dispensary",
@@ -3306,7 +3518,8 @@
             "Bethany"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "flight-on-cherry",
@@ -3321,7 +3534,8 @@
             "Long Beach"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "flor-de-fred",
@@ -3336,7 +3550,8 @@
             "Ozone Park"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "flora-terra-on-4th",
@@ -3351,7 +3566,8 @@
             "Santa Rosa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "flower-leaf",
@@ -3366,7 +3582,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "flower-bowl",
@@ -3381,7 +3598,8 @@
             "Inkster"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "flower-factory-fine-cannabis",
@@ -3396,7 +3614,8 @@
             "Edmond"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "flower-shak",
@@ -3411,7 +3630,8 @@
             "Rockaway Park"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "flowerbowl",
@@ -3426,7 +3646,8 @@
             "River Rouge"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "flowery-soho",
@@ -3441,7 +3662,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "flynn-stoned",
@@ -3457,7 +3679,8 @@
             "Staten Island"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "flynn-stoned-bay-ridge",
@@ -3472,7 +3695,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "flynn-stoned-westridge-road",
@@ -3487,7 +3711,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "foothill-wellness-center",
@@ -3502,7 +3727,8 @@
             "Tujunga"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "forever-420",
@@ -3517,7 +3743,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "fountain-of-wellbeing-a-cooperative",
@@ -3532,7 +3759,8 @@
             "North Hollywood"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "fox",
@@ -3547,7 +3775,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "freshly-baked",
@@ -3562,7 +3791,8 @@
             "Bronx"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "fridaze",
@@ -3577,7 +3807,8 @@
             "Encino"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "from-the-earth",
@@ -3593,7 +3824,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "frost",
@@ -3608,7 +3840,8 @@
             "North Hollywood"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "full-power",
@@ -3623,7 +3856,8 @@
             "Edmond"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "ganja-express",
@@ -3638,7 +3872,8 @@
             "Yorkville"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "ganja-palace-dispensary",
@@ -3653,7 +3888,8 @@
             "Johnstown"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "garage-420-llc",
@@ -3668,7 +3904,8 @@
             "Mead"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "gas-station",
@@ -3683,7 +3920,8 @@
             "Reseda"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "gazz",
@@ -3698,7 +3936,8 @@
             "Roseville"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "gemmi-verdi",
@@ -3713,7 +3952,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "gifted-cannabis-co",
@@ -3728,7 +3968,8 @@
             "Yukon"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "glh-kzoo",
@@ -3744,7 +3985,8 @@
             "Kalamazoo"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "global-greenz",
@@ -3759,7 +4001,8 @@
             "Atwater"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "gno-enterpises",
@@ -3774,7 +4017,8 @@
             "Hazel Park"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "goat-house-cannabis-co",
@@ -3789,7 +4033,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "goat-house-del-city",
@@ -3804,7 +4049,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "goldn-bloom",
@@ -3820,7 +4066,8 @@
             "San Diego"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "good-daze",
@@ -3835,7 +4082,8 @@
             "Little Neck"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "good-grades",
@@ -3850,7 +4098,8 @@
             "Jamaica"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "good-life-collective",
@@ -3865,7 +4114,8 @@
             "Rochester"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "goodies-ganja-express-2",
@@ -3880,7 +4130,8 @@
             "Edmond"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "gotham-buds",
@@ -3895,7 +4146,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "gramazon",
@@ -3910,7 +4162,8 @@
             "Flint"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "gramz",
@@ -3928,7 +4181,8 @@
             "Three Rivers"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "gramz-mt-morris",
@@ -3943,7 +4197,8 @@
             "Mount Morris"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "gramz-romeo",
@@ -3958,7 +4213,8 @@
             "Bruce Township"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "grass-roots-coillective",
@@ -3973,7 +4229,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "grasshopper",
@@ -3988,7 +4245,8 @@
             "Chula Vista"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "gray-market",
@@ -4003,7 +4261,8 @@
             "San Bernardino"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "great-life-cannabis-co",
@@ -4018,7 +4277,8 @@
             "Norman"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green",
@@ -4034,7 +4294,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-acres",
@@ -4052,7 +4313,8 @@
             "Westland"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-angel",
@@ -4067,7 +4329,8 @@
             "Sherman Oaks"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-bean",
@@ -4082,7 +4345,8 @@
             "Woodlake"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "green-cannabis-co",
@@ -4097,7 +4361,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-cross-of",
@@ -4112,7 +4377,8 @@
             "Torrance"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-doctor-420",
@@ -4130,7 +4396,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-earth-collective",
@@ -4145,7 +4412,8 @@
             "Granada Hills"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-earth-collective-highland-park",
@@ -4160,7 +4428,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-escape",
@@ -4175,7 +4444,8 @@
             "Edmond"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-escape-okc",
@@ -4190,7 +4460,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-flower-wellness",
@@ -4205,7 +4476,8 @@
             "Ozone Park"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-frog-delivery",
@@ -4220,7 +4492,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-garden-dispensary",
@@ -4235,7 +4508,8 @@
             "Skiatook"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-giant",
@@ -4250,7 +4524,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-gold-little-trees",
@@ -4265,7 +4540,8 @@
             "Arnold"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-heron",
@@ -4280,7 +4556,8 @@
             "Lakeport"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-kiss-farms",
@@ -4295,7 +4572,8 @@
             "San Fernando"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-klub",
@@ -4310,7 +4588,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-mart",
@@ -4325,7 +4604,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-on-the-go",
@@ -4340,7 +4620,8 @@
             "Oakland"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-plus",
@@ -4355,7 +4636,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-qween",
@@ -4370,7 +4652,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-rainbow",
@@ -4385,7 +4668,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-solutions",
@@ -4400,7 +4684,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-supreme-dispensary",
@@ -4415,7 +4700,8 @@
             "Seminole"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "green-witch-dispensary",
@@ -4430,7 +4716,8 @@
             "Greenwich"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "greencare",
@@ -4445,7 +4732,8 @@
             "River Rouge"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "greenleaf-wellness",
@@ -4460,7 +4748,8 @@
             "Sparks"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "greens-palace",
@@ -4475,7 +4764,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "greenway-highway",
@@ -4490,7 +4780,8 @@
             "Pacoima"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "greenwolf",
@@ -4505,7 +4796,8 @@
             "Bellflower"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "halfpipe",
@@ -4520,7 +4812,8 @@
             "Seaside"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "hall-of-flowers",
@@ -4535,7 +4828,8 @@
             "Oakland"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "hampton-premium-green",
@@ -4550,7 +4844,8 @@
             "Water Mill"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "happy-days",
@@ -4565,7 +4860,8 @@
             "Farmingdale"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "happy-daze",
@@ -4580,7 +4876,8 @@
             "Monroe"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "happy-green",
@@ -4595,7 +4892,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "happy-harry-medicine-shop",
@@ -4610,7 +4908,8 @@
             "Wyandotte"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "happy-little-trees",
@@ -4625,7 +4924,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "haqs-1000",
@@ -4640,7 +4940,8 @@
             "Guthrie"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "harborside",
@@ -4655,7 +4956,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "harvest-corner",
@@ -4670,7 +4972,8 @@
             "Banning"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "haze",
@@ -4685,7 +4988,8 @@
             "San Jose"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "hazy-bulldog-farms",
@@ -4700,7 +5004,8 @@
             "Sonora"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "health-express-2t",
@@ -4715,7 +5020,8 @@
             "Kingfisher"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "health-express-6t",
@@ -4730,7 +5036,8 @@
             "Enid"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "hello-cannnabis",
@@ -4745,7 +5052,8 @@
             "Vista"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "hells-kitchen",
@@ -4760,7 +5068,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "herb-n-joy",
@@ -4776,7 +5085,8 @@
             "Walnut Creek"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "herbal-meds",
@@ -4791,7 +5101,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "herbal-remedies-caregivers",
@@ -4806,7 +5117,8 @@
             "Sylmar"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "herban-kulture",
@@ -4822,7 +5134,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "herbgirl",
@@ -4837,7 +5150,8 @@
             "Oceanside"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "herbology",
@@ -4858,7 +5172,8 @@
             "Sherwood"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "herbology-cannabis-co",
@@ -4874,7 +5189,8 @@
             "Tekonsha"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "hi-neighbor-cannabis-club",
@@ -4889,7 +5205,8 @@
             "North Hollywood"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "hi-fidelity",
@@ -4904,7 +5221,8 @@
             "Berkeley"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "hi-lo-budz",
@@ -4919,7 +5237,8 @@
             "Holdenville"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "high-dankery",
@@ -4934,7 +5253,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "high-in-northridge",
@@ -4949,7 +5269,8 @@
             "Pacoima"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "high-profile",
@@ -4964,7 +5285,8 @@
             "Ironwood"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "high-seas",
@@ -4979,7 +5301,8 @@
             "Costa Mesa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "high-society-dispensary-10",
@@ -4994,7 +5317,8 @@
             "Norman"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "high-society-okc-10th-st",
@@ -5009,7 +5333,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "high-society-wellness",
@@ -5024,7 +5349,8 @@
             "Davison"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "high-stone",
@@ -5039,7 +5365,8 @@
             "Staten Island"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "high-way",
@@ -5054,7 +5381,8 @@
             "Lucerne"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "higher-ground",
@@ -5073,7 +5401,8 @@
             "San Bernardino"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "higher-health",
@@ -5088,7 +5417,8 @@
             "Afton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "higher-level",
@@ -5103,7 +5433,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "hightend-dispensary-lounge",
@@ -5118,7 +5449,8 @@
             "Palm Springs"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "highway-29-healthcare",
@@ -5133,7 +5465,8 @@
             "Vallejo"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "highway-dtla",
@@ -5148,7 +5481,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "hikei",
@@ -5163,7 +5497,8 @@
             "San Diego"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "hold-up-roll-up",
@@ -5178,7 +5513,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "holistic-healing-collective",
@@ -5193,7 +5529,8 @@
             "Richmond"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "honey",
@@ -5208,7 +5545,8 @@
             "Kenmore"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "hornbill",
@@ -5223,7 +5561,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "house-of-dank",
@@ -5239,7 +5578,8 @@
             "Warren"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "house-of-ounce",
@@ -5255,7 +5595,8 @@
             "Marietta"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "house-of-ounce-ardmore",
@@ -5270,7 +5611,8 @@
             "Ardmore"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "house-of-strains",
@@ -5285,7 +5627,8 @@
             "Flushing"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "hpc-oxnard",
@@ -5300,7 +5643,8 @@
             "Port Hueneme"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "hprc",
@@ -5315,7 +5659,8 @@
             "Mission Hills"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "humble-root",
@@ -5330,7 +5675,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "humboldt",
@@ -5345,7 +5691,8 @@
             "Bartlesville"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "humboldt-cannabis",
@@ -5363,7 +5710,8 @@
             "Miami"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "ignyte",
@@ -5378,7 +5726,8 @@
             "Whitestone"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "iheartkush",
@@ -5393,7 +5742,8 @@
             "Costa Mesa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "illa-store",
@@ -5408,7 +5758,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "imperial-valley",
@@ -5423,7 +5774,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "indica-cannabis-co",
@@ -5438,7 +5790,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "interstate-420",
@@ -5453,7 +5806,8 @@
             "Lawton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "inyo",
@@ -5468,7 +5822,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "its-420-time",
@@ -5483,7 +5838,8 @@
             "Moreno Valley"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "ivthc",
@@ -5498,7 +5854,8 @@
             "Desert Hot Springs"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "j-dub-dispensary",
@@ -5513,7 +5870,8 @@
             "Durant"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jade",
@@ -5528,7 +5886,8 @@
             "Reno"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jade-di",
@@ -5543,7 +5902,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jade-leaf",
@@ -5559,7 +5919,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jade-room",
@@ -5574,7 +5935,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jade-sky-pointe",
@@ -5589,7 +5951,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jaderoom",
@@ -5604,7 +5967,8 @@
             "Artesia"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jardin",
@@ -5619,7 +5983,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jars",
@@ -5635,7 +6000,8 @@
             "Warren"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jayden-s-journey",
@@ -5650,7 +6016,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jazz-cannabis-club-2",
@@ -5665,7 +6032,8 @@
             "Detroit"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jazz-club-inkser",
@@ -5680,7 +6048,8 @@
             "Inkster"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jet-room",
@@ -5695,7 +6064,8 @@
             "Adelanto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jfk-cannabis",
@@ -5710,7 +6080,8 @@
             "Jamaica"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "joe-s-buds",
@@ -5725,7 +6096,8 @@
             "Syracuse"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "joint-venture-cannabis",
@@ -5740,7 +6112,8 @@
             "Medford"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "josephines-billies",
@@ -5755,7 +6128,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "joyology",
@@ -5771,7 +6145,8 @@
             "Burton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jungle-boys",
@@ -5789,7 +6164,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "jungle-house",
@@ -5804,7 +6180,8 @@
             "Lawton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "just-a-little-higher-murray-hill",
@@ -5819,7 +6196,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "just-a-little-higher-queens",
@@ -5835,7 +6213,8 @@
             "Long Island City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "kanna-luv",
@@ -5850,7 +6229,8 @@
             "North Hills"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "kannabis-works",
@@ -5865,7 +6245,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "kaya-bliss",
@@ -5880,7 +6261,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "kind-love",
@@ -5895,7 +6277,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "king-of-budz",
@@ -5914,7 +6297,8 @@
             "Taylor"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "king-of-budz-provisioning",
@@ -5929,7 +6313,8 @@
             "Detroit"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "kings-house-of-fire",
@@ -5944,7 +6329,8 @@
             "Cortlandt Manor"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "kolas",
@@ -5959,7 +6345,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "kush-alley",
@@ -5974,7 +6361,8 @@
             "North Hills"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "kush-gardens",
@@ -5989,7 +6377,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "kush-klub",
@@ -6004,7 +6393,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "kush-mart",
@@ -6019,7 +6409,8 @@
             "Lancaster"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "kush-mart-nyc",
@@ -6034,7 +6425,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "kushology",
@@ -6049,7 +6441,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "kushy-cannabis-delivery",
@@ -6064,7 +6457,8 @@
             "Stockton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "la-2-ok",
@@ -6080,7 +6474,8 @@
             "Warr Acres"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "la-2-ok-dispensary",
@@ -6095,7 +6490,8 @@
             "Warr Acres"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "la-cannabis-club",
@@ -6110,7 +6506,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "la-kush",
@@ -6125,7 +6522,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "lapcg",
@@ -6140,7 +6538,8 @@
             "West Hollywood"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "las-damas",
@@ -6155,7 +6554,8 @@
             "Coachella"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "laxcc",
@@ -6170,7 +6570,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "lb-collective",
@@ -6185,7 +6586,8 @@
             "Long Beach"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "leaf-lion",
@@ -6200,7 +6602,8 @@
             "Long Beach"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "leaf-society",
@@ -6216,7 +6619,8 @@
             "Thermal"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "legacy-dispensary",
@@ -6231,7 +6635,8 @@
             "Colonie"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "legacy-green",
@@ -6246,7 +6651,8 @@
             "Beggs"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "legacy-kush",
@@ -6261,7 +6667,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "lemonnade",
@@ -6276,7 +6683,8 @@
             "Van Nuys"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "lemonnade-pacoima",
@@ -6291,7 +6699,8 @@
             "Arleta"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "lenox-hill",
@@ -6306,7 +6715,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "level-28",
@@ -6321,7 +6731,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "levels",
@@ -6338,7 +6749,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "levels-cannabis",
@@ -6354,7 +6766,8 @@
             "Niles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "liberty-beach",
@@ -6369,7 +6782,8 @@
             "Gardena"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "liberty-buds",
@@ -6384,7 +6798,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "lighthouse-cannabis",
@@ -6399,7 +6814,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "lilykis",
@@ -6414,7 +6830,8 @@
             "Pacoima"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "lit",
@@ -6429,7 +6846,8 @@
             "La Mesa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "lit-cannabis-club",
@@ -6444,7 +6862,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "lit-leaf-cannabis-co",
@@ -6459,7 +6878,8 @@
             "Norman"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "livwell-meds",
@@ -6475,7 +6895,8 @@
             "Durant"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "loe-dispensary",
@@ -6490,7 +6911,8 @@
             "Sonoma"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "long-beach-green-room",
@@ -6505,7 +6927,8 @@
             "Long Beach"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "long-beach-wellness-center",
@@ -6520,7 +6943,8 @@
             "Long Beach"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "long-island-cannabis-club",
@@ -6535,7 +6959,8 @@
             "Deer Park"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "loopy-sanchez",
@@ -6550,7 +6975,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "loud-cannabis",
@@ -6565,7 +6991,8 @@
             "Warren"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "lovelight-cannabis",
@@ -6580,7 +7007,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "lucid",
@@ -6595,7 +7023,8 @@
             "Winnemucca"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "luck-dog-420",
@@ -6610,7 +7039,8 @@
             "Ballston Spa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "lytt",
@@ -6625,7 +7055,8 @@
             "Pacifica"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "m-m-neighborhood",
@@ -6640,7 +7071,8 @@
             "Bellerose"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "m-c",
@@ -6655,7 +7087,8 @@
             "Yucca Valley"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "madame-jane",
@@ -6670,7 +7103,8 @@
             "Schenectady"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "magic-flower",
@@ -6685,7 +7119,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "magnolia-city-apothecary",
@@ -6700,7 +7135,8 @@
             "Durant"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "main-street-420-shop",
@@ -6715,7 +7151,8 @@
             "Binger"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "main-street-meds",
@@ -6730,7 +7167,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mainstage",
@@ -6746,7 +7184,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "malibu-community-collective",
@@ -6761,7 +7200,8 @@
             "Malibu"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mango",
@@ -6776,7 +7216,8 @@
             "Henrietta"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mango-cannabis",
@@ -6797,7 +7238,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mankind-dispensary",
@@ -6812,7 +7254,8 @@
             "San Diego"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "marina-greens",
@@ -6827,7 +7270,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mary-jane",
@@ -6842,7 +7286,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "matawana",
@@ -6857,7 +7302,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mecca-dispensary",
@@ -6872,7 +7318,8 @@
             "Woodhaven"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "medical-joint-dispensary",
@@ -6887,7 +7334,8 @@
             "Broken Bow"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "medical-man-wellness",
@@ -6902,7 +7350,8 @@
             "Bethany"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "medicated-monkey",
@@ -6917,7 +7366,8 @@
             "Hugo"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "medizen",
@@ -6932,7 +7382,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "medleaf",
@@ -6947,7 +7398,8 @@
             "Oceanside"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "megan-s-organic-market",
@@ -6962,7 +7414,8 @@
             "San Luis Obispo"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mercy-wellness",
@@ -6977,7 +7430,8 @@
             "Cotati"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "metro-cannabis-dispensary",
@@ -6992,7 +7446,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "michigan-green-magic",
@@ -7007,7 +7462,8 @@
             "Jackson"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "middletown-indoor",
@@ -7022,7 +7478,8 @@
             "Wallkill"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "milligrams",
@@ -7037,7 +7494,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "miss-pres",
@@ -7052,7 +7510,8 @@
             "Center Line"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mission-cannabis-club",
@@ -7067,7 +7526,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mission-organic",
@@ -7082,7 +7542,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mister-greens",
@@ -7097,7 +7558,8 @@
             "Colonie"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mk-s-cure-it-with-cannabis",
@@ -7112,7 +7574,8 @@
             "Madill"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mmd",
@@ -7131,7 +7594,8 @@
             "Redwood City"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "mng-hub",
@@ -7146,7 +7610,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "moe-greens",
@@ -7161,7 +7626,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mom",
@@ -7176,7 +7642,8 @@
             "Goleta"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mood-centerline",
@@ -7191,7 +7658,8 @@
             "Center Line"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "moore-kush-house",
@@ -7206,7 +7674,8 @@
             "Moore"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mr-nice-guy",
@@ -7223,7 +7692,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mrs-green-cannary",
@@ -7238,7 +7708,8 @@
             "Batavia"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "mrs-mary-jane",
@@ -7253,7 +7724,8 @@
             "Broken Arrow"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "muha",
@@ -7268,7 +7740,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "muha-meds",
@@ -7283,7 +7756,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "my-bud-420",
@@ -7298,7 +7772,8 @@
             "Bronx"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "my420",
@@ -7313,7 +7788,8 @@
             "Winnetka"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nabodoka",
@@ -7328,7 +7804,8 @@
             "Lovelock"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nade-south",
@@ -7343,7 +7820,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "native-medicine",
@@ -7359,7 +7837,8 @@
             "Nowata"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "native-rootz",
@@ -7374,7 +7853,8 @@
             "Anadarko"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "natural-aid",
@@ -7389,7 +7869,8 @@
             "Sunland-Tujunga"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nature-s-wonder",
@@ -7408,7 +7889,8 @@
             "Phoenix"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "natures-spot",
@@ -7423,7 +7905,8 @@
             "Pacoima"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "natures-story",
@@ -7438,7 +7921,8 @@
             "Woodland Hills"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nela-rd",
@@ -7453,7 +7937,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nevada-made-marijuana",
@@ -7470,7 +7955,8 @@
             "Laughlin"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "new-metro",
@@ -7485,7 +7971,8 @@
             "Bayside"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "newcastle-lotus-gold",
@@ -7500,7 +7987,8 @@
             "Newcastle"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "next-elevation",
@@ -7515,7 +8003,8 @@
             "Moore"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nexus-delivers",
@@ -7530,7 +8019,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nhc",
@@ -7547,7 +8037,8 @@
             "Turlock"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "nhc-morro-bay",
@@ -7562,7 +8053,8 @@
             "Grover Beach"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nice-yield",
@@ -7577,7 +8069,8 @@
             "Long Island City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nicklz",
@@ -7592,7 +8085,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nirvana-springs",
@@ -7607,7 +8101,8 @@
             "Jamaica"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "no-name-cannabis",
@@ -7622,7 +8117,8 @@
             "Troy"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "norcal-holistics",
@@ -7637,7 +8133,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "north-beach-pipeline",
@@ -7652,7 +8149,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nothern-lights",
@@ -7667,7 +8165,8 @@
             "Jamaica"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nova-cannabis-company",
@@ -7682,7 +8181,8 @@
             "Broken Bow"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nug",
@@ -7702,7 +8202,8 @@
             "San Leandro"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "nug-inc-sundial",
@@ -7717,7 +8218,8 @@
             "Redding"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nug-inc-calif-collective-care",
@@ -7732,7 +8234,8 @@
             "Vallejo"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nug-inc-el",
@@ -7747,7 +8250,8 @@
             "Cerrito"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "nugghubb",
@@ -7762,7 +8266,8 @@
             "Lake Elsinore"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nuleaf",
@@ -7778,7 +8283,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nuleaf-the-strip",
@@ -7793,7 +8299,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nuna-harvest",
@@ -7808,7 +8315,8 @@
             "Mount Vernon"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nurses-station",
@@ -7823,7 +8331,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "nuwu",
@@ -7838,7 +8347,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "ny-canna-co",
@@ -7853,7 +8363,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "ny-elite",
@@ -7868,7 +8379,8 @@
             "Bayside"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "oakanna",
@@ -7883,7 +8395,8 @@
             "Oakland"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "oakland",
@@ -7898,7 +8411,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "oasis-cannabis",
@@ -7913,7 +8427,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "odean",
@@ -7928,7 +8443,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "of-the-earth-canna",
@@ -7943,7 +8459,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "off-green",
@@ -7958,7 +8475,8 @@
             "Panorama City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "og-nation",
@@ -7974,7 +8492,8 @@
             "Maywood"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "og-time",
@@ -7989,7 +8508,8 @@
             "El Monte"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "ohana",
@@ -8007,7 +8527,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "ohg",
@@ -8023,7 +8544,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "okc-10-dispensary",
@@ -8038,7 +8560,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "okie",
@@ -8054,7 +8577,8 @@
             "Owasso"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "okie-green-gold-primal-cannabis",
@@ -8069,7 +8593,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "okie-highland-farms",
@@ -8084,7 +8609,8 @@
             "Bartlesville"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "okie-medicine-flower",
@@ -8099,7 +8625,8 @@
             "Yukon"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "okie-midtown",
@@ -8114,7 +8641,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "okie-wonderland",
@@ -8129,7 +8657,8 @@
             "Catoosa"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "one-plant",
@@ -8150,7 +8679,8 @@
             "Santa Cruz"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "originals",
@@ -8166,7 +8696,8 @@
             "San Diego"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "otc",
@@ -8212,7 +8743,8 @@
             "Winterhaven"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "otc-miramar",
@@ -8227,7 +8759,8 @@
             "San Diego"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "otc-palm-springs-lounge",
@@ -8242,7 +8775,8 @@
             "Palm Springs"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "outback-cannabis",
@@ -8257,7 +8791,8 @@
             "Norman"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "oz-dispensary",
@@ -8272,7 +8807,8 @@
             "Staten Island"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "packs",
@@ -8288,7 +8824,8 @@
             "San Bernardino"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "packs-oc",
@@ -8303,7 +8840,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "packs-south-la",
@@ -8318,7 +8856,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "palm-royale-collective",
@@ -8333,7 +8872,8 @@
             "Palm Desert"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "panacea-farms-llc-sipkoi",
@@ -8348,7 +8888,8 @@
             "Moreno Valley"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "paradise-factory",
@@ -8363,7 +8904,8 @@
             "San Pedro"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "park-social",
@@ -8378,7 +8920,8 @@
             "Alameda"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "patient-care-first",
@@ -8393,7 +8936,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "pcf",
@@ -8408,7 +8952,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "peace-love-bud",
@@ -8423,7 +8968,8 @@
             "South Lockport"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "perfect-union",
@@ -8439,7 +8985,8 @@
             "Turlock"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "pesha-numma",
@@ -8454,7 +9001,8 @@
             "Yerington"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "phat-pharm",
@@ -8469,7 +9017,8 @@
             "Durant"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "phenos",
@@ -8484,7 +9033,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "phenotopia",
@@ -8499,7 +9049,8 @@
             "Santa Rosa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "pipe-dreamz",
@@ -8514,7 +9065,8 @@
             "Lake Elsinore"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "pisos",
@@ -8529,7 +9081,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "planet-13",
@@ -8544,7 +9097,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "planet-buds-ii",
@@ -8559,7 +9113,8 @@
             "San Jacinto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "plant-galaxy",
@@ -8574,7 +9129,8 @@
             "Riverside"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "plu20",
@@ -8589,7 +9145,8 @@
             "San Jose"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "ponderosa",
@@ -8609,7 +9166,8 @@
             "Tucson"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "portola-pipeline",
@@ -8624,7 +9182,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "posh-green-collective",
@@ -8639,7 +9198,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "pounds",
@@ -8654,7 +9214,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "premium-blossom",
@@ -8669,7 +9230,8 @@
             "Porterville"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "presidio",
@@ -8684,7 +9246,8 @@
             "Atwater"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "prestige",
@@ -8699,7 +9262,8 @@
             "Edmond"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "prestige-cannabis-1",
@@ -8714,7 +9278,8 @@
             "Del City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "prime-leaf",
@@ -8729,7 +9294,8 @@
             "Blythe"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "primetiming",
@@ -8744,7 +9310,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "prince-diamond",
@@ -8759,7 +9326,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "project-cannabis-soma",
@@ -8774,7 +9342,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "project-releaf",
@@ -8789,7 +9358,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "proper-cannabis",
@@ -8804,7 +9374,8 @@
             "Norman"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "prospectors",
@@ -8819,7 +9390,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "puff-cannabis-company",
@@ -8834,7 +9406,8 @@
             "Utica"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "puff-theory",
@@ -8849,7 +9422,8 @@
             "Utica"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "pure-life-collective",
@@ -8864,7 +9438,8 @@
             "Diamond Springs"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "purple-buds",
@@ -8879,7 +9454,8 @@
             "Jackson Heights"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "purple-lotus",
@@ -8894,7 +9470,8 @@
             "San Jose"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "purple-star-md",
@@ -8909,7 +9486,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "purplez",
@@ -8924,7 +9502,8 @@
             "Santa Rosa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "quality-control-dispensary",
@@ -8939,7 +9518,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "qube",
@@ -8954,7 +9534,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rave-cannabis",
@@ -8969,7 +9550,8 @@
             "Benton Harbor"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "re-up",
@@ -8985,7 +9567,8 @@
             "Muskogee"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "re-up-cannabis-dispensary",
@@ -9000,7 +9583,8 @@
             "Bartlesville"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rebud-noho",
@@ -9015,7 +9599,8 @@
             "North Hollywood"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "red-moon",
@@ -9030,7 +9615,8 @@
             "Van Nuys"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "reef-strip-3400",
@@ -9045,7 +9631,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "reefer-madness",
@@ -9060,7 +9647,8 @@
             "Palm Springs"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "reefer-shop",
@@ -9075,7 +9663,8 @@
             "San Jacinto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "refinery",
@@ -9091,7 +9680,8 @@
             "New Buffalo"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "releaf",
@@ -9106,7 +9696,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "releaf-meds",
@@ -9121,7 +9712,8 @@
             "Ramona"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "remedy-313",
@@ -9136,7 +9728,8 @@
             "Detroit"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "remedy-room",
@@ -9151,7 +9744,8 @@
             "Jurupa Valley"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "renaissant-nyc",
@@ -9166,7 +9760,8 @@
             "Sunnyside"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "reup-dispensary",
@@ -9181,7 +9776,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "revo-group",
@@ -9196,7 +9792,8 @@
             "Mission Hills"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rise",
@@ -9213,7 +9810,8 @@
             "Reno"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rise-boulder-hwy",
@@ -9228,7 +9826,8 @@
             "Henderson"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rise-carson-city-hwy-50",
@@ -9243,7 +9842,8 @@
             "Carson City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rise-craig",
@@ -9258,7 +9858,8 @@
             "North Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rise-durango",
@@ -9273,7 +9874,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rise-nellis",
@@ -9288,7 +9890,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rise-rainbow",
@@ -9303,7 +9906,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rise-spanish-springs",
@@ -9318,7 +9922,8 @@
             "Sparks"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rise-tropicana",
@@ -9333,7 +9938,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rising-altitude",
@@ -9348,7 +9954,8 @@
             "Yukon"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rnr",
@@ -9363,7 +9970,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rob-sons-cannabis-company",
@@ -9378,7 +9986,8 @@
             "Shawnee"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "robinsons-cannabis",
@@ -9393,7 +10002,8 @@
             "Albany"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "root-9-dispensary",
@@ -9408,7 +10018,8 @@
             "Wappingers Falls"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "root-one",
@@ -9423,7 +10034,8 @@
             "Guadalupe"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "rooted-in-the-510",
@@ -9438,7 +10050,8 @@
             "Oakland"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "roots-2-harvest",
@@ -9453,7 +10066,8 @@
             "Lake Elsinore"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "roots-la",
@@ -9468,7 +10082,8 @@
             "Sun Valley"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "royal-flower",
@@ -9483,7 +10098,8 @@
             "Albany"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "rush-cannabis",
@@ -9498,7 +10114,8 @@
             "Hazel Park"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "russian-hill-cannabis-club",
@@ -9513,7 +10130,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "s-s-vibes",
@@ -9528,7 +10146,8 @@
             "San Jacinto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "safeport-cannabis",
@@ -9544,7 +10163,8 @@
             "Port Hueneme"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sasquatch-gardens",
@@ -9559,7 +10179,8 @@
             "McAlester"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sbp-greenfield",
@@ -9574,7 +10195,8 @@
             "Detroit"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "scalable-farms",
@@ -9589,7 +10211,8 @@
             "Lindsay"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sd-strains",
@@ -9604,7 +10227,8 @@
             "Cathedral City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "seaweed",
@@ -9625,7 +10249,8 @@
             "Arverne"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "semilla",
@@ -9640,7 +10265,8 @@
             "Sun Valley"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sensi-retail",
@@ -9655,7 +10281,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "serenity-of",
@@ -9670,7 +10297,8 @@
             "Lathrop"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "serenity-wellness-center",
@@ -9685,7 +10313,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sespe-creek-collective",
@@ -9700,7 +10329,8 @@
             "Ojai"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "shango",
@@ -9715,7 +10345,8 @@
             "Moreno Valley"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "sharps-co",
@@ -9730,7 +10361,8 @@
             "Ceres"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "shatter",
@@ -9745,7 +10377,8 @@
             "San Bernardino"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "show-grow",
@@ -9760,7 +10393,8 @@
             "Long Beach"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "showgrow",
@@ -9775,7 +10409,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sierra-green",
@@ -9790,7 +10425,8 @@
             "Bishop"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "siesta-life",
@@ -9805,7 +10441,8 @@
             "Encinitas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "silver-sage-wellness",
@@ -9820,7 +10457,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sipkoi",
@@ -9835,7 +10473,8 @@
             "San Jacinto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "skeetown",
@@ -9850,7 +10489,8 @@
             "Muskegon"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "skunkmasters",
@@ -9865,7 +10505,8 @@
             "Port Hueneme"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "skunks-den-wonderland",
@@ -9880,7 +10521,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sky-high",
@@ -9895,7 +10537,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sky-high-club",
@@ -9910,7 +10553,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "slo-cal-roots",
@@ -9926,7 +10570,8 @@
             "San Luis Obispo"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "slv-cannabis",
@@ -9941,7 +10586,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "smacked-village",
@@ -9956,7 +10602,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "smartweed",
@@ -9971,7 +10618,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "smilez",
@@ -9986,7 +10634,8 @@
             "Reading"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "smilez-of",
@@ -10002,7 +10651,8 @@
             "Quincy"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "smilez-wayne-adult-use",
@@ -10017,7 +10667,8 @@
             "Wayne"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "smok-cannabis",
@@ -10032,7 +10683,8 @@
             "Flint"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "smokey-paradise",
@@ -10047,7 +10699,8 @@
             "East Greenbush"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sol-cannabis",
@@ -10062,7 +10715,8 @@
             "Carson City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sol-flower",
@@ -10081,7 +10735,8 @@
             "Tucson"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sour-kush",
@@ -10096,7 +10751,8 @@
             "Lawton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "source-deer-springs",
@@ -10111,7 +10767,8 @@
             "North Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "source-eastern",
@@ -10126,7 +10783,8 @@
             "Henderson"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "source-homestead",
@@ -10141,7 +10799,8 @@
             "Pahrump"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "source-water-street",
@@ -10156,7 +10815,8 @@
             "Henderson"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sparkboro",
@@ -10171,7 +10831,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "squintz-foriegn",
@@ -10186,7 +10847,8 @@
             "Winnetka"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "stanton-monroe",
@@ -10201,7 +10863,8 @@
             "Stanton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "star-buds",
@@ -10218,7 +10881,8 @@
             "Chickasha"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "stash-fine-cannabis",
@@ -10233,7 +10897,8 @@
             "Tonopah"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "stateline-fine-cannabis",
@@ -10248,7 +10913,8 @@
             "Colbert"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "stay-buzzn",
@@ -10263,7 +10929,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "stiiizy",
@@ -10278,7 +10945,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "stone-age-farmacy",
@@ -10293,7 +10961,8 @@
             "San Pedro"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "stoops",
@@ -10308,7 +10977,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "strain-balboa-caregivers",
@@ -10323,7 +10993,8 @@
             "Chatsworth"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "strains",
@@ -10339,7 +11010,8 @@
             "Perris"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "street-kings",
@@ -10354,7 +11026,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "strong-strains",
@@ -10369,7 +11042,8 @@
             "East Setauket"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "studio-57",
@@ -10384,7 +11058,8 @@
             "Staten Island"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sublime-delivery",
@@ -10399,7 +11074,8 @@
             "Goleta"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sugarbudz-sfv",
@@ -10414,7 +11090,8 @@
             "Pacoima"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sun-valley-caregivers",
@@ -10429,7 +11106,8 @@
             "Sun Valley"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sundial",
@@ -10447,7 +11125,8 @@
             "Woodland"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sunset-herbal-corner",
@@ -10462,7 +11141,8 @@
             "North Hollywood"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sunset-pipeline",
@@ -10477,7 +11157,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "super-fire-cannabis",
@@ -10495,7 +11176,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "superfly",
@@ -10510,7 +11192,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sweet-flower",
@@ -10528,7 +11211,8 @@
             "Studio City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sweet-flower-westwood",
@@ -10543,7 +11227,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "sweet-life",
@@ -10558,7 +11243,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "swish-cannabis",
@@ -10573,7 +11259,8 @@
             "North Hollywood"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "tat-club-420",
@@ -10589,7 +11276,8 @@
             "Dixon"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "teleology",
@@ -10604,7 +11292,8 @@
             "New Baltimore"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "terminal-420",
@@ -10619,7 +11308,8 @@
             "Rosedale"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "texoma-tumbleweed-2",
@@ -10634,7 +11324,8 @@
             "Marietta"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "that-one-place-dispensary",
@@ -10649,7 +11340,8 @@
             "Bethany"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "thc",
@@ -10664,7 +11356,8 @@
             "Detroit"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-alchemy",
@@ -10679,7 +11372,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-artist-tree",
@@ -10700,7 +11394,8 @@
             "West Hollywood"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "the-boulevard",
@@ -10715,7 +11410,8 @@
             "Lemon Grove"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-bright-spot",
@@ -10730,7 +11426,8 @@
             "Fairfield"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-cannabis-co",
@@ -10745,7 +11442,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-cannabis-cure",
@@ -10760,7 +11458,8 @@
             "Atoka"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-cannasseurs-club-noho",
@@ -10775,7 +11474,8 @@
             "North Hollywood"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-chronic",
@@ -10790,7 +11490,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "the-cure-company-pico",
@@ -10805,7 +11506,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "the-daily-green",
@@ -10820,7 +11522,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-dispensary",
@@ -10837,7 +11540,8 @@
             "Reno"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-drop",
@@ -10852,7 +11556,8 @@
             "Gardena"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-dude-abides",
@@ -10870,7 +11575,8 @@
             "White Pigeon"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-flower-shop",
@@ -10886,7 +11592,8 @@
             "Phoenix"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "the-flowery",
@@ -10901,7 +11608,8 @@
             "Staten Island"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "the-gas-station",
@@ -10919,7 +11627,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-goat-dispensary",
@@ -10934,7 +11643,8 @@
             "Rego Park"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-gold-leaf",
@@ -10949,7 +11659,8 @@
             "Winnemucca"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-grass-station-medicinals",
@@ -10964,7 +11675,8 @@
             "McAlester"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-green-chamber",
@@ -10979,7 +11691,8 @@
             "Jurupa Valley"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-green-cross-san-franscisco",
@@ -10994,7 +11707,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-grove",
@@ -11010,7 +11724,8 @@
             "Pahrump"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-healing-tree-on-3rd",
@@ -11025,7 +11740,8 @@
             "Lake Elsinore"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-high-end",
@@ -11040,7 +11756,8 @@
             "Colonie"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-high-note-lax",
@@ -11055,7 +11772,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-higher-path",
@@ -11070,7 +11788,8 @@
             "Sherman Oaks"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-lighthouse-dispensary",
@@ -11085,7 +11804,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-market",
@@ -11100,7 +11820,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-maven-store",
@@ -11115,7 +11836,8 @@
             "Tarzana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-medicine-woman",
@@ -11130,7 +11852,8 @@
             "Bellflower"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-mint-paradise",
@@ -11145,7 +11868,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-mint-rainbow",
@@ -11160,7 +11884,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-ounce",
@@ -11175,7 +11900,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-phinest-buds",
@@ -11190,7 +11916,8 @@
             "Depew"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-plant",
@@ -11205,7 +11932,8 @@
             "Woodland Hills"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-pottery",
@@ -11220,7 +11948,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-purple-dragon-dispensary",
@@ -11235,7 +11964,8 @@
             "Lawton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-rainbow-plug",
@@ -11250,7 +11980,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-row-house",
@@ -11265,7 +11996,8 @@
             "San Bernardino"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-sanctuary",
@@ -11287,7 +12019,8 @@
             "North Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "the-set",
@@ -11302,7 +12035,8 @@
             "Northridge"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-set-hollywood",
@@ -11317,7 +12051,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-showcase-purple-star-md-grp",
@@ -11332,7 +12067,8 @@
             "Fairfield"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-society-of-the-seven-sages",
@@ -11347,7 +12083,8 @@
             "Rochester"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-source",
@@ -11362,7 +12099,8 @@
             "Nipomo"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-spot",
@@ -11383,7 +12121,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-station",
@@ -11399,7 +12138,8 @@
             "Long Beach"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-superior-dispensary",
@@ -11414,7 +12154,8 @@
             "Phoenix"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-sweet-spot-2",
@@ -11429,7 +12170,8 @@
             "Santa Rosa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-treehouse-mv",
@@ -11444,7 +12186,8 @@
             "Moreno Valley"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-vault",
@@ -11465,7 +12208,8 @@
             "Staten Island"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-weed",
@@ -11480,7 +12224,8 @@
             "Studio City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "the-woods",
@@ -11495,7 +12240,8 @@
             "West Hollywood"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "these-days-northridge",
@@ -11510,7 +12256,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "thrive-cannabis-marketplace",
@@ -11528,7 +12275,8 @@
             "Reno"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "thtree",
@@ -11543,7 +12291,8 @@
             "West Coxsackie"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "thunder-budz-dispensary",
@@ -11558,7 +12307,8 @@
             "Noble"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "tip-top",
@@ -11573,7 +12323,8 @@
             "Atwater"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "tip-top-farms",
@@ -11588,7 +12339,8 @@
             "Gustine"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "toasty",
@@ -11603,7 +12355,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "token-farms",
@@ -11618,7 +12371,8 @@
             "Tulare"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "top-cannabis",
@@ -11635,7 +12389,8 @@
             "Saginaw"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "top-notch-thc",
@@ -11650,7 +12405,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "tracy-cannabis-collective",
@@ -11665,7 +12421,8 @@
             "Tracy"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "traditional",
@@ -11680,7 +12437,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "transcend-wellness",
@@ -11696,7 +12454,8 @@
             "Troy"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "travel-agency",
@@ -11712,7 +12471,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "travel-agency-union-square",
@@ -11727,7 +12487,8 @@
             "New York"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "tree-house",
@@ -11742,7 +12503,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "tree-market-ny",
@@ -11757,7 +12519,8 @@
             "Lackawanna"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "tree-of-life",
@@ -11773,7 +12536,8 @@
             "North Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "trees-of-echo-park",
@@ -11788,7 +12552,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "trifecta-farms",
@@ -11803,7 +12568,8 @@
             "Norman"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "tropic-canna",
@@ -11819,7 +12585,8 @@
             "Lawton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "tropic-canna-lawton-west",
@@ -11834,7 +12601,8 @@
             "Lawton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "tropicanna",
@@ -11849,7 +12617,8 @@
             "Santa Ana"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "tsaa-nesunkwa",
@@ -11864,7 +12633,8 @@
             "Ely"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "tulare-herb-n-vibes",
@@ -11879,7 +12649,8 @@
             "Tulare"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "tulsa-house-of-fire",
@@ -11894,7 +12665,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "tulsa-tree-house",
@@ -11910,7 +12682,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "two-rivers-wellness",
@@ -11925,7 +12698,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "uncle-nuggz",
@@ -11940,7 +12714,8 @@
             "Poteau"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "union-cannabis-club",
@@ -11955,7 +12730,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "union-station",
@@ -11970,7 +12746,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "upstate-exotics",
@@ -11985,7 +12762,8 @@
             "Niagara Falls"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "upstate-pines",
@@ -12000,7 +12778,8 @@
             "Red Hook"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "urb",
@@ -12018,7 +12797,8 @@
             "Warren"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "us-bloom-collective",
@@ -12033,7 +12813,8 @@
             "Vallejo"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "valley-health-options",
@@ -12048,7 +12829,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "valley-pure",
@@ -12067,7 +12849,8 @@
             "Woodlake"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "valley-verde",
@@ -12082,7 +12865,8 @@
             "Van Nuys"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "vault-66-okie-wonderland",
@@ -12097,7 +12881,8 @@
             "Tulsa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "veda-leaf",
@@ -12112,7 +12897,8 @@
             "Syracuse"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "vegas-treehouse",
@@ -12127,7 +12913,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "velvet",
@@ -12142,7 +12929,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "vibe",
@@ -12158,7 +12946,8 @@
             "Quincy"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "vive-cannabis",
@@ -12173,7 +12962,8 @@
             "Detroit"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "walker-dispensary",
@@ -12188,7 +12978,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wallflower-cannabis-house",
@@ -12203,7 +12994,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wallflower-inspirada",
@@ -12218,7 +13010,8 @@
             "Henderson"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wawg",
@@ -12233,7 +13026,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "weed-nation",
@@ -12248,7 +13042,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "weedhub",
@@ -12263,7 +13058,8 @@
             "San Francisco"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "weedly-nyc",
@@ -12278,7 +13074,8 @@
             "Brooklyn"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "weedmo",
@@ -12293,7 +13090,8 @@
             "Sacramento"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "weedway",
@@ -12308,7 +13106,8 @@
             "Tujunga"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wellgreens",
@@ -12325,7 +13124,8 @@
             "Vista"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wellgreens-balboa",
@@ -12340,7 +13140,8 @@
             "San Diego"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wellgreens-city-heights",
@@ -12355,7 +13156,8 @@
             "San Diego"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wellgreens-lake-murray",
@@ -12370,7 +13172,8 @@
             "La Mesa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wellgreens-pacific-beach",
@@ -12385,7 +13188,8 @@
             "San Diego"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wellgreens-university",
@@ -12400,7 +13204,8 @@
             "La Mesa"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wheelhouse",
@@ -12416,7 +13221,8 @@
             "Ventura"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wheelhouse-cannabis-dispensary",
@@ -12431,7 +13237,8 @@
             "Port Hueneme"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "whtc",
@@ -12446,7 +13253,8 @@
             "Studio City"
           ]
         }
-      }
+      },
+      "logoOnDark": true
     },
     {
       "id": "winton-road",
@@ -12461,7 +13269,8 @@
             "Rochester"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wny-cannabis-co",
@@ -12476,7 +13285,8 @@
             "East Amherst"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "woke-wellness",
@@ -12491,7 +13301,8 @@
             "Oklahoma City"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wolfe-pak",
@@ -12506,7 +13317,8 @@
             "Needles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wonderbrett",
@@ -12521,7 +13333,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "woodhaven-cannabis",
@@ -12536,7 +13349,8 @@
             "Rego Park"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wrk",
@@ -12551,7 +13365,8 @@
             "Northridge"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "wvpc",
@@ -12566,7 +13381,8 @@
             "Woodland Hills"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "x1",
@@ -12581,7 +13397,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "xclusive-cannabis-norman-wonderland",
@@ -12596,7 +13413,8 @@
             "Norman"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "xclusive-cannabis-kelly-wonderland",
@@ -12611,7 +13429,8 @@
             "Edmond"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "xraided",
@@ -12627,7 +13446,8 @@
             "San Pedro"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "yilo-super-store",
@@ -12642,7 +13462,8 @@
             "Phoenix"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "zaza-cannabis-co",
@@ -12657,7 +13478,8 @@
             "Detroit"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "zaza-factory-8-mile",
@@ -12672,7 +13494,8 @@
             "Detroit"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "zazen",
@@ -12687,7 +13510,8 @@
             "Redford"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "zeke",
@@ -12702,7 +13526,8 @@
             "Modesto"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "zen-garden-wellness",
@@ -12718,7 +13543,8 @@
             "Stockton"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "zen-leaf",
@@ -12744,7 +13570,8 @@
             "Tempe"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "zen-zest",
@@ -12759,7 +13586,8 @@
             "Staten Island"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "zen-zest-queens",
@@ -12774,7 +13602,8 @@
             "New Hyde Park"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "zenleaf",
@@ -12790,7 +13619,8 @@
             "Reno"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "zenleaf-fort-apache",
@@ -12805,7 +13635,8 @@
             "Las Vegas"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     },
     {
       "id": "zzflux-mid-city",
@@ -12820,7 +13651,8 @@
             "Los Angeles"
           ]
         }
-      }
+      },
+      "logoOnDark": false
     }
   ]
 }

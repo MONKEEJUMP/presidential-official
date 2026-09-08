@@ -14,6 +14,20 @@ function csv(text) {
   if(cell||row.length){row.push(cell);rows.push(row);} const head=rows.shift().map(x=>x.replace(/^\uFEFF/,''));return rows.filter(r=>r.length===head.length).map(r=>Object.fromEntries(head.map((k,i)=>[k,r[i]])));
 }
 
+async function logoNeedsDark(path) {
+  try {
+    const {data,info}=await sharp(path).resize({width:32,height:32,fit:'inside'}).ensureAlpha().raw().toBuffer({resolveWithObject:true});
+    let opacity=0,luminance=0;
+    for(let i=0;i<data.length;i+=4){const a=data[i+3]/255;opacity+=a;luminance+=a*(data[i]*.2126+data[i+1]*.7152+data[i+2]*.0722)/255;}
+    return opacity>0 && opacity/(info.width*info.height)<.95 && luminance/opacity>.72;
+  }catch{return false;}
+}
+if(process.argv.includes('--logo-contrast-only')){
+  const path=resolve(root,'src/content/partners.json');const snapshot=JSON.parse(await readFile(path,'utf8'));
+  for(const brand of snapshot.brands)brand.logoOnDark=brand.logo?await logoNeedsDark(resolve(root,'public'+brand.logo)):false;
+  await writeFile(path,JSON.stringify(snapshot,null,2)+'\n');console.log('Dark-backed logos:',snapshot.brands.filter(b=>b.logoOnDark).length);process.exit();
+}
+
 if(process.argv.includes('--copy-from')) {
   const brief=(await readFile(process.argv[process.argv.indexOf('--copy-from')+1],'utf8')).replaceAll('\r\n','\n');
   const chunks=brief.split(/--- \/partners/).slice(1); const content={};
@@ -62,5 +76,6 @@ for(const file of await readdir(resolve(source,'logos'))){
 const included=brands.filter(b=>b.account_type==='retail'&&!(b.brand_name==='PRESIDENTIAL'&&b.primary_city==='Costa Mesa'&&b.primary_state==='CA'));
 const records=included.map(b=>{const members=grouped.get(b.brand_name);const perState={};for(const d of members){const c=d.state.toLowerCase();perState[c]??={count:0,cities:[]};perState[c].count++;if(!perState[c].cities.includes(ascii(d.city)))perState[c].cities.push(ascii(d.city));}for(const v of Object.values(perState))v.cities.sort();return{id:key(b.brand_name).replaceAll(' ','-'),name:ascii(b.brand_name),nationalDoors:Number(b.door_count),website:b.website,logo:logoMap.get(b.logo_file)||null,perState};});
 const snapshot={stamp:'0907-PRES-KVRT-0010',sourceRows:total,contentRanges:ranges,sourceStateCounts:Object.fromEntries(['CA','OK','NY','NV','MI','AZ'].map(s=>[s,doors.filter(d=>d.state===s).length])),excludedBrands:brands.length-included.length,excludedDoors:total-records.reduce((s,b)=>s+b.nationalDoors,0),logoBytes:{before:beforeBytes,after:afterBytes,files:logoMap.size},mismatches,brands:records};
+for(const brand of records)brand.logoOnDark=brand.logo?await logoNeedsDark(resolve(root,'public'+brand.logo)):false;
 await writeFile(resolve(root,'src/content/partners.json'),JSON.stringify(snapshot,null,2)+'\n');
 console.log(JSON.stringify({...snapshot,brands:records.length,states:Object.fromEntries(['ca','ok','ny','nv','mi','az','wa'].map(s=>{const a=records.filter(b=>b.perState[s]);return[s,{brands:a.length,doors:a.reduce((n,b)=>n+b.perState[s].count,0),logos:a.filter(b=>b.logo).length}]}))},null,2));
