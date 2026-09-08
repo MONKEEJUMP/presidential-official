@@ -20,7 +20,4 @@ Required order for every PR:
 7. Merge only when required checks are green and no unresolved valid P1/P2 thread remains.
 8. Verify the resulting main commit and production deployment.
 
-Never merge while Codex Review is pending. A newly pushed commit invalidates an earlier review until Codex reviews the new head. If repository rules cannot enforce the gate, this instruction remains mandatory and the missing GitHub setting must be reported to PAULIEWOOD.
-
-GitHub Actions does not expose the review-thread `resolved` webhook as a workflow trigger. After resolving the final Codex thread, comment `@codex gate` on the unchanged head and require the trusted gate to pass before merge.
-Where branch rules are supported, require both `Codex Review Gate` and `Codex Review Ready`; the latter turns pending when `@codex review` requests another same-head review.
+Never merge while Codex Review is pending. A newly pushed commit invalidates an earlier review until Codex reviews the new head. This instruction remains mandatory until GitHub branch protection can require current-head review checks; report that missing paid-plan setting to PAULIEWOOD.
