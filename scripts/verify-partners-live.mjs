@@ -9,10 +9,11 @@ const root=resolve(import.meta.dirname,'..');
 const report=resolve(root,'../docs/0907-PRES-KVRT-0010-PARTNERS-BUILD.md');
 const snapshot=JSON.parse(await readFile(resolve(root,'src/content/partners.json'),'utf8'));
 const origin=process.env.PARTNERS_VERIFY_ORIGIN||'https://presidentialmoonrocks.com';
+if(process.argv.includes('--only-ok')){await runLighthouse(['ok'],(await readFile(report,'utf8')).trimEnd().split('\n'));process.exit();}
 const routes=['hub',...PARTNER_STATES.map(s=>s.code)];
 const lines=['# 0907-PRES-KVRT-0010 Partners Build','','| Release | Value |','|---|---|'];
 const sha=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
-const changed=execFileSync('git',['diff-tree','--no-commit-id','--name-only','-r','HEAD'],{cwd:root,encoding:'utf8'}).trim().split(/\r?\n/);
+const changed=execFileSync('git',['diff','--name-only','70748cf','HEAD'],{cwd:root,encoding:'utf8'}).trim().split(/\r?\n/);
 const sourceFiles=changed.filter(x=>!x.startsWith('public/partners/logos/')&&x!=='src/content/partners.json');
 lines.push(`| Commit | ${sha} |`,`| Deployment | ${process.argv[2]||'pending'} |`,'| Rollback | vercel rollback dpl_4uFdLtUgZLSbFmSgUeVqvqpKESXD --scope paulie-pauliewoods-projects |',`| Source files touched | ${sourceFiles.length} / 22 |`,`| Logo files | ${snapshot.logoBytes.files} |`,`| Logo bytes before | ${snapshot.logoBytes.before} |`,`| Logo bytes after | ${snapshot.logoBytes.after} |`,`| Source rows | ${snapshot.sourceRows} |`,`| Content-Range receipts | ${snapshot.contentRanges.join('; ')} |`,`| Brand/state count mismatches | ${snapshot.mismatches.length} |`);
 lines.push('','| Source file |','|---|',...sourceFiles.map(x=>`| ${x} |`));
@@ -28,9 +29,10 @@ lines.push('','| Correction / qualification | Disposition |','|---|---|','| Cali
 await writeFile(report,lines.join('\n')+'\n');
 if(failures.length||after!==89||smart)throw Error('Live response discrepancy; see report');
 lines.push('','| Mobile Lighthouse | Performance | Accessibility | Best practices | SEO | CLS | LCP ms |','|---|---:|---:|---:|---:|---:|---:|');
-for(const code of ['ca','ok']){
+async function runLighthouse(codes,lines){for(const code of codes){
  const chrome=await launch({chromePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',chromeFlags:['--headless=new','--disable-gpu','--no-first-run']});
  try {const result=await lighthouse(origin+'/partners/'+code,{port:chrome.port,output:'json',logLevel:'error',formFactor:'mobile',onlyCategories:['performance','accessibility','best-practices','seo']});const lhr=result.lhr;const scores=['performance','accessibility','best-practices','seo'].map(k=>Math.round(lhr.categories[k].score*100));const cls=lhr.audits['cumulative-layout-shift'].numericValue;const lcp=lhr.audits['largest-contentful-paint'].numericValue;lines.push(`| /partners/${code} | ${scores.join(' | ')} | ${cls} | ${Math.round(lcp)} |`);console.log('LIGHTHOUSE',code,JSON.stringify({scores,cls,lcp:Math.round(lcp)}));await writeFile(report,lines.join('\n')+'\n');}
- finally {await chrome.kill();}
-}
+ finally {await chrome.kill().catch(error=>console.warn('Browser cleanup only:',error.message));}
+}}
+await runLighthouse(['ca','ok'],lines);
 console.log('REPORT',report);
