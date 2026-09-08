@@ -372,16 +372,6 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
               })}
 
               <li className="po-primary-nav-item"><Link className="po-primary-nav-link" href="/partners" onClick={closeMenus}>{PARTNERS_LABEL}</Link></li>
-              <li className="po-primary-nav-item group-data-[desktop=true]/header:ml-3">
-                <Link
-                  className="po-header-store-link"
-                  href="/find-us"
-                  onClick={closeMenus}
-                >
-                  Find a Store
-                </Link>
-              </li>
-
               <li className="po-primary-nav-item group-data-[desktop=true]/header:ml-1">
                 <Link
                   aria-label="Open sales login in a new tab"
@@ -392,6 +382,16 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
                   target="_blank"
                 >
                   Login
+                </Link>
+              </li>
+
+              <li className="po-primary-nav-item group-data-[desktop=true]/header:ml-3">
+                <Link
+                  className="po-header-store-link"
+                  href="/find-us"
+                  onClick={closeMenus}
+                >
+                  Find a Store
                 </Link>
               </li>
             </ul>
@@ -405,8 +405,8 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
               </li>
             ))}
             <li><span className="po-primary-nav-link">{PARTNERS_LABEL}</span></li>
-            <li className="ml-3"><span className="po-header-store-link">Find a Store</span></li>
             <li className="ml-1"><span className="po-primary-nav-link">Login</span></li>
+            <li className="ml-3"><span className="po-header-store-link">Find a Store</span></li>
           </ul>
         </div>
         <span
