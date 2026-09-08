@@ -54,7 +54,7 @@ export function VapeExperienceLoader({ page }: { page: VapePage }) {
   }, [ready]);
 
   return (
-    <div id="explore" ref={boundary}>
+    <div id="explore" ref={boundary} style={{ scrollMarginTop: '148px' }}>
       {ready ? (
         <VapeExperience page={page} />
       ) : (
