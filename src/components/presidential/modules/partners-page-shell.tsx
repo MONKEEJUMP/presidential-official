@@ -46,14 +46,15 @@ function PartnerHero({code}:{code?:PartnerStateCode}) {
 function PartnerTile({brand,code}:{brand:Partner;code:PartnerStateCode}) {
   const state=PARTNER_STATES.find(s=>s.code===code)!;const local=brand.perState[code]!;
   const initials=brand.name.split(/[^a-zA-Z0-9]+/).filter(Boolean).slice(0,4).map(s=>s[0]).join('');
-  return <li className={styles.partner}>
-    <Link href={`/find-us/${code}`} className={styles.tileLink}>
+  const tile = <>
       <div className={styles.square} style={{background:brand.logo?(brand.logoOnDark?'#18181b':'#fff'):state.color,color:code==='ca'||code==='nv'?'var(--po-color-ink)':'#fff'}}>
         {brand.logo?<Image src={brand.logo} alt={partnerLogoAlt(brand.name,local.cities.join(', '),state.name)} width={144} height={144} sizes="144px" loading="lazy" className={styles.logo} unoptimized={brand.logo.endsWith('.svg')} />:<span className={styles.fallback} aria-hidden="true">{brand.name.length<=28?brand.name:initials}</span>}
       </div>
       <span className={styles.name}>{brand.name}</span>
       {local.count>1?<span className={styles.locations}>{partnerLocations(local.count)}</span>:null}
-    </Link>
+    </>;
+  return <li className={styles.partner}>
+    {brand.website ? <a href={brand.website} target="_blank" rel="nofollow noopener noreferrer" className={styles.tileLink}>{tile}</a> : <div className={styles.tileLink}>{tile}</div>}
     {brand.website?<a href={brand.website} target="_blank" rel="nofollow noopener noreferrer" className={styles.visit}>{PARTNERS_UI.visit}</a>:null}
   </li>;
 }
