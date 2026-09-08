@@ -36,6 +36,8 @@ const partnersSnapshot = JSON.parse(read("src/content/partners.json"));
 const partnersStatePage = read("src/app/partners/[state]/page.tsx");
 const itemListSchema = read("src/lib/seo/schema/itemList.ts");
 const outboundGate = read("scripts/presidential-outbound-link-readiness-qa.mjs");
+const internalLinkGate = read("scripts/presidential-internal-link-graph-qa.mjs");
+const linkIntentGate = read("scripts/presidential-navigation-cta-intent-qa.mjs");
 const blockedLogoHashes = new Set([...partnersGenerator.matchAll(/'([0-9a-f]{64})'/g)].map((match) => match[1]));
 const invalidPartnerLogos = partnersSnapshot.brands.filter((brand) => {
   if (!brand.logo) return false;
@@ -68,6 +70,8 @@ check("partners.websiteValidation", partnersGenerator.includes("Invalid concaten
 check("partners.outboundApprovalBound", outboundGate.includes("partnerWebsiteListSha256") && outboundGate.includes("partners.snapshotOutboundApproval") && outboundGate.includes("approvedPartnerUrls.has(parsed.href)"), "partner links are allowed only when the exact owner-approved snapshot digest matches");
 check("partners.schemaOmitsGenericRetailerUrl", !partnersStatePage.includes("path:`/find-us/${state}`") && itemListSchema.includes("...(item.path ? {url: canonicalUrl(item.path)} : {})"), "partner Organizations omit URL when no unique retailer page exists");
 check("partners.placeholderLogosBlocked", blockedLogoHashes.size >= 9 && invalidPartnerLogos.length === 0, `${invalidPartnerLogos.length} blocked or social-icon logo assignment(s) remain`);
+check("partners.encodedOutboundHrefs", outboundGate.includes('replace(/&amp;/gi, "&")') && outboundGate.includes("approvedPartnerUrls.has(decodedValue)"), "built HTML entities are decoded before exact partner-link approval checks");
+check("partners.internalLinkInventories", internalLinkGate.includes("...partnerRoutePaths") && linkIntentGate.includes("...partnerRoutePaths") && linkIntentGate.includes('"/partners",'), "Partners hub and state routes are registered in internal-link QA inventories");
 for (const [name, value] of [
   ["presidentialCannabis", "Meet Presidential Cannabis, the official brand behind Moon Rocks, infused pre-rolls, tobacco-free blunts and minis. Find licensed retailers."],
   ["presidentialBlunts", "Explore Presidential Blunts, tobacco-free infused hemp wraps in the House Line. Review product details and find licensed retailers. Availability varies."],

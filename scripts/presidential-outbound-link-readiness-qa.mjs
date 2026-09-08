@@ -199,18 +199,22 @@ function collectHrefValues(files) {
 function externalHrefViolations(hrefs) {
   const violations = [];
   for (const href of hrefs) {
-    if (!/^https?:\/\//i.test(href.value)) {
+    const decodedValue = href.value
+      .replace(/&amp;/gi, "&")
+      .replace(/&#0*38;/g, "&")
+      .replace(/&#x0*26;/gi, "&");
+    if (!/^https?:\/\//i.test(decodedValue)) {
       continue;
     }
 
     try {
-      const parsed = new URL(href.value);
-      if (allowedOrigins.has(parsed.origin) || approvedPartnerUrls.has(href.value) || approvedPartnerUrls.has(parsed.href)) {
+      const parsed = new URL(decodedValue);
+      if (allowedOrigins.has(parsed.origin) || approvedPartnerUrls.has(decodedValue) || approvedPartnerUrls.has(parsed.href)) {
         continue;
       }
-      violations.push(`${href.file}:${href.line}:${href.value}`);
+      violations.push(`${href.file}:${href.line}:${decodedValue}`);
     } catch {
-      violations.push(`${href.file}:${href.line}:malformed absolute href ${href.value}`);
+      violations.push(`${href.file}:${href.line}:malformed absolute href ${decodedValue}`);
     }
   }
   return violations;

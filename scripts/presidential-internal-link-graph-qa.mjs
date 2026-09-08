@@ -60,8 +60,13 @@ for (const route of [...publicRoutes, ...fallbackRoutes]) {
 
 const mandatoryStaticPaths = publicRoutes.map((route) => route.route);
 const requiredHomePaths = mandatoryStaticPaths.filter((routePath) => routePath !== "/dispensaries");
+const partnerRoutePaths = [
+  "/partners", "/partners/az", "/partners/ca", "/partners/mi",
+  "/partners/nv", "/partners/ny", "/partners/ok", "/partners/wa",
+];
 const allowedRenderedHrefs = new Set([
   ...mandatoryStaticPaths,
+  ...partnerRoutePaths,
   ...OWNER_PREVIEW_SERIES_ROUTES.map((route) => route.path),
   ...OWNER_PREVIEW_PRODUCT_ROUTES.map((route) => route.path),
   // 9083-CODE P4 (owner 8-state ruling, 2026-07-11): themed priority-market
