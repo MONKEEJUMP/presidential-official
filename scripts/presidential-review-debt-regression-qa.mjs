@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 
 const root = process.cwd();
@@ -35,6 +36,13 @@ const partnersSnapshot = JSON.parse(read("src/content/partners.json"));
 const partnersStatePage = read("src/app/partners/[state]/page.tsx");
 const itemListSchema = read("src/lib/seo/schema/itemList.ts");
 const outboundGate = read("scripts/presidential-outbound-link-readiness-qa.mjs");
+const blockedLogoHashes = new Set([...partnersGenerator.matchAll(/'([0-9a-f]{64})'/g)].map((match) => match[1]));
+const invalidPartnerLogos = partnersSnapshot.brands.filter((brand) => {
+  if (!brand.logo) return false;
+  const content = readFileSync(path.join(root, "public", brand.logo));
+  const hash = createHash("sha256").update(content).digest("hex");
+  return blockedLogoHashes.has(hash) || (brand.logo.endsWith(".svg") && /data-icon=["'](?:instagram|facebook|tiktok|youtube|twitter)["']/i.test(content.toString("utf8")));
+});
 
 check("vapes.pageshowPreservesHash", /const resetScroll = \(\) => \{\s*if \(!window\.location\.hash\)/s.test(experienceLoader), "initial pageshow reset re-checks the current hash before the explorer mounts");
 check("vapes.malformedFragmentSafe", vapeFragment.includes("catch") && vapeFragment.includes("return rawFragment"), "malformed percent escapes fall back to the raw fragment");
@@ -59,6 +67,7 @@ check("partners.distinctVisitNames", partnersShell.includes('aria-label={`Visit 
 check("partners.websiteValidation", partnersGenerator.includes("Invalid concatenated website") && partnersSnapshot.brands.every((brand) => !brand.website || ((brand.website.match(/https?:\/\//gi) ?? []).length === 1 && ["http:", "https:"].includes(new URL(brand.website).protocol))), "snapshot generation rejects concatenated or non-HTTP partner destinations");
 check("partners.outboundApprovalBound", outboundGate.includes("partnerWebsiteListSha256") && outboundGate.includes("partners.snapshotOutboundApproval") && outboundGate.includes("approvedPartnerUrls.has(parsed.href)"), "partner links are allowed only when the exact owner-approved snapshot digest matches");
 check("partners.schemaOmitsGenericRetailerUrl", !partnersStatePage.includes("path:`/find-us/${state}`") && itemListSchema.includes("...(item.path ? {url: canonicalUrl(item.path)} : {})"), "partner Organizations omit URL when no unique retailer page exists");
+check("partners.placeholderLogosBlocked", blockedLogoHashes.size >= 9 && invalidPartnerLogos.length === 0, `${invalidPartnerLogos.length} blocked or social-icon logo assignment(s) remain`);
 for (const [name, value] of [
   ["presidentialCannabis", "Meet Presidential Cannabis, the official brand behind Moon Rocks, infused pre-rolls, tobacco-free blunts and minis. Find licensed retailers."],
   ["presidentialBlunts", "Explore Presidential Blunts, tobacco-free infused hemp wraps in the House Line. Review product details and find licensed retailers. Availability varies."],

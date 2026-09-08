@@ -156,7 +156,7 @@
       "name": "420 FLOWER FACTORY",
       "nationalDoors": 1,
       "website": "https://mrniceguyretail.com",
-      "logo": "/partners/logos/420-flower-factory.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -188,7 +188,7 @@
       "name": "A Cannaful Life",
       "nationalDoors": 1,
       "website": "https://acannafullife.com",
-      "logo": "/partners/logos/a-cannaful-life.webp",
+      "logo": null,
       "perState": {
         "ny": {
           "count": 1,
@@ -627,7 +627,7 @@
       "name": "Beyond Hello",
       "nationalDoors": 1,
       "website": "https://beyond-hello.com/nevada-dispensaries/las-vegas-sahara/?utm_source=gmb&utm_medium=organic&utm_campaign=las-vegas-sahara",
-      "logo": "/partners/logos/beyond-hello.webp",
+      "logo": null,
       "perState": {
         "nv": {
           "count": 1,
@@ -884,7 +884,7 @@
       "name": "Blue Fire",
       "nationalDoors": 1,
       "website": "https://www.tpg420.com/bluefiremerced?utm_source=google&utm_medium=organic&utm_campaign=gbp",
-      "logo": "/partners/logos/blue-fire.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -1496,7 +1496,7 @@
       "name": "Canna Health",
       "nationalDoors": 2,
       "website": "https://cannahealthandwellness.com",
-      "logo": "/partners/logos/canna-health.webp",
+      "logo": null,
       "perState": {
         "ny": {
           "count": 2,
@@ -1877,7 +1877,7 @@
       "name": "Club W",
       "nationalDoors": 1,
       "website": "https://www.tpg420.com/clubwmodesto?utm_source=google&utm_medium=organic&utm_campaign=gbp",
-      "logo": "/partners/logos/club-w.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -1909,7 +1909,7 @@
       "name": "Coachella Releaf",
       "nationalDoors": 1,
       "website": "https://coachellareleaf.com",
-      "logo": "/partners/logos/coachella-releaf.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -2317,7 +2317,7 @@
       "name": "Dankley Fidi",
       "nationalDoors": 1,
       "website": "https://dankley.com",
-      "logo": "/partners/logos/dankley-fidi.webp",
+      "logo": null,
       "perState": {
         "ny": {
           "count": 1,
@@ -2510,7 +2510,7 @@
       "name": "Delirium Dispensary",
       "nationalDoors": 1,
       "website": "http://www.deliriumdispensary.com",
-      "logo": "/partners/logos/delirium-dispensary.webp",
+      "logo": null,
       "perState": {
         "ok": {
           "count": 1,
@@ -3461,7 +3461,7 @@
       "name": "FIREHOUSE",
       "nationalDoors": 1,
       "website": "https://www.tpg420.com/firehouseturlock?utm_source=google&utm_medium=organic&utm_campaign=gbp",
-      "logo": "/partners/logos/firehouse.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -3493,7 +3493,7 @@
       "name": "Flavors",
       "nationalDoors": 3,
       "website": "https://www.tpg420.com/flavorsriverbank?utm_source=google&utm_medium=organic&utm_campaign=gbp",
-      "logo": "/partners/logos/flavors.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 3,
@@ -3719,7 +3719,7 @@
       "name": "FOOTHILL WELLNESS CENTER",
       "nationalDoors": 1,
       "website": "https://www.foothillwellnesscenter.com",
-      "logo": "/partners/logos/foothill-wellness-center.svg",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -4285,7 +4285,7 @@
       "name": "Green",
       "nationalDoors": 2,
       "website": "https://greennv.com/locations/henderson?utm_source=google&utm_medium=gbp&utm_campaign=henderson&utm_content=website",
-      "logo": "/partners/logos/green.svg",
+      "logo": null,
       "perState": {
         "nv": {
           "count": 2,
@@ -4353,7 +4353,7 @@
       "name": "Green Cannabis Co",
       "nationalDoors": 1,
       "website": "http://greennv.com",
-      "logo": "/partners/logos/green-cannabis-co.svg",
+      "logo": null,
       "perState": {
         "nv": {
           "count": 1,
@@ -4660,7 +4660,7 @@
       "name": "Green Rainbow",
       "nationalDoors": 1,
       "website": "https://greennv.com/locations/rainbow?utm_source=google&utm_medium=gbp&utm_campaign=rainbow&utm_content=website",
-      "logo": "/partners/logos/green-rainbow.svg",
+      "logo": null,
       "perState": {
         "nv": {
           "count": 1,
@@ -5109,7 +5109,7 @@
       "name": "Herbal Remedies Caregivers",
       "nationalDoors": 1,
       "website": "https://embed.getmeadow.com/organizations/1334",
-      "logo": "/partners/logos/herbal-remedies-caregivers.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -5553,7 +5553,7 @@
       "name": "Hornbill",
       "nationalDoors": 1,
       "website": "https://www.hornbillnyc.com",
-      "logo": "/partners/logos/hornbill.webp",
+      "logo": null,
       "perState": {
         "ny": {
           "count": 1,
@@ -5862,7 +5862,7 @@
       "name": "J Dub Dispensary",
       "nationalDoors": 1,
       "website": "http://www.bigdubpharms.com",
-      "logo": "/partners/logos/j-dub-dispensary.webp",
+      "logo": null,
       "perState": {
         "ok": {
           "count": 1,
@@ -7031,7 +7031,7 @@
       "name": "Luck Dog 420",
       "nationalDoors": 1,
       "website": "https://www.luckydog420.com",
-      "logo": "/partners/logos/luck-dog-420.webp",
+      "logo": null,
       "perState": {
         "ny": {
           "count": 1,
@@ -7470,7 +7470,7 @@
       "name": "Middletown Indoor",
       "nationalDoors": 1,
       "website": "https://www.middletownindoor.com",
-      "logo": "/partners/logos/middletown-indoor.webp",
+      "logo": null,
       "perState": {
         "ny": {
           "count": 1,
@@ -7518,7 +7518,7 @@
       "name": "Mission Cannabis Club",
       "nationalDoors": 1,
       "website": "https://missioncannabisclub.com",
-      "logo": "/partners/logos/mission-cannabis-club.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -7682,7 +7682,7 @@
       "name": "Mr Nice Guy",
       "nationalDoors": 6,
       "website": "https://www.mrniceguyretail.com/locations/marketplace-by-mr-nice-guy/?utm_source=gmb&utm_medium=organic",
-      "logo": "/partners/logos/mr-nice-guy.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 6,
@@ -8109,7 +8109,7 @@
       "name": "No Name Cannabis",
       "nationalDoors": 1,
       "website": "https://embed.getmeadow.com/organizations/2264",
-      "logo": "/partners/logos/no-name-cannabis.webp",
+      "logo": null,
       "perState": {
         "ny": {
           "count": 1,
@@ -8274,7 +8274,7 @@
       "name": "NuLeaf",
       "nationalDoors": 2,
       "website": "https://nuleafnv.com/dispensaries/lake-tahoe?utm_source=gmb&utm_medium=organic&utm_campaign=lake-tahoe",
-      "logo": "/partners/logos/nuleaf.webp",
+      "logo": null,
       "perState": {
         "nv": {
           "count": 2,
@@ -8291,7 +8291,7 @@
       "name": "NuLeaf The Strip",
       "nationalDoors": 1,
       "website": "https://nuleafnv.com/dispensaries/las-vegas-strip/?utm_source=gmb&utm_medium=organic&utm_campaign=las-vegas-strip",
-      "logo": "/partners/logos/nuleaf-the-strip.webp",
+      "logo": null,
       "perState": {
         "nv": {
           "count": 1,
@@ -8535,7 +8535,7 @@
       "name": "OHG",
       "nationalDoors": 3,
       "website": "https://ohgllc.com",
-      "logo": "/partners/logos/ohg.webp",
+      "logo": null,
       "perState": {
         "ok": {
           "count": 3,
@@ -8815,7 +8815,7 @@
       "name": "Packs",
       "nationalDoors": 2,
       "website": "https://www.tpg420.com/packsstockton?utm_source=google&utm_medium=organic&utm_campaign=gbp",
-      "logo": "/partners/logos/packs.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 2,
@@ -8928,7 +8928,7 @@
       "name": "Patient Care First",
       "nationalDoors": 1,
       "website": "https://www.tpg420.com/pcfceres?utm_source=google&utm_medium=organic&utm_campaign=gbp",
-      "logo": "/partners/logos/patient-care-first.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -8944,7 +8944,7 @@
       "name": "PCF",
       "nationalDoors": 2,
       "website": "https://www.tpg420.com/pcfceres",
-      "logo": "/partners/logos/pcf.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 2,
@@ -9025,7 +9025,7 @@
       "name": "Phenos",
       "nationalDoors": 1,
       "website": "https://www.tpg420.com/phenosmodesto?utm_source=google&utm_medium=organic&utm_campaign=gbp",
-      "logo": "/partners/logos/phenos.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -10122,7 +10122,7 @@
       "name": "Russian Hill Cannabis Club",
       "nationalDoors": 1,
       "website": "http://russianhillcannabisclub.com",
-      "logo": "/partners/logos/russian-hill-cannabis-club.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -10889,7 +10889,7 @@
       "name": "Stash Fine Cannabis",
       "nationalDoors": 1,
       "website": "https://www.stashfinecannabis.com",
-      "logo": "/partners/logos/stash-fine-cannabis.webp",
+      "logo": null,
       "perState": {
         "nv": {
           "count": 1,
@@ -11548,7 +11548,7 @@
       "name": "The Drop",
       "nationalDoors": 1,
       "website": "http://lnk.bio/thedropla",
-      "logo": "/partners/logos/the-drop.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -11748,7 +11748,7 @@
       "name": "The High End",
       "nationalDoors": 1,
       "website": "https://www.shophighend.com",
-      "logo": "/partners/logos/the-high-end.webp",
+      "logo": null,
       "perState": {
         "ny": {
           "count": 1,
@@ -12347,7 +12347,7 @@
       "name": "Toasty",
       "nationalDoors": 1,
       "website": "https://www.tpg420.com/toastysacramento?utm_source=google&utm_medium=organic&utm_campaign=gbp",
-      "logo": "/partners/logos/toasty.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -12722,7 +12722,7 @@
       "name": "UNION CANNABIS CLUB",
       "nationalDoors": 1,
       "website": "https://missioncannabisclub.com/union-cannabis-club",
-      "logo": "/partners/logos/union-cannabis-club.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -13341,7 +13341,7 @@
       "name": "Woodhaven Cannabis",
       "nationalDoors": 1,
       "website": "https://www.woodhavencannabis.com",
-      "logo": "/partners/logos/woodhaven-cannabis.webp",
+      "logo": null,
       "perState": {
         "ny": {
           "count": 1,
@@ -13357,7 +13357,7 @@
       "name": "WRK",
       "nationalDoors": 1,
       "website": "https://lnk.bio/wrk.la",
-      "logo": "/partners/logos/wrk.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,
@@ -13389,7 +13389,7 @@
       "name": "X1",
       "nationalDoors": 1,
       "website": "https://www.tpg420.com/x1tracy?utm_source=google&utm_medium=organic&utm_campaign=gbp",
-      "logo": "/partners/logos/x1.webp",
+      "logo": null,
       "perState": {
         "ca": {
           "count": 1,

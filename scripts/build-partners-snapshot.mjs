@@ -1,6 +1,7 @@
 import { readFile, writeFile, mkdir, readdir, copyFile, stat } from 'node:fs/promises';
 import { resolve, basename, extname } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 
 const root = resolve(import.meta.dirname, '..');
@@ -22,10 +23,32 @@ async function logoNeedsDark(path) {
     return opacity>0 && opacity/(info.width*info.height)<.95 && luminance/opacity>.72;
   }catch{return false;}
 }
+const blockedLogoContentHashes = new Set([
+  '042bf7683116b98b58da0d9473e364132d42810dd77a47e5131e75cc097a9e6f',
+  '1a7d528f1889da522f8489e65d96e527029ab722fa70ae4865ba1ab0b3820687',
+  '254577d8ef908ecdef5caaf30902f5fb409319d73b1d06d60bab72a2c44eb712',
+  '34c5691ea1f632013da8841edde653015109a9065adebc75136ebdaf91e23096',
+  '3e5d3ea299690628b6a362633c3dd47f5be22b715d8626ee69cc4e1a53d650eb',
+  '533835ea0110c5ddfb4f75cd62759d2bf8f5fcb37bef2d14755bbb9f61ced889',
+  '8f958fd7a63cebc5f6f87b4d3acefd4df4b56d702681ed9bdfa725c2a1aa12d7',
+  'bb69558445827db17a07be65575f4a8720dadf027f16620760afc58c3d0da101',
+  'f7fd61d50fb1a95f6998d8e92bdef05fc10f8db1ade54807165b9e6d207fcb2b',
+]);
+async function logoIsBlocked(filePath) {
+  const bytes = await readFile(filePath);
+  const hash = createHash('sha256').update(bytes).digest('hex');
+  if (blockedLogoContentHashes.has(hash)) return true;
+  return extname(filePath).toLowerCase() === '.svg' && /data-icon=["'](?:instagram|facebook|twitter|tiktok)["']/i.test(bytes.toString('utf8'));
+}
 if(process.argv.includes('--logo-contrast-only')){
   const path=resolve(root,'src/content/partners.json');const snapshot=JSON.parse(await readFile(path,'utf8'));
   for(const brand of snapshot.brands)brand.logoOnDark=brand.logo?await logoNeedsDark(resolve(root,'public'+brand.logo)):false;
   await writeFile(path,JSON.stringify(snapshot,null,2)+'\n');console.log('Dark-backed logos:',snapshot.brands.filter(b=>b.logoOnDark).length);process.exit();
+}
+if(process.argv.includes('--sanitize-logos-only')){
+  const path=resolve(root,'src/content/partners.json');const snapshot=JSON.parse(await readFile(path,'utf8'));let removed=0;
+  for(const brand of snapshot.brands){if(brand.logo&&await logoIsBlocked(resolve(root,'public'+brand.logo))){brand.logo=null;brand.logoOnDark=false;removed++;}}
+  await writeFile(path,JSON.stringify(snapshot,null,2)+'\n');console.log('Blocked placeholder logos removed:',removed);process.exit();
 }
 
 if(process.argv.includes('--copy-from')) {
@@ -78,7 +101,7 @@ for(const file of await readdir(resolve(source,'logos'))){
     try{await sharp(input).resize({width:400,height:400,fit:'inside',withoutEnlargement:true}).webp({quality:85}).toFile(target);}
     catch{const p=spawnSync('python',['-B','-c','from PIL import Image; import sys; im=Image.open(sys.argv[1]); im=im.ico.getimage(max(im.ico.sizes(),key=lambda s:s[0]*s[1])) if im.format=="ICO" else im; im=im.convert("RGBA"); im.thumbnail((400,400)); im.save(sys.argv[2],"WEBP",quality=85)',input,target],{encoding:'utf8'});if(p.status!==0)throw Error(file+': '+p.stderr);}
   }
-  afterBytes+=(await stat(target)).size;logoMap.set(file,'/partners/logos/'+output);
+  afterBytes+=(await stat(target)).size;if(!(await logoIsBlocked(target)))logoMap.set(file,'/partners/logos/'+output);
 }
 const included=brands.filter(b=>b.account_type==='retail'&&!(b.brand_name==='PRESIDENTIAL'&&b.primary_city==='Costa Mesa'&&b.primary_state==='CA'));
 const records=included.map(b=>{const members=grouped.get(b.brand_name);const perState={};for(const d of members){const c=d.state.toLowerCase();perState[c]??={count:0,cities:[]};perState[c].count++;if(!perState[c].cities.includes(ascii(d.city)))perState[c].cities.push(ascii(d.city));}for(const v of Object.values(perState))v.cities.sort();return{id:key(b.brand_name).replaceAll(' ','-'),name:ascii(b.brand_name),nationalDoors:Number(b.door_count),website:validatedWebsite(websiteCorrections[b.brand_name]??b.website,b.brand_name),logo:logoMap.get(b.logo_file)||null,perState};});
