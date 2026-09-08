@@ -8,6 +8,7 @@ import {
 } from "@/components/presidential";
 import { FindUsMiniBluntsGrid } from "@/components/presidential/modules/find-us-mini-blunts-grid";
 import { OurStoryPrerollGraphicsGrid } from "@/components/presidential/modules/our-story-preroll-graphics-grid";
+import { OurStoryAuthoritySources } from "@/components/presidential/modules/our-story-authority-sources";
 import { AboutCompanyShell } from "@/components/presidential/modules/about-company-shell";
 import { VapesPlatformShell } from "@/components/presidential/modules/vapes-platform-shell";
 import { RepoOwnedPageCopy } from "@/components/presidential/modules/repo-owned-page-copy";
@@ -35,6 +36,8 @@ type CmsSupportRoute = "contact" | "find-us";
 
 const cmsSiteRouteIds = new Set([
   "moon-rocks",
+  "moon-pods",
+  "orbit",
   "our-story",
   "learn",
   "find-us",
@@ -86,6 +89,12 @@ export async function PresidentialRouteShell({
 
       {route.id === "about" ? (
         <AboutCompanyShell />
+      ) : usesPillarPlatformShell ? (
+        <PillarPlatformShell
+          breadcrumbs={breadcrumbs}
+          cmsModules={cmsModules ?? undefined}
+          route={route}
+        />
       ) : cmsModules ? (
         <PageFrame>
           <SceneStack>
@@ -112,6 +121,7 @@ export async function PresidentialRouteShell({
               />
             )}
             {route.id === "our-story" ? <OurStoryPrerollGraphicsGrid /> : null}
+            {route.id === "our-story" ? <OurStoryAuthoritySources /> : null}
             {route.id === "find-us" && findUsLocatorModuleIndex < 0 ? (
               <FindUsMiniBluntsGrid />
             ) : null}
@@ -127,11 +137,6 @@ export async function PresidentialRouteShell({
         />
       ) : route.id === "vapes" ? (
         <VapesPlatformShell breadcrumbs={breadcrumbs} route={route} />
-      ) : usesPillarPlatformShell ? (
-        <PillarPlatformShell
-          breadcrumbs={breadcrumbs}
-          route={route}
-        />
       ) : (
         <StaticRouteFoundationShell
           breadcrumbs={breadcrumbs}

@@ -147,7 +147,7 @@ export function AboutCompanyShell() {
                 OFFICIAL PRESIDENTIAL
               </p>
               <h1
-                className="mt-6 max-w-5xl font-display text-5xl uppercase leading-[0.88] text-po-on-dark sm:text-7xl lg:text-7xl xl:text-9xl"
+                className="mt-6 max-w-5xl font-display text-[clamp(2.25rem,11vw,3rem)] uppercase leading-[0.88] text-po-on-dark sm:text-7xl lg:text-7xl xl:text-9xl"
                 id="about-company-title"
               >
                 PRESIDENTIAL CANNABIS. BUILT BETTER. ON PURPOSE.
@@ -156,7 +156,7 @@ export function AboutCompanyShell() {
                 About the Presidential Cannabis Brand
               </h2>
               <p className="mt-8 max-w-3xl text-lg leading-8 text-po-on-dark-muted sm:text-xl sm:leading-9">
-                Presidential exists because someone refused to accept what the market called good enough. Not better marketing — better cannabis. That standard has governed every decision since the first batch, and it still does: obsess over the material, engineer the experience, and never ship something that misses. Cannabis Deserves Better. That's not a tagline. It's the assignment. The full story — Los Angeles, 2012, and everything since — lives on the{" "}
+                Presidential exists because someone refused to accept what the market called good enough. Not better marketing — better cannabis. That standard has governed every decision since the first batch, and it still does: obsess over the material, engineer the experience, and never ship something that misses. Cannabis Deserves Better. That&apos;s not a tagline. It&apos;s the assignment. The full story — Los Angeles, 2012, and everything since — lives on the{" "}
                 <Link
                   className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand"
                   href="/presidential-cannabis"
@@ -182,7 +182,7 @@ export function AboutCompanyShell() {
           tone="contrast"
         >
           <blockquote className="mx-auto max-w-7xl font-display text-5xl uppercase leading-[0.9] text-po-brand sm:text-7xl lg:text-8xl">
-            "Cannabis Deserves Better. Expect More."
+            &ldquo;Cannabis Deserves Better. Expect More.&rdquo;
           </blockquote>
         </Scene>
 
@@ -306,7 +306,7 @@ export function AboutCompanyShell() {
           tone="contrast"
         >
           <blockquote className="mx-auto max-w-7xl font-display text-5xl uppercase leading-[0.9] text-po-brand sm:text-7xl lg:text-8xl">
-            "Presidential Doesn't Miss."
+            &ldquo;Presidential Doesn&apos;t Miss.&rdquo;
           </blockquote>
         </Scene>
 
@@ -347,7 +347,7 @@ export function AboutCompanyShell() {
                 title="A BRAND THAT NEVER STAYED IN ITS LANE."
               />
               <p className="mt-7 max-w-3xl text-lg leading-8 text-po-on-dark-muted">
-                Presidential has always treated experience as part of the product. In West Hollywood that meant Esco's, a New York–style pizzeria, and the Presidential Suite — a speakeasy-style lounge entered through an NYC subway car built inside the restaurant. A house this obsessed with how something feels was never going to stop at what's in the package.
+                Presidential has always treated experience as part of the product. In West Hollywood that meant Esco&apos;s, a New York–style pizzeria, and the Presidential Suite — a speakeasy-style lounge entered through an NYC subway car built inside the restaurant. A house this obsessed with how something feels was never going to stop at what&apos;s in the package.
               </p>
             </div>
             <AboutImage

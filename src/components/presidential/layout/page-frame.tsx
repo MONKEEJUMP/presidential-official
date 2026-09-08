@@ -19,6 +19,9 @@ export function PageFrame({ children, className = "", ...mainProps }: PageFrameP
 
   return (
     <>
+      <a className="sr-only z-[100] rounded bg-po-canvas px-4 py-3 text-po-ink focus:not-sr-only focus:fixed focus:left-4 focus:top-4" href="#presidential-main">
+        Skip to main content
+      </a>
       <SiteHeader />
       <main {...mainProps} id="presidential-main" tabIndex={-1} className={classNames}>
         {children}

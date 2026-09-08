@@ -14,6 +14,9 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <>
+      <a className="sr-only z-[100] rounded bg-po-canvas px-4 py-3 text-po-ink focus:not-sr-only focus:fixed focus:left-4 focus:top-4" href="#presidential-main">
+        Skip to main content
+      </a>
       <main
         className="flex min-h-screen items-center bg-po-soft px-6 py-20 text-po-ink"
         id="presidential-main"

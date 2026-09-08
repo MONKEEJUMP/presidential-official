@@ -165,7 +165,16 @@ export async function fetchSanityJsonWithTimeout<T>(
     let response: Response;
 
     try {
-      response = await fetch(input, {
+      let fetchImplementation = fetch;
+      const smokeFixture = process.env.PRESIDENTIAL_CMS_RUNTIME_SMOKE_FIXTURE;
+      if (smokeFixture === "approved") {
+        const fixtureModule = await import("../../../scripts/mock-sanity-fetch-approved-cms.cjs");
+        fetchImplementation = fixtureModule.mockedSanityFetch ?? fixtureModule.default?.mockedSanityFetch;
+      } else if (smokeFixture === "failure") {
+        const fixtureModule = await import("../../../scripts/mock-sanity-fetch-failure.cjs");
+        fetchImplementation = fixtureModule.mockedSanityFetch ?? fixtureModule.default?.mockedSanityFetch;
+      }
+      response = await fetchImplementation(input, {
         ...init,
         signal: boundedSignal.signal,
       });

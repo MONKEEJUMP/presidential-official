@@ -56,7 +56,7 @@ const publicRoutes = [
     file: "index.html",
     dynamicArtifactPath: "page.js",
     requiredTitleTerms: ["Presidential"],
-    requiredDescriptionTerms: ["Presidential", "cannabis"],
+    requiredDescriptionTerms: ["Presidential", "Moon", "Rocks"],
   },
   {
     route: "/moon-rocks",
@@ -365,7 +365,7 @@ function canonicalTags(head) {
 }
 
 function expectedCanonical(route) {
-  return route === "/" ? productionOrigin : `${productionOrigin}${route}`;
+  return route === "/" ? `${productionOrigin}/` : `${productionOrigin}${route}`;
 }
 
 function hasRequiredTerms(value, terms) {

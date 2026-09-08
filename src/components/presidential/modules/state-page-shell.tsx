@@ -141,9 +141,6 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
   const displayName =
     atmosphere.nameCase === "upper" ? state.name.toUpperCase() : state.name;
   const isNewYork = state.slug === "ny";
-  const heroHeading = isNewYork
-    ? "Presidential Near Me in New York"
-    : displayName;
   const otherStates = PRESIDENTIAL_STATES
     .filter((candidate) => candidate.slug !== state.slug)
     .toSorted((left, right) => left.name.localeCompare(right.name));
@@ -216,10 +213,12 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
                 {isNewYork ? "Official New York retailer guide" : "Presidential in"}
               </p>
               <h1
-                className={`mt-4 leading-none ${isNewYork ? "max-w-5xl text-5xl sm:text-7xl lg:text-8xl" : "text-6xl sm:text-8xl lg:text-9xl"} ${stateFontClass(state.slug)} ${atmosphere.nameClass}`}
+                className={`mt-4 leading-none ${isNewYork ? "max-w-5xl font-display text-5xl sm:text-7xl lg:text-8xl" : `text-6xl sm:text-8xl lg:text-9xl ${stateFontClass(state.slug)}`} ${atmosphere.nameClass}`}
                 id="presidential-state-title"
               >
-                {heroHeading}
+                {isNewYork ? (
+                  <>Presidential Near Me in <span className={`block ${stateFontClass(state.slug)}`}>New York</span></>
+                ) : displayName}
               </h1>
               <p className="mt-6 max-w-2xl font-display text-2xl uppercase leading-tight text-po-canvas sm:text-3xl">
                 {state.tagline}

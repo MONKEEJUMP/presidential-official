@@ -79,7 +79,7 @@ const fallbackExpectations = [
     // The owner-approved Bentolio hero replaced the retired homepage copy.
     // Pin its visible statement without changing the claim registry.
     path: "/",
-    markers: ["Official Presidential Cannabis", "Cannabis!"],
+    markers: ["Presidential Moon Rocks", "The Highest Form Of Cannabis."],
   },
   {
     path: "/moon-rocks",
@@ -295,10 +295,11 @@ function hasPortListener(targetPort) {
   }
 }
 
-function buildNodeOptions(preload = "") {
-  return [process.env.NODE_OPTIONS, preload ? `--require=${preload}` : ""]
-    .filter(Boolean)
-    .join(" ");
+function fixtureEnvironment(preload = "") {
+  const fixtureToken = "cms-runtime-smoke-fixture-token";
+  if (preload === sanityApprovedMockPath) return { PRESIDENTIAL_CMS_RUNTIME_SMOKE_FIXTURE: "approved", SANITY_AUTH_TOKEN: fixtureToken };
+  if (preload === sanityFailureMockPath) return { PRESIDENTIAL_CMS_RUNTIME_SMOKE_FIXTURE: "failure", SANITY_AUTH_TOKEN: fixtureToken };
+  return { PRESIDENTIAL_CMS_RUNTIME_SMOKE_FIXTURE: "" };
 }
 
 function rebuildForScenario({
@@ -311,13 +312,12 @@ function rebuildForScenario({
   }
 
   rmSync(buildCacheDir, { recursive: true, force: true });
-  const nodeOptions = buildNodeOptions(preload);
   const build = spawnSync(process.execPath, [buildScriptPath], {
     cwd: webRoot,
     env: {
       ...process.env,
       ...env,
-      ...(nodeOptions ? { NODE_OPTIONS: nodeOptions } : {}),
+      ...fixtureEnvironment(preload),
     },
     stdio: "inherit",
   });
@@ -355,16 +355,15 @@ function startServer({
   activePort = port || basePort;
   activeBaseUrl = `http://${host}:${activePort}`;
   serverErrorChunks = [];
-  const nodeOptions = buildNodeOptions(preload);
 
   server = spawn(process.execPath, [nextBin, "start", "--hostname", host, "--port", String(activePort)], {
     cwd: webRoot,
     env: {
       ...process.env,
       ...env,
+      ...fixtureEnvironment(preload),
       PRESIDENTIAL_PRIVATE_DRAFTS_ROUTE_ENABLED: "true",
       PRESIDENTIAL_PRIVATE_DRAFTS_ACCESS_TOKEN: previewAccessToken,
-      ...(nodeOptions ? { NODE_OPTIONS: nodeOptions } : {}),
     },
     stdio: ["ignore", "pipe", "pipe"],
   });

@@ -70,9 +70,9 @@ export const ROUTE_REGISTRY = [
     priority: 5,
     changeFrequency: "weekly",
     canonicalPath: "/moon-rocks",
-    title: "Presidential Moon Rocks Collection | Products & Series",
+    title: "Presidential Moon Rocks | Infused Pre-Rolls and Blunts",
     description:
-      "Explore the Presidential Moon Rocks collection across six product groupings and find licensed retailers near you. Availability varies by retailer.",
+      "Explore the Presidential Moon Rocks product platform. Availability varies by licensed retailer.",
     h1: "Presidential Moon Rocks Collection",
     keywords: [
       "presidential moon rocks",
