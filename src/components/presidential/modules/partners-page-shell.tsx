@@ -55,7 +55,7 @@ function PartnerTile({brand,code}:{brand:Partner;code:PartnerStateCode}) {
     </>;
   return <li className={styles.partner}>
     {brand.website ? <a href={brand.website} target="_blank" rel="nofollow noopener noreferrer" className={styles.tileLink}>{tile}</a> : <div className={styles.tileLink}>{tile}</div>}
-    {brand.website?<a href={brand.website} target="_blank" rel="nofollow noopener noreferrer" className={styles.visit}>{PARTNERS_UI.visit}</a>:null}
+    {brand.website?<a href={brand.website} target="_blank" rel="nofollow noopener noreferrer" className={styles.visit} aria-label={`Visit ${brand.name} site`}>{PARTNERS_UI.visit}</a>:null}
   </li>;
 }
 

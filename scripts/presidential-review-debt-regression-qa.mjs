@@ -29,6 +29,9 @@ const learnGuidePage = read("src/app/learn/[guide]/page.tsx");
 const sanityReadClient = read("src/lib/cms/sanity-read-client.ts");
 const approvedRoutes = read("src/lib/seo/approved-public-routes.ts");
 const productMetadata = read("src/lib/seo/pw7404-1019-product-metadata.ts");
+const partnersShell = read("src/components/presidential/modules/partners-page-shell.tsx");
+const partnersGenerator = read("scripts/build-partners-snapshot.mjs");
+const partnersSnapshot = JSON.parse(read("src/content/partners.json"));
 
 check("vapes.pageshowPreservesHash", /const resetScroll = \(\) => \{\s*if \(!window\.location\.hash\)/s.test(experienceLoader), "initial pageshow reset re-checks the current hash before the explorer mounts");
 check("vapes.malformedFragmentSafe", vapeFragment.includes("catch") && vapeFragment.includes("return rawFragment"), "malformed percent escapes fall back to the raw fragment");
@@ -49,6 +52,8 @@ check("homepage.moonRockFinishes", homepage.includes("finished with kief or diam
 check("authority.linksFailClosed", !authority.includes("href={source.href}"), "unapproved independent-coverage URLs are not public anchors");
 check("metadata.approvedSocialAsset", metadata.includes("/media/brand/presidential-banner.png") && !metadata.includes("/social/og-default.png"), "default social metadata uses the registered approved banner");
 check("metadata.unapprovedCtrClaimRemoved", !routes.includes("six product groupings"), "post-approval CTR claim no longer inherits the August approval record");
+check("partners.distinctVisitNames", partnersShell.includes('aria-label={`Visit ${brand.name} site`}'), "every Visit link includes its partner name for assistive technology");
+check("partners.websiteValidation", partnersGenerator.includes("Invalid concatenated website") && partnersSnapshot.brands.every((brand) => !brand.website || ((brand.website.match(/https?:\/\//gi) ?? []).length === 1 && ["http:", "https:"].includes(new URL(brand.website).protocol))), "snapshot generation rejects concatenated or non-HTTP partner destinations");
 for (const [name, value] of [
   ["presidentialCannabis", "Meet Presidential Cannabis, the official brand behind Moon Rocks, infused pre-rolls, tobacco-free blunts and minis. Find licensed retailers."],
   ["presidentialBlunts", "Explore Presidential Blunts, tobacco-free infused hemp wraps in the House Line. Review product details and find licensed retailers. Availability varies."],
