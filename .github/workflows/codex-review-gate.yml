@@ -6,13 +6,9 @@ concurrency:
 
 on:
   issue_comment:
-    types: [created]
-  pull_request:
+    types: [created, edited]
+  pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]
-  pull_request_review:
-    types: [submitted, edited, dismissed]
-  pull_request_review_comment:
-    types: [created, edited, deleted]
 
 permissions:
   contents: read
@@ -21,7 +17,7 @@ permissions:
 
 jobs:
   codex-review-request:
-    if: github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '@codex review')
+    if: github.event_name == 'issue_comment' && github.event.issue.pull_request && (contains(github.event.comment.body, '@codex review') || contains(github.event.comment.body, '@codex security review'))
     name: Codex Review Request
     runs-on: ubuntu-latest
     steps:
@@ -34,7 +30,7 @@ jobs:
           gh api --method POST "repos/${GITHUB_REPOSITORY}/statuses/${head_sha}" -f state=pending -f context='Codex Review Ready' -f description='A current-head Codex review was requested.'
 
   codex-review-gate:
-    if: github.event_name != 'issue_comment'
+    if: github.event_name != 'issue_comment' || contains(github.event.comment.body, 'codex-pull-request-review-summary') || contains(github.event.comment.body, '@codex gate')
     name: Codex Review Gate
     runs-on: ubuntu-latest
     steps:
@@ -45,14 +41,14 @@ jobs:
       - name: Require current Codex review and zero unresolved Codex threads
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
         run: |
           node --test .github/scripts/codex-review-gate.test.mjs
           node .github/scripts/codex-review-gate.mjs
       - name: Mark current-head Codex review ready
         env:
           GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
         run: |
           head_sha="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" --jq '.head.sha')"
           gh api --method POST "repos/${GITHUB_REPOSITORY}/statuses/${head_sha}" -f state=success -f context='Codex Review Ready' -f description='Current-head Codex review completed with no unresolved Codex threads.'

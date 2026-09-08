@@ -59,7 +59,7 @@ Audit basis: all unresolved Codex review threads recalculated from GitHub agains
 - Focused review-debt regression: 21/21 pass
 - CMS public/private runtime smoke: 810/810 pass
 - Outbound/publication gate: pass
-- Merge-gate fixtures: 3/3 pass
+- Merge-gate fixtures: 5/5 pass
 - Accessibility: 188/192 pass; the four remaining checks are the pre-existing legal/owner age-gate decision.
 - Performance: affected Vapes/video budgets pass; 16 pre-existing broad site/static/public-asset budgets remain above target.
 - Legacy SEO foundation gate: 68 pass, 11 fail, 4 pending, 6 human/legal. Its remaining failures are pre-existing publication/age-gate/claim doctrine, including wording PAULIEWOOD expressly authorized; they are not new regressions from this repair.

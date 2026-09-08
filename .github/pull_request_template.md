@@ -15,5 +15,5 @@
 
 Do not merge merely because the PR exists. Merge only after checks are green, Codex Review has completed on the current head, valid findings are addressed, and the Codex Review Gate passes.
 
-After resolving the final Codex thread, manually rerun the failed Codex Review Gate on the unchanged head; GitHub Actions does not expose thread resolution as a workflow trigger.
+After resolving the final Codex thread, comment `@codex gate` on the unchanged head; GitHub Actions does not expose thread resolution as a workflow trigger.
 Repository rules should require both `Codex Review Gate` and `Codex Review Ready`.
