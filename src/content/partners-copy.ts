@@ -155,3 +155,4 @@ export const partnersCountLine = (brands:number,doors:number,state:string) => `$
 export const partnerLocations = (count:number) => `${count} locations`;
 export const partnerLogoAlt = (name:string,city:string,state:string) => `${name} - licensed Presidential retailer in ${city}, ${state}`;
 export const partnerExplore = (name:string) => `Explore ${name}`;
+export const PARTNERS_STATE_NAV_LABELS = {top:'Partner states - top',bottom:'Partner states - bottom'} as const;

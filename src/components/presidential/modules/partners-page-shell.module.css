@@ -1,4 +1,7 @@
-.hero{padding:1rem 1.5rem 3rem;text-align:center}
+.page{scroll-margin-top:5rem}
+.hero{padding:1rem 1.5rem 3rem;text-align:center;scroll-margin-top:5rem}
+.stateNavigation{min-width:0}.stateNavigation ul{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.25rem .7rem;list-style:none;padding:0;margin:0}.stateNavigation a{display:flex;align-items:center;min-height:44px;padding:.4rem .3rem;font-family:var(--po-font-display);font-size:.85rem;font-weight:600;line-height:1.2;text-transform:uppercase;color:var(--po-color-on-dark);text-decoration:none;border-bottom:2px solid transparent}.stateNavigation a:hover,.stateNavigation a[aria-current=page]{color:var(--po-color-brand);border-bottom-color:var(--po-color-brand)}.stateNavigation a:focus-visible{outline:2px solid var(--po-color-brand);outline-offset:3px;border-radius:2px}.hero>.stateNavigation{max-width:1120px;margin:0 auto 1rem}.closingNavigation{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem 1.5rem}.closingNavigation>.close{flex:none}.closingNavigation>.stateNavigation{flex:1 1 580px}.closingNavigation .stateNavigation ul{justify-content:flex-end}
+@media(max-width:767px){.stateNavigation ul{gap:.2rem .65rem}.stateNavigation a{font-size:.8rem}.closingNavigation .stateNavigation ul{justify-content:flex-start}}
 .crestFrame{display:flex;align-items:center;justify-content:center;width:min(100%,620px);aspect-ratio:1;margin:0 auto;overflow:hidden;border-radius:20px;background:#0d0d0d}
 .crest{width:88%;height:auto;object-fit:contain}
 .heroCopy{max-width:1050px;margin:2.5rem auto 0}
