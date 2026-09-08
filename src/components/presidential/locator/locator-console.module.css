@@ -90,10 +90,6 @@
   outline: none;
 }
 
-.inputRow input::placeholder {
-  font-size: clamp(0.82rem, 3.6cqi, 1.35rem);
-}
-
 .inputRow input:focus-visible {
   border-color: var(--po-color-brand);
   box-shadow: 0 0 24px color-mix(in srgb, var(--po-color-brand) 48%, transparent);
