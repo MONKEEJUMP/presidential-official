@@ -55,11 +55,11 @@ export type PartnerStateCode = (typeof PARTNER_STATES)[number]["code"];
 export const PARTNERS_COPY = {
   "hub": {
     "h1": "Our Partners",
-    "title": "Presidential Partners | Licensed Retailers Across Six States",
-    "description": "The licensed dispensaries carrying authentic Presidential across California, Oklahoma, New York, Nevada, Michigan and Arizona. Find an authorized retailer near you.",
+    "title": "Presidential Partners | Licensed Retailers Across Seven States",
+    "description": "The licensed dispensaries carrying authentic Presidential across California, Oklahoma, New York, Nevada, Michigan, Arizona and Washington. Find an authorized retailer near you.",
     "body": [
       "Presidential doesn't sell direct. Never has.",
-      "Every jar, every blunt, every pre-roll reaches you through a licensed dispensary that chose to carry it - 1,223 doors across six states, and every one of them made that call on their own.",
+      "Every jar, every blunt, every pre-roll reaches you through a licensed dispensary that chose to carry it - 1,223 doors across seven states, and every one of them made that call on their own.",
       "This page is for them.",
       "These are the retailers who put Presidential on their shelves. Independent shops running one location and multi-state operators running thirty. Storefronts in downtown Los Angeles, in Tulsa, in Brooklyn, in Henderson, in Detroit, in Phoenix. Different markets, different customers, one shared decision.",
       "If you are holding a Presidential product, it came through one of them.",
@@ -143,7 +143,7 @@ export const PARTNERS_COPY = {
     "description": "Presidential is coming to Washington State. Retailer partnerships in progress across Seattle, Spokane and the Evergreen State.",
     "body": [
       "Washington is next.",
-      "Presidential currently ships to six states. Washington makes seven, and the retail partnerships are in progress now - Seattle, Tacoma, Spokane, and the Evergreen corridor.",
+      "Presidential's seven-state network includes Washington, where retail partnerships are in progress now - Seattle, Tacoma, Spokane, and the Evergreen corridor.",
       "Washington runs one of the oldest legal markets in the country, which means an experienced customer and a retail network that knows exactly what it is looking at. It is a good room for a brand that has been doing this since 2012.",
       "Nothing is on shelves yet. When the first Washington doors open they will be listed here, and the locator will start returning results for Washington zips the same day.",
       "Retailers interested in carrying Presidential in Washington can reach us through the contact page."
