@@ -169,7 +169,7 @@
   border-top: 1px solid rgb(255 255 255 / 18%);
 }
 
-.productRail button {
+.productRail a {
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 14px;
@@ -185,17 +185,17 @@
   transition: color 180ms ease, background 180ms ease;
 }
 
-.productRail button + button {
+.productRail a + a {
   border-left: 1px solid rgb(255 255 255 / 18%);
 }
 
-.productRail button:hover,
-.productRail button:focus-visible {
+.productRail a:hover,
+.productRail a:focus-visible {
   background: rgb(88 195 182 / 8%);
   color: #58c3b6;
 }
 
-.productRail button > span {
+.productRail a > span {
   color: #d8be72;
   font-size: 10px;
   letter-spacing: 0.14em;
@@ -293,7 +293,7 @@
   .heroVisual::before { top: 10%; right: 1%; bottom: 17%; left: 1%; }
   .heroImage { inset: 0 -4% 68px; }
   .productRail { right: 0; left: 0; }
-  .productRail button { gap: 10px; padding: 17px 10px 14px; }
+  .productRail a { gap: 10px; padding: 17px 10px 14px; }
   .productRail strong { font-size: 10px; letter-spacing: 0.055em; }
   .productRail svg { width: 15px; height: 15px; }
   .heroFoot { width: calc(100% - 36px); min-height: 62px; }
@@ -306,8 +306,8 @@
   .hero h1 { font-size: 21vw; }
   .heroVisual { min-height: 450px; }
   .heroImage { inset: 0 -8% 66px; }
-  .productRail button > span { display: none; }
-  .productRail button { grid-template-columns: 1fr auto; }
+  .productRail a > span { display: none; }
+  .productRail a { grid-template-columns: 1fr auto; }
   .heroFoot { width: calc(100% - 28px); }
 }
 

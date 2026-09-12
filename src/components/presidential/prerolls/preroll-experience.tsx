@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect } from "react";
 
 import {
   FEATURED_PRE_ROLL_ARTWORK_IDS,
   PRE_ROLL_ARTWORKS,
 } from "@/lib/prerolls/catalog";
+import { productDetailPath } from "@/lib/products/product-paths";
 
 import styles from "./preroll-experience.module.css";
 
@@ -42,10 +43,6 @@ function ArrowIcon({ direction }: { readonly direction: "left" | "right" }) {
 }
 
 export function PreRollExperience() {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  const selected = PRE_ROLL_ARTWORKS[selectedIndex];
-
   useLayoutEffect(() => {
     if (window.location.hash) return;
 
@@ -64,24 +61,6 @@ export function PreRollExperience() {
       window.removeEventListener("pageshow", resetScroll);
       window.history.scrollRestoration = previousRestoration;
     };
-  }, []);
-
-  const selectRelative = (offset: number) => {
-    setSelectedIndex((current) =>
-      (current + offset + PRE_ROLL_ARTWORKS.length) % PRE_ROLL_ARTWORKS.length,
-    );
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (dialogRef.current?.open) return;
-      const target = event.target;
-      if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) return;
-      if (event.key === "ArrowLeft") selectRelative(-1);
-      if (event.key === "ArrowRight") selectRelative(1);
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   return (
@@ -111,13 +90,19 @@ export function PreRollExperience() {
             {heroArtwork.map((artwork, stackIndex) => {
               return (
                 <div className={styles[`heroArt${stackIndex + 1}`]} key={artwork.id}>
-                  <Image
-                    alt={artwork.alt}
-                    fill
-                    priority={stackIndex === 2}
-                    sizes={stackIndex === 2 ? "(max-width: 780px) 58vw, 29vw" : "(max-width: 780px) 32vw, 18vw"}
-                    src={artwork.src}
-                  />
+                  <Link
+                    aria-label={`View ${artwork.name} product page`}
+                    className={styles.heroArtLink}
+                    href={productDetailPath("/pre-rolls", artwork.id)}
+                  >
+                    <Image
+                      alt={artwork.alt}
+                      fill
+                      priority={stackIndex === 2}
+                      sizes={stackIndex === 2 ? "(max-width: 780px) 58vw, 29vw" : "(max-width: 780px) 32vw, 18vw"}
+                      src={artwork.src}
+                    />
+                  </Link>
                 </div>
               );
             })}
@@ -132,7 +117,6 @@ export function PreRollExperience() {
       <nav aria-label="Pre-roll page sections" className={styles.sectionNav}>
         <a href="#story">The collection</a>
         <a href="#collection">Explore pre-rolls</a>
-        <a href="#art-index">Product details</a>
         <a href="#find">Find a retailer</a>
       </nav>
 
@@ -151,80 +135,20 @@ export function PreRollExperience() {
         </div>
         <div className={styles.featuredMosaic}>
           {featuredArtwork.map((artwork, index) => (
-            <button
+            <Link
               aria-label={`Explore ${artwork.name}, ${artwork.edition}`}
               className={styles[`featuredArt${index + 1}`]}
+              href={productDetailPath("/pre-rolls", artwork.id)}
               key={artwork.id}
-              onClick={() => {
-                setSelectedIndex(PRE_ROLL_ARTWORKS.findIndex((candidate) => candidate.id === artwork.id));
-                document.querySelector("#collection")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              type="button"
             >
               <Image alt="" fill sizes="(max-width: 780px) 50vw, 28vw" src={artwork.src} />
               <span>{artwork.name}</span>
-            </button>
+            </Link>
           ))}
         </div>
       </section>
 
-      <section aria-labelledby="collection-heading" className={styles.collection} id="collection">
-        <div className={styles.collectionTitleRow}>
-          <h2 id="collection-heading">The complete <span>collection</span></h2>
-          <p>Explore the recipes.<br />Find your flavor.</p>
-        </div>
-
-        <div className={styles.explorer}>
-          <div className={styles.selectedFrame}>
-            <Image
-              alt={selected.alt}
-              fill
-              key={selected.src}
-              priority
-              sizes="(max-width: 900px) 92vw, 44vw"
-              src={selected.src}
-            />
-          </div>
-          <div aria-live="polite" className={styles.selectedCopy}>
-            <div className={styles.counterRow}>
-              <span>Selection <strong>{String(selectedIndex + 1).padStart(2, "0")}</strong> of {PRE_ROLL_ARTWORKS.length}</span>
-              <div className={styles.arrowControls}>
-                <button aria-label="Previous product" onClick={() => selectRelative(-1)} type="button"><ArrowIcon direction="left" /></button>
-                <button aria-label="Next product" onClick={() => selectRelative(1)} type="button"><ArrowIcon direction="right" /></button>
-              </div>
-            </div>
-            <p className={styles.collectionName}>{selected.collection}</p>
-            <h3>{selected.name}</h3>
-            <p className={styles.edition}>{selected.edition}</p>
-            <div className={styles.goldRule} />
-            <p className={styles.description}>{selected.description}</p>
-            <button className={styles.fullSizeButton} onClick={() => dialogRef.current?.showModal()} type="button">
-              View product <ArrowIcon direction="right" />
-            </button>
-          </div>
-        </div>
-
-        <div aria-label="Choose a pre-roll" className={styles.filmstrip} role="list">
-          {PRE_ROLL_ARTWORKS.map((artwork, index) => (
-            <button
-              aria-current={index === selectedIndex ? "true" : undefined}
-              aria-label={`${String(index + 1).padStart(2, "0")}: ${artwork.name}, ${artwork.edition}`}
-              className={index === selectedIndex ? styles.thumbnailSelected : styles.thumbnail}
-              key={artwork.id}
-              onClick={() => setSelectedIndex(index)}
-              role="listitem"
-              type="button"
-            >
-              <span className={styles.thumbnailImage}>
-                <Image alt="" fill sizes="92px" src={artwork.src} />
-              </span>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      <section aria-labelledby="art-index-heading" className={styles.artIndex} id="art-index">
+      <section aria-labelledby="art-index-heading" className={styles.artIndex} id="collection">
         <div className={styles.indexIntro}>
           <div>
             <p>A closer look</p>
@@ -237,18 +161,14 @@ export function PreRollExperience() {
         <div className={styles.artGrid}>
           {PRE_ROLL_ARTWORKS.map((artwork, index) => (
             <article className={artwork.shape === "square" ? styles.artCardSquare : styles.artCardPortrait} key={artwork.id}>
-              <button
-                aria-label={`Open ${artwork.name} in the collection explorer`}
+              <Link
+                aria-label={`View ${artwork.name} product page`}
                 className={styles.artCardImage}
-                onClick={() => {
-                  setSelectedIndex(index);
-                  document.querySelector("#collection")?.scrollIntoView({ behavior: "smooth" });
-                }}
-                type="button"
+                href={productDetailPath("/pre-rolls", artwork.id)}
               >
                 <Image alt={artwork.alt} fill sizes="(max-width: 700px) 92vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} />
                 <span>{String(index + 1).padStart(2, "0")}</span>
-              </button>
+              </Link>
               <div className={styles.artCardCopy}>
                 <p>{artwork.collection}</p>
                 <h3>{artwork.name}</h3>
@@ -274,13 +194,6 @@ export function PreRollExperience() {
         </div>
       </section>
 
-      <dialog className={styles.dialog} ref={dialogRef}>
-        <button aria-label="Close product image" className={styles.dialogClose} onClick={() => dialogRef.current?.close()} type="button">Close</button>
-        <div className={styles.dialogImage}>
-          <Image alt={selected.alt} fill sizes="92vw" src={selected.src} />
-        </div>
-        <p>{selected.name} · {selected.edition}</p>
-      </dialog>
     </div>
   );
 }
