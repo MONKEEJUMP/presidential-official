@@ -11,6 +11,7 @@ export const STATIC_ROUTE_SHELL_PATHS = [
   "/orbit",
   "/vapes",
   "/pre-rolls",
+  "/blunts",
   "/our-story",
   "/about",
   "/learn",

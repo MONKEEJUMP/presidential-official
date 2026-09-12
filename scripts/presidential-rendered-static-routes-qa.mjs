@@ -38,6 +38,8 @@ const staticRoutes = [
   })),
   { path: "/moon-pods", label: "moonPods", htmlPath: "moon-pods.html" },
   { path: "/orbit", label: "orbit", htmlPath: "orbit.html" },
+  { path: "/pre-rolls", label: "preRolls", htmlPath: "pre-rolls.html", expectedText: ["Pre-Rolls"] },
+  { path: "/blunts", label: "blunts", htmlPath: "blunts.html", expectedText: ["Blunts"] },
   { path: "/our-story", label: "ourStory", htmlPath: "our-story.html" },
   { path: "/learn", label: "learn", htmlPath: "learn.html" },
   {
@@ -103,6 +105,8 @@ const expectedPageFiles = new Set([
   "moon-rocks/[product-or-strain]/page.tsx",
   "loyalty/page.tsx",
   "orbit/page.tsx",
+  "pre-rolls/page.tsx",
+  "blunts/page.tsx",
   "our-story/page.tsx",
 ]);
 
@@ -124,6 +128,8 @@ const allowedHtmlOutputs = new Set([
   "moon-rocks/silver.html",
   "loyalty.html",
   "orbit.html",
+  "pre-rolls.html",
+  "blunts.html",
   "our-story.html",
 ]);
 

@@ -20,6 +20,7 @@ const APPROVED_PUBLIC_STATIC_ROUTE_IDS = [
   "orbit",
   "vapes",
   "pre-rolls",
+  "blunts",
   "our-story",
   "about",
   "learn",
@@ -267,7 +268,7 @@ export const APPROVED_PUBLIC_SEO_ROUTES = [
   ...APPROVED_PUBLIC_STATE_ROUTES,
 ] as const satisfies readonly SeoRouteRecord[];
 
-export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 90 as const;
+export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 91 as const;
 
 if (APPROVED_PUBLIC_SEO_ROUTES.length !== APPROVED_PUBLIC_SEO_ROUTE_COUNT) {
   throw new Error(

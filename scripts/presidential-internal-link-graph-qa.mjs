@@ -36,6 +36,8 @@ const publicRoutes = [
   { route: "/moon-rocks", label: "moonRocks", file: "moon-rocks.html" },
   { route: "/moon-pods", label: "moonPods", file: "moon-pods.html" },
   { route: "/orbit", label: "orbit", file: "orbit.html" },
+  { route: "/pre-rolls", label: "preRolls", file: "pre-rolls.html" },
+  { route: "/blunts", label: "blunts", file: "blunts.html" },
   { route: "/our-story", label: "ourStory", file: "our-story.html" },
   { route: "/learn", label: "learn", file: "learn.html" },
   { route: "/find-us", label: "findUs", file: "find-us.html" },
@@ -87,7 +89,7 @@ const allowedSamePageFragmentHrefs = new Set([
 const futureOrTemplatePatterns = [
   /\/learn\/(?:%5Bguide%5D|\[guide\])/i,
   /\/find-us\/\[state\]/i,
-  /^\/(?:official-presidential|pre-rolls|blunts)(?:\/|$)/i,
+  /^\/official-presidential(?:\/|$)/i,
 ];
 const forbiddenHrefPatterns = [
   /^https?:\/\//i,
