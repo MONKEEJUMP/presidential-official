@@ -103,7 +103,7 @@ export function BluntsExperience() {
             </figcaption>
           </figure>
         </div>
-        <div className={styles.heroFoot}><span>Flower. Concentrate. A Presidential finish.</span><a href="#collection">36 selections <span aria-hidden="true">↓</span></a></div>
+        <div className={styles.heroFoot}><span>Flower. Concentrate. A Presidential finish.</span><a href="#collection">{BLUNT_ARTWORKS.length} selections <span aria-hidden="true">↓</span></a></div>
       </section>
 
       <nav aria-label="Blunts page sections" className={shared.sectionNav}>
@@ -129,11 +129,11 @@ export function BluntsExperience() {
       </section>
 
       <section aria-labelledby="blunts-collection-heading" className={shared.collection} id="collection">
-        <div className={shared.collectionTitleRow}><h2 id="blunts-collection-heading">The complete <span>collection</span></h2><p>36 selections.<br />Find your flavor.</p></div>
+        <div className={shared.collectionTitleRow}><h2 id="blunts-collection-heading">The complete <span>collection</span></h2><p>{BLUNT_ARTWORKS.length} selections.<br />Find your flavor.</p></div>
         <div className={shared.explorer}>
           <div className={shared.selectedFrame}><Image alt={selected.alt} fill key={selected.src} priority sizes="(max-width: 900px) 92vw, 44vw" src={selected.src} /></div>
           <div aria-live="polite" className={shared.selectedCopy}>
-            <div className={shared.counterRow}><span>Selection <strong>{String(selectedIndex + 1).padStart(2, "0")}</strong> of 36</span><div className={shared.arrowControls}><button aria-label="Previous product" onClick={() => selectRelative(-1)} type="button"><ArrowIcon direction="left" /></button><button aria-label="Next product" onClick={() => selectRelative(1)} type="button"><ArrowIcon direction="right" /></button></div></div>
+            <div className={shared.counterRow}><span>Selection <strong>{String(selectedIndex + 1).padStart(2, "0")}</strong> of {BLUNT_ARTWORKS.length}</span><div className={shared.arrowControls}><button aria-label="Previous product" onClick={() => selectRelative(-1)} type="button"><ArrowIcon direction="left" /></button><button aria-label="Next product" onClick={() => selectRelative(1)} type="button"><ArrowIcon direction="right" /></button></div></div>
             <p className={shared.collectionName}>Presidential Moon Rock Blunts</p><h3>{selected.name}</h3><p className={shared.edition}>{selected.edition}</p><div className={shared.goldRule} /><p className={shared.description}>{selected.description}</p>
             <button className={shared.fullSizeButton} onClick={() => dialogRef.current?.showModal()} type="button">View product <ArrowIcon direction="right" /></button>
           </div>

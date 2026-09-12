@@ -21,16 +21,6 @@ export const PRE_ROLL_ARTWORKS = [
     shape: "portrait",
   },
   {
-    id: "cereal-milk",
-    name: "Cereal Milk",
-    edition: "1g infused pre-roll · Flower · Live rosin · Diamonds",
-    collection: "Rose Gold Connoisseur Series",
-    description: "Cereal Milk brings a creamy strain profile known for sweet milk and vanilla notes to Presidential's live-rosin infusion. Flower, live rosin, and diamonds make this a choice for connoisseurs who want the rosin recipe in a finished roll. One 1g Moon Rock pre-roll, prepared in rolling paper.",
-    src: "/media/pre-rolls/cereal-milk.webp",
-    alt: "Presidential Cereal Milk 1g Moon Rock pre-roll product",
-    shape: "portrait",
-  },
-  {
     id: "blue-dream",
     name: "Blue Dream",
     edition: "1g infused pre-roll · Flower · Live resin · Diamonds",
@@ -79,16 +69,6 @@ export const PRE_ROLL_ARTWORKS = [
     src: "/media/pre-rolls/galactic-gas.webp",
     alt: "Presidential Galactic Gas 1g Moon Rock pre-roll product",
     shape: "portrait",
-  },
-  {
-    id: "garlic-cookies-announcement",
-    name: "Garlic Cookies",
-    edition: "1g infused pre-roll · Flower · Distillate · Kief",
-    collection: "Presidential Line collaboration",
-    description: "Garlic Cookies brings Nature's Chemistry flower together with distillate and kief. Its savory garlic, earthy, and diesel profile makes it a distinctive choice for consumers who prefer pungent cannabis over fruit-forward selections. One 1g Moon Rock pre-roll, prepared in rolling paper.",
-    src: "/media/pre-rolls/garlic-cookies-announcement.webp",
-    alt: "Presidential Garlic Cookies 1g Moon Rock pre-roll product",
-    shape: "square",
   },
   {
     id: "garlic-cookies",
@@ -270,23 +250,13 @@ export const PRE_ROLL_ARTWORKS = [
     alt: "Presidential Wedding Cake 1g Moon Rock pre-roll product",
     shape: "portrait",
   },
-  {
-    id: "wedding-cake",
-    name: "Wedding Cake",
-    edition: "1g infused pre-roll · Flower · Live rosin · Diamonds",
-    collection: "Rose Gold Connoisseur Series",
-    description: "Wedding Cake brings a strain profile known for vanilla, sweetness, and earthy citrus to Presidential's Rose Gold recipe. Flower, live rosin, and diamonds make it a selection for people who enjoy creamy cannabis character and a rosin-based infusion. One 1g Moon Rock pre-roll, prepared in rolling paper.",
-    src: "/media/pre-rolls/wedding-cake.webp",
-    alt: "Presidential Wedding Cake 1g Moon Rock pre-roll product",
-    shape: "portrait",
-  },
 ] as const satisfies readonly PreRollArtwork[];
 
 export const FEATURED_PRE_ROLL_ARTWORK_IDS = [
   "galactic-gas",
   "cereal-milk-title",
   "blue-dream",
-  "garlic-cookies-announcement",
+  "garlic-cookies",
   "pink-cookies",
   "skywalker",
 ] as const;
