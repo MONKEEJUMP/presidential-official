@@ -90,7 +90,7 @@ export const APPROVED_PUBLICATION_SOURCE_RECORDS = [
     verifiedBy: "PAULIEWOOD",
     verifiedAt: "2026-09-12",
     notes:
-      "Owner supplied 42 Blunts files representing 41 unique graphics and directed immediate publication with Products-menu, footer, indexing, and sitemap integration.",
+      "Owner supplied 42 Blunts files and directed one selected artwork per product after removing five duplicate treatments and one exact Crescendo duplicate, leaving 36 displayed graphics with Products-menu, footer, indexing, and sitemap integration.",
   },
   {
     sourceId: OWNER_APPROVAL_SOURCE_ID,

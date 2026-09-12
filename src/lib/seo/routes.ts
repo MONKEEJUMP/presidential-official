@@ -664,7 +664,7 @@ export const ROUTE_REGISTRY = [
     sourceArtifact:
       "0912-002 Blunts owner asset drop and live-publication directive, 2026-09-12",
     notes:
-      "Public-approved Presidential Blunts platform using 41 unique owner-supplied graphics, source-bounded artwork descriptions, and licensed-retailer discovery. No commerce, medical, effect, pricing, shipping, inventory, or review claims.",
+      "Public-approved Presidential Blunts platform using 36 distinct product graphics selected from the owner-supplied drop, source-bounded artwork descriptions, and licensed-retailer discovery. No commerce, medical, effect, pricing, shipping, inventory, or review claims.",
     isPublicPillar: true,
   },
   {

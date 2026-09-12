@@ -9,8 +9,8 @@ import { BLUNT_ARTWORKS } from "@/content/blunts-catalog";
 import shared from "@/components/presidential/prerolls/preroll-experience.module.css";
 import styles from "./blunts-experience.module.css";
 
-const heroIndexes = [20, 28, 9, 18, 0, 4, 24, 29] as const;
-const featuredIndexes = [9, 0, 4, 10, 24, 28] as const;
+const heroIndexes = [18, 25, 8, 16, 0, 3, 21, 26] as const;
+const featuredIndexes = [8, 0, 3, 9, 21, 25] as const;
 
 function ArrowIcon({ direction }: { readonly direction: "left" | "right" }) {
   return (
@@ -72,7 +72,7 @@ export function BluntsExperience() {
             <h1 id="blunts-heading">Blunts</h1>
             <p className={shared.heroLead}>The complete Presidential blunt art collection.</p>
             <div className={shared.heroActions}>
-              <a className={shared.primaryAction} href="#collection">Explore all 41 graphics <ArrowIcon direction="right" /></a>
+              <a className={shared.primaryAction} href="#collection">Explore all 36 graphics <ArrowIcon direction="right" /></a>
               <Link className={shared.textAction} href="/find-us">Find a retailer</Link>
             </div>
           </div>
@@ -91,14 +91,14 @@ export function BluntsExperience() {
       </section>
 
       <nav aria-label="Blunts page sections" className={shared.sectionNav}>
-        <a href="#story">The collection</a><a href="#collection">Explore all 41</a><a href="#art-index">Read the art</a><a href="#find">Find a retailer</a>
+        <a href="#story">The collection</a><a href="#collection">Explore all 36</a><a href="#art-index">Read the art</a><a href="#find">Find a retailer</a>
       </nav>
 
       <section aria-labelledby="blunts-story-heading" className={shared.story} id="story">
         <div className={shared.storyHeading}><p>The collection</p><h2 id="blunts-story-heading">Every graphic.<br /><span>Its own world.</span></h2></div>
         <div className={shared.storyCopy}>
           <p>Presidential blunt artwork moves through fruit, city skylines, music, metallic sculpture, tropical scenes, and deep space. The package stays central while every surrounding world changes.</p>
-          <p>Forty-two supplied files resolve to 41 unique graphics; one duplicated Crescendo source is represented once. Availability varies by licensed retailer.</p>
+          <p>Forty-two supplied files resolve to 36 distinct product graphics after duplicate treatments are removed. Availability varies by licensed retailer.</p>
         </div>
         <div className={shared.featuredMosaic}>
           {featuredIndexes.map((index, position) => {
@@ -113,11 +113,11 @@ export function BluntsExperience() {
       </section>
 
       <section aria-labelledby="blunts-collection-heading" className={shared.collection} id="collection">
-        <div className={shared.collectionTitleRow}><h2 id="blunts-collection-heading">The complete <span>collection</span></h2><p>41 unique artworks.<br />One visual archive.</p></div>
+        <div className={shared.collectionTitleRow}><h2 id="blunts-collection-heading">The complete <span>collection</span></h2><p>36 product artworks.<br />One visual archive.</p></div>
         <div className={shared.explorer}>
           <div className={shared.selectedFrame}><Image alt={selected.alt} fill key={selected.src} priority sizes="(max-width: 900px) 92vw, 44vw" src={selected.src} /></div>
           <div aria-live="polite" className={shared.selectedCopy}>
-            <div className={shared.counterRow}><span>Artwork <strong>{String(selectedIndex + 1).padStart(2, "0")}</strong> of 41</span><div className={shared.arrowControls}><button aria-label="Previous artwork" onClick={() => selectRelative(-1)} type="button"><ArrowIcon direction="left" /></button><button aria-label="Next artwork" onClick={() => selectRelative(1)} type="button"><ArrowIcon direction="right" /></button></div></div>
+            <div className={shared.counterRow}><span>Artwork <strong>{String(selectedIndex + 1).padStart(2, "0")}</strong> of 36</span><div className={shared.arrowControls}><button aria-label="Previous artwork" onClick={() => selectRelative(-1)} type="button"><ArrowIcon direction="left" /></button><button aria-label="Next artwork" onClick={() => selectRelative(1)} type="button"><ArrowIcon direction="right" /></button></div></div>
             <p className={shared.collectionName}>Presidential Moon Rock Blunts</p><h3>{selected.name}</h3><p className={shared.edition}>{selected.edition}</p><div className={shared.goldRule} /><p className={shared.description}>{selected.description}</p>
             <button className={shared.fullSizeButton} onClick={() => dialogRef.current?.showModal()} type="button">View full size <ArrowIcon direction="right" /></button>
           </div>
@@ -130,7 +130,7 @@ export function BluntsExperience() {
       </section>
 
       <section aria-labelledby="blunts-art-index-heading" className={shared.artIndex} id="art-index">
-        <div className={shared.indexIntro}><div><p>A closer look</p><h2 id="blunts-art-index-heading">Read<br />the art.</h2></div><p>Every unique supplied graphic appears below with its own visual description. Select any artwork to bring it into the full collection explorer.</p></div>
+        <div className={shared.indexIntro}><div><p>A closer look</p><h2 id="blunts-art-index-heading">Read<br />the art.</h2></div><p>Every distinct product graphic appears below with its own visual description. Select any artwork to bring it into the full collection explorer.</p></div>
         <div className={shared.artGrid}>
           {BLUNT_ARTWORKS.map((artwork, index) => (
             <article className={artwork.shape === "square" ? shared.artCardSquare : shared.artCardPortrait} key={artwork.id}>
