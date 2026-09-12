@@ -70,13 +70,13 @@ export function BluntsExperience() {
               <Link href="/">Presidential</Link><span aria-hidden="true">/</span><span>Blunts</span>
             </nav>
             <h1 id="blunts-heading">Blunts</h1>
-            <p className={shared.heroLead}>The complete Presidential blunt art collection.</p>
+            <p className={shared.heroLead}>Infused flower. Full flavor. Tobacco-free blunts.</p>
             <div className={shared.heroActions}>
-              <a className={shared.primaryAction} href="#collection">Explore all 36 graphics <ArrowIcon direction="right" /></a>
+              <a className={shared.primaryAction} href="#collection">Explore the blunts <ArrowIcon direction="right" /></a>
               <Link className={shared.textAction} href="/find-us">Find a retailer</Link>
             </div>
           </div>
-          <div aria-label="Featured Presidential blunt graphics" className={styles.tunnel}>
+          <div aria-label="Featured Presidential Moon Rock blunts" className={styles.tunnel}>
             {heroIndexes.map((index, panelIndex) => {
               const artwork = BLUNT_ARTWORKS[index];
               return (
@@ -87,18 +87,18 @@ export function BluntsExperience() {
             })}
           </div>
         </div>
-        <div className={shared.heroFoot}><span>One gallery. Every perspective.</span><a href="#collection">Explore the graphics <span aria-hidden="true">↓</span></a></div>
+        <div className={shared.heroFoot}><span>Flower. Concentrate. A Presidential finish.</span><a href="#collection">Explore the lineup <span aria-hidden="true">↓</span></a></div>
       </section>
 
       <nav aria-label="Blunts page sections" className={shared.sectionNav}>
-        <a href="#story">The collection</a><a href="#collection">Explore all 36</a><a href="#art-index">Read the art</a><a href="#find">Find a retailer</a>
+        <a href="#story">The collection</a><a href="#collection">Explore blunts</a><a href="#art-index">Product details</a><a href="#find">Find a retailer</a>
       </nav>
 
       <section aria-labelledby="blunts-story-heading" className={shared.story} id="story">
-        <div className={shared.storyHeading}><p>The collection</p><h2 id="blunts-story-heading">Every graphic.<br /><span>Its own world.</span></h2></div>
+        <div className={shared.storyHeading}><p>The collection</p><h2 id="blunts-story-heading">Made for flavor.<br /><span>Built with flower.</span></h2></div>
         <div className={shared.storyCopy}>
-          <p>Presidential blunt artwork moves through fruit, city skylines, music, metallic sculpture, tropical scenes, and deep space. The package stays central while every surrounding world changes.</p>
-          <p>Forty-two supplied files resolve to 36 distinct product graphics after duplicate treatments are removed. Availability varies by licensed retailer.</p>
+          <p>A Presidential Moon Rock blunt brings cannabis flower and concentrate together in a tobacco-free wrap. Explore fruit flavors, classic gas and pine, and cultivation collaborations—each with its own recipe and character.</p>
+          <p>Choose the infusion that speaks to you: distillate and kief, live resin and diamonds, or a live-rosin selection. Each single blunt contains 1.5g. Find your favorite through a licensed retailer.</p>
         </div>
         <div className={shared.featuredMosaic}>
           {featuredIndexes.map((index, position) => {
@@ -113,16 +113,16 @@ export function BluntsExperience() {
       </section>
 
       <section aria-labelledby="blunts-collection-heading" className={shared.collection} id="collection">
-        <div className={shared.collectionTitleRow}><h2 id="blunts-collection-heading">The complete <span>collection</span></h2><p>36 product artworks.<br />One visual archive.</p></div>
+        <div className={shared.collectionTitleRow}><h2 id="blunts-collection-heading">The complete <span>collection</span></h2><p>36 selections.<br />Find your flavor.</p></div>
         <div className={shared.explorer}>
           <div className={shared.selectedFrame}><Image alt={selected.alt} fill key={selected.src} priority sizes="(max-width: 900px) 92vw, 44vw" src={selected.src} /></div>
           <div aria-live="polite" className={shared.selectedCopy}>
-            <div className={shared.counterRow}><span>Artwork <strong>{String(selectedIndex + 1).padStart(2, "0")}</strong> of 36</span><div className={shared.arrowControls}><button aria-label="Previous artwork" onClick={() => selectRelative(-1)} type="button"><ArrowIcon direction="left" /></button><button aria-label="Next artwork" onClick={() => selectRelative(1)} type="button"><ArrowIcon direction="right" /></button></div></div>
+            <div className={shared.counterRow}><span>Selection <strong>{String(selectedIndex + 1).padStart(2, "0")}</strong> of 36</span><div className={shared.arrowControls}><button aria-label="Previous product" onClick={() => selectRelative(-1)} type="button"><ArrowIcon direction="left" /></button><button aria-label="Next product" onClick={() => selectRelative(1)} type="button"><ArrowIcon direction="right" /></button></div></div>
             <p className={shared.collectionName}>Presidential Moon Rock Blunts</p><h3>{selected.name}</h3><p className={shared.edition}>{selected.edition}</p><div className={shared.goldRule} /><p className={shared.description}>{selected.description}</p>
-            <button className={shared.fullSizeButton} onClick={() => dialogRef.current?.showModal()} type="button">View full size <ArrowIcon direction="right" /></button>
+            <button className={shared.fullSizeButton} onClick={() => dialogRef.current?.showModal()} type="button">View product <ArrowIcon direction="right" /></button>
           </div>
         </div>
-        <div aria-label="Choose a blunt artwork" className={shared.filmstrip} role="list">
+        <div aria-label="Choose a blunt" className={shared.filmstrip} role="list">
           {BLUNT_ARTWORKS.map((artwork, index) => (
             <button aria-current={index === selectedIndex ? "true" : undefined} aria-label={`${String(index + 1).padStart(2, "0")}: ${artwork.name}, ${artwork.edition}`} className={index === selectedIndex ? shared.thumbnailSelected : shared.thumbnail} key={artwork.id} onClick={() => setSelectedIndex(index)} role="listitem" type="button"><span className={shared.thumbnailImage}><Image alt="" fill sizes="92px" src={artwork.src} /></span><span>{String(index + 1).padStart(2, "0")}</span></button>
           ))}
@@ -130,7 +130,7 @@ export function BluntsExperience() {
       </section>
 
       <section aria-labelledby="blunts-art-index-heading" className={shared.artIndex} id="art-index">
-        <div className={shared.indexIntro}><div><p>A closer look</p><h2 id="blunts-art-index-heading">Read<br />the art.</h2></div><p>Every distinct product graphic appears below with its own visual description. Select any artwork to bring it into the full collection explorer.</p></div>
+        <div className={shared.indexIntro}><div><p>A closer look</p><h2 id="blunts-art-index-heading">Meet<br />the blunts.</h2></div><p>Compare the flavor, infusion, and ingredients in each Moon Rock blunt. Flavor and aroma vary by batch; your retailer can confirm the current selection.</p></div>
         <div className={shared.artGrid}>
           {BLUNT_ARTWORKS.map((artwork, index) => (
             <article className={artwork.shape === "square" ? shared.artCardSquare : shared.artCardPortrait} key={artwork.id}>
@@ -146,7 +146,7 @@ export function BluntsExperience() {
         <div className={shared.findMark}><span>Find your<br />Presidential.</span><Image alt="Presidential logo" height={291} src="/media/brand/presidential-crest-master.png" width={376} /></div>
       </section>
 
-      <dialog className={shared.dialog} ref={dialogRef}><button aria-label="Close full-size artwork" className={shared.dialogClose} onClick={() => dialogRef.current?.close()} type="button">Close</button><div className={shared.dialogImage}><Image alt={selected.alt} fill sizes="92vw" src={selected.src} /></div><p>{selected.name} · {selected.edition}</p></dialog>
+      <dialog className={shared.dialog} ref={dialogRef}><button aria-label="Close product image" className={shared.dialogClose} onClick={() => dialogRef.current?.close()} type="button">Close</button><div className={shared.dialogImage}><Image alt={selected.alt} fill sizes="92vw" src={selected.src} /></div><p>{selected.name} · {selected.edition}</p></dialog>
     </div>
   );
 }
