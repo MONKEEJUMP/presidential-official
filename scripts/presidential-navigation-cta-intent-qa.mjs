@@ -82,6 +82,8 @@ const publicRoutes = [
   { route: "/moon-rocks", label: "moonRocks", file: "moon-rocks.html" },
   { route: "/moon-pods", label: "moonPods", file: "moon-pods.html" },
   { route: "/orbit", label: "orbit", file: "orbit.html" },
+  { route: "/pre-rolls", label: "preRolls", file: "pre-rolls.html" },
+  { route: "/blunts", label: "blunts", file: "blunts.html" },
   { route: "/our-story", label: "ourStory", file: "our-story.html" },
   { route: "/learn", label: "learn", file: "learn.html" },
   { route: "/find-us", label: "findUs", file: "find-us.html" },
@@ -163,7 +165,7 @@ const forbiddenHrefPatterns = [
   {
     label: "future or unresolved route",
     pattern:
-      /\/learn\/(?:%5Bguide%5D|\[guide\])|\/find-us\/\[state\]|^\/(?:official-presidential|pre-rolls|blunts)(?:\/|$)/i,
+      /\/learn\/(?:%5Bguide%5D|\[guide\])|\/find-us\/\[state\]|^\/official-presidential(?:\/|$)/i,
   },
   {
     label: "private route family",

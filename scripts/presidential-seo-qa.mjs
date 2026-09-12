@@ -2765,7 +2765,7 @@ function checkBrandDefenseRoutePlanning() {
   }
 
   const routesText = readProjectFile(routesPath);
-  const brandDefensePaths = ["/official-presidential", "/blunts"];
+  const brandDefensePaths = ["/official-presidential"];
   const issues = [];
 
   for (const routePath of brandDefensePaths) {
@@ -2808,7 +2808,7 @@ function checkBrandDefenseRoutePlanning() {
       "routes.brandDefense",
       "Brand-defense route planning records are missing or lost their gated posture.",
       issues,
-      "Keep /official-presidential and /blunts gated until separately approved.",
+      "Keep /official-presidential gated until separately approved.",
     );
   }
 
@@ -2833,6 +2833,30 @@ function checkBrandDefenseRoutePlanning() {
       "Pre-Rolls publication state is incomplete or missing its owner approval source.",
       [],
       "Keep the route approved only when the September 12 owner directive, indexability, sitemap, and zero-blocker posture remain together.",
+    );
+  }
+
+  const bluntsDefinition = getRouteDefinitionText(routesText, "/blunts");
+  const bluntsApproved =
+    bluntsDefinition?.includes('status: "approved"') &&
+    bluntsDefinition.includes('indexability: "index_follow"') &&
+    bluntsDefinition.includes('sitemap: "include"') &&
+    bluntsDefinition.includes("blocks: []") &&
+    bluntsDefinition.includes("0912-002 Blunts owner asset drop");
+
+  if (bluntsApproved) {
+    addResult(
+      "PASS",
+      "routes.bluntsPublication",
+      "Blunts carries the September 12 owner approval, index-follow posture, sitemap inclusion, and zero unresolved route blockers.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routes.bluntsPublication",
+      "Blunts publication state is incomplete or missing its owner approval source.",
+      [],
+      "Keep the route approved only while the owner directive, indexability, sitemap, and zero-blocker posture remain together.",
     );
   }
 }

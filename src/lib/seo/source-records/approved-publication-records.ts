@@ -16,25 +16,33 @@ import type {
 
 const OWNER_APPROVAL_SOURCE_ID = "source-owner-7734-publication-approval";
 const PRE_ROLLS_APPROVAL_SOURCE_ID = "source-owner-0912-pre-rolls-publication-approval";
+const BLUNTS_APPROVAL_SOURCE_ID = "source-owner-0912-blunts-publication-approval";
 const SHARED_BRAND_ASSET_ID = "asset-presidential-header-banner";
 const OWNER_APPROVAL_DATE = "2026-08-04";
 const isPartners = (route: {path:string}) => route.path === '/partners' || route.path.startsWith('/partners/');
 const isPreRolls = (route: {path:string}) => route.path === '/pre-rolls';
+const isBlunts = (route: {path:string}) => route.path === '/blunts';
 const approvalSource = (route: {path:string}) => isPartners(route)
   ? 'source-owner-0907-pres-kvrt-0010'
   : isPreRolls(route)
     ? PRE_ROLLS_APPROVAL_SOURCE_ID
-    : OWNER_APPROVAL_SOURCE_ID;
+    : isBlunts(route)
+      ? BLUNTS_APPROVAL_SOURCE_ID
+      : OWNER_APPROVAL_SOURCE_ID;
 const approvalDate = (route: {path:string}) => isPartners(route)
   ? '2026-09-07'
   : isPreRolls(route)
     ? '2026-09-12'
-    : OWNER_APPROVAL_DATE;
+    : isBlunts(route)
+      ? '2026-09-12'
+      : OWNER_APPROVAL_DATE;
 const approvalLocator = (route: {path:string}) => isPartners(route)
   ? '0907-PRES-KVRT-0010 and owner count ruling, 2026-09-07'
   : isPreRolls(route)
     ? 'presidential-official-005 owner build, live-publication, navigation, indexing, and sitemap directive, 2026-09-12'
-    : '7734-SPUD owner directive dated 2026-08-04';
+    : isBlunts(route)
+      ? 'presidential-official-005 owner Blunts build and standing live-publication directive, 2026-09-12'
+      : '7734-SPUD owner directive dated 2026-08-04';
 
 function recordId(prefix: string, routeId: string): string {
   return `${prefix}-${routeId}`;
@@ -68,6 +76,21 @@ export const APPROVED_PUBLICATION_SOURCE_RECORDS = [
     verifiedAt: "2026-09-12",
     notes:
       "Owner supplied 27 Pre-Rolls graphics, approved their use on a new public page, and directed publication with menu, indexing, and sitemap integration.",
+  },
+  {
+    sourceId: BLUNTS_APPROVAL_SOURCE_ID,
+    sourceName: "0912-002 owner Blunts publication approval",
+    sourceType: "client_provided",
+    sourceLocator:
+      "presidential-official-005 owner Blunts build and standing live-publication directive, 2026-09-12",
+    allowedUsage: "production",
+    confidentialityStatus: "public",
+    publisherOrProvider: "PAULIEWOOD",
+    confidenceScore: 100,
+    verifiedBy: "PAULIEWOOD",
+    verifiedAt: "2026-09-12",
+    notes:
+      "Owner supplied 42 Blunts files representing 41 unique graphics and directed immediate publication with Products-menu, footer, indexing, and sitemap integration.",
   },
   {
     sourceId: OWNER_APPROVAL_SOURCE_ID,

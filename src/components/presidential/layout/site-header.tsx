@@ -15,6 +15,7 @@ const navigationGroups = [
     items: [
       { href: "/moon-rocks", label: "Moon Rocks" },
       { href: "/pre-rolls", label: "Pre-Rolls" },
+      { href: "/blunts", label: "Blunts" },
       { href: "/vapes", label: "Vapes" },
     ],
   },
