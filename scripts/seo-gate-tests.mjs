@@ -1356,7 +1356,7 @@ for (const text of safeMetadataTexts) {
   );
 }
 
-const brandDefensePaths = ["/official-presidential", "/pre-rolls", "/blunts"];
+const brandDefensePaths = ["/official-presidential", "/blunts"];
 for (const routePath of brandDefensePaths) {
   const route = ROUTE_REGISTRY.find((record) => record.path === routePath);
   assert(route, `Brand-defense route missing from ROUTE_REGISTRY: ${routePath}`);
@@ -1366,6 +1366,13 @@ for (const routePath of brandDefensePaths) {
     `Brand-defense route ${routePath} must stay noindex while planning-only.`,
   );
 }
+
+const preRollsRoute = ROUTE_REGISTRY.find((record) => record.path === "/pre-rolls");
+assert(preRollsRoute, "Approved Pre-Rolls route missing from ROUTE_REGISTRY.");
+assertEqual(preRollsRoute.status, "approved", "Pre-Rolls must retain owner-approved status.");
+assertEqual(preRollsRoute.indexability, "index_follow", "Pre-Rolls must retain index-follow approval.");
+assertEqual(preRollsRoute.sitemap, "include", "Pre-Rolls must retain sitemap approval.");
+assertEqual(buildRouteRobots(preRollsRoute).index, true, "Pre-Rolls metadata must remain indexable after publication approval.");
 
 // ---------------------------------------------------------------------------
 // AUTH-2 (5521-FABL) approved-visible-claims registry regression tests.

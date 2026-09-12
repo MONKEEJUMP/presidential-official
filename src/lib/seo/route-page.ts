@@ -10,6 +10,7 @@ export const STATIC_ROUTE_SHELL_PATHS = [
   "/moon-pods",
   "/orbit",
   "/vapes",
+  "/pre-rolls",
   "/our-story",
   "/about",
   "/learn",
