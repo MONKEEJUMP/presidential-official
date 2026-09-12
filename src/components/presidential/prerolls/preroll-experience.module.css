@@ -157,6 +157,11 @@
   object-fit: cover;
 }
 
+.heroArtLink {
+  position: absolute;
+  inset: 0;
+}
+
 .selectedFrame img,
 .artCardImage img,
 .dialogImage img {
@@ -320,7 +325,7 @@
   margin-top: 54px;
 }
 
-.featuredMosaic button {
+.featuredMosaic > a {
   position: absolute;
   overflow: hidden;
   border: 0;
@@ -330,15 +335,15 @@
   transition: transform 200ms ease, outline-color 200ms ease;
 }
 
-.featuredMosaic button:hover,
-.featuredMosaic button:focus-visible {
+.featuredMosaic > a:hover,
+.featuredMosaic > a:focus-visible {
   z-index: 10;
   outline: 3px solid var(--pr-teal);
   outline-offset: 5px;
   transform: translateY(-8px);
 }
 
-.featuredMosaic button span {
+.featuredMosaic > a span {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -404,6 +409,7 @@
 
 .selectedFrame {
   position: relative;
+  display: block;
   overflow: hidden;
   width: 100%;
   aspect-ratio: 4 / 5;
@@ -615,7 +621,7 @@
   overflow: hidden;
   border: 0;
   background: #07100f;
-  cursor: zoom-in;
+  cursor: pointer;
   box-shadow: 0 22px 44px rgb(0 0 0 / 28%);
 }
 
@@ -876,7 +882,7 @@
   .featuredArt4 { top: 48%; right: 0; bottom: auto; left: auto; width: 47%; }
   .featuredArt5 { bottom: 0; left: 0; right: auto; width: 42%; }
   .featuredArt6 { right: 2%; width: 46%; }
-  .featuredMosaic button span { padding: 12px; font-size: 10px; }
+  .featuredMosaic > a span { padding: 12px; font-size: 10px; }
   .collection { padding: 84px 18px; }
   .collectionTitleRow { display: block; margin-bottom: 48px; }
   .collectionTitleRow h2 { font-size: 58px; }
@@ -913,7 +919,7 @@
 @media (prefers-reduced-motion: reduce) {
   .heroStack > div,
   .primaryAction,
-  .featuredMosaic button,
+  .featuredMosaic > a,
   .selectedFrame img {
     animation: none;
     scroll-behavior: auto;

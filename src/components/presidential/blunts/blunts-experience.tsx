@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect } from "react";
 
 import { BLUNT_ARTWORKS } from "@/content/blunts-catalog";
+import { productDetailPath } from "@/lib/products/product-paths";
 
 import shared from "@/components/presidential/prerolls/preroll-experience.module.css";
 import styles from "./blunts-experience.module.css";
@@ -21,10 +22,6 @@ function ArrowIcon({ direction }: { readonly direction: "left" | "right" }) {
 }
 
 export function BluntsExperience() {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  const selected = BLUNT_ARTWORKS[selectedIndex];
-
   useLayoutEffect(() => {
     if (window.location.hash) return;
     const previousRestoration = window.history.scrollRestoration;
@@ -39,26 +36,6 @@ export function BluntsExperience() {
       window.history.scrollRestoration = previousRestoration;
     };
   }, []);
-
-  const selectRelative = (offset: number) => {
-    setSelectedIndex((current) => (current + offset + BLUNT_ARTWORKS.length) % BLUNT_ARTWORKS.length);
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (dialogRef.current?.open) return;
-      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
-      if (event.key === "ArrowLeft") setSelectedIndex((current) => (current - 1 + BLUNT_ARTWORKS.length) % BLUNT_ARTWORKS.length);
-      if (event.key === "ArrowRight") setSelectedIndex((current) => (current + 1) % BLUNT_ARTWORKS.length);
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  const openInExplorer = (index: number) => {
-    setSelectedIndex(index);
-    document.querySelector("#collection")?.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
     <div className={shared.page}>
@@ -89,15 +66,14 @@ export function BluntsExperience() {
             </div>
             <figcaption className={styles.productRail}>
               {heroProductIds.map((id, position) => {
-                const index = BLUNT_ARTWORKS.findIndex((artwork) => artwork.id === id);
-                const artwork = BLUNT_ARTWORKS[index];
+                const artwork = BLUNT_ARTWORKS.find((candidate) => candidate.id === id);
                 if (!artwork) return null;
                 return (
-                  <button key={artwork.id} onClick={() => openInExplorer(index)} type="button">
+                  <Link href={productDetailPath("/blunts", artwork.id)} key={artwork.id}>
                     <span>{String(position + 1).padStart(2, "0")}</span>
                     <strong>{artwork.name}</strong>
                     <ArrowIcon direction="right" />
-                  </button>
+                  </Link>
                 );
               })}
             </figcaption>
@@ -107,7 +83,7 @@ export function BluntsExperience() {
       </section>
 
       <nav aria-label="Blunts page sections" className={shared.sectionNav}>
-        <a href="#story">The collection</a><a href="#collection">Explore blunts</a><a href="#art-index">Product details</a><a href="#find">Find a retailer</a>
+        <a href="#story">The collection</a><a href="#collection">Explore blunts</a><a href="#find">Find a retailer</a>
       </nav>
 
       <section aria-labelledby="blunts-story-heading" className={shared.story} id="story">
@@ -120,37 +96,20 @@ export function BluntsExperience() {
           {featuredIndexes.map((index, position) => {
             const artwork = BLUNT_ARTWORKS[index];
             return (
-              <button aria-label={`Explore ${artwork.name}, ${artwork.edition}`} className={shared[`featuredArt${position + 1}`]} key={artwork.id} onClick={() => openInExplorer(index)} type="button">
+              <Link aria-label={`View ${artwork.name} product page`} className={shared[`featuredArt${position + 1}`]} href={productDetailPath("/blunts", artwork.id)} key={artwork.id}>
                 <Image alt="" fill sizes="(max-width: 780px) 50vw, 28vw" src={artwork.src} /><span>{artwork.name}</span>
-              </button>
+              </Link>
             );
           })}
         </div>
       </section>
 
-      <section aria-labelledby="blunts-collection-heading" className={shared.collection} id="collection">
-        <div className={shared.collectionTitleRow}><h2 id="blunts-collection-heading">The complete <span>collection</span></h2><p>{BLUNT_ARTWORKS.length} selections.<br />Find your flavor.</p></div>
-        <div className={shared.explorer}>
-          <div className={shared.selectedFrame}><Image alt={selected.alt} fill key={selected.src} priority sizes="(max-width: 900px) 92vw, 44vw" src={selected.src} /></div>
-          <div aria-live="polite" className={shared.selectedCopy}>
-            <div className={shared.counterRow}><span>Selection <strong>{String(selectedIndex + 1).padStart(2, "0")}</strong> of {BLUNT_ARTWORKS.length}</span><div className={shared.arrowControls}><button aria-label="Previous product" onClick={() => selectRelative(-1)} type="button"><ArrowIcon direction="left" /></button><button aria-label="Next product" onClick={() => selectRelative(1)} type="button"><ArrowIcon direction="right" /></button></div></div>
-            <p className={shared.collectionName}>Presidential Moon Rock Blunts</p><h3>{selected.name}</h3><p className={shared.edition}>{selected.edition}</p><div className={shared.goldRule} /><p className={shared.description}>{selected.description}</p>
-            <button className={shared.fullSizeButton} onClick={() => dialogRef.current?.showModal()} type="button">View product <ArrowIcon direction="right" /></button>
-          </div>
-        </div>
-        <div aria-label="Choose a blunt" className={shared.filmstrip} role="list">
-          {BLUNT_ARTWORKS.map((artwork, index) => (
-            <button aria-current={index === selectedIndex ? "true" : undefined} aria-label={`${String(index + 1).padStart(2, "0")}: ${artwork.name}, ${artwork.edition}`} className={index === selectedIndex ? shared.thumbnailSelected : shared.thumbnail} key={artwork.id} onClick={() => setSelectedIndex(index)} role="listitem" type="button"><span className={shared.thumbnailImage}><Image alt="" fill sizes="92px" src={artwork.src} /></span><span>{String(index + 1).padStart(2, "0")}</span></button>
-          ))}
-        </div>
-      </section>
-
-      <section aria-labelledby="blunts-art-index-heading" className={shared.artIndex} id="art-index">
+      <section aria-labelledby="blunts-art-index-heading" className={shared.artIndex} id="collection">
         <div className={shared.indexIntro}><div><p>A closer look</p><h2 id="blunts-art-index-heading">Meet<br />the blunts.</h2></div><p>Compare the flavor, infusion, and ingredients in each Moon Rock blunt. Flavor and aroma vary by batch; your retailer can confirm the current selection.</p></div>
         <div className={shared.artGrid}>
           {BLUNT_ARTWORKS.map((artwork, index) => (
             <article className={artwork.shape === "square" ? shared.artCardSquare : shared.artCardPortrait} key={artwork.id}>
-              <button aria-label={`Open ${artwork.name} in the collection explorer`} className={shared.artCardImage} onClick={() => openInExplorer(index)} type="button"><Image alt={artwork.alt} fill sizes="(max-width: 700px) 92vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} /><span>{String(index + 1).padStart(2, "0")}</span></button>
+              <Link aria-label={`View ${artwork.name} product page`} className={shared.artCardImage} href={productDetailPath("/blunts", artwork.id)}><Image alt={artwork.alt} fill sizes="(max-width: 700px) 92vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} /><span>{String(index + 1).padStart(2, "0")}</span></Link>
               <div className={shared.artCardCopy}><p>Presidential Moon Rock Blunts</p><h3>{artwork.name}</h3><span>{artwork.edition}</span><p>{artwork.description}</p></div>
             </article>
           ))}
@@ -162,7 +121,6 @@ export function BluntsExperience() {
         <div className={shared.findMark}><span>Find your<br />Presidential.</span><Image alt="Presidential logo" height={291} src="/media/brand/presidential-crest-master.png" width={376} /></div>
       </section>
 
-      <dialog className={shared.dialog} ref={dialogRef}><button aria-label="Close product image" className={shared.dialogClose} onClick={() => dialogRef.current?.close()} type="button">Close</button><div className={shared.dialogImage}><Image alt={selected.alt} fill sizes="92vw" src={selected.src} /></div><p>{selected.name} · {selected.edition}</p></dialog>
     </div>
   );
 }
