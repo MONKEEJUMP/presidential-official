@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import {
   FEATURED_PRE_ROLL_ARTWORK_IDS,
@@ -36,6 +36,26 @@ export function PreRollExperience() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const selected = PRE_ROLL_ARTWORKS[selectedIndex];
+
+  useLayoutEffect(() => {
+    if (window.location.hash) return;
+
+    const previousRestoration = window.history.scrollRestoration;
+    const resetScroll = () => {
+      if (!window.location.hash) window.scrollTo(0, 0);
+    };
+
+    window.history.scrollRestoration = "manual";
+    resetScroll();
+    const frame = window.requestAnimationFrame(resetScroll);
+    window.addEventListener("pageshow", resetScroll);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("pageshow", resetScroll);
+      window.history.scrollRestoration = previousRestoration;
+    };
+  }, []);
 
   const selectRelative = (offset: number) => {
     setSelectedIndex((current) =>
