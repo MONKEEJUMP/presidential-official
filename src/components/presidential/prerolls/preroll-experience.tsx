@@ -87,10 +87,10 @@ export function PreRollExperience() {
               <span>Pre-Rolls</span>
             </nav>
             <h1 id="prerolls-heading">Pre-Rolls</h1>
-            <p className={styles.heroLead}>The complete Presidential graphic collection.</p>
+            <p className={styles.heroLead}>Infused flower. Distinct flavor. Ready rolled.</p>
             <div className={styles.heroActions}>
               <a className={styles.primaryAction} href="#collection">
-                Explore all 27 graphics <ArrowIcon direction="right" />
+                Explore the pre-rolls <ArrowIcon direction="right" />
               </a>
               <Link className={styles.textAction} href="/find-us">
                 Find a retailer
@@ -98,7 +98,7 @@ export function PreRollExperience() {
             </div>
           </div>
 
-          <div aria-label="Featured Presidential pre-roll graphics" className={styles.heroStack}>
+          <div aria-label="Featured Presidential Moon Rock pre-rolls" className={styles.heroStack}>
             {[24, 18, 0, 2, 23].map((index, stackIndex) => {
               const artwork = PRE_ROLL_ARTWORKS[index];
               return (
@@ -116,29 +116,29 @@ export function PreRollExperience() {
           </div>
         </div>
         <div className={styles.heroFoot}>
-          <span>One collection. Every perspective.</span>
-          <a href="#collection">Explore the graphics <span aria-hidden="true">↓</span></a>
+          <span>Flower. Concentrate. A Presidential finish.</span>
+          <a href="#collection">Explore the lineup <span aria-hidden="true">↓</span></a>
         </div>
       </section>
 
       <nav aria-label="Pre-roll page sections" className={styles.sectionNav}>
         <a href="#story">The collection</a>
-        <a href="#collection">Explore all 27</a>
-        <a href="#art-index">Read the art</a>
+        <a href="#collection">Explore pre-rolls</a>
+        <a href="#art-index">Product details</a>
         <a href="#find">Find a retailer</a>
       </nav>
 
       <section aria-labelledby="story-heading" className={styles.story} id="story">
         <div className={styles.storyHeading}>
           <p>The collection</p>
-          <h2 id="story-heading">Every graphic.<br /><span>Its own world.</span></h2>
+          <h2 id="story-heading">More in the roll.<br /><span>More to discover.</span></h2>
         </div>
         <div className={styles.storyCopy}>
           <p>
-            Presidential pre-roll artwork moves from tropical fruit and frozen color to city streets, midnight railways, and deep space. The package remains the center; the world around it changes completely.
+            Presidential Moon Rock pre-rolls combine cannabis flower with concentrate in a finished 1g roll. From berry and tropical selections to fuel, pine, and savory strains, the lineup gives you a flavor to make your own.
           </p>
           <p>
-            These descriptions focus on the supplied art and visible package identity. Product selection and availability vary by licensed retailer.
+            Explore distillate-and-kief recipes, live-resin-and-diamond infusions, and the live-rosin selections in Rose Gold. Compare ingredients and flavor profiles, then ask your licensed retailer for the pre-roll you want.
           </p>
         </div>
         <div className={styles.featuredMosaic}>
@@ -163,7 +163,7 @@ export function PreRollExperience() {
       <section aria-labelledby="collection-heading" className={styles.collection} id="collection">
         <div className={styles.collectionTitleRow}>
           <h2 id="collection-heading">The complete <span>collection</span></h2>
-          <p>27 artworks.<br />One high-impact archive.</p>
+          <p>Explore the recipes.<br />Find your flavor.</p>
         </div>
 
         <div className={styles.explorer}>
@@ -179,10 +179,10 @@ export function PreRollExperience() {
           </div>
           <div aria-live="polite" className={styles.selectedCopy}>
             <div className={styles.counterRow}>
-              <span>Artwork <strong>{String(selectedIndex + 1).padStart(2, "0")}</strong> of 27</span>
+              <span>Selection <strong>{String(selectedIndex + 1).padStart(2, "0")}</strong> of 27</span>
               <div className={styles.arrowControls}>
-                <button aria-label="Previous artwork" onClick={() => selectRelative(-1)} type="button"><ArrowIcon direction="left" /></button>
-                <button aria-label="Next artwork" onClick={() => selectRelative(1)} type="button"><ArrowIcon direction="right" /></button>
+                <button aria-label="Previous product" onClick={() => selectRelative(-1)} type="button"><ArrowIcon direction="left" /></button>
+                <button aria-label="Next product" onClick={() => selectRelative(1)} type="button"><ArrowIcon direction="right" /></button>
               </div>
             </div>
             <p className={styles.collectionName}>{selected.collection}</p>
@@ -191,12 +191,12 @@ export function PreRollExperience() {
             <div className={styles.goldRule} />
             <p className={styles.description}>{selected.description}</p>
             <button className={styles.fullSizeButton} onClick={() => dialogRef.current?.showModal()} type="button">
-              View full size <ArrowIcon direction="right" />
+              View product <ArrowIcon direction="right" />
             </button>
           </div>
         </div>
 
-        <div aria-label="Choose a pre-roll artwork" className={styles.filmstrip} role="list">
+        <div aria-label="Choose a pre-roll" className={styles.filmstrip} role="list">
           {PRE_ROLL_ARTWORKS.map((artwork, index) => (
             <button
               aria-current={index === selectedIndex ? "true" : undefined}
@@ -220,10 +220,10 @@ export function PreRollExperience() {
         <div className={styles.indexIntro}>
           <div>
             <p>A closer look</p>
-            <h2 id="art-index-heading">Read<br />the art.</h2>
+            <h2 id="art-index-heading">Meet<br />the pre-rolls.</h2>
           </div>
           <p>
-            Every supplied graphic appears below with its own visual description. Select any artwork to bring it into the full collection explorer.
+            Get to know the flavor, infusion, and ingredients in each Moon Rock pre-roll. Flavor and aroma vary by batch; your retailer can confirm the current selection.
           </p>
         </div>
         <div className={styles.artGrid}>
@@ -267,7 +267,7 @@ export function PreRollExperience() {
       </section>
 
       <dialog className={styles.dialog} ref={dialogRef}>
-        <button aria-label="Close full-size artwork" className={styles.dialogClose} onClick={() => dialogRef.current?.close()} type="button">Close</button>
+        <button aria-label="Close product image" className={styles.dialogClose} onClick={() => dialogRef.current?.close()} type="button">Close</button>
         <div className={styles.dialogImage}>
           <Image alt={selected.alt} fill sizes="92vw" src={selected.src} />
         </div>
