@@ -74,10 +74,10 @@
   margin: 0;
   color: #f7f8f7;
   font-family: var(--po-font-display);
-  font-size: clamp(88px, 7.5vw, 142px);
+  font-size: clamp(84px, 7.1vw, 134px);
   font-weight: 700;
-  line-height: 0.76;
-  letter-spacing: -0.078em;
+  line-height: 0.88;
+  letter-spacing: 0.025em;
   text-transform: uppercase;
 }
 

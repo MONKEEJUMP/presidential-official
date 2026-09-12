@@ -106,8 +106,8 @@
   font-family: var(--po-font-display);
   font-size: clamp(58px, 6.6vw, 112px);
   font-weight: 700;
-  line-height: 0.94;
-  letter-spacing: 0.015em;
+  line-height: 0.98;
+  letter-spacing: 0.025em;
   overflow-wrap: normal;
   text-transform: uppercase;
   word-break: normal;
@@ -271,8 +271,8 @@
   margin: 0;
   font-family: var(--po-font-display);
   font-size: clamp(42px, 4vw, 70px);
-  line-height: 0.92;
-  letter-spacing: -0.045em;
+  line-height: 1;
+  letter-spacing: 0.025em;
   text-transform: uppercase;
 }
 
