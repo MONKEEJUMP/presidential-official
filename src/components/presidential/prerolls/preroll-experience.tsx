@@ -11,11 +11,20 @@ import {
 
 import styles from "./preroll-experience.module.css";
 
-const featuredArtwork = FEATURED_PRE_ROLL_ARTWORK_IDS.map((id) => {
+function getArtwork(id: string) {
   const artwork = PRE_ROLL_ARTWORKS.find((candidate) => candidate.id === id);
   if (!artwork) throw new Error(`Missing featured pre-roll artwork: ${id}`);
   return artwork;
-});
+}
+
+const featuredArtwork = FEATURED_PRE_ROLL_ARTWORK_IDS.map(getArtwork);
+const heroArtwork = [
+  "cosmic-cookies",
+  "pink-cookies",
+  "cereal-milk-title",
+  "blue-dream",
+  "strawberry",
+].map(getArtwork);
 
 function ArrowIcon({ direction }: { readonly direction: "left" | "right" }) {
   return (
@@ -99,8 +108,7 @@ export function PreRollExperience() {
           </div>
 
           <div aria-label="Featured Presidential Moon Rock pre-rolls" className={styles.heroStack}>
-            {[24, 18, 0, 2, 23].map((index, stackIndex) => {
-              const artwork = PRE_ROLL_ARTWORKS[index];
+            {heroArtwork.map((artwork, stackIndex) => {
               return (
                 <div className={styles[`heroArt${stackIndex + 1}`]} key={artwork.id}>
                   <Image
@@ -179,7 +187,7 @@ export function PreRollExperience() {
           </div>
           <div aria-live="polite" className={styles.selectedCopy}>
             <div className={styles.counterRow}>
-              <span>Selection <strong>{String(selectedIndex + 1).padStart(2, "0")}</strong> of 27</span>
+              <span>Selection <strong>{String(selectedIndex + 1).padStart(2, "0")}</strong> of {PRE_ROLL_ARTWORKS.length}</span>
               <div className={styles.arrowControls}>
                 <button aria-label="Previous product" onClick={() => selectRelative(-1)} type="button"><ArrowIcon direction="left" /></button>
                 <button aria-label="Next product" onClick={() => selectRelative(1)} type="button"><ArrowIcon direction="right" /></button>
