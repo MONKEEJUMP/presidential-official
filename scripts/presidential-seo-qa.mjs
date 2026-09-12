@@ -2765,7 +2765,7 @@ function checkBrandDefenseRoutePlanning() {
   }
 
   const routesText = readProjectFile(routesPath);
-  const brandDefensePaths = ["/official-presidential", "/pre-rolls", "/blunts"];
+  const brandDefensePaths = ["/official-presidential", "/blunts"];
   const issues = [];
 
   for (const routePath of brandDefensePaths) {
@@ -2800,18 +2800,41 @@ function checkBrandDefenseRoutePlanning() {
     addResult(
       "PASS",
       "routes.brandDefense",
-      "Artifact 17 brand-defense routes are registered as planning-only records with conditional indexability, conditional sitemap, and non-empty blocks.",
+      "Unpublished Artifact 17 brand-defense routes remain planning-only with conditional indexability, conditional sitemap, and non-empty blocks.",
     );
-    return;
+  } else {
+    addResult(
+      "FAIL",
+      "routes.brandDefense",
+      "Brand-defense route planning records are missing or lost their gated posture.",
+      issues,
+      "Keep /official-presidential and /blunts gated until separately approved.",
+    );
   }
 
-  addResult(
-    "FAIL",
-    "routes.brandDefense",
-    "Brand-defense route planning records are missing or lost their gated posture.",
-    issues,
-    "Keep /official-presidential, /pre-rolls, and /blunts as gated planning-only registry records per artifact 17.",
-  );
+  const preRollsDefinition = getRouteDefinitionText(routesText, "/pre-rolls");
+  const preRollsApproved =
+    preRollsDefinition?.includes('status: "approved"') &&
+    preRollsDefinition.includes('indexability: "index_follow"') &&
+    preRollsDefinition.includes('sitemap: "include"') &&
+    preRollsDefinition.includes("blocks: []") &&
+    preRollsDefinition.includes("0912-001-PRE-ROLLS-DESIGN-SPEC.md");
+
+  if (preRollsApproved) {
+    addResult(
+      "PASS",
+      "routes.preRollsPublication",
+      "Pre-Rolls carries the September 12 owner approval, index-follow posture, sitemap inclusion, and zero unresolved route blockers.",
+    );
+  } else {
+    addResult(
+      "FAIL",
+      "routes.preRollsPublication",
+      "Pre-Rolls publication state is incomplete or missing its owner approval source.",
+      [],
+      "Keep the route approved only when the September 12 owner directive, indexability, sitemap, and zero-blocker posture remain together.",
+    );
+  }
 }
 
 function checkRouteRegistryPublicationGateLock() {

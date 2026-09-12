@@ -15,11 +15,26 @@ import type {
 } from "./types";
 
 const OWNER_APPROVAL_SOURCE_ID = "source-owner-7734-publication-approval";
+const PRE_ROLLS_APPROVAL_SOURCE_ID = "source-owner-0912-pre-rolls-publication-approval";
 const SHARED_BRAND_ASSET_ID = "asset-presidential-header-banner";
 const OWNER_APPROVAL_DATE = "2026-08-04";
 const isPartners = (route: {path:string}) => route.path === '/partners' || route.path.startsWith('/partners/');
-const approvalSource = (route: {path:string}) => isPartners(route) ? 'source-owner-0907-pres-kvrt-0010' : OWNER_APPROVAL_SOURCE_ID;
-const approvalDate = (route: {path:string}) => isPartners(route) ? '2026-09-07' : OWNER_APPROVAL_DATE;
+const isPreRolls = (route: {path:string}) => route.path === '/pre-rolls';
+const approvalSource = (route: {path:string}) => isPartners(route)
+  ? 'source-owner-0907-pres-kvrt-0010'
+  : isPreRolls(route)
+    ? PRE_ROLLS_APPROVAL_SOURCE_ID
+    : OWNER_APPROVAL_SOURCE_ID;
+const approvalDate = (route: {path:string}) => isPartners(route)
+  ? '2026-09-07'
+  : isPreRolls(route)
+    ? '2026-09-12'
+    : OWNER_APPROVAL_DATE;
+const approvalLocator = (route: {path:string}) => isPartners(route)
+  ? '0907-PRES-KVRT-0010 and owner count ruling, 2026-09-07'
+  : isPreRolls(route)
+    ? 'presidential-official-005 owner build, live-publication, navigation, indexing, and sitemap directive, 2026-09-12'
+    : '7734-SPUD owner directive dated 2026-08-04';
 
 function recordId(prefix: string, routeId: string): string {
   return `${prefix}-${routeId}`;
@@ -39,6 +54,21 @@ function proofId(routeId: string): string {
 
 export const APPROVED_PUBLICATION_SOURCE_RECORDS = [
   {sourceId:'source-owner-0907-pres-kvrt-0010',sourceName:'0907-PRES-KVRT-0010 owner publication ruling',sourceType:'client_provided',sourceLocator:'0907-PRES-KVRT-0010 and owner count ruling, 2026-09-07',allowedUsage:'production',confidentialityStatus:'public',publisherOrProvider:'PAULIEWOOD',confidenceScore:100,verifiedBy:'PAULIEWOOD',verifiedAt:'2026-09-07',notes:'Owner approved partners copy, staged logos, exclusions, production deployment, and indexing. Published headline totals intentionally differ from tile totals.'},
+  {
+    sourceId: PRE_ROLLS_APPROVAL_SOURCE_ID,
+    sourceName: "0912-001 owner Pre-Rolls publication approval",
+    sourceType: "client_provided",
+    sourceLocator:
+      "presidential-official-005 owner build and standing live-publication directive, 2026-09-12",
+    allowedUsage: "production",
+    confidentialityStatus: "public",
+    publisherOrProvider: "PAULIEWOOD",
+    confidenceScore: 100,
+    verifiedBy: "PAULIEWOOD",
+    verifiedAt: "2026-09-12",
+    notes:
+      "Owner supplied 27 Pre-Rolls graphics, approved their use on a new public page, and directed publication with menu, indexing, and sitemap integration.",
+  },
   {
     sourceId: OWNER_APPROVAL_SOURCE_ID,
     sourceName: "7734-SPUD owner publication and indexing approval",
@@ -153,7 +183,7 @@ export const APPROVED_PUBLICATION_PROOF_RECORDS =
       relatedRecordType: "route_publication",
       relatedRecordId: publicationId(route.id),
       evidenceType: "client_confirmation",
-      evidenceLocator: isPartners(route) ? '0907-PRES-KVRT-0010 and owner count ruling, 2026-09-07' : "7734-SPUD owner directive dated 2026-08-04",
+      evidenceLocator: approvalLocator(route),
       proofSummary:
         `PAULIEWOOD approved the current ${route.path} copy, metadata, compliance posture, and public indexing as owner, CTO, and legal authority.`,
       proofLevel: "client_confirmed",

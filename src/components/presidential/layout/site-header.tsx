@@ -14,6 +14,7 @@ const navigationGroups = [
     label: "Products",
     items: [
       { href: "/moon-rocks", label: "Moon Rocks" },
+      { href: "/pre-rolls", label: "Pre-Rolls" },
       { href: "/vapes", label: "Vapes" },
     ],
   },
