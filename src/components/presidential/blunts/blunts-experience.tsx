@@ -9,7 +9,7 @@ import { BLUNT_ARTWORKS } from "@/content/blunts-catalog";
 import shared from "@/components/presidential/prerolls/preroll-experience.module.css";
 import styles from "./blunts-experience.module.css";
 
-const heroIndexes = [18, 25, 8, 16, 0, 3, 21, 26] as const;
+const heroProductIds = ["blue-dream", "papaya-punch"] as const;
 const featuredIndexes = [8, 0, 3, 9, 21, 25] as const;
 
 function ArrowIcon({ direction }: { readonly direction: "left" | "right" }) {
@@ -62,32 +62,48 @@ export function BluntsExperience() {
 
   return (
     <div className={shared.page}>
-      <section aria-labelledby="blunts-heading" className={`${shared.hero} ${styles.hero}`}>
-        <div className={shared.heroAtmosphere} />
-        <div className={`${shared.heroInner} ${styles.heroInner}`}>
-          <div className={`${shared.heroCopy} ${styles.heroCopy}`}>
-            <nav aria-label="Breadcrumb" className={shared.breadcrumbs}>
+      <section aria-labelledby="blunts-heading" className={styles.hero}>
+        <div aria-hidden="true" className={styles.heroAtmosphere} />
+        <div className={styles.heroInner}>
+          <div className={styles.heroCopy}>
+            <nav aria-label="Breadcrumb" className={styles.breadcrumbs}>
               <Link href="/">Presidential</Link><span aria-hidden="true">/</span><span>Blunts</span>
             </nav>
             <h1 id="blunts-heading">Blunts</h1>
-            <p className={shared.heroLead}>Infused flower. Full flavor. Tobacco-free blunts.</p>
-            <div className={shared.heroActions}>
+            <p className={styles.heroLead}><span>Infused flower.</span><span>Full flavor.</span></p>
+            <p className={styles.heroDetail}>One 1.5g Moon Rock blunt, rolled in a tobacco-free wrap.</p>
+            <div className={styles.heroActions}>
               <a className={shared.primaryAction} href="#collection">Explore the blunts <ArrowIcon direction="right" /></a>
               <Link className={shared.textAction} href="/find-us">Find a retailer</Link>
             </div>
           </div>
-          <div aria-label="Featured Presidential Moon Rock blunts" className={styles.tunnel}>
-            {heroIndexes.map((index, panelIndex) => {
-              const artwork = BLUNT_ARTWORKS[index];
-              return (
-                <div className={styles[`tunnelPanel${panelIndex + 1}`]} key={artwork.id}>
-                  <Image alt={artwork.alt} fill priority={panelIndex < 6} sizes="(max-width: 780px) 38vw, 20vw" src={artwork.src} />
-                </div>
-              );
-            })}
-          </div>
+          <figure className={styles.heroVisual}>
+            <div className={styles.heroImage}>
+              <Image
+                alt="Presidential Blue Dream and Papaya Punch Moon Rock blunt packages with a tobacco-free blunt"
+                fill
+                priority
+                sizes="(max-width: 900px) 100vw, min(58vw, 820px)"
+                src="/media/blunts/hero-studio-v2.webp"
+              />
+            </div>
+            <figcaption className={styles.productRail}>
+              {heroProductIds.map((id, position) => {
+                const index = BLUNT_ARTWORKS.findIndex((artwork) => artwork.id === id);
+                const artwork = BLUNT_ARTWORKS[index];
+                if (!artwork) return null;
+                return (
+                  <button key={artwork.id} onClick={() => openInExplorer(index)} type="button">
+                    <span>{String(position + 1).padStart(2, "0")}</span>
+                    <strong>{artwork.name}</strong>
+                    <ArrowIcon direction="right" />
+                  </button>
+                );
+              })}
+            </figcaption>
+          </figure>
         </div>
-        <div className={shared.heroFoot}><span>Flower. Concentrate. A Presidential finish.</span><a href="#collection">Explore the lineup <span aria-hidden="true">↓</span></a></div>
+        <div className={styles.heroFoot}><span>Flower. Concentrate. A Presidential finish.</span><a href="#collection">36 selections <span aria-hidden="true">↓</span></a></div>
       </section>
 
       <nav aria-label="Blunts page sections" className={shared.sectionNav}>
