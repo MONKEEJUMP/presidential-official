@@ -484,25 +484,26 @@ export const ROUTE_REGISTRY = [
     priority: 4,
     changeFrequency: "monthly",
     canonicalPath: "/contact",
-    title: "Contact Presidential | Official Presidential Moon Rocks",
+    title: "Contact Presidential Sales | Wholesale & Retail Partnerships",
     description:
-      "Contact the official Presidential team for customer care, wholesale, press, or brand inquiries.",
-    h1: "Contact Presidential",
+      "Contact Presidential Sales for wholesale product orders, licensed retail partnerships, vendor opportunities, or help finding a retailer.",
+    h1: "Let's Talk Sales",
     keywords: [
       "presidential contact",
       "presidential cannabis contact",
       "wholesale presidential",
-      "presidential support",
+      "presidential sales",
+      "presidential retail partner",
     ],
     schema: ["ContactPage", "WebPage", "BreadcrumbList"],
     requiredData: ["company_entity", "official_contact_details", "seo_metadata"],
     requiredApprovals: ["official contact details approval", "content approval"],
     blocks: [],
-    linksTo: ["/find-us", "/our-story"],
+    linksTo: ["/find-us", "/pre-rolls", "/blunts", "/vapes"],
     sourceArtifact:
-      "04-route-seo-matrix.csv; 20-presidential-seo-doctrine.md",
+      "04-route-seo-matrix.csv; 20-presidential-seo-doctrine.md; owner-approved sales@presidentialmoonrocks.com contact direction, 2026-09-13",
     notes:
-      "Trust and contact route. Contact facts must be official before publication.",
+      "Official sales, wholesale-order, licensed-retailer, and vendor-partnership contact route.",
     isMandatory: true,
   },
   {
