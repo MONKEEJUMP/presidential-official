@@ -34,17 +34,35 @@ export default function WholesalePage() {
       <PageFrame className={styles.page}>
         <main>
           <section className={styles.hero} aria-labelledby="wholesale-heading">
+            <div aria-hidden="true" className={styles.heroMural}>
+              <div className={`${styles.heroMuralLayer} ${styles.heroMuralVape}`}><Image alt="" fill priority sizes="(max-width: 680px) 62vw, 45vw" src="/media/contact/collage/vape-teal-lro.webp" /></div>
+              <div className={`${styles.heroMuralLayer} ${styles.heroMuralGalactic}`}><Image alt="" fill priority sizes="24vw" src="/media/contact/collage/preroll-galactic-gas.webp" /></div>
+              <div className={`${styles.heroMuralLayer} ${styles.heroMuralBlueDream}`}><Image alt="" fill priority sizes="(max-width: 680px) 60vw, 25vw" src="/media/contact/collage/blunt-blue-dream.webp" /></div>
+              <div className={`${styles.heroMuralLayer} ${styles.heroMuralMain}`}><Image alt="" fill priority sizes="(max-width: 680px) 100vw, 40vw" src="/media/contact/collage/moonrock-whoasiwhoa.webp" /></div>
+              <div className={styles.heroMuralVeil} />
+              <div className={styles.heroMuralBottomFade} />
+            </div>
             <div className={styles.heroCopy}>
               <nav aria-label="Breadcrumb" className={styles.breadcrumbs}>
                 <Link href="/">Presidential</Link><span aria-hidden="true">/</span><span>Wholesale</span>
               </nav>
-              <h1 id="wholesale-heading">Wholesale<br /><span>ordering.</span></h1>
-              <p>For approved licensed Presidential wholesale customers.</p>
-              <a className={styles.emailLink} href={`mailto:${SALES_EMAIL}`}>{SALES_EMAIL}</a>
+              <h1 id="wholesale-heading">
+                <span className={styles.heroTitleLine}>Bring</span>
+                <span className={`${styles.heroTitleLine} ${styles.heroTitleAccent}`}>Presidential</span>
+                <span className={styles.heroTitleLine}>to your</span>
+                <span className={styles.heroTitleLine}>market.</span>
+              </h1>
+              <p className={styles.heroSupport}>Wholesale ordering and partnership applications for licensed retailers and distributors.</p>
+              <div className={styles.heroActions}>
+                <Link className={styles.heroPrimaryAction} href="/wholesale/apply">Apply to partner <ArrowIcon /></Link>
+                <a className={styles.heroEmailAction} href={`mailto:${SALES_EMAIL}`}>Email sales</a>
+              </div>
+              <p className={styles.heroExistingCue}>Existing customer? Choose your market below.</p>
             </div>
-            <div aria-hidden="true" className={styles.heroArt}>
-              <div className={styles.heroArtWide}><Image alt="" fill priority sizes="(max-width: 800px) 92vw, 46vw" src="/media/contact/collage/vape-teal-lro.webp" /></div>
-              <div className={styles.heroArtTall}><Image alt="" fill priority sizes="(max-width: 800px) 48vw, 22vw" src="/media/contact/collage/blunt-cosmic-cookie.webp" /></div>
+            <div className={styles.heroRail} aria-label="Presidential wholesale markets">
+              <span className={styles.heroRailCount}>7 licensed markets</span>
+              <span className={styles.heroRailStates}>AZ <i>·</i> CA <i>·</i> MI <i>·</i> NV <i>·</i> NY <i>·</i> OK <i>·</i> WA</span>
+              <span className={styles.heroRailPlatform}>LeafLink + Distru</span>
             </div>
           </section>
 
