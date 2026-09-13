@@ -389,9 +389,9 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
 
               <li className="po-primary-nav-item">
                 <Link
-                  aria-current={pathname === "/contact" ? "page" : undefined}
+                  aria-current={pathname === "/wholesale" || pathname.startsWith("/wholesale/") ? "page" : undefined}
                   className="po-primary-nav-link"
-                  href="/contact"
+                  href="/wholesale"
                   onClick={closeMenus}
                 >
                   Wholesale

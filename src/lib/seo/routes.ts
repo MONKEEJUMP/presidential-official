@@ -491,7 +491,6 @@ export const ROUTE_REGISTRY = [
     keywords: [
       "presidential contact",
       "presidential cannabis contact",
-      "wholesale presidential",
       "presidential sales",
       "presidential retail partner",
     ],
@@ -499,12 +498,50 @@ export const ROUTE_REGISTRY = [
     requiredData: ["company_entity", "official_contact_details", "seo_metadata"],
     requiredApprovals: ["official contact details approval", "content approval"],
     blocks: [],
-    linksTo: ["/find-us", "/pre-rolls", "/blunts", "/vapes"],
+    linksTo: [
+      "/wholesale",
+      "/find-us",
+      "/pre-rolls",
+      "/blunts",
+      "/vapes",
+    ],
     sourceArtifact:
       "04-route-seo-matrix.csv; 20-presidential-seo-doctrine.md; owner-approved sales@presidentialmoonrocks.com contact direction, 2026-09-13",
     notes:
       "Official sales, wholesale-order, licensed-retailer, and vendor-partnership contact route.",
     isMandatory: true,
+  },
+  {
+    id: "wholesale",
+    path: "/wholesale",
+    kind: "contact",
+    status: "approved",
+    indexability: "index_follow",
+    sitemap: "include",
+    priority: 4,
+    changeFrequency: "monthly",
+    canonicalPath: "/wholesale",
+    title: "Presidential Wholesale | Licensed Business Access",
+    description:
+      "Choose your market to access Presidential wholesale ordering as an approved licensed business, or apply to become a Presidential partner.",
+    h1: "Wholesale Ordering",
+    keywords: [
+      "presidential wholesale",
+      "presidential wholesale ordering",
+      "presidential retailer account",
+    ],
+    schema: ["WebPage", "BreadcrumbList"],
+    requiredData: ["company_entity", "official_contact_details", "seo_metadata"],
+    requiredApprovals: [
+      "owner wholesale publication approval",
+      "content approval",
+    ],
+    blocks: [],
+    linksTo: ["/wholesale/apply", "/find-us", "/contact"],
+    sourceArtifact:
+      "04-route-seo-matrix.csv; 05-keyword-intent-map.csv; 0913-PRES-KVRT-0014 owner authorization, 2026-09-13",
+    notes:
+      "Owner-approved wholesale access hub for licensed businesses, with market routing and a separate partner-application path.",
   },
   {
     id: "pop-up",
