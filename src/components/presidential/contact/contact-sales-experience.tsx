@@ -27,6 +27,20 @@ const partnershipMailto = salesMailto(
   "Business name:\nContact name:\nState / market:\nLicense type and number:\nCurrent locations or distribution footprint:\nProducts of interest:\n\nTell us about the opportunity:",
 );
 
+const heroCollage = [
+  { src: "/media/contact/collage/vape-teal-lro.webp", className: styles.collageVapeTeal },
+  { src: "/media/contact/collage/vape-silver-ld.webp", className: styles.collageVapeSilver },
+  { src: "/media/contact/collage/preroll-galactic-gas.webp", className: styles.collageGalacticGas },
+  { src: "/media/contact/collage/preroll-papaya-punch.webp", className: styles.collagePapayaPunch },
+  { src: "/media/contact/collage/single-mini-cherry-gelato.webp", className: styles.collageSingleMini },
+  { src: "/media/contact/collage/moonrock-whoasiwhoa.webp", className: styles.collageMoonRocks },
+  { src: "/media/contact/collage/mini-preroll-watermelon.webp", className: styles.collageMiniPreRoll },
+  { src: "/media/contact/collage/mini-blunt-orange-push-pop.webp", className: styles.collageMiniBlunt },
+  { src: "/media/contact/collage/blunt-nyc-diesel.webp", className: styles.collageNycDiesel },
+  { src: "/media/contact/collage/blunt-blue-dream.webp", className: styles.collageBlueDream },
+  { src: "/media/contact/collage/blunt-cosmic-cookie.webp", className: styles.collageCosmicCookie },
+] as const;
+
 const paths = [
   {
     number: "01",
@@ -58,6 +72,20 @@ export function ContactSalesExperience() {
   return (
     <div className={styles.page}>
       <section aria-labelledby="contact-sales-heading" className={styles.hero}>
+        <div aria-hidden="true" className={styles.heroCollage}>
+          {heroCollage.map((image, index) => (
+            <div className={`${styles.collageCard} ${image.className}`} key={image.src}>
+              <Image
+                alt=""
+                fill
+                priority={index < 4}
+                sizes="(max-width: 760px) 48vw, (max-width: 1200px) 34vw, 25vw"
+                src={image.src}
+              />
+            </div>
+          ))}
+        </div>
+        <div aria-hidden="true" className={styles.heroVeil} />
         <div aria-hidden="true" className={styles.heroAtmosphere} />
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
@@ -71,17 +99,6 @@ export function ContactSalesExperience() {
               <a className={styles.primaryAction} href={wholesaleMailto}>Start a wholesale order <ArrowIcon /></a>
               <Link className={styles.textAction} href="/find-us">Find a retailer</Link>
             </div>
-          </div>
-
-          <div className={styles.heroMedia}>
-            <Image
-              alt="Presidential Blue Dream and Papaya Punch Moon Rock blunt packages"
-              fill
-              priority
-              sizes="(max-width: 900px) 100vw, min(54vw, 820px)"
-              src="/media/blunts/hero-studio-v2.webp"
-            />
-            <div className={styles.heroMediaCaption}><span>Official sales</span><span>Retail · Wholesale · Partnerships</span></div>
           </div>
         </div>
         <a className={styles.heroFoot} href="#sales-paths"><span>Choose your path</span><span aria-hidden="true">↓</span></a>
