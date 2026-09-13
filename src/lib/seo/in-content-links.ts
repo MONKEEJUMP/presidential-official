@@ -36,6 +36,31 @@ export const HARDCODED_IN_CONTENT_LINKS = {
       context: "FLOWER · LIQUID LIVE RESIN · DIAMONDS on a third",
     },
     { href: "/", anchor: "retail", context: "the retail path" },
+    {
+      href: "/moon-rocks/presidential-x-thc-design",
+      anchor: "Presidential x THC Design",
+      context: "Presidential x THC Design is a collaboration name, not a strain classification",
+    },
+    {
+      href: "/moon-rocks/papaya-punch",
+      anchor: "Papaya Punch",
+      context: "Papaya Punch is one approved product in the Gold catalogue",
+    },
+    {
+      href: "/moon-rocks/cosmic-cookies",
+      anchor: "Cosmic Cookies",
+      context: "Cosmic Cookies is one approved product in the Rose Gold catalogue",
+    },
+    {
+      href: "/moon-rocks/presidential-og",
+      anchor: "Presidential OG",
+      context: "Presidential OG has its own product page within that same Gold series",
+    },
+    {
+      href: "/moon-rocks/sfv-og",
+      anchor: "SFV OG",
+      context: "SFV OG is documented separately so the product names remain distinct",
+    },
   ],
   "/learn/what-are-liquid-diamonds": [
     {

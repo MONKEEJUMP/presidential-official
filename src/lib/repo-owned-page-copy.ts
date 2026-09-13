@@ -58,7 +58,13 @@ The build does not change between them. Only the size and the count.
 
 **The catalogue, in three tiers**
 
-The Silver Flavour Series carries flavour-led releases. The Gold Strain Series carries named strains, including [XXX](/moon-rocks/xxx). The Rose Gold Connoisseur tier sits above both. Running across all three are the collaboration releases, each carrying a partner's mark printed on the front of the pack.
+The Silver Flavour Series carries flavour-led releases. The Gold Strain Series carries named strains. Papaya Punch is one approved product in the Gold catalogue.
+
+Presidential OG has its own product page within that same Gold series. SFV OG is documented separately so the product names remain distinct.
+
+The Rose Gold Connoisseur tier sits above both. Cosmic Cookies is one approved product in the Rose Gold catalogue.
+
+Collaboration releases run alongside the three tiers. Presidential x THC Design is a collaboration name, not a strain classification.
 
 **Where to find Presidential**
 
