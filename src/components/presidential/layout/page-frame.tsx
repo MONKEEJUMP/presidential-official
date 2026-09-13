@@ -2,6 +2,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
+import { ScrollToPageTop } from "./scroll-to-page-top";
 
 type PageFrameProps = {
   readonly children: ReactNode;
@@ -19,6 +20,7 @@ export function PageFrame({ children, className = "", ...mainProps }: PageFrameP
 
   return (
     <>
+      <ScrollToPageTop />
       <SiteHeader />
       <main {...mainProps} id="presidential-main" tabIndex={-1} className={classNames}>
         {children}
