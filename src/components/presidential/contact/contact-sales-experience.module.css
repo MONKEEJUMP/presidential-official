@@ -15,15 +15,158 @@
 .hero {
   position: relative;
   isolation: isolate;
-  min-height: min(860px, calc(100svh - 72px));
+  min-height: min(920px, calc(100svh - 72px));
   overflow: hidden;
   border-bottom: 1px solid var(--sales-gold);
-  background:
-    radial-gradient(circle at 72% 45%, rgb(22 105 92 / 34%), transparent 45%),
-    linear-gradient(108deg, #020504 0%, #06110f 54%, #03201c 100%);
+  background: #020605;
 }
 
-.heroAtmosphere,
+.heroCollage {
+  position: absolute;
+  z-index: -3;
+  inset: -5% -3% -7%;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 78% 45%, rgb(53 208 192 / 26%), transparent 42%),
+    #020706;
+}
+
+.collageCard {
+  position: absolute;
+  overflow: hidden;
+  border: 1px solid rgb(216 190 114 / 44%);
+  background: #07110f;
+  box-shadow: 0 28px 66px rgb(0 0 0 / 68%);
+  transform-origin: center;
+}
+
+.collageCard::after {
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgb(255 255 255 / 8%);
+  content: "";
+  pointer-events: none;
+}
+
+.collageCard img { object-fit: cover; }
+
+.collageVapeTeal {
+  z-index: 1;
+  top: -2%;
+  left: -5%;
+  width: 43%;
+  height: 44%;
+  transform: rotate(-4deg);
+}
+
+.collageVapeSilver {
+  z-index: 2;
+  bottom: -2%;
+  left: 4%;
+  width: 39%;
+  height: 42%;
+  transform: rotate(4.5deg);
+}
+
+.collageGalacticGas {
+  z-index: 4;
+  top: -10%;
+  left: 50%;
+  width: 21%;
+  height: 67%;
+  transform: rotate(-5deg);
+}
+
+.collagePapayaPunch {
+  z-index: 7;
+  top: -3%;
+  left: 64%;
+  width: 23%;
+  height: 72%;
+  transform: rotate(4deg);
+}
+
+.collageSingleMini {
+  z-index: 3;
+  top: 2%;
+  right: -3%;
+  width: 22%;
+  height: 54%;
+  transform: rotate(-4.5deg);
+}
+
+.collageMoonRocks {
+  z-index: 8;
+  right: 3%;
+  bottom: -5%;
+  width: 25%;
+  height: 56%;
+  transform: rotate(5deg);
+}
+
+.collageMiniPreRoll {
+  z-index: 9;
+  bottom: -11%;
+  left: 50%;
+  width: 20%;
+  height: 53%;
+  transform: rotate(-3deg);
+}
+
+.collageMiniBlunt {
+  z-index: 6;
+  bottom: -9%;
+  left: 35%;
+  width: 20%;
+  height: 51%;
+  transform: rotate(6deg);
+}
+
+.collageNycDiesel {
+  z-index: 5;
+  bottom: -10%;
+  left: 19%;
+  width: 20%;
+  height: 48%;
+  transform: rotate(-6deg);
+}
+
+.collageBlueDream {
+  z-index: 5;
+  top: 23%;
+  right: 12%;
+  width: 18%;
+  height: 54%;
+  transform: rotate(-3.5deg);
+}
+
+.collageCosmicCookie {
+  z-index: 10;
+  top: 17%;
+  left: 72%;
+  width: 21%;
+  height: 65%;
+  transform: rotate(2deg);
+}
+
+.heroVeil {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgb(1 5 4 / 96%) 0%, rgb(2 8 7 / 90%) 26%, rgb(2 10 8 / 64%) 54%, rgb(2 8 7 / 24%) 78%, rgb(1 5 4 / 38%) 100%),
+    linear-gradient(180deg, rgb(1 4 3 / 68%) 0%, transparent 30%, transparent 72%, rgb(1 5 4 / 84%) 100%);
+}
+
+.heroAtmosphere {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(circle at 68% 46%, transparent 0 30%, rgb(1 10 8 / 24%) 67%, rgb(1 5 4 / 68%) 100%),
+    linear-gradient(105deg, rgb(88 195 182 / 10%), transparent 34%);
+}
+
 .partnerAtmosphere {
   position: absolute;
   z-index: -1;
@@ -36,17 +179,21 @@
 }
 
 .heroInner {
-  display: grid;
-  grid-template-columns: minmax(430px, 0.88fr) minmax(540px, 1.12fr);
-  gap: clamp(42px, 6vw, 96px);
+  display: flex;
   align-items: center;
   width: min(1540px, calc(100% - 80px));
-  min-height: min(760px, calc(100svh - 142px));
+  min-height: min(820px, calc(100svh - 142px));
   margin: 0 auto;
-  padding: 38px 0 28px;
+  padding: 42px 0 34px;
 }
 
-.heroCopy { position: relative; z-index: 2; min-width: 0; }
+.heroCopy {
+  position: relative;
+  z-index: 2;
+  width: min(760px, 54vw);
+  min-width: 0;
+  text-shadow: 0 3px 26px rgb(0 0 0 / 82%);
+}
 
 .breadcrumbs {
   display: flex;
@@ -71,7 +218,7 @@
   font-size: clamp(74px, 6.7vw, 126px);
   font-weight: 700;
   line-height: 0.92;
-  letter-spacing: 0.025em;
+  letter-spacing: 0.035em;
   text-transform: uppercase;
 }
 
@@ -136,48 +283,9 @@
   font-size: 18px;
 }
 
-.heroMedia {
-  position: relative;
-  min-width: 0;
-  min-height: 650px;
-  overflow: hidden;
-  border: 1px solid rgb(216 190 114 / 26%);
-  background: #04251f;
-  box-shadow: 0 38px 90px rgb(0 0 0 / 44%);
-}
-
-.heroMedia::after {
-  position: absolute;
-  inset: 16px;
-  border: 1px solid rgb(255 255 255 / 8%);
-  content: "";
-  pointer-events: none;
-}
-
-.heroMedia img { object-fit: cover; }
-
-.heroMediaCaption {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 2;
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 18px 22px;
-  background: rgb(2 8 7 / 88%);
-  color: var(--sales-muted);
-  font-family: var(--po-font-display);
-  font-size: 9px;
-  font-weight: 650;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-
-.heroMediaCaption span:first-child { color: var(--sales-teal); }
-
 .heroFoot {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -361,11 +469,9 @@
 }
 
 @media (max-width: 1050px) {
-  .heroInner,
   .partner { grid-template-columns: 1fr; }
   .heroInner { padding-top: 48px; }
-  .heroCopy { max-width: 780px; }
-  .heroMedia { width: min(100%, 780px); min-height: 650px; }
+  .heroCopy { width: min(700px, 68vw); max-width: 700px; }
   .partnerCopy { max-width: 850px; }
   .productStage { width: min(100%, 850px); }
 }
@@ -374,16 +480,16 @@
   .heroInner,
   .heroFoot,
   .paths { width: calc(100% - 36px); }
-  .heroInner { display: flex; min-height: 0; padding: 30px 0 28px; flex-direction: column; }
+  .hero { min-height: 820px; }
+  .heroInner { display: flex; min-height: 755px; padding: 30px 0 28px; flex-direction: column; align-items: flex-start; justify-content: center; }
+  .heroCopy { width: 100%; max-width: 590px; }
   .breadcrumbs { margin-bottom: 34px; font-size: 9px; }
-  .hero h1 { font-size: clamp(58px, 17vw, 84px); line-height: 0.96; }
+  .hero h1 { font-size: clamp(55px, 16vw, 80px); line-height: 0.98; letter-spacing: 0.045em; }
   .heroLead { margin-top: 28px; font-size: 26px; }
   .emailLink { font-size: clamp(17px, 5.2vw, 22px); }
   .heroActions { align-items: stretch; gap: 20px; flex-direction: column; }
   .primaryAction { width: 100%; }
   .textAction { align-self: flex-start; }
-  .heroMedia { width: 100%; min-height: 430px; margin-top: 42px; }
-  .heroMediaCaption { align-items: flex-start; flex-direction: column; }
   .heroFoot { min-height: 62px; }
   .paths { padding: 82px 0 92px; }
   .pathsHeader { display: block; padding-bottom: 34px; }
@@ -399,6 +505,24 @@
   .partnerDetails { gap: 9px 13px; }
   .partnerDetails span + span::before { margin-right: 13px; }
   .productStage { width: 100%; min-height: 390px; margin-top: 34px; }
+
+  .heroCollage { inset: -3% -36% -4% -30%; }
+  .heroVeil {
+    background:
+      linear-gradient(90deg, rgb(1 5 4 / 94%) 0%, rgb(2 8 7 / 79%) 58%, rgb(1 5 4 / 55%) 100%),
+      linear-gradient(180deg, rgb(1 4 3 / 72%) 0%, rgb(1 5 4 / 16%) 38%, rgb(1 5 4 / 76%) 100%);
+  }
+  .collageVapeTeal { top: -1%; left: -4%; width: 54%; height: 31%; }
+  .collageVapeSilver { bottom: 0; left: 4%; width: 52%; height: 28%; }
+  .collageGalacticGas { top: 1%; left: 48%; width: 27%; height: 47%; }
+  .collagePapayaPunch { top: -4%; left: 70%; width: 28%; height: 52%; }
+  .collageSingleMini { top: 4%; right: -3%; width: 27%; height: 39%; }
+  .collageMoonRocks { right: 1%; bottom: -4%; width: 30%; height: 42%; }
+  .collageMiniPreRoll { bottom: -6%; left: 51%; width: 26%; height: 39%; }
+  .collageMiniBlunt { bottom: -6%; left: 29%; width: 26%; height: 38%; }
+  .collageNycDiesel { bottom: -6%; left: 9%; width: 25%; height: 36%; }
+  .collageBlueDream { top: 34%; right: 8%; width: 24%; height: 40%; }
+  .collageCosmicCookie { top: 29%; left: 63%; width: 28%; height: 48%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
