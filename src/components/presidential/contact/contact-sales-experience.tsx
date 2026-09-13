@@ -13,20 +13,6 @@ function ArrowIcon() {
   );
 }
 
-function salesMailto(subject: string, body: string): string {
-  return `mailto:${PRESIDENTIAL_SALES_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
-
-const wholesaleMailto = salesMailto(
-  "Presidential wholesale order inquiry",
-  "Business name:\nContact name:\nState / market:\nLicense type and number:\nProducts of interest:\nEstimated quantities:\nPreferred timeline:\n\nHow can the Presidential Sales team help?",
-);
-
-const partnershipMailto = salesMailto(
-  "Become a Presidential retail partner",
-  "Business name:\nContact name:\nState / market:\nLicense type and number:\nCurrent locations or distribution footprint:\nProducts of interest:\n\nTell us about the opportunity:",
-);
-
 const heroCollage = [
   { src: "/media/contact/collage/vape-teal-lro.webp", className: styles.collageVapeTeal },
   { src: "/media/contact/collage/vape-silver-ld.webp", className: styles.collageVapeSilver },
@@ -48,23 +34,20 @@ const paths = [
     body: "Shopping for yourself? Find a licensed retailer carrying Presidential near you.",
     href: "/find-us",
     cta: "Find a retailer",
-    external: false,
   },
   {
     number: "02",
     title: "Wholesale orders",
-    body: "Licensed retailer or distributor? Talk product selection, quantities, and next steps with Sales.",
-    href: wholesaleMailto,
-    cta: "Email Sales",
-    external: true,
+    body: "Already approved with Presidential? Choose your market and enter the right wholesale ordering platform.",
+    href: "/wholesale",
+    cta: "Open wholesale ordering",
   },
   {
     number: "03",
     title: "Become a Presidential partner",
-    body: "Bring Presidential to your market, shelves, and customers.",
-    href: partnershipMailto,
-    cta: "Start the conversation",
-    external: true,
+    body: "Apply as a licensed retailer, distributor, or market partner and connect directly with Sales.",
+    href: "/wholesale/apply",
+    cta: "Apply to partner",
   },
 ] as const;
 
@@ -96,7 +79,7 @@ export function ContactSalesExperience() {
             <p className={styles.heroLead}>Wholesale orders. Retail partnerships.<br />The official line to Presidential.</p>
             <a className={styles.emailLink} href={`mailto:${PRESIDENTIAL_SALES_EMAIL}`}>{PRESIDENTIAL_SALES_EMAIL}</a>
             <div className={styles.heroActions}>
-              <a className={styles.primaryAction} href={wholesaleMailto}>Start a wholesale order <ArrowIcon /></a>
+              <Link className={styles.primaryAction} href="/wholesale">Start a wholesale order <ArrowIcon /></Link>
               <Link className={styles.textAction} href="/find-us">Find a retailer</Link>
             </div>
           </div>
@@ -115,11 +98,7 @@ export function ContactSalesExperience() {
             <article className={styles.pathRow} key={path.number}>
               <span className={styles.pathNumber}>{path.number}</span>
               <div><h3>{path.title}</h3><p>{path.body}</p></div>
-              {path.external ? (
-                <a href={path.href}>{path.cta}<ArrowIcon /></a>
-              ) : (
-                <Link href={path.href}>{path.cta}<ArrowIcon /></Link>
-              )}
+              <Link href={path.href}>{path.cta}<ArrowIcon /></Link>
             </article>
           ))}
         </div>
@@ -135,7 +114,7 @@ export function ContactSalesExperience() {
           <div className={styles.partnerDetails}>
             <span>Retailers</span><span>Distributors</span><span>Market partners</span>
           </div>
-          <a className={styles.primaryAction} href={partnershipMailto}>Become a Presidential partner <ArrowIcon /></a>
+          <Link className={styles.primaryAction} href="/wholesale/apply">Become a Presidential partner <ArrowIcon /></Link>
         </div>
 
         <div aria-label="Presidential product families" className={styles.productStage}>
