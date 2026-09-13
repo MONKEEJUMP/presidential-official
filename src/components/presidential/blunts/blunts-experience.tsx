@@ -7,10 +7,10 @@ import { useLayoutEffect } from "react";
 import { BLUNT_ARTWORKS } from "@/content/blunts-catalog";
 import { productDetailPath } from "@/lib/products/product-paths";
 
+import { SiteVideo } from "@/components/presidential/media/site-video";
 import shared from "@/components/presidential/prerolls/preroll-experience.module.css";
 import styles from "./blunts-experience.module.css";
 
-const heroProductIds = ["blue-dream", "papaya-punch"] as const;
 const featuredIndexes = [8, 0, 3, 9, 21, 25] as const;
 
 function ArrowIcon({ direction }: { readonly direction: "left" | "right" }) {
@@ -55,28 +55,15 @@ export function BluntsExperience() {
             </div>
           </div>
           <figure className={styles.heroVisual}>
-            <div className={styles.heroImage}>
-              <Image
-                alt="Presidential Blue Dream and Papaya Punch Moon Rock blunt packages with a tobacco-free blunt"
-                fill
-                priority
-                sizes="(max-width: 900px) 100vw, min(58vw, 820px)"
-                src="/media/blunts/hero-studio-v2.webp"
+            <div className={styles.heroVideo}>
+              <SiteVideo
+                className={styles.heroVideoElement}
+                label="Presidential Moon Rock Blunt product film"
+                preload="metadata"
+                slug="moon-rock-blunt-hero"
               />
             </div>
-            <figcaption className={styles.productRail}>
-              {heroProductIds.map((id, position) => {
-                const artwork = BLUNT_ARTWORKS.find((candidate) => candidate.id === id);
-                if (!artwork) return null;
-                return (
-                  <Link href={productDetailPath("/blunts", artwork.id)} key={artwork.id}>
-                    <span>{String(position + 1).padStart(2, "0")}</span>
-                    <strong>{artwork.name}</strong>
-                    <ArrowIcon direction="right" />
-                  </Link>
-                );
-              })}
-            </figcaption>
+            <figcaption className={styles.filmCaption}><span>Presidential Moon Rock Blunts</span><span>30-second product film</span></figcaption>
           </figure>
         </div>
         <div className={styles.heroFoot}><span>Flower. Concentrate. A Presidential finish.</span><a href="#collection">{BLUNT_ARTWORKS.length} selections <span aria-hidden="true">↓</span></a></div>
