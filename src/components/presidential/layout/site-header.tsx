@@ -387,6 +387,17 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
                 </Link>
               </li>
 
+              <li className="po-primary-nav-item">
+                <Link
+                  aria-current={pathname === "/contact" ? "page" : undefined}
+                  className="po-primary-nav-link"
+                  href="/contact"
+                  onClick={closeMenus}
+                >
+                  Wholesale
+                </Link>
+              </li>
+
               <li className="po-primary-nav-item group-data-[desktop=true]/header:ml-3">
                 <Link
                   className="po-header-store-link"
@@ -408,6 +419,7 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
             ))}
             <li><span className="po-primary-nav-link">{PARTNERS_LABEL}</span></li>
             <li className="ml-1"><span className="po-primary-nav-link">Login</span></li>
+            <li><span className="po-primary-nav-link">Wholesale</span></li>
             <li className="ml-3"><span className="po-header-store-link">Find a Store</span></li>
           </ul>
         </div>
