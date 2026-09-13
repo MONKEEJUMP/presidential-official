@@ -9,6 +9,7 @@ import { useAdultVideoPlayback } from "@/lib/browser/adult-video-playback";
 
 export type SiteVideoSlug =
   | "moon-rocks-film"
+  | "moon-rock-blunt-hero"
   | "nationwide-map"
   | "flavor-blunts"
   | "strains-horizontal"
