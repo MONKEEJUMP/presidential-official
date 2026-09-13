@@ -26,6 +26,7 @@ const APPROVED_PUBLIC_STATIC_ROUTE_IDS = [
   "learn",
   "find-us",
   "contact",
+  "wholesale",
   "pop-up",
 ] as const;
 
@@ -268,7 +269,7 @@ export const APPROVED_PUBLIC_SEO_ROUTES = [
   ...APPROVED_PUBLIC_STATE_ROUTES,
 ] as const satisfies readonly SeoRouteRecord[];
 
-export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 91 as const;
+export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 92 as const;
 
 if (APPROVED_PUBLIC_SEO_ROUTES.length !== APPROVED_PUBLIC_SEO_ROUTE_COUNT) {
   throw new Error(

@@ -17,32 +17,40 @@ import type {
 const OWNER_APPROVAL_SOURCE_ID = "source-owner-7734-publication-approval";
 const PRE_ROLLS_APPROVAL_SOURCE_ID = "source-owner-0912-pre-rolls-publication-approval";
 const BLUNTS_APPROVAL_SOURCE_ID = "source-owner-0912-blunts-publication-approval";
+const WHOLESALE_APPROVAL_SOURCE_ID = "source-owner-0913-pres-kvrt-0014-wholesale-publication-approval";
 const SHARED_BRAND_ASSET_ID = "asset-presidential-header-banner";
 const OWNER_APPROVAL_DATE = "2026-08-04";
 const isPartners = (route: {path:string}) => route.path === '/partners' || route.path.startsWith('/partners/');
 const isPreRolls = (route: {path:string}) => route.path === '/pre-rolls';
 const isBlunts = (route: {path:string}) => route.path === '/blunts';
+const isWholesale = (route: {path:string}) => route.path === '/wholesale';
 const approvalSource = (route: {path:string}) => isPartners(route)
   ? 'source-owner-0907-pres-kvrt-0010'
   : isPreRolls(route)
     ? PRE_ROLLS_APPROVAL_SOURCE_ID
     : isBlunts(route)
       ? BLUNTS_APPROVAL_SOURCE_ID
-      : OWNER_APPROVAL_SOURCE_ID;
+      : isWholesale(route)
+        ? WHOLESALE_APPROVAL_SOURCE_ID
+        : OWNER_APPROVAL_SOURCE_ID;
 const approvalDate = (route: {path:string}) => isPartners(route)
   ? '2026-09-07'
   : isPreRolls(route)
     ? '2026-09-12'
     : isBlunts(route)
       ? '2026-09-12'
-      : OWNER_APPROVAL_DATE;
+      : isWholesale(route)
+        ? '2026-09-13'
+        : OWNER_APPROVAL_DATE;
 const approvalLocator = (route: {path:string}) => isPartners(route)
   ? '0907-PRES-KVRT-0010 and owner count ruling, 2026-09-07'
   : isPreRolls(route)
     ? 'presidential-official-005 owner build, live-publication, navigation, indexing, and sitemap directive, 2026-09-12'
     : isBlunts(route)
       ? 'presidential-official-005 owner Blunts build and standing live-publication directive, 2026-09-12'
-      : '7734-SPUD owner directive dated 2026-08-04';
+      : isWholesale(route)
+        ? '0913-PRES-KVRT-0014 owner wholesale build, production publication, indexing, and sitemap authorization, 2026-09-13'
+        : '7734-SPUD owner directive dated 2026-08-04';
 
 function recordId(prefix: string, routeId: string): string {
   return `${prefix}-${routeId}`;
@@ -91,6 +99,21 @@ export const APPROVED_PUBLICATION_SOURCE_RECORDS = [
     verifiedAt: "2026-09-12",
     notes:
       "Owner supplied 42 Blunts files and directed one selected artwork per product after removing five duplicate treatments and one exact Crescendo duplicate, leaving 36 displayed graphics with Products-menu, footer, indexing, and sitemap integration.",
+  },
+  {
+    sourceId: WHOLESALE_APPROVAL_SOURCE_ID,
+    sourceName: "0913-PRES-KVRT-0014 owner Wholesale publication approval",
+    sourceType: "client_provided",
+    sourceLocator:
+      "0913-PRES-KVRT-0014 owner wholesale build, production publication, indexing, and sitemap authorization, 2026-09-13",
+    allowedUsage: "production",
+    confidentialityStatus: "public",
+    publisherOrProvider: "PAULIEWOOD",
+    confidenceScore: 100,
+    verifiedBy: "PAULIEWOOD",
+    verifiedAt: "2026-09-13",
+    notes:
+      "The owner approved /wholesale as the public canonical hub for licensed-business market routing and assigned it the primary presidential wholesale keyword.",
   },
   {
     sourceId: OWNER_APPROVAL_SOURCE_ID,
