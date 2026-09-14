@@ -84,7 +84,33 @@ function buildCanonicalHostRedirect(request: NextRequest): NextResponse | null {
   return NextResponse.redirect(url, 308);
 }
 
+function buildWholesaleApplyQueryRedirect(request: NextRequest): NextResponse | null {
+  if (request.nextUrl.pathname !== "/wholesale/apply") {
+    return null;
+  }
+
+  const hasPublicQuery = Array.from(request.nextUrl.searchParams.keys()).some(
+    (key) => key !== "_rsc",
+  );
+  const hasEmptyQueryMarker = request.url.endsWith("?");
+
+  if (!hasPublicQuery && !hasEmptyQueryMarker) {
+    return null;
+  }
+
+  return NextResponse.redirect(
+    new URL(`https://${canonicalHostname}/wholesale/apply`),
+    301,
+  );
+}
+
 export function proxy(request: NextRequest) {
+  const wholesaleApplyQueryRedirect = buildWholesaleApplyQueryRedirect(request);
+
+  if (wholesaleApplyQueryRedirect) {
+    return wholesaleApplyQueryRedirect;
+  }
+
   const canonicalRedirect = buildCanonicalHostRedirect(request);
 
   if (canonicalRedirect) {

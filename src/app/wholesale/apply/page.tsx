@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { PageFrame } from "@/components/presidential/layout/page-frame";
-import { getWholesaleMarket } from "@/lib/wholesale/market-ordering";
-import type { WholesaleRequestType } from "@/lib/wholesale/inquiry";
 
 import styles from "../wholesale.module.css";
 import { WholesaleApplicationForm } from "./wholesale-application-form";
@@ -15,17 +13,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-type ApplyPageProps = Readonly<{
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}>;
-
-export default async function WholesaleApplyPage({ searchParams }: ApplyPageProps) {
-  const params = await searchParams;
-  const request = typeof params.request === "string" ? params.request : "";
-  const state = typeof params.state === "string" ? params.state.toUpperCase() : "";
-  const initialRequestType: WholesaleRequestType | undefined = request === "ordering-access" ? request : undefined;
-  const initialState = getWholesaleMarket(state)?.code;
-
+export default function WholesaleApplyPage() {
   return (
     <PageFrame className={styles.page}>
       <main className={styles.applicationPage}>
@@ -45,7 +33,7 @@ export default async function WholesaleApplyPage({ searchParams }: ApplyPageProp
             <p>For licensed retailers, distributors, operators, and existing accounts requesting ordering access.</p>
             <a href="mailto:sales@presidentialmoonrocks.com">sales@presidentialmoonrocks.com</a>
           </div>
-          <WholesaleApplicationForm initialRequestType={initialRequestType} initialState={initialState} />
+          <WholesaleApplicationForm />
         </section>
       </main>
     </PageFrame>
