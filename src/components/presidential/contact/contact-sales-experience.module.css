@@ -171,11 +171,10 @@
   position: absolute;
   z-index: -1;
   inset: 0;
-  background-image:
-    linear-gradient(rgb(255 255 255 / 2%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 2%) 1px, transparent 1px);
-  background-size: 88px 88px;
-  mask-image: linear-gradient(90deg, transparent, #000 45%, transparent);
+  background:
+    radial-gradient(circle at 73% 46%, rgb(35 174 153 / 22%), transparent 31%),
+    radial-gradient(circle at 90% 78%, rgb(216 190 114 / 11%), transparent 24%),
+    linear-gradient(112deg, #020706 0%, #04110e 52%, #06251f 100%);
 }
 
 .heroInner {
@@ -388,21 +387,20 @@
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-columns: minmax(460px, 0.9fr) minmax(560px, 1.1fr);
-  gap: clamp(50px, 7vw, 112px);
+  grid-template-columns: minmax(520px, 0.92fr) minmax(640px, 1.08fr);
+  gap: clamp(44px, 5vw, 84px);
   align-items: center;
-  min-height: 760px;
-  padding: 112px max(40px, calc((100vw - 1480px) / 2));
+  min-height: min(900px, calc(100svh - 72px));
+  padding: 84px max(40px, calc((100vw - 1480px) / 2)) 124px;
+  overflow: hidden;
   border-top: 1px solid var(--sales-teal);
-  background:
-    radial-gradient(circle at 75% 54%, rgb(35 132 115 / 25%), transparent 38%),
-    #06251f;
+  background: #020706;
 }
 
-.partnerCopy { min-width: 0; }
+.partnerCopy { position: relative; z-index: 4; min-width: 0; }
 
 .partnerCopy > p:first-child {
-  margin: 0 0 28px;
+  margin: 0 0 26px;
   color: var(--sales-gold);
   font-family: var(--po-font-display);
   font-size: 11px;
@@ -411,10 +409,10 @@
   text-transform: uppercase;
 }
 
-.partner h2 { max-width: 780px; font-size: clamp(58px, 6vw, 102px); line-height: 0.94; }
+.partner h2 { max-width: 760px; font-size: clamp(62px, 5vw, 86px); line-height: 0.92; letter-spacing: 0.035em; }
 .partner h2 span { display: block; color: var(--sales-teal); }
 
-.partnerLead { max-width: 660px; margin: 34px 0 0; color: var(--sales-muted); font-size: 19px; line-height: 1.65; }
+.partnerLead { max-width: 640px; margin: 34px 0 0; color: var(--sales-muted); font-size: 20px; line-height: 1.5; }
 
 .partnerEmail {
   display: block;
@@ -429,51 +427,78 @@
   overflow-wrap: anywhere;
 }
 
-.partnerDetails { display: flex; flex-wrap: wrap; gap: 10px 30px; margin: 18px 0 34px; color: var(--sales-muted); font-family: var(--po-font-display); font-size: 9px; font-weight: 650; letter-spacing: 0.15em; text-transform: uppercase; }
-.partnerDetails span + span::before { margin-right: 30px; color: var(--sales-gold); content: "/"; }
+.partner .primaryAction { margin-top: 42px; }
 
 .productStage {
   position: relative;
+  z-index: 2;
   min-width: 0;
-  min-height: 520px;
-  border-bottom: 1px solid var(--sales-gold);
+  min-height: 680px;
 }
 
-.productStage > div:not(.productLegend) {
+.productStage::before,
+.productStage::after {
   position: absolute;
-  overflow: hidden;
-  border: 1px solid rgb(216 190 114 / 32%);
-  background: #03110e;
-  box-shadow: 0 32px 70px rgb(0 0 0 / 42%);
+  z-index: 0;
+  border: 1px solid rgb(88 195 182 / 24%);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.productStage::before { inset: 11% 1% 14% 4%; }
+
+.productStage::after {
+  inset: 23% 11% 24% 16%;
+  border-color: rgb(216 190 114 / 28%);
+}
+
+.productStage > div {
+  position: absolute;
+  z-index: 1;
+  filter: drop-shadow(0 28px 28px rgb(0 0 0 / 52%));
+  transform-origin: center bottom;
 }
 
 .productStage img { object-fit: contain; }
-.productPreRoll { top: 7%; left: 0; width: 31%; aspect-ratio: 3 / 4; }
-.productBlunt { top: 0; left: 34.5%; width: 32%; aspect-ratio: 3 / 4; }
-.productMoonRocks { top: 7%; right: 0; width: 30%; aspect-ratio: 3 / 4; }
 
-.productLegend {
+.productOrbit { top: -1%; left: 46%; width: 36%; aspect-ratio: 395 / 657; transform: rotate(5deg); opacity: 0.92; }
+.productPapaya { top: 14%; left: 10%; width: 28%; aspect-ratio: 436 / 1192; transform: rotate(-5deg); }
+.productCereal { top: 8%; right: 2%; width: 27%; aspect-ratio: 508 / 1428; transform: rotate(4deg); }
+.productWatermelon { bottom: 2%; left: 0; width: 22%; aspect-ratio: 552 / 1128; transform: rotate(-7deg); }
+.productMoonRocks { z-index: 3 !important; bottom: 2%; left: 34%; width: 44%; aspect-ratio: 748 / 1068; }
+
+.partnerRail {
   position: absolute;
+  z-index: 6;
   right: 0;
   bottom: 0;
   left: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  min-height: 60px;
+  padding: 0 max(40px, calc((100vw - 1480px) / 2));
+  border-top: 1px solid var(--sales-gold);
+  background: rgb(2 7 6 / 96%);
   color: var(--sales-muted);
   font-family: var(--po-font-display);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 650;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-align: center;
   text-transform: uppercase;
 }
 
+.partnerRail span:first-child { color: var(--sales-gold); text-align: left; }
+.partnerRail span:last-child { text-align: right; }
+
 @media (max-width: 1050px) {
-  .partner { grid-template-columns: 1fr; }
+  .partner { grid-template-columns: 1fr; min-height: 0; padding-top: 92px; }
   .heroInner { padding-top: 48px; }
   .heroCopy { width: min(700px, 68vw); max-width: 700px; }
   .partnerCopy { max-width: 850px; }
-  .productStage { width: min(100%, 850px); }
+  .productStage { width: min(100%, 850px); min-height: 650px; margin-top: 26px; }
 }
 
 @media (max-width: 760px) {
@@ -498,13 +523,22 @@
   .pathRow { grid-template-columns: 52px 1fr; gap: 18px; padding: 32px 0; }
   .pathRow > a { grid-column: 2; min-height: 52px; padding: 0; border-left: 0; }
   .pathRow p { font-size: 16px; }
-  .partner { display: flex; min-height: 0; padding: 82px 18px 96px; flex-direction: column; }
-  .partner h2 { font-size: clamp(52px, 15vw, 76px); line-height: 0.98; }
-  .partnerLead { font-size: 17px; }
-  .partnerEmail { font-size: 19px; }
-  .partnerDetails { gap: 9px 13px; }
-  .partnerDetails span + span::before { margin-right: 13px; }
-  .productStage { width: 100%; min-height: 390px; margin-top: 34px; }
+  .partner { display: flex; min-height: 0; padding: 72px 18px 108px; flex-direction: column; align-items: stretch; }
+  .partnerCopy { width: 100%; }
+  .partnerCopy > p:first-child { margin-bottom: 24px; font-size: 9px; }
+  .partner h2 { font-size: clamp(38px, 10.8vw, 44px); line-height: 0.95; letter-spacing: 0.035em; }
+  .partnerLead { margin-top: 26px; font-size: 16px; line-height: 1.45; }
+  .partnerEmail { margin-top: 24px; font-size: clamp(16px, 5vw, 19px); }
+  .partner .primaryAction { margin-top: 32px; }
+  .productStage { width: 100%; min-height: 500px; margin-top: 40px; }
+  .productStage::before { inset: 12% -8% 12% -8%; }
+  .productStage::after { inset: 26% 2% 21%; }
+  .productOrbit { top: 0; left: 48%; width: 36%; }
+  .productPapaya { top: 16%; left: -5%; width: 32%; }
+  .productCereal { top: 12%; right: -5%; width: 31%; }
+  .productWatermelon { bottom: 4%; left: 5%; width: 23%; }
+  .productMoonRocks { bottom: 3%; left: 22%; width: 58%; }
+  .partnerRail { min-height: 60px; padding-inline: 18px; font-size: 7.5px; letter-spacing: 0.11em; }
 
   .heroCollage { inset: -3% -36% -4% -30%; }
   .heroVeil {
