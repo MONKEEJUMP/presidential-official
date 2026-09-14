@@ -111,23 +111,29 @@ export function ContactSalesExperience() {
           <h2 id="partner-heading">Put Presidential <span>on your shelves.</span></h2>
           <p className={styles.partnerLead}>Tell us your business name, state, license type, products of interest, and estimated quantities.</p>
           <a className={styles.partnerEmail} href={`mailto:${PRESIDENTIAL_SALES_EMAIL}`}>{PRESIDENTIAL_SALES_EMAIL}</a>
-          <div className={styles.partnerDetails}>
-            <span>Retailers</span><span>Distributors</span><span>Market partners</span>
-          </div>
           <Link className={styles.primaryAction} href="/wholesale/apply">Become a Presidential partner <ArrowIcon /></Link>
         </div>
 
         <div aria-label="Presidential product families" className={styles.productStage}>
-          <div className={styles.productPreRoll}>
-            <Image alt="Presidential Cereal Milk Moon Rock pre-roll" fill sizes="(max-width: 800px) 42vw, 19vw" src="/media/pre-rolls/cereal-milk-title.webp" />
+          <div className={styles.productOrbit}>
+            <Image alt="Teal Presidential Orbit device" fill sizes="(max-width: 760px) 38vw, 18vw" src="/media/vapes/showroom/hero-teal.webp" />
           </div>
-          <div className={styles.productBlunt}>
-            <Image alt="Presidential Blue Dream Moon Rock blunt" fill sizes="(max-width: 800px) 42vw, 19vw" src="/media/blunts/blue-dream.webp" />
+          <div className={styles.productPapaya}>
+            <Image alt="Presidential Papaya Punch Moon Rock blunt package" fill sizes="(max-width: 760px) 32vw, 15vw" src="/media/contact/partner-cutouts/papaya-punch-blunt-package-cutout.webp" />
+          </div>
+          <div className={styles.productCereal}>
+            <Image alt="Presidential Cereal Milk Moon Rock pre-roll package" fill sizes="(max-width: 760px) 31vw, 15vw" src="/media/contact/partner-cutouts/cereal-milk-preroll-package-cutout.webp" />
+          </div>
+          <div className={styles.productWatermelon}>
+            <Image alt="Presidential Watermelon Moon Rock Mini Pre-Rolls package" fill sizes="(max-width: 760px) 24vw, 12vw" src="/media/contact/partner-cutouts/watermelon-mini-prerolls-package-cutout.webp" />
           </div>
           <div className={styles.productMoonRocks}>
-            <Image alt="Presidential classic Moon Rocks product graphic" fill sizes="(max-width: 800px) 42vw, 19vw" src="/media/moonrock-presidential.jpg" />
+            <Image alt="Presidential Whoa Si Whoa Moon Rocks package" fill sizes="(max-width: 760px) 58vw, 23vw" src="/media/contact/partner-cutouts/whoa-si-whoa-moon-rocks-package-cutout.webp" />
           </div>
-          <div className={styles.productLegend}><span>Pre-Rolls</span><span>Blunts</span><span>Moon Rocks</span></div>
+        </div>
+
+        <div aria-label="Presidential partner types" className={styles.partnerRail}>
+          <span>Retailers</span><span>Distributors</span><span>Market partners</span>
         </div>
       </section>
     </div>
