@@ -39,17 +39,9 @@ export function getWholesaleDestination(market: WholesaleMarket) {
     } as const;
   }
 
-  if (market.distruMenuUrl) {
-    return {
-      cta: "Open Distru",
-      external: true,
-      href: market.distruMenuUrl,
-    } as const;
-  }
-
   return {
-    cta: "Request ordering access",
-    external: false,
-    href: `/wholesale/apply?request=ordering-access&state=${market.code}`,
+    cta: "Open Distru",
+    external: true,
+    href: market.distruMenuUrl ?? DISTRU_LOGIN_URL,
   } as const;
 }
