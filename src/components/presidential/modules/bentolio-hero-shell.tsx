@@ -11,6 +11,7 @@ import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 import { CrestSpinningVideo } from "../media/crest-spinning-video";
 import { SiteVideo } from "../media/site-video";
+import { CtaLink } from "../primitives/cta-link";
 import { FindPresidentialScrollTile } from "./find-presidential-scroll-tile";
 import { GemTicker } from "./gem-ticker";
 import {
@@ -58,11 +59,40 @@ async function readHeroCatalogItems(): Promise<readonly SanityCatalogItem[]> {
 export function HomepageSpinningCrestFold() {
   return (
     <section
-      aria-label="Presidential crest"
-      className="po-home-canvas-surface flex w-full items-center px-6 py-3 sm:px-10 lg:px-16"
+      aria-label="Welcome to Presidential"
+      className="po-home-canvas-surface w-full px-6 py-10 sm:px-10 lg:px-16 lg:py-8"
     >
-      <div className="po-teal-pinstripe relative mx-auto aspect-square w-full max-w-[min(800px,calc(100svh-7.5rem))] overflow-hidden rounded-[20px] bg-[#0D0D0D]">
-        <CrestSpinningVideo />
+      <div className="mx-auto grid w-full max-w-[1392px] items-center gap-10 lg:min-h-[min(780px,calc(100svh-7.5rem))] lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,0.75fr)] lg:gap-16">
+        <div className="max-w-[720px]">
+          <p className="font-display text-[clamp(2.4rem,10.5vw,4.75rem)] font-bold uppercase leading-[0.92] tracking-[0.035em] text-po-on-dark">
+            Welcome to
+            <span className="mt-2 block text-po-brand">Presidential.</span>
+          </p>
+          <p className="mt-7 max-w-xl text-lg leading-8 text-po-on-dark-muted sm:text-xl">
+            Explore the collection, understand what&apos;s on the package, and
+            find a licensed retailer near you.
+          </p>
+          <div className="mt-9 flex flex-col gap-4 sm:flex-row">
+            <CtaLink
+              className="min-h-[58px] w-full px-6 font-display text-xs uppercase tracking-[0.08em] sm:w-auto"
+              href="/moon-rocks"
+              variant="primary"
+            >
+              Explore Moon Rocks
+            </CtaLink>
+            <CtaLink
+              className="min-h-[58px] w-full px-6 font-display text-xs uppercase tracking-[0.08em] sm:w-auto"
+              href="/find-us"
+              variant="contrast"
+            >
+              Find a retailer
+            </CtaLink>
+          </div>
+        </div>
+
+        <div className="po-teal-pinstripe relative mx-auto aspect-square w-full max-w-[min(560px,calc(100svh-11rem))] overflow-hidden rounded-[20px] bg-[#0D0D0D] shadow-[0_36px_90px_rgba(0,0,0,0.55)]">
+          <CrestSpinningVideo />
+        </div>
       </div>
     </section>
   );
