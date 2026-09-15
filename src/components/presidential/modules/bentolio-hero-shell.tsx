@@ -72,16 +72,32 @@ export function HomepageSpinningCrestFold() {
             Explore the collection, understand what&apos;s on the package, and
             find a licensed retailer near you.
           </p>
-          <div className="mt-9 flex flex-col gap-4 sm:flex-row">
+          <div className="mt-9 grid gap-3">
+            <div className="grid gap-3 sm:grid-cols-3">
+              <CtaLink
+                className="min-h-[58px] w-full px-4 font-display text-[0.7rem] uppercase tracking-[0.07em]"
+                href="/moon-rocks"
+                variant="primary"
+              >
+                Explore Moon Rocks
+              </CtaLink>
+              <CtaLink
+                className="min-h-[58px] w-full px-4 font-display text-[0.7rem] uppercase tracking-[0.07em]"
+                href="/pre-rolls"
+                variant="contrast"
+              >
+                Discover Pre-Rolls
+              </CtaLink>
+              <CtaLink
+                className="min-h-[58px] w-full px-4 font-display text-[0.7rem] uppercase tracking-[0.07em]"
+                href="/blunts"
+                variant="contrast"
+              >
+                Discover Blunts
+              </CtaLink>
+            </div>
             <CtaLink
-              className="min-h-[58px] w-full px-6 font-display text-xs uppercase tracking-[0.08em] sm:w-auto"
-              href="/moon-rocks"
-              variant="primary"
-            >
-              Explore Moon Rocks
-            </CtaLink>
-            <CtaLink
-              className="min-h-[58px] w-full px-6 font-display text-xs uppercase tracking-[0.08em] sm:w-auto"
+              className="min-h-[58px] w-full px-4 font-display text-[0.7rem] uppercase tracking-[0.07em] sm:max-w-[220px]"
               href="/find-us"
               variant="contrast"
             >
