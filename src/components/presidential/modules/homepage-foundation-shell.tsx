@@ -39,7 +39,7 @@ const proofPoints = [
   },
   {
     title: "Product clarity",
-    body: "Presidential Moon Rocks are a cannabis product format — flower coated with concentrate or resin and finished with kief or diamonds, as identified on the package — not NASA lunar samples or space rocks. Presidential is the brand; Moon Rocks describes the format, while cultivars such as Skywalker and Cherry Gelato remain distinct.",
+    body: "Presidential Moon Rocks are a cannabis product format — flower coated with concentrate or resin and finished with kief or diamonds, as identified on the package — not NASA lunar samples or space rocks. Presidential is the brand; Moon Rocks describes the format, while cultivars such as Skywalker and Cherry Gelato remain distinct. Within that format, infused flower is paired with concentrate; a live resin label identifies that concentrate for the release. Labels may list terpenes and cannabinoids for the named release and batch.",
     image: {
       alt: "Skywalker Moon Rock product graphic",
       href: "/moon-rocks/skywalker",
@@ -48,7 +48,7 @@ const proofPoints = [
   },
   {
     title: "Licensed retail path",
-    body: "Presidential doesn't sell here — it points you straight to the shelf. Drop your zip and the store finder maps participating licensed retailers near you across active markets. No carts, no checkout, no guesswork — just the fastest route from screen to store. Availability varies by retailer. Adults 21+ where legal.",
+    body: "Presidential doesn't sell here — it points you straight to the shelf. Drop your zip and the store finder maps participating licensed retailers near you across active markets. No carts, no checkout, no guesswork — just the fastest route from screen to store. Availability varies by retailer. Licensed retailers decide which releases to stock, and current stock varies by location. Confirm the store's stock before visiting. Adult use is limited to adults 21+ where legal.",
     image: {
       alt: "Cherry Gelato Moon Rock product graphic",
       href: "/moon-rocks/cherry-gelato",
@@ -99,7 +99,8 @@ const homepageCatalogPathCopy = [
   "The [Presidential House Line](/moon-rocks/presidential-house-line) collects original house releases under one catalog path.",
   "[God's Gift](/moon-rocks/gods-gift) sits in the Rose Gold collection.",
   "[NYC Diesel](/moon-rocks/nyc-diesel) is part of the named-strain catalog.",
-  "[Cereal Milk](/moon-rocks/cereal-milk) has its own place in the wider Moon Rocks lineup.",
+  "[Cereal Milk](/moon-rocks/cereal-milk) has its own place in the wider Moon Rocks lineup. Read its package for the listed terpenes tied to that release.",
+  "Label literacy keeps listed terpenes and cannabinoids tied to the named release and batch.",
 ] as const;
 
 const brandChapters = [
@@ -225,7 +226,9 @@ export function HomepageFoundationShell({
                 <p className="po-home-canvas-muted mt-3 max-w-md text-base leading-7">
                   Cannabis Deserves Better — so we built it. For over a decade,
                   Presidential has created cannabis engineered for better flavor,
-                  greater consistency, and premium experiences. More flavor. More
+                  greater consistency, and premium experiences. Its infused
+                  construction starts with flower, adds concentrate or resin, and
+                  finishes with the dry material named on the package. More flavor. More
                   consistency. More innovation. More experience. Every product,
                   every proof, and every place to find it — all in one official
                   home.
