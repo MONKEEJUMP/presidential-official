@@ -9,6 +9,13 @@ import {
   CATALOG_SERIES_REGISTRY,
   filterCatalogSeriesProducts,
 } from "@/lib/catalog/series-registry";
+import {
+  type CatalogTierEntry,
+  type CatalogTierSection,
+  resolveCatalogTier,
+} from "@/lib/catalog/tier-map";
+
+import { TierBadge, TierSectionHeader } from "../catalog/tier-section";
 
 type CatalogRenderMode = "public" | "preview";
 
@@ -144,12 +151,14 @@ function catalogImageAlt(item: SanityCatalogItem, altText?: string): string {
   );
 }
 
-function CatalogProductCard({
+export function CatalogProductCard({
   item,
   mode,
+  placement,
 }: {
   readonly item: SanityCatalogItem;
   readonly mode: CatalogRenderMode;
+  readonly placement?: CatalogTierEntry;
 }) {
   const meta = seriesMetaFor(item.series);
   const chips = parseFormatChips(item.productType);
@@ -159,6 +168,7 @@ function CatalogProductCard({
       <div
         className={`relative aspect-square overflow-hidden bg-gradient-to-b ${meta.canvas} to-po-canvas`}
       >
+        {placement?.section === "collabs" ? <TierBadge tier={placement.tierBadge} /> : null}
         {primaryImage?.assetUrl ? (
           <>
             <Image
@@ -197,8 +207,13 @@ function CatalogProductCard({
           {meta.eyebrow}
         </p>
         <h3 className="mt-2 font-display text-xl uppercase leading-tight text-po-ink">
-          {item.name}
+          {placement?.displayName || item.name}
         </h3>
+        {placement?.collabPartner ? (
+          <p className="mt-2 text-xs font-black uppercase tracking-[0.12em] text-po-brand-ink">
+            with {placement.collabPartner}
+          </p>
+        ) : null}
         {chips.length > 0 ? (
           <p className="mt-3 text-xs font-semibold uppercase text-po-body">
             {chips.join(" · ")}
@@ -215,6 +230,38 @@ function CatalogProductCard({
     >
       {cardBody}
     </Link>
+  );
+}
+
+export function TierCatalogSection({
+  section,
+  items,
+  mode,
+  href,
+  buttonLabel,
+}: {
+  readonly section: Exclude<CatalogTierSection, "more">;
+  readonly items: readonly SanityCatalogItem[];
+  readonly mode: CatalogRenderMode;
+  readonly href?: string;
+  readonly buttonLabel?: string;
+}) {
+  if (items.length === 0) return null;
+
+  return (
+    <section aria-labelledby={`tier-${section}`} id={`tier-${section}`}>
+      <TierSectionHeader buttonLabel={buttonLabel} href={href} section={section} tone="light" />
+      <div className="mt-10 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
+        {items.map((item) => {
+          const placement = resolveCatalogTier({
+            line: "moon-rocks",
+            series: item.series,
+            slug: catalogItemSlug(item),
+          }).entry;
+          return <CatalogProductCard item={item} key={item._id} mode={mode} placement={placement} />;
+        })}
+      </div>
+    </section>
   );
 }
 

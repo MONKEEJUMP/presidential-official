@@ -6,7 +6,9 @@ import { useLayoutEffect } from "react";
 
 import { BLUNT_ARTWORKS } from "@/content/blunts-catalog";
 import { productDetailPath } from "@/lib/products/product-paths";
+import { TIER_SECTION_ORDER, resolveCatalogTier } from "@/lib/catalog/tier-map";
 
+import { TierBadge, TierSectionHeader } from "@/components/presidential/catalog/tier-section";
 import { SiteVideo } from "@/components/presidential/media/site-video";
 import shared from "@/components/presidential/prerolls/preroll-experience.module.css";
 import styles from "./blunts-experience.module.css";
@@ -36,6 +38,11 @@ export function BluntsExperience() {
       window.history.scrollRestoration = previousRestoration;
     };
   }, []);
+
+  const tieredArtwork = BLUNT_ARTWORKS.map((artwork) => ({
+    artwork,
+    placement: resolveCatalogTier({ line: "blunts", slug: artwork.id }).entry,
+  })).filter(({ placement }) => !placement.retired);
 
   return (
     <div className={shared.page}>
@@ -93,13 +100,34 @@ export function BluntsExperience() {
 
       <section aria-labelledby="blunts-art-index-heading" className={shared.artIndex} id="collection">
         <div className={shared.indexIntro}><div><p>A closer look</p><h2 id="blunts-art-index-heading">Meet<br />the blunts.</h2></div><p>Compare the flavor, infusion, and ingredients in each Moon Rock blunt. Flavor and aroma vary by batch; your retailer can confirm the current selection.</p></div>
-        <div className={shared.artGrid}>
-          {BLUNT_ARTWORKS.map((artwork, index) => (
-            <article className={artwork.shape === "square" ? shared.artCardSquare : shared.artCardPortrait} key={artwork.id}>
-              <Link aria-label={`View ${artwork.name} product page`} className={shared.artCardImage} href={productDetailPath("/blunts", artwork.id)}><Image alt={artwork.alt} fill sizes="(max-width: 700px) 92vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} /><span>{String(index + 1).padStart(2, "0")}</span></Link>
-              <div className={shared.artCardCopy}><p>Presidential Moon Rock Blunts</p><h3>{artwork.name}</h3><span>{artwork.edition}</span><p>{artwork.description}</p></div>
-            </article>
-          ))}
+        <div className={shared.tierSections}>
+          {TIER_SECTION_ORDER.map((section) => {
+            const entries = tieredArtwork.filter(({ placement }) => placement.section === section);
+            if (entries.length === 0) return null;
+            return (
+              <section className={shared.tierSection} key={section}>
+                <TierSectionHeader section={section} />
+                <div className={`${shared.artGrid} ${shared.tierGrid}`}>
+                  {entries.map(({ artwork, placement }) => (
+                    <article className={artwork.shape === "square" ? shared.artCardSquare : shared.artCardPortrait} key={artwork.id}>
+                      <Link aria-label={`View ${artwork.name} product page`} className={shared.artCardImage} href={productDetailPath("/blunts", artwork.id)}>
+                        {section === "collabs" ? <TierBadge tier={placement.tierBadge} /> : null}
+                        <Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} />
+                        <span>{String(BLUNT_ARTWORKS.findIndex((item) => item.id === artwork.id) + 1).padStart(2, "0")}</span>
+                      </Link>
+                      <div className={shared.artCardCopy}>
+                        <p>Presidential Moon Rock Blunts</p>
+                        <h3>{placement.displayName || artwork.name}</h3>
+                        {placement.collabPartner ? <strong className={shared.collabPartner}>with {placement.collabPartner}</strong> : null}
+                        <span>{artwork.edition}</span>
+                        <p>{artwork.description}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            );
+          })}
         </div>
       </section>
 

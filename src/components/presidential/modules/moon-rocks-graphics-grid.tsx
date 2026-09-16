@@ -8,11 +8,6 @@ const MOON_ROCK_GRAPHICS = [
     src: "/media/moonrock-cherrygelato.jpg",
   },
   {
-    alt: "Daniel LaRusso Moon Rocks product graphic",
-    href: "/moon-rocks/presidential-line-daniel-larusso",
-    src: "/media/moonrock-daniel-larusso.jpg",
-  },
-  {
     alt: "Garlic Cookies Moon Rocks product graphic",
     href: "/moon-rocks/presidential-line-garlic-cookies",
     src: "/media/moonrock-garlic-cookies.jpg",
@@ -31,11 +26,6 @@ const MOON_ROCK_GRAPHICS = [
     alt: "Grape Moon Rocks product graphic",
     href: "/moon-rocks/grape",
     src: "/media/moonrock-grape.jpg",
-  },
-  {
-    alt: "Laura Charles Moon Rocks product graphic",
-    href: "/moon-rocks/presidential-line-laura-charles",
-    src: "/media/moonrock-laura-charles.jpg",
   },
   {
     alt: "Nino Brown Moon Rocks product graphic",

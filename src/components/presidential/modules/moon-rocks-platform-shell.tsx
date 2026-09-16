@@ -1,8 +1,14 @@
 import {
+  catalogItemSlug,
   readDraftCatalogItems,
   readPublicRenderableCatalogItems,
   type SanityCatalogItem,
 } from "@/lib/cms/catalog";
+import {
+  TIER_SECTION_ORDER,
+  resolveCatalogTier,
+  type CatalogTierSection,
+} from "@/lib/catalog/tier-map";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
 import { PageFrame } from "../layout/page-frame";
@@ -11,7 +17,7 @@ import { SceneStack } from "../layout/scene-stack";
 import { SiteVideo } from "../media/site-video";
 import { CtaLink } from "../primitives/cta-link";
 import { InContentText } from "../primitives/in-content-text";
-import { SeriesSelectorShell } from "./catalog-grid-shell";
+import { CatalogProductCard, TierCatalogSection } from "./catalog-grid-shell";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { FindUsCtaShell } from "./find-us-cta-shell";
 import { ParentLearnGuideLink } from "./learn-guide-discovery";
@@ -83,6 +89,25 @@ export async function MoonRocksPlatformShell({
   }
 
   const catalogItems = await readCatalogForShell();
+  const placements = catalogItems.map((item) => ({
+    item,
+    resolution: resolveCatalogTier({
+      line: "moon-rocks",
+      series: item.series,
+      slug: catalogItemSlug(item),
+    }),
+  }));
+  const activeItems = placements.filter(({ resolution }) => !resolution.entry.retired);
+  const itemsFor = (section: CatalogTierSection) =>
+    activeItems
+      .filter(({ resolution }) => resolution.entry.section === section)
+      .map(({ item }) => item);
+  const tierLinks = {
+    silver: ["/moon-rocks/silver", "Explore Silver Moon Rocks"],
+    gold: ["/moon-rocks/gold", "Explore Gold Moon Rocks"],
+    "rose-gold": ["/moon-rocks/rose-gold", "Explore Rose Gold Moon Rocks"],
+    collabs: ["/moon-rocks/presidential-x-thc-design", "Explore the Collaboration"],
+  } as const;
 
   return (
     <PageFrame>
@@ -123,7 +148,6 @@ export async function MoonRocksPlatformShell({
           tone="default"
         >
           <div className="mx-auto w-full max-w-7xl">
-            <SeriesSelectorShell completeCatalog items={catalogItems} />
             <div className="mt-20 max-w-3xl">
               <p className="text-xs font-black uppercase text-po-brand-ink">
                 The catalog
@@ -139,6 +163,36 @@ export async function MoonRocksPlatformShell({
                 Choose a series to explore every strain. Availability varies
                 by licensed retailer.
               </p>
+            </div>
+            <div className="mt-20 space-y-28">
+              {TIER_SECTION_ORDER.map((section) => (
+                <TierCatalogSection
+                  buttonLabel={tierLinks[section][1]}
+                  href={tierLinks[section][0]}
+                  items={itemsFor(section)}
+                  key={section}
+                  mode="public"
+                  section={section}
+                />
+              ))}
+              {itemsFor("more").length > 0 ? (
+                <section aria-labelledby="moon-rocks-more">
+                  <div className="border-b-2 border-po-ink pb-8">
+                    <h2 className="font-display text-4xl uppercase leading-none text-po-ink sm:text-6xl" id="moon-rocks-more">
+                      More from Presidential
+                    </h2>
+                  </div>
+                  <div className="mt-10 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
+                    {itemsFor("more").map((item) => (
+                      <CatalogProductCard item={item} key={item._id} mode="public" />
+                    ))}
+                  </div>
+                  <div className="mt-10 flex flex-wrap gap-6 text-xs font-black uppercase tracking-[0.08em] text-po-brand-ink">
+                    <a className="underline underline-offset-8" href="/moon-rocks/presidential-line">Explore the Presidential Line</a>
+                    <a className="underline underline-offset-8" href="/moon-rocks/presidential-house-line">Explore the Presidential House Line</a>
+                  </div>
+                </section>
+              ) : null}
             </div>
             <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {moonRocksCatalogPathCopy.map((copy) => (
