@@ -222,10 +222,6 @@ export async function MoonRocksPlatformShell({
                                   fill
                                   sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw"
                                   src={art.src}
-                                  style={{
-                                    objectFit: art.fit,
-                                    padding: art.fit === "contain" ? "clamp(1rem, 3vw, 2rem)" : 0,
-                                  }}
                                 />
                               ) : null}
                             </Link>
@@ -272,10 +268,6 @@ export async function MoonRocksPlatformShell({
                                 fill
                                 sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw"
                                 src={art.src}
-                                style={{
-                                  objectFit: art.fit,
-                                  padding: art.fit === "contain" ? "clamp(1rem, 3vw, 2rem)" : 0,
-                                }}
                               />
                             ) : null}
                           </Link>
