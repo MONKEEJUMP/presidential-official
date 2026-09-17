@@ -10,7 +10,7 @@ const VapeExperience = dynamic(
   () => import('./vape-experience').then((module) => module.VapeExperience),
   { ssr: false },
 );
-const DEFERRED_SECTION_IDS = ['moon-pods', 'orbit', 'details', 'designs'] as const;
+const DEFERRED_SECTION_IDS = ['moon-pods', 'orbit-system', 'orbit', 'details', 'designs'] as const;
 
 export function VapeExperienceLoader({ page }: { page: VapePage }) {
   const [ready, setReady] = useState(false);

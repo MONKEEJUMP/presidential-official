@@ -7,6 +7,7 @@ import { getVapeGallery, getVapeImage, VAPE_FAMILIES, VAPE_FINISHES, VAPE_MODEL_
 import { VapeGalleryDialog } from './vape-gallery-dialog';
 import { decodeVapeFragment } from './vape-fragment';
 import { VapeIcon } from './vape-icon';
+import { VapeAdvantageSections, VapeModeSystemSection } from './vape-system-sections';
 import s from './showroom.module.css';
 
 function ColorChoices({ value, onChange, label }: { value: VapeFinish; onChange: (value: VapeFinish) => void; label: string }) {
@@ -132,6 +133,8 @@ export function VapeExperience({ page }: { page: VapePage }) {
       <p className={s.sectionNote}>Moon Pods photographed on Orbit. Explore the device separately on the <Link href="/orbit">Orbit page</Link>.</p>
     </section>
 
+    {page === 'vapes' ? <VapeModeSystemSection /> : null}
+
     <section className={`${s.section} ${s.finishes}`} id="orbit" aria-labelledby="orbit-finish-heading">
       <div className={s.sectionHeading}><div><p className={s.eyebrow}>Orbit battery finishes</p><h2 id="orbit-finish-heading">Make it<br /><span>your signature.</span></h2></div><p>Four finishes. Front and back.<br />The Presidential details in full view.</p></div>
       <div className={s.finishRail}>
@@ -160,6 +163,8 @@ export function VapeExperience({ page }: { page: VapePage }) {
       </div>
       <div className={s.portDetail}><p>Explore the mouthpiece, sides and base together in the matching design overview.</p><button className={s.textLink} type="button" onClick={() => openImage(7)}>View the complete design <VapeIcon name="arrow" /></button></div>
     </section>
+
+    {page === 'vapes' ? <VapeAdvantageSections /> : null}
 
     <section className={`${s.section} ${s.models}`} id="designs" aria-labelledby="vape-design-heading">
       <div className={s.sectionHeading}><div><p className={s.eyebrow}>The design collection</p><h2 id="vape-design-heading">Every angle.<br /><span>Every expression.</span></h2></div><p>Explore all twelve design overviews.<br />Select a finish. Open the full picture.</p></div>

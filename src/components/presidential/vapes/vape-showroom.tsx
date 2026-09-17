@@ -11,7 +11,7 @@ import { CmsHomepageModuleRenderer } from '../modules/cms-homepage-module-render
 import s from './showroom.module.css';
 
 const introductions = {
-  vapes: { line: 'Designed for flavor.', text: 'Moon Pods and Orbit. The Presidential vape family, brought into focus.', title: <>VAPES<span>DESIGNED FOR FLAVOR.</span></> },
+  vapes: { line: 'Designed for flavor.', text: 'Different Oils Need Different Heat. Every Oil Has a Sweet Spot.', title: <>VAPES<span>DESIGNED FOR FLAVOR.</span></> },
   'moon-pods': { line: 'Meet Moon Pods.', text: 'Liquid Diamonds, Live Resin and Live Rosin. Explore the Moon Pods family, photographed with Orbit.', title: <>PRESIDENTIAL MOON PODS</> },
   orbit: { line: 'Make it your Orbit.', text: 'Black. Silver. Teal. White. Get to know the device behind the Presidential vape experience.', title: <>PRESIDENTIAL ORBIT</> },
 } as const;
@@ -28,7 +28,7 @@ export function VapeShowroom({ route, breadcrumbs, cmsModules }: { route: SeoRou
         <div className={s.heroFooter}><span>One system. Every perspective.</span><a href="#explore">Discover the collection <VapeIcon name="arrow" /></a></div>
       </div>
     </section>
-    <nav className={s.sectionNav} aria-label="Vape collection sections"><a href="#explore">Explore</a><a href="#moon-pods">Moon Pods</a><a href="#orbit">Orbit finishes</a><a href="#details">The details</a><a href="#designs">Design collection</a></nav>
+    <nav className={s.sectionNav} aria-label="Vape collection sections"><a href="#explore">Explore</a><a href="#moon-pods">Moon Pods</a>{page === 'vapes' ? <a href="#orbit-system">Orbit system</a> : null}<a href="#orbit">Orbit finishes</a><a href="#details">The details</a><a href="#designs">Design collection</a></nav>
     <VapeExperienceLoader page={page} />
     {cmsModules?.length ? <CmsHomepageModuleRenderer heroHeadingLevel="h2" modules={cmsModules} productRoute={page === 'moon-pods' || page === 'orbit' ? page : undefined} /> : null}
     <section className={`${s.section} ${s.education}`} aria-labelledby="vape-education-heading">
