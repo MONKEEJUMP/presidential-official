@@ -183,7 +183,6 @@ export function PreRollExperience() {
                       <Link aria-label={`View ${artwork.name} product page`} className={styles.artCardImage} href={productDetailPath("/pre-rolls", artwork.id)}>
                         {section === "collabs" ? <TierBadge tier={placement.tierBadge} /> : null}
                         <Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} />
-                        <span>{String(PRE_ROLL_ARTWORKS.findIndex((item) => item.id === artwork.id) + 1).padStart(2, "0")}</span>
                       </Link>
                       <div className={styles.artCardCopy}>
                         <p>{artwork.collection}</p>
