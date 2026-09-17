@@ -71,6 +71,7 @@ export const VAPES_ADDITIONS = {
     ],
   },
   standards: {
+    ariaLabel: "Why Orbit and safety and material standards",
     orbit: {
       title: "WHY ORBIT",
       items: [

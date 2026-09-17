@@ -55,7 +55,7 @@ export function VapeAdvantageSections() {
       <BenefitRow items={ceramic.benefits} />
     </section>
 
-    <section className={`${s.section} ${s.systemSection} ${s.standards}`} aria-label="Why Orbit and safety and material standards">
+    <section className={`${s.section} ${s.systemSection} ${s.standards}`} aria-label={standards.ariaLabel}>
       <div className={s.standardsColumn}>
         <h2>{standards.orbit.title}</h2>
         <div className={s.whyOrbitList}>{standards.orbit.items.map(item => <article key={item.title}><h3>{item.title}</h3><p>{item.description}</p></article>)}</div>
