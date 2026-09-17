@@ -175,7 +175,10 @@ export async function MoonRocksPlatformShell({
             <div className={shared.indexIntro}>
               <div>
                 <p>The catalog</p>
-                <h2 id="presidential-moon-rocks-catalog">
+                <h2
+                  id="presidential-moon-rocks-catalog"
+                  style={{ fontSize: "clamp(3.25rem, 9vw, 8.5rem)" }}
+                >
                   Every<br />Presidential strain.
                 </h2>
               </div>
