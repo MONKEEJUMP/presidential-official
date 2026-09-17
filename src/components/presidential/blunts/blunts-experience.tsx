@@ -113,7 +113,6 @@ export function BluntsExperience() {
                       <Link aria-label={`View ${artwork.name} product page`} className={shared.artCardImage} href={productDetailPath("/blunts", artwork.id)}>
                         {section === "collabs" ? <TierBadge tier={placement.tierBadge} /> : null}
                         <Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} />
-                        <span>{String(BLUNT_ARTWORKS.findIndex((item) => item.id === artwork.id) + 1).padStart(2, "0")}</span>
                       </Link>
                       <div className={shared.artCardCopy}>
                         <p>Presidential Moon Rock Blunts</p>
