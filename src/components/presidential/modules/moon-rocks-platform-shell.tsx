@@ -177,7 +177,7 @@ export async function MoonRocksPlatformShell({
                 <p>The catalog</p>
                 <h2
                   id="presidential-moon-rocks-catalog"
-                  style={{ fontSize: "clamp(3.25rem, 9vw, 8.5rem)" }}
+                  style={{ fontSize: "clamp(50px, 9vw, 136px)" }}
                 >
                   Every<br />Presidential strain.
                 </h2>
