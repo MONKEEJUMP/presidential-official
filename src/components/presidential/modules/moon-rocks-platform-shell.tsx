@@ -176,8 +176,8 @@ export async function MoonRocksPlatformShell({
               <div>
                 <p>The catalog</p>
                 <h2
+                  className={shared.moonRocksCatalogTitle}
                   id="presidential-moon-rocks-catalog"
-                  style={{ fontSize: "clamp(50px, 9vw, 136px)" }}
                 >
                   Every<br />Presidential strain.
                 </h2>

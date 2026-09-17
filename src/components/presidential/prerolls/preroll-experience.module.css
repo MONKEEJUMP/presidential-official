@@ -961,3 +961,7 @@
     transition: none;
   }
 }
+
+.indexIntro .moonRocksCatalogTitle {
+  font-size: clamp(50px, 9vw, 136px);
+}
