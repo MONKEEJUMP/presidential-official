@@ -26,7 +26,6 @@ import shared from "../prerolls/preroll-experience.module.css";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { FindUsCtaShell } from "./find-us-cta-shell";
 import { ParentLearnGuideLink } from "./learn-guide-discovery";
-import { MoonRocksGraphicsGrid } from "./moon-rocks-graphics-grid";
 
 type MoonRocksBreadcrumb = {
   readonly name: string;
@@ -166,8 +165,6 @@ export async function MoonRocksPlatformShell({
           ]}
           title={route.h1}
         />
-
-        <MoonRocksGraphicsGrid />
 
         <div className={`${shared.page} po-gold-thread-inlay`}>
           <section
