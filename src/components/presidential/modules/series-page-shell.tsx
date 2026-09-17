@@ -1,8 +1,10 @@
 import {
   readDraftCatalogItems,
   readPublicRenderableCatalogItems,
+  catalogItemSlug,
   type SanityCatalogItem,
 } from "@/lib/cms/catalog";
+import { resolveCatalogTier } from "@/lib/catalog/tier-map";
 import {
   filterCatalogSeriesProducts,
   type CatalogSeriesDefinition,
@@ -41,10 +43,16 @@ async function readSeriesItems(definition: CatalogSeriesDefinition): Promise<{
   readonly items: readonly SanityCatalogItem[];
   readonly mode: "public" | "preview";
 }> {
+  const keepActive = (item: SanityCatalogItem) =>
+    !resolveCatalogTier({
+      line: "moon-rocks",
+      series: item.series,
+      slug: catalogItemSlug(item),
+    }).entry.retired;
   const publicCatalog = await readPublicRenderableCatalogItems("/moon-rocks", {
     next: { tags: ["sanity-catalog-moon-rocks"] },
   });
-  const publicItems = filterCatalogSeriesProducts(definition, publicCatalog.items);
+  const publicItems = filterCatalogSeriesProducts(definition, publicCatalog.items).filter(keepActive);
   if (publicItems.length > 0) {
     return { items: publicItems, mode: "public" };
   }
@@ -54,7 +62,7 @@ async function readSeriesItems(definition: CatalogSeriesDefinition): Promise<{
   });
   if (draftCatalog.ok) {
     return {
-      items: filterCatalogSeriesProducts(definition, draftCatalog.items),
+      items: filterCatalogSeriesProducts(definition, draftCatalog.items).filter(keepActive),
       mode: "preview",
     };
   }

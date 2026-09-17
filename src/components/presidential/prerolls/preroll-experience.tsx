@@ -9,6 +9,9 @@ import {
   PRE_ROLL_ARTWORKS,
 } from "@/lib/prerolls/catalog";
 import { productDetailPath } from "@/lib/products/product-paths";
+import { TIER_SECTION_ORDER, resolveCatalogTier } from "@/lib/catalog/tier-map";
+
+import { TierBadge, TierSectionHeader } from "@/components/presidential/catalog/tier-section";
 
 import styles from "./preroll-experience.module.css";
 
@@ -62,6 +65,15 @@ export function PreRollExperience() {
       window.history.scrollRestoration = previousRestoration;
     };
   }, []);
+
+  const tieredArtwork = PRE_ROLL_ARTWORKS.map((artwork) => ({
+    artwork,
+    placement: resolveCatalogTier({
+      collection: artwork.collection,
+      line: "pre-rolls",
+      slug: artwork.id,
+    }).entry,
+  })).filter(({ placement }) => !placement.retired);
 
   return (
     <div className={styles.page}>
@@ -158,25 +170,47 @@ export function PreRollExperience() {
             Get to know the flavor, infusion, and ingredients in each Moon Rock pre-roll. Flavor and aroma vary by batch; your retailer can confirm the current selection.
           </p>
         </div>
-        <div className={styles.artGrid}>
-          {PRE_ROLL_ARTWORKS.map((artwork, index) => (
-            <article className={artwork.shape === "square" ? styles.artCardSquare : styles.artCardPortrait} key={artwork.id}>
-              <Link
-                aria-label={`View ${artwork.name} product page`}
-                className={styles.artCardImage}
-                href={productDetailPath("/pre-rolls", artwork.id)}
-              >
-                <Image alt={artwork.alt} fill sizes="(max-width: 700px) 92vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} />
-                <span>{String(index + 1).padStart(2, "0")}</span>
-              </Link>
-              <div className={styles.artCardCopy}>
-                <p>{artwork.collection}</p>
-                <h3>{artwork.name}</h3>
-                <span>{artwork.edition}</span>
-                <p>{artwork.description}</p>
+        <div className={styles.tierSections}>
+          {TIER_SECTION_ORDER.map((section) => {
+            const entries = tieredArtwork.filter(({ placement }) => placement.section === section);
+            if (entries.length === 0) return null;
+            return (
+              <section className={styles.tierSection} key={section}>
+                <TierSectionHeader section={section} />
+                <div className={`${styles.artGrid} ${styles.tierGrid}`}>
+                  {entries.map(({ artwork, placement }) => (
+                    <article className={artwork.shape === "square" ? styles.artCardSquare : styles.artCardPortrait} key={artwork.id}>
+                      <Link aria-label={`View ${artwork.name} product page`} className={styles.artCardImage} href={productDetailPath("/pre-rolls", artwork.id)}>
+                        {section === "collabs" ? <TierBadge tier={placement.tierBadge} /> : null}
+                        <Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} />
+                        <span>{String(PRE_ROLL_ARTWORKS.findIndex((item) => item.id === artwork.id) + 1).padStart(2, "0")}</span>
+                      </Link>
+                      <div className={styles.artCardCopy}>
+                        <p>{artwork.collection}</p>
+                        <h3>{placement.displayName || artwork.name}</h3>
+                        {placement.collabPartner ? <strong className={styles.collabPartner}>with {placement.collabPartner}</strong> : null}
+                        <span>{artwork.edition}</span>
+                        <p>{artwork.description}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            );
+          })}
+          {tieredArtwork.some(({ placement }) => placement.section === "more") ? (
+            <section className={styles.tierSection}>
+              <header className={styles.moreHeader}><h2>More from Presidential</h2></header>
+              <div className={`${styles.artGrid} ${styles.tierGrid}`}>
+                {tieredArtwork.filter(({ placement }) => placement.section === "more").map(({ artwork, placement }) => (
+                  <article className={artwork.shape === "square" ? styles.artCardSquare : styles.artCardPortrait} key={artwork.id}>
+                    <Link aria-label={`View ${artwork.name} product page`} className={styles.artCardImage} href={productDetailPath("/pre-rolls", artwork.id)}><Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} /></Link>
+                    <div className={styles.artCardCopy}><p>{artwork.collection}</p><h3>{placement.displayName || artwork.name}</h3><span>{artwork.edition}</span><p>{artwork.description}</p></div>
+                  </article>
+                ))}
               </div>
-            </article>
-          ))}
+            </section>
+          ) : null}
         </div>
       </section>
 
