@@ -198,6 +198,19 @@ export function PreRollExperience() {
               </section>
             );
           })}
+          {tieredArtwork.some(({ placement }) => placement.section === "more") ? (
+            <section className={styles.tierSection}>
+              <header className={styles.moreHeader}><h2>More from Presidential</h2></header>
+              <div className={`${styles.artGrid} ${styles.tierGrid}`}>
+                {tieredArtwork.filter(({ placement }) => placement.section === "more").map(({ artwork, placement }) => (
+                  <article className={artwork.shape === "square" ? styles.artCardSquare : styles.artCardPortrait} key={artwork.id}>
+                    <Link aria-label={`View ${artwork.name} product page`} className={styles.artCardImage} href={productDetailPath("/pre-rolls", artwork.id)}><Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} /></Link>
+                    <div className={styles.artCardCopy}><p>{artwork.collection}</p><h3>{placement.displayName || artwork.name}</h3><span>{artwork.edition}</span><p>{artwork.description}</p></div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ) : null}
         </div>
       </section>
 

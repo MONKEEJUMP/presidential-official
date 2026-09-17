@@ -619,6 +619,20 @@
   margin-top: 0;
 }
 
+.moreHeader {
+  padding-bottom: 32px;
+  border-bottom: 2px solid var(--pr-teal);
+}
+
+.moreHeader h2 {
+  margin: 0;
+  font-family: var(--po-font-display);
+  font-size: clamp(40px, 6vw, 88px);
+  line-height: 0.94;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
 .artCardPortrait:nth-child(3n + 2) {
   margin-top: 86px;
 }

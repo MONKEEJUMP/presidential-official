@@ -128,6 +128,19 @@ export function BluntsExperience() {
               </section>
             );
           })}
+          {tieredArtwork.some(({ placement }) => placement.section === "more") ? (
+            <section className={shared.tierSection}>
+              <header className={shared.moreHeader}><h2>More from Presidential</h2></header>
+              <div className={`${shared.artGrid} ${shared.tierGrid}`}>
+                {tieredArtwork.filter(({ placement }) => placement.section === "more").map(({ artwork, placement }) => (
+                  <article className={artwork.shape === "square" ? shared.artCardSquare : shared.artCardPortrait} key={artwork.id}>
+                    <Link aria-label={`View ${artwork.name} product page`} className={shared.artCardImage} href={productDetailPath("/blunts", artwork.id)}><Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} /></Link>
+                    <div className={shared.artCardCopy}><p>Presidential Moon Rock Blunts</p><h3>{placement.displayName || artwork.name}</h3><span>{artwork.edition}</span><p>{artwork.description}</p></div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ) : null}
         </div>
       </section>
 

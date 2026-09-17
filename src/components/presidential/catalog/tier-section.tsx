@@ -19,7 +19,7 @@ export function TierBadge({ tier }: { readonly tier: CatalogTierBadge }) {
   if (!tier) return null;
 
   return (
-    <span className="absolute left-3 top-3 z-10 flex items-center gap-1.5 bg-po-ink/90 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-po-on-dark">
+    <span className={`absolute left-3 top-3 z-10 flex items-center gap-1.5 bg-po-ink/90 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] ${TIER_COLOR[tier]}`}>
       <TierIcon size={14} tier={tier} />
       {tier.replace("-", " ")}
     </span>
@@ -43,7 +43,7 @@ export function TierSectionHeader({
   const accent = TIER_COLOR[section];
 
   return (
-    <header className="border-b-2 border-current pb-8">
+    <header className={`border-b-2 border-current pb-8 ${accent}`}>
       <div className={`flex items-center gap-4 ${accent}`}>
         <TierIcon tier={section} />
         <p className="flex items-center gap-3 text-xs font-black uppercase tracking-[0.18em]">
