@@ -1,3 +1,6 @@
+import Image from "next/image";
+import Link from "next/link";
+
 import {
   catalogItemSlug,
   readDraftCatalogItems,
@@ -9,15 +12,17 @@ import {
   resolveCatalogTier,
   type CatalogTierSection,
 } from "@/lib/catalog/tier-map";
+import { resolveMoonRocksCardArt } from "@/lib/catalog/moon-rocks-card-art";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 
+import { TierBadge, TierSectionHeader } from "../catalog/tier-section";
 import { PageFrame } from "../layout/page-frame";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { SiteVideo } from "../media/site-video";
 import { CtaLink } from "../primitives/cta-link";
 import { InContentText } from "../primitives/in-content-text";
-import { CatalogProductCard, TierCatalogSection } from "./catalog-grid-shell";
+import shared from "../prerolls/preroll-experience.module.css";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { FindUsCtaShell } from "./find-us-cta-shell";
 import { ParentLearnGuideLink } from "./learn-guide-discovery";
@@ -62,6 +67,27 @@ const ecosystemSteps = [
   "Find licensed retailers",
 ] as const;
 
+function productSpec(productType: string | undefined) {
+  if (!productType || /multi[ -]?format|reviewer/i.test(productType)) return null;
+  if (/pre[ -]?roll.*blunt.*moon rocks?/i.test(productType)) return null;
+  return productType;
+}
+
+function descriptionExcerpt(description: string | undefined) {
+  if (!description) return null;
+
+  const clean = description
+    .split(/\bSOURCE:/i)[0]
+    .replace(/\*\*|__|`|#{1,6}\s*/g, "")
+    .replace(/^\s*\|.*\|\s*$/gm, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (clean.length <= 300) return clean;
+  const clipped = clean.slice(0, 300);
+  return `${clipped.slice(0, clipped.lastIndexOf(" "))}…`;
+}
+
 async function readCatalogForShell(): Promise<readonly SanityCatalogItem[]> {
   const publicCatalog = await readPublicRenderableCatalogItems("/moon-rocks", {
     next: { tags: ["sanity-catalog-moon-rocks"] },
@@ -100,8 +126,7 @@ export async function MoonRocksPlatformShell({
   const activeItems = placements.filter(({ resolution }) => !resolution.entry.retired);
   const itemsFor = (section: CatalogTierSection) =>
     activeItems
-      .filter(({ resolution }) => resolution.entry.section === section)
-      .map(({ item }) => item);
+      .filter(({ resolution }) => resolution.entry.section === section);
   const tierLinks = {
     silver: ["/moon-rocks/silver", "Explore Silver Moon Rocks"],
     gold: ["/moon-rocks/gold", "Explore Gold Moon Rocks"],
@@ -142,70 +167,145 @@ export async function MoonRocksPlatformShell({
 
         <MoonRocksGraphicsGrid />
 
-        <Scene
-          ariaLabelledBy="presidential-moon-rocks-catalog"
-          className="po-gold-thread-inlay py-24 lg:py-32"
-          tone="default"
-        >
-          <div className="mx-auto w-full max-w-7xl">
-            <div className="mt-20 max-w-3xl">
-              <p className="text-xs font-black uppercase text-po-brand-ink">
-                The catalog
-              </p>
-              <h2
-                className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-6xl"
-                id="presidential-moon-rocks-catalog"
-              >
-                Every Presidential strain
-              </h2>
-              <p className="mt-6 text-base leading-7 text-po-body">
+        <div className={`${shared.page} po-gold-thread-inlay`}>
+          <section
+            aria-labelledby="presidential-moon-rocks-catalog"
+            className={shared.artIndex}
+          >
+            <div className={shared.indexIntro}>
+              <div>
+                <p>The catalog</p>
+                <h2 id="presidential-moon-rocks-catalog">
+                  Every<br />Presidential strain.
+                </h2>
+              </div>
+              <p>
                 Silver, Gold, and Rose Gold series — one official catalog.
                 Choose a series to explore every strain. Availability varies
                 by licensed retailer.
               </p>
             </div>
-            <div className="mt-20 space-y-28">
-              {TIER_SECTION_ORDER.map((section) => (
-                <TierCatalogSection
-                  buttonLabel={tierLinks[section][1]}
-                  href={tierLinks[section][0]}
-                  items={itemsFor(section)}
-                  key={section}
-                  mode="public"
-                  section={section}
-                />
-              ))}
+
+            <div className={shared.tierSections}>
+              {TIER_SECTION_ORDER.map((section) => {
+                const entries = itemsFor(section);
+                if (entries.length === 0) return null;
+                return (
+                  <section className={shared.tierSection} key={section}>
+                    <TierSectionHeader
+                      buttonLabel={tierLinks[section][1]}
+                      href={tierLinks[section][0]}
+                      section={section}
+                    />
+                    <div className={`${shared.artGrid} ${shared.tierGrid}`}>
+                      {entries.map(({ item, resolution }) => {
+                        const slug = catalogItemSlug(item);
+                        const art = resolveMoonRocksCardArt(item, slug);
+                        const spec = productSpec(item.productType);
+                        const description = descriptionExcerpt(item.description);
+                        return (
+                          <article className={shared.artCardSquare} key={item._id}>
+                            <Link
+                              aria-label={`View ${resolution.entry.displayName || item.name || slug} product page`}
+                              className={shared.artCardImage}
+                              href={`/moon-rocks/${slug}`}
+                            >
+                              {section === "collabs" ? (
+                                <TierBadge tier={resolution.entry.tierBadge} />
+                              ) : null}
+                              {art ? (
+                                <Image
+                                  alt={`${resolution.entry.displayName || item.name || slug} Moon Rocks packaging`}
+                                  fill
+                                  sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw"
+                                  src={art.src}
+                                  style={{
+                                    objectFit: art.fit,
+                                    padding: art.fit === "contain" ? "clamp(1rem, 3vw, 2rem)" : 0,
+                                  }}
+                                />
+                              ) : null}
+                            </Link>
+                            <div className={shared.artCardCopy}>
+                              <p>Presidential Moon Rocks</p>
+                              <h3>{resolution.entry.displayName || item.name || slug}</h3>
+                              {resolution.entry.collabPartner ? (
+                                <strong className={shared.collabPartner}>
+                                  with {resolution.entry.collabPartner}
+                                </strong>
+                              ) : null}
+                              {spec ? <span>{spec}</span> : null}
+                              {description ? <p>{description}</p> : null}
+                            </div>
+                          </article>
+                        );
+                      })}
+                    </div>
+                  </section>
+                );
+              })}
+
               {itemsFor("more").length > 0 ? (
-                <section aria-labelledby="moon-rocks-more">
-                  <div className="border-b-2 border-po-ink pb-8">
-                    <h2 className="font-display text-4xl uppercase leading-none text-po-ink sm:text-6xl" id="moon-rocks-more">
-                      More from Presidential
-                    </h2>
+                <section className={shared.tierSection}>
+                  <header className={shared.moreHeader}>
+                    <h2>More from Presidential</h2>
+                  </header>
+                  <div className={`${shared.artGrid} ${shared.tierGrid}`}>
+                    {itemsFor("more").map(({ item, resolution }) => {
+                      const slug = catalogItemSlug(item);
+                      const art = resolveMoonRocksCardArt(item, slug);
+                      const spec = productSpec(item.productType);
+                      const description = descriptionExcerpt(item.description);
+                      return (
+                        <article className={shared.artCardSquare} key={item._id}>
+                          <Link
+                            aria-label={`View ${resolution.entry.displayName || item.name || slug} product page`}
+                            className={shared.artCardImage}
+                            href={`/moon-rocks/${slug}`}
+                          >
+                            {art ? (
+                              <Image
+                                alt={`${resolution.entry.displayName || item.name || slug} Moon Rocks packaging`}
+                                fill
+                                sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw"
+                                src={art.src}
+                                style={{
+                                  objectFit: art.fit,
+                                  padding: art.fit === "contain" ? "clamp(1rem, 3vw, 2rem)" : 0,
+                                }}
+                              />
+                            ) : null}
+                          </Link>
+                          <div className={shared.artCardCopy}>
+                            <p>Presidential Moon Rocks</p>
+                            <h3>{resolution.entry.displayName || item.name || slug}</h3>
+                            {spec ? <span>{spec}</span> : null}
+                            {description ? <p>{description}</p> : null}
+                          </div>
+                        </article>
+                      );
+                    })}
                   </div>
-                  <div className="mt-10 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
-                    {itemsFor("more").map((item) => (
-                      <CatalogProductCard item={item} key={item._id} mode="public" />
-                    ))}
-                  </div>
-                  <div className="mt-10 flex flex-wrap gap-6 text-xs font-black uppercase tracking-[0.08em] text-po-brand-ink">
-                    <a className="underline underline-offset-8" href="/moon-rocks/presidential-line">Explore the Presidential Line</a>
-                    <a className="underline underline-offset-8" href="/moon-rocks/presidential-house-line">Explore the Presidential House Line</a>
+                  <div className="mt-10 flex flex-wrap gap-6 text-xs font-black uppercase tracking-[0.08em] text-po-brand">
+                    <Link className="underline underline-offset-8" href="/moon-rocks/presidential-line">Explore the Presidential Line</Link>
+                    <Link className="underline underline-offset-8" href="/moon-rocks/presidential-house-line">Explore the Presidential House Line</Link>
                   </div>
                 </section>
               ) : null}
             </div>
-            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+            <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {moonRocksCatalogPathCopy.map((copy) => (
                 <p
-                  className="border-l border-po-brand pl-4 text-sm leading-6 text-po-body"
+                  className="border-l border-po-brand pl-4 text-sm leading-6 text-po-on-dark-muted"
                   key={copy}
                 >
                   <InContentText sourcePath="/moon-rocks" value={copy} />
                 </p>
               ))}
             </div>
-          </div>
-        </Scene>
+          </section>
+        </div>
 
         <Scene
           ariaLabelledBy="presidential-moon-rocks-packaging"
@@ -244,21 +344,21 @@ export async function MoonRocksPlatformShell({
         <Scene
           ariaLabelledBy="presidential-moon-rocks-lanes"
           className="po-gold-thread-inlay py-24 lg:py-32"
-          tone="default"
+          tone="contrast"
         >
           <div className="mx-auto w-full max-w-7xl">
             <div className="grid gap-12 lg:grid-cols-[minmax(260px,0.55fr)_1fr] lg:gap-20">
               <div>
-                <p className="text-xs font-black uppercase text-po-brand-ink">
+                <p className="text-xs font-black uppercase text-po-brand">
                   Product architecture
                 </p>
                 <h2
-                  className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-6xl"
+                  className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl"
                   id="presidential-moon-rocks-lanes"
                 >
                   Inside the Moon Rocks platform
                 </h2>
-                <p className="mt-6 max-w-md text-base leading-7 text-po-body">
+                <p className="mt-6 max-w-md text-base leading-7 text-po-on-dark-muted">
                   Product education, format clarity, related platforms, and
                   retail discovery live here without turning the page into a
                   transaction surface.
@@ -267,16 +367,16 @@ export async function MoonRocksPlatformShell({
               <div className="grid gap-10 sm:grid-cols-3">
                 {productLanes.map((lane, index) => (
                   <article
-                    className="border-t border-po-ink pt-5"
+                    className="border-t border-po-on-dark/20 pt-5"
                     key={lane.title}
                   >
-                    <p className="text-xs font-black text-po-brand-ink">
+                    <p className="text-xs font-black text-po-brand">
                       0{index + 1}
                     </p>
-                    <h3 className="mt-10 text-xl font-semibold leading-snug text-po-ink">
+                    <h3 className="mt-10 text-xl font-semibold leading-snug text-po-on-dark">
                       {lane.title}
                     </h3>
-                    <p className="mt-3 text-sm leading-6 text-po-body">
+                    <p className="mt-3 text-sm leading-6 text-po-on-dark-muted">
                       {lane.body}
                     </p>
                   </article>
