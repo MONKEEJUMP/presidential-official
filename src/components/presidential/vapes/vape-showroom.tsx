@@ -4,7 +4,7 @@ import type { SeoRouteRecord } from '@/lib/seo/route-types';
 import type { VapePage } from '@/lib/vapes/catalog';
 import type { SanityHomepageModule } from '@/lib/cms/homepage';
 import { PageFrame } from '../layout/page-frame';
-import { VapeExperienceLoader } from './vape-experience-loader';
+import { VapeExperience } from './vape-experience';
 import { VapeIcon } from './vape-icon';
 import { OrbitHeroFilm } from './orbit-hero-film';
 import { CmsHomepageModuleRenderer } from '../modules/cms-homepage-module-renderer';
@@ -28,8 +28,8 @@ export function VapeShowroom({ route, breadcrumbs, cmsModules }: { route: SeoRou
         <div className={s.heroFooter}><span>One system. Every perspective.</span><a href="#explore">Discover the collection <VapeIcon name="arrow" /></a></div>
       </div>
     </section>
-    <nav className={s.sectionNav} aria-label="Vape collection sections"><a href="#explore">Explore</a><a href="#moon-pods">Moon Pods</a>{page === 'vapes' ? <a href="#orbit-system">Orbit system</a> : null}<a href="#orbit">Orbit finishes</a><a href="#details">The details</a><a href="#designs">Design collection</a></nav>
-    <VapeExperienceLoader page={page} />
+    <div className={s.sectionNavShell}><nav className={s.sectionNav} aria-label="Vape collection sections"><a href="#explore">Explore</a><a href="#moon-pods">Moon Pods</a>{page === 'vapes' ? <a href="#orbit-system">Orbit system</a> : null}<a href="#orbit">Orbit finishes</a><a href="#details">The details</a><a href="#designs">Design collection</a></nav></div>
+    <div id="explore" className={s.experienceBoundary}><VapeExperience page={page} /></div>
     {cmsModules?.length ? <CmsHomepageModuleRenderer heroHeadingLevel="h2" modules={cmsModules} productRoute={page === 'moon-pods' || page === 'orbit' ? page : undefined} /> : null}
     <section className={`${s.section} ${s.education}`} aria-labelledby="vape-education-heading">
       <p className={s.eyebrow}>Get to know the system</p><div className={s.educationGrid}><div><h2 id="vape-education-heading">Good design.<br /><span>Clear understanding.</span></h2><OrbitHeroFilm /></div><div><p>Moon Pods and Orbit have distinct roles in the Presidential vape family. Explore the pod presentations, then examine the Orbit finish, front display, rear artwork and side profile. The photographs show them together as an assembled device.</p><p>Extract names describe different materials and processes. A photograph shows the product’s appearance; its package and accompanying product information identify the exact contents. Use the guides to understand the vocabulary, and confirm the product with your licensed retailer.</p><div className={s.educationLinks}><Link href="/learn/flavor-science">Flavor science <VapeIcon name="arrow" /></Link><Link href="/learn/different-extracts-need-different-heat">Different extracts, different heat <VapeIcon name="arrow" /></Link><Link href={page === 'moon-pods' ? '/orbit' : '/moon-pods'}>{page === 'moon-pods' ? 'Explore Orbit' : 'Explore Moon Pods'} <VapeIcon name="arrow" /></Link>{page !== 'vapes' ? <Link href="/vapes">The complete vape collection <VapeIcon name="arrow" /></Link> : null}</div></div></div>

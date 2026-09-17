@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 
-export type VapeIconName = 'arrow' | 'left' | 'right' | 'expand' | 'close' | 'plus' | 'minus' | 'check' | 'modes' | 'heat' | 'precision' | 'display' | 'battery' | 'flavor' | 'cloud' | 'smart' | 'shield' | 'user' | 'value';
+export type VapeIconName = 'arrow' | 'left' | 'right' | 'expand' | 'close' | 'plus' | 'minus' | 'check' | 'modes' | 'heat' | 'precision' | 'display' | 'battery' | 'flavor' | 'cloud' | 'smart' | 'shield' | 'user' | 'value' | 'ceramic-platform' | 'ceramic-coils' | 'ceramic-cotton-free' | 'ceramic-tube-free';
 
 export function VapeIcon({ name, ...props }: SVGProps<SVGSVGElement> & { name: VapeIconName }) {
   const paths = {
@@ -23,6 +23,10 @@ export function VapeIcon({ name, ...props }: SVGProps<SVGSVGElement> & { name: V
     shield: 'M12 3 19 6v5c0 4.6-2.6 7.7-7 10-4.4-2.3-7-5.4-7-10V6l7-3Zm-3 9 2 2 4-5',
     user: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9c.6-4 3-6 7-6s6.4 2 7 6',
     value: 'M12 3v18M16 7.5C15.2 6.5 13.8 6 12 6c-2.2 0-4 1.1-4 3s1.8 3 4 3 4 1.1 4 3-1.8 3-4 3c-1.8 0-3.2-.5-4-1.5',
+    'ceramic-platform': 'M4 14h16v4H4zM7 11c0-2 2-2 2-4M12 11c0-2 2-2 2-4M17 11c0-2 2-2 2-4',
+    'ceramic-coils': 'M3 15c0-5 6-5 6 0s6 5 6 0 6-5 6 0M4 19h16M6 6h12',
+    'ceramic-cotton-free': 'M4 14h16v4H4zM8 11c-2-2 0-5 2-3 1-4 4-2 3 1 4 2 2 3 0 5M5 4l14 16',
+    'ceramic-tube-free': 'M5 4h14v16H5zM8 7h8v10H8zM9 12h6',
   };
-  return <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" {...props}><path d={paths[name]} stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+  return <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" {...props}><path d={paths[name]} stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={name === 'ceramic-tube-free' ? '4 2' : undefined} /></svg>;
 }
