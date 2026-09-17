@@ -673,6 +673,18 @@
   border-width: 5px;
 }
 
+.moonRocksCardImage {
+  background: transparent;
+  box-shadow: none;
+}
+
+.moonRocksCardArt {
+  box-sizing: border-box;
+  padding: clamp(6px, 1vw, 14px);
+  object-fit: contain;
+  object-position: center;
+}
+
 .artCardCopy {
   padding: 26px 4px 0;
 }

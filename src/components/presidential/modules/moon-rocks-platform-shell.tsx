@@ -123,7 +123,9 @@ export async function MoonRocksPlatformShell({
       slug: catalogItemSlug(item),
     }),
   }));
-  const activeItems = placements.filter(({ resolution }) => !resolution.entry.retired);
+  const activeItems = placements.filter(
+    ({ resolution }) => !resolution.entry.retired && resolution.entry.hasArt,
+  );
   const itemsFor = (section: CatalogTierSection) =>
     activeItems
       .filter(({ resolution }) => resolution.entry.section === section);
@@ -192,7 +194,6 @@ export async function MoonRocksPlatformShell({
             <div className={shared.tierSections}>
               {TIER_SECTION_ORDER.map((section) => {
                 const entries = itemsFor(section);
-                if (entries.length === 0) return null;
                 return (
                   <section className={shared.tierSection} key={section}>
                     <TierSectionHeader
@@ -200,46 +201,48 @@ export async function MoonRocksPlatformShell({
                       href={tierLinks[section][0]}
                       section={section}
                     />
-                    <div className={`${shared.artGrid} ${shared.tierGrid}`}>
-                      {entries.map(({ item, resolution }) => {
-                        const slug = catalogItemSlug(item);
-                        const art = resolveMoonRocksCardArt(item, slug);
-                        const spec = productSpec(item.productType);
-                        const description = descriptionExcerpt(item.description);
-                        return (
-                          <article className={shared.artCardSquare} key={item._id}>
-                            <Link
-                              aria-label={`View ${resolution.entry.displayName || item.name || slug} product page`}
-                              className={shared.artCardImage}
-                              href={`/moon-rocks/${slug}`}
-                            >
-                              {section === "collabs" ? (
-                                <TierBadge tier={resolution.entry.tierBadge} />
-                              ) : null}
-                              {art ? (
+                    {entries.length > 0 ? (
+                      <div className={`${shared.artGrid} ${shared.tierGrid}`}>
+                        {entries.map(({ item, resolution }) => {
+                          const slug = catalogItemSlug(item);
+                          const art = resolveMoonRocksCardArt(slug);
+                          if (!art) return null;
+                          const spec = productSpec(item.productType);
+                          const description = descriptionExcerpt(item.description);
+                          return (
+                            <article className={shared.artCardSquare} key={item._id}>
+                              <Link
+                                aria-label={`View ${resolution.entry.displayName || item.name || slug} product page`}
+                                className={`${shared.artCardImage} ${shared.moonRocksCardImage}`}
+                                href={`/moon-rocks/${slug}`}
+                              >
+                                {section === "collabs" ? (
+                                  <TierBadge tier={resolution.entry.tierBadge} />
+                                ) : null}
                                 <Image
                                   alt={`${resolution.entry.displayName || item.name || slug} Moon Rocks packaging`}
+                                  className={shared.moonRocksCardArt}
                                   fill
                                   sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw"
                                   src={art.src}
                                 />
-                              ) : null}
-                            </Link>
-                            <div className={shared.artCardCopy}>
-                              <p>Presidential Moon Rocks</p>
-                              <h3>{resolution.entry.displayName || item.name || slug}</h3>
-                              {resolution.entry.collabPartner ? (
-                                <strong className={shared.collabPartner}>
-                                  with {resolution.entry.collabPartner}
-                                </strong>
-                              ) : null}
-                              {spec ? <span>{spec}</span> : null}
-                              {description ? <p>{description}</p> : null}
-                            </div>
-                          </article>
-                        );
-                      })}
-                    </div>
+                              </Link>
+                              <div className={shared.artCardCopy}>
+                                <p>Presidential Moon Rocks</p>
+                                <h3>{resolution.entry.displayName || item.name || slug}</h3>
+                                {resolution.entry.collabPartner ? (
+                                  <strong className={shared.collabPartner}>
+                                    with {resolution.entry.collabPartner}
+                                  </strong>
+                                ) : null}
+                                {spec ? <span>{spec}</span> : null}
+                                {description ? <p>{description}</p> : null}
+                              </div>
+                            </article>
+                          );
+                        })}
+                      </div>
+                    ) : null}
                   </section>
                 );
               })}
@@ -252,24 +255,24 @@ export async function MoonRocksPlatformShell({
                   <div className={`${shared.artGrid} ${shared.tierGrid}`}>
                     {itemsFor("more").map(({ item, resolution }) => {
                       const slug = catalogItemSlug(item);
-                      const art = resolveMoonRocksCardArt(item, slug);
+                      const art = resolveMoonRocksCardArt(slug);
+                      if (!art) return null;
                       const spec = productSpec(item.productType);
                       const description = descriptionExcerpt(item.description);
                       return (
                         <article className={shared.artCardSquare} key={item._id}>
                           <Link
                             aria-label={`View ${resolution.entry.displayName || item.name || slug} product page`}
-                            className={shared.artCardImage}
+                            className={`${shared.artCardImage} ${shared.moonRocksCardImage}`}
                             href={`/moon-rocks/${slug}`}
                           >
-                            {art ? (
-                              <Image
-                                alt={`${resolution.entry.displayName || item.name || slug} Moon Rocks packaging`}
-                                fill
-                                sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw"
-                                src={art.src}
-                              />
-                            ) : null}
+                            <Image
+                              alt={`${resolution.entry.displayName || item.name || slug} Moon Rocks packaging`}
+                              className={shared.moonRocksCardArt}
+                              fill
+                              sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw"
+                              src={art.src}
+                            />
                           </Link>
                           <div className={shared.artCardCopy}>
                             <p>Presidential Moon Rocks</p>

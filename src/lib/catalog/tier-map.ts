@@ -14,6 +14,7 @@ export type CatalogTierEntry = {
   readonly tierBadge: CatalogTierBadge;
   readonly collabPartner: string | null;
   readonly retired: boolean;
+  readonly hasArt: boolean;
   readonly displayName: string | null;
 };
 
@@ -210,6 +211,24 @@ const PRODUCTS_BY_LINE = {
   },
 } as const;
 
+const MOON_ROCKS_CARD_ART_SLUGS: ReadonlySet<string> = new Set([
+  "cherry-gelato",
+  "gorilla-goo",
+  "grape",
+  "peach-mango",
+  "pink-cookies",
+  "presidential-line-garlic-cookies",
+  "presidential-line-ghost-haze-train",
+  "presidential-line-nino-brown",
+  "presidential-line-whoa-si-whoa",
+  "presidential-moon-rocks",
+  "skywalker",
+  "strawberry",
+  "watermelon",
+  "waui",
+  "xj-13",
+]);
+
 const ENTRY_OVERRIDES: Readonly<
   Record<string, Partial<Omit<CatalogTierEntry, "section" | "retired">>>
 > = {
@@ -323,6 +342,7 @@ function buildTierMap(): Readonly<Record<string, CatalogTierEntry>> {
           tierBadge: defaultTierBadge(section),
           collabPartner: null,
           retired: false,
+          hasArt: line !== "moon-rocks" || MOON_ROCKS_CARD_ART_SLUGS.has(slug),
           displayName: null,
           ...ENTRY_OVERRIDES[key],
         };
@@ -336,6 +356,7 @@ function buildTierMap(): Readonly<Record<string, CatalogTierEntry>> {
         tierBadge: null,
         collabPartner: null,
         retired: true,
+        hasArt: false,
         displayName: null,
         ...ENTRY_OVERRIDES[key],
       };
@@ -391,6 +412,7 @@ export function resolveCatalogTier({
       tierBadge: defaultTierBadge(section),
       collabPartner: null,
       retired: false,
+      hasArt: line !== "moon-rocks",
       displayName: null,
     },
     source: "fallback",
