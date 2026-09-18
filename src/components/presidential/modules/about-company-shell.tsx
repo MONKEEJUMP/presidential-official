@@ -181,7 +181,7 @@ export function AboutCompanyShell() {
           className="po-gold-thread-inlay py-20 sm:py-24 lg:py-28"
           tone="contrast"
         >
-          <blockquote className="mx-auto max-w-7xl font-display text-5xl uppercase leading-[0.9] text-po-brand sm:text-7xl lg:text-8xl">
+          <blockquote className="mx-auto max-w-7xl font-display text-[clamp(2.25rem,10vw,3rem)] uppercase leading-[0.9] text-po-brand sm:text-7xl lg:text-8xl">
             &ldquo;Cannabis Deserves Better. Expect More.&rdquo;
           </blockquote>
         </Scene>
@@ -305,7 +305,7 @@ export function AboutCompanyShell() {
           className="po-gold-thread-inlay py-20 sm:py-24 lg:py-28"
           tone="contrast"
         >
-          <blockquote className="mx-auto max-w-7xl font-display text-5xl uppercase leading-[0.9] text-po-brand sm:text-7xl lg:text-8xl">
+          <blockquote className="mx-auto max-w-7xl font-display text-[clamp(2.25rem,10vw,3rem)] uppercase leading-[0.9] text-po-brand sm:text-7xl lg:text-8xl">
             &ldquo;Presidential Doesn&apos;t Miss.&rdquo;
           </blockquote>
         </Scene>

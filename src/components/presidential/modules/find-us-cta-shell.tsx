@@ -46,7 +46,7 @@ export function FindUsCtaShell({
             className={
               compact
                 ? "max-w-4xl font-display text-4xl uppercase leading-[0.92] text-po-on-dark sm:text-6xl lg:text-7xl"
-                : "max-w-[12ch] font-display text-[clamp(3.25rem,6vw,6rem)] font-bold uppercase leading-[0.86] text-po-on-dark"
+                : "max-w-[12ch] font-display text-[clamp(2.5rem,6vw,6rem)] font-bold uppercase leading-[0.86] text-po-on-dark"
             }
             id="presidential-find-us-path"
           >

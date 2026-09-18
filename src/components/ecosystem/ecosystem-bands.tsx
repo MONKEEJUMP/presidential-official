@@ -49,7 +49,14 @@ const ARCHITECTURE_STEPS = [
   },
 ] as const;
 
-const PLATFORM_FEATURES = [
+const MOON_ROCKS_PLATFORM_FEATURES = [
+  { icon: Crown, label: "Premium Flower Base" },
+  { icon: Drop, label: "Precision Oil Infusion" },
+  { icon: Diamond, label: "Kief-Coated Finish" },
+  { icon: CirclesThree, label: "Three Experience Tiers" },
+] as const;
+
+const OIL_PLATFORM_FEATURES = [
   { icon: Thermometer, label: "Smart Heat Technology" },
   { icon: CirclesThree, label: "Three Experience Modes" },
   { icon: Drop, label: "Maximum Flavor" },
@@ -429,6 +436,15 @@ export function HomePlatformsAndTiersBand() {
             >
               <h3 id="home-moon-rocks-platform-heading">MOON ROCKS™ PLATFORM</h3>
               <p className={styles.cardSubline}>The Ultimate Flower Experience.</p>
+              <h4>THREE LAYERS. ONE SIGNATURE EXPERIENCE.</h4>
+              <div className={styles.platformFeatures}>
+                {MOON_ROCKS_PLATFORM_FEATURES.map(({ icon: Icon, label }) => (
+                  <p key={label}>
+                    <CircledIcon Icon={Icon} />
+                    <span>{label}</span>
+                  </p>
+                ))}
+              </div>
             </Link>
             <Image
               alt="Presidential crest"
@@ -447,7 +463,7 @@ export function HomePlatformsAndTiersBand() {
               <p className={styles.cardSubline}>The Ultimate Oil Experience.</p>
               <h4>SMARTER SYSTEM. BETTER EXPERIENCE.</h4>
               <div className={styles.platformFeatures}>
-                {PLATFORM_FEATURES.map(({ icon: Icon, label }) => (
+                {OIL_PLATFORM_FEATURES.map(({ icon: Icon, label }) => (
                   <p key={label}>
                     <CircledIcon Icon={Icon} />
                     <span>{label}</span>

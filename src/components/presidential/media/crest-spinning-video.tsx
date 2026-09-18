@@ -15,7 +15,7 @@ export function CrestSpinningVideo() {
 
   return (
     <div
-      className="absolute left-1/2 top-1/2 h-[90%] w-[160%] max-h-[720px] max-w-[1280px] -translate-x-1/2 -translate-y-1/2"
+      className="absolute left-1/2 top-1/2 h-[90%] w-full max-h-[720px] max-w-[1280px] -translate-x-1/2 -translate-y-1/2 sm:w-[160%]"
       ref={mountRef}
     >
       <Image
