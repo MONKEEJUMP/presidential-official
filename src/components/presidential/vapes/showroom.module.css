@@ -131,6 +131,7 @@
 .cardBand::before { top: 0; }.cardBand::after { bottom: 0; }
 .cardBand > * { position: relative; z-index: 2; }
 .bandTitle, .builtForOil > h2 { margin-bottom: 42px; color: #d4b96a; text-align: center; font-size: clamp(28px,3vw,44px) !important; letter-spacing: .055em !important; }
+.builtForOil > h2 { width: 100%; max-width: none; margin-inline: auto; }
 .builtForOil { text-align: center; }
 .builtForOil .pillarGrid { text-align: left; }
 .dualPanelBand { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; align-items: stretch; }
