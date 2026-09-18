@@ -584,7 +584,7 @@ export function PresidentialSrosSection() {
 
       <section className={styles.band} data-sros-band="8">
         <div className={styles.inner}>
-          <BandHeading id="sros-do-dont-heading">WHAT NOT TO SAY / DO</BandHeading>
+          <BandHeading id="sros-do-dont-heading">WHAT WE DON&apos;T SAY / WHAT WE DO SAY</BandHeading>
           <div className={styles.behaviorColumns}>
             <article className={`${styles.card} ${styles.dontColumn}`}>
               <h4 data-sros-line>DON&apos;T</h4>
