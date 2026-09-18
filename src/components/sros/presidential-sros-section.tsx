@@ -635,7 +635,7 @@ export function PresidentialSrosSection() {
 
       <section className={styles.band} data-sros-band="10">
         <div className={styles.inner}>
-          <BandHeading id="sros-objections-heading">OBJECTION HANDLING</BandHeading>
+          <BandHeading id="sros-objections-heading">Q&amp;A</BandHeading>
           <div className={styles.objectionGrid}>
             {OBJECTIONS.map(({ question, answer }) => (
               <article className={`${styles.card} ${styles.objectionCard}`} key={question}>
