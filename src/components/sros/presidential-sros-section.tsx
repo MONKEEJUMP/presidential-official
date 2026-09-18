@@ -726,16 +726,6 @@ export function PresidentialSrosSection() {
                 ))}
               </div>
             </div>
-            <div className={styles.wordmarkLockup}>
-              <Image
-                alt="Presidential"
-                height={48}
-                sizes="146px"
-                src="/media/brand/presidential-banner.png"
-                width={146}
-              />
-              <p data-sros-line>BUILT FOR THE OIL.</p>
-            </div>
           </div>
           <div className={styles.finalClose}>
             <p data-sros-line>DIFFERENT OILS. DIFFERENT HEAT. DIFFERENT RESULTS.</p>

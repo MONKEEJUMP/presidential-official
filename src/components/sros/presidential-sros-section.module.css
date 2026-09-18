@@ -57,8 +57,7 @@
   object-fit: contain;
 }
 
-.brandLockup p,
-.wordmarkLockup p {
+.brandLockup p {
   margin: 0;
   color: var(--sros-gold);
   font-family: var(--po-font-display);
@@ -624,7 +623,12 @@
 .fieldBlock,
 .toolsBlock { min-width: 0; }
 
-.fieldToolsGrid h3 { color: var(--sros-heading); }
+.fieldToolsGrid h3 {
+  max-width: 100%;
+  color: var(--sros-heading);
+  font-size: clamp(2.25rem, 3.25vw, 4rem);
+  text-wrap: balance;
+}
 
 .fieldList {
   display: grid;
@@ -677,11 +681,10 @@
 }
 
 .mantraGrid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(250px, 0.65fr);
-  gap: 60px;
-  align-items: center;
+  display: block;
 }
+
+.mantraGrid > div { max-width: 1000px; }
 
 .mantraLight,
 .mantraGold {
@@ -700,18 +703,6 @@
 .mantraGold { color: var(--sros-gold); }
 .mantraLight p,
 .mantraGold p { margin: 0; }
-
-.wordmarkLockup {
-  display: grid;
-  justify-items: center;
-  gap: 14px;
-}
-
-.wordmarkLockup img {
-  width: 146px;
-  height: 48px;
-  object-fit: contain;
-}
 
 .finalClose {
   display: grid;
@@ -835,8 +826,6 @@
 
   .fieldToolsGrid { gap: 48px; }
   .toolsGrid article:last-child { grid-column: auto; }
-
-  .wordmarkLockup { margin-top: 14px; }
 }
 
 @media (max-width: 27.5rem) {
