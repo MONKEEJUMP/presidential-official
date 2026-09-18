@@ -279,10 +279,11 @@
 .primaryAction svg,
 .secondaryAction svg { width: 21px; height: 21px; flex: 0 0 auto; }
 
-.nextSteps { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--wholesale-gold); }
-.nextSteps > div { min-height: 430px; padding: 84px max(40px, calc((100vw - 1460px) / 2)); background: #061b17; }
-.nextSteps > div + div { border-left: 1px solid var(--wholesale-line); background: #04100e; }
-.nextSteps h2 { max-width: 650px; margin-top: 20px; font-size: clamp(44px, 4.2vw, 72px); line-height: 0.98; }
+.nextSteps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--wholesale-gold); }
+.nextSteps > div { min-width: 0; min-height: 430px; padding-block: 84px; background: #061b17; }
+.nextSteps > div:first-child { padding-inline: max(40px, calc((100vw - 1460px) / 2)) clamp(40px, 4vw, 72px); }
+.nextSteps > div + div { padding-inline: clamp(40px, 4vw, 72px) max(40px, calc((100vw - 1460px) / 2)); border-left: 1px solid var(--wholesale-line); background: #04100e; }
+.nextSteps h2 { width: min(650px, 100%); margin-top: 20px; font-size: clamp(42px, 3.4vw, 64px); line-height: 0.98; }
 
 .primaryAction,
 .secondaryAction {
@@ -411,7 +412,9 @@
   .marketGrid { grid-template-columns: 1fr; }
   .marketCard { min-height: 210px; }
   .nextSteps { grid-template-columns: 1fr; }
-  .nextSteps > div { min-height: 360px; padding: 64px 18px; }
+  .nextSteps > div,
+  .nextSteps > div:first-child,
+  .nextSteps > div + div { min-height: 360px; padding: 64px 18px; }
   .nextSteps > div + div { border-top: 1px solid var(--wholesale-line); border-left: 0; }
   .nextSteps h2 { font-size: 45px; }
   .applicationPage { padding: 45px 18px 86px; }
