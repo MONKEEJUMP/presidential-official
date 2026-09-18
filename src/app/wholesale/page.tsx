@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PageFrame } from "@/components/presidential/layout/page-frame";
+import { PresidentialSrosSection } from "@/components/sros/presidential-sros-section";
 import { buildStaticRouteMetadata, getStaticRouteRecord } from "@/lib/seo/route-page";
 import { buildRouteShellJsonLd, JsonLd } from "@/lib/seo/schema";
 import { getWholesaleDestination, WHOLESALE_MARKETS } from "@/lib/wholesale/market-ordering";
@@ -90,6 +91,8 @@ export default function WholesalePage() {
               })}
             </div>
           </section>
+
+          <PresidentialSrosSection />
 
           <section className={styles.nextSteps} aria-label="Other Presidential paths">
             <div><span>Not approved yet?</span><h2>Become a Presidential partner.</h2><Link className={styles.primaryAction} href="/wholesale/apply">Apply to become a partner <ArrowIcon /></Link></div>
