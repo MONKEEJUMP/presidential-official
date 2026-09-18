@@ -7,6 +7,7 @@ import { PageFrame } from '../layout/page-frame';
 import { VapeExperience } from './vape-experience';
 import { VapeIcon } from './vape-icon';
 import { OrbitHeroFilm } from './orbit-hero-film';
+import { VapeValueBand } from './vape-system-sections';
 import { CmsHomepageModuleRenderer } from '../modules/cms-homepage-module-renderer';
 import s from './showroom.module.css';
 
@@ -29,11 +30,12 @@ export function VapeShowroom({ route, breadcrumbs, cmsModules }: { route: SeoRou
       </div>
     </section>
     <div className={s.sectionNavShell}><nav className={s.sectionNav} aria-label="Vape collection sections"><a href="#explore">Explore</a><a href="#moon-pods">Moon Pods</a>{page === 'vapes' ? <a href="#orbit-system">Orbit system</a> : null}<a href="#orbit">Orbit finishes</a><a href="#details">The details</a><a href="#designs">Design collection</a></nav></div>
-    <div id="explore" className={s.experienceBoundary}><VapeExperience page={page} /></div>
+    <div className={s.experienceBoundary}><VapeExperience page={page} /></div>
     {cmsModules?.length ? <CmsHomepageModuleRenderer heroHeadingLevel="h2" modules={cmsModules} productRoute={page === 'moon-pods' || page === 'orbit' ? page : undefined} /> : null}
     <section className={`${s.section} ${s.education}`} aria-labelledby="vape-education-heading">
       <p className={s.eyebrow}>Get to know the system</p><div className={s.educationGrid}><div><h2 id="vape-education-heading">Good design.<br /><span>Clear understanding.</span></h2><OrbitHeroFilm /></div><div><p>Moon Pods and Orbit have distinct roles in the Presidential vape family. Explore the pod presentations, then examine the Orbit finish, front display, rear artwork and side profile. The photographs show them together as an assembled device.</p><p>Extract names describe different materials and processes. A photograph shows the product’s appearance; its package and accompanying product information identify the exact contents. Use the guides to understand the vocabulary, and confirm the product with your licensed retailer.</p><div className={s.educationLinks}><Link href="/learn/flavor-science">Flavor science <VapeIcon name="arrow" /></Link><Link href="/learn/different-extracts-need-different-heat">Different extracts, different heat <VapeIcon name="arrow" /></Link><Link href={page === 'moon-pods' ? '/orbit' : '/moon-pods'}>{page === 'moon-pods' ? 'Explore Orbit' : 'Explore Moon Pods'} <VapeIcon name="arrow" /></Link>{page !== 'vapes' ? <Link href="/vapes">The complete vape collection <VapeIcon name="arrow" /></Link> : null}</div></div></div>
     </section>
+    {page === 'vapes' ? <VapeValueBand /> : null}
     <section className={s.retail} aria-labelledby="vape-retail-heading"><div className={s.retailInner}><div><p className={s.eyebrow}>Find your Presidential</p><h2 id="vape-retail-heading">Your next stop.<br /><span>The right retailer.</span></h2><p>Explore the official retailer locator, then check the store’s current Presidential selection. Availability varies by licensed retailer.</p><Link href="/find-us" className={s.primaryButton}>Find a licensed retailer <VapeIcon name="arrow" /></Link><p className={s.adultNote}>For adults 21+ where legal.</p></div><div className={s.retailArt} aria-hidden="true"><Image src="/media/vapes/showroom/teal-ld-back.webp" alt="" aria-hidden="true" width={1200} height={1500} sizes="(min-width: 900px) 440px, 80vw" /></div></div><p className={s.signoff}>EXPECT MORE.</p></section>
   </PageFrame>;
 }

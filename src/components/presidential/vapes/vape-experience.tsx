@@ -6,7 +6,14 @@ import { useRef, useState } from 'react';
 import { getVapeGallery, getVapeImage, VAPE_FAMILIES, VAPE_FINISHES, VAPE_MODEL_SETS, VAPE_VIEWS, type VapeFamily, type VapeFinish, type VapePage } from '@/lib/vapes/catalog';
 import { VapeGalleryDialog } from './vape-gallery-dialog';
 import { VapeIcon } from './vape-icon';
-import { VapeAdvantageSections, VapeModeSystemSection } from './vape-system-sections';
+import {
+  VapeBuiltForOilBand,
+  VapeHardwareBand,
+  VapeModeSystemSection,
+  VapePerformanceBand,
+  VapeTechnologyBand,
+  VapeUserExperienceBand,
+} from './vape-system-sections';
 import s from './showroom.module.css';
 
 function ColorChoices({ value, onChange, label }: { value: VapeFinish; onChange: (value: VapeFinish) => void; label: string }) {
@@ -43,7 +50,9 @@ export function VapeExperience({ page }: { page: VapePage }) {
   function openImage(index: number) { setViewIndex(index); setLightboxOpen(true); }
 
   return <>
-    <section className={`${s.section} ${s.explorer}`} id="vape-explorer" ref={explorerRef} aria-labelledby="vape-explorer-heading">
+    {page === 'vapes' ? <VapeBuiltForOilBand /> : null}
+
+    <section className={`${s.section} ${s.explorer}`} id="explore" ref={explorerRef} aria-labelledby="vape-explorer-heading">
       <div className={s.sectionHeading}>
         <div><p className={s.eyebrow}>The product explorer</p><h2 id="vape-explorer-heading">Your Orbit.<br /><span>Your perspective.</span></h2></div>
         <p>Find your finish. Explore the pod families.<br />See the details from every side.</p>
@@ -94,6 +103,8 @@ export function VapeExperience({ page }: { page: VapePage }) {
       </div>
     </section>
 
+    {page === 'vapes' ? <VapePerformanceBand /> : null}
+
     <section className={`${s.section} ${s.families}`} id="moon-pods" aria-labelledby="moon-pods-chapters-heading">
       <div className={s.sectionHeading}>
         <div><p className={s.eyebrow}>Moon Pods</p><h2 id="moon-pods-chapters-heading">Three families.<br /><span>One Presidential standard.</span></h2></div>
@@ -139,6 +150,8 @@ export function VapeExperience({ page }: { page: VapePage }) {
       <p className={s.sectionNote}>Tap a finish to explore its complete gallery. Devices shown with LD Moon Pods attached.</p>
     </section>
 
+    {page === 'vapes' ? <VapeHardwareBand /> : null}
+
     <section className={`${s.section} ${s.details}`} id="details" aria-labelledby="orbit-detail-heading">
       <div className={s.sectionHeading}><div><p className={s.eyebrow}>The closer look</p><h2 id="orbit-detail-heading">Details make<br /><span>the difference.</span></h2></div><div><p>Currently exploring</p><p className={s.detailSelection}>{selectedFinish.name} / {selectedFamily.name}</p><button type="button" className={s.textLink} onClick={() => explore(finish, family)}>Change your selection <VapeIcon name="arrow" /></button></div></div>
       <div className={s.detailGrid}>
@@ -154,7 +167,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
       <div className={s.portDetail}><p>Explore the mouthpiece, sides and base together in the matching design overview.</p><button className={s.textLink} type="button" onClick={() => openImage(7)}>View the complete design <VapeIcon name="arrow" /></button></div>
     </section>
 
-    {page === 'vapes' ? <VapeAdvantageSections /> : null}
+    {page === 'vapes' ? <VapeTechnologyBand /> : null}
 
     <section className={`${s.section} ${s.models}`} id="designs" aria-labelledby="vape-design-heading">
       <div className={s.sectionHeading}><div><p className={s.eyebrow}>The design collection</p><h2 id="vape-design-heading">Every angle.<br /><span>Every expression.</span></h2></div><p>Explore all twelve design overviews.<br />Select a finish. Open the full picture.</p></div>
@@ -180,6 +193,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
         </div> : null}
       </details>
     </section>
+    {page === 'vapes' ? <VapeUserExperienceBand /> : null}
     <VapeGalleryDialog open={lightboxOpen} onClose={() => setLightboxOpen(false)} images={gallery} index={viewIndex} onIndex={setViewIndex} title={`${selectedFinish.name} / ${selectedFamily.name}`} />
   </>;
 }

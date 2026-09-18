@@ -1,9 +1,49 @@
 export const VAPES_ADDITIONS = {
+  builtForOil: {
+    title: "BUILT FOR THE OIL.",
+  },
+  performance: {
+    panels: [
+      {
+        number: "01",
+        title: "FLAVOR THAT ACTUALLY LASTS",
+        intro: "Most disposables lose flavor halfway through.",
+        chart: {
+          title: "FLAVOR OVER TIME",
+          lines: ["PYRIC HARDWARE", "OTHER VAPES"],
+          axes: ["GREAT FLAVOR", "FADES FAST"],
+        },
+        checks: [
+          "Post less hardware heats oil more evenly",
+          "Less burn (no cotton wick)",
+          "Cleaner flavor",
+          "More consistent hits",
+        ],
+      },
+      {
+        number: "02",
+        title: "BIGGER CLOUDS. BETTER EXPERIENCE.",
+        intro: "PYRIC hardware produces strong vapor output designed for experienced consumers.",
+        callouts: [
+          { icon: "CloudArrowDown", title: "LARGER HITS" },
+          { icon: "Cloud", title: "MORE SATISFYING CLOUDS" },
+          { icon: "Wind", title: "SMOOTH PULLS" },
+        ],
+        image: {
+          src: "/media/vapes/showroom/teal-lre-front-left.webp",
+          alt: "Teal Presidential Orbit with Live Resin Moon Pod, front left angle",
+        },
+      },
+    ],
+  },
   modeSystem: {
     eyebrow: ["THREE OILS", "THREE MODES", "ONE SMART SYSTEM"],
     title: "SMART MULTI-MODE FLAVOR SYSTEM",
     lead: "Different oils need different heat. Orbit makes it simple: select the oil type and the device automatically applies the optimized heat.",
+    modesHeading: "OPTIMIZED MODES INCLUDE:",
     howTo: "Press the device button three times, then select the oil type.",
+    benefitsHeading: "CONSUMER BENEFITS",
+    closing: "ORBIT™ KNOWS THE DIFFERENCE.",
     modes: [
       {
         title: "LIQUID DIAMOND MODE",
@@ -29,6 +69,33 @@ export const VAPES_ADDITIONS = {
       "Reduced risk of burnt taste",
       "Better flavor consistency",
       "Less oil waste from overheating",
+    ],
+  },
+  hardware: {
+    panels: [
+      {
+        number: "03",
+        title: "BETTER HARDWARE. MADE TO PERFORM.",
+        intro: "Unlike most value disposables, PYRIC includes premium features that elevate every hit.",
+        features: [
+          { icon: "Monitor", title: "LED SCREEN", description: "See everything. Stay in control." },
+          { icon: "Lightning", title: "VARIABLE VOLTAGE", description: "Dial in your perfect experience." },
+          { icon: "Fire", title: "PREHEAT FUNCTION", description: "Preheats oil for smoother, more consistent hits." },
+        ],
+        image: {
+          src: "/media/vapes/showroom/teal-ld-screen.webp",
+          alt: "LD display on the teal Presidential Orbit device",
+        },
+      },
+      {
+        number: "04",
+        title: "REAL BENEFITS. EVERY TIME.",
+        features: [
+          { icon: "Prohibit", title: "PREVENTS CLOGGING", description: "Better airflow. Fewer issues." },
+          { icon: "SlidersHorizontal", title: "BETTER VAPOR CONTROL", description: "More precision. More satisfaction." },
+          { icon: "BatteryFull", title: "CONSISTENT BATTERY PERFORMANCE", description: "All-day power. Every day." },
+        ],
+      },
     ],
   },
   advantage: {
@@ -73,13 +140,22 @@ export const VAPES_ADDITIONS = {
   standards: {
     ariaLabel: "Why Orbit and safety and material standards",
     orbit: {
-      title: "WHY ORBIT",
+      number: "05",
+      title: "WHY PYRIC? WHY ORBIT?",
       items: [
         { title: "FLAVOR THAT LASTS", description: "All the way to the last hit." },
         { title: "BIGGER CLOUDS", description: "Stronger output. Better experience." },
         { title: "BETTER HARDWARE", description: "LED screen. Variable voltage. Preheat function." },
         { title: "REAL BENEFITS", description: "Prevents clogging. Better vapor control. Consistent battery performance." },
       ],
+      oils: {
+        title: "THREE OILS. THREE MODES. ONE SMART SYSTEM.",
+        items: [
+          { name: "LIQUID DIAMONDS (LD)", tier: "SILVER" },
+          { name: "LIVE RESIN (LR)", tier: "GOLD" },
+          { name: "LIVE ROSIN (LRO)", tier: "ROSE GOLD" },
+        ],
+      },
     },
     safety: {
       title: "SAFETY & MATERIAL STANDARDS",
@@ -96,9 +172,30 @@ export const VAPES_ADDITIONS = {
       ],
     },
   },
+  userExperience: {
+    title: "USER EXPERIENCE FEATURES",
+    blinker: {
+      title: "10-SECOND BLINKER CHALLENGE MODE",
+      checks: [
+        "Stronger consumer interaction",
+        "Social sharing potential",
+        "More engaging experience",
+      ],
+    },
+    badge: ["PRESIDENTIAL", "HEAVY METAL TESTED"],
+  },
   value: {
+    bandTitle: "COMMERCIAL & CONSUMER ADVANTAGES",
+    subhead: "REUSABLE BATTERY + DISPOSABLE POD CONCEPT",
     title: "REUSABLE BATTERY + DISPOSABLE POD = SMARTER VALUE",
     body: "Combines the convenience of a disposable device with the cost-saving advantage of a reusable battery system.",
+    benefits: ["Lower long-term consumer cost", "Better sustainability positioning"],
+    taglines: [
+      ["SMART TECHNOLOGY", "PERFECTED HEAT"],
+      ["PREMIUM FLAVOR", "EVERY TIME"],
+      ["MAX CLOUDS", "MAX SATISFACTION"],
+      ["UNMATCHED QUALITY", "ALWAYS"],
+    ],
     pillars: [
       { icon: "flavor", title: "PREMIUM FLAVOR", description: "Engineered for flavor that lasts from first hit to last." },
       { icon: "cloud", title: "BIGGER CLOUDS", description: "Stronger output. Smoother pulls. More satisfying experience." },
