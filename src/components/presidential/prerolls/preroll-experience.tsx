@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, type ReactNode } from "react";
 
 import {
   FEATURED_PRE_ROLL_ARTWORK_IDS,
@@ -45,7 +45,13 @@ function ArrowIcon({ direction }: { readonly direction: "left" | "right" }) {
   );
 }
 
-export function PreRollExperience() {
+export function PreRollExperience({
+  afterCollection,
+  afterStory,
+}: {
+  readonly afterCollection?: ReactNode;
+  readonly afterStory?: ReactNode;
+}) {
   useLayoutEffect(() => {
     if (window.location.hash) return;
 
@@ -160,6 +166,8 @@ export function PreRollExperience() {
         </div>
       </section>
 
+      {afterStory}
+
       <section aria-labelledby="art-index-heading" className={styles.artIndex} id="collection">
         <div className={styles.indexIntro}>
           <div>
@@ -212,6 +220,8 @@ export function PreRollExperience() {
           ) : null}
         </div>
       </section>
+
+      {afterCollection}
 
       <section aria-labelledby="find-heading" className={styles.find} id="find">
         <div>

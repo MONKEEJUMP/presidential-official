@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, type ReactNode } from "react";
 
 import { BLUNT_ARTWORKS } from "@/content/blunts-catalog";
 import { productDetailPath } from "@/lib/products/product-paths";
@@ -23,7 +23,13 @@ function ArrowIcon({ direction }: { readonly direction: "left" | "right" }) {
   );
 }
 
-export function BluntsExperience() {
+export function BluntsExperience({
+  afterCollection,
+  afterStory,
+}: {
+  readonly afterCollection?: ReactNode;
+  readonly afterStory?: ReactNode;
+}) {
   useLayoutEffect(() => {
     if (window.location.hash) return;
     const previousRestoration = window.history.scrollRestoration;
@@ -98,6 +104,8 @@ export function BluntsExperience() {
         </div>
       </section>
 
+      {afterStory}
+
       <section aria-labelledby="blunts-art-index-heading" className={shared.artIndex} id="collection">
         <div className={shared.indexIntro}><div><p>A closer look</p><h2 id="blunts-art-index-heading">Meet<br />the blunts.</h2></div><p>Compare the flavor, infusion, and ingredients in each Moon Rock blunt. Flavor and aroma vary by batch; your retailer can confirm the current selection.</p></div>
         <div className={shared.tierSections}>
@@ -142,6 +150,8 @@ export function BluntsExperience() {
           ) : null}
         </div>
       </section>
+
+      {afterCollection}
 
       <section aria-labelledby="blunts-find-heading" className={shared.find} id="find">
         <div><p>Find your Presidential</p><h2 id="blunts-find-heading">Your next stop.<br /><span>The right retailer.</span></h2><p className={shared.findCopy}>Explore the official retailer locator, then check the store&apos;s current Presidential selection. Availability varies by licensed retailer.</p><Link className={shared.primaryAction} href="/find-us">Find a licensed retailer <ArrowIcon direction="right" /></Link><small>For adults 21+ where legal.</small></div>

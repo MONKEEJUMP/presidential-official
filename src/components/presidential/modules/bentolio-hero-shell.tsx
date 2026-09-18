@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import {
   catalogItemSlug,
@@ -144,8 +145,10 @@ function toTheaterSeries(
 }
 
 export async function BentolioHeroShell({
+  afterProductCarousel,
   route,
 }: {
+  readonly afterProductCarousel?: ReactNode;
   readonly route: SeoRouteRecord;
 }) {
   const catalogItems = await readHeroCatalogItems();
@@ -194,6 +197,12 @@ export async function BentolioHeroShell({
         </div>
 
         </div>
+      </section>
+        {afterProductCarousel}
+      <section
+        aria-label="Presidential term pages"
+        className="po-home-canvas-surface px-6 py-3"
+      >
         <div className="po-teal-pinstripe mx-auto mt-3 w-full max-w-[1392px] overflow-hidden rounded-[20px] bg-[#0D0D0D] px-6 py-4 text-po-on-dark sm:px-10 lg:px-12">
         <h2 className="font-display text-4xl uppercase leading-none text-po-brand sm:text-5xl">
           Presidential

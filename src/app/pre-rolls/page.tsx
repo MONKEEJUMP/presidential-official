@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 
+import {
+  ClosingStripBand,
+  ProductExpressionBand,
+} from "@/components/ecosystem/ecosystem-bands";
 import { PageFrame } from "@/components/presidential/layout/page-frame";
 import { PreRollExperience } from "@/components/presidential/prerolls/preroll-experience";
 import {
@@ -27,7 +31,10 @@ export default function PreRollsPage() {
         <JsonLd data={entry.data} key={`${route.id}-${entry.id}`} />
       ))}
       <PageFrame className="bg-[#06100f]">
-        <PreRollExperience />
+        <PreRollExperience
+          afterCollection={<ClosingStripBand scope="pre-rolls" />}
+          afterStory={<ProductExpressionBand product="pre-rolls" />}
+        />
       </PageFrame>
     </>
   );

@@ -1,5 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import {
+  ExperienceEveryMomentBand,
+  MoonRocksPlatformBand,
+} from "@/components/ecosystem/ecosystem-bands";
 
 import {
   catalogItemSlug,
@@ -165,6 +169,8 @@ export async function MoonRocksPlatformShell({
           ]}
           title={route.h1}
         />
+
+        <MoonRocksPlatformBand />
 
         <div className={`${shared.page} po-gold-thread-inlay`}>
           <section
@@ -432,6 +438,8 @@ export async function MoonRocksPlatformShell({
             </ol>
           </div>
         </Scene>
+
+        <ExperienceEveryMomentBand scope="moon-rocks" />
 
         <FindUsCtaShell className="po-gold-thread-inlay" compact />
       </SceneStack>

@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 
+import {
+  ClosingStripBand,
+  ProductExpressionBand,
+} from "@/components/ecosystem/ecosystem-bands";
 import { BluntsExperience } from "@/components/presidential/blunts/blunts-experience";
 import { PageFrame } from "@/components/presidential/layout/page-frame";
 import { buildStaticRouteMetadata, getStaticRouteRecord } from "@/lib/seo/route-page";
@@ -17,7 +21,12 @@ export default function BluntsPage() {
   return (
     <>
       {jsonLdEntries.map((entry) => <JsonLd data={entry.data} key={`${route.id}-${entry.id}`} />)}
-      <PageFrame className="bg-[#06100f]"><BluntsExperience /></PageFrame>
+      <PageFrame className="bg-[#06100f]">
+        <BluntsExperience
+          afterCollection={<ClosingStripBand scope="blunts" />}
+          afterStory={<ProductExpressionBand product="blunts" />}
+        />
+      </PageFrame>
     </>
   );
 }

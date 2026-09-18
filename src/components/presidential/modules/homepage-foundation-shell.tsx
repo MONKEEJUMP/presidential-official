@@ -3,6 +3,13 @@ import Link from "next/link";
 
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
 import type { LocatorInitialSearch } from "@/lib/locator/inbound-search";
+import {
+  ExperienceEveryMomentBand,
+  HomeArchitectureBand,
+  HomeEcosystemBand,
+  HomeExpressionsBand,
+  HomePlatformsAndTiersBand,
+} from "@/components/ecosystem/ecosystem-bands";
 
 import { PageFrame } from "../layout/page-frame";
 import { LocatorConsole } from "../locator/locator-console";
@@ -207,7 +214,12 @@ export function HomepageFoundationShell({
           </div>
         </Scene>
 
-        <BentolioHeroShell route={route} />
+        <HomeEcosystemBand />
+
+        <BentolioHeroShell
+          afterProductCarousel={<HomeArchitectureBand />}
+          route={route}
+        />
 
         <Scene
           ariaLabelledBy="presidential-expect-more"
@@ -314,6 +326,8 @@ export function HomepageFoundationShell({
           </div>
         </Scene>
 
+        <HomePlatformsAndTiersBand />
+
         <Scene
           ariaLabelledBy="presidential-then-now-next"
           className="po-gold-thread-inlay !py-12 lg:!py-16"
@@ -352,6 +366,8 @@ export function HomepageFoundationShell({
             </div>
           </div>
         </Scene>
+
+        <HomeExpressionsBand />
 
         <div className="[&>section]:!pb-8 lg:[&>section]:!pb-10">
           <BluntsGraphicsGrid />
@@ -430,6 +446,8 @@ export function HomepageFoundationShell({
             </article>
           ))}
         </section>
+
+        <ExperienceEveryMomentBand scope="home" />
 
         <div className="po-gold-thread-inlay">
           <FindUsCtaShell className="!py-12 lg:!py-16" />
