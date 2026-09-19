@@ -211,20 +211,113 @@ function ImageGrid({
   );
 }
 
+function ProductCollage() {
+  return (
+    <div className="grid gap-6 sm:grid-cols-2">
+      <div className="relative isolate aspect-[3/4] overflow-hidden rounded-[20px] border-[3px] border-po-brand bg-po-ink shadow-[0_28px_60px_rgba(0,0,0,0.28)]">
+        <Image
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover opacity-70"
+          fill
+          sizes="(min-width: 1024px) 21vw, 48vw"
+          src="/media/blunts/hero-studio-v2.webp"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-po-ink/20 via-transparent to-po-ink/80" />
+        <div className="absolute left-[8%] top-[8%] w-[55%] -rotate-[8deg] overflow-hidden rounded-[12px] border border-po-on-dark/35 bg-po-ink shadow-[0_18px_32px_rgba(0,0,0,0.42)]">
+          <Image
+            alt="Pink Cookies Presidential Moon Rock Blunt packaging"
+            className="h-full w-full object-cover"
+            height={1350}
+            sizes="(min-width: 1024px) 12vw, 27vw"
+            src="/media/blunts/pink-cookies-title.webp"
+            width={1080}
+          />
+        </div>
+        <div className="absolute bottom-[7%] right-[7%] w-[49%] rotate-[7deg] overflow-hidden rounded-[12px] border border-po-on-dark/35 bg-po-ink shadow-[0_18px_32px_rgba(0,0,0,0.42)]">
+          <Image
+            alt="Cherry Gelato Presidential Moon Rock Blunt packaging"
+            className="h-full w-full object-cover"
+            height={1350}
+            sizes="(min-width: 1024px) 11vw, 24vw"
+            src="/media/blunts/cherry-gelato.webp"
+            width={1080}
+          />
+        </div>
+        <p className="absolute bottom-5 left-5 m-0 font-display text-xs font-semibold uppercase tracking-[0.14em] text-po-on-dark">
+          Moon Rock Blunts
+        </p>
+      </div>
+
+      <div className="relative isolate aspect-[3/4] overflow-hidden rounded-[20px] border-[3px] border-po-brand bg-po-ink shadow-[0_28px_60px_rgba(0,0,0,0.28)]">
+        <Image
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover opacity-75"
+          fill
+          sizes="(min-width: 1024px) 21vw, 48vw"
+          src="/media/moon-rocks/cards/gorilla-goo.webp"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-po-ink/15 via-transparent to-po-ink/85" />
+        <div className="absolute left-[7%] top-[8%] w-[57%] rotate-[6deg] overflow-hidden rounded-[12px] border border-po-on-dark/35 bg-po-ink shadow-[0_18px_32px_rgba(0,0,0,0.42)]">
+          <Image
+            alt="Blue Dream Presidential Moon Rock Blunt packaging"
+            className="h-full w-full object-cover"
+            height={1350}
+            sizes="(min-width: 1024px) 12vw, 27vw"
+            src="/media/blunts/blue-dream.webp"
+            width={1080}
+          />
+        </div>
+        <div className="absolute bottom-[7%] right-[7%] w-[52%] -rotate-[7deg] overflow-hidden rounded-[12px] border border-po-on-dark/35 bg-po-ink shadow-[0_18px_32px_rgba(0,0,0,0.42)]">
+          <Image
+            alt="Gorilla Goo Presidential Moon Rocks packaging"
+            className="h-full w-full object-cover"
+            height={1200}
+            sizes="(min-width: 1024px) 12vw, 26vw"
+            src="/media/moon-rocks/cards/gorilla-goo.webp"
+            width={1200}
+          />
+        </div>
+        <p className="absolute bottom-5 left-5 m-0 font-display text-xs font-semibold uppercase tracking-[0.14em] text-po-on-dark">
+          Built for the shelf
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function TermSection({
   children,
   id,
   images = [],
   title,
   tone = "default",
+  wideMedia,
 }: {
   children: ReactNode;
   id: string;
   images?: readonly TermImage[];
   title: string;
   tone?: "default" | "quiet" | "contrast";
+  wideMedia?: ReactNode;
 }) {
   const dark = tone === "contrast";
+  const copy = (
+    <div className={wideMedia ? "max-w-5xl" : "max-w-3xl"}>
+      <h2
+        className={`font-display text-3xl uppercase leading-[0.95] sm:text-5xl ${dark ? "text-po-on-dark" : "text-po-ink"}`}
+        id={id}
+      >
+        {title}
+      </h2>
+      <div
+        className={`mt-8 grid gap-5 text-base leading-8 ${dark ? "text-po-on-dark-muted" : "text-po-body"}`}
+      >
+        {children}
+      </div>
+    </div>
+  );
 
   return (
     <Scene
@@ -232,22 +325,17 @@ function TermSection({
       className="po-gold-thread-inlay py-20 lg:py-28"
       tone={tone}
     >
-      <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(360px,0.7fr)] lg:items-start lg:gap-16">
-        <div className="max-w-3xl">
-          <h2
-            className={`font-display text-3xl uppercase leading-[0.95] sm:text-5xl ${dark ? "text-po-on-dark" : "text-po-ink"}`}
-            id={id}
-          >
-            {title}
-          </h2>
-          <div
-            className={`mt-8 grid gap-5 text-base leading-8 ${dark ? "text-po-on-dark-muted" : "text-po-body"}`}
-          >
-            {children}
-          </div>
+      {wideMedia ? (
+        <div className="mx-auto w-full max-w-7xl">
+          {copy}
+          <div className="mt-12">{wideMedia}</div>
         </div>
-        {images.length ? <ImageGrid images={images} /> : null}
-      </div>
+      ) : (
+        <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(360px,0.7fr)] lg:items-start lg:gap-16">
+          {copy}
+          {images.length ? <ImageGrid images={images} /> : null}
+        </div>
+      )}
     </Scene>
   );
 }
@@ -492,7 +580,7 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
         <p>The model also keeps the website focused on education, product discovery, brand history, and retailer connection. Visitors can understand the lineup here, then confirm the products and formats currently available with their chosen licensed retailer.</p>
       </TermSection>
 
-      <TermSection id="presidential-cannabis-catalog" images={[images[3], images[4]]} title="What the company makes">
+      <TermSection id="presidential-cannabis-catalog" title="What the company makes" wideMedia={<ProductCollage />}>
         <p><strong>Official products. Organized collections. One standard.</strong></p>
         <p>The catalog is organized to make the relationship between extract, profile, and format visible. Each grouping has a clear role while remaining part of the same Presidential product platform.</p>
         <p>Collections include the Silver Flavor Series, Gold Strain Series, Rose Gold Connoisseur Series, Presidential Line, Presidential House Line, and Presidential x THC Design. Current product records—not fixed counts in evergreen copy—define the catalog.</p>
