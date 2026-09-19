@@ -10,7 +10,7 @@ export const VAPES_ADDITIONS = {
         intro: "Most disposables lose flavor halfway through.",
         chart: {
           title: "FLAVOR OVER TIME",
-          lines: ["PYRIC HARDWARE", "OTHER VAPES"],
+          lines: ["ORBIT HARDWARE", "OTHER VAPES"],
           axes: ["GREAT FLAVOR", "FADES FAST"],
         },
         checks: [
@@ -23,7 +23,7 @@ export const VAPES_ADDITIONS = {
       {
         number: "02",
         title: "BIGGER CLOUDS. BETTER EXPERIENCE.",
-        intro: "PYRIC hardware produces strong vapor output designed for experienced consumers.",
+        intro: "Orbit hardware produces strong vapor output designed for experienced consumers.",
         callouts: [
           { icon: "CloudArrowDown", title: "LARGER HITS" },
           { icon: "Cloud", title: "MORE SATISFYING CLOUDS" },
@@ -76,7 +76,7 @@ export const VAPES_ADDITIONS = {
       {
         number: "03",
         title: "BETTER HARDWARE. MADE TO PERFORM.",
-        intro: "Unlike most value disposables, PYRIC includes premium features that elevate every hit.",
+        intro: "Unlike most value disposables, Orbit includes premium features that elevate every hit.",
         features: [
           { icon: "Monitor", title: "LED SCREEN", description: "See everything. Stay in control." },
           { icon: "Lightning", title: "VARIABLE VOLTAGE", description: "Dial in your perfect experience." },
@@ -141,7 +141,7 @@ export const VAPES_ADDITIONS = {
     ariaLabel: "Why Orbit and safety and material standards",
     orbit: {
       number: "05",
-      title: "WHY PYRIC? WHY ORBIT?",
+      title: "WHY ORBIT?",
       items: [
         { title: "FLAVOR THAT LASTS", description: "All the way to the last hit." },
         { title: "BIGGER CLOUDS", description: "Stronger output. Better experience." },

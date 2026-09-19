@@ -80,11 +80,11 @@ function FlavorChart() {
       <title id="flavor-chart-title">{chart.title}</title>
       <desc id="flavor-chart-description">{chart.lines[0]}. {chart.lines[1]}. {chart.axes[0]}. {chart.axes[1]}.</desc>
       <rect x="1.5" y="1.5" width="517" height="247" rx="8" />
-      <text x="34" y="42" className={s.pyricLabel}>{chart.lines[0]}</text>
+      <text x="34" y="42" className={s.orbitLabel}>{chart.lines[0]}</text>
       <text x="34" y="67" className={s.otherLabel}>{chart.lines[1]}</text>
-      <path className={`${s.chartLine} ${s.pyricLine}`} pathLength="1" d="M36 88 C 180 84 340 82 484 86" />
+      <path className={`${s.chartLine} ${s.orbitLine}`} pathLength="1" d="M36 88 C 180 84 340 82 484 86" />
       <path className={`${s.chartLine} ${s.otherLine}`} pathLength="1" d="M36 88 C 170 104 332 145 484 198" />
-      <circle className={s.pyricDot} cx="36" cy="88" r="5" /><circle className={s.pyricDot} cx="484" cy="86" r="5" />
+      <circle className={s.orbitDot} cx="36" cy="88" r="5" /><circle className={s.orbitDot} cx="484" cy="86" r="5" />
       <circle className={s.otherDot} cx="36" cy="88" r="4.5" /><circle className={s.otherDot} cx="484" cy="198" r="4.5" />
       <text x="34" y="230" className={s.axisLabel}>{chart.axes[0]}</text>
       <text x="486" y="230" textAnchor="end" className={s.axisLabel}>{chart.axes[1]}</text>

@@ -153,10 +153,10 @@
 .flavorChart { display: block; width: 100%; height: auto; overflow: visible; }
 .flavorChart rect { fill: #07110f; stroke: color-mix(in srgb,#58c3b6 30%,transparent); stroke-width: 1; }
 .flavorChart text { font: 700 12px var(--po-font-display); letter-spacing: .08em; }
-.pyricLabel { fill: #58c3b6; }.otherLabel, .axisLabel { fill: #c9ced6; }.axisLabel { font-size: 10px !important; }
+.orbitLabel { fill: #58c3b6; }.otherLabel, .axisLabel { fill: #c9ced6; }.axisLabel { font-size: 10px !important; }
 .chartLine { fill: none; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
-.pyricLine { stroke: #58c3b6; stroke-width: 2.5; }.otherLine { stroke: #c9ced6; stroke-width: 2; }
-.pyricDot { fill: #58c3b6; }.otherDot { fill: #c9ced6; }
+.orbitLine { stroke: #58c3b6; stroke-width: 2.5; }.otherLine { stroke: #c9ced6; stroke-width: 2; }
+.orbitDot { fill: #58c3b6; }.otherDot { fill: #c9ced6; }
 .chartDrawn .chartLine { animation: chartDraw 900ms ease-out forwards; }
 @keyframes chartDraw { to { stroke-dashoffset: 0; } }
 .cloudPanelBody, .hardwarePanelBody { display: grid; grid-template-columns: minmax(0,.9fr) minmax(180px,1.1fr); gap: 24px; align-items: center; }

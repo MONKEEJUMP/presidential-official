@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { headers } from "next/headers";
+import { AgeGate } from "@/components/age-gate";
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { getGoogleSiteVerification } from "@/lib/analytics/google";
 import { METADATA_BASE } from "@/lib/seo/metadata";
@@ -67,7 +68,7 @@ export default async function RootLayout({
       className={`${clashDisplay.variable} ${sourceSerif4.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        {children}
+        <AgeGate siteName="Presidential">{children}</AgeGate>
         <GoogleAnalytics nonce={nonce} />
       </body>
     </html>
