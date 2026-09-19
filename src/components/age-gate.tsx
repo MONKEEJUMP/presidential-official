@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 
-const AGE_GATE_STORAGE_KEY = "presidential-age-gate-approved";
+const AGE_GATE_STORAGE_KEY = "presidential-age-gate-v2-approved";
 
 const overlayStyle: CSSProperties = {
   position: "fixed",
