@@ -91,8 +91,6 @@
 
 .introLines p,
 .cardCopy p,
-.ecosystemLines p,
-.goldStack p,
 .closingGoldLines p,
 .closingWordmark p {
   margin: 0;
@@ -234,54 +232,54 @@
   outline: none;
 }
 
-.ecosystemCard {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(220px, 0.65fr);
-  gap: 40px;
-  align-items: center;
-  margin-top: 44px;
-  padding: 38px 42px;
-}
-
-.ecosystemIdentity > div {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  align-items: center;
-}
-
-.ecosystemIdentity h3 {
-  color: var(--eco-teal);
-  font-size: clamp(1.6rem, 2.6vw, 2.8rem);
-}
-
 .wordmark { width: auto; object-fit: contain; }
 
-.ecosystemIdentity > p {
-  margin: 20px 0 0;
-  font-family: var(--po-font-display);
-  font-size: clamp(1rem, 1.5vw, 1.35rem);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1.35;
-  text-transform: uppercase;
+.ecosystemPart { margin-top: 72px; }
+
+.ecosystemGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 42px;
 }
 
-.ecosystemLines,
-.goldStack {
-  display: grid;
-  gap: 8px;
+.ecosystemFeatureCard {
+  min-height: 285px;
+  padding: 34px;
+  border-top: 2px solid var(--eco-teal);
+}
+
+.ecosystemFeatureCard h3 {
+  margin-top: 34px;
+  font-size: clamp(1.45rem, 2vw, 2.2rem);
+  line-height: 1;
+}
+
+.ecosystemFeatureCard > p {
+  margin: 22px 0 0;
   color: var(--eco-body);
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
-.goldStack {
+.ecosystemSignature {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 34px;
+  padding: 24px;
+  border: 1px solid color-mix(in srgb, var(--eco-teal) 42%, transparent);
+}
+
+.ecosystemSignature p {
+  margin: 0;
   color: var(--eco-gold);
   font-family: var(--po-font-display);
-  font-size: 0.8rem;
+  font-size: clamp(0.78rem, 1.15vw, 1rem);
   font-weight: 700;
-  letter-spacing: 0.13em;
+  letter-spacing: 0.14em;
+  line-height: 1.45;
   text-transform: uppercase;
 }
 
@@ -535,6 +533,8 @@
   .valueGrid,
   .momentGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
+  .ecosystemGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
   .expressionGrid[data-count="4"],
   .expressionGrid[data-count="3"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -544,8 +544,6 @@
 
   .architectureSteps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px 0; }
   .architectureSteps article:not(:last-child)::after { display: none; }
-
-  .ecosystemCard { grid-template-columns: 1fr; }
 
   .platformGrid { grid-template-columns: 1fr; }
   .platformCrest { justify-self: center; }
@@ -575,8 +573,9 @@
   .architectureSteps article:first-child,
   .architectureSteps article:last-child { padding: 0 0 26px; }
 
-  .ecosystemCard { padding: 28px 24px; }
-  .ecosystemIdentity > div { align-items: flex-start; }
+  .ecosystemGrid { grid-template-columns: 1fr; }
+  .ecosystemFeatureCard { min-height: 0; padding: 28px 24px; }
+  .ecosystemSignature { align-items: flex-start; flex-direction: column; }
   .platformCard { min-height: 0; padding: 28px 24px; }
   .platformFeatures { grid-template-columns: 1fr; }
   .tierCard { padding: 28px 24px; }

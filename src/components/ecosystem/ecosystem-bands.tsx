@@ -49,6 +49,29 @@ const ARCHITECTURE_STEPS = [
   },
 ] as const;
 
+const ECOSYSTEM_PILLARS = [
+  {
+    icon: SealCheck,
+    heading: "ONE STANDARD",
+    copy: "Premium craftsmanship across every Presidential product.",
+  },
+  {
+    icon: Gear,
+    heading: "TWO PLATFORMS",
+    copy: "Moon Rocks and Moon Pods + Orbit. One connected system.",
+  },
+  {
+    icon: CirclesThree,
+    heading: "THREE EXPERIENCE TIERS",
+    copy: "Silver, Gold, and Rose Gold make every profile easy to choose.",
+  },
+  {
+    icon: Diamond,
+    heading: "FOUR EXPRESSIONS",
+    copy: "Moon Rocks, pre-rolls, blunts, and vapes. Endless choice.",
+  },
+] as const;
+
 const MOON_ROCKS_PLATFORM_FEATURES = [
   { icon: Crown, label: "Premium Flower Base" },
   { icon: Drop, label: "Precision Oil Infusion" },
@@ -395,25 +418,25 @@ export function HomeArchitectureBand() {
             </article>
           ))}
         </div>
-        <article className={`${styles.card} ${styles.ecosystemCard}`}>
-          <div className={styles.ecosystemIdentity}>
-            <div>
-              <h3>1 ECOSYSTEM</h3>
-              <Wordmark height={48} />
-            </div>
-            <p>A COMPLETE CANNABIS ECOSYSTEM.</p>
+        <div aria-labelledby="home-ecosystem-architecture-heading" className={styles.ecosystemPart}>
+          <h2 className={styles.numberedHeading} id="home-ecosystem-architecture-heading">
+            1 ECOSYSTEM
+          </h2>
+          <p className={styles.sectionSubline}>A complete cannabis ecosystem.</p>
+          <div className={styles.ecosystemGrid}>
+            {ECOSYSTEM_PILLARS.map(({ icon: Icon, heading, copy }) => (
+              <article className={`${styles.card} ${styles.ecosystemFeatureCard}`} key={heading}>
+                <CircledIcon Icon={Icon} />
+                <h3>{heading}</h3>
+                <p>{copy}</p>
+              </article>
+            ))}
           </div>
-          <div className={styles.ecosystemLines}>
-            <p>Three experience tiers. Four expressions.</p>
-            <p>All crafted with the same standards.</p>
-            <p>All designed to elevate every moment.</p>
+          <div className={styles.ecosystemSignature}>
+            <Wordmark height={48} />
+            <p>ONE STANDARD. ENDLESS CHOICE. ELEVATED ALWAYS.</p>
           </div>
-          <div className={styles.goldStack}>
-            <p>ONE STANDARD.</p>
-            <p>ENDLESS CHOICE.</p>
-            <p>ELEVATED ALWAYS.</p>
-          </div>
-        </article>
+        </div>
       </div>
     </section>
   );
