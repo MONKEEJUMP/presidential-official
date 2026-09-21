@@ -15,7 +15,6 @@ import {
   Wind,
 } from '@phosphor-icons/react/ssr';
 import { VAPES_ADDITIONS } from '@/content/vapes-additions';
-import { getVapeImage, type VapeView } from '@/lib/vapes/catalog';
 import { TierIcon } from '../primitives/tier-icon';
 import { VapeIcon, type VapeIconName } from './vape-icon';
 import s from './showroom.module.css';
@@ -33,33 +32,19 @@ const CARD_ICONS = {
   Wind,
 } as const;
 
-const ORBIT_SPIN_VIEWS = [
-  'home',
-  'front-left',
-  'back-right',
-  'back',
-  'back-left',
-  'front-right',
-] as const satisfies readonly VapeView[];
-
 function OrbitSpin() {
-  return <div className={s.orbitSpin} role="img" aria-label="Teal Presidential Orbit rotating through its front, side, and rear views">
-    {ORBIT_SPIN_VIEWS.map((view, index) => {
-      const image = getVapeImage('teal', 'ld', view);
-      return <Image
-        alt=""
-        aria-hidden="true"
-        className={s.orbitSpinFrame}
-        data-frame={index}
-        height={image.height}
-        key={view}
-        loading="eager"
-        sizes="(min-width: 1024px) 43vw, 78vw"
-        src={image.src}
-        width={image.width}
-      />;
-    })}
-  </div>;
+  return <video
+    aria-label="Teal Presidential Orbit rotating through a complete 360-degree turn"
+    autoPlay
+    className={s.orbitSpin}
+    loop
+    muted
+    playsInline
+    poster="/media/vapes/showroom/teal-ld-home.webp"
+    preload="metadata"
+  >
+    <source src="/media/vapes/orbit-turntable.mp4" type="video/mp4" />
+  </video>;
 }
 
 function DotList({ items }: { readonly items: readonly string[] }) {
@@ -167,7 +152,6 @@ export function VapeModeSystemSection() {
       <div className={s.modeDevice}>
         <div className={s.modeDeviceGlow} aria-hidden="true" />
         <OrbitSpin />
-        <div className={s.modeLights} aria-hidden="true"><i data-tier="silver" /><i data-tier="gold" /><i data-tier="rose-gold" /></div>
       </div>
       <div className={s.modeStory}>
         <p className={s.eyebrow}><DotList items={content.eyebrow} /></p>

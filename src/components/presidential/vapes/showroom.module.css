@@ -86,18 +86,7 @@
 .modeShowpiece { display: grid; grid-template-columns: minmax(360px,.88fr) minmax(520px,1.12fr); align-items: center; gap: clamp(52px,6vw,100px); }
 .modeDevice { position: relative; display: grid; justify-items: center; min-width: 0; isolation: isolate; }
 .modeDeviceGlow { position: absolute; z-index: -1; inset: 16% 2% 12%; background: radial-gradient(circle,#58c3b640 0%,#276a6122 36%,transparent 70%); filter: blur(10px); }
-.orbitSpin { position: relative; width: 100%; height: min(760px,66vw); overflow: hidden; background: #f4f6f7; }
-.orbitSpinFrame { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; animation: orbitSpinFrame 18s linear infinite; will-change: opacity; }
-.orbitSpinFrame[data-frame="0"] { opacity: 1; animation-delay: -18s; }
-.orbitSpinFrame[data-frame="1"] { animation-delay: -15s; }
-.orbitSpinFrame[data-frame="2"] { animation-delay: -12s; }
-.orbitSpinFrame[data-frame="3"] { animation-delay: -9s; }
-.orbitSpinFrame[data-frame="4"] { animation-delay: -6s; }
-.orbitSpinFrame[data-frame="5"] { animation-delay: -3s; }
-@keyframes orbitSpinFrame { 0% { opacity: 1; } 16.666% { opacity: 0; } 83.334% { opacity: 0; } 100% { opacity: 1; } }
-.modeLights { display: flex; gap: 18px; align-items: center; justify-content: center; margin-top: -8px; }
-.modeLights i { width: 13px; height: 13px; border: 1px solid #fff5; border-radius: 50%; box-shadow: 0 0 14px currentColor; }
-.modeLights i[data-tier=silver] { color: #dfe5e7; background: #dfe5e7; }.modeLights i[data-tier=gold] { color: #d9bb69; background: #d9bb69; }.modeLights i[data-tier=rose-gold] { color: #d9a38e; background: #d9a38e; }
+.orbitSpin { display: block; width: 100%; height: min(760px,66vw); object-fit: contain; background: #fff; }
 .modeStory h2 { margin-bottom: 22px; font-size: clamp(42px,4.25vw,64px); }
 .modeLead { max-width: 680px; color: #c9d6d1; font-size: 18px; line-height: 1.7; }
 .modeRows { display: grid; gap: 12px; margin-top: 34px; }
@@ -249,7 +238,6 @@
 @media (max-width:559px) { .pillarGrid { grid-template-columns: 1fr; } }
 @media (min-width:650px) and (max-width:759px) { .familyCards { grid-template-columns: 1fr 1fr; }.familyCard:last-child { grid-column: 1/-1; max-width: 70%; justify-self: center; }.finishCard { flex-basis: 46%; }.archiveContents > section > div { grid-template-columns: repeat(4,minmax(0,1fr)); } }
 @media (prefers-reduced-motion:reduce) { .showroom *, .dialog * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
-@media (prefers-reduced-motion:reduce) { .orbitSpinFrame { opacity: 0 !important; }.orbitSpinFrame[data-frame="0"] { opacity: 1 !important; } }
 @media (min-width:760px) and (max-width:1100px) {
   .builtForOil .pillarGrid { grid-template-columns: repeat(3,minmax(0,1fr)); }
 }
