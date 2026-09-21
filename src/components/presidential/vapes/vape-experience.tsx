@@ -49,7 +49,24 @@ export function VapeExperience({ page }: { page: VapePage }) {
   }
   function openImage(index: number) { setViewIndex(index); setLightboxOpen(true); }
 
+  const orbitFinishesSection = (
+    <section className={`${s.section} ${s.finishes}`} id="orbit" aria-labelledby="orbit-finish-heading">
+      <div className={s.sectionHeading}><div><p className={s.eyebrow}>Orbit battery finishes</p><h2 id="orbit-finish-heading">Make it<br /><span>your signature.</span></h2></div><p>Four finishes. Front and back.<br />The Presidential details in full view.</p></div>
+      <div className={s.finishRail}>
+        {VAPE_FINISHES.map(item => {
+          const front = getVapeImage(item.id, 'ld', 'home'), back = getVapeImage(item.id, 'ld', 'back');
+          return <button className={s.finishCard} key={item.id} type="button" onClick={() => explore(item.id, 'ld', 3)} aria-label={`Explore ${item.name} Orbit finish`}>
+            <span className={s.finishPair}><Image src={front.src} alt={`${item.name} Orbit front, LD pod attached`} width={1200} height={1500} sizes="(min-width: 900px) 200px, 42vw" /><Image src={back.src} alt={`${item.name} Orbit rear artwork, LD pod attached`} width={1200} height={1500} sizes="(min-width: 900px) 200px, 42vw" /></span>
+            <span className={s.finishCaption}><span className={s.swatch} data-finish={item.id} />{item.name}<VapeIcon name="arrow" /></span>
+          </button>;
+        })}
+      </div>
+      <p className={s.sectionNote}>Tap a finish to explore its complete gallery. Devices shown with LD Moon Pods attached.</p>
+    </section>
+  );
+
   return <>
+    {page === 'vapes' ? <><VapeModeSystemSection />{orbitFinishesSection}</> : null}
     {page === 'vapes' ? <VapeBuiltForOilBand /> : null}
 
     <section className={`${s.section} ${s.explorer}`} id="explore" ref={explorerRef} aria-labelledby="vape-explorer-heading">
@@ -134,21 +151,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
       <p className={s.sectionNote}>Moon Pods photographed on Orbit. Explore the device separately on the <Link href="/orbit">Orbit page</Link>.</p>
     </section>
 
-    {page === 'vapes' ? <VapeModeSystemSection /> : null}
-
-    <section className={`${s.section} ${s.finishes}`} id="orbit" aria-labelledby="orbit-finish-heading">
-      <div className={s.sectionHeading}><div><p className={s.eyebrow}>Orbit battery finishes</p><h2 id="orbit-finish-heading">Make it<br /><span>your signature.</span></h2></div><p>Four finishes. Front and back.<br />The Presidential details in full view.</p></div>
-      <div className={s.finishRail}>
-        {VAPE_FINISHES.map(item => {
-          const front = getVapeImage(item.id, 'ld', 'home'), back = getVapeImage(item.id, 'ld', 'back');
-          return <button className={s.finishCard} key={item.id} type="button" onClick={() => explore(item.id, 'ld', 3)} aria-label={`Explore ${item.name} Orbit finish`}>
-            <span className={s.finishPair}><Image src={front.src} alt={`${item.name} Orbit front, LD pod attached`} width={1200} height={1500} sizes="(min-width: 900px) 200px, 42vw" /><Image src={back.src} alt={`${item.name} Orbit rear artwork, LD pod attached`} width={1200} height={1500} sizes="(min-width: 900px) 200px, 42vw" /></span>
-            <span className={s.finishCaption}><span className={s.swatch} data-finish={item.id} />{item.name}<VapeIcon name="arrow" /></span>
-          </button>;
-        })}
-      </div>
-      <p className={s.sectionNote}>Tap a finish to explore its complete gallery. Devices shown with LD Moon Pods attached.</p>
-    </section>
+    {page !== 'vapes' ? orbitFinishesSection : null}
 
     {page === 'vapes' ? <VapeHardwareBand /> : null}
 
