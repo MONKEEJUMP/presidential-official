@@ -297,6 +297,8 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
             className={`absolute inset-x-5 top-[calc(100%+0.01rem)] max-h-[calc(100dvh-4.5rem)] overflow-y-auto overscroll-contain border border-po-on-dark/15 bg-po-ink p-3 shadow-2xl [-webkit-overflow-scrolling:touch] sm:inset-x-8 group-data-[desktop=true]/header:static group-data-[desktop=true]/header:block group-data-[desktop=true]/header:max-h-none group-data-[desktop=true]/header:shrink-0 group-data-[desktop=true]/header:ml-auto group-data-[desktop=true]/header:overflow-visible group-data-[desktop=true]/header:border-0 group-data-[desktop=true]/header:bg-transparent group-data-[desktop=true]/header:p-0 group-data-[desktop=true]/header:shadow-none ${navigationOpen ? "block" : "hidden"}`}
             id="presidential-primary-navigation"
           >
+            <div className="group-data-[desktop=true]/header:flex group-data-[desktop=true]/header:items-center group-data-[desktop=true]/header:gap-4">
+              <div>
             <ul className="grid group-data-[desktop=true]/header:flex group-data-[desktop=true]/header:items-center group-data-[desktop=true]/header:gap-1 group-data-[desktop=true]/header:whitespace-nowrap">
               {navigationGroups.map((group) => {
                 const groupOpen = openGroup === group.id;
@@ -398,16 +400,21 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
                 </Link>
               </li>
 
-              <li className="po-primary-nav-item group-data-[desktop=true]/header:ml-3">
-                <Link
-                  className="po-header-store-link"
-                  href="/find-us"
-                  onClick={closeMenus}
-                >
-                  Find a Store
-                </Link>
-              </li>
             </ul>
+                <p className="hidden pt-1 text-center font-display text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-po-on-dark-muted group-data-[desktop=true]/header:block">
+                  For retail partnerships email{" "}
+                  <a
+                    className="text-po-brand transition-colors hover:text-po-on-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
+                    href="mailto:sales@presidentialmoonrocks.com"
+                  >
+                    sales@presidentialmoonrocks.com
+                  </a>
+                </p>
+              </div>
+              <Link className="po-header-store-link mt-3 group-data-[desktop=true]/header:mt-0" href="/find-us" onClick={closeMenus}>
+                Find a Store
+              </Link>
+            </div>
           </nav>
           <ul aria-hidden="true" inert ref={measureRef} className="po-header-measure">
             {navigationGroups.map((group) => (
