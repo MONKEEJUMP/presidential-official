@@ -1,6 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { SalesEmail } from "@/components/contact/sales-email";
+import { SiteHeader } from "@/components/presidential/layout/site-header";
+import { SiteFooter } from "@/components/presidential/layout/site-footer";
 import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
@@ -761,11 +764,13 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     }
   }
 
-  if (!ready) return <main className={styles.loginPage}><p>Opening Presidential Sales…</p></main>;
+  if (!ready) return <><SiteHeader /><main className={styles.loginPage}><p>Opening Presidential Sales…</p></main><SiteFooter /></>;
 
   if (!snapshot) {
     return (
+      <><SiteHeader />
       <main className={styles.loginPage}>
+        <div className="w-full max-w-[31rem]">
         <form className={styles.loginCard} onSubmit={authMode === "login" ? login : setupRep}>
           <Link href="/">← Back to website</Link>
           <span>PRESIDENTIAL INTERNAL</span>
@@ -784,7 +789,10 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
           <button disabled={loggingIn || settingUp} type="submit">{authMode === "login" ? loggingIn ? "SIGNING IN…" : "SIGN IN" : settingUp ? "CREATING…" : "CREATE MY LOGIN"}</button>
           {loginError || pageError ? <p className={styles.errorMessage}>{loginError || pageError}</p> : null}
         </form>
+        <SalesEmail variant="strip" prefix="Need a retailer account? Email" />
+        </div>
       </main>
+      <SiteFooter /></>
     );
   }
 

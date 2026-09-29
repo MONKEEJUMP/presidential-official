@@ -9,6 +9,7 @@ import { buildRouteShellJsonLd, JsonLd } from "@/lib/seo/schema";
 import { getWholesaleDestination, WHOLESALE_MARKETS } from "@/lib/wholesale/market-ordering";
 
 import styles from "./wholesale.module.css";
+import { SalesEmail } from "@/components/contact/sales-email";
 
 const ROUTE_PATH = "/wholesale" as const;
 const SALES_EMAIL = "sales@presidentialmoonrocks.com";
@@ -58,6 +59,7 @@ export default function WholesalePage() {
                 <Link className={styles.heroPrimaryAction} href="/wholesale/apply">Apply to partner <ArrowIcon /></Link>
                 <a className={styles.heroEmailAction} href={`mailto:${SALES_EMAIL}`}>Email sales</a>
               </div>
+              <SalesEmail variant="strip" />
               <p className={styles.heroExistingCue}>Existing customer? Choose your market below.</p>
             </div>
             <div className={styles.heroRail} aria-label="Presidential wholesale markets">
@@ -92,10 +94,11 @@ export default function WholesalePage() {
             </div>
           </section>
 
+          <SalesEmail variant="band" copy="partner" />
           <PresidentialSrosSection />
 
           <section className={styles.nextSteps} aria-label="Other Presidential paths">
-            <div><span>Not approved yet?</span><h2>Become a Presidential partner.</h2><Link className={styles.primaryAction} href="/wholesale/apply">Apply to become a partner <ArrowIcon /></Link></div>
+            <div><span>Not approved yet?</span><h2>Become a Presidential partner.</h2><Link className={styles.primaryAction} href="/wholesale/apply">Apply to become a partner <ArrowIcon /></Link><SalesEmail variant="strip" prefix="Or email" /></div>
             <div><span>Shopping for yourself?</span><h2>Find Presidential near you.</h2><Link className={styles.secondaryAction} href="/find-us">Find a retailer <ArrowIcon /></Link></div>
           </section>
         </main>

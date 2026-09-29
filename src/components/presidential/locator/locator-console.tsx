@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useId, useRef, useState } from "react";
+import { SalesEmail } from "@/components/contact/sales-email";
 
 import type {
   LocatorApiError,
@@ -388,6 +389,7 @@ export function LocatorConsole({
 
         <LocatorReadout results={results} searching={searching} />
       </div>
+      <SalesEmail variant="strip" align="left" prefix="Want Presidential in your store? Email" onlyOn={["/find-us"]} />
     </div>
   );
 }

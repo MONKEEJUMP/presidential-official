@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SalesEmail } from "@/components/contact/sales-email";
+import { SiteHeader } from "@/components/presidential/layout/site-header";
+import { SiteFooter } from "@/components/presidential/layout/site-footer";
 
 export const metadata: Metadata = {
   title: "Page Not Found | Presidential",
@@ -14,6 +17,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <>
+      <SiteHeader />
       <main
         className="flex min-h-screen items-center bg-po-soft px-6 py-20 text-po-ink"
         id="presidential-main"
@@ -31,6 +35,7 @@ export default function NotFound() {
             This Presidential page is not available. Continue through the
             official home while approved sections are finalized.
           </p>
+          <SalesEmail variant="strip" prefix="Looking for Presidential? Email" />
         </div>
         <div className="flex flex-wrap gap-3">
           <Link
@@ -51,6 +56,7 @@ export default function NotFound() {
         </p>
       </section>
       </main>
+      <SiteFooter />
     </>
   );
 }

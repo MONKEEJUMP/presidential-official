@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SalesEmail } from "@/components/contact/sales-email";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -239,6 +240,7 @@ export default async function CatalogProductDetailPage({
                   className="mt-10 w-full max-w-md"
                   inlineResults
                 />
+                <SalesEmail variant="strip" align="left" prefix="Carry this product in your store:" />
               </div>
             </div>
 

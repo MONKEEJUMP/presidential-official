@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SalesEmail } from "@/components/contact/sales-email";
 
 import { CtaLink } from "../primitives/cta-link";
 import { InContentText } from "../primitives/in-content-text";
@@ -70,6 +71,7 @@ export function FindUsCtaShell({
               Contact Presidential
             </CtaLink>
           </div>
+          <SalesEmail variant="strip" prefix="Wholesale & retail partnerships:" onlyOn={["/"]} />
         </div>
 
         {compact ? null : (

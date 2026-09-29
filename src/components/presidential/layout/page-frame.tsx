@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import { PageSalesEmail } from "@/components/contact/sales-email";
 
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
@@ -24,6 +25,7 @@ export function PageFrame({ children, className = "", ...mainProps }: PageFrameP
       <SiteHeader />
       <main {...mainProps} id="presidential-main" tabIndex={-1} className={classNames}>
         {children}
+        <PageSalesEmail />
       </main>
       <SiteFooter />
     </>

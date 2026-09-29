@@ -23,8 +23,13 @@ export function buildOrganizationSchema({
     name: PRESIDENTIAL_NAME,
     url: PRODUCTION_ORIGIN,
     description: PRESIDENTIAL_DESCRIPTION,
+    email: "sales@presidentialmoonrocks.com",
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      email: "sales@presidentialmoonrocks.com",
+    },
     ...(logoPath ? { logo: canonicalUrl(logoPath) } : {}),
     ...(APPROVED_SAME_AS.length > 0 ? { sameAs: [...APPROVED_SAME_AS] } : {}),
   };
 }
-

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import snapshot from '@/content/partners.json';
 import { PARTNER_STATES, PARTNERS_COPY, PARTNERS_UI, PARTNERS_LABEL, PARTNERS_STATE_NAV_LABELS, partnerExplore, partnerLocations, partnerLogoAlt, partnersCountLine, type PartnerStateCode } from '@/content/partners-copy';
 import { PresidentialSrosSection } from '@/components/sros/presidential-sros-section';
+import { SalesEmail } from '@/components/contact/sales-email';
 import { PageFrame } from '../layout/page-frame';
 import { SceneStack } from '../layout/scene-stack';
 import styles from './partners-page-shell.module.css';
@@ -80,7 +81,8 @@ export function PartnersStateShell({code}:{code:PartnerStateCode}) {
 export function PartnersHubShell(){return <PageFrame className={`po-home-canvas-dark ${styles.page}`}><SceneStack><PartnerHero/>
   <section className={`${styles.section} po-gold-thread-inlay`}><div className={styles.copy}>{PARTNERS_COPY.hub.body.map(p=><p key={p}>{p}</p>)}</div></section>
   <section className={`${styles.section} po-gold-thread-inlay`} aria-label={PARTNERS_LABEL}><ul className={styles.states}>{PARTNER_STATES.map(s=><li key={s.code}><Link href={`/partners/${s.code}`} className={styles.stateCard}><div><span className={styles.stateCode} aria-hidden="true">{s.code.toUpperCase()}</span><h2>{s.name}</h2><p>{s.tagline}</p><p className={styles.stateCount}>{s.code==='wa'?PARTNERS_UI.landing:partnerLocations(s.headlineDoors)}</p><span className={styles.explore}>{partnerExplore(s.name)}</span></div></Link></li>)}</ul></section>
-  <section className={`${styles.section} po-gold-thread-inlay`}><aside className={styles.callout}><p>{PARTNERS_UI.callout}</p><Link href="/contact" className={styles.close}>{PARTNERS_UI.contact}</Link></aside></section>
+  <section className={`${styles.section} po-gold-thread-inlay`}><aside className={styles.callout}><p>{PARTNERS_UI.callout}</p><Link href="/contact" className={styles.close}>{PARTNERS_UI.contact}</Link><SalesEmail variant="strip" prefix="Send your logo to" /></aside></section>
   <PresidentialSrosSection/>
+  <SalesEmail variant="band" copy="partner" />
   <PartnerClosingNavigation/>
   </SceneStack></PageFrame>}

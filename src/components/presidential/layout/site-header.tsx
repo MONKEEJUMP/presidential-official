@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { PARTNERS_LABEL } from '@/content/partners-copy';
+import { SalesEmail } from "@/components/contact/sales-email";
 
 
 
@@ -401,15 +402,7 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
               </li>
 
             </ul>
-                <p className="hidden pt-1 text-center font-display text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-po-on-dark-muted group-data-[desktop=true]/header:block">
-                  For retail partnerships email{" "}
-                  <a
-                    className="text-po-brand transition-colors hover:text-po-on-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand"
-                    href="mailto:sales@presidentialmoonrocks.com"
-                  >
-                    sales@presidentialmoonrocks.com
-                  </a>
-                </p>
+                <SalesEmail variant="inline" prefix="For retail partnerships email" className="block pt-3 text-center font-display text-sm font-semibold tracking-[0.12em] text-po-on-dark-muted group-data-[desktop=true]/header:pt-1 group-data-[desktop=true]/header:text-[0.65rem]" />
               </div>
               <Link className="po-header-store-link mt-3 group-data-[desktop=true]/header:mt-0" href="/find-us" onClick={closeMenus}>
                 Find a Store

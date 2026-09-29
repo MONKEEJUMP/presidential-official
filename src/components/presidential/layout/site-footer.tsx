@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SalesEmail } from "@/components/contact/sales-email";
 import { PARTNERS_LABEL } from '@/content/partners-copy';
 
 const footerLinks = [
@@ -37,6 +38,7 @@ export function SiteFooter() {
             Official home of Presidential cannabis products. Availability varies
             by licensed retailer. For adults 21+ where legal.
           </p>
+          <SalesEmail variant="inline" prefix="Wholesale & retail partnerships:" className="block max-w-md text-sm leading-6 text-po-on-dark-muted" />
         </div>
 
         <nav aria-label="Footer navigation">

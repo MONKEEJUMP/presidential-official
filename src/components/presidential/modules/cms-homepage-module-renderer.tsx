@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { SalesEmail } from "@/components/contact/sales-email";
 
 import type {
   SanityAssetRecord,
@@ -1155,6 +1156,7 @@ function ContactModule({
           </div>
         </div>
         <ContactRouteCards module={module} renderMode={renderMode} resolvedVariant={resolvedVariant} />
+        {resolvedVariant === "locator" ? <SalesEmail variant="strip" align="left" prefix="Want Presidential in your store? Email" onlyOn={["/find-us"]} /> : null}
         {resolvedVariant === "contact" ? (
           <ContactDetailPanel contactProfile={module.contactProfile} renderMode={renderMode} />
         ) : null}

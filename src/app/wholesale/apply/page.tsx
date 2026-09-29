@@ -5,6 +5,7 @@ import { PageFrame } from "@/components/presidential/layout/page-frame";
 
 import styles from "../wholesale.module.css";
 import { WholesaleApplicationForm } from "./wholesale-application-form";
+import { SalesEmail } from "@/components/contact/sales-email";
 
 export const metadata: Metadata = {
   title: "Apply to Partner with Presidential | Wholesale Sales",
@@ -17,6 +18,7 @@ export default function WholesaleApplyPage() {
   return (
     <PageFrame className={styles.page}>
       <main className={styles.applicationPage}>
+        <SalesEmail variant="strip" prefix="Questions before you apply? Email" />
         <section className={styles.applicationHero} aria-labelledby="application-heading">
           <nav aria-label="Breadcrumb" className={styles.breadcrumbs}>
             <Link href="/">Presidential</Link><span aria-hidden="true">/</span><Link href="/wholesale">Wholesale</Link><span aria-hidden="true">/</span><span>Apply</span>

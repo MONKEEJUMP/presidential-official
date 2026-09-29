@@ -1,0 +1,52 @@
+.email {
+  color: var(--po-color-brand);
+  overflow-wrap: anywhere;
+  text-decoration: none;
+  text-transform: none;
+  text-underline-offset: 0.2em;
+}
+.email:hover { text-decoration: underline; }
+.email:focus-visible { outline: 2px solid var(--po-color-brand); outline-offset: 4px; }
+.inline { overflow-wrap: anywhere; }
+.band {
+  min-width: 0;
+  padding: 4rem 1.5rem;
+  background: var(--po-color-ink);
+  color: var(--po-color-on-dark);
+  font-family: var(--po-font-body);
+  text-align: center;
+}
+.strip {
+  position: relative;
+  min-width: 0;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  font-family: var(--po-font-body);
+  font-size: 1rem;
+  line-height: 1.75;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.strip::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: var(--po-gold-thread-inlay);
+}
+.strip .email { font-weight: 700; }
+.strip p { margin: 0; }
+.left { text-align: left; }
+.pageStrip {
+  margin-top: 0;
+  padding: 2rem 1.5rem;
+  background: var(--po-color-ink);
+  color: var(--po-color-on-dark-muted);
+}
+@media (min-width: 640px) {
+  .band { padding-inline: 2.5rem; }
+  .strip { font-size: 1.125rem; }
+}
+@media (min-width: 1024px) {
+  .band { padding: 6rem 4rem; }
+}
