@@ -17,7 +17,7 @@ export function VaultRoomPage({ room }: { room: VaultRoom }) {
   const openedHere = useRef(false);
   const content = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const header = document.querySelector('header.group\/header');
+    const header = document.querySelector('header[data-desktop]');
     if (!header) return;
     const observer = new ResizeObserver(() => { if (roomMenu.current) roomMenu.current.style.top = `${header.getBoundingClientRect().height}px`; });
     observer.observe(header);
