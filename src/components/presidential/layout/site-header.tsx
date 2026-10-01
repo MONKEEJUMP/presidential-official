@@ -27,6 +27,7 @@ const navigationGroups = [
       { href: "/learn", label: "Learn" },
       { href: "/our-story", label: "Our Story" },
       { href: "/about", label: "About" },
+      { href: "/presidential-art", label: "Presidential Art" },
     ],
   },
   {
