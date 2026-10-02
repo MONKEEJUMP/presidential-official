@@ -70,7 +70,7 @@ export function HomepageSpinningCrestFold() {
           <div className={heroStyles.welcome}>
           <p className={`${heroStyles.headline} font-display font-bold uppercase leading-[0.92] tracking-[0.035em] text-po-on-dark`}>
             Welcome to{" "}
-            <span className="mt-2 block text-po-brand">Presidential.</span>
+            <span className="mt-2 block text-po-brand">Presidential</span>
           </p>
           </div>
           <HomepageArtworkShowcase />
