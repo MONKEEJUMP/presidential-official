@@ -15,6 +15,8 @@ import { SiteVideo } from "../media/site-video";
 import { CtaLink } from "../primitives/cta-link";
 import { FindPresidentialScrollTile } from "./find-presidential-scroll-tile";
 import { GemTicker } from "./gem-ticker";
+import { HomepageArtworkShowcase } from './homepage-artwork-showcase';
+import heroStyles from './homepage-artwork-showcase.module.css';
 import {
   MoonRocksSeriesTheater,
   type MoonRocksTheaterSeries,
@@ -63,9 +65,11 @@ export function HomepageSpinningCrestFold() {
       aria-label="Welcome to Presidential"
       className="po-home-canvas-surface w-full px-6 py-10 sm:px-10 lg:px-16 lg:py-8"
     >
-      <div className="mx-auto grid w-full max-w-[1392px] items-center gap-10 lg:min-h-[min(780px,calc(100svh-7.5rem))] lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,0.75fr)] lg:gap-16">
-        <div className="max-w-[720px]">
-          <p className="font-display text-[clamp(2.4rem,10.5vw,4.75rem)] font-bold uppercase leading-[0.92] tracking-[0.035em] text-po-on-dark">
+      <div className={heroStyles.grid}>
+        <div className={heroStyles.left}>
+          <HomepageArtworkShowcase />
+          <div className={heroStyles.welcome}>
+          <p className={`${heroStyles.headline} font-display font-bold uppercase leading-[0.92] tracking-[0.035em] text-po-on-dark`}>
             Welcome to
             <span className="mt-2 block text-po-brand">Presidential.</span>
           </p>
@@ -73,8 +77,10 @@ export function HomepageSpinningCrestFold() {
             Explore the collection, understand what&apos;s on the package, and
             find a licensed retailer near you.
           </p>
-          <div className="mt-9 grid gap-3">
-            <div className="grid gap-3 sm:grid-cols-3">
+          </div>
+        </div>
+        <div className={heroStyles.right}>
+            <div className={heroStyles.buttons}>
               <CtaLink
                 className="min-h-[58px] w-full px-4 font-display text-[0.7rem] uppercase tracking-[0.07em]"
                 href="/moon-rocks"
@@ -89,26 +95,26 @@ export function HomepageSpinningCrestFold() {
               >
                 Discover Pre-Rolls
               </CtaLink>
-              <CtaLink
-                className="min-h-[58px] w-full px-4 font-display text-[0.7rem] uppercase tracking-[0.07em]"
-                href="/blunts"
-                variant="contrast"
-              >
-                Discover Blunts
-              </CtaLink>
             </div>
+        <div className="po-teal-pinstripe relative mx-auto aspect-square w-full max-w-[min(560px,calc(100svh-11rem))] overflow-hidden rounded-[20px] bg-[#0D0D0D] shadow-[0_36px_90px_rgba(0,0,0,0.55)]">
+          <CrestSpinningVideo />
+        </div>
+          <div className={heroStyles.buttons}>
             <CtaLink
-              className="min-h-[58px] w-full px-4 font-display text-[0.7rem] uppercase tracking-[0.07em] sm:max-w-[220px]"
+              className="min-h-[58px] w-full px-4 font-display text-[0.7rem] uppercase tracking-[0.07em]"
+              href="/blunts"
+              variant="contrast"
+            >
+              Discover Blunts
+            </CtaLink>
+            <CtaLink
+              className="min-h-[58px] w-full px-4 font-display text-[0.7rem] uppercase tracking-[0.07em]"
               href="/find-us"
               variant="contrast"
             >
               Find a retailer
             </CtaLink>
           </div>
-        </div>
-
-        <div className="po-teal-pinstripe relative mx-auto aspect-square w-full max-w-[min(560px,calc(100svh-11rem))] overflow-hidden rounded-[20px] bg-[#0D0D0D] shadow-[0_36px_90px_rgba(0,0,0,0.55)]">
-          <CrestSpinningVideo />
         </div>
       </div>
     </section>
