@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { vaultProductForImage } from "@/lib/products/vault-links";
 
 type ConveyorPack = {
   readonly alt: string;
@@ -205,7 +206,7 @@ export function GemTicker() {
                   <Link
                     aria-label={`View ${pack.name}`}
                     className="po-product-conveyor-pack relative block h-[91px] w-[142px] cursor-pointer overflow-hidden rounded-[10px] border border-po-brand/70 bg-po-ink transition-transform duration-200 hover:-translate-y-1 hover:scale-[1.03] focus-visible:-translate-y-1 focus-visible:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-po-brand motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:focus-visible:transform-none"
-                    href={pack.href}
+                    href={vaultProductForImage(pack.src)?.productUrl ?? pack.href}
                     prefetch={false}
                     tabIndex={clone ? -1 : undefined}
                   >

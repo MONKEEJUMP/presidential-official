@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ProductImageLink } from "@/components/presidential/products/product-mention";
 
 import { PageFrame } from "../layout/page-frame";
 import { Scene } from "../layout/scene";
@@ -31,7 +32,7 @@ const platforms = [
     body: "The full method, packed and finished by hand — no compromise made for convenience, no step skipped for speed. The easy choice that gave up nothing.",
     image: "/media/preroll-cherry-gelato.jpg" as const,
     imageAlt: "Cherry Gelato Presidential Moon Rock Pre-roll package artwork",
-    href: "/moon-rocks/cherry-gelato" as const,
+    href: "/pre-rolls/cherry-gelato" as const,
   },
 ] as const;
 
@@ -110,24 +111,26 @@ function AboutImage({
   aspectClassName,
   className = "",
   contain = false,
+  linked = false,
 }: {
   readonly alt: string;
   readonly src: `/${string}`;
   readonly aspectClassName: string;
   readonly className?: string;
   readonly contain?: boolean;
+  readonly linked?: boolean;
 }) {
   return (
     <figure
       className={`relative overflow-hidden rounded-[20px] border border-po-brand bg-po-ink ${aspectClassName} ${className}`}
     >
-      <Image
+      <ProductImageLink src={src} disabled={linked} className="absolute inset-0"><Image
         alt={alt}
         className={contain ? "object-contain p-8 sm:p-12" : "object-contain"}
         fill
         sizes="(min-width: 1024px) 42vw, 100vw"
         src={src}
-      />
+      /></ProductImageLink>
     </figure>
   );
 }
@@ -214,6 +217,7 @@ export function AboutCompanyShell() {
                       aspectClassName="aspect-square"
                       className="transition-transform duration-200 group-hover:-translate-y-1 motion-reduce:transition-none motion-reduce:group-hover:transform-none"
                       src={platform.image}
+                      linked
                     />
                     <h3 className="mt-7 font-display text-3xl uppercase leading-none text-po-ink transition-colors group-hover:text-po-brand-ink sm:text-4xl">
                       {platform.title}

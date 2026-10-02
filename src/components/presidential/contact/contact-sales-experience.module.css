@@ -150,6 +150,7 @@
 }
 
 .heroVeil {
+  pointer-events: none;
   position: absolute;
   z-index: -2;
   inset: 0;
@@ -159,6 +160,7 @@
 }
 
 .heroAtmosphere {
+  pointer-events: none;
   position: absolute;
   z-index: -1;
   inset: 0;

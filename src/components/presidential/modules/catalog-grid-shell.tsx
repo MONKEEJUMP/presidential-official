@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { vaultProductForAlt } from '@/lib/products/vault-links';
 
 import {
   catalogItemSlug,
@@ -226,7 +227,7 @@ export function CatalogProductCard({
   return (
     <Link
       className="group block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
-      href={`/moon-rocks/${catalogItemSlug(item)}`}
+      href={vaultProductForAlt(primaryImage?.altText ?? '')?.productUrl ?? `/moon-rocks/${catalogItemSlug(item)}`}
     >
       {cardBody}
     </Link>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SalesEmail } from "@/components/contact/sales-email";
 import Image from "next/image";
 import Link from "next/link";
+import { ProductImageLink } from '@/components/presidential/products/product-mention';
 import { notFound } from "next/navigation";
 import { cache } from "react";
 
@@ -177,7 +178,7 @@ export default async function CatalogProductDetailPage({
                 className={`relative min-w-0 aspect-square overflow-hidden bg-gradient-to-b ${meta.canvas} to-po-canvas`}
               >
                 {heroImage?.assetUrl ? (
-                  <Image
+                  <ProductImageLink src={heroImage.assetUrl} alt={heroImage.altText} currentPath={route.path} className="absolute inset-0"><Image
                     alt={
                       heroImage.altText ||
                       `${item.name} — ${item.series} product photography`
@@ -188,7 +189,7 @@ export default async function CatalogProductDetailPage({
                     loading="eager"
                     sizes={containedImageSizes(heroImage, "hero")}
                     src={heroImage.assetUrl}
-                  />
+                  /></ProductImageLink>
                 ) : (
                   <div className="flex h-full items-center justify-center border border-dashed border-po-line text-sm font-semibold uppercase text-po-body">
                     Photography in production
@@ -255,7 +256,7 @@ export default async function CatalogProductDetailPage({
                       className={`relative aspect-square overflow-hidden bg-gradient-to-b ${meta.canvas} to-po-canvas`}
                       key={`${image.assetUrl}-${index}`}
                     >
-                      <Image
+                      <ProductImageLink src={image.assetUrl} alt={image.altText} currentPath={route.path} className="absolute inset-0"><Image
                         alt={
                           image.altText ||
                           `${item.name} — ${item.series} format photography`
@@ -265,7 +266,7 @@ export default async function CatalogProductDetailPage({
                         loading="lazy"
                         sizes={containedImageSizes(image, "gallery")}
                         src={image.assetUrl}
-                      />
+                      /></ProductImageLink>
                     </div>
                   ))}
                 </div>

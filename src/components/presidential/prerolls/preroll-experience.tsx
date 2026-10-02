@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ProductNameLink, ProductMentions } from "@/components/presidential/products/product-mention";
 import { useLayoutEffect, type ReactNode } from "react";
 
 import {
@@ -194,10 +195,10 @@ export function PreRollExperience({
                       </Link>
                       <div className={styles.artCardCopy}>
                         <p>{artwork.collection}</p>
-                        <h3>{placement.displayName || artwork.name}</h3>
+                        <h3><ProductNameLink name={artwork.name} format="Pre-roll" className="text-inherit no-underline">{placement.displayName || artwork.name}</ProductNameLink></h3>
                         {placement.collabPartner ? <strong className={styles.collabPartner}>with {placement.collabPartner}</strong> : null}
                         <span>{artwork.edition}</span>
-                        <p>{artwork.description}</p>
+                        <p><ProductMentions format="Pre-roll">{artwork.description}</ProductMentions></p>
                       </div>
                     </article>
                   ))}
@@ -212,7 +213,7 @@ export function PreRollExperience({
                 {tieredArtwork.filter(({ placement }) => placement.section === "more").map(({ artwork, placement }) => (
                   <article className={artwork.shape === "square" ? styles.artCardSquare : styles.artCardPortrait} key={artwork.id}>
                     <Link aria-label={`View ${artwork.name} product page`} className={styles.artCardImage} href={productDetailPath("/pre-rolls", artwork.id)}><Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} /></Link>
-                    <div className={styles.artCardCopy}><p>{artwork.collection}</p><h3>{placement.displayName || artwork.name}</h3><span>{artwork.edition}</span><p>{artwork.description}</p></div>
+                    <div className={styles.artCardCopy}><p>{artwork.collection}</p><h3><ProductNameLink name={artwork.name} format="Pre-roll" className="text-inherit no-underline">{placement.displayName || artwork.name}</ProductNameLink></h3><span>{artwork.edition}</span><p><ProductMentions format="Pre-roll">{artwork.description}</ProductMentions></p></div>
                   </article>
                 ))}
               </div>

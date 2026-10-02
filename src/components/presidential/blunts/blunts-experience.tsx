@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ProductNameLink, ProductMentions } from "@/components/presidential/products/product-mention";
 import { useLayoutEffect, type ReactNode } from "react";
 
 import { BLUNT_ARTWORKS } from "@/content/blunts-catalog";
@@ -124,10 +125,10 @@ export function BluntsExperience({
                       </Link>
                       <div className={shared.artCardCopy}>
                         <p>Presidential Moon Rock Blunts</p>
-                        <h3>{placement.displayName || artwork.name}</h3>
+                        <h3><ProductNameLink name={artwork.name} format="Blunt" className="text-inherit no-underline">{placement.displayName || artwork.name}</ProductNameLink></h3>
                         {placement.collabPartner ? <strong className={shared.collabPartner}>with {placement.collabPartner}</strong> : null}
                         <span>{artwork.edition}</span>
-                        <p>{artwork.description}</p>
+                        <p><ProductMentions format="Blunt">{artwork.description}</ProductMentions></p>
                       </div>
                     </article>
                   ))}
@@ -142,7 +143,7 @@ export function BluntsExperience({
                 {tieredArtwork.filter(({ placement }) => placement.section === "more").map(({ artwork, placement }) => (
                   <article className={artwork.shape === "square" ? shared.artCardSquare : shared.artCardPortrait} key={artwork.id}>
                     <Link aria-label={`View ${artwork.name} product page`} className={shared.artCardImage} href={productDetailPath("/blunts", artwork.id)}><Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} /></Link>
-                    <div className={shared.artCardCopy}><p>Presidential Moon Rock Blunts</p><h3>{placement.displayName || artwork.name}</h3><span>{artwork.edition}</span><p>{artwork.description}</p></div>
+                    <div className={shared.artCardCopy}><p>Presidential Moon Rock Blunts</p><h3><ProductNameLink name={artwork.name} format="Blunt" className="text-inherit no-underline">{placement.displayName || artwork.name}</ProductNameLink></h3><span>{artwork.edition}</span><p><ProductMentions format="Blunt">{artwork.description}</ProductMentions></p></div>
                   </article>
                 ))}
               </div>

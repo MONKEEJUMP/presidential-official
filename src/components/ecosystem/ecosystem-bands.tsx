@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ProductImageLink } from "@/components/presidential/products/product-mention";
+import { vaultProductForImage } from '@/lib/products/vault-links';
 import {
   CirclesThree,
   Crown,
@@ -316,12 +318,12 @@ function ExpressionCard({
   const content = (
     <>
       <div className={styles.expressionMedia}>
-        <Image
+        <ProductImageLink src={expression.image.src} disabled={linked} className="absolute inset-0"><Image
           alt={expression.image.alt}
           fill
           sizes="(min-width: 1180px) 22vw, (min-width: 720px) 45vw, 92vw"
           src={expression.image.src}
-        />
+        /></ProductImageLink>
       </div>
       <h3 id={headingId}>{expression.heading}</h3>
       <p className={styles.cardSubline}>{expression.subline}</p>
@@ -338,7 +340,7 @@ function ExpressionCard({
     <Link
       aria-labelledby={headingId}
       className={`${styles.card} ${styles.expressionCard} ${styles.linkedCard}`}
-      href={expression.href}
+      href={vaultProductForImage(expression.image.src)?.productUrl ?? expression.href}
     >
       {content}
     </Link>

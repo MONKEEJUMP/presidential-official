@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { ProductImageLink, ProductMentions } from "@/components/presidential/products/product-mention";
 import type { ReactNode } from "react";
 import type { FAQPage, WithContext } from "schema-dts";
 
@@ -182,7 +183,7 @@ export function buildTermPageMetadata(route: SeoRouteRecord): Metadata {
 function ContentImage({ image, priority = false }: { image: TermImage; priority?: boolean }) {
   return (
     <div className="overflow-hidden rounded-[20px] border-[3px] border-po-brand bg-po-ink">
-      <Image
+      <ProductImageLink src={image.src} className="block"><Image
         alt={image.alt}
         className="h-auto w-full object-cover"
         height={image.height}
@@ -190,7 +191,7 @@ function ContentImage({ image, priority = false }: { image: TermImage; priority?
         src={image.src}
         width={image.width}
         {...(priority ? { priority: true } : { loading: "lazy" as const })}
-      />
+      /></ProductImageLink>
     </div>
   );
 }
@@ -225,24 +226,24 @@ function ProductCollage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-po-ink/20 via-transparent to-po-ink/80" />
         <div className="absolute left-[8%] top-[8%] w-[55%] -rotate-[8deg] overflow-hidden rounded-[12px] border border-po-on-dark/35 bg-po-ink shadow-[0_18px_32px_rgba(0,0,0,0.42)]">
-          <Image
+          <ProductImageLink src="/media/blunts/pink-cookies-title.webp" className="block"><Image
             alt="Pink Cookies Presidential Moon Rock Blunt packaging"
             className="h-full w-full object-cover"
             height={1350}
             sizes="(min-width: 1024px) 12vw, 27vw"
             src="/media/blunts/pink-cookies-title.webp"
             width={1080}
-          />
+          /></ProductImageLink>
         </div>
         <div className="absolute bottom-[7%] right-[7%] w-[49%] rotate-[7deg] overflow-hidden rounded-[12px] border border-po-on-dark/35 bg-po-ink shadow-[0_18px_32px_rgba(0,0,0,0.42)]">
-          <Image
+          <ProductImageLink src="/media/blunts/cherry-gelato.webp" className="block"><Image
             alt="Cherry Gelato Presidential Moon Rock Blunt packaging"
             className="h-full w-full object-cover"
             height={1350}
             sizes="(min-width: 1024px) 11vw, 24vw"
             src="/media/blunts/cherry-gelato.webp"
             width={1080}
-          />
+          /></ProductImageLink>
         </div>
         <p className="absolute bottom-5 left-5 m-0 font-display text-xs font-semibold uppercase tracking-[0.14em] text-po-on-dark">
           Moon Rock Blunts
@@ -260,14 +261,14 @@ function ProductCollage() {
         />
         <div className="absolute inset-0 bg-gradient-to-br from-po-ink/15 via-transparent to-po-ink/85" />
         <div className="absolute left-[7%] top-[8%] w-[57%] rotate-[6deg] overflow-hidden rounded-[12px] border border-po-on-dark/35 bg-po-ink shadow-[0_18px_32px_rgba(0,0,0,0.42)]">
-          <Image
+          <ProductImageLink src="/media/blunts/blue-dream.webp" className="block"><Image
             alt="Blue Dream Presidential Moon Rock Blunt packaging"
             className="h-full w-full object-cover"
             height={1350}
             sizes="(min-width: 1024px) 12vw, 27vw"
             src="/media/blunts/blue-dream.webp"
             width={1080}
-          />
+          /></ProductImageLink>
         </div>
         <div className="absolute bottom-[7%] right-[7%] w-[52%] -rotate-[7deg] overflow-hidden rounded-[12px] border border-po-on-dark/35 bg-po-ink shadow-[0_18px_32px_rgba(0,0,0,0.42)]">
           <Image
@@ -521,8 +522,8 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
       </TermSection>
 
       <TermSection id="presidential-blunts-strains" title="Available strains" tone="contrast">
-        <p>The Presidential Blunts catalog spans strain-led and flavor-led releases. Recognizable names include Cherry Gelato, Gorilla Goo, Cap Junky, Skywalker, Crescendo, XJ-13, Garlic Cookies, Ghost Haze Train, Laura Charles, Nino Brown, Whoa Si Whoa, and Daniel LaRusso.</p>
-        <p>Flavor-focused choices include Blue Raspberry, Peach Mango, Pineapple, Tropical, Grape, Strawberry, Watermelon, Orange Push Pop, Pink Cookies, Waui, <Link className={inlineLinkClass} href="/moon-rocks/xxx">XXX</Link>, and Apricotti. That range gives the format a broad shelf presence while every package remains tied to a specific named selection.</p>
+        <p><ProductMentions format="Blunt">The Presidential Blunts catalog spans strain-led and flavor-led releases. Recognizable names include Cherry Gelato, Gorilla Goo, Cap Junky, Skywalker, Crescendo, XJ-13, Garlic Cookies, Ghost Haze Train, Laura Charles, Nino Brown, Whoa Si Whoa, and Daniel LaRusso.</ProductMentions></p>
+        <p><ProductMentions format="Blunt">Flavor-focused choices include Blue Raspberry, Peach Mango, Pineapple, Tropical, Grape, Strawberry, Watermelon, Orange Push Pop, Pink Cookies, Waui, <Link className={inlineLinkClass} href="/blunts/xxx">XXX</Link>, and Apricotti. That range gives the format a broad shelf presence while every package remains tied to a specific named selection.</ProductMentions></p>
         <p>Availability varies by licensed retailer.</p>
       </TermSection>
 

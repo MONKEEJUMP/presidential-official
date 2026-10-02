@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ProductMentions } from "./product-mention";
 
 import {
   productDetailPath,
@@ -91,7 +92,7 @@ export function CatalogProductPage({
               <h1 id="product-title">{product.name}</h1>
               {collection ? <p className={styles.collection}>{collection}</p> : null}
               <p className={styles.edition}>{product.edition}</p>
-              <p className={styles.description}>{product.description}</p>
+              <p className={styles.description}><ProductMentions format={categoryPath === "/blunts" ? "Blunt" : categoryPath === "/pre-rolls" ? "Pre-roll" : categoryPath === "/mini-blunts" ? "Mini Blunt" : "Mini Pre-roll"} currentPath={productDetailPath(categoryPath, product.id)}>{product.description}</ProductMentions></p>
 
               {vaultProduct ? <dl className={styles.facts}><div><dt>Format</dt><dd>{vaultProduct.format}</dd></div>{vaultProduct.tier && <div><dt>Tier</dt><dd>{vaultProduct.tier}</dd></div>}</dl> : <dl className={styles.facts}>
                 <div><dt>Format</dt><dd>{format}</dd></div>

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ProductImageLink } from '@/components/presidential/products/product-mention';
 
 import styles from "./contact-sales-experience.module.css";
 
@@ -55,9 +56,9 @@ export function ContactSalesExperience() {
   return (
     <div className={styles.page}>
       <section aria-labelledby="contact-sales-heading" className={styles.hero}>
-        <div aria-hidden="true" className={styles.heroCollage}>
+        <div className={styles.heroCollage}>
           {heroCollage.map((image, index) => (
-            <div className={`${styles.collageCard} ${image.className}`} key={image.src}>
+            <ProductImageLink src={image.src} fallbackContainer className={`${styles.collageCard} ${image.className}`} key={image.src}>
               <Image
                 alt=""
                 fill
@@ -65,7 +66,7 @@ export function ContactSalesExperience() {
                 sizes="(max-width: 760px) 48vw, (max-width: 1200px) 34vw, 25vw"
                 src={image.src}
               />
-            </div>
+            </ProductImageLink>
           ))}
         </div>
         <div aria-hidden="true" className={styles.heroVeil} />
@@ -119,10 +120,10 @@ export function ContactSalesExperience() {
             <Image alt="Teal Presidential Orbit device" fill sizes="(max-width: 760px) 38vw, 18vw" src="/media/vapes/showroom/hero-teal.webp" />
           </div>
           <div className={styles.productPapaya}>
-            <Image alt="Presidential Papaya Punch Moon Rock blunt package" fill sizes="(max-width: 760px) 32vw, 15vw" src="/media/contact/partner-cutouts/papaya-punch-blunt-package-cutout.webp" />
+            <ProductImageLink src="/media/contact/partner-cutouts/papaya-punch-blunt-package-cutout.webp" className="absolute inset-0"><Image alt="Presidential Papaya Punch Moon Rock blunt package" fill sizes="(max-width: 760px) 32vw, 15vw" src="/media/contact/partner-cutouts/papaya-punch-blunt-package-cutout.webp" /></ProductImageLink>
           </div>
           <div className={styles.productCereal}>
-            <Image alt="Presidential Cereal Milk Moon Rock pre-roll package" fill sizes="(max-width: 760px) 31vw, 15vw" src="/media/contact/partner-cutouts/cereal-milk-preroll-package-cutout.webp" />
+            <ProductImageLink src="/media/contact/partner-cutouts/cereal-milk-preroll-package-cutout.webp" className="absolute inset-0"><Image alt="Presidential Cereal Milk Moon Rock pre-roll package" fill sizes="(max-width: 760px) 31vw, 15vw" src="/media/contact/partner-cutouts/cereal-milk-preroll-package-cutout.webp" /></ProductImageLink>
           </div>
           <div className={styles.productWatermelon}>
             <Image alt="Presidential Watermelon Moon Rock Mini Pre-Rolls package" fill sizes="(max-width: 760px) 24vw, 12vw" src="/media/contact/partner-cutouts/watermelon-mini-prerolls-package-cutout.webp" />

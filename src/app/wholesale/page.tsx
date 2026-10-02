@@ -36,10 +36,10 @@ export default function WholesalePage() {
       <PageFrame className={styles.page}>
         <main>
           <section className={styles.hero} aria-labelledby="wholesale-heading">
-            <div aria-hidden="true" className={styles.heroMural}>
+            <div className={styles.heroMural}>
               <div className={`${styles.heroMuralLayer} ${styles.heroMuralVape}`}><Image alt="" fill priority sizes="(max-width: 680px) 62vw, 45vw" src="/media/contact/collage/vape-teal-lro.webp" /></div>
-              <div className={`${styles.heroMuralLayer} ${styles.heroMuralGalactic}`}><Image alt="" fill priority sizes="24vw" src="/media/contact/collage/preroll-galactic-gas.webp" /></div>
-              <div className={`${styles.heroMuralLayer} ${styles.heroMuralBlueDream}`}><Image alt="" fill priority sizes="(max-width: 680px) 60vw, 25vw" src="/media/contact/collage/blunt-blue-dream.webp" /></div>
+              <Link href="/pre-rolls/galactic-gas" aria-label="Galactic Gas Pre-roll" className={`${styles.heroMuralLayer} ${styles.heroMuralGalactic} pointer-events-auto`}><Image alt="Galactic Gas Moon Rock Pre-roll" fill priority sizes="24vw" src="/media/contact/collage/preroll-galactic-gas.webp" /></Link>
+              <Link href="/blunts/blue-dream" aria-label="Blue Dream Blunt" className={`${styles.heroMuralLayer} ${styles.heroMuralBlueDream} pointer-events-auto`}><Image alt="Blue Dream Moon Rock Blunt" fill priority sizes="(max-width: 680px) 60vw, 25vw" src="/media/contact/collage/blunt-blue-dream.webp" /></Link>
               <div className={`${styles.heroMuralLayer} ${styles.heroMuralMain}`}><Image alt="" fill priority sizes="(max-width: 680px) 100vw, 40vw" src="/media/contact/collage/moonrock-whoasiwhoa.webp" /></div>
               <div className={styles.heroMuralVeil} />
               <div className={styles.heroMuralBottomFade} />
