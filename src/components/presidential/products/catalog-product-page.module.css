@@ -89,6 +89,9 @@
 }
 
 .copy { min-width: 0; }
+.artworkStack { display: grid; gap: 28px; min-width: 0; }
+.wholeMedia { aspect-ratio: auto; }
+.wholeMedia img { position: relative; display: block; width: 100%; height: auto; object-fit: contain; }
 
 .kicker {
   margin: 0;
@@ -292,6 +295,7 @@
 }
 
 @media (max-width: 700px) {
+  .wholeMedia { aspect-ratio: auto !important; }
   .shell,
   .productNavigation,
   .findSection { width: calc(100% - 36px); }

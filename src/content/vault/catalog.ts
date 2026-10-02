@@ -1,8 +1,16 @@
 import artwork from './artwork.json';
 
-export type VaultProduct = (typeof artwork)[number];
+export type VaultProduct = Omit<(typeof artwork)[number], 'productUrl'> & { productUrl: string };
 export type VaultImage = VaultProduct['pack'];
-export const vaultProducts = artwork;
+export function vaultStrainSlug(product: { strain: string; slug: string }) {
+  const established = artwork.find(p => p.strain === product.strain && p.productUrl)?.productUrl;
+  return established?.split('/').at(-1) ?? product.slug.replace(/-(?:mini-)?(?:blunt|pre-roll)$/, '');
+}
+export const vaultProducts: VaultProduct[] = artwork.map(p => ({ ...p, productUrl: p.productUrl ?? `/${p.room}/${vaultStrainSlug(p)}` }));
+export const newVaultProductPages = vaultProducts.filter(p => artwork.find(a => a.slug === p.slug)?.productUrl === null);
+export function findNewVaultProduct(room: string, strainSlug: string) {
+  return newVaultProductPages.find(p => p.room === room && vaultStrainSlug(p) === strainSlug);
+}
 export const vaultRooms = [
   { slug: 'blunts', name: 'Blunts', numeral: 'I', format: 'Blunt', featured: 'galactic-gas-blunt' },
   { slug: 'pre-rolls', name: 'Pre-rolls', numeral: 'II', format: 'Pre-roll', featured: 'king-louis-pre-roll' },

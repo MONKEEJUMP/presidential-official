@@ -1,4 +1,4 @@
-export type ProductCategoryPath = "/pre-rolls" | "/blunts";
+export type ProductCategoryPath = "/pre-rolls" | "/blunts" | "/mini-blunts" | "/mini-pre-rolls";
 
 export function productSlug(id: string): string {
   return id.endsWith("-title") ? id.slice(0, -"-title".length) : id;

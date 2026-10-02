@@ -7,6 +7,8 @@ import {
 } from "@/lib/products/product-paths";
 
 import styles from "./catalog-product-page.module.css";
+import type { VaultProduct } from '@/content/vault/catalog';
+import { imageAlt } from '@/content/vault/catalog';
 
 type CatalogProduct = {
   readonly id: string;
@@ -24,6 +26,8 @@ type CatalogProductPageProps = {
   readonly formatLabel: string;
   readonly product: CatalogProduct;
   readonly products: readonly CatalogProduct[];
+  readonly vaultProduct?: VaultProduct;
+  readonly backPath?: string;
 };
 
 function ArrowIcon({ direction }: { readonly direction: "left" | "right" }) {
@@ -48,6 +52,8 @@ export function CatalogProductPage({
   formatLabel,
   product,
   products,
+  vaultProduct,
+  backPath = categoryPath,
 }: CatalogProductPageProps) {
   const productIndex = products.findIndex((candidate) => candidate.id === product.id);
   const previous = products[(productIndex - 1 + products.length) % products.length];
@@ -60,13 +66,17 @@ export function CatalogProductPage({
         <div aria-hidden="true" className={styles.atmosphere} />
         <div className={styles.shell}>
           <nav aria-label="Breadcrumb" className={styles.breadcrumbs}>
-            <Link href={categoryPath}>{categoryLabel}</Link>
+            <Link href={backPath}>{categoryLabel}</Link>
             <span aria-hidden="true">/</span>
             <span aria-current="page">{product.name}</span>
           </nav>
 
           <div className={styles.heroGrid}>
-            <div className={styles.media}>
+            {vaultProduct ? <div className={styles.artworkStack}>
+              {(vaultProduct.scenes.length ? [...vaultProduct.scenes, vaultProduct.pack] : [vaultProduct.pack]).map((image, index) => <div key={image.full} className={`${styles.media} ${styles.wholeMedia}`}>
+                <Image alt={imageAlt(vaultProduct, image)} src={image.full} width={image.fullWidth} height={image.fullHeight} priority={index === 0} sizes="(max-width: 1000px) 100vw, 52vw" unoptimized />
+              </div>)}
+            </div> : <div className={styles.media}>
               <Image
                 alt={product.alt}
                 fill
@@ -74,7 +84,7 @@ export function CatalogProductPage({
                 sizes="(max-width: 900px) 100vw, 52vw"
                 src={product.src}
               />
-            </div>
+            </div>}
 
             <div className={styles.copy}>
               <p className={styles.kicker}>{formatLabel}</p>
@@ -83,27 +93,27 @@ export function CatalogProductPage({
               <p className={styles.edition}>{product.edition}</p>
               <p className={styles.description}>{product.description}</p>
 
-              <dl className={styles.facts}>
+              {vaultProduct ? <dl className={styles.facts}><div><dt>Format</dt><dd>{vaultProduct.format}</dd></div>{vaultProduct.tier && <div><dt>Tier</dt><dd>{vaultProduct.tier}</dd></div>}</dl> : <dl className={styles.facts}>
                 <div><dt>Format</dt><dd>{format}</dd></div>
                 <div><dt>Made with</dt><dd>{ingredients.join(" · ")}</dd></div>
                 <div><dt>Availability</dt><dd>Licensed retailers</dd></div>
-              </dl>
+              </dl>}
 
               <div className={styles.actions}>
-                <Link className={styles.primaryAction} href="/find-us">
+                {!vaultProduct && <Link className={styles.primaryAction} href="/find-us">
                   Find this product <ArrowIcon direction="right" />
-                </Link>
-                <Link className={styles.textAction} href={categoryPath}>
+                </Link>}
+                <Link className={styles.textAction} href={backPath}>
                   Back to all {categoryLabel}
                 </Link>
               </div>
-              <small>For adults 21+ where legal. Availability varies by retailer.</small>
+              {!vaultProduct && <small>For adults 21+ where legal. Availability varies by retailer.</small>}
             </div>
           </div>
         </div>
       </section>
 
-      <nav aria-label={`${categoryLabel} product navigation`} className={styles.productNavigation}>
+      {!vaultProduct && <nav aria-label={`${categoryLabel} product navigation`} className={styles.productNavigation}>
         <Link href={productDetailPath(categoryPath, previous.id)}>
           <ArrowIcon direction="left" />
           <span><small>Previous</small><strong>{previous.name}</strong></span>
@@ -113,9 +123,9 @@ export function CatalogProductPage({
           <span><small>Next</small><strong>{next.name}</strong></span>
           <ArrowIcon direction="right" />
         </Link>
-      </nav>
+      </nav>}
 
-      <section className={styles.findSection}>
+      {!vaultProduct && <section className={styles.findSection}>
         <p>Find this product</p>
         <h2>Start with the official retailer locator.</h2>
         <div>
@@ -124,7 +134,7 @@ export function CatalogProductPage({
             Find a licensed retailer <ArrowIcon direction="right" />
           </Link>
         </div>
-      </section>
+      </section>}
     </div>
   );
 }
