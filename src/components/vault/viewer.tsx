@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { pieceLabel, type VaultProduct, type VaultRoom } from '@/content/vault/catalog';
 import { FramedArt } from './framed-piece';
+import descriptions from '@/content/vault/descriptions.json';
 
 export function PieceViewer({ product, room, close }: { product: VaultProduct; room: VaultRoom; close: () => void }) {
   const [version, setVersion] = useState(0);
@@ -11,7 +12,7 @@ export function PieceViewer({ product, room, close }: { product: VaultProduct; r
   const closing = useRef(false);
   const n = product.scenes.length;
   const image = product.scenes[version] ?? product.pack;
-  const description = n === 0 ? `The ${product.strain} Moon Rock Mini Pre-roll pack portrait.` : `${n === 1 ? 'The original artwork' : `${n} original artworks`} for the ${product.strain} Moon Rock ${product.format}, shown with its clean pack portrait.`;
+  const description = (descriptions as Record<string, string>)[product.slug];
   useEffect(() => {
     const node = dialog.current!;
     const previousFocus = document.activeElement as HTMLElement | null;
@@ -30,7 +31,7 @@ export function PieceViewer({ product, room, close }: { product: VaultProduct; r
   return <dialog ref={dialog} className="vault-viewer" aria-labelledby="vault-piece-title" onCancel={event => { event.preventDefault(); requestClose(); }}>
     <div className="vault-viewer-top"><p className="vault-eyebrow">ROOM {room.numeral} · {room.name.toUpperCase()}</p><button onClick={requestClose} autoFocus aria-label="Close piece viewer">CLOSE <span aria-hidden="true">✕</span></button></div>
     <div className="vault-viewer-body"><div className="vault-viewer-stage"><FramedArt product={product} image={image} full priority /></div><div className="vault-viewer-details">
-      <p className="vault-eyebrow">{pieceLabel({ ...product, tier: null })}</p><h2 id="vault-piece-title">{product.strain}</h2>{product.tier && <p className="vault-viewer-tier"><span aria-hidden="true">●</span> {product.tier}</p>}<span className="vault-rule" /><p className="vault-description">{description}</p>
+      <p className="vault-eyebrow">{pieceLabel({ ...product, tier: null })}</p><h2 id="vault-piece-title">{product.strain}</h2>{product.tier && <p className="vault-viewer-tier"><span aria-hidden="true">●</span> {product.tier}</p>}<span className="vault-rule" />{description !== undefined && <p className="vault-description">{description}</p>}
       {n > 0 && <div className="vault-pack-portrait"><FramedArt product={product} image={product.pack} full /><span>THE PACK</span></div>}
       {product.productUrl && <Link className="vault-product-button" href={product.productUrl}>VIEW PRODUCT</Link>}
       <button className="vault-back-button" type="button" onClick={requestClose}>← BACK</button>
