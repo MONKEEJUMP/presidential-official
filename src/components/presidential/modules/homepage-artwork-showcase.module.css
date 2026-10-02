@@ -12,7 +12,7 @@
 .art[data-active=true]{opacity:1}
 @media(min-width:1024px){
   .grid{grid-template-columns:minmax(0,55fr) minmax(0,45fr);column-gap:64px}
-  .left{grid-template-rows:var(--hero-top-height,58px) auto}
+  .left{grid-template-rows:var(--hero-top-height,58px) auto 58px}
   .headline{font-size:clamp(1rem,5cqi,2.5rem);white-space:nowrap}
   .headline span{display:inline;margin-top:0}
   .frame{--fallback-height:min(560px,calc(100svh - 11rem),calc(100cqw * 9 / 11));height:var(--hero-box-height,var(--fallback-height));width:var(--hero-frame-width,calc((var(--fallback-height) - 46px) * 1200 / 1362 + 46px));max-width:100%}

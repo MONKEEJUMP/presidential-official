@@ -74,6 +74,11 @@ export function HomepageSpinningCrestFold() {
           </p>
           </div>
           <HomepageArtworkShowcase />
+          <div className={heroStyles.welcome}>
+            <p className={`${heroStyles.headline} font-display font-bold uppercase leading-[0.92] tracking-[0.035em] text-po-on-dark`}>
+              <span className="text-po-brand">World&apos;s</span>{" "}Strongest
+            </p>
+          </div>
         </div>
         <div className={heroStyles.right}>
             <div className={heroStyles.buttons}>
@@ -106,7 +111,7 @@ export function HomepageSpinningCrestFold() {
             <CtaLink
               className="min-h-[58px] w-full px-4 font-display text-[0.7rem] uppercase tracking-[0.07em]"
               href="/find-us"
-              variant="contrast"
+              variant="primary"
             >
               Find a retailer
             </CtaLink>
