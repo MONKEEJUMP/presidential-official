@@ -6,14 +6,30 @@ import styles from './homepage-artwork-showcase.module.css';
 
 const pieces = [
   { src: '/media/vault/piece-077-full.webp', href: '/pre-rolls/gorilla-goo', alt: 'Gorilla Goo Moon Rock Pre-roll artwork by Presidential', width: 1200, height: 1362 },
-  { src: '/media/vault/piece-003-full.webp', href: '/blunts/cereal-milk', alt: 'Cereal Milk Moon Rock Blunt artwork by Presidential', width: 1080, height: 1440 },
+  { src: '/media/vault/piece-073-full.webp', href: '/pre-rolls/24k', alt: '24K Moon Rock Pre-roll artwork by Presidential', width: 1200, height: 1362 },
   { src: '/media/vault/piece-078-full.webp', href: '/pre-rolls/pink-cookies', alt: 'Pink Cookies Moon Rock Pre-roll artwork by Presidential', width: 1200, height: 1362 },
-  { src: '/media/vault/piece-039-full.webp', href: '/blunts/skywalker', alt: 'Skywalker Moon Rock Blunt artwork by Presidential', width: 1200, height: 1200 },
 ] as const;
 
 export function HomepageArtworkShowcase() {
   const frame = useRef<HTMLAnchorElement>(null);
   const [index, setIndex] = useState(0);
+  useEffect(() => {
+    const node = frame.current!;
+    const left = node.parentElement!;
+    const box = node.closest('section[aria-label="Welcome to Presidential"]')?.querySelector<HTMLElement>('.po-teal-pinstripe');
+    const topPair = box?.previousElementSibling;
+    if (!box || !topPair) return;
+    const update = () => {
+      const height = box.getBoundingClientRect().height;
+      left.style.setProperty('--hero-box-height', `${height}px`);
+      left.style.setProperty('--hero-frame-width', `${Math.max(0, height - 46) * 1200 / 1362 + 46}px`);
+      left.style.setProperty('--hero-top-height', `${topPair.getBoundingClientRect().height}px`);
+    };
+    const observer = new ResizeObserver(update);
+    observer.observe(box);
+    observer.observe(topPair);
+    return () => observer.disconnect();
+  }, []);
   useEffect(() => {
     const images = Array.from(frame.current!.querySelectorAll('img'));
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');

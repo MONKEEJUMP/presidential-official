@@ -67,17 +67,13 @@ export function HomepageSpinningCrestFold() {
     >
       <div className={heroStyles.grid}>
         <div className={heroStyles.left}>
-          <HomepageArtworkShowcase />
           <div className={heroStyles.welcome}>
           <p className={`${heroStyles.headline} font-display font-bold uppercase leading-[0.92] tracking-[0.035em] text-po-on-dark`}>
-            Welcome to
+            Welcome to{" "}
             <span className="mt-2 block text-po-brand">Presidential.</span>
           </p>
-          <p className="mt-7 max-w-xl text-lg leading-8 text-po-on-dark-muted sm:text-xl">
-            Explore the collection, understand what&apos;s on the package, and
-            find a licensed retailer near you.
-          </p>
           </div>
+          <HomepageArtworkShowcase />
         </div>
         <div className={heroStyles.right}>
             <div className={heroStyles.buttons}>
