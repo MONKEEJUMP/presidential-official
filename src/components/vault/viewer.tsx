@@ -33,6 +33,7 @@ export function PieceViewer({ product, room, close }: { product: VaultProduct; r
       <p className="vault-eyebrow">{pieceLabel({ ...product, tier: null })}</p><h2 id="vault-piece-title">{product.strain}</h2>{product.tier && <p className="vault-viewer-tier"><span aria-hidden="true">●</span> {product.tier}</p>}<span className="vault-rule" /><p className="vault-description">{description}</p>
       {n > 0 && <div className="vault-pack-portrait"><FramedArt product={product} image={product.pack} full /><span>THE PACK</span></div>}
       {product.productUrl && <Link className="vault-product-button" href={product.productUrl}>VIEW PRODUCT</Link>}
+      <button className="vault-back-button" type="button" onClick={requestClose}>← BACK</button>
       {n > 1 && <div className="vault-versions"><p>VERSION {version + 1} OF {n}</p><div>{product.scenes.map((scene, i) => <button key={scene.full} onClick={() => setVersion(i)} aria-label={`Show version ${i + 1}`} aria-pressed={version === i}><FramedArt product={product} image={scene} /></button>)}</div></div>}
     </div></div>
   </dialog>;
