@@ -159,14 +159,21 @@ export function AboutCompanyShell() {
                 About the Presidential Cannabis Brand
               </h2>
               <p className="mt-8 max-w-3xl text-lg leading-8 text-po-on-dark-muted sm:text-xl sm:leading-9">
-                Presidential exists because someone refused to accept what the market called good enough. Not better marketing — better cannabis. That standard has governed every decision since the first batch, and it still does: obsess over the material, engineer the experience, and never ship something that misses. Cannabis Deserves Better. That&apos;s not a tagline. It&apos;s the assignment. The full story — Los Angeles, 2012, and everything since — lives on the{" "}
+                Presidential is the Los Angeles cannabis brand Everett Smith and John Zapp started in 2012. It makes{" "}
                 <Link
                   className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand"
-                  href="/presidential-cannabis"
+                  href="/moon-rocks"
                 >
-                  Presidential Cannabis company page
+                  Moon Rocks
                 </Link>
-                .
+                , infused pre-rolls, and tobacco-free blunts, and sells them through licensed retailers. The{" "}
+                <Link
+                  className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand"
+                  href="/find-us"
+                >
+                  finder
+                </Link>{" "}
+                lists those retailers.
               </p>
             </div>
 
