@@ -295,7 +295,7 @@ export const ROUTE_REGISTRY = [
     priority: 4,
     changeFrequency: "monthly",
     canonicalPath: "/about",
-    title: "About Presidential | Premium Infused Cannabis Brand",
+    title: "Presidential Cannabis Brand | Official",
     description:
       "Meet Presidential, the premium infused cannabis brand behind Moon Rocks, three signature series, and the Presidential Infusion System™. Explore the standard.",
     h1: "PRESIDENTIAL CANNABIS. BUILT BETTER. ON PURPOSE.",
