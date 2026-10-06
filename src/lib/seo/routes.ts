@@ -269,7 +269,7 @@ export const ROUTE_REGISTRY = [
       "presidential brand heritage",
       "presidential origin story",
     ],
-    schema: ["AboutPage", "WebPage", "BreadcrumbList"],
+    schema: ["Organization", "AboutPage", "WebPage", "BreadcrumbList"],
     requiredData: ["company_entity", "founder_story", "proof_items", "assets"],
     requiredApprovals: [
       "founder/company proof approval",
