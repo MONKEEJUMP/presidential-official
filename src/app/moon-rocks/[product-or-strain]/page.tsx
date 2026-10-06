@@ -229,7 +229,7 @@ export default async function CatalogProductDetailPage({
                 {slug !== "presidential-blunts" ? (
                   <ProductSpecBlock chips={chips} name={item.name} series={item.series} slug={slug} />
                 ) : null}
-                {slug !== "presidential-blunts" ? <SkuAnswers name={item.name} series={item.series} /> : null}
+                {slug !== "presidential-blunts" ? <SkuAnswers name={item.name} series={item.series} slug={slug} /> : null}
 
                 {relatedGuide ? (
                   <div className="mt-8 border-t border-po-line pt-5">

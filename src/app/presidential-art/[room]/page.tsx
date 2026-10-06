@@ -15,5 +15,5 @@ export default async function RoomPage({ params }: { params: Promise<{ room: str
   const { room: slug } = await params;
   const room = vaultRooms.find(r => r.slug === slug);
   if (!room) notFound();
-  return <Suspense fallback={<div className="vault-room-heading"><h1>{room.name.toUpperCase()}</h1></div>}><VaultRoomPage room={room} /></Suspense>;
+  return <Suspense fallback={<div className="vault-room-heading"><p className="vault-room-title">{room.name.toUpperCase()}</p></div>}><VaultRoomPage room={room} /></Suspense>;
 }

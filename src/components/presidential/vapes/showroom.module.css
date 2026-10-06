@@ -270,3 +270,6 @@
   .builtForOil .pillarGrid { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
 @media (prefers-reduced-motion:reduce) { .chartLine { stroke-dashoffset: 0 !important; } }
+.itemTitle { font-family: var(--po-font-display); font-weight: 600; text-transform: uppercase; }
+.whyOrbitList .itemTitle { font-size: 17px; line-height: 1.35; margin-bottom: 9px; }
+.pillarGrid .itemTitle { font-size: 14px; line-height: 1.35; margin-bottom: 12px; }
