@@ -74,7 +74,7 @@ export const ROUTE_REGISTRY = [
     canonicalPath: "/moon-rocks",
     title: "Presidential Moon Rocks | Infused Pre-Rolls and Blunts",
     description:
-      "Explore the Presidential Moon Rocks product platform. Availability varies by licensed retailer.",
+      "Presidential Moon Rocks: flower, concentrate, and kief in one product. Browse 2G Moon Rocks, pre-rolls, and blunts across Silver, Gold, and Rose Gold series.",
     h1: "Presidential Moon Rocks Collection",
     keywords: [
       "presidential moon rocks",
@@ -297,7 +297,7 @@ export const ROUTE_REGISTRY = [
     canonicalPath: "/about",
     title: "Presidential Cannabis Brand | Official",
     description:
-      "Meet Presidential, the premium infused cannabis brand behind Moon Rocks, three signature series, and the Presidential Infusion System™. Explore the standard.",
+      "Presidential is the Los Angeles cannabis brand started in 2012. It makes Moon Rocks, infused pre-rolls, and tobacco-free blunts sold through licensed retailers.",
     h1: "PRESIDENTIAL CANNABIS. BUILT BETTER. ON PURPOSE.",
     keywords: [
       "presidential cannabis company",

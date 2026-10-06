@@ -148,10 +148,10 @@ export function PreRollExperience({
         </div>
         <div className={styles.storyCopy}>
           <p>
-            Presidential Moon Rock pre-rolls combine cannabis flower with concentrate in a finished 1g roll. From berry and tropical selections to fuel, pine, and savory strains, the lineup gives you a flavor to make your own.
+            Presidential pre-rolls, sold as Moon Rock pre-rolls, combine cannabis flower with concentrate in a finished 1g roll. From berry and tropical selections to fuel, pine, and savory strains, the lineup gives you a flavor to make your own.
           </p>
           <p>
-            Explore distillate-and-kief recipes, live-resin-and-diamond infusions, and the live-rosin selections in Rose Gold. Compare ingredients and flavor profiles, then ask your licensed retailer for the pre-roll you want.
+            Explore distillate recipes coated in kief, live-resin-and-diamond infusions, and the live-rosin selections in Rose Gold. Compare ingredients and flavor profiles, then ask your licensed retailer for the pre-roll you want.
           </p>
         </div>
         <div className={styles.featuredMosaic}>
@@ -178,7 +178,7 @@ export function PreRollExperience({
             <h2 id="art-index-heading">Meet<br />the pre-rolls.</h2>
           </div>
           <p>
-            Get to know the flavor, infusion, and ingredients in each Moon Rock pre-roll. Flavor and aroma vary by batch; your retailer can confirm the current selection.
+            Get to know the flavor, infusion, and ingredients in each Moon Rock pre-roll from the Presidential brand. Flavor and aroma vary by batch; your retailer can confirm the current selection.
           </p>
         </div>
         <div className={styles.tierSections}>
@@ -231,7 +231,7 @@ export function PreRollExperience({
         <div>
           <p>Find your Presidential</p>
           <h2 id="find-heading">Your next stop.<br /><span>The right retailer.</span></h2>
-          <p className={styles.findCopy}>Explore the official retailer locator, then check the store&apos;s current Presidential selection. Availability varies by licensed retailer.</p>
+          <p className={styles.findCopy}>Explore the official retailer locator, then confirm the store&apos;s current Presidential selection. Availability varies by licensed retailer. For adults 21 or older where cannabis is legal.</p>
           <Link className={styles.primaryAction} href="/find-us">Find a licensed retailer <ArrowIcon direction="right" /></Link>
           <small>For adults 21+ where legal.</small>
         </div>
