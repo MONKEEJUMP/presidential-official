@@ -397,9 +397,9 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
             <h2 className="mt-10 font-display text-2xl uppercase text-po-brand">What Presidential THC covers</h2>
             <div className="mt-5 grid max-w-2xl gap-5 text-lg leading-8 text-po-on-dark-muted">
               <p>
-                &ldquo;Presidential THC&rdquo; is a common way to search for Presidential, the cannabis brand behind{" "}
-                <Link className={inlineLinkClass} href="/moon-rocks">Moon Rocks</Link>, <Link className={inlineLinkClass} href="/pre-rolls">pre-rolls</Link>, and{" "}
-                <Link className={inlineLinkClass} href="/blunts">blunts</Link>. This page is the official guide to Presidential&apos;s infused product system, its three extract-led series, and the numbers printed on a cannabis label.
+                &ldquo;Presidential THC&rdquo; is how many retail menus list Presidential, the cannabis brand behind{" "}
+                <Link className={inlineLinkClass} href="/moon-rocks">Moon Rocks</Link>, <Link className={inlineLinkClass} href="/pre-rolls">Moon Rock pre-rolls</Link>, and{" "}
+                <Link className={inlineLinkClass} href="/blunts">Moon Rock blunts</Link>. This page is the official guide to Presidential&apos;s infused product system, its three extract-led series, and the numbers printed on a cannabis label.
               </p>
               <p>
                 It explains flower, concentrate, kief, distillate, live resin, live rosin, THCa, and total THC for{" "}
@@ -415,8 +415,18 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
         </div>
       </Scene>
 
+      <TermSection id="presidential-thc-infused-pre-rolls" title="Presidential THC infused pre-rolls" tone="contrast">
+        <p>
+          Retail menus often list Presidential&apos;s infused pre-rolls under &ldquo;Presidential THC.&rdquo; Presidential Moon Rock pre-rolls combine cannabis flower with concentrate in a finished 1g roll, across the{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver</Link>, <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold</Link>, and{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold</Link> series. Browse the{" "}
+          <Link className={inlineLinkClass} href="/pre-rolls">Presidential infused pre-rolls</Link> lineup, then confirm the current selection with a{" "}
+          <Link className={inlineLinkClass} href="/find-us">licensed retailer</Link>.
+        </p>
+      </TermSection>
+
       <TermSection id="presidential-thc-ingredients" images={[images[1]]} title="Flower, concentrate, and kief">
-        <p>Presidential brand materials describe the flagship Moon Rocks format through three visible roles: flower as the base, cannabis concentrate as the infused component, and kief as the finish.</p>
+        <p><Link className={inlineLinkClass} href="/about">Presidential brand materials</Link> describe the flagship Moon Rocks format through three visible roles: flower as the base, cannabis concentrate as the infused component, and kief as the finish.</p>
         <p><strong>Flower</strong> supplies the plant material and the named product identity. <strong>Concentrate</strong> supplies the extract component. <strong>Kief</strong> is the collected trichome material used for the exterior finish.</p>
         <p>Potency is batch-specific. Read the current package label and its associated test results rather than inferring a fixed percentage from a format, series, or product name.</p>
       </TermSection>
@@ -432,9 +442,9 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
 
       <TermSection id="presidential-thc-extracts" images={[images[4], images[5], images[6]]} title="Three extracts, three series">
         <p>The catalog is organized by what goes into the product, not by marketing tier.</p>
-        <p><strong>Distillate</strong> is the extract identified with the <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver Flavor Series</Link>.</p>
-        <p><strong>Live resin</strong> is the extract identified with the <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold Strain Series</Link> and is made from cannabis frozen at harvest rather than first dried and cured.</p>
-        <p><strong>Live rosin</strong> is the solventless extract identified with the <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>. Ice water, heat, and pressure are used instead of chemical solvents.</p>
+        <p><strong>Distillate</strong> is the extract identified with the Silver Flavor Series.</p>
+        <p><strong>Live resin</strong> is the extract identified with the Gold Strain Series and is made from cannabis frozen at harvest rather than first dried and cured.</p>
+        <p><strong>Live rosin</strong> is the solventless extract identified with the Rose Gold Connoisseur Series. Ice water, heat, and pressure are used instead of chemical solvents.</p>
         <p>These series descriptions explain the catalog structure. The current package label and batch documentation remain authoritative for a specific product.</p>
         <p>
           That same infused framework appears in the collaboration catalog as{" "}
