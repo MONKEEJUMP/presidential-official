@@ -29,7 +29,9 @@ import { InContentText } from "../primitives/in-content-text";
 import shared from "../prerolls/preroll-experience.module.css";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { FindUsCtaShell } from "./find-us-cta-shell";
+import { AnswerSections } from "./answer-sections";
 import { ParentLearnGuideLink } from "./learn-guide-discovery";
+import { MOON_ROCKS_ANSWERS } from "./salvage-content";
 
 type MoonRocksBreadcrumb = {
   readonly name: string;
@@ -394,6 +396,8 @@ export async function MoonRocksPlatformShell({
             </div>
           </div>
         </Scene>
+
+        <AnswerSections eyebrow="Presidential Moon Rocks questions" id="moon-rocks-answers" items={MOON_ROCKS_ANSWERS} />
 
         <ParentLearnGuideLink parentPath="/moon-rocks" />
 

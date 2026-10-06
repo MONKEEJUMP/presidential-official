@@ -7,7 +7,9 @@ import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { CtaLink } from "../primitives/cta-link";
 import { InContentText } from "../primitives/in-content-text";
+import { AnswerSections } from "./answer-sections";
 import { ParentLearnGuideLink } from "./learn-guide-discovery";
+import { ABOUT_ANSWERS } from "./salvage-content";
 
 const platforms = [
   {
@@ -309,6 +311,8 @@ export function AboutCompanyShell() {
             />
           </div>
         </Scene>
+
+        <AnswerSections eyebrow="About Presidential" id="about-answers" items={ABOUT_ANSWERS} />
 
         <ParentLearnGuideLink parentPath="/about" />
 

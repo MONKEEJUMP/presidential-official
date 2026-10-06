@@ -20,6 +20,7 @@ import { relatedGuideForCatalogItem } from "@/lib/catalog/series-registry";
 import { FindUsCtaShell } from "@/components/presidential/modules/find-us-cta-shell";
 import { ProductDescription } from "@/components/presidential/modules/product-description";
 import { ProductSpecBlock } from "@/components/presidential/products/product-spec-block";
+import { SkuAnswers } from "@/components/presidential/products/sku-answers";
 import {
   readCatalogItemBySlug,
   readCatalogProductParams,
@@ -228,6 +229,7 @@ export default async function CatalogProductDetailPage({
                 {slug !== "presidential-blunts" ? (
                   <ProductSpecBlock chips={chips} name={item.name} series={item.series} slug={slug} />
                 ) : null}
+                {slug !== "presidential-blunts" ? <SkuAnswers name={item.name} series={item.series} /> : null}
 
                 {relatedGuide ? (
                   <div className="mt-8 border-t border-po-line pt-5">
