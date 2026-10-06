@@ -29,6 +29,15 @@ export function buildOrganizationSchema({
       contactType: "sales",
       email: "sales@presidentialmoonrocks.com",
     },
+    foundingDate: "2012",
+    foundingLocation: {
+      "@type": "Place",
+      name: "Los Angeles",
+    },
+    founder: [
+      { "@type": "Person", name: "Everett Smith" },
+      { "@type": "Person", name: "John Zapp" },
+    ],
     ...(logoPath ? { logo: canonicalUrl(logoPath) } : {}),
     ...(APPROVED_SAME_AS.length > 0 ? { sameAs: [...APPROVED_SAME_AS] } : {}),
   };

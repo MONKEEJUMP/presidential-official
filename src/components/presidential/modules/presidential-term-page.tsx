@@ -428,9 +428,9 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
 
       <TermSection id="presidential-thc-extracts" images={[images[4], images[5], images[6]]} title="Three extracts, three series">
         <p>The catalog is organized by what goes into the product, not by marketing tier.</p>
-        <p><strong>Distillate</strong> is the extract identified with the Silver Flavor Series.</p>
-        <p><strong>Live resin</strong> is the extract identified with the Gold Strain Series and is made from cannabis frozen at harvest rather than first dried and cured.</p>
-        <p><strong>Live rosin</strong> is the solventless extract identified with the Rose Gold Connoisseur Series. Ice water, heat, and pressure are used instead of chemical solvents.</p>
+        <p><strong>Distillate</strong> is the extract identified with the <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver Flavor Series</Link>.</p>
+        <p><strong>Live resin</strong> is the extract identified with the <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold Strain Series</Link> and is made from cannabis frozen at harvest rather than first dried and cured.</p>
+        <p><strong>Live rosin</strong> is the solventless extract identified with the <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>. Ice water, heat, and pressure are used instead of chemical solvents.</p>
         <p>These series descriptions explain the catalog structure. The current package label and batch documentation remain authoritative for a specific product.</p>
         <p>
           That same infused framework appears in the collaboration catalog as{" "}
@@ -510,7 +510,7 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
       <TermSection id="presidential-blunts-lineup" images={[images[3], images[4]]} title="The lineup">
         <p><strong>The Presidential Blunt</strong> is the flagship wrapped format. It carries recognizable strain and flavor names in a full-size presentation designed around a steady burn and a complete session.</p>
         <p><strong>Mini Blunts</strong> provide the same family character in a smaller package. Their compact scale broadens the ways licensed retailers can present Presidential infused cannabis and gives customers another practical format choice.</p>
-        <p><strong>The Presidential Line</strong> connects core house names across formats, while the Silver Flavor Series, Gold Strain Series, and Rose Gold Connoisseur Series organize products by their featured profile and extract approach.</p>
+        <p><strong>The Presidential Line</strong> connects core house names across formats, while the <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver Flavor Series</Link>, <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold Strain Series</Link>, and <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> organize products by their featured profile and extract approach.</p>
         <p>The catalog also includes <strong>Presidential House Line</strong> selections and <strong>Presidential x THC Design</strong> releases. Together, these groupings position the blunt program inside a broader 47-product system with a clear, connected presence across the Presidential catalog.</p>
         <p>Packaging carries the strain or flavor identity forward with bold color, Presidential branding, and format information that helps customers recognize the exact release they selected.</p>
       </TermSection>

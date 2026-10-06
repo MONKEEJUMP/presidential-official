@@ -166,7 +166,8 @@ export function AboutCompanyShell() {
                 >
                   Moon Rocks
                 </Link>
-                , infused pre-rolls, and tobacco-free blunts, and sells them through licensed retailers. The{" "}
+                , <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/pre-rolls">infused pre-rolls</Link>, and{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/blunts">tobacco-free blunts</Link>, and sells them through licensed retailers. The{" "}
                 <Link
                   className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand"
                   href="/find-us"
