@@ -6,6 +6,7 @@ import {
 } from "@/components/ecosystem/ecosystem-bands";
 import { PageFrame } from "@/components/presidential/layout/page-frame";
 import { PreRollExperience } from "@/components/presidential/prerolls/preroll-experience";
+import { buildVaultCardsBySection } from "@/components/vault/format-cards";
 import {
   buildRouteShellJsonLd,
   JsonLd,
@@ -34,6 +35,7 @@ export default function PreRollsPage() {
         <PreRollExperience
           afterCollection={<ClosingStripBand scope="pre-rolls" />}
           afterStory={<ProductExpressionBand product="pre-rolls" />}
+          vaultCards={buildVaultCardsBySection("pre-rolls")}
         />
       </PageFrame>
     </>

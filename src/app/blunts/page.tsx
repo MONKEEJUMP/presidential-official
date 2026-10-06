@@ -5,6 +5,7 @@ import {
   ProductExpressionBand,
 } from "@/components/ecosystem/ecosystem-bands";
 import { BluntsExperience } from "@/components/presidential/blunts/blunts-experience";
+import { buildVaultCardsBySection } from "@/components/vault/format-cards";
 import { PageFrame } from "@/components/presidential/layout/page-frame";
 import { buildStaticRouteMetadata, getStaticRouteRecord } from "@/lib/seo/route-page";
 import { buildRouteShellJsonLd, JsonLd } from "@/lib/seo/schema";
@@ -25,6 +26,7 @@ export default function BluntsPage() {
         <BluntsExperience
           afterCollection={<ClosingStripBand scope="blunts" />}
           afterStory={<ProductExpressionBand product="blunts" />}
+          vaultCards={buildVaultCardsBySection("blunts")}
         />
       </PageFrame>
     </>

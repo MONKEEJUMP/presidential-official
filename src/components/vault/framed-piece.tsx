@@ -13,7 +13,8 @@ export function Placard({ product }: { product: VaultProduct }) {
 }
 export function FramedPiece({ product, featured = false, entrance = false }: { product: VaultProduct; featured?: boolean; entrance?: boolean }) {
   const image = product.scenes[0] ?? product.pack;
-  return <Link href={pieceHref(product)} scroll={false} className={`vault-piece ${featured ? 'vault-featured-piece' : ''} ${entrance ? 'vault-collection-piece' : ''}`} aria-label={`Open ${product.strain} ${product.format} artwork`}>
-    <FramedArt product={product} image={image} full={featured} /><Placard product={product} />
-  </Link>;
+  return <div className={`vault-piece ${featured ? 'vault-featured-piece' : ''} ${entrance ? 'vault-collection-piece' : ''}`}>
+    <Link href={pieceHref(product)} scroll={false} className="vault-piece-art" aria-label={`Open ${product.strain} ${product.format} artwork`}><FramedArt product={product} image={image} full={featured} /></Link>
+    <Link href={product.productUrl} className="vault-placard vault-placard-link"><span className="vault-piece-name">{product.strain}</span><span className="vault-piece-format">{pieceLabel(product)}</span></Link>
+  </div>;
 }
