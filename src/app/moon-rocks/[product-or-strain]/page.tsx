@@ -226,7 +226,7 @@ export default async function CatalogProductDetailPage({
 
                 {/* /moon-rocks/presidential-blunts is on hold until Oct 26. */}
                 {slug !== "presidential-blunts" ? (
-                  <ProductSpecBlock name={item.name} series={item.series} slug={slug} />
+                  <ProductSpecBlock chips={chips} name={item.name} series={item.series} slug={slug} />
                 ) : null}
 
                 {relatedGuide ? (
