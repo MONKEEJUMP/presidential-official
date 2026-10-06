@@ -70,7 +70,7 @@ const PRODUCT_H1_OVERRIDE_BY_SLUG: Readonly<Record<string, string>> = {
   "blue-dream": "Blue Dream Moon Rocks",
   "gorilla-goo": "Gorilla Goo Moon Rocks",
   "pink-cookies": "Pink Cookies Moon Rocks",
-  "presidential-blunts": "Presidential House Line Blunt",
+  "presidential-blunts": "Presidential Blunts — House Line",
   "presidential-moon-rocks": "Presidential House Line Moon Rocks",
   skywalker: "Skywalker Moon Rocks",
   strawberry: "Strawberry Moon Rocks",
