@@ -444,7 +444,7 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
         <p>A cannabis label may show delta-9 THC, THCa, and a calculated total THC value. Those numbers describe different measurements and should be read with their units and the batch&apos;s testing record.</p>
         <p>Heat can convert THCa into delta-9 THC through decarboxylation. The conventional total-THC calculation applies a <strong>0.877</strong> conversion factor based on the compounds&apos; molar-mass ratio.</p>
         <p><strong>Total THC = (THCa × 0.877) + THC</strong></p>
-        <p>This formula is documented in NIST&apos;s hemp reference-material guidance. The independent source remains non-linked until outbound publication approval is recorded. It explains the calculation; it does not supply the potency of any Presidential product. Use the product&apos;s current label and test record for that.</p>
+        <p>This formula is documented in NIST&apos;s hemp reference-material guidance. It explains the calculation; it does not supply the potency of any Presidential product. Use the product&apos;s current label and test record for that.</p>
       </TermSection>
 
       <TermSection id="presidential-thc-terpenes" title="What terpenes contribute to aroma">
