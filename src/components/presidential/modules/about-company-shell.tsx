@@ -336,7 +336,7 @@ export function AboutCompanyShell() {
             />
             <div className="lg:pt-8">
               <p className="max-w-3xl text-lg leading-8 text-po-body">
-                It started in Los Angeles, and it started early — early enough to help shape what infused cannabis became. Presidential built a reputation the slow way: one pack at a time, in a market that rewarded shortcuts. The full story is worth reading on its own.
+                It started in Los Angeles, California, and it started early — early enough to help shape what infused cannabis became. Presidential built a reputation the slow way: one pack at a time, in a market that rewarded shortcuts. The full story is worth reading on its own.
               </p>
               <CtaLink className="mt-8" href="/our-story" variant="secondary">
                 Read the Presidential story

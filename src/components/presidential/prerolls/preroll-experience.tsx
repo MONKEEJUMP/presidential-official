@@ -148,10 +148,13 @@ export function PreRollExperience({
         </div>
         <div className={styles.storyCopy}>
           <p>
-            Presidential pre-rolls, sold as Moon Rock pre-rolls, combine cannabis flower with concentrate in a finished 1g roll. From berry and tropical selections to fuel, pine, and savory strains, the lineup gives you a flavor to make your own.
+            Presidential pre-rolls, sold as Moon Rock pre-rolls, combine cannabis flower with concentrate in a finished 1g roll. From berry and tropical selections to fuel, pine, and savory strains, the lineup gives you a flavor to make your own. For a smaller format, <Link href="/mini-pre-rolls">Presidential Mini Pre-Rolls</Link> come as three 0.5g Moon Rock mini pre-rolls, 1.5g in total.
           </p>
           <p>
             Explore distillate recipes coated in kief, live-resin-and-diamond infusions, and the live-rosin selections in Rose Gold. Compare ingredients and flavor profiles, then ask your licensed retailer for the pre-roll you want.
+          </p>
+          <p>
+            Where to buy: Presidential pre-rolls are sold through licensed retailers. Enter your zip code in the <Link href="/find-us">Presidential store finder</Link> to see the nearest licensed retailers carrying Presidential, ranked by distance.
           </p>
         </div>
         <div className={styles.featuredMosaic}>
@@ -178,7 +181,7 @@ export function PreRollExperience({
             <h2 id="art-index-heading">Meet<br />the pre-rolls.</h2>
           </div>
           <p>
-            Get to know the flavor, infusion, and ingredients in each Moon Rock pre-roll from the Presidential brand. Flavor and aroma vary by batch; your retailer can confirm the current selection.
+            Get to know the flavor, infusion, and ingredients in each Moon Rock pre-roll from the Presidential brand. Flavor and aroma vary by batch; your retailer can confirm the current selection. The 1g lineup comes in three series: the Silver Flavor Series (flower, distillate, and kief), the Gold Strain Series, defined by live resin, and the Rose Gold Connoisseur Series, defined by solventless live rosin.
           </p>
         </div>
         <div className={styles.tierSections}>
@@ -187,7 +190,7 @@ export function PreRollExperience({
             if (entries.length === 0 && !vaultCards?.[section]) return null;
             return (
               <section className={styles.tierSection} key={section}>
-                <TierSectionHeader section={section} />
+                <TierSectionHeader descriptionSuffix={section === "collabs" ? " On the pre-roll menu, those partners include Rove, Nature’s Chemistry, Trendi, and VLADTV." : undefined} section={section} />
                 <div className={`${styles.artGrid} ${styles.tierGrid}`}>
                   {entries.map(({ artwork, placement }) => (
                     <article className={artwork.shape === "square" ? styles.artCardSquare : styles.artCardPortrait} key={artwork.id}>
@@ -232,6 +235,7 @@ export function PreRollExperience({
           <p>Find your Presidential</p>
           <h2 id="find-heading">Your next stop.<br /><span>The right retailer.</span></h2>
           <p className={styles.findCopy}>Explore the official retailer locator, then confirm the store&apos;s current Presidential selection. Availability varies by licensed retailer. For adults 21 or older where cannabis is legal.</p>
+          <p className={styles.findCopy}>Every location in the <Link href="/find-us">store finder</Link> is an official, licensed Presidential retailer. Stock shifts by store and by day, so check with the store for the pre-roll you want before you go.</p>
           <Link className={styles.primaryAction} href="/find-us">Find a licensed retailer <ArrowIcon direction="right" /></Link>
           <small>For adults 21+ where legal.</small>
         </div>
