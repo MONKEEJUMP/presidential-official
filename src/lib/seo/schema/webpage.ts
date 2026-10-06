@@ -10,12 +10,14 @@ type WebPageInput = {
   path: string;
   name: string;
   description: string;
+  aboutId?: string;
 };
 
 export function buildWebPageSchema({
   path,
   name,
   description,
+  aboutId,
 }: WebPageInput): WithContext<WebPage> {
   const url = canonicalUrl(path);
 
@@ -28,6 +30,7 @@ export function buildWebPageSchema({
     description,
     isPartOf: { "@id": WEBSITE_ID },
     publisher: { "@id": ORGANIZATION_ID },
+    ...(aboutId ? { about: { "@id": aboutId } } : {}),
   };
 }
 

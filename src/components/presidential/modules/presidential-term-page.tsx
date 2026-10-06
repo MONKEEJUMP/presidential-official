@@ -397,14 +397,17 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
             <h2 className="mt-10 font-display text-2xl uppercase text-po-brand">What Presidential THC covers</h2>
             <div className="mt-5 grid max-w-2xl gap-5 text-lg leading-8 text-po-on-dark-muted">
               <p>
-                Presidential THC is the official guide to the brand&apos;s infused product system, its three extract-led series, and the numbers printed on a cannabis label.
+                &ldquo;Presidential THC&rdquo; is a common way to search for Presidential, the cannabis brand behind{" "}
+                <Link className={inlineLinkClass} href="/moon-rocks">Moon Rocks</Link>, <Link className={inlineLinkClass} href="/pre-rolls">pre-rolls</Link>, and{" "}
+                <Link className={inlineLinkClass} href="/blunts">blunts</Link>. This page is the official guide to Presidential&apos;s infused product system, its three extract-led series, and the numbers printed on a cannabis label.
               </p>
               <p>
                 It explains flower, concentrate, kief, distillate, live resin, live rosin, THCa, and total THC for{" "}
                 <Link className={inlineLinkClass} href="/presidential-cannabis">
                   Presidential
                 </Link>
-                , then points readers to the detailed guides and licensed-retailer path.
+                , then points readers to the detailed guides and the{" "}
+                <Link className={inlineLinkClass} href="/find-us">licensed-retailer locator</Link>.
               </p>
             </div>
           </div>
@@ -420,7 +423,8 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
 
       <TermSection id="presidential-thc-infusion" images={[images[2], images[3]]} title="The Presidential Infusion System™" tone="contrast">
         <p>
-          Presidential uses <strong>Presidential Infusion System™</strong> as the name for its product framework: flower and cannabis extracts working together in a finished format. The dedicated THC reference explains the distinction between concentrate placed on a surface and concentrate{" "}
+          Presidential uses <strong>Presidential Infusion System™</strong> as the name for its product framework: flower and cannabis extracts working together in a finished format. The{" "}
+          <Link className={inlineLinkClass} href="/learn/infusion-science">Infusion Science guide</Link> explains the distinction between concentrate placed on a surface and concentrate{" "}
           carried through the flower.
         </p>
         <p>The system name identifies Presidential&apos;s brand architecture. It does not establish a universal potency, burn, or performance result; the specific package and batch record control those facts.</p>

@@ -13,6 +13,7 @@ import type { RoutePublicationGateInput } from "../metadata-types";
 import type { SeoRouteRecord, SeoSchemaType } from "../route-types";
 import { getRoutePublicationGateBlockReasons } from "../source-records";
 import { buildBreadcrumbSchema } from "./breadcrumb";
+import { ORGANIZATION_ID } from "./constants";
 import { buildOrganizationSchema } from "./organization";
 import { getEmittedRouteShellSchemaTypes } from "./route-contract";
 import { buildWebPageSchema } from "./webpage";
@@ -134,6 +135,8 @@ export function buildRouteShellJsonLd(
       path: route.canonicalPath,
       name: getSafeRouteShellName(route),
       description: getSafeRouteShellDescription(route),
+      // FIX-10: connect the "presidential thc" owner page to the brand entity.
+      ...(route.path === "/presidential-thc" ? { aboutId: ORGANIZATION_ID } : {}),
     });
 
     if (webPageSchema.url !== canonical) {
