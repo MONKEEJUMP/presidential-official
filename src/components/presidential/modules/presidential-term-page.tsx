@@ -398,8 +398,8 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
             <div className="mt-5 grid max-w-2xl gap-5 text-lg leading-8 text-po-on-dark-muted">
               <p>
                 &ldquo;Presidential THC&rdquo; is how many retail menus list Presidential, the cannabis brand behind{" "}
-                <Link className={inlineLinkClass} href="/moon-rocks">Moon Rocks</Link>, <Link className={inlineLinkClass} href="/pre-rolls">Moon Rock pre-rolls</Link>, and{" "}
-                <Link className={inlineLinkClass} href="/blunts">Moon Rock blunts</Link>. This page is the official guide to Presidential&apos;s infused product system, its three extract-led series, and the numbers printed on a cannabis label.
+                <Link className={inlineLinkClass} href="/moon-rocks">Moon Rocks</Link>, <Link className={inlineLinkClass} href="/pre-rolls">Moon Rock pre-rolls</Link>,{" "}
+                <Link className={inlineLinkClass} href="/blunts">Moon Rock blunts</Link>, and <Link className={inlineLinkClass} href="/mini-blunts">Mini Blunts</Link>. This page is the official guide to Presidential&apos;s infused product system, its three extract-led series, and the numbers printed on a cannabis label.
               </p>
               <p>
                 It explains flower, concentrate, kief, distillate, live resin, live rosin, THCa, and total THC for{" "}
@@ -419,8 +419,8 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
         <p>
           Retail menus often list Presidential&apos;s infused pre-rolls under &ldquo;Presidential THC.&rdquo; Presidential Moon Rock pre-rolls combine cannabis flower with concentrate in a finished 1g roll, across the{" "}
           <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver</Link>, <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold</Link>, and{" "}
-          <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold</Link> series. Browse the{" "}
-          <Link className={inlineLinkClass} href="/pre-rolls">Presidential infused pre-rolls</Link> lineup, then confirm the current selection with a{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold</Link> series. Some menus list them as infused joints. Browse the{" "}
+          <Link className={inlineLinkClass} href="/pre-rolls">Presidential infused pre-rolls</Link> lineup, then check the store&apos;s current Presidential selection with a{" "}
           <Link className={inlineLinkClass} href="/find-us">licensed retailer</Link>.
         </p>
       </TermSection>
@@ -441,13 +441,13 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
       </TermSection>
 
       <TermSection id="presidential-thc-extracts" images={[images[4], images[5], images[6]]} title="Three extracts, three series">
-        <p>The catalog is organized by what goes into the product, not by marketing tier.</p>
+        <p>The catalog is organized by what goes into the product, not by marketing tier, so consumers can compare ingredients and flavor profiles.</p>
         <p><strong>Distillate</strong> is the extract identified with the Silver Flavor Series.</p>
         <p><strong>Live resin</strong> is the extract identified with the Gold Strain Series and is made from cannabis frozen at harvest rather than first dried and cured.</p>
         <p><strong>Live rosin</strong> is the solventless extract identified with the Rose Gold Connoisseur Series. Ice water, heat, and pressure are used instead of chemical solvents.</p>
         <p>These series descriptions explain the catalog structure. The current package label and batch documentation remain authoritative for a specific product.</p>
         <p>
-          That same infused framework appears in the collaboration catalog as{" "}
+          Presidential&apos;s collaboration strains are grown with the cultivators and brands it works with. That same infused framework appears in the collaboration catalog as{" "}
           <Link className={inlineLinkClass} href="/moon-rocks/thc-design-moon-rocks">Presidential x THC Design Moon Rocks</Link>,{" "}
           <Link className={inlineLinkClass} href="/moon-rocks/thc-design-prerolls">Presidential x THC Design Prerolls</Link>, and{" "}
           <Link className={inlineLinkClass} href="/moon-rocks/thc-design-blunts">Presidential x THC Design Blunts</Link>.

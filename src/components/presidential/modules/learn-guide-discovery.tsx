@@ -19,6 +19,13 @@ const PARENT_GUIDE_SLUGS = {
   "/orbit": "different-extracts-need-different-heat",
 } as const;
 
+// SHIP-FIXLIST audit-1006 item 12: card copy on /moon-rocks only; the guide's
+// own intro and meta description are unchanged.
+const CARD_INTRO_OVERRIDES: Readonly<Record<string, string>> = {
+  "/moon-rocks:what-are-moon-rocks":
+    "Moon Rocks are a layered cannabis format: flower, concentrate, and kief working together in one complete product. Each Presidential moon rock infused with concentrate is finished with a coat of kief, built to be experienced as a single thing rather than three.",
+};
+
 function GuideCard({
   guide,
   sourcePath,
@@ -26,8 +33,9 @@ function GuideCard({
   readonly guide: SanityLearnGuideSummaryRecord;
   readonly sourcePath?: string;
 }) {
+  const intro = (sourcePath && CARD_INTRO_OVERRIDES[`${sourcePath}:${guide.slug}`]) || guide.intro;
   const hasApprovedIntroLink = Boolean(
-    sourcePath && hardcodeInContentLinks(sourcePath, guide.intro) !== guide.intro,
+    sourcePath && hardcodeInContentLinks(sourcePath, intro) !== intro,
   );
   const cardClassName =
     "po-teal-pinstripe group block rounded-md bg-po-ink p-7 transition-transform duration-200 hover:-translate-y-1 focus-visible:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:focus-visible:transform-none sm:p-9";
@@ -44,7 +52,7 @@ function GuideCard({
           </h2>
         </Link>
         <p className="mt-5 text-base leading-7 text-po-on-dark-muted">
-          <InContentText sourcePath={sourcePath} value={guide.intro} />
+          <InContentText sourcePath={sourcePath} value={intro} />
         </p>
       </article>
     );
@@ -59,7 +67,7 @@ function GuideCard({
         {guide.title}
       </h2>
       <p className="mt-5 text-base leading-7 text-po-on-dark-muted">
-        {guide.intro}
+        {intro}
       </p>
     </Link>
   );

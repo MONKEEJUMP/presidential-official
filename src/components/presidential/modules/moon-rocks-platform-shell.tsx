@@ -166,7 +166,7 @@ export async function MoonRocksPlatformShell({
             <InContentText
               key="moon-rocks-description"
               sourcePath="/moon-rocks"
-              value={route.description}
+              value="Explore the Presidential Moon Rocks product platform. Availability varies by state and licensed retailer."
             />,
             "Moon Rocks is the flagship Presidential product platform for pre-rolls, blunts, learning, and licensed retailer discovery.",
           ]}
