@@ -86,7 +86,7 @@ The main [Presidential Moon Rocks collection](/moon-rocks) organizes the approve
 
 **How Moon Rocks relate to other Presidential formats**
 
-Loose Moon Rocks show the layered construction directly. Infused pre-rolls place prepared cannabis material inside paper, while [Presidential Blunts](/presidential-blunts) use a tobacco-free hemp-wrap format. These products can share brand and infusion context without becoming interchangeable names for the same physical format.
+Loose Moon Rocks show the layered construction directly. Infused pre-rolls place prepared cannabis material inside rolling paper, while [Presidential Blunts](/presidential-blunts) use a tobacco-free hemp-wrap format. These products can share brand and infusion context without becoming interchangeable names for the same physical format.
 
 For deeper technical vocabulary, the [Presidential THC guide](/presidential-thc) explains infusion, extracts, and label reading. [Presidential Cannabis](/presidential-cannabis) provides the parent-brand context. [Presidential x THC Design](/moon-rocks/presidential-x-thc-design) shows how a collaboration remains part of the same official product system.
 
