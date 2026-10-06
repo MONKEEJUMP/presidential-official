@@ -44,17 +44,28 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
   if (/pre-?roll|blunt/i.test(name)) return null;
   const materials = madeWith(name, series);
   const marking = packMarking(name);
+  const watermelonBlunt = slug === "watermelon" ? offersFor(name).find((offer) => offer.format === "Blunt") : undefined;
   return (
     <div className="mt-8 border-t border-po-line pt-5">
       {slug === "watermelon" && series === "Silver Flavor Series" ? (
         <>
           <h2 className="font-display text-2xl uppercase leading-tight text-po-ink">What are Watermelon Moon Rocks?</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">
-            Watermelon Moon Rocks are a Presidential infused cannabis product and one of the flavor-led releases in the
-            Silver Flavor Series, alongside Grape, Pineapple, and Peach Mango. The{" "}
-            <Link className={linkClass} href="/learn/what-are-moon-rocks">What Are Moon Rocks</Link> guide explains the
-            format.
+            Moon rocks are cannabis flower coated with a concentrate and finished with a dry material such as kief.
+            Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongside Grape, Pineapple, and Peach
+            Mango. See the <Link className={linkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link> and the{" "}
+            <Link className={linkClass} href="/learn/flavor-science">Flavor Science</Link> guide.
           </p>
+          {watermelonBlunt ? (
+            <>
+              <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Does Watermelon come already rolled?</h2>
+              <p className="mt-3 text-sm leading-6 text-po-body">
+                Yes. Watermelon cannabis flower also comes rolled as the{" "}
+                <Link className={linkClass} href={watermelonBlunt.href}>Watermelon Blunt</Link>
+                {watermelonBlunt.weight ? `, ${watermelonBlunt.weight} in a tobacco-free wrap.` : ", in a tobacco-free wrap."}
+              </p>
+            </>
+          ) : null}
         </>
       ) : null}
       {materials ? (

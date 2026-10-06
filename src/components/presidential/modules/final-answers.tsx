@@ -12,9 +12,11 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
     question: "What are Presidential Moon Rocks?",
     answer: (
       <p>
-        Presidential Moon Rocks are cannabis flower coated with a concentrate and finished with kief or diamonds, with the
-        materials printed on each package. The same infused build carries into 1g pre-rolls, 1.5g blunts, Mini Pre-Rolls
-        (3 × 0.5g) and Mini Blunts (3 × 0.7g). Browse the <Link className={a} href="/moon-rocks">Moon Rocks collection</Link>.
+        Presidential Moon Rocks are cannabis flower coated with a concentrate, such as distillate or live resin, and
+        finished with kief or diamonds, with the materials printed on each package. The same infused build carries into
+        1g <Link className={a} href="/pre-rolls">infused pre-rolls</Link>, 1.5g blunts in a tobacco-free blunt wrap, Mini
+        Pre-Rolls (3 × 0.5g) and Mini Blunts (3 × 0.7g). Browse the{" "}
+        <Link className={a} href="/moon-rocks">Presidential Moon Rocks collection</Link>.
       </p>
     ),
   },
@@ -23,9 +25,11 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
     question: "What strain is Presidential?",
     answer: (
       <p>
-        Presidential is the brand, not a strain. Each product names its own strain on the pack, along with its strain type:{" "}
-        <Link className={a} href="/moon-rocks/24k">24K</Link>, for example, is marked Indica. THC is batch-specific, so read
-        the package label for the product in hand.
+        Presidential is the brand, not a strain; <Link className={a} href="/about">about Presidential</Link> covers the
+        company. Each product names its own strain on the pack, along with its strain type:{" "}
+        <Link className={a} href="/moon-rocks/24k">24K</Link>, for example, is marked Indica. THC and other cannabinoids,
+        the chemical compounds listed on a cannabis label, are batch-specific, and burn and potency are not universal
+        across the line, so the package and batch record for the product in hand control those facts.
       </p>
     ),
   },

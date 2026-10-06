@@ -59,9 +59,22 @@ export const ABOUT_ANSWERS: readonly AnswerItem[] = [
     question: "Who founded the Presidential cannabis brand?",
     answer: (
       <p>
-        Everett Smith and John Zapp started Presidential in Los Angeles, California, in 2012. The brand makes Moon Rocks
-        such as <Link className={a} href="/moon-rocks/24k">24K</Link>, infused pre-rolls, tobacco-free blunts, and{" "}
-        <Link className={a} href="/mini-blunts">Mini Blunts</Link>.
+        Everett Smith and John Zapp founded Presidential in Los Angeles, California, in 2012. The brand works across
+        product categories built on cannabis flower: <Link className={a} href="/moon-rocks">Moon Rocks</Link> such as{" "}
+        <Link className={a} href="/moon-rocks/24k">24K</Link>, <Link className={a} href="/pre-rolls">infused pre-rolls</Link>,
+        tobacco-free blunts, and <Link className={a} href="/mini-blunts">Mini Blunts</Link>.
+      </p>
+    ),
+  },
+  {
+    id: "about-q-flavors",
+    question: "What flavors and strains does Presidential make?",
+    answer: (
+      <p>
+        The Silver Flavor Series carries flavor-led releases such as Grape, Pineapple,{" "}
+        <Link className={a} href="/moon-rocks/watermelon">Watermelon</Link>, and Peach Mango. The Gold Strain Series
+        carries named strains built on live resin, such as 24K and Blue Dream. Presidential Classic, the house recipe, is
+        made with flower, distillate, and kief.
       </p>
     ),
   },
