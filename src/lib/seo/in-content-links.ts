@@ -590,6 +590,14 @@ export const HARDCODED_IN_CONTENT_LINKS = {
       context: "That sequence is the Presidential Infusion System, and it has run",
     },
   ],
+  "/moon-rocks/presidential-blunts": [
+    // FIX-10 item 8: one owner page for "presidential blunts" (/presidential-blunts).
+    {
+      href: "/presidential-blunts",
+      anchor: "Presidential Blunt",
+      context: "A Presidential Blunt is the house method in its most complete form",
+    },
+  ],
 } as const satisfies Record<string, readonly HardcodedInContentLinkRule[]>;
 
 export const HARDCODED_IN_CONTENT_LINK_COUNT = Object.values(
