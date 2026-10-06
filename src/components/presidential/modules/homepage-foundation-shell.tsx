@@ -24,6 +24,8 @@ import {
   HomepageSpinningCrestFold,
 } from "./bentolio-hero-shell";
 import { BluntsGraphicsGrid } from "./blunts-graphics-grid";
+import { AnswerSections } from "./answer-sections";
+import { HOME_ANSWERS } from "./final-answers";
 import { FindUsCtaShell } from "./find-us-cta-shell";
 import { UsMapShell } from "./us-map-shell";
 
@@ -446,6 +448,8 @@ export function HomepageFoundationShell({
             </article>
           ))}
         </section>
+
+        <AnswerSections eyebrow="Presidential Moon Rocks questions" id="home-answers" items={HOME_ANSWERS} />
 
         <ExperienceEveryMomentBand scope="home" />
 

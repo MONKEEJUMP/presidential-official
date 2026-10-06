@@ -1,8 +1,12 @@
+import Link from "next/link";
+
 import { vaultProducts } from "@/content/vault/catalog";
 import descriptions from "@/content/vault/descriptions.json";
 
-// SKU-page answers built from data: the shared moon rock build (/moon-rocks/rose-gold
-// copy), the series extract (/presidential-thc), and the vault pack marking.
+import { offersFor } from "./product-spec-block";
+
+// SKU-page answers built from each product's own data: its "Made with" build from the
+// pre-roll/blunt catalogs (or its series extract), and the vault pack marking.
 
 const SERIES_EXTRACT: Readonly<Record<string, string>> = {
   "Silver Flavor Series": "distillate",
@@ -11,6 +15,7 @@ const SERIES_EXTRACT: Readonly<Record<string, string>> = {
 };
 const vaultDescriptions = descriptions as Readonly<Record<string, string>>;
 const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
+const linkClass = "font-semibold text-po-ink underline decoration-po-brand underline-offset-4";
 
 function packMarking(name: string): string | undefined {
   const key = normalize(name);
@@ -23,21 +28,47 @@ function packMarking(name: string): string | undefined {
   return found.size === 1 ? [...found][0] : undefined;
 }
 
-export function SkuAnswers({ name, series }: { readonly name: string; readonly series?: string }) {
-  if (/pre-?roll|blunt/i.test(name)) return null;
+function listMaterials(parts: readonly string[]): string {
+  const words = parts.map((part) => part.toLowerCase());
+  return words.length > 1 ? `${words.slice(0, -1).join(", ")}${words.length > 2 ? "," : ""} and ${words.at(-1)}` : words[0] ?? "";
+}
+
+function madeWith(name: string, series?: string): string | undefined {
+  const build = offersFor(name).find((offer) => offer.build)?.build;
+  if (build) return listMaterials(build.split("·").map((part) => part.trim()).filter(Boolean));
   const extract = series ? SERIES_EXTRACT[series] : undefined;
+  return extract ? `flower and ${extract}` : undefined;
+}
+
+export function SkuAnswers({ name, series, slug }: { readonly name: string; readonly series?: string; readonly slug: string }) {
+  if (/pre-?roll|blunt/i.test(name)) return null;
+  const materials = madeWith(name, series);
   const marking = packMarking(name);
   return (
     <div className="mt-8 border-t border-po-line pt-5">
-      <h2 className="font-display text-2xl uppercase leading-tight text-po-ink">{`How are ${name} Moon Rocks made?`}</h2>
-      <p className="mt-3 text-sm leading-6 text-po-body">
-        Every Presidential moon rock is built the same way: flower as the base, a concentrate coat applied over it, and a
-        dry finishing material bonded to the coat. The pack prints which materials fill those roles.
-        {extract && series ? ` ${name} is in the ${series}, the series identified with ${extract}.` : null}
-      </p>
+      {slug === "watermelon" && series === "Silver Flavor Series" ? (
+        <>
+          <h2 className="font-display text-2xl uppercase leading-tight text-po-ink">What are Watermelon Moon Rocks?</h2>
+          <p className="mt-3 text-sm leading-6 text-po-body">
+            Watermelon Moon Rocks are a Presidential infused cannabis product and one of the flavor-led releases in the
+            Silver Flavor Series, alongside Grape, Pineapple, and Peach Mango. The{" "}
+            <Link className={linkClass} href="/learn/what-are-moon-rocks">What Are Moon Rocks</Link> guide explains the
+            format.
+          </p>
+        </>
+      ) : null}
+      {materials ? (
+        <>
+          <h2 className={`${slug === "watermelon" ? "mt-6 " : ""}font-display text-2xl uppercase leading-tight text-po-ink`}>{`How are ${name} Moon Rocks made?`}</h2>
+          <p className="mt-3 text-sm leading-6 text-po-body">
+            {`${name} is made with ${materials}, layered the way `}
+            <Link className={linkClass} href="/moon-rocks#moon-rocks-q-infused">every Presidential moon rock is built</Link>.
+          </p>
+        </>
+      ) : null}
       {marking ? (
         <>
-          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">{`Is ${name} indica, sativa, or hybrid?`}</h2>
+          <h2 className={`${materials || slug === "watermelon" ? "mt-6 " : ""}font-display text-2xl uppercase leading-tight text-po-ink`}>{`Is ${name} indica, sativa, or hybrid?`}</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">{`Presidential packs mark ${name} as ${marking}.`}</p>
         </>
       ) : null}

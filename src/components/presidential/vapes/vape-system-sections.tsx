@@ -64,6 +64,11 @@ function BandIcon({ name }: { name: keyof typeof CARD_ICONS }) {
   return <span className={s.bandIcon}><Icon aria-hidden="true" size={28} weight="regular" /></span>;
 }
 
+// "BIGGER CLOUDS" repeats the panel heading, so its short repeats render as text, not headings (Sitebulb oct06c).
+function ItemTitle({ title }: { title: string }) {
+  return title === 'BIGGER CLOUDS' ? <p className={s.itemTitle}>{title}</p> : <h3>{title}</h3>;
+}
+
 function PanelHeading({ number, title }: { number: string; title: string }) {
   return <div className={s.panelHeading}><span aria-hidden="true">{number}</span><h2>{title}</h2></div>;
 }
@@ -118,7 +123,7 @@ export function VapeBuiltForOilBand() {
   const { builtForOil, value } = VAPES_ADDITIONS;
   return <section className={`${s.section} ${s.systemSection} ${s.cardBand} ${s.builtForOil}`} aria-labelledby="built-for-oil-heading">
     <h2 id="built-for-oil-heading">{builtForOil.title}</h2>
-    <div className={s.pillarGrid}>{value.pillars.map(item => <article key={item.title}><VapeIcon name={item.icon} /><h3>{item.title}</h3><p>{item.description}</p></article>)}</div>
+    <div className={s.pillarGrid}>{value.pillars.map(item => <article key={item.title}><VapeIcon name={item.icon} /><ItemTitle title={item.title} /><p>{item.description}</p></article>)}</div>
   </section>;
 }
 
@@ -207,7 +212,7 @@ export function VapeTechnologyBand() {
   return <section className={`${s.section} ${s.systemSection} ${s.cardBand} ${s.technologyBand}`} aria-label={standards.ariaLabel}>
     <div className={s.whyOrbitBlock}>
       <div className={s.panelHeading}><span aria-hidden="true">{standards.orbit.number}</span><h2>{standards.orbit.title}</h2></div>
-      <div className={s.whyOrbitList}>{standards.orbit.items.map(item => <article key={item.title}><VapeIcon name="check" /><div><h3>{item.title}</h3><p>{item.description}</p></div></article>)}</div>
+      <div className={s.whyOrbitList}>{standards.orbit.items.map(item => <article key={item.title}><VapeIcon name="check" /><div><ItemTitle title={item.title} /><p>{item.description}</p></div></article>)}</div>
       <div className={s.oilTierRow}>
         <h3>{standards.orbit.oils.title}</h3>
         <div>{standards.orbit.oils.items.map(item => <article key={item.name}><strong>{item.name}</strong><span>{item.tier}</span></article>)}</div>

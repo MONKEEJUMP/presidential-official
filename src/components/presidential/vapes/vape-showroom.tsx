@@ -11,6 +11,7 @@ import { VapeValueBand } from './vape-system-sections';
 import { CmsHomepageModuleRenderer } from '../modules/cms-homepage-module-renderer';
 import { AnswerSections } from '../modules/answer-sections';
 import { MOON_PODS_ANSWERS } from '../modules/moon-pods-answers';
+import { ORBIT_ANSWERS } from '../modules/final-answers';
 import s from './showroom.module.css';
 
 const introductions = {
@@ -39,6 +40,7 @@ export function VapeShowroom({ route, breadcrumbs, cmsModules }: { route: SeoRou
     </section>
     {page === 'vapes' ? <VapeValueBand /> : null}
     {page === 'moon-pods' ? <AnswerSections eyebrow="Moon Pods questions" id="moon-pods-answers" items={MOON_PODS_ANSWERS} /> : null}
+    {page === 'orbit' ? <AnswerSections eyebrow="Orbit questions" id="orbit-answers" items={ORBIT_ANSWERS} /> : null}
     <section className={s.retail} aria-labelledby="vape-retail-heading"><div className={s.retailInner}><div><p className={s.eyebrow}>Find your Presidential</p><h2 id="vape-retail-heading">Your next stop.<br /><span>The right retailer.</span></h2><p>Explore the official retailer locator, then check the store’s current Presidential selection. Availability varies by licensed retailer.</p><Link href="/find-us" className={s.primaryButton}>Find a licensed retailer <VapeIcon name="arrow" /></Link><p className={s.adultNote}>For adults 21+ where legal.</p></div><div className={s.retailArt} aria-hidden="true"><Image src="/media/vapes/showroom/teal-ld-back.webp" alt="" aria-hidden="true" width={1200} height={1500} sizes="(min-width: 900px) 440px, 80vw" /></div></div><p className={s.signoff}>EXPECT MORE.</p></section>
   </PageFrame>;
 }

@@ -108,3 +108,6 @@
 @keyframes vault-fade-out{from{opacity:1}to{opacity:0}}
 @keyframes vault-viewer-open{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.vault *,.vault-viewer{animation:none!important;transition:none!important}.vault-piece:hover .vault-frame{transform:none}}
+/* Suspense fallback title: same look as the room H1 without a second H1 (Sitebulb oct06c). */
+.vault-room-heading>p.vault-room-title{font-family:var(--font-clash-display),sans-serif;font-weight:700;line-height:1;font-size:64px;letter-spacing:.03em;color:inherit}
+@media(max-width:767px){.vault-room-heading>p.vault-room-title{font-size:clamp(32px,9vw,48px)}}

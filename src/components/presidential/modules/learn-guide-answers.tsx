@@ -67,6 +67,21 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
       },
     ],
   },
+  "what-are-moon-rocks": {
+    eyebrow: "Moon Rocks questions",
+    items: [
+      {
+        id: "what-are-moon-rocks-q-strain-type",
+        question: "Do Presidential packs say indica, sativa, or hybrid?",
+        answer: (
+          <p>
+            Yes. Each pack prints the strain type alongside the format line and the composition line. The{" "}
+            <Link className={a} href="/moon-rocks/24k">24K</Link> pack, for example, is marked Indica.
+          </p>
+        ),
+      },
+    ],
+  },
   "what-is-live-resin": {
     eyebrow: "Live resin questions",
     items: [

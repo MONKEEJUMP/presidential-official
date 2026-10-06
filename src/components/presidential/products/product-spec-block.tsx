@@ -61,7 +61,7 @@ function descriptionWeight(text?: string): string | undefined {
   return /\b(\d+(?:\.\d+)?g) Moon Rock (?:blunt|pre-roll)\b/i.exec(text)?.[1];
 }
 
-function offersFor(name: string): readonly Offer[] {
+export function offersFor(name: string): readonly Offer[] {
   const keys = nameKeys(name);
   const offers = new Map<string, Offer>();
   for (const product of PRE_ROLL_ARTWORKS) {
