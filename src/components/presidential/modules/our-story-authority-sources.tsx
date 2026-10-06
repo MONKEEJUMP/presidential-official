@@ -29,7 +29,7 @@ export function OurStoryAuthoritySources() {
         <div>
           <p className="text-xs font-black uppercase text-po-brand-ink">Source trail</p>
           <h2 className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-5xl" id="presidential-independent-coverage">Independent coverage</h2>
-          <p className="mt-6 max-w-xl text-base leading-7 text-po-body">Third-party interviews document Presidential&apos;s 2012 start, its founders, product focus, and early market expansion. External links remain withheld until their publication approval is recorded.</p>
+          <p className="mt-6 max-w-xl text-base leading-7 text-po-body">Third-party interviews document Presidential&apos;s 2012 start, its founders, product focus, and early market expansion.</p>
           <ul className="mt-8 border-t border-po-line">
             {OUR_STORY_INDEPENDENT_COVERAGE.map((source) => (
               <li className="border-b border-po-line py-5" key={source.href}>
