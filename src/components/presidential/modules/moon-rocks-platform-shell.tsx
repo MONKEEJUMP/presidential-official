@@ -129,6 +129,9 @@ export async function MoonRocksPlatformShell({
   const activeItems = placements.filter(
     ({ resolution }) => !resolution.entry.retired && resolution.entry.hasArt,
   );
+  const activeItemsWithoutArt = placements.filter(
+    ({ resolution }) => !resolution.entry.retired && !resolution.entry.hasArt,
+  );
   const itemsFor = (section: CatalogTierSection) =>
     activeItems
       .filter(({ resolution }) => resolution.entry.section === section);
@@ -290,6 +293,11 @@ export async function MoonRocksPlatformShell({
                   <div className="mt-10 flex flex-wrap gap-6 text-xs font-black uppercase tracking-[0.08em] text-po-brand">
                     <Link className="underline underline-offset-8" href="/moon-rocks/presidential-line">Explore the Presidential Line</Link>
                     <Link className="underline underline-offset-8" href="/moon-rocks/presidential-house-line">Explore the Presidential House Line</Link>
+                    {activeItemsWithoutArt.map(({ item, resolution }) => (
+                      <Link className="underline underline-offset-8" href={`/moon-rocks/${catalogItemSlug(item)}`} key={item._id}>
+                        {resolution.entry.displayName || item.name || catalogItemSlug(item)}
+                      </Link>
+                    ))}
                   </div>
                 </section>
               ) : null}

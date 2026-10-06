@@ -27,9 +27,11 @@ function ArrowIcon({ direction }: { readonly direction: "left" | "right" }) {
 export function BluntsExperience({
   afterCollection,
   afterStory,
+  vaultCards,
 }: {
   readonly afterCollection?: ReactNode;
   readonly afterStory?: ReactNode;
+  readonly vaultCards?: Partial<Record<string, ReactNode>>;
 }) {
   useLayoutEffect(() => {
     if (window.location.hash) return;
@@ -112,7 +114,7 @@ export function BluntsExperience({
         <div className={shared.tierSections}>
           {TIER_SECTION_ORDER.map((section) => {
             const entries = tieredArtwork.filter(({ placement }) => placement.section === section);
-            if (entries.length === 0) return null;
+            if (entries.length === 0 && !vaultCards?.[section]) return null;
             return (
               <section className={shared.tierSection} key={section}>
                 <TierSectionHeader section={section} />
@@ -132,6 +134,7 @@ export function BluntsExperience({
                       </div>
                     </article>
                   ))}
+                  {vaultCards?.[section]}
                 </div>
               </section>
             );

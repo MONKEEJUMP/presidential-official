@@ -29,6 +29,7 @@ type CatalogProductPageProps = {
   readonly products: readonly CatalogProduct[];
   readonly vaultProduct?: VaultProduct;
   readonly backPath?: string;
+  readonly headingFormat?: string;
 };
 
 function ArrowIcon({ direction }: { readonly direction: "left" | "right" }) {
@@ -55,6 +56,7 @@ export function CatalogProductPage({
   products,
   vaultProduct,
   backPath = categoryPath,
+  headingFormat,
 }: CatalogProductPageProps) {
   const productIndex = products.findIndex((candidate) => candidate.id === product.id);
   const previous = products[(productIndex - 1 + products.length) % products.length];
@@ -89,7 +91,7 @@ export function CatalogProductPage({
 
             <div className={styles.copy}>
               <p className={styles.kicker}>{formatLabel}</p>
-              <h1 id="product-title">{product.name}</h1>
+              <h1 id="product-title">{headingFormat ? `${product.name} ${headingFormat}` : product.name}</h1>
               {collection ? <p className={styles.collection}>{collection}</p> : null}
               <p className={styles.edition}>{product.edition}</p>
               <p className={styles.description}><ProductMentions format={categoryPath === "/blunts" ? "Blunt" : categoryPath === "/pre-rolls" ? "Pre-roll" : categoryPath === "/mini-blunts" ? "Mini Blunt" : "Mini Pre-roll"} currentPath={productDetailPath(categoryPath, product.id)}>{product.description}</ProductMentions></p>

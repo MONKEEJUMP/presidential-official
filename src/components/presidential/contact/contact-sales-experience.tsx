@@ -1,8 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ProductImageLink } from '@/components/presidential/products/product-mention';
+import { vaultProductForImage } from '@/lib/products/vault-links';
 
 import styles from "./contact-sales-experience.module.css";
+
+// Same product name the collage link already exposes as its aria-label.
+function collageAlt(src: string): string {
+  const product = vaultProductForImage(src);
+  return product ? `${product.strain} Moon Rock ${product.format}` : "";
+}
 
 export const PRESIDENTIAL_SALES_EMAIL = "sales@presidentialmoonrocks.com" as const;
 
@@ -60,7 +67,7 @@ export function ContactSalesExperience() {
           {heroCollage.map((image, index) => (
             <ProductImageLink src={image.src} fallbackContainer className={`${styles.collageCard} ${image.className}`} key={image.src}>
               <Image
-                alt=""
+                alt={collageAlt(image.src)}
                 fill
                 priority={index < 4}
                 sizes="(max-width: 760px) 48vw, (max-width: 1200px) 34vw, 25vw"
