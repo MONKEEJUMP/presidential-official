@@ -19,7 +19,7 @@ export type PresidentialStateSiteLink = {
   readonly before: string;
   readonly anchor: string;
   readonly after: string;
-  readonly href: string;
+  readonly href?: string;
 };
 
 export type PresidentialState = {
@@ -128,7 +128,6 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
       anchor: "Presidential THC Oklahoma",
       after:
         " carries the statewide retail map, grouped by Oklahoma's tourism regions.",
-      href: "https://presidentialthcoklahoma.com/",
     },
   },
   {

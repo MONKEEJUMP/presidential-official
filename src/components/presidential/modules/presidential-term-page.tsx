@@ -421,10 +421,7 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
       <TermSection id="presidential-thc-infusion" images={[images[2], images[3]]} title="The Presidential Infusion System™" tone="contrast">
         <p>
           Presidential uses <strong>Presidential Infusion System™</strong> as the name for its product framework: flower and cannabis extracts working together in a finished format. The dedicated THC reference explains the distinction between concentrate placed on a surface and concentrate{" "}
-          <a className={inlineLinkClass} href="https://presidentialthc.net/infusion/surface-vs-saturation">
-            carried through the flower
-          </a>
-          .
+          carried through the flower.
         </p>
         <p>The system name identifies Presidential&apos;s brand architecture. It does not establish a universal potency, burn, or performance result; the specific package and batch record control those facts.</p>
       </TermSection>
@@ -494,10 +491,7 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
         <p><strong><Link className={inlineLinkClass} href="/moon-rocks/presidential-prerolls">Presidential pre-rolls</Link></strong> place infused material inside a slim rolling paper. Their familiar shape makes them an easy entry into the lineup, while the measured build supports an even, approachable session.</p>
         <p>
           <strong>Presidential Blunts</strong> use a broader hemp wrap that carries more material and{" "}
-          <a className={inlineLinkClass} href="https://presidentialblunts.net/wrap/burn-rate">
-            holds heat over a longer burn
-          </a>
-          . The format suits a shared circle, a paced solo session, or any occasion that benefits from time and room for the flavor to develop.
+          holds heat over a longer burn. The format suits a shared circle, a paced solo session, or any occasion that benefits from time and room for the flavor to develop.
         </p>
         <p><strong>Presidential Mini Blunts</strong> translate that construction into a compact size. They keep the hemp-wrap character and infused composition while matching a shorter occasion.</p>
         <p>Each format begins with the same focus on construction. Size, wrap, airflow, and burn rate shape the experience, giving people a clear way to choose the Presidential format that fits the moment.</p>
@@ -566,10 +560,7 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
       <TermSection id="presidential-cannabis-argument" images={[images[1]]} title="The argument">
         <p>
           The company began with the belief that infused cannabis could be treated as a complete product discipline.{" "}
-          <a className={inlineLinkClass} href="https://presidentialcannabis.net/flower/what-makes-good-flower">
-            Flower selection
-          </a>
-          , extract choice, kief, airflow, packaging, and finish all contribute to what reaches the customer.
+          Flower selection, extract choice, kief, airflow, packaging, and finish all contribute to what reaches the customer.
         </p>
         <p>That view became the foundation for the Presidential Infusion System™, a house approach that carries concentrate through the flower and finishes the material with kief. The method supports the burn, flavor, and consistency expected from the Moon Rocks, pre-rolls, blunts, and Mini Blunts that carry the name.</p>
         <p>“Cannabis Evolved,” “Expect More,” and “Presidential Doesn&apos;t Miss” express the same operating idea in brand language: every format should feel intentional, every series should be easy to understand, and every release should belong inside one coherent catalog.</p>

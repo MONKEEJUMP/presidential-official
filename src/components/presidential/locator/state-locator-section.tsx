@@ -19,12 +19,16 @@ function StateSiteSentence({
   return (
     <>
       {stateSiteLink.before}
-      <a
-        className="text-po-brand underline decoration-po-brand underline-offset-4 transition-colors hover:text-po-on-dark focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
-        href={stateSiteLink.href}
-      >
-        {stateSiteLink.anchor}
-      </a>
+      {stateSiteLink.href ? (
+        <a
+          className="text-po-brand underline decoration-po-brand underline-offset-4 transition-colors hover:text-po-on-dark focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
+          href={stateSiteLink.href}
+        >
+          {stateSiteLink.anchor}
+        </a>
+      ) : (
+        stateSiteLink.anchor
+      )}
       {stateSiteLink.after}
     </>
   );
