@@ -244,9 +244,10 @@ export function HomepageFoundationShell({
                   construction starts with flower, adds concentrate or resin, and
                   finishes with the dry material named on the package. That infused
                   build keeps flower, concentrate, and the finishing layer together
-                  as one Moon Rocks format. More flavor. More consistency. More
-                  innovation. More experience. Every product, every proof, and every
-                  place to find it — all in one official home.
+                  as one Moon Rocks format. Each infused layer should match the
+                  flower, concentrate, and finish named on the package. More flavor.
+                  More consistency. More innovation. More experience. Every product,
+                  every proof, and every place to find it — all in one official home.
                 </p>
               </div>
               <div className="grid gap-5 sm:grid-cols-3">
