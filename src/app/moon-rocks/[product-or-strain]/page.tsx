@@ -19,6 +19,8 @@ import {
 import { relatedGuideForCatalogItem } from "@/lib/catalog/series-registry";
 import { FindUsCtaShell } from "@/components/presidential/modules/find-us-cta-shell";
 import { ProductDescription } from "@/components/presidential/modules/product-description";
+import { ProductSpecBlock } from "@/components/presidential/products/product-spec-block";
+import { SkuAnswers } from "@/components/presidential/products/sku-answers";
 import {
   readCatalogItemBySlug,
   readCatalogProductParams,
@@ -222,6 +224,12 @@ export default async function CatalogProductDetailPage({
                     </ul>
                   </div>
                 ) : null}
+
+                {/* /moon-rocks/presidential-blunts is on hold until Oct 26. */}
+                {slug !== "presidential-blunts" ? (
+                  <ProductSpecBlock chips={chips} name={item.name} series={item.series} slug={slug} />
+                ) : null}
+                {slug !== "presidential-blunts" ? <SkuAnswers name={item.name} series={item.series} slug={slug} /> : null}
 
                 {relatedGuide ? (
                   <div className="mt-8 border-t border-po-line pt-5">

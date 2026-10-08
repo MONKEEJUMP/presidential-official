@@ -164,6 +164,11 @@ export function CatalogProductCard({
   const meta = seriesMetaFor(item.series);
   const chips = parseFormatChips(item.productType);
   const [primaryImage, secondaryImage] = item.images || [];
+  const retired = resolveCatalogTier({
+    line: "moon-rocks",
+    series: item.series,
+    slug: catalogItemSlug(item),
+  }).entry.retired;
   const cardBody = (
     <>
       <div
@@ -210,6 +215,11 @@ export function CatalogProductCard({
         <h3 className="mt-2 font-display text-xl uppercase leading-tight text-po-ink">
           {placement?.displayName || item.name}
         </h3>
+        {retired ? (
+          <p className="mt-2 inline-block bg-po-ink px-2 py-1 text-[10px] font-black uppercase tracking-wide text-po-on-dark">
+            Retired
+          </p>
+        ) : null}
         {placement?.collabPartner ? (
           <p className="mt-2 text-xs font-black uppercase tracking-[0.12em] text-po-brand-ink">
             with {placement.collabPartner}

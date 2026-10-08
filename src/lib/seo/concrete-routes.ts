@@ -102,6 +102,12 @@ export function getConcreteSeriesSeoRoutes(): readonly SeoRouteRecord[] {
   return CONCRETE_SEO_SERIES_PATHS.map(getRequiredSeriesRoute);
 }
 
+// Product H1s name the format so the same strain on several format pages
+// (Moon Rocks, Blunt, Pre-Roll, minis) does not repeat one H1.
+function withMoonRocksFormat(name: string): string {
+  return /moon rocks?|blunts?|pre-?rolls?/i.test(name) ? name : `${name} Moon Rocks`;
+}
+
 export function buildCatalogProductSeoRoute(
   item: ConcreteCatalogItem,
   slug: string,
@@ -124,7 +130,7 @@ export function buildCatalogProductSeoRoute(
     canonicalPath: path,
     title: metadata?.seoTitle ?? `${name} | Presidential Moon Rocks`,
     description: metadata?.metaDescription ?? generatedDescription,
-    h1: PRODUCT_H1_OVERRIDE_BY_SLUG[slug] ?? name,
+    h1: PRODUCT_H1_OVERRIDE_BY_SLUG[slug] ?? withMoonRocksFormat(name),
     keywords: [
       `${name.toLowerCase()} presidential`,
       `${name.toLowerCase()} moon rocks`,

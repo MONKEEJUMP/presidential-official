@@ -9,6 +9,9 @@ import { VapeIcon } from './vape-icon';
 import { OrbitHeroFilm } from './orbit-hero-film';
 import { VapeValueBand } from './vape-system-sections';
 import { CmsHomepageModuleRenderer } from '../modules/cms-homepage-module-renderer';
+import { AnswerSections } from '../modules/answer-sections';
+import { MOON_PODS_ANSWERS } from '../modules/moon-pods-answers';
+import { ORBIT_ANSWERS } from '../modules/final-answers';
 import s from './showroom.module.css';
 
 const introductions = {
@@ -36,6 +39,8 @@ export function VapeShowroom({ route, breadcrumbs, cmsModules }: { route: SeoRou
       <p className={s.eyebrow}>Get to know the system</p><div className={s.educationGrid}><div><h2 id="vape-education-heading">Good design.<br /><span>Clear understanding.</span></h2><OrbitHeroFilm /></div><div><p>Moon Pods and Orbit have distinct roles in the Presidential vape family. Explore the pod presentations, then examine the Orbit finish, front display, rear artwork and side profile. The photographs show them together as an assembled device.</p><p>Extract names describe different materials and processes. A photograph shows the product’s appearance; its package and accompanying product information identify the exact contents. Use the guides to understand the vocabulary, and confirm the product with your licensed retailer.</p><div className={s.educationLinks}><Link href="/learn/flavor-science">Flavor science <VapeIcon name="arrow" /></Link><Link href="/learn/different-extracts-need-different-heat">Different extracts, different heat <VapeIcon name="arrow" /></Link><Link href={page === 'moon-pods' ? '/orbit' : '/moon-pods'}>{page === 'moon-pods' ? 'Explore Orbit' : 'Explore Moon Pods'} <VapeIcon name="arrow" /></Link>{page !== 'vapes' ? <Link href="/vapes">The complete vape collection <VapeIcon name="arrow" /></Link> : null}</div></div></div>
     </section>
     {page === 'vapes' ? <VapeValueBand /> : null}
+    {page === 'moon-pods' ? <AnswerSections eyebrow="Moon Pods questions" id="moon-pods-answers" items={MOON_PODS_ANSWERS} /> : null}
+    {page === 'orbit' ? <AnswerSections eyebrow="Orbit questions" id="orbit-answers" items={ORBIT_ANSWERS} /> : null}
     <section className={s.retail} aria-labelledby="vape-retail-heading"><div className={s.retailInner}><div><p className={s.eyebrow}>Find your Presidential</p><h2 id="vape-retail-heading">Your next stop.<br /><span>The right retailer.</span></h2><p>Explore the official retailer locator, then check the store’s current Presidential selection. Availability varies by licensed retailer.</p><Link href="/find-us" className={s.primaryButton}>Find a licensed retailer <VapeIcon name="arrow" /></Link><p className={s.adultNote}>For adults 21+ where legal.</p></div><div className={s.retailArt} aria-hidden="true"><Image src="/media/vapes/showroom/teal-ld-back.webp" alt="" aria-hidden="true" width={1200} height={1500} sizes="(min-width: 900px) 440px, 80vw" /></div></div><p className={s.signoff}>EXPECT MORE.</p></section>
   </PageFrame>;
 }

@@ -31,11 +31,13 @@ export function TierSectionHeader({
   href,
   buttonLabel,
   tone = "dark",
+  descriptionSuffix,
 }: {
   readonly section: Exclude<CatalogTierSection, "more">;
   readonly href?: string;
   readonly buttonLabel?: string;
   readonly tone?: "dark" | "light";
+  readonly descriptionSuffix?: string;
 }) {
   const copy = TIER_SECTION_PRESENTATION[section];
   const ink = tone === "dark" ? "text-po-on-dark" : "text-po-ink";
@@ -64,7 +66,7 @@ export function TierSectionHeader({
           ) : null}
         </div>
         <div>
-          <p className={`font-serif text-base leading-7 ${body}`}>{copy.description}</p>
+          <p className={`font-serif text-base leading-7 ${body}`}>{copy.description}{descriptionSuffix}</p>
           {href && buttonLabel ? (
             <Link className={`mt-5 inline-block text-xs font-black uppercase tracking-[0.08em] underline decoration-1 underline-offset-8 ${accent}`} href={href}>
               {buttonLabel}

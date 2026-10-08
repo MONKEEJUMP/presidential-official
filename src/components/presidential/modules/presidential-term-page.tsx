@@ -397,14 +397,17 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
             <h2 className="mt-10 font-display text-2xl uppercase text-po-brand">What Presidential THC covers</h2>
             <div className="mt-5 grid max-w-2xl gap-5 text-lg leading-8 text-po-on-dark-muted">
               <p>
-                Presidential THC is the official guide to the brand&apos;s infused product system, its three extract-led series, and the numbers printed on a cannabis label.
+                &ldquo;Presidential THC&rdquo; is how many retail menus list Presidential, the cannabis brand behind{" "}
+                <Link className={inlineLinkClass} href="/moon-rocks">Moon Rocks</Link>, <Link className={inlineLinkClass} href="/pre-rolls">Moon Rock pre-rolls</Link>,{" "}
+                <Link className={inlineLinkClass} href="/blunts">Moon Rock blunts</Link>, and <Link className={inlineLinkClass} href="/mini-blunts">Mini Blunts</Link>. This page is the official guide to Presidential&apos;s infused product system, its three extract-led series, and the numbers printed on a cannabis label.
               </p>
               <p>
                 It explains flower, concentrate, kief, distillate, live resin, live rosin, THCa, and total THC for{" "}
                 <Link className={inlineLinkClass} href="/presidential-cannabis">
                   Presidential
                 </Link>
-                , then points readers to the detailed guides and licensed-retailer path.
+                , then points readers to the detailed guides and the{" "}
+                <Link className={inlineLinkClass} href="/find-us">licensed-retailer locator</Link>.
               </p>
             </div>
           </div>
@@ -412,31 +415,39 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
         </div>
       </Scene>
 
+      <TermSection id="presidential-thc-infused-pre-rolls" title="Presidential THC infused pre-rolls" tone="contrast">
+        <p>
+          Retail menus often list Presidential&apos;s infused pre-rolls under &ldquo;Presidential THC.&rdquo; Presidential Moon Rock pre-rolls combine cannabis flower with concentrate in a finished 1g roll, across the{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver</Link>, <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold</Link>, and{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold</Link> series. Some menus list them as infused joints. Browse the{" "}
+          <Link className={inlineLinkClass} href="/pre-rolls">Presidential infused pre-rolls</Link> lineup, then check the store&apos;s current Presidential selection with a{" "}
+          <Link className={inlineLinkClass} href="/find-us">licensed retailer</Link>.
+        </p>
+      </TermSection>
+
       <TermSection id="presidential-thc-ingredients" images={[images[1]]} title="Flower, concentrate, and kief">
-        <p>Presidential brand materials describe the flagship Moon Rocks format through three visible roles: flower as the base, cannabis concentrate as the infused component, and kief as the finish.</p>
+        <p><Link className={inlineLinkClass} href="/about">Presidential brand materials</Link> describe the flagship Moon Rocks format through three visible roles: flower as the base, cannabis concentrate as the infused component, and kief as the finish.</p>
         <p><strong>Flower</strong> supplies the plant material and the named product identity. <strong>Concentrate</strong> supplies the extract component. <strong>Kief</strong> is the collected trichome material used for the exterior finish.</p>
         <p>Potency is batch-specific. Read the current package label and its associated test results rather than inferring a fixed percentage from a format, series, or product name.</p>
       </TermSection>
 
       <TermSection id="presidential-thc-infusion" images={[images[2], images[3]]} title="The Presidential Infusion System™" tone="contrast">
         <p>
-          Presidential uses <strong>Presidential Infusion System™</strong> as the name for its product framework: flower and cannabis extracts working together in a finished format. The dedicated THC reference explains the distinction between concentrate placed on a surface and concentrate{" "}
-          <a className={inlineLinkClass} href="https://presidentialthc.net/infusion/surface-vs-saturation">
-            carried through the flower
-          </a>
-          .
+          Presidential uses <strong>Presidential Infusion System™</strong> as the name for its product framework: flower and cannabis extracts working together in a finished format. The{" "}
+          <Link className={inlineLinkClass} href="/learn/infusion-science">Infusion Science guide</Link> explains the distinction between concentrate placed on a surface and concentrate{" "}
+          carried through the flower.
         </p>
         <p>The system name identifies Presidential&apos;s brand architecture. It does not establish a universal potency, burn, or performance result; the specific package and batch record control those facts.</p>
       </TermSection>
 
       <TermSection id="presidential-thc-extracts" images={[images[4], images[5], images[6]]} title="Three extracts, three series">
-        <p>The catalog is organized by what goes into the product, not by marketing tier.</p>
+        <p>The catalog is organized by what goes into the product, not by marketing tier, so consumers can compare ingredients and flavor profiles.</p>
         <p><strong>Distillate</strong> is the extract identified with the Silver Flavor Series.</p>
         <p><strong>Live resin</strong> is the extract identified with the Gold Strain Series and is made from cannabis frozen at harvest rather than first dried and cured.</p>
         <p><strong>Live rosin</strong> is the solventless extract identified with the Rose Gold Connoisseur Series. Ice water, heat, and pressure are used instead of chemical solvents.</p>
         <p>These series descriptions explain the catalog structure. The current package label and batch documentation remain authoritative for a specific product.</p>
         <p>
-          That same infused framework appears in the collaboration catalog as{" "}
+          Presidential&apos;s collaboration strains are grown with the cultivators and brands it works with. That same infused framework appears in the collaboration catalog as{" "}
           <Link className={inlineLinkClass} href="/moon-rocks/thc-design-moon-rocks">Presidential x THC Design Moon Rocks</Link>,{" "}
           <Link className={inlineLinkClass} href="/moon-rocks/thc-design-prerolls">Presidential x THC Design Prerolls</Link>, and{" "}
           <Link className={inlineLinkClass} href="/moon-rocks/thc-design-blunts">Presidential x THC Design Blunts</Link>.
@@ -447,7 +458,7 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
         <p>A cannabis label may show delta-9 THC, THCa, and a calculated total THC value. Those numbers describe different measurements and should be read with their units and the batch&apos;s testing record.</p>
         <p>Heat can convert THCa into delta-9 THC through decarboxylation. The conventional total-THC calculation applies a <strong>0.877</strong> conversion factor based on the compounds&apos; molar-mass ratio.</p>
         <p><strong>Total THC = (THCa × 0.877) + THC</strong></p>
-        <p>This formula is documented in NIST&apos;s hemp reference-material guidance. The independent source remains non-linked until outbound publication approval is recorded. It explains the calculation; it does not supply the potency of any Presidential product. Use the product&apos;s current label and test record for that.</p>
+        <p>This formula is documented in NIST&apos;s hemp reference-material guidance. It explains the calculation; it does not supply the potency of any Presidential product. Use the product&apos;s current label and test record for that.</p>
       </TermSection>
 
       <TermSection id="presidential-thc-terpenes" title="What terpenes contribute to aroma">
@@ -494,10 +505,7 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
         <p><strong><Link className={inlineLinkClass} href="/moon-rocks/presidential-prerolls">Presidential pre-rolls</Link></strong> place infused material inside a slim rolling paper. Their familiar shape makes them an easy entry into the lineup, while the measured build supports an even, approachable session.</p>
         <p>
           <strong>Presidential Blunts</strong> use a broader hemp wrap that carries more material and{" "}
-          <a className={inlineLinkClass} href="https://presidentialblunts.net/wrap/burn-rate">
-            holds heat over a longer burn
-          </a>
-          . The format suits a shared circle, a paced solo session, or any occasion that benefits from time and room for the flavor to develop.
+          holds heat over a longer burn. The format suits a shared circle, a paced solo session, or any occasion that benefits from time and room for the flavor to develop.
         </p>
         <p><strong>Presidential Mini Blunts</strong> translate that construction into a compact size. They keep the hemp-wrap character and infused composition while matching a shorter occasion.</p>
         <p>Each format begins with the same focus on construction. Size, wrap, airflow, and burn rate shape the experience, giving people a clear way to choose the Presidential format that fits the moment.</p>
@@ -516,7 +524,7 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
       <TermSection id="presidential-blunts-lineup" images={[images[3], images[4]]} title="The lineup">
         <p><strong>The Presidential Blunt</strong> is the flagship wrapped format. It carries recognizable strain and flavor names in a full-size presentation designed around a steady burn and a complete session.</p>
         <p><strong>Mini Blunts</strong> provide the same family character in a smaller package. Their compact scale broadens the ways licensed retailers can present Presidential infused cannabis and gives customers another practical format choice.</p>
-        <p><strong>The Presidential Line</strong> connects core house names across formats, while the Silver Flavor Series, Gold Strain Series, and Rose Gold Connoisseur Series organize products by their featured profile and extract approach.</p>
+        <p><strong>The Presidential Line</strong> connects core house names across formats, while the <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver Flavor Series</Link>, <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold Strain Series</Link>, and <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> organize products by their featured profile and extract approach.</p>
         <p>The catalog also includes <strong>Presidential House Line</strong> selections and <strong>Presidential x THC Design</strong> releases. Together, these groupings position the blunt program inside a broader 47-product system with a clear, connected presence across the Presidential catalog.</p>
         <p>Packaging carries the strain or flavor identity forward with bold color, Presidential branding, and format information that helps customers recognize the exact release they selected.</p>
       </TermSection>
@@ -566,10 +574,7 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
       <TermSection id="presidential-cannabis-argument" images={[images[1]]} title="The argument">
         <p>
           The company began with the belief that infused cannabis could be treated as a complete product discipline.{" "}
-          <a className={inlineLinkClass} href="https://presidentialcannabis.net/flower/what-makes-good-flower">
-            Flower selection
-          </a>
-          , extract choice, kief, airflow, packaging, and finish all contribute to what reaches the customer.
+          Flower selection, extract choice, kief, airflow, packaging, and finish all contribute to what reaches the customer.
         </p>
         <p>That view became the foundation for the Presidential Infusion System™, a house approach that carries concentrate through the flower and finishes the material with kief. The method supports the burn, flavor, and consistency expected from the Moon Rocks, pre-rolls, blunts, and Mini Blunts that carry the name.</p>
         <p>“Cannabis Evolved,” “Expect More,” and “Presidential Doesn&apos;t Miss” express the same operating idea in brand language: every format should feel intentional, every series should be easy to understand, and every release should belong inside one coherent catalog.</p>

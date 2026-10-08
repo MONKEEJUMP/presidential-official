@@ -65,6 +65,7 @@ export default async function BluntProductPage({ params }: BluntProductPageProps
         categoryLabel="Blunts"
         categoryPath="/blunts"
         formatLabel="Presidential Moon Rock Blunt"
+        headingFormat="Blunt"
         product={product}
         products={BLUNT_ARTWORKS}
       />

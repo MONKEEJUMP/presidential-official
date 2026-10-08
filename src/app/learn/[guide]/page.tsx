@@ -6,7 +6,9 @@ import {
   Scene,
   SceneStack,
 } from "@/components/presidential";
+import { AnswerSections } from "@/components/presidential/modules/answer-sections";
 import { FindUsCtaShell } from "@/components/presidential/modules/find-us-cta-shell";
+import { LEARN_GUIDE_ANSWERS } from "@/components/presidential/modules/learn-guide-answers";
 import { RepoOwnedPageCopy } from "@/components/presidential/modules/repo-owned-page-copy";
 import { CtaLink } from "@/components/presidential/primitives/cta-link";
 import { SectionHeading } from "@/components/presidential/primitives/section-heading";
@@ -81,6 +83,7 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
     slug,
   );
   const jsonLdEntries = buildRouteShellJsonLd(route);
+  const answers = LEARN_GUIDE_ANSWERS[slug];
 
   return (
     <PageFrame>
@@ -125,6 +128,9 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
           modules={guide.modules}
           sourcePath={`/learn/${slug}`}
         />
+        {answers ? (
+          <AnswerSections eyebrow={answers.eyebrow} id={`learn-${slug}-answers`} items={answers.items} />
+        ) : null}
         {slug === "what-are-moon-rocks" ? (
           <RepoOwnedPageCopy path="/learn/what-are-moon-rocks" />
         ) : null}

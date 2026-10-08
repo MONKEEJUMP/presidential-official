@@ -29,7 +29,9 @@ import { InContentText } from "../primitives/in-content-text";
 import shared from "../prerolls/preroll-experience.module.css";
 import { DispensariesStyleHero } from "./dispensaries-style-hero";
 import { FindUsCtaShell } from "./find-us-cta-shell";
+import { AnswerSections } from "./answer-sections";
 import { ParentLearnGuideLink } from "./learn-guide-discovery";
+import { MOON_ROCKS_ANSWERS } from "./salvage-content";
 
 type MoonRocksBreadcrumb = {
   readonly name: string;
@@ -129,6 +131,9 @@ export async function MoonRocksPlatformShell({
   const activeItems = placements.filter(
     ({ resolution }) => !resolution.entry.retired && resolution.entry.hasArt,
   );
+  const activeItemsWithoutArt = placements.filter(
+    ({ resolution }) => !resolution.entry.retired && !resolution.entry.hasArt,
+  );
   const itemsFor = (section: CatalogTierSection) =>
     activeItems
       .filter(({ resolution }) => resolution.entry.section === section);
@@ -163,7 +168,7 @@ export async function MoonRocksPlatformShell({
             <InContentText
               key="moon-rocks-description"
               sourcePath="/moon-rocks"
-              value={route.description}
+              value="Explore the Presidential Moon Rocks product platform. Availability varies by state and licensed retailer."
             />,
             "Moon Rocks is the flagship Presidential product platform for pre-rolls, blunts, learning, and licensed retailer discovery.",
           ]}
@@ -290,6 +295,11 @@ export async function MoonRocksPlatformShell({
                   <div className="mt-10 flex flex-wrap gap-6 text-xs font-black uppercase tracking-[0.08em] text-po-brand">
                     <Link className="underline underline-offset-8" href="/moon-rocks/presidential-line">Explore the Presidential Line</Link>
                     <Link className="underline underline-offset-8" href="/moon-rocks/presidential-house-line">Explore the Presidential House Line</Link>
+                    {activeItemsWithoutArt.map(({ item, resolution }) => (
+                      <Link className="underline underline-offset-8" href={`/moon-rocks/${catalogItemSlug(item)}`} key={item._id}>
+                        {resolution.entry.displayName || item.name || catalogItemSlug(item)}
+                      </Link>
+                    ))}
                   </div>
                 </section>
               ) : null}
@@ -386,6 +396,8 @@ export async function MoonRocksPlatformShell({
             </div>
           </div>
         </Scene>
+
+        <AnswerSections eyebrow="Presidential Moon Rocks questions" id="moon-rocks-answers" items={MOON_ROCKS_ANSWERS} />
 
         <ParentLearnGuideLink parentPath="/moon-rocks" />
 

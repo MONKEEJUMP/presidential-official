@@ -66,6 +66,7 @@ export default async function PreRollProductPage({ params }: PreRollProductPageP
         categoryPath="/pre-rolls"
         collection={product.collection}
         formatLabel="Presidential Moon Rock Pre-Roll"
+        headingFormat="Pre-Roll"
         product={product}
         products={PRE_ROLL_ARTWORKS}
       />

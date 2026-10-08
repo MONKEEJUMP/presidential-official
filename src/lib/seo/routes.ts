@@ -74,7 +74,7 @@ export const ROUTE_REGISTRY = [
     canonicalPath: "/moon-rocks",
     title: "Presidential Moon Rocks | Infused Pre-Rolls and Blunts",
     description:
-      "Explore the Presidential Moon Rocks product platform. Availability varies by licensed retailer.",
+      "Presidential Moon Rocks: flower, concentrate, and kief in one product. Browse 2G Moon Rocks, pre-rolls, and blunts across Silver, Gold, and Rose Gold series.",
     h1: "Presidential Moon Rocks Collection",
     keywords: [
       "presidential moon rocks",
@@ -269,7 +269,7 @@ export const ROUTE_REGISTRY = [
       "presidential brand heritage",
       "presidential origin story",
     ],
-    schema: ["AboutPage", "WebPage", "BreadcrumbList"],
+    schema: ["Organization", "AboutPage", "WebPage", "BreadcrumbList"],
     requiredData: ["company_entity", "founder_story", "proof_items", "assets"],
     requiredApprovals: [
       "founder/company proof approval",
@@ -295,9 +295,9 @@ export const ROUTE_REGISTRY = [
     priority: 4,
     changeFrequency: "monthly",
     canonicalPath: "/about",
-    title: "About Presidential | Premium Infused Cannabis Brand",
+    title: "Presidential Cannabis Brand | Official",
     description:
-      "Meet Presidential, the premium infused cannabis brand behind Moon Rocks, three signature series, and the Presidential Infusion System™. Explore the standard.",
+      "Presidential is the Los Angeles cannabis brand started in 2012. It makes Moon Rocks, infused pre-rolls, and tobacco-free blunts sold through licensed retailers.",
     h1: "PRESIDENTIAL CANNABIS. BUILT BETTER. ON PURPOSE.",
     keywords: [
       "presidential cannabis company",
@@ -426,7 +426,7 @@ export const ROUTE_REGISTRY = [
     canonicalPath: "/find-us",
     title: "Find Presidential Near You | Official Retailer Locator",
     description:
-      "Find licensed retailers that carry Presidential products. Availability varies by licensed retailer.",
+      "Find Presidential near you: enter your zip code to see the nearest official, licensed Presidential retailers, ranked by distance. Stock varies by store.",
     h1: "Find Presidential Near You",
     keywords: [
       "where to buy Presidential Moon Rocks",
@@ -629,7 +629,7 @@ export const ROUTE_REGISTRY = [
     canonicalPath: "/pre-rolls",
     title: "Presidential Pre-Rolls | Infused Pre-Rolls",
     description:
-      "Explore Presidential pre-rolls and infused pre-rolls. Availability varies by licensed retailer.",
+      "Presidential pre-rolls: Moon Rock pre-rolls combining cannabis flower with concentrate in a finished 1g roll, across Silver, Gold, and Rose Gold series.",
     h1: "Presidential Pre-Rolls",
     keywords: [
       "presidential pre-rolls",
@@ -673,7 +673,7 @@ export const ROUTE_REGISTRY = [
     canonicalPath: "/blunts",
     title: "Presidential Blunts | Moon Rock Blunts",
     description:
-      "Explore Presidential blunts and Moon Rock blunts. Availability varies by licensed retailer.",
+      "Presidential Moon Rock blunts: cannabis flower and concentrate in a 1.5g tobacco-free wrap, with distillate, live resin, or live rosin infusions.",
     h1: "Presidential Blunts",
     keywords: [
       "presidential blunts",
@@ -717,7 +717,7 @@ export const ROUTE_REGISTRY = [
     canonicalPath: "/moon-rocks/silver",
     title: "Presidential Silver Moon Rocks",
     description:
-      "Explore the Presidential Silver Moon Rocks series after catalog and compliance approval.",
+      "Silver Flavor Series Moon Rocks from Presidential: flower, distillate, and kief in flavor-led strains like Watermelon, Pineapple, and Blue Raspberry.",
     h1: "Silver Flavor Series",
     keywords: ["presidential silver moon rocks", "moon rock flavors"],
     schema: ["WebPage", "BreadcrumbList", "ItemList"],
@@ -744,7 +744,7 @@ export const ROUTE_REGISTRY = [
     canonicalPath: "/moon-rocks/gold",
     title: "Presidential Gold Moon Rocks",
     description:
-      "Explore the Presidential Gold Moon Rocks series after catalog and compliance approval.",
+      "Gold Strain Series Moon Rocks from Presidential, defined by live resin. Full-spectrum strains include 24K, Blue Dream, Presidential OG, and NYC Diesel.",
     h1: "Gold Strain Series",
     keywords: ["presidential gold moon rocks", "live resin moon rocks"],
     schema: ["WebPage", "BreadcrumbList", "ItemList"],
@@ -776,7 +776,7 @@ export const ROUTE_REGISTRY = [
     canonicalPath: "/moon-rocks/rose-gold",
     title: "Presidential Rose Gold Moon Rocks",
     description:
-      "Explore the Presidential Rose Gold Moon Rocks series after catalog and compliance approval.",
+      "Rose Gold Connoisseur Series Moon Rocks from Presidential, defined by solventless live rosin. Strains include Wedding Cake, White Walker, and Cereal Milk.",
     h1: "Rose Gold Connoisseur Series",
     keywords: ["presidential rose gold moon rocks", "live rosin moon rocks"],
     schema: ["WebPage", "BreadcrumbList", "ItemList"],
@@ -802,7 +802,7 @@ export const ROUTE_REGISTRY = [
     changeFrequency: "weekly",
     canonicalPath: "/moon-rocks/presidential-line",
     title: "Presidential Line | Presidential Moon Rocks",
-    description: "Explore the Presidential Line. Availability varies by licensed retailer.",
+    description: "Presidential Line Moon Rocks: named strains including Guava Haze, Iced Lemon, Apricotti, Daniel LaRusso, and Laura Charles. Find a licensed retailer.",
     h1: "Presidential Line",
     keywords: ["presidential line", "presidential moon rocks"],
     schema: ["WebPage", "BreadcrumbList", "ItemList"],
@@ -830,7 +830,7 @@ export const ROUTE_REGISTRY = [
     canonicalPath: "/moon-rocks/presidential-house-line",
     title: "Presidential House Line | Presidential Moon Rocks",
     description:
-      "Explore the original Presidential formats. Availability varies by licensed retailer.",
+      "The Presidential House Line: the original Presidential formats, with house Moon Rocks, pre-rolls, and blunts. Available through licensed retailers.",
     h1: "Presidential House Line",
     keywords: ["presidential house line", "presidential moon rocks"],
     schema: ["WebPage", "BreadcrumbList", "ItemList"],
@@ -858,7 +858,7 @@ export const ROUTE_REGISTRY = [
     canonicalPath: "/moon-rocks/presidential-x-thc-design",
     title: "Presidential x THC Design | Presidential Moon Rocks",
     description:
-      "Explore the Presidential x THC Design series. Availability varies by licensed retailer.",
+      "Presidential x THC Design is a collaboration series of Moon Rocks, pre-rolls, and blunts built on flower, distillate, and kief. Find a licensed retailer.",
     h1: "Presidential x THC Design",
     keywords: ["presidential x thc design", "presidential moon rocks"],
     schema: ["WebPage", "BreadcrumbList", "ItemList"],

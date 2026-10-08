@@ -7,7 +7,9 @@ import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { CtaLink } from "../primitives/cta-link";
 import { InContentText } from "../primitives/in-content-text";
+import { AnswerSections } from "./answer-sections";
 import { ParentLearnGuideLink } from "./learn-guide-discovery";
+import { ABOUT_ANSWERS } from "./salvage-content";
 
 const platforms = [
   {
@@ -159,14 +161,22 @@ export function AboutCompanyShell() {
                 About the Presidential Cannabis Brand
               </h2>
               <p className="mt-8 max-w-3xl text-lg leading-8 text-po-on-dark-muted sm:text-xl sm:leading-9">
-                Presidential exists because someone refused to accept what the market called good enough. Not better marketing — better cannabis. That standard has governed every decision since the first batch, and it still does: obsess over the material, engineer the experience, and never ship something that misses. Cannabis Deserves Better. That&apos;s not a tagline. It&apos;s the assignment. The full story — Los Angeles, 2012, and everything since — lives on the{" "}
+                Presidential is the Los Angeles cannabis brand Everett Smith and John Zapp started in 2012. It makes{" "}
                 <Link
                   className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand"
-                  href="/presidential-cannabis"
+                  href="/moon-rocks"
                 >
-                  Presidential Cannabis company page
+                  Moon Rocks
                 </Link>
-                .
+                , <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/pre-rolls">infused pre-rolls</Link>, and{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/blunts">tobacco-free blunts</Link>, and sells them through licensed retailers. The{" "}
+                <Link
+                  className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand"
+                  href="/find-us"
+                >
+                  finder
+                </Link>{" "}
+                lists those retailers.
               </p>
             </div>
 
@@ -302,6 +312,8 @@ export function AboutCompanyShell() {
           </div>
         </Scene>
 
+        <AnswerSections eyebrow="About Presidential" id="about-answers" items={ABOUT_ANSWERS} />
+
         <ParentLearnGuideLink parentPath="/about" />
 
         <Scene
@@ -328,7 +340,7 @@ export function AboutCompanyShell() {
             />
             <div className="lg:pt-8">
               <p className="max-w-3xl text-lg leading-8 text-po-body">
-                It started in Los Angeles, and it started early — early enough to help shape what infused cannabis became. Presidential built a reputation the slow way: one pack at a time, in a market that rewarded shortcuts. The full story is worth reading on its own.
+                It started in Los Angeles, California, and it started early — early enough to help shape what infused cannabis became. Presidential built a reputation the slow way: one pack at a time, in a market that rewarded shortcuts. The full story is worth reading on its own.
               </p>
               <CtaLink className="mt-8" href="/our-story" variant="secondary">
                 Read the Presidential story
