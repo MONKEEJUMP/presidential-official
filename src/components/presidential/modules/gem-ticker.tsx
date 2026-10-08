@@ -25,13 +25,6 @@ const CONVEYOR_PACKS: readonly ConveyorPack[] = [
     src: "/media/moonrock-cherrygelato.jpg",
   },
   {
-    alt: "Daniel LaRusso Moon Rocks product graphic",
-    href: "/moon-rocks/presidential-line-daniel-larusso",
-    name: "Daniel LaRusso",
-    objectPosition: "center 55%",
-    src: "/media/moonrock-daniel-larusso.jpg",
-  },
-  {
     alt: "Gorilla Goo Moon Rocks product graphic",
     href: "/moon-rocks/gorilla-goo",
     name: "Gorilla Goo",
@@ -44,13 +37,6 @@ const CONVEYOR_PACKS: readonly ConveyorPack[] = [
     name: "Grape",
     objectPosition: "center 54%",
     src: "/media/moonrock-grape.jpg",
-  },
-  {
-    alt: "Laura Charles Moon Rocks product graphic",
-    href: "/moon-rocks/presidential-line-laura-charles",
-    name: "Laura Charles",
-    objectPosition: "center 55%",
-    src: "/media/moonrock-laura-charles.jpg",
   },
   {
     alt: "Nino Brown Moon Rocks product graphic",
@@ -72,13 +58,6 @@ const CONVEYOR_PACKS: readonly ConveyorPack[] = [
     name: "Waui",
     objectPosition: "center 55%",
     src: "/media/moonrock-waui.jpg",
-  },
-  {
-    alt: "Apricotti Presidential blunt product graphic",
-    href: "/moon-rocks/presidential-line-apricotti",
-    name: "Apricotti",
-    objectPosition: "center 55%",
-    src: "/media/blunt-apricotti.jpg",
   },
   {
     alt: "Blue Raspberry Presidential blunt product graphic",

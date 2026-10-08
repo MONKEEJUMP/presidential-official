@@ -802,7 +802,7 @@ export const ROUTE_REGISTRY = [
     changeFrequency: "weekly",
     canonicalPath: "/moon-rocks/presidential-line",
     title: "Presidential Line | Presidential Moon Rocks",
-    description: "Presidential Line Moon Rocks: named strains including Guava Haze, Iced Lemon, Apricotti, Daniel LaRusso, and Laura Charles. Find a licensed retailer.",
+    description: "Presidential Line Moon Rocks: named strains including Guava Haze, Iced Lemon, Garlic Cookies, Nino Brown, and Head Cheese. Find a licensed retailer.",
     h1: "Presidential Line",
     keywords: ["presidential line", "presidential moon rocks"],
     schema: ["WebPage", "BreadcrumbList", "ItemList"],

@@ -162,16 +162,6 @@ export const PRODUCT_METADATA_BY_SLUG: Readonly<
     metaDescription:
       "Explore White Walker in the Rose Gold Connoisseur Series. Review product details and find licensed retailers near you. Availability varies by retailer.",
   },
-  "presidential-line-apricotti": {
-    seoTitle: "Apricotti Moon Rocks | Presidential Line",
-    metaDescription:
-      "Explore Apricotti in the Presidential Line. Review product details and find licensed retailers near you. Availability varies by retailer.",
-  },
-  "presidential-line-daniel-larusso": {
-    seoTitle: "Daniel LaRusso Moon Rocks | Presidential Line",
-    metaDescription:
-      "Explore Daniel LaRusso in the Presidential Line. Review product details and find licensed retailers near you. Availability varies by retailer.",
-  },
   "presidential-line-garlic-cookies": {
     seoTitle: "Garlic Cookies Moon Rocks | Presidential Line",
     metaDescription:
@@ -196,11 +186,6 @@ export const PRODUCT_METADATA_BY_SLUG: Readonly<
     seoTitle: "Iced Lemon Moon Rocks | Presidential Line",
     metaDescription:
       "Explore Iced Lemon in the Presidential Line. Review product details and find licensed retailers near you. Availability varies by retailer.",
-  },
-  "presidential-line-laura-charles": {
-    seoTitle: "Laura Charles Moon Rocks | Presidential Line",
-    metaDescription:
-      "Explore Laura Charles in the Presidential Line. Review product details and find licensed retailers near you. Availability varies by retailer.",
   },
   "presidential-line-nino-brown": {
     seoTitle: "Nino Brown Moon Rocks | Presidential Line",

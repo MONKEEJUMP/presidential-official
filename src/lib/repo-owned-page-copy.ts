@@ -282,7 +282,7 @@ Both are Sativa. Both run the same composition. Together they are the whole of t
 
 **Where the collaboration sits among the others**
 
-Presidential's partner roster runs across three kinds of relationship. Cultivators and processors: Ball Family Farms on Daniel Larusso, Laura Charles and Nino Brown. Nature's Chemistry of Las Vegas on Garlic Cookies and Ghost Train Haze. Top Shelf Cultivation on Whoa Si Whoa. Moxie on Apriscotti. Polaris Cannabis on Head Cheese. ROVE on Cherry Gelato, Skywalker and Waui. Trendi, powered by Planet 13, on Cap Junky and Orange Push Pop. Platinum on Iced Lemon, Guava Haze and Tropicana Cookies. And one media partner: VladTV on King Louis.
+Presidential's partner roster runs across three kinds of relationship. Cultivators and processors: Ball Family Farms on Nino Brown. Nature's Chemistry of Las Vegas on Garlic Cookies and Ghost Train Haze. Top Shelf Cultivation on Whoa Si Whoa. Polaris Cannabis on Head Cheese. ROVE on Cherry Gelato, Skywalker and Waui. Trendi, powered by Planet 13, on Cap Junky and Orange Push Pop. Platinum on Iced Lemon, Guava Haze and Tropicana Cookies. And one media partner: VladTV on King Louis.
 
 THC Design sits with the cultivation and processing group, and the artwork on both its releases leans scientific — molecules on XJ13, a laboratory palette on both.
 

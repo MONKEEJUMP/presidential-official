@@ -530,8 +530,8 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
       </TermSection>
 
       <TermSection id="presidential-blunts-strains" title="Available strains" tone="contrast">
-        <p><ProductMentions format="Blunt">The Presidential Blunts catalog spans strain-led and flavor-led releases. Recognizable names include Cherry Gelato, Gorilla Goo, Cap Junky, Skywalker, Crescendo, XJ-13, Garlic Cookies, Ghost Haze Train, Laura Charles, Nino Brown, Whoa Si Whoa, and Daniel LaRusso.</ProductMentions></p>
-        <p><ProductMentions format="Blunt">Flavor-focused choices include Blue Raspberry, Peach Mango, Pineapple, Tropical, Grape, Strawberry, Watermelon, Orange Push Pop, Pink Cookies, Waui, <Link className={inlineLinkClass} href="/blunts/xxx">XXX</Link>, and Apricotti. That range gives the format a broad shelf presence while every package remains tied to a specific named selection.</ProductMentions></p>
+        <p><ProductMentions format="Blunt">The Presidential Blunts catalog spans strain-led and flavor-led releases. Recognizable names include Cherry Gelato, Gorilla Goo, Cap Junky, Skywalker, Crescendo, XJ-13, Garlic Cookies, Ghost Haze Train, Nino Brown, and Whoa Si Whoa.</ProductMentions></p>
+        <p><ProductMentions format="Blunt">Flavor-focused choices include Blue Raspberry, Peach Mango, Pineapple, Tropical, Grape, Strawberry, Watermelon, Orange Push Pop, Pink Cookies, Waui, and <Link className={inlineLinkClass} href="/blunts/xxx">XXX</Link>. That range gives the format a broad shelf presence while every package remains tied to a specific named selection.</ProductMentions></p>
         <p>Availability varies by licensed retailer.</p>
       </TermSection>
 

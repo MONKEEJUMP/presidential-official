@@ -62,14 +62,11 @@ const APPROVED_PRODUCT_ROUTE_ROWS = [
   { slug: "gods-gift", name: "God's Gift", series: "Rose Gold Connoisseur Series" },
   { slug: "wedding-cake", name: "Wedding Cake", series: "Rose Gold Connoisseur Series" },
   { slug: "white-walker", name: "White Walker", series: "Rose Gold Connoisseur Series" },
-  { slug: "presidential-line-apricotti", name: "Apricotti", series: "Presidential Line" },
-  { slug: "presidential-line-daniel-larusso", name: "Daniel LaRusso", series: "Presidential Line" },
   { slug: "presidential-line-garlic-cookies", name: "Garlic Cookies", series: "Presidential Line" },
   { slug: "presidential-line-ghost-haze-train", name: "Ghost Haze Train", series: "Presidential Line" },
   { slug: "presidential-line-guava-haze", name: "Guava Haze", series: "Presidential Line" },
   { slug: "presidential-line-head-cheese", name: "Head Cheese", series: "Presidential Line" },
   { slug: "presidential-line-iced-lemon", name: "Iced Lemon", series: "Presidential Line" },
-  { slug: "presidential-line-laura-charles", name: "Laura Charles", series: "Presidential Line" },
   { slug: "presidential-line-nino-brown", name: "Nino Brown", series: "Presidential Line" },
   { slug: "presidential-line-whoa-si-whoa", name: "Whoa Si Whoa", series: "Presidential Line" },
   { slug: "presidential-blunts", name: "Presidential Blunts", series: "Presidential House Line" },
@@ -199,9 +196,9 @@ function assertApprovedProductInventory(): void {
   const routeSlugs = APPROVED_PRODUCT_ROUTE_ROWS.map((row) => row.slug).sort();
   const metadataSlugs = Object.keys(PRODUCT_METADATA_BY_SLUG).sort();
 
-  if (routeSlugs.length !== 47 || routeSlugs.join("|") !== metadataSlugs.join("|")) {
+  if (routeSlugs.length !== 44 || routeSlugs.join("|") !== metadataSlugs.join("|")) {
     throw new Error(
-      "Approved product route inventory must exactly match all 47 PW7404-1019 metadata records.",
+      "Approved product route inventory must exactly match all 44 active PW7404-1019 metadata records.",
     );
   }
 }
@@ -269,7 +266,7 @@ export const APPROVED_PUBLIC_SEO_ROUTES = [
   ...APPROVED_PUBLIC_STATE_ROUTES,
 ] as const satisfies readonly SeoRouteRecord[];
 
-export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 92 as const;
+export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 89 as const;
 
 if (APPROVED_PUBLIC_SEO_ROUTES.length !== APPROVED_PUBLIC_SEO_ROUTE_COUNT) {
   throw new Error(

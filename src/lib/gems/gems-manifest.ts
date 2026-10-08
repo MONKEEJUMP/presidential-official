@@ -33,13 +33,11 @@ const GEM_PRODUCT_ROWS = [
   { productKey: "gold-waui", name: "Waui", series: "Gold Strain Series" },
   { productKey: "gold-xj-13", name: "XJ-13", series: "Gold Strain Series" },
   { productKey: "gold-xxx", name: "XXX", series: "Gold Strain Series" },
-  { productKey: "presidential-line-daniel-larusso", name: "Daniel LaRusso", series: "Presidential Line" },
   { productKey: "presidential-line-garlic-cookies", name: "Garlic Cookies", series: "Presidential Line" },
   { productKey: "presidential-line-ghost-haze-train", name: "Ghost Haze Train", series: "Presidential Line" },
   { productKey: "presidential-line-guava-haze", name: "Guava Haze", series: "Presidential Line" },
   { productKey: "presidential-line-head-cheese", name: "Head Cheese", series: "Presidential Line" },
   { productKey: "presidential-line-iced-lemon", name: "Iced Lemon", series: "Presidential Line" },
-  { productKey: "presidential-line-laura-charles", name: "Laura Charles", series: "Presidential Line" },
   { productKey: "presidential-line-nino-brown", name: "Nino Brown", series: "Presidential Line" },
   { productKey: "presidential-line-whoa-si-whoa", name: "Whoa Si Whoa", series: "Presidential Line" },
 ] as const;

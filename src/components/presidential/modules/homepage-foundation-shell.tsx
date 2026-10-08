@@ -68,11 +68,6 @@ const proofPoints = [
 
 const homepageMoonRockProducts = [
   {
-    alt: "Daniel LaRusso Moon Rocks product packaging",
-    name: "Daniel LaRusso",
-    src: "/media/moonrock-daniel-larusso.jpg",
-  },
-  {
     alt: "Gorilla Goo Moon Rocks product packaging",
     name: "Gorilla Goo",
     src: "/media/moonrock-gorilla-goo.jpg",
@@ -81,11 +76,6 @@ const homepageMoonRockProducts = [
     alt: "Grape Moon Rocks product packaging",
     name: "Grape",
     src: "/media/moonrock-grape.jpg",
-  },
-  {
-    alt: "Laura Charles Moon Rocks product packaging",
-    name: "Laura Charles",
-    src: "/media/moonrock-laura-charles.jpg",
   },
   {
     alt: "Nino Brown Moon Rocks product packaging",

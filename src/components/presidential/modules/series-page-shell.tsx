@@ -43,10 +43,8 @@ async function readSeriesItems(definition: CatalogSeriesDefinition): Promise<{
   readonly items: readonly SanityCatalogItem[];
   readonly mode: "public" | "preview";
 }> {
-  // Sitebulb oct06b #1: the Presidential Line page also lists its retired SKUs,
-  // which still have live, indexable product pages.
+  // Owner ruling: retired products are excluded, including Presidential Line.
   const keepActive = (item: SanityCatalogItem) =>
-    definition.slug === "presidential-line" ||
     !resolveCatalogTier({
       line: "moon-rocks",
       series: item.series,

@@ -4,11 +4,6 @@ import { vaultProductForImage } from "@/lib/products/vault-links";
 
 const BLUNT_GRAPHICS = [
   {
-    alt: "Apricotti Presidential blunt product graphic",
-    href: "/moon-rocks/presidential-line-apricotti",
-    src: "/media/blunt-apricotti.jpg",
-  },
-  {
     alt: "Blue Raspberry Presidential blunt product graphic",
     href: "/moon-rocks/blue-raspberry",
     src: "/media/blunt-blue-raspberry.jpg",
@@ -29,11 +24,6 @@ const BLUNT_GRAPHICS = [
     src: "/media/blunt-crescendo.jpg",
   },
   {
-    alt: "Daniel LaRusso Presidential blunt product graphic",
-    href: "/moon-rocks/presidential-line-daniel-larusso",
-    src: "/media/blunt-daniel-larusso.jpg",
-  },
-  {
     alt: "Garlic Cookies Presidential blunt product graphic",
     href: "/moon-rocks/presidential-line-garlic-cookies",
     src: "/media/blunt-garlic-cookies.jpg",
@@ -52,11 +42,6 @@ const BLUNT_GRAPHICS = [
     alt: "Grape Presidential blunt product graphic",
     href: "/moon-rocks/grape",
     src: "/media/blunt-grape.jpg",
-  },
-  {
-    alt: "Laura Charles Presidential blunt product graphic",
-    href: "/moon-rocks/presidential-line-laura-charles",
-    src: "/media/blunt-laura-charles.jpg",
   },
   {
     alt: "Nino Brown Presidential blunt product graphic",

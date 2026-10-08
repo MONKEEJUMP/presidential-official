@@ -68,6 +68,18 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      ...["apricotti", "daniel-larusso", "laura-charles"].flatMap((slug) => [
+        {
+          source: `/moon-rocks/presidential-line-${slug}`,
+          destination: "/moon-rocks/presidential-line",
+          permanent: true,
+        },
+        {
+          source: `/blunts/${slug}`,
+          destination: "/blunts",
+          permanent: true,
+        },
+      ]),
       // Recover editorial backlink authority from the dead Wix homepage.
       {
         source: "/home-1",
