@@ -14,8 +14,9 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
       <p>
         Presidential Moon Rocks are cannabis flower coated with a concentrate, such as distillate or live resin, and
         finished with kief or diamonds, with the materials printed on each package. The same infused build carries into
-        1g <Link className={a} href="/pre-rolls">infused pre-rolls</Link>, 1.5g blunts in a tobacco-free blunt wrap, Mini
-        Pre-Rolls (3 × 0.5g) and Mini Blunts (3 × 0.7g). Browse the{" "}
+        1g <Link className={a} href="/pre-rolls">Presidential pre-rolls</Link>, 1.5g{" "}
+        <Link className={a} href="/blunts">Moon Rock blunts</Link> in a tobacco-free blunt wrap, Mini Pre-Rolls (3 × 0.5g)
+        and Mini Blunts (3 × 0.7g). Browse the{" "}
         <Link className={a} href="/moon-rocks">Presidential Moon Rocks collection</Link>.
       </p>
     ),

@@ -278,7 +278,7 @@ export function HomepageFoundationShell({
               <p className="po-home-canvas-accent text-xs font-black uppercase tracking-[0.12em]">
                 <InContentText
                   sourcePath="/"
-                  value="Official [Presidential Moon Rocks](/moon-rocks/presidential-moon-rocks)"
+                  value="Official [Presidential House Line Moon Rocks](/moon-rocks/presidential-moon-rocks)"
                 />
               </p>
               <ul

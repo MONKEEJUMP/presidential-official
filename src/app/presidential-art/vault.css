@@ -52,6 +52,7 @@
 .vault-room-heading h1{font-size:64px;letter-spacing:.03em}
 .vault-room-heading>p:last-child{font:400 18px var(--font-source-serif-4),serif;color:#b9c9c4}
 .vault-room-intro{max-width:680px;margin:28px auto 0;text-align:center;font:400 18px/1.6 var(--font-source-serif-4),serif;color:#b9c9c4}
+.vault-room-intro a{color:inherit;text-decoration:underline;text-underline-offset:4px}
 .vault-room-featured{display:flex;flex-direction:column;align-items:center;gap:30px;margin-top:56px}
 .vault-featured-piece{gap:30px;max-width:100%}
 .vault-featured-piece .vault-frame{padding:22px}

@@ -18,8 +18,14 @@ const extractsLine = (
   </>
 );
 
-const labelLine =
-  "THC is batch-specific. A label may show delta-9 THC, THCa, and a calculated total THC value; read them with their units and the batch's test record.";
+// MR-TOP50 L12: one "Presidential THC" link per guide, where the label sentence already fits.
+const labelLine = (
+  <>
+    THC is batch-specific. A label may show delta-9 THC, THCa, and a calculated total THC value; read them with their
+    units and the batch&apos;s test record. <Link className={a} href="/presidential-thc">Presidential THC</Link> explains
+    those numbers.
+  </>
+);
 
 export const LEARN_GUIDE_ANSWERS: Readonly<
   Partial<Record<string, { readonly eyebrow: string; readonly items: readonly AnswerItem[] }>>
@@ -76,7 +82,8 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
         answer: (
           <p>
             Yes. Each pack prints the strain type alongside the format line and the composition line. The{" "}
-            <Link className={a} href="/moon-rocks/24k">24K</Link> pack, for example, is marked Indica.
+            <Link className={a} href="/moon-rocks/24k">24K</Link> pack, for example, is marked Indica. Every pack in the{" "}
+            <Link className={a} href="/moon-rocks">Presidential Moon Rocks collection</Link> carries the same three lines.
           </p>
         ),
       },
@@ -158,7 +165,9 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
         answer: (
           <p>
             The pack prints the strain type, the format line, and the composition line. THC and other cannabinoids are
-            batch-specific, so read the label and its test record. Presidential is sold through{" "}
+            batch-specific, so read the label and its test record;{" "}
+            <Link className={a} href="/presidential-thc">Presidential THC</Link> explains those numbers. Presidential is
+            sold through{" "}
             <Link className={a} href="/">licensed retailers</Link>.
           </p>
         ),
@@ -186,7 +195,9 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
             The catalog is organized by what goes into the product, so ingredients and flavor profiles can be compared. The
             Silver Flavor Series centers deliberate flavor profiles and is built on flower, distillate, and kief. The Gold
             Strain Series organizes strain-led releases, such as <Link className={a} href="/moon-rocks/24k">24K</Link>,
-            around live resin. The Rose Gold Connoisseur Series features solventless live rosin.
+            around live resin. The Rose Gold Connoisseur Series features solventless live rosin. The{" "}
+            <Link className={a} href="/presidential-thc">Presidential THC</Link> guide sets the three extracts side by
+            side.
           </p>
         ),
       },
@@ -212,7 +223,8 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
           <p>
             Heat can convert THCa into delta-9 THC through decarboxylation. The conventional total-THC calculation applies
             a 0.877 conversion factor: total THC = (THCa × 0.877) + THC. The formula explains the calculation; the current
-            package label and test record give the value for a specific product.
+            package label and test record give the value for a specific product, and{" "}
+            <Link className={a} href="/presidential-thc">Presidential THC</Link> covers the label numbers.
           </p>
         ),
       },

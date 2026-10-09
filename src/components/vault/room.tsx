@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { productsInRoom, vaultProducts, vaultRooms, type VaultRoom } from '@/content/vault/catalog';
 import { FramedPiece } from './framed-piece';
 import { PieceViewer } from './viewer';
 
-export function VaultRoomPage({ room, intro }: { room: VaultRoom; intro?: string }) {
+export function VaultRoomPage({ room, intro }: { room: VaultRoom; intro?: ReactNode }) {
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();

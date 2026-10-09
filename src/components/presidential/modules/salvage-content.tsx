@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { type AnswerItem, answerLinkClass as a } from "./answer-sections";
 
-// SALVAGE 1006 content. Sources: /moon-rocks/rose-gold build copy, /presidential-thc
+// SALVAGE 1006 content, plus MR-TOP50 (Oct 8) query-owner sections and anchors. Sources: /moon-rocks/rose-gold build copy, /presidential-thc
 // extract and kief copy, /blunts and /pre-rolls product copy, vault mini-pack data,
 // /about (Los Angeles, California, 2012, founders), /find-us retailer copy.
 
@@ -17,6 +17,43 @@ export const MOON_ROCKS_ANSWERS: readonly AnswerItem[] = [
         <Link className={a} href="/moon-rocks/blue-dream">Blue Dream</Link>, or{" "}
         <Link className={a} href="/moon-rocks/wedding-cake">Wedding Cake</Link>. The pack prints the strain name and the
         materials in the build.
+      </p>
+    ),
+  },
+  {
+    id: "moon-rocks-q-strains",
+    question: "Presidential Moon Rock strains by series",
+    answer: (
+      <p>
+        Presidential weed strains are grouped into three series. The Silver Flavor Series carries flavor-led releases such
+        as Grape, <Link className={a} href="/moon-rocks/pineapple">Pineapple</Link>, and{" "}
+        <Link className={a} href="/moon-rocks/watermelon">Watermelon</Link>. The Gold Strain Series carries named strains
+        such as Blue Dream, <Link className={a} href="/moon-rocks/gorilla-goo">Gorilla Goo</Link>, and NYC Diesel. The Rose
+        Gold Connoisseur Series carries Cereal Milk, God&apos;s Gift, and White Walker.
+      </p>
+    ),
+  },
+  {
+    id: "moon-rocks-q-flower",
+    question: "What is Presidential flower?",
+    answer: (
+      <p>
+        Presidential flower is the cannabis flower at the base of every Presidential moon rock. It is moon rock infused:
+        a concentrate coat goes over the flower, and a dry finish such as kief or diamonds is bonded to that coat. The pack
+        prints the build, for example FLOWER · LIVE RESIN · DIAMONDS on 24K. THC is batch-specific, so read the package
+        label and its test results.
+      </p>
+    ),
+  },
+  {
+    id: "moon-rocks-q-formats",
+    question: "Do Presidential Moon Rocks come in other formats?",
+    answer: (
+      <p>
+        Yes. The same build is rolled into 1g <Link className={a} href="/pre-rolls">Moon Rock pre-rolls</Link>, 1.5g
+        blunts in a tobacco-free wrap, <Link className={a} href="/mini-pre-rolls">Mini Pre-Rolls</Link> (three 0.5g, 1.5g
+        in total), and <Link className={a} href="/mini-blunts">Presidential Mini Blunts</Link> (three 0.7g, 2.1g in
+        total).
       </p>
     ),
   },
@@ -46,14 +83,37 @@ export const MOON_ROCKS_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         A Presidential Moon Rock blunt brings cannabis flower and concentrate together in a tobacco-free wrap. Each single
-        blunt contains 1.5g. See the <Link className={a} href="/blunts">blunts lineup</Link>, or the{" "}
-        <Link className={a} href="/mini-blunts">Mini Blunts</Link>: three 0.7g Moon Rock mini blunts, 2.1g in total.
+        blunt contains 1.5g. See the <Link className={a} href="/blunts">Moon Rock blunts lineup</Link>.
       </p>
     ),
   },
 ];
 
 export const ABOUT_ANSWERS: readonly AnswerItem[] = [
+  {
+    id: "about-q-weed-brand",
+    question: "What is the Presidential weed brand?",
+    answer: (
+      <p>
+        Presidential is the cannabis company, and the weed brand, behind{" "}
+        <Link className={a} href="/presidential-cannabis">Presidential cannabis</Link>: Moon Rocks, infused pre-rolls
+        (joints), tobacco-free blunts, Mini Blunts, Mini Pre-Rolls, and Moon Pods for the Orbit device. Every infused
+        product follows the Presidential Infusion System™. The company is wholesale and sells through licensed
+        dispensaries, not direct.
+      </p>
+    ),
+  },
+  {
+    id: "about-q-rx",
+    question: "Is Presidential RX the same brand?",
+    answer: (
+      <p>
+        Presidential RX is the name on one of the owner-approved official Presidential profiles, the Presidential RX
+        Facebook page. It is listed with the brand&apos;s other official profiles on{" "}
+        <Link className={a} href="/our-story">Our Story</Link>.
+      </p>
+    ),
+  },
   {
     id: "about-q-founded",
     question: "Who founded the Presidential cannabis brand?",
@@ -110,11 +170,33 @@ export const PRE_ROLL_ANSWERS: readonly AnswerItem[] = [
     question: "What is a Presidential pre-roll?",
     answer: (
       <p>
-        A Presidential pre-roll is a 1g Moon Rock pre-roll: cannabis flower combined with concentrate, prepared in rolling
-        paper. Some menus list them as infused joints. The build follows the series: flower, distillate, and kief in the
-        Silver Flavor Series; flower, live resin, and diamonds in the Gold Strain Series; and flower, live rosin, and
-        diamonds in the Rose Gold Connoisseur Series. The House Line adds{" "}
-        <Link className={a} href="/moon-rocks/presidential-prerolls">Presidential Prerolls</Link>.
+        A Presidential pre-roll is a ready-rolled joint: a 1g Moon Rock pre-roll of cannabis flower combined with
+        concentrate, prepared in rolling paper. Some menus list them as infused joints. The House Line adds{" "}
+        <Link className={a} href="/moon-rocks/presidential-prerolls">Presidential Prerolls Moon Rocks</Link>.
+      </p>
+    ),
+  },
+  {
+    id: "pre-rolls-q-made",
+    question: "How are Presidential pre rolls made?",
+    answer: (
+      <p>
+        Every Presidential pre-roll follows the same infusion process as a Presidential moon rock: cannabis flower as the
+        base, a concentrate infused over it, and a dry finish. The pack prints the build, for example FLOWER · DISTILLATE ·
+        KIEF on Grape, FLOWER · LIVE RESIN · DIAMONDS on Blue Dream, and FLOWER · LIVE ROSIN · DIAMONDS on Wedding Cake.
+        Presidential pre rolls are sold through licensed dispensaries; the{" "}
+        <Link className={a} href="/find-us">store finder</Link> lists licensed retailers carrying Presidential.
+      </p>
+    ),
+  },
+  {
+    id: "pre-rolls-q-moon-rock",
+    question: "Is a Moon Rock pre-roll the same as a Presidential pre-roll?",
+    answer: (
+      <p>
+        Yes. Presidential pre-rolls are sold as Moon Rock pre-rolls: the moon rock build in a finished 1g roll. The
+        unrolled format is in the{" "}
+        <Link className={a} href="/moon-rocks">Presidential Moon Rocks collection</Link>.
       </p>
     ),
   },
@@ -124,7 +206,7 @@ export const PRE_ROLL_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         <Link className={a} href="/mini-pre-rolls">Mini pre-rolls</Link> come as three 0.5g Moon Rock mini pre-rolls,
-        1.5g in total. A Moon Rock <Link className={a} href="/blunts">blunt</Link> holds 1.5g in a tobacco-free wrap.
+        1.5g in total. <Link className={a} href="/blunts">Moon Rock blunts</Link> hold 1.5g in a tobacco-free wrap.
         Every format comes from Presidential, the Los Angeles, California cannabis brand, and is sold through licensed
         retailers.
       </p>
