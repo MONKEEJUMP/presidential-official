@@ -14,7 +14,8 @@ export function vaultFormatHubMetadata(room: VaultRoom): Metadata {
   const label = hubLabel(room);
   const names = productsInRoom(room.slug).map((p) => p.strain);
   const title = `Presidential ${label} | Infused ${label}`;
-  const description = `Explore Presidential Moon Rock ${label}: ${names.join(', ')}. Availability varies by licensed retailer.`;
+  // Sitebulb oct06d #5: kept at 155 characters or fewer.
+  const description = `Presidential Moon Rock ${label}: ${names.join(', ')}. At licensed retailers.`;
   const canonical = canonicalUrl(`/${room.slug}`);
   return { title, description, alternates: { canonical }, robots: { index: true, follow: true }, openGraph: { title, description, url: canonical, type: 'website' } };
 }

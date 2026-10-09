@@ -1,0 +1,287 @@
+{
+  "24k-blunt": {
+    "weight": "1.5g",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "wrap": "Tobacco-free",
+    "packMarking": "Indica",
+    "series": "Gold Strain Series"
+  },
+  "gods-gift-blunt": {
+    "weight": "1.5g",
+    "madeWith": [
+      "Flower",
+      "Live rosin",
+      "Diamonds"
+    ],
+    "wrap": "Tobacco-free",
+    "packMarking": "Indica",
+    "series": "Rose Gold Connoisseur Series"
+  },
+  "white-walker-blunt": {
+    "weight": "1.5g",
+    "madeWith": [
+      "Flower",
+      "Live rosin",
+      "Diamonds"
+    ],
+    "wrap": "Tobacco-free",
+    "packMarking": "Sativa",
+    "series": "Rose Gold Connoisseur Series"
+  },
+  "24k-mini-blunt": {
+    "weight": "3 × 0.7g (2.1g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "wrap": "Tobacco-free",
+    "packMarking": "Indica"
+  },
+  "cherry-gelato-mini-blunt": {
+    "weight": "3 × 0.7g (2.1g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "wrap": "Tobacco-free",
+    "packMarking": "Hybrid",
+    "collaboration": "ROVE"
+  },
+  "gorilla-goo-mini-blunt": {
+    "weight": "3 × 0.7g (2.1g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "wrap": "Tobacco-free",
+    "packMarking": "Hybrid"
+  },
+  "pink-cookies-mini-blunt": {
+    "weight": "3 × 0.7g (2.1g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "wrap": "Tobacco-free",
+    "packMarking": "Indica"
+  },
+  "presidential-og-mini-blunt": {
+    "weight": "3 × 0.7g (2.1g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "wrap": "Tobacco-free",
+    "packMarking": "Hybrid"
+  },
+  "skywalker-mini-blunt": {
+    "weight": "3 × 0.7g (2.1g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "wrap": "Tobacco-free",
+    "packMarking": "Indica",
+    "collaboration": "ROVE"
+  },
+  "waui-mini-blunt": {
+    "weight": "3 × 0.7g (2.1g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "wrap": "Tobacco-free",
+    "packMarking": "Sativa",
+    "collaboration": "ROVE"
+  },
+  "xj13-mini-blunt": {
+    "weight": "3 × 0.7g (2.1g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "wrap": "Tobacco-free",
+    "packMarking": "Sativa"
+  },
+  "xxx-mini-blunt": {
+    "weight": "3 × 0.7g (2.1g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "wrap": "Tobacco-free",
+    "packMarking": "Indica"
+  },
+  "24k-mini-pre-roll": {
+    "weight": "3 × 0.5g (1.5g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "packMarking": "Indica",
+    "series": "Gold Strain Series"
+  },
+  "cherry-gelato-mini-pre-roll": {
+    "weight": "3 × 0.5g (1.5g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "packMarking": "Hybrid",
+    "collaboration": "ROVE"
+  },
+  "gorilla-goo-mini-pre-roll": {
+    "weight": "3 × 0.5g (1.5g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "packMarking": "Hybrid"
+  },
+  "pink-cookies-mini-pre-roll": {
+    "weight": "3 × 0.5g (1.5g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "packMarking": "Indica",
+    "series": "Gold Strain Series"
+  },
+  "presidential-og-mini-pre-roll": {
+    "weight": "3 × 0.5g (1.5g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "packMarking": "Hybrid"
+  },
+  "skywalker-mini-pre-roll": {
+    "weight": "3 × 0.5g (1.5g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "packMarking": "Indica",
+    "collaboration": "ROVE"
+  },
+  "waui-mini-pre-roll": {
+    "weight": "3 × 0.5g (1.5g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "packMarking": "Sativa",
+    "series": "Gold Strain Series",
+    "collaboration": "ROVE"
+  },
+  "xj13-mini-pre-roll": {
+    "weight": "3 × 0.5g (1.5g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "packMarking": "Sativa"
+  },
+  "xxx-mini-pre-roll": {
+    "weight": "3 × 0.5g (1.5g total)",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "packMarking": "Indica",
+    "series": "Gold Strain Series"
+  },
+  "24k-pre-roll": {
+    "weight": "1g",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "packMarking": "Indica",
+    "series": "Gold Strain Series"
+  },
+  "crescendo-pre-roll": {
+    "weight": "1g",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "packMarking": "Sativa",
+    "series": "Gold Strain Series"
+  },
+  "gods-gift-pre-roll": {
+    "weight": "1g",
+    "madeWith": [
+      "Flower",
+      "Live rosin",
+      "Diamonds"
+    ],
+    "packMarking": "Indica",
+    "series": "Rose Gold Connoisseur Series"
+  },
+  "waui-pre-roll": {
+    "weight": "1g",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "packMarking": "Sativa",
+    "series": "Gold Strain Series",
+    "collaboration": "ROVE"
+  },
+  "white-walker-pre-roll": {
+    "weight": "1g",
+    "madeWith": [
+      "Flower",
+      "Live rosin",
+      "Diamonds"
+    ],
+    "packMarking": "Sativa",
+    "series": "Rose Gold Connoisseur Series"
+  },
+  "xj13-pre-roll": {
+    "weight": "1g",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "packMarking": "Sativa",
+    "series": "Gold Strain Series"
+  },
+  "xxx-pre-roll": {
+    "weight": "1g",
+    "madeWith": [
+      "Flower",
+      "Live resin",
+      "Diamonds"
+    ],
+    "packMarking": "Indica",
+    "series": "Gold Strain Series"
+  }
+}

@@ -180,6 +180,29 @@
   line-height: 1.4;
 }
 
+.specs { margin-top: 44px; }
+.specsLabel {
+  margin: 0;
+  color: var(--detail-teal);
+  font-family: var(--po-font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.specs .specFacts { margin-top: 14px; }
+.specFacts > div:nth-child(3n + 1) { padding-left: 0; border-left: 0; }
+.specFacts > div:nth-child(n + 4) { border-top: 1px solid var(--detail-line); }
+.specsNote {
+  max-width: 650px;
+  margin: 18px 0 0;
+  color: var(--detail-ink);
+  font-family: var(--po-font-body);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.specsNote a { border-bottom: 1px solid currentColor; }
+
 .actions {
   display: flex;
   flex-wrap: wrap;
