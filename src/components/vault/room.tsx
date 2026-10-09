@@ -7,7 +7,7 @@ import { productsInRoom, vaultProducts, vaultRooms, type VaultRoom } from '@/con
 import { FramedPiece } from './framed-piece';
 import { PieceViewer } from './viewer';
 
-export function VaultRoomPage({ room }: { room: VaultRoom }) {
+export function VaultRoomPage({ room, intro }: { room: VaultRoom; intro?: string }) {
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -75,6 +75,7 @@ export function VaultRoomPage({ room }: { room: VaultRoom }) {
     }}>
       <nav ref={roomMenu} className="vault-room-menu" aria-label="Vault rooms">{vaultRooms.map(r => <Link href={`/presidential-art/${r.slug}`} key={r.slug} aria-current={r.slug === room.slug ? 'page' : undefined}><span>ROOM {r.numeral}</span>{r.name.toUpperCase()}</Link>)}</nav>
       <div className="vault-room-content">{nav}<header className="vault-room-heading"><p className="vault-eyebrow">ROOM {room.numeral}</p><h1>{room.name.toUpperCase()}</h1><span className="vault-rule" /><p>{roomProducts.length} WORKS</p></header>
+        {intro ? <p className="vault-room-intro">{intro}</p> : null}
         <section className="vault-room-featured"><p className="vault-eyebrow">FEATURED WORK</p><FramedPiece featured product={vaultProducts.find(p => p.slug === room.featured)!} /></section>
         <span className="vault-rule vault-gallery-rule" />
         <section className="vault-gallery" aria-label={`${room.name} gallery`}>{roomProducts.map(p => <FramedPiece product={p} key={p.slug} />)}</section>{nav}

@@ -10,6 +10,7 @@ import {
 import styles from "./catalog-product-page.module.css";
 import type { VaultProduct } from '@/content/vault/catalog';
 import { imageAlt } from '@/content/vault/catalog';
+import { vaultMadeWithSentence, vaultSpecs } from '@/content/vault/specs';
 
 type CatalogProduct = {
   readonly id: string;
@@ -44,6 +45,35 @@ function ArrowIcon({ direction }: { readonly direction: "left" | "right" }) {
         strokeWidth="1.8"
       />
     </svg>
+  );
+}
+
+// Sitebulb oct06d #2: the Product specs block for the Vault format SKU pages
+// (pre-rolls, blunts, mini pre-rolls, mini blunts). Values come only from
+// src/content/vault/specs.json; a field with no data is left out.
+function VaultSpecs({ product }: { readonly product: VaultProduct }) {
+  const spec = vaultSpecs(product);
+  const rows: { readonly label: string; readonly value: string }[] = [{ label: "Format", value: `Moon Rock ${product.format}` }];
+  if (spec) {
+    rows.push({ label: "Weight", value: spec.weight });
+    rows.push({ label: "Made with", value: spec.madeWith.join(" · ") });
+    if (spec.wrap) rows.push({ label: "Wrap", value: spec.wrap });
+    if (spec.series) rows.push({ label: "Series", value: spec.series });
+    if (spec.collaboration) rows.push({ label: "Collaboration", value: spec.collaboration });
+    if (spec.packMarking) rows.push({ label: "Strain type", value: `${spec.packMarking} (as marked on the pack)` });
+  } else if (product.tier) {
+    rows.push({ label: "Tier", value: product.tier });
+  }
+  rows.push({ label: "Availability", value: "Licensed retailers" });
+  const sentence = vaultMadeWithSentence(product);
+  return (
+    <div className={styles.specs}>
+      <p className={styles.specsLabel}>Product specs</p>
+      <dl className={`${styles.facts} ${styles.specFacts}`}>
+        {rows.map((row) => <div key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}
+      </dl>
+      {sentence ? <p className={styles.specsNote}>{sentence} <Link href="/find-us">Find a licensed retailer</Link> and confirm its current selection with the store.</p> : null}
+    </div>
   );
 }
 
@@ -96,21 +126,21 @@ export function CatalogProductPage({
               <p className={styles.edition}>{product.edition}</p>
               <p className={styles.description}><ProductMentions format={categoryPath === "/blunts" ? "Blunt" : categoryPath === "/pre-rolls" ? "Pre-roll" : categoryPath === "/mini-blunts" ? "Mini Blunt" : "Mini Pre-roll"} currentPath={productDetailPath(categoryPath, product.id)}>{product.description}</ProductMentions></p>
 
-              {vaultProduct ? <dl className={styles.facts}><div><dt>Format</dt><dd>{vaultProduct.format}</dd></div>{vaultProduct.tier && <div><dt>Tier</dt><dd>{vaultProduct.tier}</dd></div>}</dl> : <dl className={styles.facts}>
+              {vaultProduct ? <VaultSpecs product={vaultProduct} /> : <dl className={styles.facts}>
                 <div><dt>Format</dt><dd>{format}</dd></div>
                 <div><dt>Made with</dt><dd>{ingredients.join(" · ")}</dd></div>
                 <div><dt>Availability</dt><dd>Licensed retailers</dd></div>
               </dl>}
 
               <div className={styles.actions}>
-                {!vaultProduct && <Link className={styles.primaryAction} href="/find-us">
+                <Link className={styles.primaryAction} href="/find-us">
                   Find this product <ArrowIcon direction="right" />
-                </Link>}
+                </Link>
                 <Link className={styles.textAction} href={backPath}>
                   Back to all {categoryLabel}
                 </Link>
               </div>
-              {!vaultProduct && <small>For adults 21+ where legal. Availability varies by retailer.</small>}
+              <small>For adults 21+ where legal. Availability varies by retailer.</small>
             </div>
           </div>
         </div>

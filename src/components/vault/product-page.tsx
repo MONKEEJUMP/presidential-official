@@ -8,10 +8,12 @@ import { buildInformationalProductSchema } from '@/lib/seo/schema/product';
 import { imageAlt, vaultStrainSlug, type VaultProduct } from '@/content/vault/catalog';
 import descriptions from '@/content/vault/descriptions.json';
 import { vaultFormatHeading } from './format-cards';
+import { vaultMetaDescription } from '@/content/vault/specs';
 
 export function vaultProductMetadata(product: VaultProduct): Metadata {
   const title = `${product.strain} Moon Rock ${product.format} | Presidential`;
-  const description = (descriptions as Record<string, string>)[product.slug];
+  // Sitebulb oct06d #1: the meta is a short spec summary; the full blurb stays on the page.
+  const description = vaultMetaDescription(product) ?? (descriptions as Record<string, string>)[product.slug];
   const image = product.scenes[0] ?? product.pack;
   const canonical = canonicalUrl(product.productUrl);
   return { title, description, alternates: { canonical }, robots: { index: true, follow: true }, openGraph: { title, description, url: canonical, type: 'website', images: [{ url: canonicalUrl(image.full), alt: imageAlt(product, image) }] } };

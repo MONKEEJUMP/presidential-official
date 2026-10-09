@@ -56,7 +56,7 @@ export const PARTNERS_COPY = {
   "hub": {
     "h1": "Our Partners",
     "title": "Presidential Partners | Licensed Retailers Across Seven States",
-    "description": "The licensed dispensaries carrying authentic Presidential across California, Oklahoma, New York, Nevada, Michigan, Arizona and Washington. Find an authorized retailer near you.",
+    "description": "Licensed dispensaries carrying authentic Presidential in California, Oklahoma, New York, Nevada, Michigan, Arizona and Washington. Find a retailer.",
     "body": [
       "Presidential doesn't sell direct. Never has.",
       "Every jar, every blunt, every pre-roll reaches you through a licensed dispensary that chose to carry it - 1,223 doors across seven states, and every one of them made that call on their own.",
@@ -70,7 +70,7 @@ export const PARTNERS_COPY = {
   "ca": {
     "h1": "California Partners",
     "title": "Presidential Partners in California | 604 Licensed Retailers",
-    "description": "The 604 licensed California dispensaries carrying authentic Presidential - from Los Angeles County to the Bay Area, the Central Valley and San Diego. Find one near you.",
+    "description": "The 604 licensed California dispensaries carrying authentic Presidential, from Los Angeles County to the Bay Area and San Diego. Find one near you.",
     "body": [
       "California is where Presidential started, and it is still the largest network we have.",
       "Six hundred and four doors. The largest network in the country.",
