@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 import { BLUNT_ARTWORKS } from "@/content/blunts-catalog";
+import { newVaultProductPages } from "@/content/vault/catalog";
+import { vaultSpecs } from "@/content/vault/specs";
 
 import { type AnswerItem, answerLinkClass as a } from "./answer-sections";
 
@@ -9,10 +11,20 @@ import { type AnswerItem, answerLinkClass as a } from "./answer-sections";
 // builds), vault mini-pack data (specs.json), /moon-pods and /orbit copy.
 // MR-NEXT (Oct 9) extends /blunts and /vapes from the same sources only.
 
-// Infusion builds printed on the /blunts editions, counted from blunts-catalog.ts.
+// Infusion builds of every edition shown on /blunts: the blunts-catalog.ts editions
+// plus the Vault blunt SKUs that buildVaultCardsBySection("blunts") adds (specs.json).
+const BLUNT_EDITION_BUILDS: readonly string[] = [
+  ...BLUNT_ARTWORKS.map((blunt) => blunt.edition.replace("1.5g infused blunt · ", "")),
+  ...newVaultProductPages
+    .filter((product) => product.room === "blunts")
+    .flatMap((product) => {
+      const madeWith = vaultSpecs(product)?.madeWith;
+      return madeWith ? [madeWith.join(" · ")] : [];
+    }),
+];
+const BLUNT_EDITION_COUNT = BLUNT_EDITION_BUILDS.length;
 const BLUNT_BUILDS = Object.entries(
-  BLUNT_ARTWORKS.reduce<Record<string, number>>((builds, blunt) => {
-    const build = blunt.edition.replace("1.5g infused blunt · ", "");
+  BLUNT_EDITION_BUILDS.reduce<Record<string, number>>((builds, build) => {
     builds[build] = (builds[build] ?? 0) + 1;
     return builds;
   }, {}),
@@ -60,8 +72,8 @@ export const BLUNT_ANSWERS: readonly AnswerItem[] = [
     question: "Can you make blunts without tobacco?",
     answer: (
       <p>
-        Yes. Every Presidential Moon Rock blunt is rolled in a tobacco-free wrap, and each of the {BLUNT_ARTWORKS.length}{" "}
-        editions on this page states it: one 1.5g Moon Rock blunt, rolled in a tobacco-free wrap.
+        Yes. Every Presidential Moon Rock blunt is rolled in a tobacco-free wrap, and each of the {BLUNT_EDITION_COUNT}{" "}
+        editions on this page states it: one 1.5g Moon Rock blunt in a tobacco-free wrap.
       </p>
     ),
   },
@@ -72,7 +84,7 @@ export const BLUNT_ANSWERS: readonly AnswerItem[] = [
       <>
         <p>
           This page does not publish reviews or ratings; it lists what each pack states. Every edition is one 1.5g Moon Rock
-          blunt: cannabis flower with a concentrate infused over it, in a tobacco-free wrap. The {BLUNT_ARTWORKS.length}{" "}
+          blunt: cannabis flower with a concentrate infused over it, in a tobacco-free wrap. The {BLUNT_EDITION_COUNT}{" "}
           editions use these builds:
         </p>
         <ul className="list-disc pl-6">
