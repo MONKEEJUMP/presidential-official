@@ -486,7 +486,7 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
       </TermSection>
 
       <TermSection id="presidential-thc-formats" title="Presidential THC formats">
-        <p>Presidential THC covers one infused build in several formats. Each has its own page:</p>
+        <p>Presidential THC covers several product families, each with its own page. Moon Rocks, pre-rolls, blunts, and minis share the infused flower build; vapes are a separate family of pods and a device.</p>
         <ul className="grid list-disc gap-3 pl-6">
           <li>
             <Link className={inlineLinkClass} href="/moon-rocks">Moon Rocks</Link>: flower, a concentrate coat, and a dry
