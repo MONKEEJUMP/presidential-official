@@ -347,6 +347,50 @@ const inlineLinkClass =
 const buttonLinkClass =
   "inline-flex w-fit items-center justify-center bg-po-brand px-7 py-4 font-display text-sm font-semibold uppercase text-po-ink transition-transform hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand motion-reduce:transition-none motion-reduce:hover:transform-none";
 
+// MR-PTHC (Oct 9): /presidential-thc questions. Facts only from this page, /pre-rolls,
+// /blunts, the mini hubs, /vapes and /presidential-cannabis; no potency numbers.
+const PRESIDENTIAL_THC_QUESTIONS: readonly { readonly question: string; readonly answer: ReactNode }[] = [
+  {
+    question: "Is Presidential THC the same brand as Presidential Moon Rocks?",
+    answer: (
+      <>
+        Yes. &ldquo;Presidential THC&rdquo; is how many retail menus list Presidential, the brand behind Presidential Moon
+        Rocks. The products are the same; the official company home is this site, and{" "}
+        <Link className={inlineLinkClass} href="/presidential-cannabis">Presidential cannabis</Link> covers the company.
+      </>
+    ),
+  },
+  {
+    question: "What products does Presidential THC include?",
+    answer: (
+      <>
+        Moon Rocks, Moon Rock pre-rolls, Moon Rock blunts, Presidential minis (Mini Blunts and Mini Pre-Rolls), and the
+        Orbit device with Moon Pods. Some releases are made with partner brands, such as the Presidential x THC Design
+        collaboration.
+      </>
+    ),
+  },
+  {
+    question: "Where can I buy Presidential THC?",
+    answer: (
+      <>
+        Presidential THC products are sold through licensed retailers, not direct. Use the{" "}
+        <Link className={inlineLinkClass} href="/find-us">store finder</Link>, then confirm the current selection with the
+        store.
+      </>
+    ),
+  },
+  {
+    question: "How strong is Presidential THC flower?",
+    answer: (
+      <>
+        Potency is batch-specific, so this page gives no fixed number. Batch-to-batch consistency is read from the label:
+        check the current package label and its test results for delta-9 THC, THCa, and total THC.
+      </>
+    ),
+  },
+];
+
 // Single source for the visible FAQ copy and the FAQPage JSON-LD so the two
 // can never drift apart.
 const PRESIDENTIAL_CANNABIS_FAQ = [
@@ -439,6 +483,49 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
           <Link className={inlineLinkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>; potency is
           batch-specific, so read the current package label and its test results.
         </p>
+      </TermSection>
+
+      <TermSection id="presidential-thc-formats" title="Presidential THC formats">
+        <p>Presidential THC covers one infused build in several formats. Each has its own page:</p>
+        <ul className="grid list-disc gap-3 pl-6">
+          <li>
+            <Link className={inlineLinkClass} href="/moon-rocks">Moon Rocks</Link>: flower, a concentrate coat, and a dry
+            finish such as kief or diamonds.
+          </li>
+          <li>
+            <Link className={inlineLinkClass} href="/pre-rolls">Moon Rock pre-rolls</Link>: 1g rolls in rolling paper.
+          </li>
+          <li>
+            <Link className={inlineLinkClass} href="/blunts">Moon Rock blunts</Link>: 1.5g in a tobacco-free wrap.
+          </li>
+          <li>
+            Presidential minis: <Link className={inlineLinkClass} href="/mini-blunts">Mini Blunts</Link> (three 0.7g,
+            2.1g in total) and <Link className={inlineLinkClass} href="/mini-pre-rolls">Mini Pre-Rolls</Link> (three 0.5g,
+            1.5g in total).
+          </li>
+          <li>
+            <Link className={inlineLinkClass} href="/vapes">Presidential vapes</Link>: the Orbit device and Moon Pods in
+            Liquid Diamonds, Live Resin, and Live Rosin.
+          </li>
+        </ul>
+      </TermSection>
+
+      <TermSection id="presidential-thc-where" title="Where to find Presidential THC" tone="contrast">
+        <p>
+          Presidential is wholesale: Presidential THC products reach customers through licensed retailers, and the store or
+          retailer holds the current selection. The{" "}
+          <Link className={inlineLinkClass} href="/find-us">Presidential store finder</Link> lists licensed retailers
+          carrying Presidential. Availability varies by retailer. Adults 21+ where legal.
+        </p>
+      </TermSection>
+
+      <TermSection id="presidential-thc-questions" title="Presidential THC questions">
+        {PRESIDENTIAL_THC_QUESTIONS.map((item) => (
+          <div key={item.question}>
+            <h3 className="text-xl font-semibold leading-snug text-po-ink">{item.question}</h3>
+            <p className="mt-3">{item.answer}</p>
+          </div>
+        ))}
       </TermSection>
 
       <TermSection id="presidential-thc-ingredients" images={[images[1]]} title="Flower, concentrate, and kief">

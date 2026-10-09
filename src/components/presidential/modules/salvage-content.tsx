@@ -41,7 +41,8 @@ export const MOON_ROCKS_ANSWERS: readonly AnswerItem[] = [
         Presidential flower is the cannabis flower at the base of every Presidential moon rock. It is moon rock infused:
         a concentrate coat goes over the flower, and a dry finish such as kief or diamonds is bonded to that coat. The pack
         prints the build, for example FLOWER · LIVE RESIN · DIAMONDS on 24K. THC is batch-specific, so read the package
-        label and its test results.
+        label and its test results; <Link className={a} href="/presidential-thc">Presidential THC flower</Link> explains
+        those label numbers.
       </p>
     ),
   },
@@ -99,7 +100,8 @@ export const ABOUT_ANSWERS: readonly AnswerItem[] = [
         <Link className={a} href="/presidential-cannabis">Presidential cannabis</Link>: Moon Rocks, infused pre-rolls
         (joints), tobacco-free blunts, Mini Blunts, Mini Pre-Rolls, and Moon Pods for the Orbit device. Every infused
         product follows the Presidential Infusion System™. The company is wholesale and sells through licensed
-        dispensaries, not direct.
+        dispensaries, not direct. Many menus list these formats as Presidential THC; see{" "}
+        <Link className={a} href="/presidential-thc">what Presidential THC means</Link>.
       </p>
     ),
   },

@@ -97,6 +97,17 @@ const nextConfig: NextConfig = {
         destination: "/",
         permanent: true,
       },
+      // Short term paths: no /thc or /cannabis route exists; send them to the owning term pages.
+      {
+        source: "/thc",
+        destination: "/presidential-thc",
+        permanent: true,
+      },
+      {
+        source: "/cannabis",
+        destination: "/presidential-cannabis",
+        permanent: true,
+      },
     ];
   },
 };

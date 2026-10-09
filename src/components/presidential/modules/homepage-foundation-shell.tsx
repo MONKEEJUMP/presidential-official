@@ -381,7 +381,15 @@ export function HomepageFoundationShell({
               </h2>
               <p className="po-home-canvas-muted mt-3 text-base leading-7">
                 The flagship Presidential platform for Moon Rocks, infused
-                pre-rolls, blunts, education, and retail discovery.
+                pre-rolls, blunts, education, and retail discovery. Retail menus
+                often list it as{" "}
+                <Link
+                  className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand"
+                  href="/presidential-thc"
+                >
+                  Presidential THC
+                </Link>
+                .
               </p>
               <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                 <CtaLink href="/moon-rocks" variant="primary">
