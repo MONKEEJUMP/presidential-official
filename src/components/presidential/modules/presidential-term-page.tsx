@@ -356,6 +356,11 @@ const PRESIDENTIAL_CANNABIS_FAQ = [
       "Presidential Cannabis is the official brand behind Presidential Moon Rocks, infused pre-rolls, tobacco-free blunts, and minis. Its official company home is presidentialmoonrocks.com.",
   },
   {
+    question: "What is Presidential weed?",
+    answer:
+      "Presidential weed is the Presidential cannabis line: infused Moon Rocks built on cannabis flower, pre-rolls (joints), tobacco-free blunts, and minis, sold through licensed dispensaries. Presidential marijuana and Presidential cannabis refer to the same products.",
+  },
+  {
     question: "What products does Presidential make?",
     answer:
       "Presidential makes infused Moon Rocks, pre-rolls, tobacco-free blunts, and minis. The catalog is organized through the Silver Flavor Series, Gold Strain Series, Rose Gold Connoisseur Series, Presidential Line, Presidential House Line, and Presidential x THC Design.",
@@ -397,9 +402,10 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
             <h2 className="mt-10 font-display text-2xl uppercase text-po-brand">What Presidential THC covers</h2>
             <div className="mt-5 grid max-w-2xl gap-5 text-lg leading-8 text-po-on-dark-muted">
               <p>
-                &ldquo;Presidential THC&rdquo; is how many retail menus list Presidential, the cannabis brand behind{" "}
-                <Link className={inlineLinkClass} href="/moon-rocks">Moon Rocks</Link>, <Link className={inlineLinkClass} href="/pre-rolls">Moon Rock pre-rolls</Link>,{" "}
-                <Link className={inlineLinkClass} href="/blunts">Moon Rock blunts</Link>, and <Link className={inlineLinkClass} href="/mini-blunts">Mini Blunts</Link>. This page is the official guide to Presidential&apos;s infused product system, its three extract-led series, and the numbers printed on a cannabis label.
+                &ldquo;Presidential THC&rdquo; is how many retail menus list Presidential, the cannabis brand behind Moon Rocks made from{" "}
+                <Link className={inlineLinkClass} href="/moon-rocks">Presidential flower</Link>, <Link className={inlineLinkClass} href="/pre-rolls">Moon Rock pre-rolls</Link>,{" "}
+                <Link className={inlineLinkClass} href="/blunts">Moon Rock blunts</Link>, <Link className={inlineLinkClass} href="/mini-blunts">Mini Blunts</Link>, and{" "}
+                <Link className={inlineLinkClass} href="/vapes">Presidential vapes</Link>. This page is the official guide to Presidential&apos;s infused product system, its three extract-led series, and the numbers printed on a cannabis label.
               </p>
               <p>
                 It explains flower, concentrate, kief, distillate, live resin, live rosin, THCa, and total THC for{" "}
@@ -422,6 +428,16 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
           <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold</Link> series. Some menus list them as infused joints. Browse the{" "}
           <Link className={inlineLinkClass} href="/pre-rolls">Presidential infused pre-rolls</Link> lineup, then check the store&apos;s current Presidential selection with a{" "}
           <Link className={inlineLinkClass} href="/find-us">licensed retailer</Link>.
+        </p>
+      </TermSection>
+
+      <TermSection id="presidential-thc-flower" title="Presidential THC flower: Moon Rocks">
+        <p>
+          Presidential THC flower is the cannabis flower inside Presidential Moon Rocks. Each moon rock starts with flower as
+          the base, adds a concentrate coat, and finishes with a dry material such as kief or diamonds, with the build printed
+          on the pack. Browse the{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>; potency is
+          batch-specific, so read the current package label and its test results.
         </p>
       </TermSection>
 
@@ -563,7 +579,7 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
             <h1 className="font-display text-5xl uppercase leading-[0.9] text-po-on-dark sm:text-7xl lg:text-8xl" id="presidential-cannabis-title">{route.h1}</h1>
             <h2 className="mt-10 font-display text-2xl uppercase text-po-brand">Opening</h2>
             <div className="mt-5 grid max-w-2xl gap-5 text-lg leading-8 text-po-on-dark-muted">
-              <p>Presidential Cannabis builds infused products around disciplined craft, recognizable formats, and a consistent house standard.</p>
+              <p>Presidential Cannabis, also searched as Presidential weed or Presidential marijuana, builds infused products around disciplined craft, recognizable formats, and a consistent house standard.</p>
               <p>The official product system connects Moon Rocks, pre-rolls, tobacco-free blunts, and minis with organized collections and a licensed-retailer path.</p>
             </div>
           </div>
@@ -591,10 +607,12 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
         <p>The catalog is organized to make the relationship between extract, profile, and format visible. Each grouping has a clear role while remaining part of the same Presidential product platform.</p>
         <p>Collections include the Silver Flavor Series, Gold Strain Series, Rose Gold Connoisseur Series, Presidential Line, Presidential House Line, and Presidential x THC Design. Current product records—not fixed counts in evergreen copy—define the catalog.</p>
         <p>
-          Formats:{" "}
-          <Link className={inlineLinkClass} href="/presidential-thc">Moon Rocks</Link>,{" "}
-          <Link className={inlineLinkClass} href="/moon-rocks/presidential-prerolls">Presidential pre-rolls</Link>,{" "}
-          <Link className={inlineLinkClass} href="/presidential-blunts">blunts</Link>, minis.
+          Formats: the{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>,{" "}
+          <Link className={inlineLinkClass} href="/pre-rolls">Presidential pre-rolls</Link> (joints),{" "}
+          <Link className={inlineLinkClass} href="/blunts">Moon Rock blunts</Link>, minis, and{" "}
+          <Link className={inlineLinkClass} href="/vapes">Presidential vapes</Link>. Many retail menus list the same
+          products as <Link className={inlineLinkClass} href="/presidential-thc">Presidential THC</Link>.
         </p>
         <p>
           The Silver Flavor Series centers deliberate flavor profiles. The Gold Strain Series organizes strain-led releases around live resin. The Rose Gold Connoisseur Series features live rosin. The Presidential Line and Presidential House Line extend the catalog through named house releases, while the collaboration is represented by{" "}
@@ -631,7 +649,7 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
       </TermSection>
 
       <TermSection id="presidential-cannabis-contact" title="Contact" tone="contrast">
-        <p>Wholesale, press, and brand enquiries move through the official contact channel. The Our Story and About pages provide additional context on the company, its craft, and the standards connecting the full platform. That path keeps every conversation connected to current Presidential company information.</p>
+        <p>Wholesale, press, and brand enquiries move through the official contact channel. Our Story and the page{" "}<Link className={inlineLinkClass} href="/about">about the Presidential brand</Link>{" "}provide additional context on the company, its craft, and the standards connecting the full platform. That path keeps every conversation connected to current Presidential company information.</p>
         <nav aria-label="Presidential company links" className="flex flex-wrap gap-x-6 gap-y-3">
           <Link className={inlineLinkClass} href="/contact">Contact</Link>
           <Link className={inlineLinkClass} href="/our-story">Our Story</Link>

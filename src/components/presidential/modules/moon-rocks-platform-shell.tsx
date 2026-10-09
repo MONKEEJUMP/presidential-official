@@ -297,7 +297,10 @@ export async function MoonRocksPlatformShell({
                     <Link className="underline underline-offset-8" href="/moon-rocks/presidential-house-line">Explore the Presidential House Line</Link>
                     {activeItemsWithoutArt.map(({ item, resolution }) => (
                       <Link className="underline underline-offset-8" href={`/moon-rocks/${catalogItemSlug(item)}`} key={item._id}>
-                        {resolution.entry.displayName || item.name || catalogItemSlug(item)}
+                        {/* MR-TOP50 A4: the bare "Presidential Prerolls" anchor belongs to /pre-rolls queries. */}
+                        {catalogItemSlug(item) === "presidential-prerolls"
+                          ? "Presidential Prerolls Moon Rocks"
+                          : resolution.entry.displayName || item.name || catalogItemSlug(item)}
                       </Link>
                     ))}
                   </div>

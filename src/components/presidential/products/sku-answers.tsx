@@ -53,8 +53,9 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <p className="mt-3 text-sm leading-6 text-po-body">
             Moon rocks are cannabis flower coated with a concentrate and finished with a dry material such as kief.
             Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongside Grape, Pineapple, and Peach
-            Mango. See the <Link className={linkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link> and the{" "}
-            <Link className={linkClass} href="/learn/flavor-science">Flavor Science</Link> guide.
+            Mango. See the <Link className={linkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>, the{" "}
+            <Link className={linkClass} href="/learn/flavor-science">Flavor Science</Link> guide, and{" "}
+            <Link className={linkClass} href="/learn/what-are-moon-rocks">What are moon rocks</Link> for the format itself.
           </p>
           {watermelonBlunt ? (
             <>
@@ -68,9 +69,20 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           ) : null}
         </>
       ) : null}
+      {slug === "pineapple" && series === "Silver Flavor Series" ? (
+        <>
+          <h2 className="font-display text-2xl uppercase leading-tight text-po-ink">What are Pineapple Moon Rocks?</h2>
+          <p className="mt-3 text-sm leading-6 text-po-body">
+            Moon rocks are cannabis flower coated with a concentrate and finished with a dry material such as kief. Each
+            Pineapple moonrock is one of the flavor-led releases in the Silver Flavor Series, alongside Grape, Watermelon, and
+            Peach Mango. Read <Link className={linkClass} href="/learn/what-are-moon-rocks">What are moon rocks</Link> for the
+            format, or see the <Link className={linkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>.
+          </p>
+        </>
+      ) : null}
       {materials ? (
         <>
-          <h2 className={`${slug === "watermelon" ? "mt-6 " : ""}font-display text-2xl uppercase leading-tight text-po-ink`}>{`How are ${name} Moon Rocks made?`}</h2>
+          <h2 className={`${slug === "watermelon" || slug === "pineapple" ? "mt-6 " : ""}font-display text-2xl uppercase leading-tight text-po-ink`}>{`How are ${name} Moon Rocks made?`}</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">
             {`${name} is made with ${materials}, layered the way `}
             <Link className={linkClass} href="/moon-rocks#moon-rocks-q-infused">every Presidential moon rock is built</Link>.

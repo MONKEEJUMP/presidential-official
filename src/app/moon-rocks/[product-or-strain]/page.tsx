@@ -230,6 +230,13 @@ export default async function CatalogProductDetailPage({
                   <ProductSpecBlock chips={chips} name={item.name} series={item.series} slug={slug} />
                 ) : null}
                 {slug !== "presidential-blunts" ? <SkuAnswers name={item.name} series={item.series} slug={slug} /> : null}
+                {/* MR-TOP50 L4: the House Line SKU hands the pre-roll queries up to /pre-rolls. */}
+                {slug === "presidential-prerolls" ? (
+                  <p className="mt-6 text-sm leading-6 text-po-body">
+                    The House Line pre-roll sits alongside the series pre-rolls. See{" "}
+                    <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/pre-rolls">all Presidential pre-rolls</Link>.
+                  </p>
+                ) : null}
 
                 {relatedGuide ? (
                   <div className="mt-8 border-t border-po-line pt-5">

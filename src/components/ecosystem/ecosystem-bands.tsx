@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ProductImageLink } from "@/components/presidential/products/product-mention";
-import { vaultProductForImage } from '@/lib/products/vault-links';
 import {
   CirclesThree,
   Crown,
@@ -340,7 +339,7 @@ function ExpressionCard({
     <Link
       aria-labelledby={headingId}
       className={`${styles.card} ${styles.expressionCard} ${styles.linkedCard}`}
-      href={vaultProductForImage(expression.image.src)?.productUrl ?? expression.href}
+      href={expression.href}
     >
       {content}
     </Link>

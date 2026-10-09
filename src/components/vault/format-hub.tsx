@@ -4,6 +4,9 @@ import type { Metadata } from 'next';
 import shared from '@/components/presidential/prerolls/preroll-experience.module.css';
 import { productsInRoom, type VaultRoom } from '@/content/vault/catalog';
 import { canonicalUrl } from '@/lib/seo/schema/constants';
+import { buildBreadcrumbSchema, buildOrganizationSchema, buildWebPageSchema, JsonLd } from '@/lib/seo/schema';
+import { AnswerSections } from '@/components/presidential/modules/answer-sections';
+import { MINI_BLUNT_ANSWERS } from '@/components/presidential/modules/top50-content';
 import { VaultFormatCard } from './format-cards';
 
 function hubLabel(room: VaultRoom): string {
@@ -20,10 +23,25 @@ export function vaultFormatHubMetadata(room: VaultRoom): Metadata {
   return { title, description, alternates: { canonical }, robots: { index: true, follow: true }, openGraph: { title, description, url: canonical, type: 'website' } };
 }
 
+// MR-TOP50: the mini hubs had no JSON-LD. Same pattern as the /blunts and /pre-rolls
+// route shells: Organization, WebPage and BreadcrumbList (Presidential > hub).
+function vaultFormatHubJsonLd(room: VaultRoom) {
+  const meta = vaultFormatHubMetadata(room);
+  const name = `Presidential ${hubLabel(room)}`;
+  const path = `/${room.slug}`;
+  return [
+    buildOrganizationSchema(),
+    buildWebPageSchema({ path, name, description: String(meta.description) }),
+    buildBreadcrumbSchema([{ name: 'Presidential', path: '/' }, { name, path }]),
+  ];
+}
+
 export function VaultFormatHub({ room }: { room: VaultRoom }) {
   const products = productsInRoom(room.slug);
   const label = hubLabel(room);
   return (
+    <>
+    {vaultFormatHubJsonLd(room).map((data, index) => <JsonLd data={data} key={`${room.slug}-jsonld-${index}`} />)}
     <div className={shared.page}>
       <section aria-labelledby={`${room.slug}-heading`} className={shared.hero}>
         <div className={shared.heroAtmosphere} />
@@ -54,6 +72,8 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
         </div>
       </section>
 
+      {room.slug === 'mini-blunts' ? <AnswerSections eyebrow="Mini blunt questions" id="mini-blunts-answers" items={MINI_BLUNT_ANSWERS} /> : null}
+
       <section aria-labelledby={`${room.slug}-find-heading`} className={shared.find} id="find">
         <div>
           <p>Find your Presidential</p>
@@ -68,5 +88,6 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
         </div>
       </section>
     </div>
+    </>
   );
 }

@@ -17,11 +17,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     },
   ],
   "/about": [
-    {
-      href: "/moon-rocks/24k",
-      anchor: "flower",
-      context: "flower with something dusted on top",
-    },
+    // MR-TOP50 A11: the bare "flower" -> /moon-rocks/24k link was removed; /moon-rocks owns "presidential flower".
     {
       href: "/",
       anchor: "retailers",
@@ -196,13 +192,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
       context: "Liquid diamonds run highest",
     },
   ],
-  "/moon-rocks": [
-    {
-      href: "/moon-rocks/24k",
-      anchor: "flower",
-      context: "flower, concentrate, and kief working together",
-    },
-  ],
+  // MR-TOP50 A11: the bare "flower" -> /moon-rocks/24k rule for /moon-rocks was removed.
   "/moon-rocks/24k": [
     { href: "/about", anchor: "brand", context: "Presidential is a wholesale brand" },
     {

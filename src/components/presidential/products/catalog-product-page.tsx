@@ -48,6 +48,17 @@ function ArrowIcon({ direction }: { readonly direction: "left" | "right" }) {
   );
 }
 
+// MR-TOP50 L13/L18/L19-22: format SKUs hand their flavor query to the canonical
+// /moon-rocks/<flavor> page with a "<Flavor> Moon Rocks" anchor.
+const FLAVOR_PAGE_BY_SKU_PATH: Readonly<Record<string, { readonly href: string; readonly label: string }>> = {
+  "/blunts/watermelon": { href: "/moon-rocks/watermelon", label: "Watermelon Moon Rocks" },
+  "/blunts/pineapple": { href: "/moon-rocks/pineapple", label: "Pineapple Moon Rocks" },
+  "/blunts/gorilla-goo": { href: "/moon-rocks/gorilla-goo", label: "Gorilla Goo Moon Rocks" },
+  "/pre-rolls/gorilla-goo": { href: "/moon-rocks/gorilla-goo", label: "Gorilla Goo Moon Rocks" },
+  "/mini-blunts/gorilla-goo": { href: "/moon-rocks/gorilla-goo", label: "Gorilla Goo Moon Rocks" },
+  "/mini-pre-rolls/gorilla-goo": { href: "/moon-rocks/gorilla-goo", label: "Gorilla Goo Moon Rocks" },
+};
+
 // Sitebulb oct06d #2: the Product specs block for the Vault format SKU pages
 // (pre-rolls, blunts, mini pre-rolls, mini blunts). Values come only from
 // src/content/vault/specs.json; a field with no data is left out.
@@ -92,6 +103,7 @@ export function CatalogProductPage({
   const previous = products[(productIndex - 1 + products.length) % products.length];
   const next = products[(productIndex + 1) % products.length];
   const [format, ...ingredients] = product.edition.split(" · ");
+  const flavorPage = FLAVOR_PAGE_BY_SKU_PATH[vaultProduct ? vaultProduct.productUrl : productDetailPath(categoryPath, product.id)];
 
   return (
     <div className={styles.page}>
@@ -131,6 +143,12 @@ export function CatalogProductPage({
                 <div><dt>Made with</dt><dd>{ingredients.join(" · ")}</dd></div>
                 <div><dt>Availability</dt><dd>Licensed retailers</dd></div>
               </dl>}
+
+              {flavorPage ? (
+                <p className={styles.specsNote}>
+                  {product.name} also comes as <Link href={flavorPage.href}>{flavorPage.label}</Link>.
+                </p>
+              ) : null}
 
               <div className={styles.actions}>
                 <Link className={styles.primaryAction} href="/find-us">
