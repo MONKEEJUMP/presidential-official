@@ -72,7 +72,13 @@ const FLAVOR_SERIES_LABELS = {
   gold: "Gold Strain Series",
   "rose-gold": "Rose Gold Connoisseur Series",
   collabs: "Collaborations",
+  more: "More from Presidential",
 } as const;
+
+// Every tier, including "more" (Presidential Line and House Line flavors such as Guava Haze).
+const FLAVOR_LIST_SECTIONS = [...TIER_SECTION_ORDER, "more"] as const;
+// Format products, not flavors: the HOLD blunts page and the House Line pre-roll.
+const FLAVOR_LIST_EXCLUDED_SLUGS = new Set(["presidential-blunts", "presidential-prerolls"]);
 
 const ecosystemSteps = [
   "Learn what Moon Rocks are",
@@ -436,13 +442,13 @@ export async function MoonRocksPlatformShell({
               listed here by series.
             </p>
             <dl className="mt-8 grid gap-6 text-base leading-7 text-po-body">
-              {TIER_SECTION_ORDER.map((section) => {
+              {FLAVOR_LIST_SECTIONS.map((section) => {
                 // Every non-retired catalog entry, with or without card art.
                 const entries = placements.filter(
                   ({ item, resolution }) =>
                     !resolution.entry.retired &&
                     resolution.entry.section === section &&
-                    catalogItemSlug(item) !== "presidential-blunts",
+                    !FLAVOR_LIST_EXCLUDED_SLUGS.has(catalogItemSlug(item)),
                 );
                 if (entries.length === 0) return null;
                 return (
