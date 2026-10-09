@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Suspense, type ReactNode } from 'react';
 import { VaultRoomPage } from '@/components/vault/room';
-import { productsInRoom, vaultRooms } from '@/content/vault/catalog';
+import { productsInRoom, vaultRoomHeading, vaultRooms } from '@/content/vault/catalog';
 
 // Sitebulb oct06d #3: short factual intros for the two mini rooms. Weights and the
 // build are the ones every mini pack states in src/content/vault/specs.json.
@@ -26,5 +26,5 @@ export default async function RoomPage({ params }: { params: Promise<{ room: str
   if (!room) notFound();
   const intro = ROOM_INTROS[room.slug]?.(productsInRoom(room.slug).length);
   // The intro is also in the fallback so it is in the server HTML before the client room hydrates.
-  return <Suspense fallback={<><div className="vault-room-heading"><p className="vault-room-title">{room.name.toUpperCase()}</p></div>{intro ? <p className="vault-room-intro">{intro}</p> : null}</>}><VaultRoomPage room={room} intro={intro} /></Suspense>;
+  return <Suspense fallback={<><div className="vault-room-heading"><p className="vault-room-title">{vaultRoomHeading(room)}</p></div>{intro ? <p className="vault-room-intro">{intro}</p> : null}</>}><VaultRoomPage room={room} intro={intro} /></Suspense>;
 }
