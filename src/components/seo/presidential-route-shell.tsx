@@ -20,6 +20,7 @@ import { readPublicRenderableSitePage } from "@/lib/cms";
 import {
   buildRouteShellBreadcrumbItems,
   buildRouteShellJsonLd,
+  isRouteFaqSchemaEnabled,
   JsonLd,
 } from "@/lib/seo/schema";
 import { getStaticRouteShellLinks } from "@/lib/seo/route-page";
@@ -88,7 +89,7 @@ export async function PresidentialRouteShell({
       ))}
 
       {route.id === "about" ? (
-        <AboutCompanyShell />
+        <AboutCompanyShell faqSchema={isRouteFaqSchemaEnabled(route)} />
       ) : usesPillarPlatformShell ? (
         <PillarPlatformShell
           breadcrumbs={breadcrumbs}

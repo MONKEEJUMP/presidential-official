@@ -140,7 +140,7 @@ function AboutImage({
   );
 }
 
-export function AboutCompanyShell() {
+export function AboutCompanyShell({ faqSchema = false }: { readonly faqSchema?: boolean }) {
   return (
     <PageFrame>
       <SceneStack>
@@ -315,7 +315,7 @@ export function AboutCompanyShell() {
           </div>
         </Scene>
 
-        <AnswerSections eyebrow="About Presidential" faqSchema id="about-answers" items={ABOUT_ANSWERS} />
+        <AnswerSections eyebrow="About Presidential" faqSchema={faqSchema} id="about-answers" items={ABOUT_ANSWERS} />
 
         <ParentLearnGuideLink parentPath="/about" />
 

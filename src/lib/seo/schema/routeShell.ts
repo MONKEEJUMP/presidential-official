@@ -92,6 +92,26 @@ export function buildRouteShellBreadcrumbItems(
   ];
 }
 
+/**
+ * FAQPage JSON-LD built from a page's visible question sections is emitted only when the
+ * route record declares FAQPage and the same publication and sitemap gates as the route
+ * shell JSON-LD are open.
+ */
+export function isRouteFaqSchemaEnabled(
+  route: SeoRouteRecord,
+  gateInput: RoutePublicationGateInput = {},
+): boolean {
+  return (
+    route.schema.includes("FAQPage") &&
+    getRoutePublicationGateBlockReasons(
+      route,
+      gateInput.routePublicationRecords,
+      gateInput.routePublicationContext,
+    ).length === 0 &&
+    getSitemapBlockReasons(route, gateInput).length === 0
+  );
+}
+
 export function buildRouteShellJsonLd(
   route: SeoRouteRecord,
   gateInput: RoutePublicationGateInput = {},

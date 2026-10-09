@@ -84,7 +84,7 @@ export const ROUTE_REGISTRY = [
       "infused pre-rolls",
       "infused blunts",
     ],
-    schema: ["WebPage", "BreadcrumbList", "Product"],
+    schema: ["WebPage", "BreadcrumbList", "Product", "FAQPage"],
     requiredData: [
       "product_platforms",
       "product_series",
@@ -307,7 +307,7 @@ export const ROUTE_REGISTRY = [
       "presidential silver gold rose gold series",
       "official presidential cannabis brand",
     ],
-    schema: ["Organization", "WebPage", "BreadcrumbList"],
+    schema: ["Organization", "WebPage", "BreadcrumbList", "FAQPage"],
     requiredData: [
       "company_entity",
       "approved_about_copy",

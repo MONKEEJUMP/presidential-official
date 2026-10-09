@@ -11,6 +11,9 @@ import {
 
 const projectRoot = process.cwd();
 const productionOrigin = "https://presidentialmoonrocks.com";
+// Routes whose record (src/lib/seo/routes.ts) declares FAQPage; they emit it from visible questions.
+const FAQ_SCHEMA_ROUTES = new Set(["/about", "/moon-rocks"]);
+const FAQ_SCHEMA_TYPES = ["FAQPage", "Question", "Answer"];
 const nextBin = join(projectRoot, "node_modules", "next", "dist", "bin", "next");
 const runtimeHost = "127.0.0.1";
 const runtimeBasePort = Number(process.env.PRESIDENTIAL_RENDERED_STATIC_QA_PORT || "3349");
@@ -922,6 +925,8 @@ function checkRouteHtml(route, runtimeHtmlByPath) {
     "WebPage",
     "BreadcrumbList",
     "ListItem",
+    // Routes whose record declares FAQPage emit it from their visible question sections.
+    ...(FAQ_SCHEMA_ROUTES.has(route.path) ? FAQ_SCHEMA_TYPES : []),
   ]);
   const forbiddenTypes = schemaTypes.filter((type) => !allowedTypes.has(type));
 

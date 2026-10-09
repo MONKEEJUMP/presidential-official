@@ -52,7 +52,7 @@ export function AnswerSections({
   readonly id: string;
   readonly eyebrow: string;
   readonly items: readonly AnswerItem[];
-  /** Emit FAQPage JSON-LD for the question items (pages without another FAQPage only). */
+  /** Emit FAQPage JSON-LD for the question items. Pass isRouteFaqSchemaEnabled(route), never a bare true. */
   readonly faqSchema?: boolean;
 }) {
   return (

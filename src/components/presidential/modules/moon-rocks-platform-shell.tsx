@@ -18,6 +18,7 @@ import {
 } from "@/lib/catalog/tier-map";
 import { resolveMoonRocksCardArt } from "@/lib/catalog/moon-rocks-card-art";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
+import { isRouteFaqSchemaEnabled } from "@/lib/seo/schema";
 
 import { TierBadge, TierSectionHeader } from "../catalog/tier-section";
 import { PageFrame } from "../layout/page-frame";
@@ -436,7 +437,13 @@ export async function MoonRocksPlatformShell({
             </p>
             <dl className="mt-8 grid gap-6 text-base leading-7 text-po-body">
               {TIER_SECTION_ORDER.map((section) => {
-                const entries = itemsFor(section).filter(({ item }) => catalogItemSlug(item) !== "presidential-blunts");
+                // Every non-retired catalog entry, with or without card art.
+                const entries = placements.filter(
+                  ({ item, resolution }) =>
+                    !resolution.entry.retired &&
+                    resolution.entry.section === section &&
+                    catalogItemSlug(item) !== "presidential-blunts",
+                );
                 if (entries.length === 0) return null;
                 return (
                   <div key={section}>
@@ -459,7 +466,12 @@ export async function MoonRocksPlatformShell({
           </div>
         </Scene>
 
-        <AnswerSections eyebrow="Presidential Moon Rocks questions" faqSchema id="moon-rocks-answers" items={MOON_ROCKS_ANSWERS} />
+        <AnswerSections
+          eyebrow="Presidential Moon Rocks questions"
+          faqSchema={isRouteFaqSchemaEnabled(route)}
+          id="moon-rocks-answers"
+          items={MOON_ROCKS_ANSWERS}
+        />
 
         <ParentLearnGuideLink parentPath="/moon-rocks" />
 
