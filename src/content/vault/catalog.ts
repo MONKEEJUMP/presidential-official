@@ -35,3 +35,7 @@ export const procession = vaultRooms.flatMap(room => productsInRoom(room.slug).f
 const kingIndex = procession.findIndex(p => p.product.slug === 'king-louis-blunt');
 // Start with King Louis; the remaining pieces keep their relative room order.
 export const entrancePieces = [procession[kingIndex], ...procession.filter((_, i) => i !== kingIndex)];
+
+// Visible room H1 overrides for the two full-size art rooms only; titles and metas still use room.name.
+const ROOM_H1: Record<string, string> = { blunts: 'Blunts Pack Art', 'pre-rolls': 'Pre-Roll Pack Art' };
+export const vaultRoomHeading = (room: VaultRoom) => ROOM_H1[room.slug] ?? room.name.toUpperCase();

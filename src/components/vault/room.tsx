@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, type ReactNode } from 'react';
-import { productsInRoom, vaultProducts, vaultRooms, type VaultRoom } from '@/content/vault/catalog';
+import { productsInRoom, vaultProducts, vaultRoomHeading, vaultRooms, type VaultRoom } from '@/content/vault/catalog';
 import { FramedPiece } from './framed-piece';
 import { PieceViewer } from './viewer';
 
@@ -74,7 +74,7 @@ export function VaultRoomPage({ room, intro }: { room: VaultRoom; intro?: ReactN
       if (href?.startsWith(`${pathname}?piece=`)) origin.current = { kind: 'room', y: window.scrollY, href };
     }}>
       <nav ref={roomMenu} className="vault-room-menu" aria-label="Vault rooms">{vaultRooms.map(r => <Link href={`/presidential-art/${r.slug}`} key={r.slug} aria-current={r.slug === room.slug ? 'page' : undefined}><span>ROOM {r.numeral}</span>{r.name.toUpperCase()}</Link>)}</nav>
-      <div className="vault-room-content">{nav}<header className="vault-room-heading"><p className="vault-eyebrow">ROOM {room.numeral}</p><h1>{room.name.toUpperCase()}</h1><span className="vault-rule" /><p>{roomProducts.length} WORKS</p></header>
+      <div className="vault-room-content">{nav}<header className="vault-room-heading"><p className="vault-eyebrow">ROOM {room.numeral}</p><h1>{vaultRoomHeading(room)}</h1><span className="vault-rule" /><p>{roomProducts.length} WORKS</p></header>
         {intro ? <p className="vault-room-intro">{intro}</p> : null}
         <section className="vault-room-featured"><p className="vault-eyebrow">FEATURED WORK</p><FramedPiece featured product={vaultProducts.find(p => p.slug === room.featured)!} /></section>
         <span className="vault-rule vault-gallery-rule" />
