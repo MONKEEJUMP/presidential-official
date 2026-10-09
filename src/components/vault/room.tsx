@@ -7,6 +7,9 @@ import { productsInRoom, vaultProducts, vaultRooms, type VaultRoom } from '@/con
 import { FramedPiece } from './framed-piece';
 import { PieceViewer } from './viewer';
 
+// Visible H1 overrides for the two full-size art rooms only; titles and metas still use room.name.
+const ROOM_H1: Record<string, string> = { blunts: 'Blunts Pack Art', 'pre-rolls': 'Pre-Roll Pack Art' };
+
 export function VaultRoomPage({ room, intro }: { room: VaultRoom; intro?: ReactNode }) {
   const params = useSearchParams();
   const pathname = usePathname();
@@ -74,7 +77,7 @@ export function VaultRoomPage({ room, intro }: { room: VaultRoom; intro?: ReactN
       if (href?.startsWith(`${pathname}?piece=`)) origin.current = { kind: 'room', y: window.scrollY, href };
     }}>
       <nav ref={roomMenu} className="vault-room-menu" aria-label="Vault rooms">{vaultRooms.map(r => <Link href={`/presidential-art/${r.slug}`} key={r.slug} aria-current={r.slug === room.slug ? 'page' : undefined}><span>ROOM {r.numeral}</span>{r.name.toUpperCase()}</Link>)}</nav>
-      <div className="vault-room-content">{nav}<header className="vault-room-heading"><p className="vault-eyebrow">ROOM {room.numeral}</p><h1>{room.name.toUpperCase()}</h1><span className="vault-rule" /><p>{roomProducts.length} WORKS</p></header>
+      <div className="vault-room-content">{nav}<header className="vault-room-heading"><p className="vault-eyebrow">ROOM {room.numeral}</p><h1>{ROOM_H1[room.slug] ?? room.name.toUpperCase()}</h1><span className="vault-rule" /><p>{roomProducts.length} WORKS</p></header>
         {intro ? <p className="vault-room-intro">{intro}</p> : null}
         <section className="vault-room-featured"><p className="vault-eyebrow">FEATURED WORK</p><FramedPiece featured product={vaultProducts.find(p => p.slug === room.featured)!} /></section>
         <span className="vault-rule vault-gallery-rule" />
