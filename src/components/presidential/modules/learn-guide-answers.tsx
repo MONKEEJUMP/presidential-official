@@ -84,6 +84,8 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
             Yes. Each pack prints the strain type alongside the format line and the composition line. The{" "}
             <Link className={a} href="/moon-rocks/24k">24K</Link> pack, for example, is marked Indica. Every pack in the{" "}
             <Link className={a} href="/moon-rocks">Presidential Moon Rocks collection</Link> carries the same three lines.
+            The <Link className={a} href="/presidential-thc">Presidential THC guide</Link> explains the flower, concentrate,
+            and kief roles behind them.
           </p>
         ),
       },

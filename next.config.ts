@@ -97,6 +97,17 @@ const nextConfig: NextConfig = {
         destination: "/",
         permanent: true,
       },
+      // Short term paths: no /thc or /cannabis route exists; send them to the owning term pages with an explicit 301.
+      {
+        source: "/thc",
+        destination: "/presidential-thc",
+        statusCode: 301,
+      },
+      {
+        source: "/cannabis",
+        destination: "/presidential-cannabis",
+        statusCode: 301,
+      },
     ];
   },
 };
