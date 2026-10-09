@@ -238,6 +238,14 @@ export default async function CatalogProductDetailPage({
                   </p>
                 ) : null}
 
+                {/* MR-ABOUT-MOONROCKS: series flavor pages link back to the full flavor list. */}
+                {slug !== "presidential-blunts" && slug !== "presidential-prerolls" && seriesPath ? (
+                  <p className="mt-6 text-sm leading-6 text-po-body">
+                    See{" "}
+                    <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/moon-rocks">all Presidential Moon Rock flavors</Link>.
+                  </p>
+                ) : null}
+
                 {relatedGuide ? (
                   <div className="mt-8 border-t border-po-line pt-5">
                     <p className="text-xs font-black uppercase text-po-brand-ink">

@@ -15,10 +15,11 @@ const platforms = [
   {
     title: "MOON ROCKS™",
     tagline: '"The Highest Form Of Cannabis."',
-    body: "The flagship, and the reason the name travels. Premium flower, rich resin, and a coat of the finest kief fused into one complete product — built to be experienced as a single thing rather than three. Available as moon rocks, blunts, pre-rolls, and mini blunts.",
+    body: "The flagship, and the reason the name travels. Premium flower as the base, rich resin, and a coat of the finest kief fused into one complete product — built to be experienced as a single thing rather than three. Available as moon rocks, blunts, pre-rolls, and mini blunts.",
     image: "/media/moonrock-cherrygelato.jpg" as const,
     imageAlt: "Cherry Gelato Presidential Moon Rocks package artwork",
     href: "/moon-rocks" as const,
+    linkLabel: "Explore Presidential Moon Rocks",
   },
   {
     title: "PRESIDENTIAL BLUNTS",
@@ -26,15 +27,17 @@ const platforms = [
     body: "A Presidential Blunt is the house method in its most complete form: flower, concentrate, and kief brought together in a single wrap, rolled to burn evenly and finish clean. The original argument — still winning it.",
     image: "/media/blunt-nino-brown.jpg" as const,
     imageAlt: "Nino Brown Presidential Moon Rock Blunt package artwork",
-    href: "/moon-rocks/presidential-line-nino-brown" as const,
+    // InLinks AB2 (chief-approved): the PRESIDENTIAL BLUNTS card points at the /blunts hub.
+    href: "/blunts" as const,
   },
   {
     title: "PRESIDENTIAL PRE-ROLLS",
     tagline: '"Everything the house does, ready when you are."',
-    body: "The full method, packed and finished by hand — no compromise made for convenience, no step skipped for speed. The easy choice that gave up nothing.",
+    body: "Infused pre-rolls with the full method, packed and finished by hand — no compromise made for convenience, no step skipped for speed. The easy choice that gave up nothing.",
     image: "/media/preroll-cherry-gelato.jpg" as const,
     imageAlt: "Cherry Gelato Presidential Moon Rock Pre-roll package artwork",
-    href: "/pre-rolls/cherry-gelato" as const,
+    // InLinks AB1: the PRESIDENTIAL PRE-ROLLS card points at the /pre-rolls hub, like the Moon Rocks card.
+    href: "/pre-rolls" as const,
   },
 ] as const;
 
@@ -45,7 +48,7 @@ const series = [
   },
   {
     title: "GOLD STRAIN SERIES",
-    body: "Balanced. Authentic. Full-spectrum. Cannabis-forward. The strains people ask for by name, treated with the seriousness they stopped receiving years ago.",
+    body: "Balanced. Authentic. Full-spectrum. Cannabis-forward. The strains people ask for by name, treated with the seriousness they stopped receiving years ago. Built on live resin.",
   },
   {
     title: "ROSE GOLD CONNOISSEUR SERIES",
@@ -218,7 +221,7 @@ export function AboutCompanyShell() {
                     0{index + 1}
                   </p>
                   <Link
-                    aria-label={`Explore ${platform.title}`}
+                    aria-label={"linkLabel" in platform ? platform.linkLabel : `Explore ${platform.title}`}
                     className="group mt-6 block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
                     href={platform.href}
                   >

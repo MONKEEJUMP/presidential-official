@@ -393,7 +393,7 @@ export function HomepageFoundationShell({
               </p>
               <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                 <CtaLink href="/moon-rocks" variant="primary">
-                  Explore Moon Rocks
+                  Presidential Moon Rocks collection
                 </CtaLink>
                 <CtaLink className="po-home-canvas-accent" href="/learn" variant="text">
                   Learn about Moon Rocks
