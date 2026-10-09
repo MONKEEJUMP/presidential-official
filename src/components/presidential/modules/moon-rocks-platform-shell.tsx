@@ -66,6 +66,13 @@ const moonRocksCatalogPathCopy = [
   "[Guava Haze](/moon-rocks/presidential-line-guava-haze) adds another collaboration product page to explore.",
 ] as const;
 
+const FLAVOR_SERIES_LABELS = {
+  silver: "Silver Flavor Series",
+  gold: "Gold Strain Series",
+  "rose-gold": "Rose Gold Connoisseur Series",
+  collabs: "Collaborations",
+} as const;
+
 const ecosystemSteps = [
   "Learn what Moon Rocks are",
   "Explore related Presidential platforms",
@@ -193,8 +200,9 @@ export async function MoonRocksPlatformShell({
                 </h2>
               </div>
               <p>
-                Silver, Gold, and Rose Gold series — one official catalog.
-                Choose a series to explore every strain. Availability varies
+                Presidential Moon Rock flavors and strains in the Silver, Gold,
+                and Rose Gold series — one official catalog. Choose a series to
+                explore every strain. Availability varies
                 by licensed retailer.
               </p>
             </div>
@@ -219,14 +227,18 @@ export async function MoonRocksPlatformShell({
                           const description = descriptionExcerpt(item.description);
                           return (
                             <article className={shared.artCardSquare} key={item._id}>
+                              {/* InLinks MR1: the tier badge sits outside the link, so "gold" is not anchor text for SKU pages. */}
+                              <div className="relative">
+                              {section === "collabs" ? (
+                                <span className="pointer-events-none">
+                                  <TierBadge tier={resolution.entry.tierBadge} />
+                                </span>
+                              ) : null}
                               <Link
                                 aria-label={`View ${resolution.entry.displayName || item.name || slug} product page`}
                                 className={`${shared.artCardImage} ${shared.moonRocksCardImage}`}
                                 href={`/moon-rocks/${slug}`}
                               >
-                                {section === "collabs" ? (
-                                  <TierBadge tier={resolution.entry.tierBadge} />
-                                ) : null}
                                 <Image
                                   alt={`${resolution.entry.displayName || item.name || slug} Moon Rocks packaging`}
                                   className={shared.moonRocksCardArt}
@@ -235,6 +247,7 @@ export async function MoonRocksPlatformShell({
                                   src={art.src}
                                 />
                               </Link>
+                              </div>
                               <div className={shared.artCardCopy}>
                                 <p>Presidential Moon Rocks</p>
                                 <h3>{resolution.entry.displayName || item.name || slug}</h3>
@@ -375,7 +388,11 @@ export async function MoonRocksPlatformShell({
                 <p className="mt-6 max-w-md text-base leading-7 text-po-on-dark-muted">
                   Product education, format clarity, related platforms, and
                   retail discovery live here without turning the page into a
-                  transaction surface.
+                  transaction surface. Read more{" "}
+                  <Link className="font-semibold text-po-brand underline underline-offset-4" href="/about">
+                    about the Presidential cannabis brand
+                  </Link>
+                  .
                 </p>
               </div>
               <div className="grid gap-10 sm:grid-cols-3">
@@ -400,7 +417,49 @@ export async function MoonRocksPlatformShell({
           </div>
         </Scene>
 
-        <AnswerSections eyebrow="Presidential Moon Rocks questions" id="moon-rocks-answers" items={MOON_ROCKS_ANSWERS} />
+        {/* MR-ABOUT-MOONROCKS: the flavor pages by series, from the same live catalog as the cards above. */}
+        <Scene
+          ariaLabelledBy="presidential-moon-rock-flavors"
+          className="po-gold-thread-inlay py-24 lg:py-32"
+          tone="default"
+        >
+          <div className="mx-auto w-full max-w-4xl">
+            <h2
+              className="font-display text-3xl uppercase leading-[0.95] text-po-ink sm:text-4xl"
+              id="presidential-moon-rock-flavors"
+            >
+              Presidential Moon Rock Flavors
+            </h2>
+            <p className="mt-5 text-base leading-7 text-po-body">
+              What flavors do Presidential Moon Rocks come in? Each Presidential moonrock carries one named flavor or strain,
+              listed here by series.
+            </p>
+            <dl className="mt-8 grid gap-6 text-base leading-7 text-po-body">
+              {TIER_SECTION_ORDER.map((section) => {
+                const entries = itemsFor(section).filter(({ item }) => catalogItemSlug(item) !== "presidential-blunts");
+                if (entries.length === 0) return null;
+                return (
+                  <div key={section}>
+                    <dt className="font-semibold text-po-ink">{FLAVOR_SERIES_LABELS[section]}</dt>
+                    <dd className="mt-2 flex flex-wrap gap-x-4 gap-y-2">
+                      {entries.map(({ item, resolution }) => (
+                        <Link
+                          className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4"
+                          href={`/moon-rocks/${catalogItemSlug(item)}`}
+                          key={item._id}
+                        >
+                          {resolution.entry.displayName || item.name || catalogItemSlug(item)}
+                        </Link>
+                      ))}
+                    </dd>
+                  </div>
+                );
+              })}
+            </dl>
+          </div>
+        </Scene>
+
+        <AnswerSections eyebrow="Presidential Moon Rocks questions" faqSchema id="moon-rocks-answers" items={MOON_ROCKS_ANSWERS} />
 
         <ParentLearnGuideLink parentPath="/moon-rocks" />
 

@@ -79,6 +79,28 @@ export const MOON_ROCKS_ANSWERS: readonly AnswerItem[] = [
     ),
   },
   {
+    id: "moon-rocks-q-live-resin",
+    question: "Are Presidential Moon Rocks made with live resin?",
+    answer: (
+      <p>
+        The <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link> are the live resin Moon Rocks: packs such
+        as 24K and Blue Dream print FLOWER · LIVE RESIN · DIAMONDS. The Silver Flavor Series uses distillate, and the Rose
+        Gold Connoisseur Series uses solventless live rosin.
+      </p>
+    ),
+  },
+  {
+    id: "moon-rocks-q-rx",
+    question: "Are Presidential RX Moon Rocks the same product?",
+    answer: (
+      <p>
+        Presidential RX is the name on one of the official Presidential profiles; the Moon Rocks on this page are the
+        official Presidential lineup. <Link className={a} href="/about">Presidential RX</Link> is explained on the About
+        page.
+      </p>
+    ),
+  },
+  {
     id: "moon-rocks-q-blunt-wrap",
     question: "What are Moon Rock blunts wrapped in?",
     answer: (
@@ -91,6 +113,52 @@ export const MOON_ROCKS_ANSWERS: readonly AnswerItem[] = [
 ];
 
 export const ABOUT_ANSWERS: readonly AnswerItem[] = [
+  // MR-ABOUT-MOONROCKS (Oct 9): company, logo and Moon Rocks questions. Sources: /about hero,
+  // /our-story ("helped invent a category"), /learn pack architecture, live ™ names.
+  {
+    id: "about-q-at-a-glance",
+    question: "The Presidential Cannabis Company at a Glance",
+    answer: (
+      <p>
+        Presidential is a Los Angeles cannabis company, started in 2012. As{" "}
+        <Link className={a} href="/our-story">Our Story</Link> tells it, Presidential helped invent a category: infused
+        cannabis products. It builds three formats under one standard, Moon Rocks™, infused pre-rolls, and tobacco-free
+        blunts, across the Silver Flavor, Gold Strain, and Rose Gold Connoisseur series, and it sells only through licensed
+        retailers.
+      </p>
+    ),
+  },
+  {
+    id: "about-q-company",
+    question: "Is Presidential a cannabis company or a product line?",
+    answer: (
+      <p>
+        A company. Presidential is the cannabis company; Moon Rocks™ is its flagship product platform. Pre-rolls, blunts,
+        Mini Blunts, Mini Pre-Rolls, and Moon Pods for the Orbit device are its other product lines.
+      </p>
+    ),
+  },
+  {
+    id: "about-q-moon-rocks",
+    question: "Is Presidential the same as Presidential Moon Rocks?",
+    answer: (
+      <p>
+        Yes. Presidential is the brand, and{" "}
+        <Link className={a} href="/moon-rocks">Presidential Moon Rocks</Link> is its flagship product and the name of this
+        official site. The infused pre-rolls and blunts carry the same moon rock build.
+      </p>
+    ),
+  },
+  {
+    id: "about-q-logo",
+    question: "What is the Presidential cannabis logo?",
+    answer: (
+      <p>
+        The Presidential logo is the crest shown at the top of this page. On every pack, the silver crown crest carries the
+        PRESIDENTIAL banner. The ™ symbol appears on the names Moon Rocks™ and Presidential Infusion System™.
+      </p>
+    ),
+  },
   {
     id: "about-q-weed-brand",
     question: "What is the Presidential weed brand?",

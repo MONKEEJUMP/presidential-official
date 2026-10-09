@@ -1,4 +1,7 @@
-import type { ReactNode } from "react";
+import { isValidElement, type ReactNode } from "react";
+import type { FAQPage, WithContext } from "schema-dts";
+
+import { JsonLd } from "@/lib/seo/schema";
 
 import { Scene } from "../layout/scene";
 
@@ -14,16 +17,47 @@ export type AnswerItem = {
 export const answerLinkClass =
   "font-semibold text-po-ink underline decoration-po-brand underline-offset-4 transition-colors hover:text-po-brand-ink";
 
+// Plain text of a rendered answer, so FAQPage JSON-LD repeats the visible copy word for word.
+function answerText(node: ReactNode): string {
+  if (node === null || node === undefined || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(answerText).join("");
+  if (isValidElement<{ children?: ReactNode }>(node)) {
+    const text = answerText(node.props.children);
+    return node.type === "p" || node.type === "li" ? ` ${text} ` : text;
+  }
+  return "";
+}
+
+function buildAnswerFaqSchema(items: readonly AnswerItem[]): WithContext<FAQPage> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items
+      .filter((item) => item.question.trim().endsWith("?"))
+      .map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: answerText(item.answer).replace(/\s+/g, " ").trim() },
+      })),
+  };
+}
+
 export function AnswerSections({
   id,
   eyebrow,
   items,
+  faqSchema = false,
 }: {
   readonly id: string;
   readonly eyebrow: string;
   readonly items: readonly AnswerItem[];
+  /** Emit FAQPage JSON-LD for the question items (pages without another FAQPage only). */
+  readonly faqSchema?: boolean;
 }) {
   return (
+    <>
+    {faqSchema ? <JsonLd data={buildAnswerFaqSchema(items)} /> : null}
     <Scene ariaLabelledBy={`${id}-title`} className="po-gold-thread-inlay py-20 lg:py-28" tone="default">
       <div className="mx-auto w-full max-w-4xl">
         <p className="text-xs font-black uppercase text-po-brand-ink" id={`${id}-title`}>
@@ -39,5 +73,6 @@ export function AnswerSections({
         ))}
       </div>
     </Scene>
+    </>
   );
 }
