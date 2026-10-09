@@ -108,9 +108,6 @@ const blockedSchemaKeys = new Set([
   "reviewCount",
   "shippingDetails",
 ]);
-// Routes whose record (src/lib/seo/routes.ts) declares FAQPage; they emit it from visible questions.
-const FAQ_SCHEMA_ROUTES = new Set(["/about", "/moon-rocks"]);
-const FAQ_SCHEMA_TYPES = ["FAQPage", "Question", "Answer"];
 const allowedSchemaTypes = new Set([
   "BreadcrumbList",
   "ListItem",
@@ -509,11 +506,7 @@ async function checkRenderedRoute(routeConfig, baseUrl) {
   const jsonLdData = jsonLdEntries.map((entry) => entry.data).filter(Boolean);
   const parseErrors = jsonLdEntries.filter((entry) => entry.error);
   const schemaTypes = collectSchemaTypes(jsonLdData);
-  const unexpectedTypes = schemaTypes.filter(
-    (type) =>
-      !allowedSchemaTypes.has(type) &&
-      !(FAQ_SCHEMA_ROUTES.has(routeConfig.route) && FAQ_SCHEMA_TYPES.includes(type)),
-  );
+  const unexpectedTypes = schemaTypes.filter((type) => !allowedSchemaTypes.has(type));
   const blockedKeys = collectObjectKeys(jsonLdData).filter((key) => blockedSchemaKeys.has(key));
   const webPages = collectObjectsByType(jsonLdData, "WebPage");
   const breadcrumbs = collectObjectsByType(jsonLdData, "BreadcrumbList");

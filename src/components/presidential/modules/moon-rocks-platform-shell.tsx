@@ -18,7 +18,6 @@ import {
 } from "@/lib/catalog/tier-map";
 import { resolveMoonRocksCardArt } from "@/lib/catalog/moon-rocks-card-art";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
-import { isRouteFaqSchemaEnabled } from "@/lib/seo/schema";
 
 import { TierBadge, TierSectionHeader } from "../catalog/tier-section";
 import { PageFrame } from "../layout/page-frame";
@@ -77,8 +76,15 @@ const FLAVOR_SERIES_LABELS = {
 
 // Every tier, including "more" (Presidential Line and House Line flavors such as Guava Haze).
 const FLAVOR_LIST_SECTIONS = [...TIER_SECTION_ORDER, "more"] as const;
-// Format products, not flavors: the HOLD blunts page and the House Line pre-roll.
-const FLAVOR_LIST_EXCLUDED_SLUGS = new Set(["presidential-blunts", "presidential-prerolls"]);
+// Format-only rows, not named flavors: the House Line and THC Design format SKUs (and the HOLD blunts page).
+const FLAVOR_LIST_EXCLUDED_SLUGS = new Set([
+  "presidential-blunts",
+  "presidential-moon-rocks",
+  "presidential-prerolls",
+  "thc-design-blunts",
+  "thc-design-moon-rocks",
+  "thc-design-prerolls",
+]);
 
 const ecosystemSteps = [
   "Learn what Moon Rocks are",
@@ -472,12 +478,7 @@ export async function MoonRocksPlatformShell({
           </div>
         </Scene>
 
-        <AnswerSections
-          eyebrow="Presidential Moon Rocks questions"
-          faqSchema={isRouteFaqSchemaEnabled(route)}
-          id="moon-rocks-answers"
-          items={MOON_ROCKS_ANSWERS}
-        />
+        <AnswerSections eyebrow="Presidential Moon Rocks questions" id="moon-rocks-answers" items={MOON_ROCKS_ANSWERS} />
 
         <ParentLearnGuideLink parentPath="/moon-rocks" />
 
