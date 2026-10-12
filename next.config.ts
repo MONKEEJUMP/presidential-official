@@ -37,6 +37,47 @@ const presidentialSecurityHeaders = [
   },
 ];
 
+// GSC 1012 404s: crawled element-id fragments of real pages; 301 each to its own page.
+// (/find-us/fl is an intentional 410 in the proxy and is left alone.)
+const gscFragmentRedirects: readonly (readonly [string, string])[] = [
+  ["/find-us/wa-2-heading-text-0", "/find-us/wa"],
+  ["/find-us/wa-7-paragraph-text-0", "/find-us/wa"],
+  ["/find-us/wa-8", "/find-us/wa"],
+  ["/find-us/wa-3-paragraph-text-0", "/find-us/wa"],
+  ["/find-us/wa-7", "/find-us/wa"],
+  ["/find-us/wa-5-heading-text-0", "/find-us/wa"],
+  ["/find-us/wa-16", "/find-us/wa"],
+  ["/find-us/wa-3", "/find-us/wa"],
+  ["/find-us/wa-0", "/find-us/wa"],
+  ["/find-us/wa-18-paragraph-text-0", "/find-us/wa"],
+  ["/find-us/wa-18", "/find-us/wa"],
+  ["/find-us/wa-4", "/find-us/wa"],
+  ["/find-us/wa-17-heading-text-0", "/find-us/wa"],
+  ["/find-us/ny-13-paragraph-text-0", "/find-us/ny"],
+  ["/find-us/ny-2", "/find-us/ny"],
+  ["/find-us/ny-1", "/find-us/ny"],
+  ["/find-us/ny-11-heading-text-0", "/find-us/ny"],
+  ["/find-us/ny-15", "/find-us/ny"],
+  ["/find-us/ny-4", "/find-us/ny"],
+  ["/find-us/ny-15-paragraph-text-130", "/find-us/ny"],
+  ["/find-us/ny-15-paragraph-text-0", "/find-us/ny"],
+  ["/moon-rocks/presidential-x-thc-design-6", "/moon-rocks/presidential-x-thc-design"],
+  ["/moon-rocks/presidential-x-thc-design-12", "/moon-rocks/presidential-x-thc-design"],
+  ["/moon-rocks/presidential-x-thc-design-3-heading-text-0", "/moon-rocks/presidential-x-thc-design"],
+  ["/moon-rocks/presidential-x-thc-design-4", "/moon-rocks/presidential-x-thc-design"],
+  ["/moon-rocks/presidential-x-thc-design-18", "/moon-rocks/presidential-x-thc-design"],
+  ["/moon-rocks/thc-design-moon-rocks-text-0", "/moon-rocks/thc-design-moon-rocks"],
+  ["/moon-rocks/wedding-cake-text-0", "/moon-rocks/wedding-cake"],
+  ["/moon-rocks/presidential-og-text-0", "/moon-rocks/presidential-og"],
+  ["/learn/different-extracts-need-different-heat-link-590", "/learn/different-extracts-need-different-heat"],
+  ["/learn/what-is-live-resin-link-101", "/learn/what-is-live-resin"],
+  ["/learn/what-is-live-resin-text-134", "/learn/what-is-live-resin"],
+  ["/learn/what-is-live-resin-text-90", "/learn/what-is-live-resin"],
+  ["/vapes-12-paragraph-text-0", "/vapes"],
+  ["/learn-0-paragraph-text-0", "/learn"],
+  ["/learn-18-paragraph-text-0", "/learn"],
+];
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   htmlLimitedBots,
@@ -97,6 +138,11 @@ const nextConfig: NextConfig = {
         destination: "/",
         permanent: true,
       },
+      ...gscFragmentRedirects.map(([source, destination]) => ({
+        source,
+        destination,
+        statusCode: 301 as const,
+      })),
       // Short term paths: no /thc or /cannabis route exists; send them to the owning term pages with an explicit 301.
       {
         source: "/thc",
