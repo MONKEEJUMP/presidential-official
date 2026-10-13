@@ -642,7 +642,15 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     setPanelError("");
     setUndoMessage("");
     try {
-      await postAction({ action: "undo_call", callId: call.id });
+      const payload = await postAction({ action: "undo_call", callId: call.id });
+      setSnapshot((current) => current ? {
+        ...current,
+        doors: current.doors.map((door) => door.id === activeDoor.id ? {
+          ...door,
+          contactProgress: payload.contactProgress ?? door.contactProgress,
+          callHistory: door.callHistory.map((item) => item.id === call.id ? { ...item, undone: true, undoEligible: false } : item),
+        } : door),
+      } : current);
       await loadSnapshot(snapshot.selectedState);
       await loadDoorHistory(activeDoor.id);
       setLoggedCall(null);

@@ -103,6 +103,14 @@ export function SalesInlineWorkArea({
   if (progress?.disposition) progressLabels.push(salesOutcome(progress.disposition).label.toUpperCase());
   if (door.doNotCallLocked) progressLabels.push("DO NOT CALL");
 
+  function isActiveOutcome(outcome: SalesOutcome) {
+    if (!progress) return true;
+    if (outcome === "no_answer") return progress.noAnswer;
+    if (outcome === "left_message") return progress.leftMessage;
+    if (outcome === "talked_to_buyer") return progress.spokeToBuyer;
+    return progress.disposition === outcome;
+  }
+
   function confirmHighImpactAction() {
     if (!confirmation) return;
     const action = confirmation;
@@ -117,7 +125,7 @@ export function SalesInlineWorkArea({
         <span>CALL OUTCOME — CLICK AGAIN TO UNDO</span>
         <div>
           {NORMAL_OUTCOMES.map((outcome) => {
-            const saved = undoableCall?.outcome === outcome ? undoableCall : null;
+            const saved = undoableCall?.outcome === outcome && isActiveOutcome(outcome) ? undoableCall : null;
             return <button
               className={saved ? styles.outcomeUndo : undefined}
               aria-pressed={Boolean(saved)}

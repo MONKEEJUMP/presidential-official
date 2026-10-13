@@ -871,6 +871,7 @@ export async function POST(request: Request) {
       return json({
         success: true,
         undoneCallId: Number(row.undone_call_id),
+        contactProgress: await readSalesContactProgress(admin, user.id, resultTargetId),
         doorId: resultTargetId,
         status: isVerifiedCustomerCall ? "review" : row.door_status as DoorStatus,
         nextCallbackAt: row.result_callback_at as string | null,
