@@ -1942,17 +1942,20 @@
 
 /* CRM workbench: readable controls, compact overview, and in-place sales tools. */
 .notesActions {
+  grid-column: 1 / -1;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 12px;
+  margin-top: 0;
 }
 
 .salesPage .notesActions button {
   min-height: 44px;
-  padding: 12px 24px;
+  width: auto;
+  flex: 0 0 auto;
+  padding: 8px 14px;
   border: 1px solid #58c3b6;
   background: #58c3b6;
   color: #041412;
