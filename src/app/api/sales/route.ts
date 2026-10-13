@@ -17,7 +17,7 @@ import {
   type SalesSnapshot,
 } from "@/lib/sales";
 import { createSalesAdminClient, createSalesAuthClient } from "@/lib/supabase/sales-server";
-import { browseSales, readSalesActivity, readSalesHistory, readSalesRequests } from "@/lib/sales-browse-server";
+import { browseSales, readSalesActivity, readSalesContactProgress, readSalesHistory, readSalesRequests } from "@/lib/sales-browse-server";
 import { consumeSalesAttempt, requireSalesClaim, SalesWorkflowError } from "@/lib/sales-workflow-server";
 
 export const dynamic = "force-dynamic";
@@ -912,6 +912,7 @@ export async function POST(request: Request) {
     return json({
       success: true,
       call: mapCall(logged.data.call as CallRow, false, true),
+      contactProgress: await readSalesContactProgress(admin, user.id, doorId),
       status: door.data.status as DoorStatus,
       nextCallbackAt: door.data.next_callback_at as string | null,
     });

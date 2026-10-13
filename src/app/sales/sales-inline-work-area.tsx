@@ -72,7 +72,6 @@ export function SalesInlineWorkArea({
   mode,
   notes,
   discardWarning,
-  loggedCall,
   message,
   error,
   saving,
@@ -93,6 +92,16 @@ export function SalesInlineWorkArea({
   const undoableRequest = door.pendingVerification?.canWithdraw ? door.pendingVerification : null;
   const busy = saving || undoing || toolkitBusy;
   const canRecord = mode === "log" && canWork && !door.isPurchasing && !door.doNotCallLocked;
+  const progress = door.contactProgress;
+  const progressLabels: string[] = [];
+  if (progress?.spokeToBuyer) {
+    progressLabels.push("SPOKE TO BUYER");
+  } else if (!progress?.disposition) {
+    if (progress?.noAnswer) progressLabels.push("NO ANSWER");
+    if (progress?.leftMessage) progressLabels.push("LEFT MESSAGE");
+  }
+  if (progress?.disposition) progressLabels.push(salesOutcome(progress.disposition).label.toUpperCase());
+  if (door.doNotCallLocked) progressLabels.push("DO NOT CALL");
 
   function confirmHighImpactAction() {
     if (!confirmation) return;
@@ -185,6 +194,16 @@ export function SalesInlineWorkArea({
       {message ? <p className={styles.inlineMessage} role="status">{message}</p> : null}
       {error ? <p className={styles.inlineError} role="alert">{error}</p> : null}
 
+      {!discardWarning && progressLabels.length > 0 ? (
+        <div className={styles.inlineComposer}>
+          {progressLabels.map((label) => (
+            <div className={styles.inlineConfirmation} key={label}>
+              <strong>{label} SAVED</strong>
+            </div>
+          ))}
+        </div>
+      ) : null}
+
       {discardWarning ? (
         <div className={styles.discardWarning} role="alertdialog" aria-modal="true" aria-labelledby="discard-warning-title">
           <strong id="discard-warning-title">YOU HAVE UNSAVED CALL INFORMATION.</strong>
@@ -224,13 +243,6 @@ export function SalesInlineWorkArea({
         </div>
       ) : (
         <div className={styles.inlineComposer}>
-          {loggedCall ? (
-            <div className={styles.inlineConfirmation} role="status">
-              <strong>{salesOutcome(loggedCall.outcome).label.toUpperCase()} SAVED</strong>
-              {loggedCall.notes ? <p>{loggedCall.notes}</p> : null}
-              {loggedCall.callbackAt ? <span>Callback: {formatSalesDate(loggedCall.callbackAt, false, timeZone)}</span> : null}
-            </div>
-          ) : null}
           {door.hasPendingVerification ? (
             <div className={styles.pendingNotice}>
               <strong>AWAITING OWNER REVIEW</strong>

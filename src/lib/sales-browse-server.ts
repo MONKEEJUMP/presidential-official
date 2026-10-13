@@ -1,6 +1,6 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { SALES_TIME_ZONE, type SalesCall, type SalesDoor, type SalesPersonalStats, type SalesRepActivity, type SalesVerificationRequest } from "@/lib/sales";
+import { SALES_TIME_ZONE, type SalesCall, type SalesContactProgress, type SalesDoor, type SalesPersonalStats, type SalesRepActivity, type SalesVerificationRequest } from "@/lib/sales";
 
 export type BrowseResult = {
   doors: SalesDoor[];
@@ -44,9 +44,19 @@ export async function browseSales(admin: SupabaseClient, userId: string, params:
 }
 
 export async function readSalesHistory(admin: SupabaseClient, userId: string, doorId: number, beforeId?: number) {
-  const { data, error } = await admin.rpc("read_sales_call_history", { p_actor_id: userId, p_target_id: doorId, p_before_id: beforeId ?? null });
+  const [history, progress] = await Promise.all([
+    admin.rpc("read_sales_call_history", { p_actor_id: userId, p_target_id: doorId, p_before_id: beforeId ?? null }),
+    readSalesContactProgress(admin, userId, doorId),
+  ]);
+  const { data, error } = history;
   if (error) throw error;
-  return data as { calls: SalesCall[]; hasMore: boolean };
+  return { ...(data as { calls: SalesCall[]; hasMore: boolean }), contactProgress: progress };
+}
+
+export async function readSalesContactProgress(admin: SupabaseClient, userId: string, doorId: number) {
+  const { data, error } = await admin.rpc("read_sales_contact_progress", { p_actor_id: userId, p_target_id: doorId });
+  if (error || !data) throw error ?? new Error("The store's contact progress is unavailable.");
+  return data as SalesContactProgress;
 }
 
 export async function readSalesActivity(admin: SupabaseClient, userId: string) {

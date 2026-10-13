@@ -14,6 +14,7 @@ import {
   type DoorStatus,
   type SalesAdminEvent,
   type SalesCall,
+  type SalesContactProgress,
   type SalesDoor,
   type SalesOutcome,
   type SalesRepActivity,
@@ -39,6 +40,7 @@ type ApiResponse = Readonly<{
   authenticated?: boolean;
   error?: string;
   call?: SalesCall;
+  contactProgress?: SalesContactProgress;
   status?: DoorStatus;
   nextCallbackAt?: string | null;
   doorId?: number;
@@ -165,7 +167,13 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       const payload = (await response.json()) as SalesSnapshot & { error?: string };
       if (!response.ok || !payload.authenticated) throw new Error(payload.error ?? "Sales data is temporarily unavailable.");
       if (sequence !== requestSequence.current) return null;
-      setSnapshot(payload);
+      setSnapshot((current) => ({
+        ...payload,
+        doors: payload.doors.map((door) => {
+          const previous = current?.doors.find((item) => item.id === door.id);
+          return previous ? { ...door, callHistory: previous.callHistory, contactProgress: previous.contactProgress } : door;
+        }),
+      }));
       try { sessionStorage.setItem("presidential.sales.user", payload.user.username); localStorage.setItem(`presidential.sales.state:${payload.user.username}`, payload.selectedState); } catch { /* Preferences are optional. */ }
       return payload;
     } catch (error) {
@@ -307,10 +315,10 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     const historyRequest = ++historySequence.current;
     try {
       const response = await fetch(`/api/sales?resource=history&doorId=${doorId}${before ? `&before=${before}` : ""}`, { cache: "no-store" });
-      const data = await response.json() as { calls: SalesCall[]; hasMore: boolean; error?: string };
+      const data = await response.json() as { calls: SalesCall[]; hasMore: boolean; contactProgress: SalesContactProgress; error?: string };
       if (sequence !== requestSequence.current || historyRequest !== historySequence.current) return;
       if (!response.ok) throw new Error(data.error ?? "History unavailable.");
-      setSnapshot((current) => current ? { ...current, doors: current.doors.map((door) => door.id === doorId ? { ...door, callHistory: before ? [...door.callHistory, ...data.calls] : data.calls } : door) } : current);
+      setSnapshot((current) => current ? { ...current, doors: current.doors.map((door) => door.id === doorId ? { ...door, callHistory: before ? [...door.callHistory, ...data.calls] : data.calls, contactProgress: data.contactProgress } : door) } : current);
       setHasMoreHistory(data.hasMore);
     } catch (cause) { setPanelError(cause instanceof Error ? cause.message : "History unavailable."); }
   }
@@ -612,6 +620,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
           status: payload.status ?? door.status,
           nextCallbackAt: payload.nextCallbackAt === undefined ? door.nextCallbackAt : payload.nextCallbackAt,
           callHistory: [savedCall, ...door.callHistory.map((call) => ({ ...call, undoEligible: false }))],
+          contactProgress: payload.contactProgress,
           lastCall: savedCall,
           myLastActivityAt: savedCall.calledAt,
           doNotCallLocked: outcome === "do_not_call",

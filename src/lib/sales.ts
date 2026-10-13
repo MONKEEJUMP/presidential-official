@@ -78,6 +78,13 @@ export type SalesVerificationRequest = Readonly<{
   canWithdraw: boolean;
 }>;
 
+export type SalesContactProgress = Readonly<{
+  noAnswer: boolean;
+  leftMessage: boolean;
+  spokeToBuyer: boolean;
+  disposition: "interested" | "not_interested" | null;
+}>;
+
 export type SalesDoor = Readonly<{
   id: number;
   marketDoorId: number | null;
@@ -102,6 +109,7 @@ export type SalesDoor = Readonly<{
   nextCallbackAt: string | null;
   sourceListDate: string;
   callHistory: readonly SalesCall[];
+  contactProgress?: SalesContactProgress;
   lastCall: SalesCall | null;
   personallyStarred: boolean;
   companyPriority: boolean;
