@@ -28,13 +28,14 @@ type Props = {
   notes: string;
   notesActionsTarget: HTMLDivElement | null;
   externalBusy: boolean;
-  onNoteSaved: () => void;
+  onNoteSaved: (value: string) => void;
+  onNotesLoaded: (value: string) => void;
   onAvailability: (available: boolean) => void;
   onDirtyChange: (dirty: boolean) => void;
   onBusyChange: (busy: boolean) => void;
 };
 
-export function SalesToolkit({ door, timeZone, userId, isSuper, mode, notes, notesActionsTarget, externalBusy, onNoteSaved, onAvailability, onDirtyChange, onBusyChange }: Props) {
+export function SalesToolkit({ door, timeZone, userId, isSuper, mode, notes, notesActionsTarget, externalBusy, onNoteSaved, onNotesLoaded, onAvailability, onDirtyChange, onBusyChange }: Props) {
   const [detail, setDetail] = useState<WorkflowDetail | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -63,12 +64,19 @@ export function SalesToolkit({ door, timeZone, userId, isSuper, mode, notes, not
     if (!response.ok) throw new Error(data.error ?? "Unable to open the workspace.");
     if (abort.signal.aborted || !mounted.current) return;
     setDetail(data);
+    if (mode === "log") {
+      const latestNote = data.notes.find((note) => !note.undone);
+      const latestCall = door.lastCall;
+      const callIsNewer = latestCall?.notes && !latestCall.undone &&
+        (!latestNote || Date.parse(latestCall.calledAt) > Date.parse(latestNote.createdAt));
+      onNotesLoaded(callIsNewer ? latestCall!.notes! : latestNote?.text ?? "");
+    }
     if (!callbackDirtyRef.current) {
       setDueDraft(data.callback ? localInput(data.callback.dueAt) : "");
       setCallbackNote(data.callback?.note ?? "");
     }
     onAvailability(mode === "log" && Boolean(data.claim?.mine) && !door.doNotCallLocked);
-  }, [door.id, door.doNotCallLocked, mode, onAvailability]);
+  }, [door.id, door.doNotCallLocked, door.lastCall, mode, onNotesLoaded, onAvailability]);
 
   useEffect(() => {
     mounted.current = true;
@@ -110,7 +118,7 @@ export function SalesToolkit({ door, timeZone, userId, isSuper, mode, notes, not
       if (!response.ok || !data.success) throw new Error(data.error ?? "The change was not saved.");
       requestRef.current = null;
       if (!mounted.current) return;
-      if (action.action === "save_note") onNoteSaved();
+      if (action.action === "save_note") onNoteSaved(String(action.text));
       if (action.action === "request_correction") { setCorrection(""); setReportOpen(false); }
       if (["set_callback", "complete_callback", "undo_callback"].includes(String(action.action))) callbackDirtyRef.current = false;
       setMessage(success);

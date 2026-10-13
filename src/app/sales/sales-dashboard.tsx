@@ -119,6 +119,19 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   const [activeDoorId, setActiveDoorId] = useState<number | null>(null);
   const [workMode, setWorkMode] = useState<"log" | "history" | null>(null);
   const [notes, setNotes] = useState("");
+  const [savedNotes, setSavedNotes] = useState("");
+  const savedNotesRef = useRef("");
+  const notesDirty = notes !== savedNotes;
+  const loadSharedNotes = useCallback((value: string) => {
+    const previous = savedNotesRef.current;
+    savedNotesRef.current = value;
+    setSavedNotes(value);
+    setNotes((current) => current === previous ? value : current);
+  }, []);
+  const rememberSavedNotes = useCallback((value: string) => {
+    savedNotesRef.current = value;
+    setSavedNotes(value);
+  }, []);
   const [callbackDate, setCallbackDate] = useState("");
   const [discardWarning, setDiscardWarning] = useState(false);
   const [savingCall, setSavingCall] = useState(false);
@@ -202,17 +215,17 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     if (!snapshot?.user.id || !activeDoorId || workMode !== "log") return;
     try {
       const key = `presidential.sales.draft:${snapshot.user.id}:${activeDoorId}`;
-      if (notes) sessionStorage.setItem(key, notes); else sessionStorage.removeItem(key);
+      if (notesDirty) sessionStorage.setItem(key, notes); else sessionStorage.removeItem(key);
     } catch { /* Draft protection still applies when storage is disabled. */ }
-  }, [notes, activeDoorId, workMode, snapshot?.user.id]);
+  }, [notes, notesDirty, activeDoorId, workMode, snapshot?.user.id]);
 
   useEffect(() => {
     const warn = (event: BeforeUnloadEvent) => {
-      if (notes.trim() || toolkitDirty || savingCall || toolkitBusy) { event.preventDefault(); event.returnValue = ""; }
+      if (notesDirty || toolkitDirty || savingCall || toolkitBusy) { event.preventDefault(); event.returnValue = ""; }
     };
     window.addEventListener("beforeunload", warn);
     return () => window.removeEventListener("beforeunload", warn);
-  }, [notes, toolkitDirty, savingCall, toolkitBusy]);
+  }, [notesDirty, toolkitDirty, savingCall, toolkitBusy]);
 
   useEffect(() => {
     if (!activeDoorId || !workMode) return;
@@ -259,6 +272,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     let draft = "";
     try { draft = sessionStorage.getItem(`presidential.sales.draft:${snapshot?.user.id}:${door.id}`) ?? ""; } catch { /* Optional draft recovery. */ }
     setNotes(mode === "log" ? draft : "");
+    rememberSavedNotes("");
     setCallbackDate("");
     setPanelError("");
     setUndoMessage("");
@@ -271,7 +285,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
 
   function requestMove(action: () => void) {
     if (savingCall || undoingCall || toolkitBusy) return;
-    if (activeDoorId && (notes.trim() || toolkitDirty)) {
+    if (activeDoorId && (notesDirty || toolkitDirty)) {
       pendingMove.current = action;
       setDiscardWarning(true);
       return;
@@ -342,6 +356,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     setWorkMode(null);
     setLoggedCall(null);
     setNotes("");
+    rememberSavedNotes("");
     setCallbackDate("");
     setPanelError("");
     setUndoMessage("");
@@ -535,7 +550,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     setTeamPanelOpen(false);
     setActiveDoorId(null);
     setWorkMode(null);
-    setNotes(""); setToolkitDirty(false); setDataReviewOpen(false); setReady(true); setLoadingData(false);
+    setNotes(""); rememberSavedNotes(""); setToolkitDirty(false); setDataReviewOpen(false); setReady(true); setLoadingData(false);
   }
 
   async function resetMyDailyCalls() {
@@ -607,7 +622,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         } : door),
       } : current);
       setLoggedCall(savedCall);
-      setNotes(""); setCallbackDate(""); callRequest.current = null;
+      rememberSavedNotes(notes); setCallbackDate(""); callRequest.current = null;
       setUndoMessage("");
     } catch (error) {
       setPanelError(error instanceof Error ? error.message : "The call could not be logged.");
@@ -674,7 +689,6 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         } : door),
         verificationRequests: [pendingVerification, ...current.verificationRequests],
       } : current);
-      setNotes("");
       setCallbackDate("");
       setUndoMessage(`${claimLabel} REPORT SUBMITTED. It is awaiting owner verification.`);
     } catch (error) {
@@ -1014,7 +1028,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
                 hasMoreHistory={hasMoreHistory}
                 onMoreHistory={() => void loadDoorHistory(activeDoor.id, activeDoor.callHistory.at(-1)?.id)}
                 onNotesActionsTarget={setNotesActionsTarget}
-                tools={<SalesToolkit key={`${snapshot.user.id}:${activeDoor.id}:${workMode}`} door={activeDoor} timeZone={timeZone} userId={snapshot.user.id} isSuper={Boolean(isSuper)} mode={workMode} notes={notes} notesActionsTarget={notesActionsTarget} externalBusy={savingCall || undoingCall} onNoteSaved={() => { setNotes(""); setLoggedCall(null); }} onAvailability={setCanWork} onDirtyChange={setToolkitDirty} onBusyChange={setToolkitBusy} />}
+                tools={<SalesToolkit key={`${snapshot.user.id}:${activeDoor.id}:${workMode}`} door={activeDoor} timeZone={timeZone} userId={snapshot.user.id} isSuper={Boolean(isSuper)} mode={workMode} notes={notes} notesActionsTarget={notesActionsTarget} externalBusy={savingCall || undoingCall} onNoteSaved={rememberSavedNotes} onNotesLoaded={loadSharedNotes} onAvailability={setCanWork} onDirtyChange={setToolkitDirty} onBusyChange={setToolkitBusy} />}
               />
             ) : null}
           </div>

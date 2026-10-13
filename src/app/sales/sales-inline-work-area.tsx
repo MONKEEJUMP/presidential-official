@@ -188,7 +188,7 @@ export function SalesInlineWorkArea({
                 disabled={busy}
                 maxLength={4000}
                 onChange={(event) => onNotesChange(event.target.value)}
-                placeholder="Write the useful details from this call…"
+                placeholder="Write shared notes for this store…"
                 value={notes}
               />
             </label>
