@@ -38,6 +38,7 @@ type Props = {
 export function SalesToolkit({ door, timeZone, userId, isSuper, mode, notes, notesActionsTarget, externalBusy, onNoteSaved, onNotesLoaded, onAvailability, onDirtyChange, onBusyChange }: Props) {
   const [detail, setDetail] = useState<WorkflowDetail | null>(null);
   const [busy, setBusy] = useState(false);
+  const [savingNote, setSavingNote] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [dueDraft, setDueDraft] = useState("");
@@ -109,6 +110,7 @@ export function SalesToolkit({ door, timeZone, userId, isSuper, mode, notes, not
   async function act(action: Record<string, unknown>, success: string) {
     if (requestBusy.current || externalBusy) return;
     requestBusy.current = true;
+    setSavingNote(action.action === "save_note");
     setBusy(true); onBusyChange(true); setError(""); setMessage("");
     const signature = JSON.stringify(action);
     if (requestRef.current?.signature !== signature) requestRef.current = { signature, id: crypto.randomUUID() };
@@ -127,7 +129,7 @@ export function SalesToolkit({ door, timeZone, userId, isSuper, mode, notes, not
       if (mounted.current) setError(cause instanceof Error ? cause.message : "The change was not saved. Your draft is still here.");
     } finally {
       requestBusy.current = false;
-      if (mounted.current) { setBusy(false); onBusyChange(false); }
+      if (mounted.current) { setBusy(false); setSavingNote(false); onBusyChange(false); }
     }
   }
 
@@ -139,11 +141,10 @@ export function SalesToolkit({ door, timeZone, userId, isSuper, mode, notes, not
     </div>
     {detail?.claim && !detail.claim.mine ? <p className={styles.claimNotice}>This dispensary is in use{detail.claim.ownerId ? ` by ${detail.claim.ownerName}` : ""}. You can read its history or move to the next store.</p> : canEdit ? <p className={styles.claimNotice}>Your workspace · other reps are prevented from logging over this active call.</p> : null}
     {isSuper && ((detail?.claim && !detail.claim.mine) || (detail?.callback && detail.callback.ownerId !== userId)) ? <div className={styles.toolkitActions}><label>Owner intervention reason<input value={ownerReason} maxLength={1000} onChange={(event) => setOwnerReason(event.target.value)} placeholder="Required before taking over another rep’s workspace or callback" /></label>{detail?.claim && !detail.claim.mine ? <button type="button" disabled={busy || !ownerReason.trim()} onClick={() => void act({ action: "claim", doorId: door.id, reason: ownerReason }, "Workspace taken over. Your reason was recorded.")}>Take over workspace</button> : null}</div> : null}
-    {message && message !== "Notes saved." ? <p role="status" className={styles.inlineMessage}>{message}</p> : null}
+    {message ? <p role="status" className={styles.inlineMessage}>{message}</p> : null}
     {error ? <p role="alert" className={styles.inlineError}>{error} <button type="button" onClick={() => void refresh().catch(() => setError("Please reopen this dispensary."))}>Refresh workspace</button></p> : null}
     {mode === "log" && notesActionsTarget ? createPortal(<>
-      {message === "Notes saved." ? <span role="status">Notes saved.</span> : null}
-      <button type="button" disabled={!canEdit || busy || externalBusy || !notes.trim()} onClick={() => void act({ action: "save_note", doorId: door.id, text: notes }, "Notes saved.")}>{busy ? "SAVING…" : "SAVE NOTES"}</button>
+      <button type="button" aria-busy={savingNote} disabled={!canEdit || busy || externalBusy} onClick={() => void act({ action: "save_note", doorId: door.id, text: notes }, "")}>{savingNote ? "SAVING…" : "SAVE NOTES"}</button>
     </>, notesActionsTarget) : null}
     <div className={styles.savedNotes}>
       <h3>Team notes</h3>

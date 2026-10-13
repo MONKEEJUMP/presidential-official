@@ -49,12 +49,19 @@ function requestKey(value: unknown): string {
   return value;
 }
 
+function noteText(value: unknown): string {
+  if (typeof value !== "string" || value.length > 4000) {
+    throw new SalesWorkflowError("Please use no more than 4000 characters for the notes.");
+  }
+  return value;
+}
+
 function parseAction(value: unknown): WorkflowAction {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new SalesWorkflowError("Invalid action.");
   const input = value as Record<string, unknown>;
   const reason = () => text(input.reason, 1000, false) ?? undefined;
   switch (input.action) {
-    case "save_note": return { action: input.action, doorId: id(input.doorId), text: text(input.text, 4000)!, requestId: requestKey(input.requestId) };
+    case "save_note": return { action: input.action, doorId: id(input.doorId), text: noteText(input.text), requestId: requestKey(input.requestId) };
     case "undo_note": return { action: input.action, noteId: id(input.noteId) };
     case "set_callback": {
       const dueAt = text(input.dueAt, 60)!;
