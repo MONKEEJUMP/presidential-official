@@ -261,7 +261,6 @@ export async function GET(request: Request) {
     const params = new URL(request.url).searchParams;
     const resource = params.get("resource");
     if (resource === "activity") {
-      if (profile.role === "sales_rep") return json({ error: "Master access is required." }, 403);
       return json({ activity: await readSalesActivity(admin, user.id) });
     }
     if (resource === "admin_log") {

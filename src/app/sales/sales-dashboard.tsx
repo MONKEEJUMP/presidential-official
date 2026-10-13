@@ -250,13 +250,9 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
 
   const activeDoor = snapshot?.doors.find((door) => door.id === activeDoorId) ?? null;
   const isSuper = snapshot?.user.role === "super_master";
-  const canSeeActivity = snapshot?.user.role === "super_master" || snapshot?.user.role === "master";
-  const visibleActivity = isSuper
-    ? activity
-    : activity.filter((rep) => rep.role !== "super_master" && rep.username !== "paulie");
-  const visibleExecutiveRequests = isSuper
-    ? snapshot?.verificationRequests ?? []
-    : (snapshot?.verificationRequests ?? []).filter((request) => request.submittedByName.trim().toLowerCase() !== "paulie");
+  const canSeeActivity = Boolean(snapshot);
+  const visibleActivity = activity;
+  const visibleExecutiveRequests = snapshot?.verificationRequests ?? [];
 
   function openWorkArea(door: SalesDoor, mode: "log" | "history") {
     if (mode === "log" && (door.isPurchasing || door.doNotCallLocked)) return;
@@ -858,7 +854,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
 
       {activityOpen && canSeeActivity ? (
         <section className={styles.activityPanel} id="rep-activity">
-          <div className={styles.sectionHeading}><div><span>EXECUTIVE VISIBILITY</span><h2>REP ACTIVITY</h2></div><button disabled={adminBusy} onClick={() => void loadActivity(Boolean(isSuper))} type="button">REFRESH</button></div>
+          <div className={styles.sectionHeading}><div><span>SHARED TEAM VISIBILITY</span><h2>REP ACTIVITY</h2></div><button disabled={adminBusy} onClick={() => void loadActivity(Boolean(isSuper))} type="button">REFRESH</button></div>
           <section className={styles.verificationRequests}>
             <h3>CUSTOMER VERIFICATION REQUESTS</h3>
             {visibleExecutiveRequests.length ? visibleExecutiveRequests.map((request) => (
