@@ -695,13 +695,17 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   }
 
   async function withdrawVerification(request: SalesVerificationRequest) {
-    if (!snapshot) return;
+    if (!snapshot || undoingCall || savingCall || toolkitBusy) return;
+    setUndoingCall(true);
+    setPanelError("");
     try {
       await postAction({ action: "withdraw_verification_request", requestId: request.id });
       await loadSnapshot(snapshot.selectedState);
       setUndoMessage(`${request.claimedStatus === "sold" ? "SOLD" : "ALREADY CARRIES"} REPORT WITHDRAWN.`);
     } catch (error) {
       setPanelError(error instanceof Error ? error.message : "The request could not be withdrawn.");
+    } finally {
+      setUndoingCall(false);
     }
   }
 
@@ -928,18 +932,13 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
 
       {snapshot.user.role === "sales_rep" && snapshot.verificationRequests.length ? (
         <details className={styles.myVerificationRequests}>
-          <summary>MY CUSTOMER REPORTS ({snapshot.verificationRequests.length})</summary>
+          <summary>TEAM CUSTOMER REPORTS ({snapshot.verificationRequests.length})</summary>
           {snapshot.verificationRequests.map((request) => (
             <article key={request.id}>
               <strong>{request.storeName}</strong>
               <span>{request.claimedStatus === "sold" ? "SOLD" : "ALREADY CARRIES PRESIDENTIAL"} · {request.status.toUpperCase()}</span>
               <span>{formatSalesDate(request.submittedAt, true, timeZone)}</span>
               {request.decisionNote ? <p>{request.decisionNote}</p> : null}
-              {request.canWithdraw ? (
-                <button onClick={() => void withdrawVerification(request)} type="button">
-                  {request.claimedStatus === "sold" ? "WITHDRAW SOLD REPORT" : "WITHDRAW ALREADY CARRIES REPORT"}
-                </button>
-              ) : null}
             </article>
           ))}
         </details>

@@ -22,6 +22,12 @@ const NORMAL_OUTCOMES: readonly SalesOutcome[] = [
   "not_interested",
 ];
 
+const CUSTOMER_ACTIONS: readonly { action: SalesVerificationClaim | "do_not_call"; label: string }[] = [
+  { action: "already_carries_us", label: "ALREADY CARRIES PRESIDENTIAL" },
+  { action: "sold", label: "SOLD" },
+  { action: "do_not_call", label: "DO NOT CALL" },
+];
+
 export function undoActionLabel(call: SalesCall): string {
   return `UNDO ${salesOutcome(call.outcome).label.toUpperCase()}`;
 }
@@ -86,6 +92,7 @@ export function SalesInlineWorkArea({
   const undoableCall = door.callHistory.find((call) => call.undoEligible && !call.undone) ?? null;
   const undoableRequest = door.pendingVerification?.canWithdraw ? door.pendingVerification : null;
   const busy = saving || undoing || toolkitBusy;
+  const canRecord = mode === "log" && canWork && !door.isPurchasing && !door.doNotCallLocked;
 
   function confirmHighImpactAction() {
     if (!confirmation) return;
@@ -93,6 +100,69 @@ export function SalesInlineWorkArea({
     setConfirmation(null);
     if (action === "do_not_call") onOutcome(action);
     else onSubmitVerification(action);
+  }
+
+  function actionButtons() {
+    return <>
+      <div className={styles.normalOutcomes}>
+        <span>CALL OUTCOME — CLICK AGAIN TO UNDO</span>
+        <div>
+          {NORMAL_OUTCOMES.map((outcome) => {
+            const saved = undoableCall?.outcome === outcome ? undoableCall : null;
+            return <button
+              className={saved ? styles.outcomeUndo : undefined}
+              aria-pressed={Boolean(saved)}
+              disabled={busy || (!saved && !canRecord)}
+              key={outcome}
+              onClick={() => saved ? onUndo(saved) : onOutcome(outcome)}
+              type="button"
+            >{saved ? undoActionLabel(saved) : salesOutcome(outcome).label}</button>;
+          })}
+        </div>
+      </div>
+      <div className={styles.highImpactActions}>
+        <span>CUSTOMER STATUS — CONFIRMATION REQUIRED</span>
+        <div>
+          {CUSTOMER_ACTIONS.map(({ action, label }) => {
+            const savedCall = action === "do_not_call" && undoableCall?.outcome === action ? undoableCall : null;
+            const savedRequest = undoableRequest?.claimedStatus === action ? undoableRequest : null;
+            const canUndo = Boolean(savedCall || savedRequest);
+            return <button
+              className={`${action === "do_not_call" ? styles.doNotCallAction : ""} ${canUndo ? styles.outcomeUndo : ""}`}
+              aria-pressed={canUndo}
+              disabled={busy || (!canUndo && (!canRecord || (action !== "do_not_call" && door.hasPendingVerification)))}
+              key={action}
+              onClick={() => {
+                if (savedCall) onUndo(savedCall);
+                else if (savedRequest) onWithdrawRequest(savedRequest);
+                else setConfirmation(action);
+              }}
+              type="button"
+            >{canUndo ? `UNDO ${label}` : label}</button>;
+          })}
+        </div>
+        {confirmation ? (
+          <div className={confirmation === "do_not_call" ? styles.doNotCallConfirmation : styles.customerConfirmation} role="alertdialog" aria-modal="true">
+            <strong>
+              {confirmation === "do_not_call"
+                ? "Mark this dispensary DO NOT CALL?"
+                : confirmation === "sold"
+                  ? "Report this dispensary as SOLD?"
+                  : "Report that this dispensary currently carries Presidential?"}
+            </strong>
+            <p>{confirmation === "do_not_call"
+              ? "This removes it from normal calling activity."
+              : "This sends the information to the owner for verification. It does not immediately change verified customer truth."}</p>
+            <div>
+              <button onClick={() => setConfirmation(null)} type="button">CANCEL</button>
+              <button disabled={busy || !canRecord} onClick={confirmHighImpactAction} type="button">
+                {confirmation === "do_not_call" ? "CONFIRM DO NOT CALL" : confirmation === "sold" ? "SUBMIT SOLD REPORT" : "SUBMIT ALREADY CARRIES REPORT"}
+              </button>
+            </div>
+          </div>
+        ) : null}
+      </div>
+    </>;
   }
 
   return (
@@ -126,6 +196,7 @@ export function SalesInlineWorkArea({
         </div>
       ) : mode === "history" ? (
         <div className={styles.inlineHistory}>
+          <div className={styles.inlineComposer}>{actionButtons()}</div>
           {door.callHistory.length ? door.callHistory.map((call) => (
             <article className={call.undone ? styles.undoneActivity : ""} key={call.id}>
               <div>
@@ -135,11 +206,6 @@ export function SalesInlineWorkArea({
               <span>{formatSalesDate(call.calledAt, true, timeZone)} · {call.repName}{new Date(call.calledAt).getTime() < Date.parse("2026-09-02T22:18:00Z") ? " · PRELAUNCH ARCHIVE" : ""}</span>
               {call.callbackAt ? <span>Callback: {formatSalesDate(call.callbackAt, false, timeZone)}</span> : null}
               {call.notes ? <p>{call.notes}</p> : null}
-              {call.undoEligible ? (
-                <button disabled={undoing} onClick={() => onUndo(call)} type="button">
-                  {undoing ? "UNDOING…" : undoActionLabel(call)}
-                </button>
-              ) : null}
             </article>
           )) : <p>No call activity yet.</p>}
           {hasMoreHistory ? <button type="button" onClick={onMoreHistory}>Older call history</button> : null}
@@ -151,11 +217,6 @@ export function SalesInlineWorkArea({
               <span>Submitted {formatSalesDate(door.pendingVerification.submittedAt, true, timeZone)}</span>
               <span>AWAITING OWNER REVIEW</span>
               {door.pendingVerification.notes ? <p>{door.pendingVerification.notes}</p> : null}
-              {door.pendingVerification.canWithdraw ? (
-                <button onClick={() => onWithdrawRequest(door.pendingVerification!)} type="button">
-                  {door.pendingVerification.claimedStatus === "sold" ? "WITHDRAW SOLD REPORT" : "WITHDRAW ALREADY CARRIES REPORT"}
-                </button>
-              ) : null}
             </article>
           ) : null}
 
@@ -173,11 +234,6 @@ export function SalesInlineWorkArea({
           {door.hasPendingVerification ? (
             <div className={styles.pendingNotice}>
               <strong>AWAITING OWNER REVIEW</strong>
-              {door.pendingVerification?.canWithdraw ? (
-                <button onClick={() => onWithdrawRequest(door.pendingVerification!)} type="button">
-                  {door.pendingVerification.claimedStatus === "sold" ? "WITHDRAW SOLD REPORT" : "WITHDRAW ALREADY CARRIES REPORT"}
-                </button>
-              ) : null}
             </div>
           ) : null}
 
@@ -195,87 +251,7 @@ export function SalesInlineWorkArea({
             <div className={styles.notesActions} ref={onNotesActionsTarget} />
           </div>
 
-          <div className={styles.normalOutcomes}>
-            <span>CALL OUTCOME — SAVES THIS CALL AND YOUR NOTES</span>
-            <div>
-              {NORMAL_OUTCOMES.map((outcome) => (
-                <button disabled={busy || !canWork || door.doNotCallLocked} key={outcome} onClick={() => onOutcome(outcome)} type="button">
-                  {salesOutcome(outcome).label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.highImpactActions}>
-            <span>CUSTOMER STATUS — CONFIRMATION REQUIRED</span>
-            {confirmation ? (
-              <div className={confirmation === "do_not_call" ? styles.doNotCallConfirmation : styles.customerConfirmation} role="alertdialog" aria-modal="true">
-                <strong>
-                  {confirmation === "do_not_call"
-                    ? "Mark this dispensary DO NOT CALL?"
-                    : confirmation === "sold"
-                      ? "Report this dispensary as SOLD?"
-                      : "Report that this dispensary currently carries Presidential?"}
-                </strong>
-                <p>
-                  {confirmation === "do_not_call"
-                    ? "This removes it from normal calling activity."
-                    : "This sends the information to the owner for verification. It does not immediately change verified customer truth."}
-                </p>
-                <div>
-                  <button onClick={() => setConfirmation(null)} type="button">CANCEL</button>
-                  <button disabled={busy || !canWork} onClick={confirmHighImpactAction} type="button">
-                    {confirmation === "do_not_call"
-                      ? "CONFIRM DO NOT CALL"
-                      : confirmation === "sold"
-                        ? "SUBMIT SOLD REPORT"
-                        : "SUBMIT ALREADY CARRIES REPORT"}
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div>
-                <button
-                  disabled={busy || !canWork || door.hasPendingVerification}
-                  onClick={() => setConfirmation("already_carries_us")}
-                  type="button"
-                >
-                  ALREADY CARRIES PRESIDENTIAL
-                </button>
-                <button
-                  disabled={busy || !canWork || door.hasPendingVerification}
-                  onClick={() => setConfirmation("sold")}
-                  type="button"
-                >
-                  SOLD
-                </button>
-                <button
-                  className={styles.doNotCallAction}
-                  disabled={busy || !canWork}
-                  onClick={() => setConfirmation("do_not_call")}
-                  type="button"
-                >
-                  DO NOT CALL
-                </button>
-              </div>
-            )}
-          </div>
-
-          {undoableCall || undoableRequest ? (
-            <div className={styles.undoActionStack}>
-              <span>UNDO LATEST ACTION</span>
-              {undoableRequest ? (
-                <button disabled={undoing} onClick={() => onWithdrawRequest(undoableRequest)} type="button">
-                  {undoing ? "UNDOING…" : `UNDO ${undoableRequest.claimedStatus === "sold" ? "SOLD REPORT" : "ALREADY CARRIES REPORT"}`}
-                </button>
-              ) : null}
-              {undoableCall ? (
-                <button disabled={undoing} onClick={() => onUndo(undoableCall)} type="button">
-                  {undoing ? "UNDOING…" : undoActionLabel(undoableCall)}
-                </button>
-              ) : null}
-            </div>
-          ) : null}
+          {actionButtons()}
         </div>
       )}
       {tools}

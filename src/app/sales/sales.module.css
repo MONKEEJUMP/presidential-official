@@ -858,6 +858,12 @@
   color: #041412;
 }
 
+.salesPage .inlineComposer button.outcomeUndo {
+  border-color: #58c3b6;
+  background: #58c3b6;
+  color: #041412;
+}
+
 .highImpactActions {
   border-top: 1px solid rgb(244 227 161 / 28%);
   padding-top: 0.9rem;
