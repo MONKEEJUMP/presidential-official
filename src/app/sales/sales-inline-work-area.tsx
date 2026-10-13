@@ -49,6 +49,7 @@ type SalesInlineWorkAreaProps = Readonly<{
   onMoreHistory: () => void;
   hasMoreHistory: boolean;
   onNotesChange: (value: string) => void;
+  onNotesActionsTarget: (target: HTMLDivElement | null) => void;
   onCallbackChange: (value: string) => void;
   onOutcome: (outcome: SalesOutcome) => void;
   onSubmitVerification: (claim: SalesVerificationClaim) => void;
@@ -71,6 +72,7 @@ export function SalesInlineWorkArea({
   saving,
   undoing,
   onNotesChange,
+  onNotesActionsTarget,
   onOutcome,
   onSubmitVerification,
   onWithdrawRequest,
@@ -190,6 +192,7 @@ export function SalesInlineWorkArea({
                 value={notes}
               />
             </label>
+            <div className={styles.notesActions} ref={onNotesActionsTarget} />
           </div>
 
           <div className={styles.normalOutcomes}>

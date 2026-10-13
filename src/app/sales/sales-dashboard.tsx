@@ -90,6 +90,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   const [canWork, setCanWork] = useState(false);
   const [toolkitDirty, setToolkitDirty] = useState(false);
   const [toolkitBusy, setToolkitBusy] = useState(false);
+  const [notesActionsTarget, setNotesActionsTarget] = useState<HTMLDivElement | null>(null);
   const [hasMoreHistory, setHasMoreHistory] = useState(false);
   const [dataReviewOpen, setDataReviewOpen] = useState(false);
   const listScrollY = useRef(0);
@@ -1012,7 +1013,8 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
                 positionLabel={`Store ${snapshot.page * snapshot.pageSize + filteredDoors.findIndex((item) => item.id === activeDoor.id) + 1} of ${snapshot.totalMatching}`}
                 hasMoreHistory={hasMoreHistory}
                 onMoreHistory={() => void loadDoorHistory(activeDoor.id, activeDoor.callHistory.at(-1)?.id)}
-                tools={<SalesToolkit key={`${snapshot.user.id}:${activeDoor.id}:${workMode}`} door={activeDoor} timeZone={timeZone} userId={snapshot.user.id} isSuper={Boolean(isSuper)} mode={workMode} notes={notes} externalBusy={savingCall || undoingCall} onNoteSaved={() => { setNotes(""); setLoggedCall(null); }} onAvailability={setCanWork} onDirtyChange={setToolkitDirty} onBusyChange={setToolkitBusy} />}
+                onNotesActionsTarget={setNotesActionsTarget}
+                tools={<SalesToolkit key={`${snapshot.user.id}:${activeDoor.id}:${workMode}`} door={activeDoor} timeZone={timeZone} userId={snapshot.user.id} isSuper={Boolean(isSuper)} mode={workMode} notes={notes} notesActionsTarget={notesActionsTarget} externalBusy={savingCall || undoingCall} onNoteSaved={() => { setNotes(""); setLoggedCall(null); }} onAvailability={setCanWork} onDirtyChange={setToolkitDirty} onBusyChange={setToolkitBusy} />}
               />
             ) : null}
           </div>

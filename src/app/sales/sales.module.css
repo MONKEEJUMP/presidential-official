@@ -1941,6 +1941,30 @@
 }
 
 /* CRM workbench: readable controls, compact overview, and in-place sales tools. */
+.notesActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.salesPage .notesActions button {
+  min-height: 44px;
+  padding: 12px 24px;
+  border: 1px solid #58c3b6;
+  background: #58c3b6;
+  color: #041412;
+  font-family: var(--po-font-display);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.salesPage .notesActions button:hover:not(:disabled) {
+  background: #9ce9e0;
+}
+
 .salesPage :is(button, .websiteLink) {
   min-height: 2.75rem;
   font-size: 0.75rem;

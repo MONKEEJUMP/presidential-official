@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { formatSalesDate, type SalesDoor } from "@/lib/sales";
 import type { WorkflowDetail } from "@/lib/sales-workflow";
 import styles from "./sales.module.css";
@@ -25,6 +26,7 @@ type Props = {
   isSuper: boolean;
   mode: "log" | "history";
   notes: string;
+  notesActionsTarget: HTMLDivElement | null;
   externalBusy: boolean;
   onNoteSaved: () => void;
   onAvailability: (available: boolean) => void;
@@ -32,7 +34,7 @@ type Props = {
   onBusyChange: (busy: boolean) => void;
 };
 
-export function SalesToolkit({ door, timeZone, userId, isSuper, mode, notes, externalBusy, onNoteSaved, onAvailability, onDirtyChange, onBusyChange }: Props) {
+export function SalesToolkit({ door, timeZone, userId, isSuper, mode, notes, notesActionsTarget, externalBusy, onNoteSaved, onAvailability, onDirtyChange, onBusyChange }: Props) {
   const [detail, setDetail] = useState<WorkflowDetail | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -129,12 +131,12 @@ export function SalesToolkit({ door, timeZone, userId, isSuper, mode, notes, ext
     </div>
     {detail?.claim && !detail.claim.mine ? <p className={styles.claimNotice}>This dispensary is in use{detail.claim.ownerId ? ` by ${detail.claim.ownerName}` : ""}. You can read its history or move to the next store.</p> : canEdit ? <p className={styles.claimNotice}>Your workspace · other reps are prevented from logging over this active call.</p> : null}
     {isSuper && ((detail?.claim && !detail.claim.mine) || (detail?.callback && detail.callback.ownerId !== userId)) ? <div className={styles.toolkitActions}><label>Owner intervention reason<input value={ownerReason} maxLength={1000} onChange={(event) => setOwnerReason(event.target.value)} placeholder="Required before taking over another rep’s workspace or callback" /></label>{detail?.claim && !detail.claim.mine ? <button type="button" disabled={busy || !ownerReason.trim()} onClick={() => void act({ action: "claim", doorId: door.id, reason: ownerReason }, "Workspace taken over. Your reason was recorded.")}>Take over workspace</button> : null}</div> : null}
-    {message ? <p role="status" className={styles.inlineMessage}>{message}</p> : null}
+    {message && message !== "Notes saved." ? <p role="status" className={styles.inlineMessage}>{message}</p> : null}
     {error ? <p role="alert" className={styles.inlineError}>{error} <button type="button" onClick={() => void refresh().catch(() => setError("Please reopen this dispensary."))}>Refresh workspace</button></p> : null}
-    {mode === "log" ? <div className={styles.toolkitActions}>
-      <button type="button" disabled={!canEdit || busy || externalBusy || !notes.trim()} onClick={() => void act({ action: "save_note", doorId: door.id, text: notes }, "Note saved. No call was added to your totals.")}>Save note only</button>
-      <small>For a completed call, choose its outcome below. Save note only does not record a call.</small>
-    </div> : null}
+    {mode === "log" && notesActionsTarget ? createPortal(<>
+      {message === "Notes saved." ? <span role="status">Notes saved.</span> : null}
+      <button type="button" disabled={!canEdit || busy || externalBusy || !notes.trim()} onClick={() => void act({ action: "save_note", doorId: door.id, text: notes }, "Notes saved.")}>{busy ? "SAVING…" : "SAVE NOTES"}</button>
+    </>, notesActionsTarget) : null}
     <div className={styles.savedNotes}>
       <h3>Team notes</h3>
       {!detail ? <p>Loading notes…</p> : !detail.notes.length ? <p>No saved team notes yet. Call notes appear in call history.</p> : detail.notes.map((note) => <article className={styles.noteEntry} key={note.id}>
