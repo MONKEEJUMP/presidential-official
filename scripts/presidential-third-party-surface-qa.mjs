@@ -359,7 +359,8 @@ async function main() {
   const inlinksSurfaceModeled =
     inlinksLayoutText.includes(`src="${inlinksSurface.scriptSrc}"`) &&
     inlinksLayoutText.includes('strategy="afterInteractive"') &&
-    [enforcingCsp, runtimeCsp].every(inlinksOriginInAllowedDirectives) &&
+    inlinksOriginInAllowedDirectives(runtimeCsp) &&
+    (!enforcingCsp.trim() || inlinksOriginInAllowedDirectives(enforcingCsp)) &&
     [reportOnlyCsp, enforcingCsp, runtimeCsp].every(inlinksOriginOnlyInAllowedDirectives);
   const cspHasSafeFormAction = effectiveCsp.includes("form-action 'self'");
   const cspHasSafeObjectSrc = effectiveCsp.includes("object-src 'none'");
