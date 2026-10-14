@@ -5,6 +5,7 @@ import {
   getPlaceholderPolicy,
   type PlaceholderKind,
 } from "@/lib/design-system/placeholder-policy";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 type MediaSlotProps = {
   readonly kind?: PlaceholderKind;
@@ -80,7 +81,7 @@ export function MediaSlot({
               className={`object-cover ${backgroundPositionClass}`}
               fill
               sizes="100vw"
-              src={backgroundImagePath}
+              {...sanityImage(backgroundImagePath)}
             />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--po-color-ink)_16%,transparent),color-mix(in_srgb,var(--po-color-ink)_72%,transparent))]" />
             <div className="absolute inset-0 bg-po-brand-strong/20" />

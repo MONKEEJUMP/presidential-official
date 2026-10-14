@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { vaultProductForImage } from "@/lib/products/vault-links";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 const PREROLL_GRAPHICS = [
   {
@@ -132,7 +133,7 @@ export function OurStoryPrerollGraphicsGrid() {
                 className="object-contain"
                 fill
                 sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                src={graphic.src}
+                {...sanityImage(graphic.src)}
               />
             </Link>
           ))}

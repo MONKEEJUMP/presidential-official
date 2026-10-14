@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { useAdultVideoPlayback } from "@/lib/browser/adult-video-playback";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 const NATIONWIDE_MAP_POSTER = "/media/posters/nationwide-map.jpg";
 
@@ -25,7 +26,7 @@ export function FindUsNationwideVideo() {
           fill
           priority
           sizes="(min-width: 1024px) 62vw, 100vw"
-          src={NATIONWIDE_MAP_POSTER}
+          {...sanityImage(NATIONWIDE_MAP_POSTER)}
         />
 
         {shouldPlayVideo ? (

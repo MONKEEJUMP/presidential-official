@@ -10,6 +10,7 @@ import { InContentText } from "../primitives/in-content-text";
 import { AnswerSections } from "./answer-sections";
 import { ParentLearnGuideLink } from "./learn-guide-discovery";
 import { ABOUT_ANSWERS } from "./salvage-content";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 const platforms = [
   {
@@ -134,7 +135,7 @@ function AboutImage({
         className={contain ? "object-contain p-8 sm:p-12" : "object-contain"}
         fill
         sizes="(min-width: 1024px) 42vw, 100vw"
-        src={src}
+        {...sanityImage(src)}
       /></ProductImageLink>
     </figure>
   );

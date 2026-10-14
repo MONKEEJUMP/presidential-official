@@ -23,6 +23,7 @@ import { CtaLink } from "../primitives/cta-link";
 import { SeriesSelectorShell } from "./catalog-grid-shell";
 import { FindUsCtaShell } from "./find-us-cta-shell";
 import { RepoOwnedPageCopy } from "./repo-owned-page-copy";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 type ThemeAtmosphere = {
   readonly base: string;
@@ -176,7 +177,7 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
                 fill
                 loading="eager"
                 sizes="100vw"
-                src={heroImage.src}
+                {...sanityImage(heroImage.src)}
               />
               {heroImage.scrim === "left" ? (
                 <>

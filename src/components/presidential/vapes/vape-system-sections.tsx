@@ -18,6 +18,7 @@ import { VAPES_ADDITIONS } from '@/content/vapes-additions';
 import { TierIcon } from '../primitives/tier-icon';
 import { VapeIcon, type VapeIconName } from './vape-icon';
 import s from './showroom.module.css';
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 const CARD_ICONS = {
   BatteryFull,
@@ -141,7 +142,7 @@ export function VapePerformanceBand() {
       <p className={s.panelIntro}>{clouds.intro}</p>
       <div className={s.cloudPanelBody}>
         <FeatureList items={clouds.callouts} />
-        <Image src={clouds.image.src} alt={clouds.image.alt} width={1200} height={1500} sizes="(min-width: 1024px) 24vw, 82vw" />
+        <Image {...sanityImage(clouds.image.src)} alt={clouds.image.alt} width={1200} height={1500} sizes="(min-width: 1024px) 24vw, 82vw" />
       </div>
     </article>
   </section>;
@@ -189,7 +190,7 @@ export function VapeHardwareBand() {
       <p className={s.panelIntro}>{hardware.intro}</p>
       <div className={s.hardwarePanelBody}>
         <FeatureList items={hardware.features} />
-        <Image src={hardware.image.src} alt={hardware.image.alt} width={1200} height={1500} sizes="(min-width: 1024px) 23vw, 82vw" />
+        <Image {...sanityImage(hardware.image.src)} alt={hardware.image.alt} width={1200} height={1500} sizes="(min-width: 1024px) 23vw, 82vw" />
       </div>
     </article>
     <article className={s.bandPanel}>

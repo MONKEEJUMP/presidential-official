@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { VapeImage } from '@/lib/vapes/catalog';
 import { VapeIcon } from './vape-icon';
 import s from './showroom.module.css';
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 type Props = {
   open: boolean;
@@ -57,7 +58,7 @@ export function VapeGalleryDialog({ open, images, index, title, onIndex, onClose
           </div>
         </header>
         <div className={`${s.lightboxImage} ${zoomed ? s.zoomed : ''}`}>
-          <Image key={current.src} src={current.src} alt={current.alt} width={current.width} height={current.height} sizes={zoomed ? '1536px' : '90vw'} loading="eager" />
+          <Image key={current.src} {...sanityImage(current.src)} alt={current.alt} width={current.width} height={current.height} sizes={zoomed ? '1536px' : '90vw'} loading="eager" />
         </div>
         <footer className={s.lightboxFooter}>
           <button type="button" onClick={() => move(-1)} aria-label="Previous gallery image"><VapeIcon name="left" /><span>Previous</span></button>

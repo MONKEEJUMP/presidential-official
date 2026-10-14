@@ -5179,7 +5179,7 @@
       "id": "herbology-cannabis-co",
       "name": "Herbology Cannabis Co",
       "nationalDoors": 2,
-      "website": "https://shophcc.com/mi/jefferson-ave",
+      "website": "https://shophcc.com/mi",
       "logo": null,
       "perState": {
         "mi": {
@@ -6626,7 +6626,7 @@
       "id": "legacy-dispensary",
       "name": "Legacy Dispensary",
       "nationalDoors": 1,
-      "website": "https://legacydispensers.com",
+      "website": "",
       "logo": null,
       "perState": {
         "ny": {
@@ -6789,7 +6789,7 @@
       "id": "liberty-buds",
       "name": "Liberty Buds",
       "nationalDoors": 1,
-      "website": "https://weedsrusnyc.com",
+      "website": "",
       "logo": null,
       "perState": {
         "ny": {
@@ -7681,7 +7681,7 @@
       "id": "mr-nice-guy",
       "name": "Mr Nice Guy",
       "nationalDoors": 6,
-      "website": "https://www.mrniceguyretail.com/locations/marketplace-by-mr-nice-guy/?utm_source=gmb&utm_medium=organic",
+      "website": "https://www.mrniceguyretail.com/locations",
       "logo": null,
       "perState": {
         "ca": {
@@ -12721,7 +12721,7 @@
       "id": "union-cannabis-club",
       "name": "UNION CANNABIS CLUB",
       "nationalDoors": 1,
-      "website": "https://missioncannabisclub.com/union-cannabis-club",
+      "website": "https://missioncannabisclub.com",
       "logo": null,
       "perState": {
         "ca": {
@@ -13485,7 +13485,7 @@
       "id": "zaza-factory-8-mile",
       "name": "Zaza factory 8 mile",
       "nationalDoors": 1,
-      "website": "https://shop.gagecannabis.com/gage313detroit?utm_source=google&utm_medium=gmb&utm_content=gage+313",
+      "website": "",
       "logo": "/partners/logos/zaza-factory-8-mile.webp",
       "perState": {
         "mi": {

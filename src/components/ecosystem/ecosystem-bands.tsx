@@ -15,6 +15,7 @@ import {
 } from "@phosphor-icons/react/ssr";
 
 import styles from "./ecosystem-bands.module.css";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 type Tier = "silver" | "gold" | "rose-gold";
 type ExpressionKind = "moon-rocks" | "pre-rolls" | "blunts" | "vapes";
@@ -321,7 +322,7 @@ function ExpressionCard({
           alt={expression.image.alt}
           fill
           sizes="(min-width: 1180px) 22vw, (min-width: 720px) 45vw, 92vw"
-          src={expression.image.src}
+          {...sanityImage(expression.image.src)}
         /></ProductImageLink>
       </div>
       <h3 id={headingId}>{expression.heading}</h3>

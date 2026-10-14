@@ -32,6 +32,7 @@ import { FindUsCtaShell } from "./find-us-cta-shell";
 import { AnswerSections } from "./answer-sections";
 import { ParentLearnGuideLink } from "./learn-guide-discovery";
 import { MOON_ROCKS_ANSWERS } from "./salvage-content";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 type MoonRocksBreadcrumb = {
   readonly name: string;
@@ -257,7 +258,7 @@ export async function MoonRocksPlatformShell({
                                   className={shared.moonRocksCardArt}
                                   fill
                                   sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw"
-                                  src={art.src}
+                                  {...sanityImage(art.src)}
                                 />
                               </Link>
                               </div>
@@ -305,7 +306,7 @@ export async function MoonRocksPlatformShell({
                               className={shared.moonRocksCardArt}
                               fill
                               sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw"
-                              src={art.src}
+                              {...sanityImage(art.src)}
                             />
                           </Link>
                           <div className={shared.artCardCopy}>

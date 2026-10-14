@@ -34,6 +34,7 @@ import {
   buildProductRouteJsonLd,
   JsonLd,
 } from "@/lib/seo/schema";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 const CATALOG_ROUTE = "/moon-rocks";
 
@@ -190,7 +191,7 @@ export default async function CatalogProductDetailPage({
                     fill
                     loading="eager"
                     sizes={containedImageSizes(heroImage, "hero")}
-                    src={heroImage.assetUrl}
+                    {...sanityImage(heroImage.assetUrl)}
                   /></ProductImageLink>
                 ) : (
                   <div className="flex h-full items-center justify-center border border-dashed border-po-line text-sm font-semibold uppercase text-po-body">
@@ -288,7 +289,7 @@ export default async function CatalogProductDetailPage({
                         fill
                         loading="lazy"
                         sizes={containedImageSizes(image, "gallery")}
-                        src={image.assetUrl}
+                        {...sanityImage(image.assetUrl)}
                       /></ProductImageLink>
                     </div>
                   ))}

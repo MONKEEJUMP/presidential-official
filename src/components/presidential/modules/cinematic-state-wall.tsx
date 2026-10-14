@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import type { LocatorStateCode } from "@/lib/locator/types";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 export type CinematicStateWallState = {
   readonly code: LocatorStateCode;
@@ -39,7 +40,7 @@ export function CinematicStateWall({ states }: CinematicStateWallProps) {
               fill
               priority={index === 0}
               sizes="100vw"
-              src={state.imageSrc}
+              {...sanityImage(state.imageSrc)}
             />
 
             <div

@@ -17,6 +17,7 @@ import type { SeoRouteRecord } from "@/lib/seo/route-types";
 import { PageFrame } from "../layout/page-frame";
 import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 type TermPagePath =
   | "/presidential-thc"
@@ -188,7 +189,7 @@ function ContentImage({ image, priority = false }: { image: TermImage; priority?
         className="h-auto w-full object-cover"
         height={image.height}
         sizes="(min-width: 1024px) 42vw, 100vw"
-        src={image.src}
+        {...sanityImage(image.src)}
         width={image.width}
         {...(priority ? { priority: true } : { loading: "lazy" as const })}
       /></ProductImageLink>

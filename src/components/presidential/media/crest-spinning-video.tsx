@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { useAdultVideoPlayback } from "@/lib/browser/adult-video-playback";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 const CREST_SPINNING_POSTER = "/media/posters/crest-spinning.jpg";
 
@@ -27,7 +28,7 @@ export function CrestSpinningVideo() {
         loading="eager"
         onLoad={() => setPosterLoaded(true)}
         sizes="(min-width: 1536px) 1392px, 100vw"
-        src={CREST_SPINNING_POSTER}
+        {...sanityImage(CREST_SPINNING_POSTER)}
       />
 
       {shouldPlayVideo ? (
