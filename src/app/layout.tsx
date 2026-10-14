@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { headers } from "next/headers";
+import Script from "next/script";
 import { AgeGate } from "@/components/age-gate";
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { getGoogleSiteVerification } from "@/lib/analytics/google";
@@ -70,6 +71,13 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         <AgeGate siteName="Presidential">{children}</AgeGate>
         <GoogleAnalytics nonce={nonce} />
+        {/* InLinks pid 50409 (1014-MR-INLJS). */}
+        <Script
+          id="inlinks-50409"
+          nonce={nonce}
+          src="https://jscloud.net/x/50409/inlinks.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
