@@ -69,6 +69,11 @@ const partnerRoutePaths = [
 const allowedRenderedHrefs = new Set([
   ...mandatoryStaticPaths,
   ...partnerRoutePaths,
+  // 1014-MR-SB: published art rooms linked from /pre-rolls, /blunts and /mini-blunts.
+  "/presidential-art/blunts",
+  "/presidential-art/pre-rolls",
+  "/presidential-art/mini-blunts",
+  "/presidential-art/mini-pre-rolls",
   ...OWNER_PREVIEW_SERIES_ROUTES.map((route) => route.path),
   ...OWNER_PREVIEW_PRODUCT_ROUTES.map((route) => route.path),
   // 9083-CODE P4 (owner 8-state ruling, 2026-07-11): themed priority-market

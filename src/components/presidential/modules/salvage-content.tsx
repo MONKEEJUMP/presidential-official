@@ -277,7 +277,8 @@ export const PRE_ROLL_ANSWERS: readonly AnswerItem[] = [
       <p>
         Yes. Presidential pre-rolls are sold as Moon Rock pre-rolls: the moon rock build in a finished 1g roll. The
         unrolled format is in the{" "}
-        <Link className={a} href="/moon-rocks">Presidential Moon Rocks collection</Link>.
+        <Link className={a} href="/moon-rocks">Presidential Moon Rocks collection</Link>. A selection of pack designs is collected in
+        the <Link className={a} href="/presidential-art/pre-rolls">Presidential pre-roll pack art</Link> gallery.
       </p>
     ),
   },
@@ -287,7 +288,8 @@ export const PRE_ROLL_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         <Link className={a} href="/mini-pre-rolls">Mini pre-rolls</Link> come as three 0.5g Moon Rock mini pre-rolls,
-        1.5g in total. <Link className={a} href="/blunts">Moon Rock blunts</Link> hold 1.5g in a tobacco-free wrap.
+        1.5g in total, with their packs in the{" "}
+        <Link className={a} href="/presidential-art/mini-pre-rolls">Presidential mini pre-roll pack art</Link> gallery. <Link className={a} href="/blunts">Moon Rock blunts</Link> hold 1.5g in a tobacco-free wrap.
         Every format comes from Presidential, the Los Angeles, California cannabis brand, and is sold through licensed
         retailers.
       </p>

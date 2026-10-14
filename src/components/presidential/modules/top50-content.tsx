@@ -40,7 +40,8 @@ export const BLUNT_ANSWERS: readonly AnswerItem[] = [
         infused over it, and a dry finish. Each moonrock blunt pack prints its build, for example FLOWER · DISTILLATE · KIEF
         on Watermelon, FLOWER · LIVE RESIN · DIAMONDS on Blue Dream, and FLOWER · LIVE ROSIN · DIAMONDS on Wedding Cake. The
         unrolled format is in the{" "}
-        <Link className={a} href="/moon-rocks">Presidential Moon Rocks collection</Link>.
+        <Link className={a} href="/moon-rocks">Presidential Moon Rocks collection</Link>, and a selection of pack designs is in the{" "}
+        <Link className={a} href="/presidential-art/blunts">Presidential blunt pack art</Link> gallery.
       </p>
     ),
   },
@@ -112,7 +113,8 @@ export const MINI_BLUNT_ANSWERS: readonly AnswerItem[] = [
         A Presidential Mini Blunts pack holds three 0.7g Moon Rock mini blunts, 2.1g in total.{" "}
         <Link className={a} href="/blunts">Full-size Moon Rock blunts</Link> hold 1.5g in a single roll. Each mini blunt
         is flower, live resin, and diamonds in a tobacco-free wrap: a smaller version of the same object, not a cheaper
-        one.
+        one. The packs are in the{" "}
+        <Link className={a} href="/presidential-art/mini-blunts">Presidential mini blunt pack art</Link> gallery.
       </p>
     ),
   },
