@@ -115,7 +115,8 @@ export const PRODUCT_METADATA_BY_SLUG: Readonly<
   "sfv-og": {
     seoTitle: "SFV OG Moon Rocks | Presidential Gold",
     metaDescription:
-      "Explore SFV OG in the Presidential Gold Strain Series. Review product details and find licensed retailers near you. Availability varies by retailer.",
+      // 1014-MR-CNI: unique meta from repo product facts (descriptions + Gold = live resin).
+      "SFV OG Moon Rocks in the Presidential Gold Strain Series: lemon, pine, and earthy diesel from the OG family, built on live resin. Find licensed retailers.",
   },
   skywalker: {
     seoTitle: "Skywalker Moon Rocks | Presidential Gold",

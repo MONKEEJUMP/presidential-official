@@ -57,6 +57,9 @@ const FLAVOR_PAGE_BY_SKU_PATH: Readonly<Record<string, { readonly href: string; 
   "/pre-rolls/gorilla-goo": { href: "/moon-rocks/gorilla-goo", label: "Gorilla Goo Moon Rocks" },
   "/mini-blunts/gorilla-goo": { href: "/moon-rocks/gorilla-goo", label: "Gorilla Goo Moon Rocks" },
   "/mini-pre-rolls/gorilla-goo": { href: "/moon-rocks/gorilla-goo", label: "Gorilla Goo Moon Rocks" },
+  // 1014-MR-CNI: /moon-rocks/sfv-og is crawled but not indexed; link it from its same-strain format SKUs.
+  "/blunts/sfv-og": { href: "/moon-rocks/sfv-og", label: "SFV OG Moon Rocks" },
+  "/pre-rolls/sfv-og": { href: "/moon-rocks/sfv-og", label: "SFV OG Moon Rocks" },
 };
 
 // Sitebulb oct06d #2: the Product specs block for the Vault format SKU pages
