@@ -44,7 +44,8 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
   if (/pre-?roll|blunt/i.test(name)) return null;
   const materials = madeWith(name, series);
   const marking = packMarking(name);
-  const watermelonBlunt = slug === "watermelon" ? offersFor(name).find((offer) => offer.format === "Blunt") : undefined;
+  const watermelonOffers = slug === "watermelon" ? offersFor(name) : [];
+  const watermelonBlunt = watermelonOffers.find((offer) => offer.format === "Blunt");
   return (
     <div className="mt-8 border-t border-po-line pt-5">
       {slug === "watermelon" && series === "Silver Flavor Series" ? (
@@ -57,13 +58,28 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             <Link className={linkClass} href="/learn/flavor-science">Flavor Science</Link> guide, and{" "}
             <Link className={linkClass} href="/learn/what-are-moon-rocks">What are moon rocks</Link> for the format itself.
           </p>
-          {watermelonBlunt ? (
+          {/* MR-LOW3: handling (source: /learn/what-are-moon-rocks) and formats (this page's own Formats data). */}
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">How to Handle Watermelon Moon Rocks</h2>
+          <h3 className="mt-3 text-base font-semibold text-po-ink">How should Watermelon Moon Rocks be handled?</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Don&apos;t grind them: the concentrate layer gums up a grinder and strips the kief. Layer them in when rolling or
+            packing a bowl instead.
+          </p>
+          {watermelonOffers.length > 0 ? (
             <>
-              <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Does Watermelon come already rolled?</h2>
-              <p className="mt-3 text-sm leading-6 text-po-body">
-                Yes. Watermelon cannabis flower also comes rolled as the{" "}
-                <Link className={linkClass} href={watermelonBlunt.href}>Watermelon Blunt</Link>
-                {watermelonBlunt.weight ? `, ${watermelonBlunt.weight} in a tobacco-free wrap.` : ", in a tobacco-free wrap."}
+              <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Watermelon in Every Format</h2>
+              <h3 className="mt-3 text-base font-semibold text-po-ink">What formats does Watermelon come in?</h3>
+              <p className="mt-2 text-sm leading-6 text-po-body">
+                {`Watermelon comes as loose Moon Rocks and as a ${listMaterials(watermelonOffers.map((offer) => offer.format))}.`}
+                {watermelonBlunt ? (
+                  <>
+                    {" Watermelon cannabis flower also comes rolled as the "}
+                    <Link className={linkClass} href={watermelonBlunt.href}>Watermelon blunt</Link>
+                    {watermelonBlunt.weight ? `, ${watermelonBlunt.weight}` : ""}
+                    {watermelonBlunt.build ? ` of ${listMaterials(watermelonBlunt.build.split("·").map((part) => part.trim()).filter(Boolean))}` : ""}
+                    {" in a tobacco-free wrap."}
+                  </>
+                ) : null}
               </p>
             </>
           ) : null}
