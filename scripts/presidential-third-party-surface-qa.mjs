@@ -73,9 +73,38 @@ const publicAnalyticsEnvPattern =
 const forbiddenCspSourcePattern =
   /(?:https?:\/\/|wss?:\/\/|\*\.|(?:^|[\s;])\*(?=$|[\s;])|data:|blob:|'unsafe-eval')/i;
 // InLinks pid 50409 (1014-MR-INLJS, owner-requested): its one CSP origin is excluded before the check.
-const allowedThirdPartyCspSources = ["https://jscloud.net"];
+const inlinksSurface = {
+  ticket: "1014-MR-INLJS",
+  pid: 50409,
+  origin: "https://jscloud.net",
+  scriptSrc: "https://jscloud.net/x/50409/inlinks.js",
+  cspDirectives: ["script-src", "connect-src"],
+  sourceFile: "src/app/layout.tsx",
+};
+// Drop only exact InLinks origin tokens from the directives it is allowed in; any other
+// token (including look-alikes such as https://jscloud.net.example) is kept and still checked.
 const withoutAllowedCspSources = (csp) =>
-  allowedThirdPartyCspSources.reduce((value, source) => value.replaceAll(source, ""), csp);
+  csp
+    .split(";")
+    .map((directive) => {
+      const tokens = directive.trim().split(/\s+/).filter(Boolean);
+      if (!tokens.length || !inlinksSurface.cspDirectives.includes(tokens[0].toLowerCase())) return directive;
+      return tokens.filter((token, index) => index === 0 || token !== inlinksSurface.origin).join(" ");
+    })
+    .join(";");
+const inlinksOriginOnlyInAllowedDirectives = (csp) =>
+  csp.split(";").every((directive) => {
+    const tokens = directive.trim().split(/\s+/).filter(Boolean);
+    if (!tokens.length || inlinksSurface.cspDirectives.includes(tokens[0].toLowerCase())) return true;
+    return !tokens.includes(inlinksSurface.origin);
+  });
+const inlinksOriginInAllowedDirectives = (csp) =>
+  inlinksSurface.cspDirectives.every((name) =>
+    csp.split(";").some((directive) => {
+      const tokens = directive.trim().split(/\s+/).filter(Boolean);
+      return tokens[0]?.toLowerCase() === name && tokens.includes(inlinksSurface.origin);
+    }),
+  );
 const cspReportingEndpointPattern = /\b(?:report-uri|report-to|Reporting-Endpoints|Report-To)\b/i;
 const publicUnlockPattern =
   /analytics approved|tracking approved|pixel approved|third-party approved|external script approved|connect source approved|tag manager approved|public seo unlocked|route publication approved|sitemap inclusion approved|index,\s*follow approved|deployment approved/i;
@@ -326,6 +355,12 @@ async function main() {
     !forbiddenCspSourcePattern.test(withoutAllowedCspSources(reportOnlyCsp)) &&
     !forbiddenCspSourcePattern.test(withoutAllowedCspSources(enforcingCsp)) &&
     !forbiddenCspSourcePattern.test(withoutAllowedCspSources(runtimeCsp));
+  const inlinksLayoutText = readIfExists(path.join(webRoot, inlinksSurface.sourceFile));
+  const inlinksSurfaceModeled =
+    inlinksLayoutText.includes(`src="${inlinksSurface.scriptSrc}"`) &&
+    inlinksLayoutText.includes('strategy="afterInteractive"') &&
+    [enforcingCsp, runtimeCsp].every(inlinksOriginInAllowedDirectives) &&
+    [reportOnlyCsp, enforcingCsp, runtimeCsp].every(inlinksOriginOnlyInAllowedDirectives);
   const cspHasSafeFormAction = effectiveCsp.includes("form-action 'self'");
   const cspHasSafeObjectSrc = effectiveCsp.includes("object-src 'none'");
   const cspHasSafeFrameAncestors = effectiveCsp.includes("frame-ancestors 'none'");
@@ -356,6 +391,7 @@ async function main() {
     addCheck(rows, "csp.formActionSelf", cspHasSafeFormAction, effectiveCsp || "missing CSP"),
     addCheck(rows, "csp.objectSrcNone", cspHasSafeObjectSrc, effectiveCsp || "missing CSP"),
     addCheck(rows, "csp.frameAncestorsNone", cspHasSafeFrameAncestors, effectiveCsp || "missing CSP"),
+    addCheck(rows, "inlinks.surfaceModeled", inlinksSurfaceModeled, inlinksSurfaceModeled ? `InLinks pid ${inlinksSurface.pid} (${inlinksSurface.ticket}): next/script ${inlinksSurface.scriptSrc} afterInteractive in ${inlinksSurface.sourceFile}; ${inlinksSurface.origin} only in script-src and connect-src` : "InLinks script or CSP origin is missing or appears outside script-src/connect-src"),
     addCheck(rows, "noPublicUnlockSignals", !publicUnlockPattern.test(combinedPublicText), "Third-party readiness does not approve tracking, analytics, scripts, connects, route publication, deployment, sitemap inclusion, indexability, or public SEO"),
   ];
 
@@ -415,12 +451,13 @@ async function main() {
     gatedAnalyticsSourceReady: approvedGatedAnalyticsSource,
     analyticsApproved: false,
     trackingApproved: false,
-    thirdPartyScriptsApproved: false,
-    thirdPartyConnectSourcesApproved: false,
+    thirdPartyScriptsApproved: inlinksSurfaceModeled,
+    thirdPartyConnectSourcesApproved: inlinksSurfaceModeled,
+    allowedThirdPartySurface: [inlinksSurface],
     iframeEmbedsApproved: false,
     externalFormActionsApproved: false,
     cspReportingEndpointApproved: false,
-    cspScriptConnectAllowlistApproved: false,
+    cspScriptConnectAllowlistApproved: inlinksSurfaceModeled,
     consentModeApproved: false,
     publicSeoUnlocked: false,
     routePublicationApproved: false,
