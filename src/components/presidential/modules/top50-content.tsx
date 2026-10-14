@@ -114,7 +114,7 @@ export const MINI_BLUNT_ANSWERS: readonly AnswerItem[] = [
         <Link className={a} href="/blunts">Full-size Moon Rock blunts</Link> hold 1.5g in a single roll. Each mini blunt
         is flower, live resin, and diamonds in a tobacco-free wrap: a smaller version of the same object, not a cheaper
         one. The packs are in the{" "}
-        <Link className={a} href="/presidential-art/mini-blunts">mini blunt pack art</Link> gallery.
+        <Link className={a} href="/presidential-art/mini-blunts">Presidential mini blunt pack art</Link> gallery.
       </p>
     ),
   },
