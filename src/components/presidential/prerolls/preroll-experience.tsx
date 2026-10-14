@@ -148,7 +148,7 @@ export function PreRollExperience({
         </div>
         <div className={styles.storyCopy}>
           <p>
-            Presidential pre-rolls, sold as Moon Rock pre-rolls, combine cannabis flower with concentrate in a finished 1g roll. From berry and tropical selections to fuel, pine, and savory strains, the lineup gives you a flavor to make your own. For a smaller format, <Link href="/mini-pre-rolls">Presidential Mini Pre-Rolls</Link> come as three 0.5g Moon Rock mini pre-rolls, 1.5g in total.
+            Presidential pre-rolls, sold as infused Moon Rock pre-rolls, combine cannabis flower with concentrate in a finished 1g roll. From berry and tropical selections to fuel, pine, and savory strains, the lineup gives you a flavor to make your own. For a smaller format, <Link href="/mini-pre-rolls">Presidential Mini Pre-Rolls</Link> come as three 0.5g Moon Rock mini pre-rolls, 1.5g in total.
           </p>
           <p>
             Explore distillate recipes coated in kief, live-resin-and-diamond infusions, and the live-rosin selections in Rose Gold. Compare ingredients and flavor profiles, then ask your licensed retailer for the pre-roll you want.

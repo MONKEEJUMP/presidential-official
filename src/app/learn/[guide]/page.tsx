@@ -21,6 +21,7 @@ import { APPROVED_PUBLIC_LEARN_GUIDE_ROUTES } from "@/lib/seo/approved-public-ro
 import { buildRouteMetadata } from "@/lib/seo/metadata";
 import { buildRouteShellJsonLd, JsonLd } from "@/lib/seo/schema";
 
+import { softenLearnGuideClaims } from "@/lib/cms/learn-guide-claims";
 import { LearnGuideCmsBody } from "./learn-guide-cms-body";
 
 type LearnGuidePageProps = {
@@ -125,7 +126,7 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
         </Scene>
 
         <LearnGuideCmsBody
-          modules={guide.modules}
+          modules={softenLearnGuideClaims(slug, guide.modules)}
           sourcePath={`/learn/${slug}`}
         />
         {answers ? (

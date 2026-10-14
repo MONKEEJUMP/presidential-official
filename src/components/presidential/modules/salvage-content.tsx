@@ -110,6 +110,17 @@ export const MOON_ROCKS_ANSWERS: readonly AnswerItem[] = [
       </p>
     ),
   },
+  // MR-LOW3 (source: /learn/what-are-moon-rocks).
+  {
+    id: "moon-rocks-q-grind",
+    question: "Do Presidential Moon Rocks need to be ground?",
+    answer: (
+      <p>
+        No. Never use a grinder on a Presidential moon rock; layer it in instead. The ready-to-smoke infused pre-rolls and
+        tobacco-free blunts need no preparation at all.
+      </p>
+    ),
+  },
 ];
 
 export const ABOUT_ANSWERS: readonly AnswerItem[] = [
@@ -279,6 +290,17 @@ export const PRE_ROLL_ANSWERS: readonly AnswerItem[] = [
         1.5g in total. <Link className={a} href="/blunts">Moon Rock blunts</Link> hold 1.5g in a tobacco-free wrap.
         Every format comes from Presidential, the Los Angeles, California cannabis brand, and is sold through licensed
         retailers.
+      </p>
+    ),
+  },
+  // MR-LOW3 (source: /learn/what-are-moon-rocks).
+  {
+    id: "pre-rolls-q-prep",
+    question: "Do Presidential pre-rolls need any prep?",
+    answer: (
+      <p>
+        No. They are the ready-to-smoke version of the same layered Moon Rocks construction, already rolled in a finished
+        1g roll.
       </p>
     ),
   },
