@@ -15,6 +15,13 @@ const SERIES_EXTRACT: Readonly<Record<string, string>> = {
 };
 const vaultDescriptions = descriptions as Readonly<Record<string, string>>;
 const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
+// 1014-MR-2LINK: one same-series sibling link for the weakest (2-inlink) loose Moon Rock pages.
+const SERIES_SIBLING: Readonly<Record<string, { readonly series: string; readonly href: string; readonly label: string }>> = {
+  "presidential-line-guava-haze": { series: "Presidential Line", href: "/moon-rocks/presidential-line-iced-lemon", label: "Iced Lemon Moon Rocks" },
+  "presidential-line-iced-lemon": { series: "Presidential Line", href: "/moon-rocks/presidential-line-guava-haze", label: "Guava Haze Moon Rocks" },
+  "xj-13": { series: "Gold Strain Series", href: "/moon-rocks/rainbow-belts", label: "Rainbow Belts Moon Rocks" },
+  xxx: { series: "Gold Strain Series", href: "/moon-rocks/rainbow-belts", label: "Rainbow Belts Moon Rocks" },
+};
 const linkClass = "font-semibold text-po-ink underline decoration-po-brand underline-offset-4";
 
 function packMarking(name: string): string | undefined {
@@ -110,6 +117,12 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h2 className={`${materials || slug === "watermelon" ? "mt-6 " : ""}font-display text-2xl uppercase leading-tight text-po-ink`}>{`Is ${name} indica, sativa, or hybrid?`}</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">{`Presidential packs mark ${name} as ${marking}.`}</p>
         </>
+      ) : null}
+      {SERIES_SIBLING[slug] && SERIES_SIBLING[slug].series === series ? (
+        <p className="mt-6 text-sm leading-6 text-po-body">
+          {`${name} is part of the ${series}. Another release in the same series is `}
+          <Link className={linkClass} href={SERIES_SIBLING[slug].href}>{SERIES_SIBLING[slug].label}</Link>.
+        </p>
       ) : null}
     </div>
   );
