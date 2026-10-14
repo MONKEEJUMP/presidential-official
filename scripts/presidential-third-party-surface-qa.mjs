@@ -72,6 +72,10 @@ const publicAnalyticsEnvPattern =
   /\bNEXT_PUBLIC_[A-Z0-9_]*(?:GA|GTM|GOOGLE_ANALYTICS|TAG_MANAGER|PIXEL|TRACK|ANALYTICS|HOTJAR|POSTHOG|SEGMENT|MIXPANEL|AMPLITUDE|SENTRY|CLARITY)[A-Z0-9_]*\b/i;
 const forbiddenCspSourcePattern =
   /(?:https?:\/\/|wss?:\/\/|\*\.|(?:^|[\s;])\*(?=$|[\s;])|data:|blob:|'unsafe-eval')/i;
+// InLinks pid 50409 (1014-MR-INLJS, owner-requested): its one CSP origin is excluded before the check.
+const allowedThirdPartyCspSources = ["https://jscloud.net"];
+const withoutAllowedCspSources = (csp) =>
+  allowedThirdPartyCspSources.reduce((value, source) => value.replaceAll(source, ""), csp);
 const cspReportingEndpointPattern = /\b(?:report-uri|report-to|Reporting-Endpoints|Report-To)\b/i;
 const publicUnlockPattern =
   /analytics approved|tracking approved|pixel approved|third-party approved|external script approved|connect source approved|tag manager approved|public seo unlocked|route publication approved|sitemap inclusion approved|index,\s*follow approved|deployment approved/i;
@@ -319,9 +323,9 @@ async function main() {
     !runtimeCsp.includes("google-analytics.com");
 
   const cspHasNoThirdPartySource =
-    !forbiddenCspSourcePattern.test(reportOnlyCsp) &&
-    !forbiddenCspSourcePattern.test(enforcingCsp) &&
-    !forbiddenCspSourcePattern.test(runtimeCsp);
+    !forbiddenCspSourcePattern.test(withoutAllowedCspSources(reportOnlyCsp)) &&
+    !forbiddenCspSourcePattern.test(withoutAllowedCspSources(enforcingCsp)) &&
+    !forbiddenCspSourcePattern.test(withoutAllowedCspSources(runtimeCsp));
   const cspHasSafeFormAction = effectiveCsp.includes("form-action 'self'");
   const cspHasSafeObjectSrc = effectiveCsp.includes("object-src 'none'");
   const cspHasSafeFrameAncestors = effectiveCsp.includes("frame-ancestors 'none'");
