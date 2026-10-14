@@ -131,12 +131,9 @@ export function buildCatalogProductSeoRoute(
     title: metadata?.seoTitle ?? `${name} | Presidential Moon Rocks`,
     description: metadata?.metaDescription ?? generatedDescription,
     h1: PRODUCT_H1_OVERRIDE_BY_SLUG[slug] ?? withMoonRocksFormat(name),
-    // GSC 1012: no approved prices or reviews exist, so Product (which needs offers/review/rating)
-    // is dropped; the page keeps its approved WebPage + BreadcrumbList. presidential-blunts is on HOLD.
-    schema:
-      slug === "presidential-blunts"
-        ? template.schema
-        : template.schema.filter((type) => type !== "Product"),
+    // GSC 1012/1014-PS2: no approved prices or reviews exist, so Product (which needs offers/review/rating)
+    // is dropped on every product route; WebPage + BreadcrumbList stay.
+    schema: template.schema.filter((type) => type !== "Product"),
     keywords: [
       `${name.toLowerCase()} presidential`,
       `${name.toLowerCase()} moon rocks`,
