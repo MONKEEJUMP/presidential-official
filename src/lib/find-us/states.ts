@@ -15,6 +15,7 @@ export type PresidentialStateTheme =
   | "empire-skyline"
   | "evergreen";
 
+// XLINK-1014: state-site mentions render as plain text; no cross-domain hrefs.
 export type PresidentialStateSiteLink = {
   readonly before: string;
   readonly anchor: string;
@@ -47,7 +48,6 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
       before: "",
       anchor: "Presidential THC Arizona",
       after: " covers the state on its own site.",
-      href: "https://presidentialthcarizona.com/",
     },
   },
   {
@@ -63,7 +63,6 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
       before: "The full California retail network has its own home at ",
       anchor: "Presidential THC California",
       after: ".",
-      href: "https://presidentialthccalifornia.com/",
     },
   },
   {
@@ -79,7 +78,6 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
       before: "Michigan's retail network has its own home at ",
       anchor: "Presidential THC Michigan",
       after: ".",
-      href: "https://presidentialthcmichigan.com/",
     },
   },
   {
@@ -95,7 +93,6 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
       before: "",
       anchor: "Presidential in Nevada",
       after: " runs its own site for the state.",
-      href: "https://presidentialthcnevada.com/",
     },
   },
   {
@@ -111,7 +108,6 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
       before: "New York has its own Presidential site at ",
       anchor: "Presidential THC New York",
       after: ".",
-      href: "https://presidentialthcnewyork.com/",
     },
   },
   {
@@ -143,7 +139,6 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
       before: "",
       anchor: "Presidential THC Washington",
       after: " is live ahead of the state's market opening.",
-      href: "https://presidentialthcwashington.com/",
     },
   },
 ] as const;
