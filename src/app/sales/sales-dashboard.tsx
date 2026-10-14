@@ -636,6 +636,28 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     }
   }
 
+  async function clearContactOutcome(outcome: SalesOutcome, callId: number) {
+    if (!activeDoor || undoingCall || savingCall || toolkitBusy) return;
+    const doorId = activeDoor.id;
+    setUndoingCall(true);
+    setPanelError("");
+    setUndoMessage("");
+    try {
+      const payload = await postAction({ action: "clear_contact_outcome", doorId, outcome, callId });
+      setSnapshot((current) => current ? {
+        ...current,
+        doors: current.doors.map((door) => door.id === doorId ? {
+          ...door, contactProgress: payload.contactProgress ?? door.contactProgress,
+        } : door),
+      } : current);
+    } catch (error) {
+      setPanelError(error instanceof Error ? error.message : "The shared status could not be cleared.");
+      await loadDoorHistory(doorId);
+    } finally {
+      setUndoingCall(false);
+    }
+  }
+
   async function undoCall(call: SalesCall) {
     if (!activeDoor || !snapshot || undoingCall) return;
     setUndoingCall(true);
@@ -1027,6 +1049,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
                 onOutcome={(outcome) => void logCall(outcome)}
                 onSubmitVerification={(claim) => void submitVerification(claim)}
                 onUndo={(call) => void undoCall(call)}
+                onClearOutcome={(outcome, callId) => void clearContactOutcome(outcome, callId)}
                 onWithdrawRequest={(request) => void withdrawVerification(request)}
                 saving={savingCall}
                 undoing={undoingCall}

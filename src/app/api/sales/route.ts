@@ -826,6 +826,21 @@ export async function POST(request: Request) {
       return json({ success: true, doorId, status, nextCallbackAt });
     }
 
+    if (input.action === "clear_contact_outcome") {
+      const doorId = Number(input.doorId);
+      const callId = Number(input.callId);
+      const outcomes = ["no_answer", "left_message", "talked_to_buyer", "interested", "not_interested"];
+      if (!Number.isSafeInteger(doorId) || doorId <= 0 || !Number.isSafeInteger(callId) || callId <= 0
+        || typeof input.outcome !== "string" || !outcomes.includes(input.outcome)) {
+        return json({ error: "Choose a valid active call outcome." }, 400);
+      }
+      const { data, error } = await admin.rpc("clear_sales_contact_outcome", {
+        p_actor_id: user.id, p_target_id: doorId, p_outcome: input.outcome, p_call_id: callId,
+      });
+      if (error) return json({ error: "The status changed or cannot be cleared. Reopen this store and try again." }, 409);
+      return json({ success: true, doorId, contactProgress: data });
+    }
+
     if (input.action === "undo_call") {
       const callId = Number(input.callId);
       if (!Number.isSafeInteger(callId) || callId <= 0) return json({ error: "A valid call is required." }, 400);

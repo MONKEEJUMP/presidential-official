@@ -61,6 +61,7 @@ type SalesInlineWorkAreaProps = Readonly<{
   onSubmitVerification: (claim: SalesVerificationClaim) => void;
   onWithdrawRequest: (request: SalesVerificationRequest) => void;
   onUndo: (call: SalesCall) => void;
+  onClearOutcome: (outcome: SalesOutcome, callId: number) => void;
   onClose: () => void;
   onDiscard: () => void;
   onKeepWorking: () => void;
@@ -82,6 +83,7 @@ export function SalesInlineWorkArea({
   onSubmitVerification,
   onWithdrawRequest,
   onUndo,
+  onClearOutcome,
   onClose,
   onDiscard,
   onKeepWorking,
@@ -104,7 +106,7 @@ export function SalesInlineWorkArea({
   if (door.doNotCallLocked) progressLabels.push("DO NOT CALL");
 
   function isActiveOutcome(outcome: SalesOutcome) {
-    if (!progress) return true;
+    if (!progress) return false;
     if (outcome === "no_answer") return progress.noAnswer;
     if (outcome === "left_message") return progress.leftMessage;
     if (outcome === "talked_to_buyer") return progress.spokeToBuyer;
@@ -125,15 +127,16 @@ export function SalesInlineWorkArea({
         <span>CALL OUTCOME — CLICK AGAIN TO UNDO</span>
         <div>
           {NORMAL_OUTCOMES.map((outcome) => {
-            const saved = undoableCall?.outcome === outcome && isActiveOutcome(outcome) ? undoableCall : null;
+            const active = isActiveOutcome(outcome);
+            const sourceId = progress?.activeCallIds?.[outcome];
             return <button
-              className={saved ? styles.outcomeUndo : undefined}
-              aria-pressed={Boolean(saved)}
-              disabled={busy || (!saved && !canRecord)}
+              className={active ? styles.outcomeUndo : undefined}
+              aria-pressed={active}
+              disabled={busy || (active ? !sourceId : !canRecord)}
               key={outcome}
-              onClick={() => saved ? onUndo(saved) : onOutcome(outcome)}
+              onClick={() => active ? sourceId && onClearOutcome(outcome, sourceId) : onOutcome(outcome)}
               type="button"
-            >{saved ? undoActionLabel(saved) : salesOutcome(outcome).label}</button>;
+            >{active ? `UNDO ${salesOutcome(outcome).label.toUpperCase()}` : salesOutcome(outcome).label}</button>;
           })}
         </div>
       </div>

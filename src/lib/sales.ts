@@ -83,6 +83,7 @@ export type SalesContactProgress = Readonly<{
   leftMessage: boolean;
   spokeToBuyer: boolean;
   disposition: "interested" | "not_interested" | null;
+  activeCallIds?: Partial<Record<SalesOutcome, number>>;
 }>;
 
 export type SalesDoor = Readonly<{
