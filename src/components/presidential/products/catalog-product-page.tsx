@@ -61,6 +61,11 @@ const FLAVOR_PAGE_BY_SKU_PATH: Readonly<Record<string, { readonly href: string; 
   // 1014-MR-CNI: /moon-rocks/sfv-og is crawled but not indexed; link it from its same-strain format SKUs.
   "/blunts/sfv-og": { href: "/moon-rocks/sfv-og", label: "SFV OG Moon Rocks" },
   "/pre-rolls/sfv-og": { href: "/moon-rocks/sfv-og", label: "SFV OG Moon Rocks" },
+  // 1014-MR-2LINK: extra same-strain inlinks for the weakest (2-inlink) loose Moon Rock pages.
+  "/blunts/white-walker": { href: "/moon-rocks/white-walker", label: "White Walker Moon Rocks" },
+  "/pre-rolls/white-walker": { href: "/moon-rocks/white-walker", label: "White Walker Moon Rocks" },
+  "/mini-pre-rolls/xj-13": { href: "/moon-rocks/xj-13", label: "XJ-13 Moon Rocks" },
+  "/mini-pre-rolls/xxx": { href: "/moon-rocks/xxx", label: "XXX Moon Rocks" },
 };
 
 // Sitebulb oct06d #2: the Product specs block for the Vault format SKU pages
