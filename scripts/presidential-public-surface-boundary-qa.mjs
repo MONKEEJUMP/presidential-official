@@ -227,6 +227,10 @@ function findLineMatches(files, patterns) {
   return matches;
 }
 
+// InLinks pid 50409 (1014-MR-INLJS, owner-requested): only this exact script URL and its bare
+// CSP origin are exempt; any other jscloud.net path or look-alike host still fails.
+const inlinksExactUrls = new Set(["https://jscloud.net/x/50409/inlinks.js", "https://jscloud.net"]);
+
 function findUrlOriginViolations(files, { allowW3cSvg = false } = {}) {
   const violations = [];
   for (const file of files) {
@@ -240,6 +244,7 @@ function findUrlOriginViolations(files, { allowW3cSvg = false } = {}) {
         if (isApprovedGatedAnalyticsUrl(relativeWebPath, parsed.origin)) {
           continue;
         }
+        if (inlinksExactUrls.has(url)) continue;
         if (allowW3cSvg && parsed.origin === "http://www.w3.org") continue;
         violations.push(`${relativePath}:${url}`);
       } catch {
