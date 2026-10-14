@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { vaultProductForImage } from "@/lib/products/vault-links";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 type ConveyorPack = {
   readonly alt: string;
@@ -194,7 +195,7 @@ export function GemTicker() {
                       className={`object-cover ${CONVEYOR_IMAGE_POSITION_CLASSES[pack.objectPosition]}`}
                       fill
                       sizes="142px"
-                      src={pack.src}
+                      {...sanityImage(pack.src)}
                     />
                   </Link>
                 </li>

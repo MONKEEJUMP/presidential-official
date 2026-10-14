@@ -13,6 +13,7 @@ import {
   isPublicCmsAsset,
   sanitizePublicCmsModule,
 } from "@/lib/cms/public-content";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 export type CmsProductRouteSlug = "moon-rocks" | "moon-pods" | "orbit";
 export type CmsProductRenderMode = "public" | "private";
@@ -292,7 +293,7 @@ export function CmsProductAssetCard({
             className="object-contain object-center"
             fill
             sizes="(min-width: 1024px) 35vw, 100vw"
-            src={asset.assetUrl}
+            {...sanityImage(asset.assetUrl)}
           />
         </figure>
       ) : (

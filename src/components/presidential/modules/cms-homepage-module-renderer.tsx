@@ -27,6 +27,7 @@ import { Scene } from "../layout/scene";
 import { CtaLink } from "../primitives/cta-link";
 import { SectionHeading } from "../primitives/section-heading";
 import { CmsProductModuleComponents } from "./cms-product-module-components";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 type CmsHomepageModuleRendererProps = {
   readonly modules: readonly SanityHomepageModule[];
@@ -510,7 +511,7 @@ function AssetCards({ assets, renderMode }: { readonly assets: readonly SanityAs
                 className="object-contain object-center"
                 fill
                 sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                src={asset.assetUrl}
+                {...sanityImage(asset.assetUrl)}
               />
             </figure>
           ) : isPrivate ? (
@@ -767,7 +768,7 @@ function HeroModule({
               className="object-contain object-center"
               fill
               sizes="(min-width: 1024px) 35vw, 100vw"
-              src={heroAsset.assetUrl}
+              {...sanityImage(heroAsset.assetUrl)}
             />
             {isPrivate ? (
               <figcaption className="relative z-10 m-5 mt-80 grid gap-3 border border-po-brand-line bg-po-canvas p-5 text-po-ink">
@@ -832,7 +833,7 @@ function HomepageActModule({ module, index, renderMode }: { readonly module: San
               className="object-contain object-center"
               fill
               sizes="(min-width: 1024px) 40vw, 100vw"
-              src={asset.assetUrl}
+              {...sanityImage(asset.assetUrl)}
             />
           </figure>
         ) : isPrivateRenderMode(renderMode) ? (

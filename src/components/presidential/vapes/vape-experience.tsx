@@ -15,6 +15,7 @@ import {
   VapeUserExperienceBand,
 } from './vape-system-sections';
 import s from './showroom.module.css';
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 function ColorChoices({ value, onChange, label }: { value: VapeFinish; onChange: (value: VapeFinish) => void; label: string }) {
   return <div className={s.colorChoices} role="group" aria-label={label}>
@@ -56,7 +57,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
         {VAPE_FINISHES.map(item => {
           const front = getVapeImage(item.id, 'ld', 'home'), back = getVapeImage(item.id, 'ld', 'back');
           return <button className={s.finishCard} key={item.id} type="button" onClick={() => explore(item.id, 'ld', 3)} aria-label={`Explore ${item.name} Orbit finish`}>
-            <span className={s.finishPair}><Image src={front.src} alt={`${item.name} Orbit front, LD pod attached`} width={1200} height={1500} sizes="(min-width: 900px) 200px, 42vw" /><Image src={back.src} alt={`${item.name} Orbit rear artwork, LD pod attached`} width={1200} height={1500} sizes="(min-width: 900px) 200px, 42vw" /></span>
+            <span className={s.finishPair}><Image {...sanityImage(front.src)} alt={`${item.name} Orbit front, LD pod attached`} width={1200} height={1500} sizes="(min-width: 900px) 200px, 42vw" /><Image {...sanityImage(back.src)} alt={`${item.name} Orbit rear artwork, LD pod attached`} width={1200} height={1500} sizes="(min-width: 900px) 200px, 42vw" /></span>
             <span className={s.finishCaption}><span className={s.swatch} data-finish={item.id} />{item.name}<VapeIcon name="arrow" /></span>
           </button>;
         })}
@@ -88,7 +89,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
                 touchStart.current = null;
               }}
               onClick={() => { if (swiped.current) { swiped.current = false; return; } setLightboxOpen(true); }}>
-              <Image key={current.src} src={current.src} alt={current.alt} width={current.width} height={current.height} sizes="(min-width: 1100px) 680px, (min-width: 760px) 58vw, 95vw" className={s.mainImage} />
+              <Image key={current.src} {...sanityImage(current.src)} alt={current.alt} width={current.width} height={current.height} sizes="(min-width: 1100px) 680px, (min-width: 760px) 58vw, 95vw" className={s.mainImage} />
               <span className={s.enlarge}><VapeIcon name="expand" /><span>Take a closer look</span></span>
             </button>
             <div className={s.galleryArrows}>
@@ -99,7 +100,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
           </div>
           <div className={s.thumbnails} role="group" aria-label="Product image views">
             {gallery.map((image, index) => <button key={image.view} type="button" aria-label={`Show ${image.label}`} aria-pressed={index === viewIndex} onClick={() => setViewIndex(index)}>
-              <Image src={image.src} alt="" width={96} height={104} sizes="90px" /><span>{VAPE_VIEWS[index].short}</span>
+              <Image {...sanityImage(image.src)} alt="" width={96} height={104} sizes="90px" /><span>{VAPE_VIEWS[index].short}</span>
             </button>)}
           </div>
         </div>
@@ -136,10 +137,10 @@ export function VapeExperience({ page }: { page: VapePage }) {
             <div className={s.familyCardMedia}>
               <span className={s.familyNumber}>0{index + 1}<span>{item.code}</span></span>
               <button type="button" aria-label={`Explore ${selectedFinish.name} ${item.name}`} onClick={() => explore(finish, item.id, 1)}>
-                <Image src={angle.src} alt={angle.alt} width={1200} height={1500} sizes="(min-width: 1000px) 380px, (min-width: 650px) 46vw, 92vw" />
+                <Image {...sanityImage(angle.src)} alt={angle.alt} width={1200} height={1500} sizes="(min-width: 1000px) 380px, (min-width: 650px) 46vw, 92vw" />
               </button>
               <button type="button" className={s.screenPeek} aria-label={`Enlarge ${item.code} display`} onClick={() => explore(finish, item.id, 6, true)}>
-                <Image src={screen.src} alt={`${item.code} display on the ${selectedFinish.name.toLowerCase()} Orbit device`} width={180} height={225} sizes="100px" /><span>{item.code} display <VapeIcon name="expand" /></span>
+                <Image {...sanityImage(screen.src)} alt={`${item.code} display on the ${selectedFinish.name.toLowerCase()} Orbit device`} width={180} height={225} sizes="100px" /><span>{item.code} display <VapeIcon name="expand" /></span>
               </button>
             </div>
             <div className={s.familyCardCopy}><h3>{item.name}</h3><p>{item.description}</p>
@@ -164,7 +165,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
           { view: 'front-left' as const, index: 1, title: 'The profile.', text: 'A different perspective on the mouthpiece, side control and shape of Orbit.', style: s.profileDetail },
         ].map(item => {
           const image = getVapeImage(finish, family, item.view);
-          return <article className={`${s.detailCard} ${item.style}`} key={item.view}><button type="button" onClick={() => openImage(item.index)} aria-label={`Enlarge ${item.title}`}><Image src={image.src} alt={image.alt} width={1200} height={1500} sizes="(min-width: 900px) 550px, 92vw" /><span><VapeIcon name="expand" /></span></button><div><h3>{item.title}</h3><p>{item.text}</p></div></article>;
+          return <article className={`${s.detailCard} ${item.style}`} key={item.view}><button type="button" onClick={() => openImage(item.index)} aria-label={`Enlarge ${item.title}`}><Image {...sanityImage(image.src)} alt={image.alt} width={1200} height={1500} sizes="(min-width: 900px) 550px, 92vw" /><span><VapeIcon name="expand" /></span></button><div><h3>{item.title}</h3><p>{item.text}</p></div></article>;
         })}
       </div>
       <div className={s.portDetail}><p>Explore the mouthpiece, sides and base together in the matching design overview.</p><button className={s.textLink} type="button" onClick={() => openImage(7)}>View the complete design <VapeIcon name="arrow" /></button></div>
@@ -176,7 +177,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
       <div className={s.sectionHeading}><div><p className={s.eyebrow}>The design collection</p><h2 id="vape-design-heading">Every angle.<br /><span>Every expression.</span></h2></div><p>Explore all twelve design overviews.<br />Select a finish. Open the full picture.</p></div>
       <div className={s.modelLayout}>
         <div className={s.modelStage}>
-          <button type="button" className={s.modelImage} onClick={() => explore(selectedModel.finish, selectedModel.family, 7, true)} aria-label={`Enlarge ${model.alt}`}><Image key={model.src} src={model.src} alt={model.alt} width={model.width} height={model.height} sizes="(min-width: 1000px) 850px, 94vw" /><span className={s.enlarge}><VapeIcon name="expand" />Open design overview</span></button>
+          <button type="button" className={s.modelImage} onClick={() => explore(selectedModel.finish, selectedModel.family, 7, true)} aria-label={`Enlarge ${model.alt}`}><Image key={model.src} {...sanityImage(model.src)} alt={model.alt} width={model.width} height={model.height} sizes="(min-width: 1000px) 850px, 94vw" /><span className={s.enlarge}><VapeIcon name="expand" />Open design overview</span></button>
           <div className={s.modelCaption}><button type="button" aria-label="Previous design overview" onClick={() => setModelIndex(value => (value + 11) % 12)}><VapeIcon name="left" /></button><p>{VAPE_FINISHES.find(item => item.id === selectedModel.finish)!.name} / {VAPE_FAMILIES.find(item => item.id === selectedModel.family)!.name}<span>{String(modelIndex + 1).padStart(2, '0')} / 12</span></p><button type="button" aria-label="Next design overview" onClick={() => setModelIndex(value => (value + 1) % 12)}><VapeIcon name="right" /></button></div>
         </div>
         <div className={s.modelMenu}>
@@ -191,7 +192,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
         {archiveOpened ? <div className={s.archiveContents}>
           {VAPE_MODEL_SETS.map(set => <section key={`${set.finish}-${set.family}`} aria-label={`${set.finish} ${set.family.toUpperCase()} photo collection`}>
             <h3>{VAPE_FINISHES.find(item => item.id === set.finish)!.name} <span>/ {VAPE_FAMILIES.find(item => item.id === set.family)!.name}</span></h3>
-            <div>{getVapeGallery(set.finish, set.family).map((image, index) => <button key={image.view} type="button" onClick={() => explore(set.finish, set.family, index, true)} aria-label={`Open ${image.alt}`}><Image src={image.src} alt={image.alt} width={image.width} height={image.height} sizes="(min-width: 1000px) 140px, (min-width: 650px) 22vw, 42vw" loading="lazy" /><span>{image.label}</span></button>)}</div>
+            <div>{getVapeGallery(set.finish, set.family).map((image, index) => <button key={image.view} type="button" onClick={() => explore(set.finish, set.family, index, true)} aria-label={`Open ${image.alt}`}><Image {...sanityImage(image.src)} alt={image.alt} width={image.width} height={image.height} sizes="(min-width: 1000px) 140px, (min-width: 650px) 22vw, 42vw" loading="lazy" /><span>{image.label}</span></button>)}</div>
           </section>)}
         </div> : null}
       </details>

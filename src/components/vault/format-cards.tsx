@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import shared from '@/components/presidential/prerolls/preroll-experience.module.css';
 import { imageAlt, newVaultProductPages, type VaultProduct } from '@/content/vault/catalog';
 import descriptions from '@/content/vault/descriptions.json';
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 export function vaultFormatHeading(format: string): string {
   return format.replace('Pre-roll', 'Pre-Roll');
@@ -21,7 +22,7 @@ export function VaultFormatCard({ product }: { product: VaultProduct }) {
   return (
     <article className={shared.artCardPortrait}>
       <Link aria-label={`View ${product.strain} product page`} className={shared.artCardImage} href={product.productUrl}>
-        <Image alt={imageAlt(product, image)} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" src={image.full} />
+        <Image alt={imageAlt(product, image)} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" {...sanityImage(image.full)} />
       </Link>
       <div className={shared.artCardCopy}>
         <p>{`Presidential Moon Rock ${vaultFormatHeading(product.format)}`}</p>

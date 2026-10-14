@@ -11,6 +11,7 @@ import styles from "./catalog-product-page.module.css";
 import type { VaultProduct } from '@/content/vault/catalog';
 import { imageAlt } from '@/content/vault/catalog';
 import { vaultMadeWithSentence, vaultSpecs } from '@/content/vault/specs';
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 type CatalogProduct = {
   readonly id: string;
@@ -130,7 +131,7 @@ export function CatalogProductPage({
                 fill
                 priority
                 sizes="(max-width: 900px) 100vw, 52vw"
-                src={product.src}
+                {...sanityImage(product.src)}
               />
             </div>}
 

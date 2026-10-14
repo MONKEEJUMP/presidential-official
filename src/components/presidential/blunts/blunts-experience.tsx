@@ -13,6 +13,7 @@ import { TierBadge, TierSectionHeader } from "@/components/presidential/catalog/
 import { SiteVideo } from "@/components/presidential/media/site-video";
 import shared from "@/components/presidential/prerolls/preroll-experience.module.css";
 import styles from "./blunts-experience.module.css";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 const featuredIndexes = [8, 0, 3, 9, 21, 25] as const;
 
@@ -100,7 +101,7 @@ export function BluntsExperience({
             const artwork = BLUNT_ARTWORKS[index];
             return (
               <Link aria-label={`View ${artwork.name} product page`} className={shared[`featuredArt${position + 1}`]} href={productDetailPath("/blunts", artwork.id)} key={artwork.id}>
-                <Image alt="" fill sizes="(max-width: 780px) 50vw, 28vw" src={artwork.src} /><span>{artwork.name}</span>
+                <Image alt="" fill sizes="(max-width: 780px) 50vw, 28vw" {...sanityImage(artwork.src)} /><span>{artwork.name}</span>
               </Link>
             );
           })}
@@ -123,7 +124,7 @@ export function BluntsExperience({
                     <article className={artwork.shape === "square" ? shared.artCardSquare : shared.artCardPortrait} key={artwork.id}>
                       <Link aria-label={`View ${artwork.name} product page`} className={shared.artCardImage} href={productDetailPath("/blunts", artwork.id)}>
                         {section === "collabs" ? <TierBadge tier={placement.tierBadge} /> : null}
-                        <Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} />
+                        <Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" {...sanityImage(artwork.src)} />
                       </Link>
                       <div className={shared.artCardCopy}>
                         <p>Presidential Moon Rock Blunts</p>
@@ -145,7 +146,7 @@ export function BluntsExperience({
               <div className={`${shared.artGrid} ${shared.tierGrid}`}>
                 {tieredArtwork.filter(({ placement }) => placement.section === "more").map(({ artwork, placement }) => (
                   <article className={artwork.shape === "square" ? shared.artCardSquare : shared.artCardPortrait} key={artwork.id}>
-                    <Link aria-label={`View ${artwork.name} product page`} className={shared.artCardImage} href={productDetailPath("/blunts", artwork.id)}><Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" src={artwork.src} /></Link>
+                    <Link aria-label={`View ${artwork.name} product page`} className={shared.artCardImage} href={productDetailPath("/blunts", artwork.id)}><Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" {...sanityImage(artwork.src)} /></Link>
                     <div className={shared.artCardCopy}><p>Presidential Moon Rock Blunts</p><h3><ProductNameLink name={artwork.name} format="Blunt" className="text-inherit no-underline">{placement.displayName || artwork.name}</ProductNameLink></h3><span>{artwork.edition}</span><p><ProductMentions format="Blunt">{artwork.description}</ProductMentions></p></div>
                   </article>
                 ))}

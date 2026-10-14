@@ -4,6 +4,7 @@ import { ProductImageLink } from '@/components/presidential/products/product-men
 import { vaultProductForImage } from '@/lib/products/vault-links';
 
 import styles from "./contact-sales-experience.module.css";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 // Same product name the collage link already exposes as its aria-label.
 function collageAlt(src: string): string {
@@ -71,7 +72,7 @@ export function ContactSalesExperience() {
                 fill
                 priority={index < 4}
                 sizes="(max-width: 760px) 48vw, (max-width: 1200px) 34vw, 25vw"
-                src={image.src}
+                {...sanityImage(image.src)}
               />
             </ProductImageLink>
           ))}

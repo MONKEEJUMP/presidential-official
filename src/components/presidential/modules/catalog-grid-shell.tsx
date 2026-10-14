@@ -17,6 +17,7 @@ import {
 } from "@/lib/catalog/tier-map";
 
 import { TierBadge, TierSectionHeader } from "../catalog/tier-section";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 type CatalogRenderMode = "public" | "preview";
 
@@ -184,7 +185,7 @@ export function CatalogProductCard({
               }`}
               fill
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-              src={primaryImage.assetUrl}
+              {...sanityImage(primaryImage.assetUrl)}
             />
             {secondaryImage?.assetUrl ? (
               <Image
@@ -193,7 +194,7 @@ export function CatalogProductCard({
                 className="object-contain p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                 fill
                 sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                src={secondaryImage.assetUrl}
+                {...sanityImage(secondaryImage.assetUrl)}
               />
             ) : null}
           </>

@@ -28,6 +28,7 @@ import { AnswerSections } from "./answer-sections";
 import { HOME_ANSWERS } from "./final-answers";
 import { FindUsCtaShell } from "./find-us-cta-shell";
 import { UsMapShell } from "./us-map-shell";
+import { sanityImage } from "@/lib/cms/sanity-image";
 
 type HomepageFoundationShellProps = {
   readonly locatorInitialSearch?: LocatorInitialSearch;
@@ -265,7 +266,7 @@ export function HomepageFoundationShell({
                           className="object-contain"
                           fill
                           sizes="(min-width: 640px) 33vw, 100vw"
-                          src={point.image.src}
+                          {...sanityImage(point.image.src)}
                         />
                       </Link>
                     </div>
@@ -294,7 +295,7 @@ export function HomepageFoundationShell({
                           className="object-contain"
                           fill
                           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                          src={product.src}
+                          {...sanityImage(product.src)}
                         />
                       </div>
                       <figcaption className="po-home-canvas-muted mt-2 text-sm">
