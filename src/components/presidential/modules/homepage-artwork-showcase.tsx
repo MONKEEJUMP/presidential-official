@@ -54,6 +54,7 @@ export function HomepageArtworkShowcase() {
           {canStream ? <source src={SHOWCASE_VIDEO} type="video/mp4" /> : null}
         </video>
       </div>
+      <span className="sr-only">Explore Presidential Moon Rock pre-rolls</span>
     </Link>
   );
 }
