@@ -20,6 +20,8 @@ function buildContentSecurityPolicy(
     "script-src 'self'",
     `'nonce-${nonce}'`,
     "'strict-dynamic'",
+    // InLinks (1014-MR-INLJS); the nonce covers it under strict-dynamic, the host covers older browsers.
+    "https://jscloud.net",
     analyticsAllowed ? "https://www.googletagmanager.com" : "",
     isDev ? "'unsafe-eval'" : "",
   ]
@@ -27,6 +29,7 @@ function buildContentSecurityPolicy(
     .join(" ");
   const connectSrc = [
     "connect-src 'self'",
+    "https://jscloud.net",
     analyticsAllowed ? "https://www.google-analytics.com" : "",
     analyticsAllowed ? "https://analytics.google.com" : "",
   ]
