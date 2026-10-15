@@ -130,7 +130,7 @@ function main() {
     "launchReadiness.canonicalRedirect.apexLocked",
     proxyText.includes('const canonicalHostname = "presidentialmoonrocks.com"') &&
       proxyText.includes('"www.presidentialmoonrocks.com"') &&
-      proxyText.includes("NextResponse.redirect(url, 308)") &&
+      proxyText.includes("NextResponse.redirect(url, 301)") && // 1014-MR-SEOMATOR
       canonicalText.includes("www.presidentialmoonrocks.com"),
     "apex canonical host and defensive www redirect are wired",
   );
