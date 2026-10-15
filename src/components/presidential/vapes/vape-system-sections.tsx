@@ -97,8 +97,7 @@ function FlavorChart() {
 
   return <div className={s.chartBlock}>
     <h3>{chart.title}</h3>
-    <svg ref={chartRef} className={`${s.flavorChart} ${drawn ? s.chartDrawn : ''}`} viewBox="0 0 520 250" role="img" aria-labelledby="flavor-chart-title flavor-chart-description">
-      <title id="flavor-chart-title">{chart.title}</title>
+    <svg ref={chartRef} className={`${s.flavorChart} ${drawn ? s.chartDrawn : ''}`} viewBox="0 0 520 250" role="img" aria-label={chart.title} aria-describedby="flavor-chart-description">
       <desc id="flavor-chart-description">{chart.lines[0]}. {chart.lines[1]}. {chart.axes[0]}. {chart.axes[1]}.</desc>
       <rect x="1.5" y="1.5" width="517" height="247" rx="8" />
       <text x="34" y="42" className={s.orbitLabel}>{chart.lines[0]}</text>
@@ -245,8 +244,7 @@ export function VapeTechnologyBand() {
 
 function HeavyMetalBadge() {
   const [brand, tested] = VAPES_ADDITIONS.userExperience.badge;
-  return <svg className={s.heavyMetalBadge} viewBox="0 0 120 140" role="img" aria-labelledby="heavy-metal-badge-title">
-    <title id="heavy-metal-badge-title">{brand} {tested}</title>
+  return <svg className={s.heavyMetalBadge} viewBox="0 0 120 140" role="img" aria-label={`${brand} ${tested}`}>
     <path d="M60 5 108 23v43c0 32-18 55-48 69C30 121 12 98 12 66V23L60 5Z" />
     <text x="60" y="52" textAnchor="middle">{brand}</text>
     <text x="60" y="75" textAnchor="middle">{tested}</text>

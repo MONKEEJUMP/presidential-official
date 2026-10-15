@@ -94,7 +94,7 @@ export const PARTNERS_COPY = {
   "ny": {
     "h1": "New York Partners",
     "title": "Presidential Partners in New York | 170 Licensed Retailers",
-    "description": "The 170 licensed New York dispensaries carrying authentic Presidential - across the five boroughs, Long Island, the Hudson Valley and upstate. Find one near you.",
+    "description": "The 170 licensed New York dispensaries carrying authentic Presidential - across the five boroughs, Long Island, the Hudson Valley and upstate. Find one.",
     "body": [
       "New York is the newest of Presidential's major markets and already the third largest.",
       "A hundred and seventy licensed doors. The five boroughs carry the weight - Manhattan, Brooklyn, Queens, the Bronx, Staten Island - and the network runs out from there through Long Island, up the Hudson Valley, west to Buffalo and Rochester, north toward the Adirondacks.",
@@ -106,7 +106,7 @@ export const PARTNERS_COPY = {
   "nv": {
     "h1": "Nevada Partners",
     "title": "Presidential Partners in Nevada | 102 Licensed Retailers",
-    "description": "The 102 licensed Nevada dispensaries carrying authentic Presidential - from the Las Vegas Strip to Reno, Henderson and the Silver Trails. Find one near you.",
+    "description": "The 102 licensed Nevada dispensaries carrying authentic Presidential - from the Las Vegas Strip to Reno, Henderson and the Silver Trails. Find one.",
     "body": [
       "Nevada is a hundred and two doors, and no state has a customer quite like it.",
       "Las Vegas and Henderson hold most of the network, which makes sense - the Strip moves more visitors through a few square miles than most states see in a year. A Nevada dispensary serves locals on Tuesday and forty million annual visitors the rest of the week, and the shelf has to work for both.",

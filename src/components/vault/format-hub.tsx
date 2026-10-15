@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { buildSocialMetadata } from '@/lib/seo/metadata';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import shared from '@/components/presidential/prerolls/preroll-experience.module.css';
@@ -20,7 +21,7 @@ export function vaultFormatHubMetadata(room: VaultRoom): Metadata {
   // Sitebulb oct06d #5: kept at 155 characters or fewer.
   const description = `Presidential Moon Rock ${label}: ${names.join(', ')}. At licensed retailers.`;
   const canonical = canonicalUrl(`/${room.slug}`);
-  return { title, description, alternates: { canonical }, robots: { index: true, follow: true }, openGraph: { title, description, url: canonical, type: 'website' } };
+  return { title, description, alternates: { canonical }, robots: { index: true, follow: true }, ...buildSocialMetadata({ title, description, url: canonical }) };
 }
 
 // MR-TOP50: the mini hubs had no JSON-LD. Same pattern as the /blunts and /pre-rolls
