@@ -84,7 +84,8 @@ function buildCanonicalHostRedirect(request: NextRequest): NextResponse | null {
   url.hostname = canonicalHostname;
   url.port = "";
 
-  return NextResponse.redirect(url, 308);
+  // 1014-MR-SEOMATOR: permanent 301 for www/alias/http to the canonical host.
+  return NextResponse.redirect(url, 301);
 }
 
 function buildWholesaleApplyQueryRedirect(request: NextRequest): NextResponse | null {

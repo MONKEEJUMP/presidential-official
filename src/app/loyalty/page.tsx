@@ -9,8 +9,12 @@ import {
   buildStaticRouteMetadata,
   getStaticRouteRecord,
 } from "@/lib/seo/route-page";
+import { buildSocialMetadata } from "@/lib/seo/metadata";
+import { canonicalUrl } from "@/lib/seo/schema/constants";
 import {
+  buildBreadcrumbSchema,
   buildRouteShellJsonLd,
+  buildWebPageSchema,
   JsonLd,
 } from "@/lib/seo/schema";
 
@@ -19,8 +23,17 @@ import styles from "./loyalty.module.css";
 
 const ROUTE_PATH = "/loyalty" as const;
 
+// 1014-MR-SEOMATOR: OG/Twitter tags; noindex from the route record is kept.
 export function generateMetadata(): Metadata {
-  return buildStaticRouteMetadata(ROUTE_PATH);
+  const base = buildStaticRouteMetadata(ROUTE_PATH);
+  return {
+    ...base,
+    ...buildSocialMetadata({
+      title: String(base.title ?? ""),
+      description: String(base.description ?? ""),
+      url: canonicalUrl(ROUTE_PATH),
+    }),
+  };
 }
 
 const HOW_IT_WORKS = [
@@ -41,7 +54,13 @@ const PROGRAM_DOCUMENT_PATH = "/media/docs/rock-club-program.pdf";
 
 export default function LoyaltyPage() {
   const route = getStaticRouteRecord(ROUTE_PATH);
-  const jsonLdEntries = buildRouteShellJsonLd(route);
+  const routeShellEntries = buildRouteShellJsonLd(route);
+  // 1014-MR-SEOMATOR: the route gate emits nothing for this noindex page, so fall back to
+  // WebPage + BreadcrumbList (no Product, no FAQPage).
+  const jsonLdEntries = routeShellEntries.length > 0 ? routeShellEntries : [
+    { id: "webpage", data: buildWebPageSchema({ path: ROUTE_PATH, name: route.title, description: route.description }) },
+    { id: "breadcrumb", data: buildBreadcrumbSchema([{ name: "Presidential", path: "/" }, { name: "Loyalty", path: ROUTE_PATH }]) },
+  ];
   const programDocumentAvailable = existsSync(
     join(process.cwd(), "public", "media", "docs", "rock-club-program.pdf"),
   );

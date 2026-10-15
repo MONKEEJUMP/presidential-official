@@ -266,8 +266,10 @@ function HeaderNavigation({ pathname }: { readonly pathname: string }) {
             </span>
             <Image
               alt="Presidential"
-              className="h-9 w-auto sm:h-10 lg:h-11"
+              className="h-9 w-auto max-w-full sm:h-10 lg:h-11"
+              fetchPriority="high"
               height={604}
+              loading="eager"
               priority
               sizes="(min-width: 1024px) 134px, (min-width: 640px) 122px, 110px"
               src="/media/brand/presidential-banner.png"

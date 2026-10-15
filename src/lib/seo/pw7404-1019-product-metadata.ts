@@ -10,7 +10,7 @@ export const PRODUCT_METADATA_BY_SLUG: Readonly<
   "blue-raspberry": {
     seoTitle: "Blue Raspberry Moon Rocks | Presidential Silver",
     metaDescription:
-      "Explore Blue Raspberry in the Presidential Silver Flavor Series. Review product details and find licensed retailers near you. Availability varies by retailer.",
+      "Explore Blue Raspberry in the Presidential Silver Flavor Series. Review product details and find licensed retailers. Availability varies by retailer.",
   },
   grape: {
     seoTitle: "Grape Moon Rocks | Presidential Silver",
@@ -90,7 +90,7 @@ export const PRODUCT_METADATA_BY_SLUG: Readonly<
   "orange-push-pop": {
     seoTitle: "Orange Push Pop Moon Rocks | Presidential Gold",
     metaDescription:
-      "Explore Orange Push Pop in the Presidential Gold Strain Series. Review product details and find licensed retailers near you. Availability varies by retailer.",
+      "Explore Orange Push Pop in the Presidential Gold Strain Series. Review product details and find licensed retailers. Availability varies by retailer.",
   },
   "papaya-punch": {
     seoTitle: "Papaya Punch Moon Rocks | Presidential Gold",
@@ -105,7 +105,7 @@ export const PRODUCT_METADATA_BY_SLUG: Readonly<
   "presidential-og": {
     seoTitle: "Presidential OG Moon Rocks | Presidential Gold",
     metaDescription:
-      "Explore Presidential OG in the Presidential Gold Strain Series. Review product details and find licensed retailers near you. Availability varies by retailer.",
+      "Explore Presidential OG in the Presidential Gold Strain Series. Review product details and find licensed retailers. Availability varies by retailer.",
   },
   "rainbow-belts": {
     seoTitle: "Rainbow Belts Moon Rocks | Presidential Gold",
@@ -206,7 +206,7 @@ export const PRODUCT_METADATA_BY_SLUG: Readonly<
   "presidential-moon-rocks": {
     seoTitle: "Presidential Moon Rocks | Presidential House Line",
     metaDescription:
-      "Explore Presidential Moon Rocks in the Presidential House Line. Review product details and find licensed retailers near you. Availability varies by retailer.",
+      "Explore Presidential Moon Rocks in the Presidential House Line. Review product details and find licensed retailers. Availability varies by retailer.",
   },
   "presidential-prerolls": {
     seoTitle: "Presidential Prerolls | Infused Pre-Rolls",

@@ -652,10 +652,12 @@ export function PopUpBooking({
                   <h3>Already booked?</h3>
                   <p>Enter the same email you booked with and we’ll send your private management link.</p>
                 </div>
-                <label>
+                <label htmlFor="pop-up-manage-email">
                   <span>Booking email</span>
                   <input
+                    aria-label="Booking email"
                     autoComplete="email"
+                    id="pop-up-manage-email"
                     maxLength={254}
                     name="manageEmail"
                     required

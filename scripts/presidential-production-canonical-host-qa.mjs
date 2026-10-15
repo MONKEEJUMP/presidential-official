@@ -134,7 +134,7 @@ function main() {
     "canonical.proxyWwwRedirect.present",
     proxyText.includes('"www.presidentialmoonrocks.com"') &&
       proxyText.includes("NextResponse.redirect") &&
-      proxyText.includes("308"),
+      proxyText.includes("NextResponse.redirect(url, 301)"), // 1014-MR-SEOMATOR: 301 permanent
     "proxy redirects the www host to the canonical apex with a permanent redirect",
   );
   addCheck(

@@ -30,6 +30,16 @@ const DEFAULT_SOCIAL_IMAGE = {
   alt: "Presidential logo",
 } as const;
 
+// 1014-MR-SEOMATOR: OG + Twitter tags for pages whose metadata is built outside
+// buildRouteMetadata (the vault hubs, /presidential-art) or that the route gate keeps
+// out of social previews (/loyalty, /sales). Same default image and card type.
+export function buildSocialMetadata({ title, description, url }: { readonly title: string; readonly description: string; readonly url: string }): Pick<Metadata, "openGraph" | "twitter"> {
+  return {
+    openGraph: { title, description, url, siteName: OPEN_GRAPH_SITE_NAME, type: "website", images: [DEFAULT_SOCIAL_IMAGE] },
+    twitter: { card: TWITTER_CARD_TYPE, title, description, images: [DEFAULT_SOCIAL_IMAGE.url] },
+  };
+}
+
 export function isRouteMetadataIndexable(
   route: SeoRouteRecord,
   gateInput: RoutePublicationGateInput = {},
