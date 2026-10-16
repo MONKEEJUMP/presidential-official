@@ -19,11 +19,30 @@ export function softenLearnGuideText(slug: string, text: string): string {
   return slug === "what-are-moon-rocks" ? soften(text) : text;
 }
 
+type SpanBlock = { readonly children: readonly { readonly text?: string; readonly marks?: readonly string[] }[] };
+
+function isSpanBlock(node: object): node is SpanBlock {
+  const children = (node as { children?: unknown }).children;
+  return Array.isArray(children) && children.length > 0 && children.every((child) => Boolean(child) && typeof child === "object" && typeof (child as { text?: unknown }).text === "string");
+}
+
 export function softenLearnGuideClaims<T>(slug: string, value: T): T {
   if (slug !== "what-are-moon-rocks") return value;
   const walk = (node: unknown): unknown => {
     if (typeof node === "string") return soften(node);
     if (Array.isArray(node)) return node.map(walk);
+    // Portable Text block: renderers join span text, so a figure split across spans
+    // (e.g. "reach as high as " + bold "70%") must be matched on the joined text.
+    if (node && typeof node === "object" && isSpanBlock(node)) {
+      const joined = node.children.map((child) => child.text ?? "").join("");
+      const softened = soften(joined);
+      if (softened !== joined) {
+        return {
+          ...node,
+          children: node.children.map((child, index) => ({ ...child, marks: [], text: index === 0 ? softened : "" })),
+        };
+      }
+    }
     if (node && typeof node === "object") {
       return Object.fromEntries(Object.entries(node).map(([key, child]) => [key, walk(child)]));
     }
