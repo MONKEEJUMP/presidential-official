@@ -75,6 +75,18 @@ export const ORBIT_ANSWERS: readonly AnswerItem[] = [
     ),
   },
   {
+    // SURFER-R11: from "What is the Presidential Orbit?" and the /moon-pods families answer.
+    id: "orbit-q-moon-pods",
+    question: "How do Orbit and Moon Pods work together?",
+    answer: (
+      <p>
+        Orbit is the device and Moon Pods are the pods shown with it. Each pod family is named for its extract: Liquid
+        Diamonds (LD), Live Resin (LRE), and Live Rosin (LRO). See the <Link className={a} href="/moon-pods">Moon Pods</Link>{" "}
+        page for the pod families and the <Link className={a} href="/vapes">vapes</Link> page for the full platform.
+      </p>
+    ),
+  },
+  {
     id: "orbit-q-brand",
     question: "Who makes Orbit, and where is it sold?",
     answer: (

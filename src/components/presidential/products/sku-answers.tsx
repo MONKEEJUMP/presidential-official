@@ -157,6 +157,20 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
         </>
       ) : null}
+      {/* SURFER-R11: God's Gift series, from its own build and the gods-gift-pre-roll vault entry. */}
+      {slug === "gods-gift" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Which series is God&apos;s Gift in?</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            God&apos;s Gift belongs to the{" "}
+            <Link className={linkClass} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>, made with flower,
+            live rosin, and diamonds. It is also available as a{" "}
+            <Link className={linkClass} href="/pre-rolls/gods-gift">God&apos;s Gift pre-roll</Link>. Read{" "}
+            <Link className={linkClass} href="/learn/what-is-live-rosin">what live rosin is</Link> for the extract behind the
+            series.
+          </p>
+        </>
+      ) : null}
       {/* SURFER-R9: Cherry Gelato type from its vault pack descriptions ("marked Hybrid"). */}
       {slug === "cherry-gelato" && !marking && cherryGelatoMarking ? (
         <>
