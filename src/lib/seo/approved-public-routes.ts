@@ -120,6 +120,13 @@ const APPROVED_LEARN_GUIDE_ROUTE_ROWS = [
     intro:
       "Live rosin, live resin, and liquid diamonds each perform at their own temperature — one heat setting cannot serve all three.",
   },
+  {
+    // SURFER-R13 repo-owned guide; intro here is the route meta description.
+    slug: "what-is-thc-distillate",
+    title: "What Is THC Distillate",
+    intro:
+      "THC distillate is a refined, essentially neutral cannabis concentrate. See how Presidential layers it with flower and kief in the Silver Flavor Series.",
+  },
 ] as const;
 
 export const APPROVED_TERM_ROUTE_ROWS = [
@@ -266,7 +273,7 @@ export const APPROVED_PUBLIC_SEO_ROUTES = [
   ...APPROVED_PUBLIC_STATE_ROUTES,
 ] as const satisfies readonly SeoRouteRecord[];
 
-export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 89 as const;
+export const APPROVED_PUBLIC_SEO_ROUTE_COUNT = 90 as const;
 
 if (APPROVED_PUBLIC_SEO_ROUTES.length !== APPROVED_PUBLIC_SEO_ROUTE_COUNT) {
   throw new Error(

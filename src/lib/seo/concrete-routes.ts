@@ -168,6 +168,7 @@ const LEARN_GUIDE_RELATED_PATHS: Readonly<
   "infusion-science": ["/moon-rocks/presidential-house-line"],
   "flavor-science": ["/moon-rocks/silver"],
   "different-extracts-need-different-heat": ["/orbit"],
+  "what-is-thc-distillate": ["/moon-rocks/silver"],
 };
 
 export type ConcreteTermPage = {
