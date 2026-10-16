@@ -155,6 +155,38 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
         </>
       ) : null}
+      {/* SURFER-R15: King Louis live resin H3, from its own page, /learn and the label line. */}
+      {slug === "king-louis" && series === "Gold Strain Series" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Why does King Louis use live resin?</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            King Louis is a Gold Strain Series release, and the Gold series is built on live resin. Flower forms the body, live
+            resin coats it, and diamonds, the crystalline concentrate, finish the outside. Those three stages, in that order, give a
+            Presidential Moon Rock the density that makes it burn the way it does. King Louis is also one of a small number of
+            Presidential releases with a second name on the pack: IN COLLABORATION WITH VLAD TV. It also runs as a{" "}
+            <Link className={linkClass} href="/pre-rolls/king-louis">King Louis pre-roll</Link>. THC is batch-specific, so read the
+            current package label and its test results. See{" "}
+            <Link className={linkClass} href="/moon-rocks/gold">Gold Strain Series moon rocks</Link> and{" "}
+            <Link className={linkClass} href="/learn/what-is-live-resin">what live resin is</Link>.
+          </p>
+        </>
+      ) : null}
+      {/* SURFER-R15: Watermelon distillate H3, from its own page, /learn/what-is-live-resin and /about. */}
+      {slug === "watermelon" && series === "Silver Flavor Series" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">What does distillate do in a Silver moon rock?</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Watermelon is a flavor-led release in the{" "}
+            <Link className={linkClass} href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link> lineup, and its concentrate
+            is distillate. Distillate is stripped and refined until it is essentially neutral, which lets the Silver series lead
+            with flavor names such as Watermelon, Grape, Pineapple, and Peach Mango; see{" "}
+            <Link className={linkClass} href="/learn/what-is-thc-distillate">what THC distillate is</Link>. The build is the same as
+            every Presidential moon rock: flower first, distillate carried through it, and kief as the dry finish, as explained in{" "}
+            <Link className={linkClass} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. Don&apos;t grind them. The
+            concentrate layer gums up a grinder and strips the kief, so layer pieces in when rolling or packing a bowl.
+          </p>
+        </>
+      ) : null}
       {marking ? (
         <>
           <h2 className={`${materials || slug === "watermelon" ? "mt-6 " : ""}font-display text-2xl uppercase leading-tight text-po-ink`}>{`Is ${name} indica, sativa, or hybrid?`}</h2>
