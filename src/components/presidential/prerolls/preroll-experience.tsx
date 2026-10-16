@@ -182,7 +182,7 @@ export function PreRollExperience({
             <h2 id="art-index-heading">Meet<br />the pre-rolls.</h2>
           </div>
           <p>
-            Get to know the flavor, infusion, and ingredients in each Moon Rock pre-roll from the Presidential brand. Flavor and aroma vary by batch; your retailer can confirm the current selection. The 1g lineup comes in three series: the Silver Flavor Series (flower, distillate, and kief), the Gold Strain Series, defined by live resin, and the Rose Gold Connoisseur Series, defined by solventless live rosin.
+            These are Moon Rock Prerolls™, the moonrock pre-rolls built with Moon Rocks inside: infused moonrock prerolls of cannabis flower and concentrate. Get to know the flavor, infusion, and ingredients in each Moon Rock pre-roll from the Presidential brand. Flavor and aroma vary by batch; your retailer can confirm the current selection. The 1g lineup comes in three series: the Silver Flavor Series (flower, distillate, and kief), the Gold Strain Series, defined by live resin, and the Rose Gold Connoisseur Series, defined by solventless live rosin.
           </p>
         </div>
         <div className={styles.tierSections}>
