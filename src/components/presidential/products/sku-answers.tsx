@@ -35,6 +35,20 @@ function packMarking(name: string): string | undefined {
   return found.size === 1 ? [...found][0] : undefined;
 }
 
+// Wider match than packMarking: vault copy also says "marked Hybrid" / "pack marked Hybrid".
+function descriptionMarking(name: string): string | undefined {
+  const key = normalize(name);
+  const found = new Set<string>();
+  for (const product of vaultProducts) {
+    if (normalize(product.strain) !== key) continue;
+    const marking = /marked (Indica|Sativa|Hybrid)\b/.exec(vaultDescriptions[product.slug] ?? "")?.[1];
+    if (marking) found.add(marking);
+  }
+  return found.size === 1 ? [...found][0] : undefined;
+}
+
+const CHERRY_GELATO_SIBLINGS = new Set(["24k", "blue-dream", "blue-raspberry", "cap-junky", "cereal-milk"]);
+
 function listMaterials(parts: readonly string[]): string {
   const words = parts.map((part) => part.toLowerCase());
   return words.length > 1 ? `${words.slice(0, -1).join(", ")}${words.length > 2 ? "," : ""} and ${words.at(-1)}` : words[0] ?? "";
@@ -51,6 +65,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
   if (/pre-?roll|blunt/i.test(name)) return null;
   const materials = madeWith(name, series);
   const marking = packMarking(name);
+  const cherryGelatoMarking = slug === "cherry-gelato" ? descriptionMarking("Cherry Gelato") : undefined;
   const watermelonOffers = slug === "watermelon" ? offersFor(name) : [];
   const watermelonBlunt = watermelonOffers.find((offer) => offer.format === "Blunt");
   const skuOffers = slug === "strawberry" || slug === "gorilla-goo" || slug === "presidential-og" ? offersFor(name) : [];
@@ -113,6 +128,12 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <p className="mt-3 text-sm leading-6 text-po-body">
             {`${name} is made with ${materials}, layered the way `}
             <Link className={linkClass} href="/moon-rocks#moon-rocks-q-infused">every Presidential moon rock is built</Link>.
+            {slug === "cherry-gelato" ? (
+              <>
+                {" See "}
+                <Link className={linkClass} href="/learn/what-are-moon-rocks">how Moon Rocks are built</Link>.
+              </>
+            ) : null}
           </p>
         </>
       ) : null}
@@ -121,6 +142,19 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h2 className={`${materials || slug === "watermelon" ? "mt-6 " : ""}font-display text-2xl uppercase leading-tight text-po-ink`}>{`Is ${name} indica, sativa, or hybrid?`}</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">{`Presidential packs mark ${name} as ${marking}.`}</p>
         </>
+      ) : null}
+      {/* SURFER-R9: Cherry Gelato type from its vault pack descriptions ("marked Hybrid"). */}
+      {slug === "cherry-gelato" && !marking && cherryGelatoMarking ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Is Cherry Gelato indica, sativa, or hybrid?</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">{`Presidential packs mark Cherry Gelato as ${cherryGelatoMarking}.`}</p>
+        </>
+      ) : null}
+      {/* InLinks r9: same-lineup link to Cherry Gelato from sibling strain pages. */}
+      {CHERRY_GELATO_SIBLINGS.has(slug) ? (
+        <p className="mt-6 text-sm leading-6 text-po-body">
+          <Link className={linkClass} href="/moon-rocks/cherry-gelato">Cherry Gelato Moon Rocks</Link> is one of the collaboration releases.
+        </p>
       ) : null}
       {/* MR-GSC-R2: strawberry pre-roll question, Gorilla Goo strain question, mini links (all from catalog data). */}
       {slug === "strawberry" && strawberryPreRoll ? (

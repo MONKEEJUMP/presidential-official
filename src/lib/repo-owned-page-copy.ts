@@ -80,7 +80,7 @@ Those three components explain why Moon Rocks look and handle differently from p
 
 **A format, not a strain name**
 
-Presidential Moon Rocks can use different named cultivars and product identities while retaining the same broad layered format. [Presidential OG](/moon-rocks/presidential-og), [SFV OG](/moon-rocks/sfv-og), [Papaya Punch](/moon-rocks/papaya-punch), [Cosmic Cookies](/moon-rocks/cosmic-cookies), and [Cereal Milk](/moon-rocks/cereal-milk) are product examples; their names do not redefine what the Moon Rocks category means.
+Presidential Moon Rocks can use different named cultivars and product identities while retaining the same broad layered format. [Presidential OG](/moon-rocks/presidential-og), [SFV OG](/moon-rocks/sfv-og), [Papaya Punch](/moon-rocks/papaya-punch), [Cosmic Cookies](/moon-rocks/cosmic-cookies), [Cereal Milk](/moon-rocks/cereal-milk), and [Cherry Gelato](/moon-rocks/cherry-gelato) are product examples; their names do not redefine what the Moon Rocks category means.
 
 The main [Presidential Moon Rocks collection](/moon-rocks) organizes the approved products and series. A product page supplies the exact name, series, packaging, visible composition language, and approved retailer path for that item. This guide supplies the definition shared across the category.
 

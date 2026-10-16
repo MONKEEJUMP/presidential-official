@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import {
   BatteryFull,
@@ -124,6 +125,8 @@ export function VapeBuiltForOilBand() {
   return <section className={`${s.section} ${s.systemSection} ${s.cardBand} ${s.builtForOil}`} aria-labelledby="built-for-oil-heading">
     <h2 id="built-for-oil-heading">{builtForOil.title}</h2>
     <div className={s.pillarGrid}>{value.pillars.map(item => <article key={item.title}><VapeIcon name={item.icon} /><ItemTitle title={item.title} /><p>{item.description}</p></article>)}</div>
+    {/* SURFER-R9: lineup carrier line; facts from the home platforms band and /about formats. */}
+    <p>Moon Pods and Orbit sit inside the same Presidential lineup as <Link href="/moon-rocks">Presidential Moon Rocks</Link> and <Link href="/pre-rolls">infused pre-rolls</Link>; <Link href="/about">read about the brand</Link>.</p>
   </section>;
 }
 
