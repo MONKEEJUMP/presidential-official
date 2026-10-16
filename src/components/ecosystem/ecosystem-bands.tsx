@@ -504,6 +504,9 @@ export function HomePlatformsAndTiersBand() {
             3 EXPERIENCE TIERS
           </h2>
           <p className={styles.sectionSubline}>Choose your experience profile.</p>
+          <p className={styles.sectionSubline}>
+            THC and cannabinoid numbers are batch-specific. Read the current package label and its test results.
+          </p>
           <div className={styles.tierGrid}>
             {TIERS.map(({ icon: Icon, ...tier }) => (
               <Link

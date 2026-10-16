@@ -58,7 +58,7 @@ const proofPoints = [
   },
   {
     title: "Licensed retail path",
-    body: "Presidential doesn't sell here — it points you straight to the shelf. Drop your zip and the store finder maps participating licensed retailers near you across active markets. No carts, no checkout, no guesswork — just the fastest route from screen to store. Availability varies by retailer. Licensed retailers decide which releases to stock, and current stock varies by location. Confirm the store's stock before visiting. Adult use is limited to adults 21+ where legal.",
+    body: "Presidential doesn't sell here — it points you straight to the shelf. Drop your zip and the store finder maps participating licensed retailers near you across active markets. No carts, no checkout, no guesswork — just the fastest route from screen to store. Availability varies by retailer. Licensed retailers decide which releases to stock, and current stock varies by location. [Confirm availability with the licensed retailer](/find-us) before visiting. Adult use is limited to adults 21+ where legal.",
     image: {
       alt: "Cherry Gelato Moon Rock product graphic",
       href: "/moon-rocks/cherry-gelato",
@@ -237,7 +237,9 @@ export function HomepageFoundationShell({
                   build keeps flower, concentrate, and the finishing layer together
                   as one Moon Rocks format. More flavor. More consistency. More
                   innovation. More experience. Every product, every proof, and every
-                  place to find it — all in one official home.
+                  place to find it — all in one official home. Read{" "}
+                  <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/our-story">the Presidential story</Link>, or explore the{" "}
+                  <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks">Presidential Moon Rocks platform</Link>.
                 </p>
               </div>
               <div className="grid gap-5 sm:grid-cols-3">

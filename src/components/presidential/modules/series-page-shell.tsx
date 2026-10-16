@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {
   readDraftCatalogItems,
   readPublicRenderableCatalogItems,
@@ -188,6 +190,21 @@ export async function SeriesPageShell({
             </div>
           </Scene>
         )}
+
+        {definition.slug === "gold" ? (
+          <Scene
+            ariaLabel="Related Moon Rocks"
+            className="po-gold-thread-inlay py-12"
+            tone="default"
+          >
+            <p className="mx-auto w-full max-w-7xl text-base leading-7 text-po-body">
+              <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/gorilla-goo">Gorilla Goo Moon Rocks</Link> are part of the Gold Strain
+              Series.{" "}
+              <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/cherry-gelato">Cherry Gelato Moon Rocks</Link> sit outside the Gold series,
+              with the collaboration releases.
+            </p>
+          </Scene>
+        ) : null}
 
         <ParentLearnGuideLink parentPath={definition.path} />
 
