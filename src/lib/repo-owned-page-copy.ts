@@ -2,6 +2,7 @@ export type RepoOwnedPagePath =
   | "/learn"
   | "/learn/what-are-moon-rocks"
   | "/learn/what-is-thc-distillate"
+  | "/learn/flavor-science"
   | "/vapes"
   | "/find-us/wa"
   | "/find-us/az"
@@ -96,6 +97,13 @@ Distillate is one of the concentrates in the Presidential catalog. Live resin is
 **Reading a distillate product**
 
 When comparing infused products, look at what was infused, how, and with which concentrate: distillate, live resin, or live rosin each brings a different character. THC and cannabinoids are batch-specific, so read the current package label and its test results.`,
+  },
+  // SURFER-R13 MR: flavor-science extract-by-series H3, from the flavor-science series answer, /learn hub, /moon-rocks/rose-gold and /about.
+  "/learn/flavor-science": {
+    label: "Which extract sits behind each series",
+    markdown: `### Which extract sits behind each series?
+
+The [Silver Flavor Series](/moon-rocks/silver) is built on flower, [THC distillate](/learn/what-is-thc-distillate), and kief. The [Gold Strain Series](/moon-rocks/gold) carries strain-led releases such as 24K, with live resin as the coat across most of the series. The [Rose Gold Connoisseur Series](/moon-rocks/rose-gold) is the solventless tier built on live rosin, and [different extracts need different heat](/learn/different-extracts-need-different-heat).`,
   },
   "/learn/what-are-moon-rocks": {
     label: "What Moon Rocks are and how to read the format",
@@ -291,7 +299,7 @@ Those releases are frequently market-specific — the Platinum packs carry Michi
 
 **Where to find Presidential**
 
-Wholesale, through licensed retailers only. Availability varies by retailer and by market. Seven state markets make up the Presidential footprint. Use the zip search above to find the nearest licensed retailer. For adults 21+ where legal.`,
+Wholesale, through licensed retailers only. Availability varies by retailer and by market. Presidential is available in [select state markets](/find-us). Use the zip search above to find the nearest licensed retailer. For adults 21+ where legal.`,
   },
   "/moon-rocks/presidential-x-thc-design": {
     label: "Presidential x THC Design collaboration",
