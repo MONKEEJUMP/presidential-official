@@ -92,6 +92,23 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
               retailers only, and the <Link href="/find-us">Presidential store finder</Link> shows the nearest ones. If you want
               paper in place of a hemp wrap, see <Link href="/mini-pre-rolls">Mini Pre-Rolls</Link>.
             </p>
+            {/* INLINKS-COPY-R18: /mini-blunts strain-name and pack-art H3s (copy as written). */}
+            <h3>Choosing a mini blunt by strain name</h3>
+            <p>
+              Each mini blunt pack takes its name from the full-size line, so a familiar strain carries over. Compare{' '}
+              <Link href="/mini-blunts/presidential-og">Presidential OG mini blunts</Link>,{' '}
+              <Link href="/mini-blunts/skywalker">Skywalker mini blunts</Link> and{' '}
+              <Link href="/mini-blunts/xj-13">XJ-13 mini blunts</Link>. Then check whether the pack is marked Indica or Hybrid.
+            </p>
+            <h3>The craft on the outside of the pack</h3>
+            <p>
+              Every pack carries its own artwork, and the{' '}
+              <Link href="/presidential-art/mini-blunts">mini blunt art collection</Link> shows the illustration behind each name.
+              Choose <Link href="/mini-blunts/pink-cookies">Pink Cookies mini blunts</Link>,{' '}
+              <Link href="/mini-blunts/waui">Waui mini blunts</Link> or <Link href="/mini-blunts/xxx">XXX mini blunts</Link> by
+              name, then find the pack at a licensed store through the{' '}
+              <Link href="/find-us">Presidential store finder</Link>.
+            </p>
           </div>
         ) : null}
         {room.slug === 'mini-pre-rolls' ? (
