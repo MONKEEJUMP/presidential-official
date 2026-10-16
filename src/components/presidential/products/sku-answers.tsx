@@ -53,6 +53,10 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
   const marking = packMarking(name);
   const watermelonOffers = slug === "watermelon" ? offersFor(name) : [];
   const watermelonBlunt = watermelonOffers.find((offer) => offer.format === "Blunt");
+  const skuOffers = slug === "strawberry" || slug === "gorilla-goo" || slug === "presidential-og" ? offersFor(name) : [];
+  const strawberryPreRoll = slug === "strawberry" ? skuOffers.find((offer) => offer.format === "Pre-roll") : undefined;
+  const strawberryBlunt = slug === "strawberry" ? skuOffers.find((offer) => offer.format === "Blunt") : undefined;
+  const miniOffers = skuOffers.filter((offer) => offer.format.startsWith("Mini"));
   return (
     <div className="mt-8 border-t border-po-line pt-5">
       {slug === "watermelon" && series === "Silver Flavor Series" ? (
@@ -117,6 +121,48 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h2 className={`${materials || slug === "watermelon" ? "mt-6 " : ""}font-display text-2xl uppercase leading-tight text-po-ink`}>{`Is ${name} indica, sativa, or hybrid?`}</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">{`Presidential packs mark ${name} as ${marking}.`}</p>
         </>
+      ) : null}
+      {/* MR-GSC-R2: strawberry pre-roll question, Gorilla Goo strain question, mini links (all from catalog data). */}
+      {slug === "strawberry" && strawberryPreRoll ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Is Strawberry available as a pre-roll?</h2>
+          <p className="mt-3 text-sm leading-6 text-po-body">
+            {"Yes. Strawberry moonrocks also come rolled as the "}
+            <Link className={linkClass} href={strawberryPreRoll.href}>Strawberry pre-roll</Link>
+            {strawberryPreRoll.weight ? ` (${strawberryPreRoll.weight})` : ""}
+            {strawberryBlunt ? (
+              <>
+                {" and the "}
+                <Link className={linkClass} href={strawberryBlunt.href}>Strawberry blunt</Link>
+                {strawberryBlunt.weight ? ` (${strawberryBlunt.weight})` : ""}
+              </>
+            ) : null}
+            {". See all "}
+            <Link className={linkClass} href="/pre-rolls">Presidential pre-rolls</Link>
+            {" and "}
+            <Link className={linkClass} href="/blunts">Moon Rock blunts</Link>.
+          </p>
+        </>
+      ) : null}
+      {slug === "gorilla-goo" && series && marking && materials ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">What is the Gorilla Goo strain?</h2>
+          <p className="mt-3 text-sm leading-6 text-po-body">
+            {`Gorilla Goo is a ${series} release, marked ${marking} on Presidential packs. It is made with ${materials}.`}
+          </p>
+        </>
+      ) : null}
+      {(slug === "gorilla-goo" || slug === "presidential-og") && miniOffers.length > 0 ? (
+        <p className="mt-6 text-sm leading-6 text-po-body">
+          {`${name} also comes in the mini formats: `}
+          {miniOffers.map((offer, index) => (
+            <span key={offer.format}>
+              {index > 0 ? " and " : ""}
+              <Link className={linkClass} href={offer.href}>{`${name} ${offer.format}`}</Link>
+            </span>
+          ))}
+          .
+        </p>
       ) : null}
       {SERIES_SIBLING[slug] && SERIES_SIBLING[slug].series === series ? (
         <p className="mt-6 text-sm leading-6 text-po-body">

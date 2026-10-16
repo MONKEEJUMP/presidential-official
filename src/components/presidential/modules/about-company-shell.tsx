@@ -165,7 +165,7 @@ export function AboutCompanyShell() {
                 About the Presidential Cannabis Brand
               </h2>
               <p className="mt-8 max-w-3xl text-lg leading-8 text-po-on-dark-muted sm:text-xl sm:leading-9">
-                Presidential is the Los Angeles cannabis brand Everett Smith and John Zapp started in 2012. It makes{" "}
+                Presidential is the Los Angeles cannabis and moon rock brand Everett Smith and John Zapp started in 2012. It makes{" "}
                 <Link
                   className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand"
                   href="/moon-rocks"
