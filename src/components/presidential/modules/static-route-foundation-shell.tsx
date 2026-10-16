@@ -75,9 +75,14 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
         title: "How it's built",
         body: "A Presidential Moon Rock isn't flower with a dusting on top. It's the Presidential Infusion System™ — premium flower, rich resin, and a coat of the finest kief, fused into one complete product. Three layers, one hit, engineered for flavor and strength you actually feel. That's what Cannabis Evolved means — and why Moon Rocks earned the name. The series are the [Silver Flavor Series](/moon-rocks/silver), [Gold Strain Series](/moon-rocks/gold) and [Rose Gold Connoisseur Series](/moon-rocks/rose-gold).",
       },
+      // SURFER-R18: series-to-extract panel, from /about, /learn, /moon-rocks/rose-gold, /vapes and /moon-pods.
+      {
+        title: "Which extract goes into each series?",
+        body: "The Presidential Infusion System™ uses a different concentrate for each series. The [Silver Flavor Series moon rocks](/moon-rocks/silver) are built on THC distillate, the [Gold Strain Series moon rocks](/moon-rocks/gold) on live resin, and the Rose Gold Connoisseur Series on live rosin. Every infused product starts with flower, adds that concentrate, and finishes with the dry material named on the package, such as kief. Moon Pods are a separate vape family, used with the Orbit device and led by liquid diamonds; [explore Moon Pods](/moon-pods).",
+      },
       {
         title: "The reputation",
-        body: "Presidential became the house behind the World's Strongest™ pre-rolls and the moon rock blunt the whole market tried to copy — carried across 400+ licensed California retailers. The reputation wasn't marketed into existence. It was earned, one pack at a time.",
+        body: "Presidential became the house behind the World's Strongest™ pre-rolls and the moon rock blunt the whole market tried to copy — carried across licensed California retailers. The reputation wasn't marketed into existence. It was earned, one pack at a time.",
       },
       {
         title: "The culture",
@@ -170,7 +175,7 @@ function EditorialRouteFoundationShell({
           supportingText={
             route.id === "our-story"
               ? [
-                  "Los Angeles, 2012. Two founders, Everett Smith and John Zapp, set out with one stubborn belief: cannabis deserves better. Not better marketing — better cannabis. They weren't interested in growing flower and calling it premium; they wanted to build the best product on the shelf and obsess over every gram to get there. What they made didn't just sell — it helped invent a category. Presidential became one of the founding fathers of the infused-product market in Southern California: the house behind the World's Strongest™ pre-rolls and the moon rock blunt the whole industry spent the next decade trying to copy, stocked across 400+ licensed California retailers from MedMen and Stiiizy to Catalyst and March & Ash. But Presidential never chased the copies. It kept chasing better — better flavor, greater consistency, a premium experience pack after pack, no misses. More than a decade later, that obsession has grown into a full platform: Moon Rocks, Moon Pods, and Orbit. The name on the box hasn't changed, and neither has the standard behind it. Cannabis Evolved. Expect More. Because Presidential Doesn't Miss.",
+                  "Los Angeles, 2012. Two founders, Everett Smith and John Zapp, set out with one stubborn belief: cannabis deserves better. Not better marketing — better cannabis. They weren't interested in growing flower and calling it premium; they wanted to build the best product on the shelf and obsess over every gram to get there. What they made didn't just sell — it helped invent a category. Presidential became one of the founding fathers of the infused-product market in Southern California: the house behind the World's Strongest™ pre-rolls and the moon rock blunt the whole industry spent the next decade trying to copy, stocked across licensed California retailers from MedMen and Stiiizy to Catalyst and March & Ash. But Presidential never chased the copies. It kept chasing better — better flavor, greater consistency, a premium experience pack after pack, no misses. More than a decade later, that obsession has grown into a full platform: Moon Rocks, Moon Pods, and Orbit. The name on the box hasn't changed, and neither has the standard behind it. Cannabis Evolved. Expect More. Because Presidential Doesn't Miss.",
                 ]
               : [
                   route.description,
