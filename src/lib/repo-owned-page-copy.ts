@@ -339,7 +339,7 @@ Collaboration releases typically reach fewer formats and fewer markets than the 
 
 **Where to find Presidential**
 
-Wholesale, licensed retailers only. Seven state markets make up the Presidential footprint. Use the zip search above. For adults 21+ where legal.`,
+Wholesale, licensed retailers only. Presidential is available in [select state markets](/find-us). Use the zip search above. For adults 21+ where legal.`,
   },
   "/vapes": {
     label: "Presidential Vapes",
