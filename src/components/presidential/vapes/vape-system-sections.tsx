@@ -165,6 +165,15 @@ export function VapeModeSystemSection() {
         <p className={s.eyebrow}><DotList items={content.eyebrow} /></p>
         <h2 id="orbit-system-heading">{content.title}</h2>
         <p className={s.modeLead}>{content.lead}</p>
+        {/* INLINKS-COPY-R16: /vapes system H3 (copy as written). */}
+        <h3 className={s.smallHeading}>Moon Pods and the Orbit vaporizer as one system</h3>
+        <p className={s.modeLead}>
+          Presidential vapes are one product system: <Link href="/moon-pods">Moon Pods vape cartridges</Link> hold the oil, and the{' '}
+          <Link href="/orbit">Orbit smart battery</Link> supplies the heat. Orbit has three modes, one each for liquid diamond, live
+          resin and live rosin oil, so the taste you get comes from matching the mode to the oil in the pod.{' '}
+          <Link href="/learn/different-extracts-need-different-heat">Different extracts need different heat</Link> explains why, and
+          the <Link href="/find-us">Presidential store finder</Link> lists the retail stores that carry both.
+        </p>
         <h3 className={s.smallHeading}>{content.modesHeading}</h3>
         <div className={s.modeRows}>
           {content.modes.map(mode => <article className={s.modeRow} data-tier={mode.tier} key={mode.code}>
