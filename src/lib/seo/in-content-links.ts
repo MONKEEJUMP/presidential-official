@@ -296,6 +296,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     },
   ],
   "/moon-rocks/king-louis": [
+    { href: "/find-us", anchor: "select state markets", context: "currently active in select state markets" },
     {
       href: "/",
       anchor: "shop carries",
@@ -595,12 +596,18 @@ export const HARDCODED_IN_CONTENT_LINK_COUNT = Object.values(
   HARDCODED_IN_CONTENT_LINKS,
 ).reduce((total, rules) => total + rules.length, 0);
 
-// Chief ruling (Oct 16): no state-market count on /moon-rocks/24k; CMS sentence rewritten here (no Sanity write access).
+// Chief ruling (Oct 16): no state-market count on /moon-rocks/24k or /moon-rocks/king-louis; CMS sentence rewritten here (no Sanity write access).
 const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
   "/moon-rocks/24k": [
     [
       "Presidential is currently active across six state markets with two more opening.",
       "Presidential is currently active across select state markets.",
+    ],
+  ],
+  "/moon-rocks/king-louis": [
+    [
+      "Presidential is currently active in six state markets with two more opening.",
+      "Presidential is currently active in select state markets.",
     ],
   ],
 };
