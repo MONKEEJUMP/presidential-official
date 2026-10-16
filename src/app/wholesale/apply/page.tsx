@@ -10,7 +10,7 @@ import { SalesEmail } from "@/components/contact/sales-email";
 export const metadata: Metadata = {
   title: "Apply to Partner with Presidential | Wholesale Sales",
   description: "Apply as a licensed Presidential retail, distribution, market, or wholesale ordering partner.",
-  alternates: { canonical: "/wholesale/apply" },
+  alternates: { canonical: "https://presidentialmoonrocks.com/wholesale/apply" },
   robots: { index: false, follow: true },
 };
 
