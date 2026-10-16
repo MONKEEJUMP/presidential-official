@@ -270,9 +270,8 @@ export const PRE_ROLL_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         Every Moon Rock pre-roll is 1g, and the pack prints its build. Silver Flavor Series rolls such as{" "}
-        <Link className={a} href="/pre-rolls/grape">Grape</Link> are flower, distillate, and kief. Gold Strain Series builds
-        vary by strain: <Link className={a} href="/pre-rolls/blue-dream">Blue Dream</Link> is flower, live resin, and
-        diamonds, Gorilla Goo adds distillate, and Skywalker is flower, distillate, and kief. Rose Gold Connoisseur Series rolls such as{" "}
+        <Link className={a} href="/pre-rolls/grape">Grape</Link> are flower, distillate, and kief. Gold Strain Series rolls
+        such as <Link className={a} href="/pre-rolls/blue-dream">Blue Dream</Link> are flower, live resin, and diamonds. Rose Gold Connoisseur Series rolls such as{" "}
         <Link className={a} href="/pre-rolls/wedding-cake">Wedding Cake</Link> are flower, live rosin, and diamonds. Read{" "}
         <Link className={a} href="/learn/what-are-moon-rocks">what moon rocks are</Link> for the layered build itself.
       </p>
