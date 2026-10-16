@@ -24,6 +24,7 @@ function buildContentSecurityPolicy(
     "https://jscloud.net",
     // GA4 G-D6FB0E81YN (1016-MR-GA4): loaded on every page.
     "https://www.googletagmanager.com",
+    "https://*.google-analytics.com",
     isDev ? "'unsafe-eval'" : "",
   ]
     .filter(Boolean)
