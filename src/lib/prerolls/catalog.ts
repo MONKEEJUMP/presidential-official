@@ -93,9 +93,9 @@ export const PRE_ROLL_ARTWORKS = [
   {
     id: "gorilla-goo",
     name: "Gorilla Goo",
-    edition: "1g infused pre-roll · Flower · Live resin · Distillate · Diamonds",
+    edition: "1g infused pre-roll · Flower · Live resin · Diamonds",
     collection: "Gold Strain Series",
-    description: "Gorilla Goo's reported sour fuel, pine, and chocolate notes give it a rich, gassy character. This version combines flower, live resin, distillate, and diamonds for consumers who want a layered infusion around that robust strain profile. One 1g Moon Rock pre-roll, prepared in rolling paper.",
+    description: "Gorilla Goo's reported sour fuel, pine, and chocolate notes give it a rich, gassy character. This version combines flower, live resin, and diamonds for consumers who want a layered infusion around that robust strain profile. One 1g Moon Rock pre-roll, prepared in rolling paper.",
     src: "/media/pre-rolls/gorilla-goo.webp",
     alt: "Presidential Gorilla Goo 1g Moon Rock pre-roll product",
     shape: "portrait",
@@ -213,9 +213,9 @@ export const PRE_ROLL_ARTWORKS = [
   {
     id: "skywalker",
     name: "Skywalker",
-    edition: "1g infused pre-roll · Flower · Distillate · Kief",
+    edition: "1g infused pre-roll · Flower · Live resin · Diamonds",
     collection: "Gold Strain Series",
-    description: "Skywalker pairs cannabis flower with Rove-formulated distillate and a kief finish. Rove describes its Skywalker profile through blueberry, tropical, and earthy notes, giving this collaboration a fruit-and-earth character to explore. One 1g Moon Rock pre-roll, prepared in rolling paper.",
+    description: "Skywalker pairs cannabis flower with live resin and a diamond finish. Rove describes its Skywalker profile through blueberry, tropical, and earthy notes, giving this collaboration a fruit-and-earth character to explore. One 1g Moon Rock pre-roll, prepared in rolling paper.",
     src: "/media/pre-rolls/skywalker.webp",
     alt: "Presidential Skywalker 1g Moon Rock pre-roll product",
     shape: "square",

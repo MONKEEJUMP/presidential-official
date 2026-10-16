@@ -1,5 +1,6 @@
 import "server-only";
 
+import { softenLearnGuideClaims, softenLearnGuideText } from "./learn-guide-claims";
 import { readPrivatePublishedLearnGuideQuery } from "./learn-guide-drafts";
 import type { SanityReadResult } from "./sanity-read-client";
 import {
@@ -211,7 +212,7 @@ export async function readPublicRenderableLearnGuideSummaries(
         continue;
       }
 
-      uniqueSummaries.set(slug, { slug, title, intro });
+      uniqueSummaries.set(slug, { slug, title, intro: softenLearnGuideText(slug, intro) });
     }
 
     return Array.from(uniqueSummaries.values()).sort((a, b) =>
@@ -242,10 +243,14 @@ export async function readPublicRenderableLearnGuide(
       ? record
       : null;
 
+    // Claim softening lives here, at the single CMS read boundary, so every render path
+    // (header intro, metadata, body modules) gets the same softened copy.
     return {
       enabled: true,
-      record: approvedRecord,
-      modules: approvedRecord ? modules : [],
+      record: approvedRecord
+        ? { ...approvedRecord, intro: approvedRecord.intro ? softenLearnGuideText(slug, approvedRecord.intro) : approvedRecord.intro }
+        : null,
+      modules: approvedRecord ? softenLearnGuideClaims(slug, modules) : [],
     };
   } catch {
     return {

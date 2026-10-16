@@ -38,8 +38,8 @@ const BLUNT_SERIES_ANSWER: AnswerItem = {
     <p>
       Every Presidential infused blunt is 1.5g in a tobacco-free wrap. The{" "}
       <Link className={a} href="/moon-rocks/silver">Silver Flavor Series</Link> blunts are flower, distillate, and kief.{" "}
-      <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link> blunts vary by strain: Presidential OG,
-      Crescendo, and XJ-13 are flower, distillate, and kief, while Blue Dream is flower, live resin, and diamonds. The{" "}
+      <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link> blunts such as Blue Dream
+      are flower, live resin, and diamonds. The{" "}
       <Link className={a} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> blunts are flower, live rosin,
       and diamonds.
     </p>
