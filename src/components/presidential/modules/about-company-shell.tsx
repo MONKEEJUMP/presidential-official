@@ -178,9 +178,8 @@ export function AboutCompanyShell() {
                   className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand"
                   href="/find-us"
                 >
-                  finder
-                </Link>{" "}
-                lists those retailers.
+                  finder lists those retailers
+                </Link>.
               </p>
             </div>
 

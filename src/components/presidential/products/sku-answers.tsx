@@ -130,8 +130,8 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             <Link className={linkClass} href="/moon-rocks#moon-rocks-q-infused">every Presidential moon rock is built</Link>.
             {series === "Silver Flavor Series" ? (
               <>
-                {" Its concentrate is "}
-                <Link className={linkClass} href="/learn/what-is-thc-distillate">distillate</Link>.
+                {" Its "}
+                <Link className={linkClass} href="/learn/what-is-thc-distillate">concentrate is distillate</Link>.
               </>
             ) : null}
             {slug === "cherry-gelato" ? (

@@ -438,9 +438,9 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
                 <Link className={inlineLinkClass} href="/vapes">Presidential vapes</Link>. This page is the official guide to Presidential&apos;s infused product system, its three extract-led series, and the numbers printed on a cannabis label.
               </p>
               <p>
-                It explains flower, concentrate, kief, distillate, live resin, live rosin, THCa, and total THC for{" "}
+                It explains flower, concentrate, kief, distillate, live resin, live rosin, THCa, and total{" "}
                 <Link className={inlineLinkClass} href="/presidential-cannabis">
-                  Presidential
+                  THC for Presidential
                 </Link>
                 , then points readers to the detailed guides and the{" "}
                 <Link className={inlineLinkClass} href="/find-us">licensed-retailer locator</Link>.
@@ -607,8 +607,8 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
       <TermSection id="presidential-blunts-tobacco-free" images={[images[2]]} title="Tobacco-free, and why that matters" tone="contrast">
         <p>The hemp wrap is central to the Presidential Blunt identity. Hemp gives the format its substantial feel and measured pace while allowing the infused cannabis inside to lead the aroma and taste.</p>
         <p>
-          <Link className={inlineLinkClass} href="/presidential-cannabis">Presidential</Link>{" "}
-          rolls its blunts in <strong>hemp wraps that are one hundred percent tobacco free.</strong>
+          <Link className={inlineLinkClass} href="/presidential-cannabis">Presidential rolls its blunts</Link>{" "}
+          in <strong>hemp wraps that are one hundred percent tobacco free.</strong>
         </p>
         <p>That material choice keeps the focus on the flower, concentrate, kief, and strain or flavor profile selected for the package. It also creates a consistent physical foundation across the house blunt and Mini Blunt families.</p>
         <p>The wrap, fill, and infusion are treated as one system. Balanced airflow supports the light, the infused material carries the profile, and the finished roll gives the blend enough space to burn at its intended rhythm.</p>
