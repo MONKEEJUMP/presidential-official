@@ -2,12 +2,13 @@
 // No lab result on the site backs the number, and the no-potency rule applies.
 const POTENCY_CLAIM =
   /reach(?:es)? as high as 70\s*%\s*(?:[\u2014\u2013-]+|,)?\s*roughly three times the ceiling of top-shelf flower/gi;
-const POTENCY_FIGURE = /\b(?:as high as|up to|reach(?:es|ing)?)\s+70\s*(?:%|percent)/gi;
+// Keeps a leading reach verb so "can reach 70%" becomes "can reach higher than flower alone".
+const POTENCY_FIGURE = /\b(?:(reach(?:es|ing)?)\s+(?:as high as\s+|up to\s+)?|as high as\s+|up to\s+)70\s*(?:%|percent)/gi;
 
 function soften(text: string): string {
   return text
     .replace(POTENCY_CLAIM, "carry concentrate and kief on top of the flower")
-    .replace(POTENCY_FIGURE, "higher than flower alone");
+    .replace(POTENCY_FIGURE, (_match, verb?: string) => (verb ? `${verb} higher than flower alone` : "higher than flower alone"));
 }
 
 // Text-level entry point for render paths that build strings themselves: the body
