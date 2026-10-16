@@ -82,7 +82,7 @@ export function ContactSalesExperience() {
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
             <nav aria-label="Breadcrumb" className={styles.breadcrumbs}>
-              <Link href="/">Presidential</Link><span aria-hidden="true">/</span><span>Sales &amp; Partnerships</span>
+              <Link href="/">Presidential</Link><span aria-hidden="true">/</span><span aria-current="page">Let&apos;s Talk Sales</span>
             </nav>
             <h1 id="contact-sales-heading">Let&apos;s talk <span>sales.</span></h1>
             <p className={styles.heroLead}>Wholesale orders. Retail partnerships.<br />The official line to Presidential.</p>

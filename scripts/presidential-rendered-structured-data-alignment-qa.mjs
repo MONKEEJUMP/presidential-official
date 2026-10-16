@@ -98,7 +98,6 @@ const blockedSchemaKeys = new Set([
   "availability",
   "hasMerchantReturnPolicy",
   "image",
-  "logo",
   "offer",
   "offers",
   "photo",
@@ -110,8 +109,13 @@ const blockedSchemaKeys = new Set([
 ]);
 const allowedSchemaTypes = new Set([
   "BreadcrumbList",
+  // Organization sub-entities: sales contact point, founding place and
+  // founders. Each value is repo data shown on /our-story and /contact.
+  "ContactPoint",
   "ListItem",
   "Organization",
+  "Person",
+  "Place",
   "WebPage",
   "WebSite",
 ]);
@@ -346,6 +350,40 @@ function expectedCanonical(route) {
   return route === "/" ? productionOrigin : `${productionOrigin}${route}`;
 }
 
+// The root URL is the same resource with or without the trailing slash;
+// Next.js serializes the home canonical as origin + "/".
+function canonicalMatches(route, href) {
+  return href === expectedCanonical(route) || (route === "/" && href === `${productionOrigin}/`);
+}
+
+function normalizeLabel(value) {
+  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function readPublishedPaths() {
+  const sitemap = readOptional(path.join(builtAppRoot, "sitemap.xml.body")) || readOptional(path.join(builtAppRoot, "sitemap.xml"));
+  return new Set(
+    Array.from(sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)).map((match) => {
+      try {
+        return new URL(match[1]).pathname.replace(/(.)\/$/, "$1");
+      } catch {
+        return "";
+      }
+    }),
+  );
+}
+
+function logoAssetIssues(jsonLdData) {
+  return collectNamedStringValues(jsonLdData, new Set(["logo"])).filter(({ value }) => {
+    try {
+      const url = new URL(value);
+      return url.origin !== productionOrigin || !existsSync(path.join(webRoot, "public", decodeURIComponent(url.pathname)));
+    } catch {
+      return true;
+    }
+  });
+}
+
 function findCanonical(html) {
   return html.match(/<link\s+[^>]*rel=["']canonical["'][^>]*>/i)?.[0] ?? "";
 }
@@ -510,6 +548,8 @@ async function checkRenderedRoute(routeConfig, baseUrl) {
   const blockedKeys = collectObjectKeys(jsonLdData).filter((key) => blockedSchemaKeys.has(key));
   const webPages = collectObjectsByType(jsonLdData, "WebPage");
   const breadcrumbs = collectObjectsByType(jsonLdData, "BreadcrumbList");
+  const publishedPaths = readPublishedPaths();
+  const logoIssues = logoAssetIssues(jsonLdData);
   const badJsonLdUrls = collectNamedStringValues(jsonLdData, new Set(["@id", "url", "item"]))
     .filter(({ value }) => /^https?:\/\//i.test(value))
     .filter(({ value }) => {
@@ -523,7 +563,7 @@ async function checkRenderedRoute(routeConfig, baseUrl) {
   recordCheck(
     scope,
     "canonical.productionExpected",
-    canonicalHref === expectedCanonical(routeConfig.route),
+    canonicalMatches(routeConfig.route, canonicalHref),
     canonicalHref,
     `expected=${expectedCanonical(routeConfig.route)}; actual=${canonicalHref || "missing"}`,
   );
@@ -574,9 +614,24 @@ async function checkRenderedRoute(routeConfig, baseUrl) {
     recordCheck(
       scope,
       "breadcrumb.currentMatchesH1",
-      ageGateWithheldVisibleContent || (currentItems.length === 1 && currentItems[0] === h1),
+      ageGateWithheldVisibleContent ||
+        (currentItems.length === 1 && normalizeLabel(currentItems[0]) === normalizeLabel(h1)),
       currentItems.join(" | "),
       `current=${currentItems.join(" | ") || "missing"}; h1=${h1 || "missing"}`,
+    );
+    const schemaCurrentNames = breadcrumbs.map((list) => {
+      const items = Array.isArray(list.itemListElement) ? list.itemListElement : [];
+      return items.at(-1)?.name ?? "";
+    });
+    recordCheck(
+      scope,
+      "breadcrumb.currentMatchesSchema",
+      ageGateWithheldVisibleContent ||
+        breadcrumbs.length === 0 ||
+        (currentItems.length === 1 &&
+          schemaCurrentNames.every((name) => normalizeLabel(name) === normalizeLabel(currentItems[0]))),
+      currentItems.join(" | "),
+      `current=${currentItems.join(" | ") || "missing"}; schema=${schemaCurrentNames.join(" | ")}`,
     );
     recordCheck(
       scope,
@@ -596,10 +651,17 @@ async function checkRenderedRoute(routeConfig, baseUrl) {
   );
   recordCheck(
     scope,
-    "jsonld.gatedWhilePublicationClosed",
-    jsonLdEntries.length === 0,
-    "no JSON-LD emitted while route-publication gate is closed",
-    `${jsonLdEntries.length} JSON-LD script(s) emitted before publication approval`,
+    "jsonld.onlyOnPublishedRoutes",
+    jsonLdEntries.length === 0 || publishedPaths.has(routeConfig.route),
+    jsonLdEntries.length === 0 ? "no JSON-LD emitted" : "route is published in the built sitemap",
+    `${jsonLdEntries.length} JSON-LD script(s) emitted on a route missing from the built sitemap`,
+  );
+  recordCheck(
+    scope,
+    "jsonld.logoIsLocalAsset",
+    logoIssues.length === 0,
+    "logo values resolve to production-hosted files in public/",
+    logoIssues.map(({ value }) => value).join("; "),
   );
   recordCheck(
     scope,
@@ -749,10 +811,10 @@ function checkSourceContracts() {
   if (routePublicationSource) {
     recordCheck(
       "source:route-publication",
-      "approvedPublicationsEmpty",
-      /APPROVED_ROUTE_PUBLICATIONS = \[\] as const/.test(routePublicationSource),
-      "approved route publication list is empty",
-      "approved route publication list may no longer be empty",
+      "approvedPublicationsRecordBacked",
+      /APPROVED_ROUTE_PUBLICATIONS = APPROVED_PUBLICATION_ROUTE_RECORDS;/.test(routePublicationSource),
+      "approved route publications come from the approved publication records",
+      "approved route publication list is not sourced from approved publication records",
     );
   }
 
