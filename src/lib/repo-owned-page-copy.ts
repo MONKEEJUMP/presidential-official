@@ -238,7 +238,7 @@ The process does not change between them.
 
 Every Presidential moon rock is built the same way: flower as the base, a concentrate coat applied over it, a dry finishing material bonded to the coat. Three stages, in that order. The Presidential Infusion System has run on that sequence since Los Angeles in 2012, and a Silver Flavour Series pack goes through exactly what a Rose Gold pack goes through.
 
-What changes across the catalogue is which materials fill the three roles, and the pack always prints it. Some carry FLOWER · LIVE RESIN · DIAMONDS. Some carry FLOWER · DISTILLATE · KIEF. Cap Junky carries FLOWER · LIQUID LIVE RESIN · DIAMONDS. Gorilla Goo carries four ingredients rather than three.
+What changes across the catalogue is which materials fill the three roles, and the pack always prints it. Some carry FLOWER · LIVE RESIN · DIAMONDS. Some carry FLOWER · DISTILLATE · KIEF. Cap Junky carries FLOWER · LIQUID LIVE RESIN · DIAMONDS.
 
 **The formats, identical across all three tiers**
 
@@ -272,11 +272,11 @@ The THC Design mark is a white hexagonal molecule diagram set beside the words T
 
 **The two releases**
 
-**Creskendo.** Sativa. Moon Rock Blunt. Built on FLOWER · DISTILLATE · KIEF. The artwork runs a teal-to-blue gradient with vivid purple, violet and mint liquid erupting upward from a plume behind the pack, and glossy three-dimensional musical notes and treble clefs floating through the frame. The pack itself is printed purple.
+**Creskendo.** Sativa. Moon Rock Blunt. Built on FLOWER · LIVE RESIN · DIAMONDS. The artwork runs a teal-to-blue gradient with vivid purple, violet and mint liquid erupting upward from a plume behind the pack, and glossy three-dimensional musical notes and treble clefs floating through the frame. The pack itself is printed purple.
 
 Worth knowing: the pack prints **CRESKENDO**, stylised with a music-note K — not "crescendo." The name is a deliberate construction, not a spelling error.
 
-**XJ13.** Sativa. Moon Rock Blunt, Net Wt. 1.5G (.053oz), 100% TOBACCO FREE. Also built on FLOWER · DISTILLATE · KIEF. The artwork puts a frosty green cannabis bud and golden fan leaves behind the pack, with a molecular ball-and-stick diagram and a chemical structure line-drawing floating through teal and gold liquid. The pack is mint green.
+**XJ13.** Sativa. Moon Rock Blunt, Net Wt. 1.5G (.053oz), 100% TOBACCO FREE. Also built on FLOWER · LIVE RESIN · DIAMONDS. The artwork puts a frosty green cannabis bud and golden fan leaves behind the pack, with a molecular ball-and-stick diagram and a chemical structure line-drawing floating through teal and gold liquid. The pack is mint green.
 
 Both are Sativa. Both run the same composition. Together they are the whole of the THC Design collaboration in the Presidential catalogue.
 
