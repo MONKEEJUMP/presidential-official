@@ -307,6 +307,13 @@ export function AboutCompanyShell() {
                   value="A Presidential Moon Rock isn't flower with something dusted on top. It's a system: premium flower, rich resin, and the finest kief brought together so the layers stop behaving like layers. Three components, one product, engineered to burn evenly and finish clean. That process has a name because it took years to earn one. Cannabis Evolved."
                 />
               </p>
+              {/* ROUND2 MR 2 (Surfer 16649229): series-to-concentrate mapping as published on /learn and the SKU pages. */}
+              <h3 className="mt-8 font-display text-2xl uppercase leading-tight text-po-ink">Which concentrate goes into each series?</h3>
+              <p className="mt-3 max-w-3xl text-lg leading-8 text-po-body">
+                The Silver Flavor Series is built on THC distillate, with flavors such as Grape, Strawberry, and Watermelon.
+                The Gold Strain Series is built around live resin, and the Rose Gold Connoisseur Series uses solventless live
+                rosin. Each pack prints its own materials.
+              </p>
             </div>
             <AboutImage
               alt="Whoa Si Whoa Presidential Moon Rocks package artwork"

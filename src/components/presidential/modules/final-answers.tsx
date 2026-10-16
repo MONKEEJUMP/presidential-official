@@ -34,6 +34,20 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
       </p>
     ),
   },
+  // ROUND2 MR 1 (Surfer 16649274): format-only answer; sources /about infusion copy and /learn/what-are-moon-rocks.
+  {
+    id: "home-q-worth-it",
+    question: "Are moon rocks worth it?",
+    answer: (
+      <p>
+        That comes down to the format you want. A moon rock is not plain flower: it is cannabis flower coated with a
+        concentrate and finished with kief, three layers in one product. Presidential&apos;s{" "}
+        <Link className={a} href="/about#about-craft-title">infusion process</Link> runs in that order: flower, then
+        concentrate, then kief. Read <Link className={a} href="/learn/what-are-moon-rocks">what moon rocks are</Link> for
+        how the format differs from flower alone.
+      </p>
+    ),
+  },
 ];
 
 export const ORBIT_ANSWERS: readonly AnswerItem[] = [
