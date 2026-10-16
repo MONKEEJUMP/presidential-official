@@ -22,7 +22,8 @@ function buildContentSecurityPolicy(
     "'strict-dynamic'",
     // InLinks (1014-MR-INLJS); the nonce covers it under strict-dynamic, the host covers older browsers.
     "https://jscloud.net",
-    analyticsAllowed ? "https://www.googletagmanager.com" : "",
+    // GA4 G-D6FB0E81YN (1016-MR-GA4): loaded on every page.
+    "https://www.googletagmanager.com",
     isDev ? "'unsafe-eval'" : "",
   ]
     .filter(Boolean)
@@ -30,14 +31,16 @@ function buildContentSecurityPolicy(
   const connectSrc = [
     "connect-src 'self'",
     "https://jscloud.net",
-    analyticsAllowed ? "https://www.google-analytics.com" : "",
+    "https://www.googletagmanager.com",
+    "https://*.google-analytics.com",
     analyticsAllowed ? "https://analytics.google.com" : "",
   ]
     .filter(Boolean)
     .join(" ");
   const imgSrc = [
     "img-src 'self'",
-    analyticsAllowed ? "https://www.google-analytics.com" : "",
+    "https://www.googletagmanager.com",
+    "https://*.google-analytics.com",
   ]
     .filter(Boolean)
     .join(" ");
