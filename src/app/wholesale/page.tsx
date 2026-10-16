@@ -49,9 +49,9 @@ export default function WholesalePage() {
                 <Link href="/">Presidential</Link><span aria-hidden="true">/</span><span>Wholesale</span>
               </nav>
               <h1 id="wholesale-heading">
-                <span className={styles.heroTitleLine}>Bring</span>
-                <span className={`${styles.heroTitleLine} ${styles.heroTitleAccent}`}>Presidential</span>
-                <span className={styles.heroTitleLine}>to your</span>
+                <span className={styles.heroTitleLine}>Bring</span>{" "}
+                <span className={`${styles.heroTitleLine} ${styles.heroTitleAccent}`}>Presidential</span>{" "}
+                <span className={styles.heroTitleLine}>to your</span>{" "}
                 <span className={styles.heroTitleLine}>market.</span>
               </h1>
               <p className={styles.heroSupport}>Wholesale ordering and partnership applications for licensed retailers and distributors.</p>
