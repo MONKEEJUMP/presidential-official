@@ -199,7 +199,7 @@ Alongside them run the collaboration releases, each carrying a partner's mark on
 
 **Arizona in the wider footprint**
 
-Presidential's seven-state [footprint includes Washington](/find-us/wa). Arizona sits in that group alongside California, Oklahoma, Nevada, New York and Michigan.
+Presidential's footprint includes Washington; see the [Washington retailer finder](/find-us/wa). Arizona sits in that group alongside California, Oklahoma, Nevada, New York and Michigan.
 
 Each market carries its own mix. Some collaboration releases are market-specific — the Platinum partnership packs carry Michigan regulatory markings, and Nature's Chemistry prints Las Vegas, Nevada on its packs. What reaches Arizona shelves is decided by distribution and by the retailers themselves.
 
@@ -239,7 +239,7 @@ That composition line is the one that matters. FLOWER · LIVE RESIN · DIAMONDS 
 
 **The footprint**
 
-Presidential's seven-state footprint spans California, Oklahoma, Nevada, Arizona, Michigan, New York [and Washington](/find-us/wa).
+Presidential's footprint spans California, Oklahoma, Nevada, Arizona, Michigan, New York and Washington. For Washington stores, use the [Washington retailer finder](/find-us/wa).
 
 **Start with the search**
 
