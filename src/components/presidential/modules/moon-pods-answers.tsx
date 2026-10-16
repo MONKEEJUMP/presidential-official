@@ -30,6 +30,21 @@ export const MOON_PODS_ANSWERS: readonly AnswerItem[] = [
     ),
   },
   {
+    // SURFER-R10: family/extract mapping from "What are Presidential Moon Pods?" plus existing /learn guides.
+    id: "moon-pods-q-families",
+    question: "Which Moon Pod family uses which extract?",
+    answer: (
+      <p>
+        Each Moon Pod family is named for its extract: Liquid Diamonds (LD) with a teal mouthpiece, Live Resin (LRE) with a
+        clear mouthpiece, and Live Rosin (LRO) with a smoked mouthpiece. Read{" "}
+        <Link className={a} href="/learn/what-are-liquid-diamonds">what liquid diamonds are</Link>,{" "}
+        <Link className={a} href="/learn/what-is-live-resin">what live resin is</Link>, and{" "}
+        <Link className={a} href="/learn/what-is-live-rosin">what live rosin is</Link>, then see why{" "}
+        <Link className={a} href="/learn/different-extracts-need-different-heat">different extracts need different heat</Link>.
+      </p>
+    ),
+  },
+  {
     id: "moon-pods-q-buy",
     question: "Where can I buy Moon Pods?",
     answer: (

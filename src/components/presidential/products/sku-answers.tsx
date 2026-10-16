@@ -47,7 +47,7 @@ function descriptionMarking(name: string): string | undefined {
   return found.size === 1 ? [...found][0] : undefined;
 }
 
-const CHERRY_GELATO_SIBLINGS = new Set(["24k", "blue-dream", "blue-raspberry", "cap-junky", "cereal-milk"]);
+const CHERRY_GELATO_SIBLINGS = new Set(["24k", "blue-dream", "blue-raspberry", "cap-junky"]);
 
 function listMaterials(parts: readonly string[]): string {
   const words = parts.map((part) => part.toLowerCase());
@@ -141,6 +141,20 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
         <>
           <h2 className={`${materials || slug === "watermelon" ? "mt-6 " : ""}font-display text-2xl uppercase leading-tight text-po-ink`}>{`Is ${name} indica, sativa, or hybrid?`}</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">{`Presidential packs mark ${name} as ${marking}.`}</p>
+        </>
+      ) : null}
+      {/* SURFER-R10: Cereal Milk series, from its own build and the cereal-milk-pre-roll vault entry. */}
+      {slug === "cereal-milk" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Which series is Cereal Milk in?</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Cereal Milk belongs to the{" "}
+            <Link className={linkClass} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>, built with flower,
+            live rosin, and diamonds. It also comes as a{" "}
+            <Link className={linkClass} href="/pre-rolls/cereal-milk">Cereal Milk pre-roll</Link>. See{" "}
+            <Link className={linkClass} href="/learn/what-is-live-rosin">what live rosin is</Link> for the extract behind the
+            series.
+          </p>
         </>
       ) : null}
       {/* SURFER-R9: Cherry Gelato type from its vault pack descriptions ("marked Hybrid"). */}
