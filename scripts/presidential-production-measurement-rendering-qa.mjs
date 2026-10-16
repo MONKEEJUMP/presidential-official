@@ -132,7 +132,11 @@ function main() {
   );
   // 1016-MR-GA4: the owner-requested GA4 tag G-D6FB0E81YN renders on every page; any other
   // measurement ID in the built loader still fails.
-  const builtGaIds = [...builtText.matchAll(/gtag\/js\?id=([A-Za-z0-9-]+)/g)].map((match) => match[1]);
+  const builtGaIds = [
+    ...[...builtText.matchAll(/gtag\/js\?id=([A-Za-z0-9-]+)/g)].map((match) => match[1]),
+    // Configured destinations too: gtag('config', 'G-...') in plain or escaped (RSC/JSON) form.
+    ...[...builtText.matchAll(/gtag\(\s*\\?["']config\\?["']\s*,\s*\\?["']([A-Za-z0-9-]+)/g)].map((match) => match[1]),
+  ];
   addCheck(
     rows,
     "analyticsRendering.defaultBuiltOutput.onlyOwnerGa4",
