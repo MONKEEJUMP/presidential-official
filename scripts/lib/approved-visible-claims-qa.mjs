@@ -104,6 +104,18 @@ function approvedEntryForNode(text, route, current, stack) {
   )
 }
 
+// Phrase entries (match: "phrase") exempt only the named phrase inside a
+// text node at the listed placement; the rest of the node is still scanned.
+function stripApprovedPhrases(text, route, current, stack) {
+  let result = normalizeVisibleClaimNode(text)
+  for (const entry of APPROVED_VISIBLE_CLAIMS.entries) {
+    if (entry.match !== 'phrase') continue
+    if (!entry.placements.some((placement) => placementMatches(placement, route, current, stack))) continue
+    result = result.replace(new RegExp(escapeRegExp(normalizeVisibleClaimNode(entry.claim)), 'gi'), ' ')
+  }
+  return result
+}
+
 function escapeRegExp(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
@@ -153,7 +165,7 @@ export function stripApprovedVisibleClaims(text, placement) {
 
   return approvedEntryForNode(text, placement.route, current, stack)
     ? ' '
-    : String(text)
+    : stripApprovedPhrases(text, placement.route, current, stack)
 }
 
 export function stripApprovedVisibleClaimsFromHtml(html, route) {
@@ -168,7 +180,10 @@ export function stripApprovedVisibleClaimsFromHtml(html, route) {
           return token
         }
 
-        return approvedEntryForNode(token, route, current, stack) ? ' ' : token
+        if (approvedEntryForNode(token, route, current, stack)) {
+          return ' '
+        }
+        return stripApprovedPhrases(token, route, current, stack)
       }
 
       const closingName = token.match(/^<\s*\/\s*([a-z0-9-]+)\b/i)?.[1]?.toLowerCase()

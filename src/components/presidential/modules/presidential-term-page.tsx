@@ -578,7 +578,8 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
             <h1 className="font-display text-5xl uppercase leading-[0.9] text-po-on-dark sm:text-7xl lg:text-8xl" id="presidential-blunts-title">{route.h1}</h1>
             <h2 className="mt-10 font-display text-2xl uppercase text-po-brand">Opening</h2>
             <div className="mt-5 grid max-w-2xl gap-5 text-lg leading-8 text-po-on-dark-muted">
-              <p>Presidential Blunts bring the house infusion method into a slow-burning hemp wrap built for a longer session.</p>
+              <p>Presidential Blunts bring the house infusion method into a slow-burning hemp wrap built for a longer session. Read more{" "}
+                <Link className={inlineLinkClass} href="/about">about the Presidential cannabis brand</Link>.</p>
               <p>
                 Flower, concentrate, kief, format, and finish work together here. The result is a distinctly Presidential way to enjoy{" "}
                 <Link className={inlineLinkClass} href="/presidential-thc">infused cannabis</Link>.
@@ -596,7 +597,8 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
           holds heat over a longer burn. The format suits a shared circle, a paced solo session, or any occasion that benefits from time and room for the flavor to develop.
         </p>
         <p><strong>Presidential Mini Blunts</strong> translate that construction into a compact size. They keep the hemp-wrap character and infused composition while matching a shorter occasion.</p>
-        <p>Each format begins with the same focus on construction. Size, wrap, airflow, and burn rate shape the experience, giving people a clear way to choose the Presidential format that fits the moment.</p>
+        <p>Each format begins with the same focus on construction. Size, wrap, airflow, and burn rate shape the experience, giving people a clear way to choose the Presidential format that fits the moment. Loose Moon Rocks live on the{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks">Presidential Moon Rocks platform</Link>.</p>
       </TermSection>
 
       <TermSection id="presidential-blunts-tobacco-free" images={[images[2]]} title="Tobacco-free, and why that matters" tone="contrast">
