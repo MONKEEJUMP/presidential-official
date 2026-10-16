@@ -90,10 +90,21 @@ const ga4Surface = {
   cspTokens: {
     "script-src": ["https://www.googletagmanager.com", "https://*.google-analytics.com"],
     "connect-src": ["https://www.googletagmanager.com", "https://*.google-analytics.com", "https://*.analytics.google.com"],
-    "img-src": ["https://www.googletagmanager.com", "https://*.google-analytics.com"],
+    "img-src": ["https://www.googletagmanager.com", "https://*.google-analytics.com", "https://*.analytics.google.com"],
   },
 };
-const ga4VendorTokenPattern = /\b(?:gtag|dataLayer|googletagmanager|google-analytics)\b/gi;
+// Exact approved GA4 snippet pieces (layout loader + init). Only these occurrences are exempt;
+// any other gtag/dataLayer use on the same built line still matches.
+const ga4ExactSnippets = [
+  "https://www.googletagmanager.com/gtag/js?id=G-D6FB0E81YN",
+  "presidential-ga4-loader",
+  "presidential-ga4-init",
+  "window.dataLayer = window.dataLayer || [];",
+  "function gtag(){window.dataLayer.push(arguments);}",
+  "gtag('js', new Date());",
+  "gtag('config', 'G-D6FB0E81YN');",
+];
+const withoutGa4Snippets = (line) => ga4ExactSnippets.reduce((value, snippet) => value.replaceAll(snippet, ""), line);
 const allowedCspTokens = (directiveName) => [
   ...(inlinksSurface.cspDirectives.includes(directiveName) ? [inlinksSurface.origin] : []),
   ...(ga4Surface.cspTokens[directiveName] ?? []),
@@ -191,10 +202,8 @@ function collectMatches(files, pattern, options = {}) {
     const lines = text.split(/\r?\n/);
     for (const [index, line] of lines.entries()) {
       pattern.lastIndex = 0;
-      // GA4 exemption: on lines carrying the approved measurement ID, only the GA4 vendor words are
-      // removed; any other vendor signal on the same line still matches.
-      const tested =
-        options.ga4Exempt && line.includes(ga4Surface.measurementId) ? line.replace(ga4VendorTokenPattern, "") : line;
+      // GA4 exemption: remove only the exact approved snippet pieces before matching.
+      const tested = options.ga4Exempt ? withoutGa4Snippets(line) : line;
       if (pattern.test(tested)) {
         matches.push(`${relativePath}:${index + 1}:${line.trim()}`);
       }

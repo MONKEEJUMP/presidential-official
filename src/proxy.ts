@@ -40,6 +40,7 @@ function buildContentSecurityPolicy(nonce: string): string {
     "img-src 'self'",
     "https://www.googletagmanager.com",
     "https://*.google-analytics.com",
+    "https://*.analytics.google.com",
   ]
     .filter(Boolean)
     .join(" ");

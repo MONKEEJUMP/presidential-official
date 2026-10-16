@@ -175,7 +175,7 @@ function main() {
   const passCount = rows.length - failCount;
   const verdict =
     failCount === 0
-      ? "PASS_PRODUCTION_MEASUREMENT_RENDERING_LOCAL_GATED"
+      ? "PASS_PRODUCTION_MEASUREMENT_RENDERING_OWNER_GA4_ALWAYS_ON"
       : "FAIL_PRODUCTION_MEASUREMENT_RENDERING_REVIEW_REQUIRED";
 
   console.log(JSON.stringify({
@@ -183,7 +183,9 @@ function main() {
     passCount,
     failCount,
     builtFileCount: builtFiles.length,
-    analyticsRenderedByDefault: false,
+    // 1016-MR-GA4: the owner GA4 tag renders in the default build; GSC stays gated.
+    analyticsRenderedByDefault: true,
+    analyticsMeasurementId: "G-D6FB0E81YN",
     gscRenderedByDefault: false,
     deploymentExecuted: false,
     providerMutated: false,
