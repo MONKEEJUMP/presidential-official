@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { isGoogleAnalyticsEnabled } from "@/lib/analytics/google";
 import { hasPrivateDraftRouteAccess } from "@/lib/cms/draft-route-access";
 
 const canonicalHostname = "presidentialmoonrocks.com";
@@ -11,10 +10,8 @@ const nextImageStyleAttributeHashes = [
   "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='",
 ] as const;
 
-function buildContentSecurityPolicy(
-  nonce: string,
-  analyticsAllowed: boolean,
-): string {
+// GA4 hosts are always allowed now (1016-MR-GA4), so the CSP no longer depends on the analytics env gate.
+function buildContentSecurityPolicy(nonce: string): string {
   const isDev = process.env.NODE_ENV === "development";
   const scriptSrc = [
     "script-src 'self'",
@@ -34,7 +31,8 @@ function buildContentSecurityPolicy(
     "https://jscloud.net",
     "https://www.googletagmanager.com",
     "https://*.google-analytics.com",
-    analyticsAllowed ? "https://analytics.google.com" : "",
+    // GA4 regional collection (EU/UK/CH) uses *.analytics.google.com.
+    "https://*.analytics.google.com",
   ]
     .filter(Boolean)
     .join(" ");
@@ -126,7 +124,7 @@ export function proxy(request: NextRequest) {
   }
 
   const nonce = btoa(crypto.randomUUID());
-  const csp = buildContentSecurityPolicy(nonce, isGoogleAnalyticsEnabled());
+  const csp = buildContentSecurityPolicy(nonce);
 
   if (request.nextUrl.pathname === "/find-us/fl") {
     const response = new NextResponse("Gone", {

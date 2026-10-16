@@ -130,11 +130,17 @@ function main() {
       analyticsComponentSource.includes("nonce={nonce}"),
     "GA4 scripts are helper-gated, encoded, nonce-aware, and anonymized",
   );
+  // 1016-MR-GA4: the owner-requested GA4 tag G-D6FB0E81YN renders on every page; any other
+  // measurement ID in the built loader still fails.
+  const builtGaIds = [...builtText.matchAll(/gtag\/js\?id=([A-Za-z0-9-]+)/g)].map((match) => match[1]);
   addCheck(
     rows,
-    "analyticsRendering.defaultBuiltOutput.noGaLoader",
-    !builtText.includes(loaderNeedle) && !builtText.includes(initNeedle),
-    "default production build output has no GA4 loader/init marker",
+    "analyticsRendering.defaultBuiltOutput.onlyOwnerGa4",
+    builtText.includes(loaderNeedle) &&
+      builtText.includes(initNeedle) &&
+      builtGaIds.length > 0 &&
+      builtGaIds.every((id) => id === "G-D6FB0E81YN"),
+    "default production build output carries only the owner GA4 tag G-D6FB0E81YN",
   );
   addCheck(
     rows,
