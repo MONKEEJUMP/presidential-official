@@ -155,6 +155,38 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
         </>
       ) : null}
+      {/* SURFER-R17: Pineapple distillate H3, from its own page, /learn/what-is-live-resin and /moon-rocks/watermelon. */}
+      {slug === "pineapple" && series === "Silver Flavor Series" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Why distillate for a flavor-led moon rock?</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Pineapple is one of the flavor-led releases in the{" "}
+            <Link className={linkClass} href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link> lineup, and its concentrate
+            is distillate. Distillate is stripped and refined until it is essentially neutral, so the series can lead with the
+            flavor name rather than the strain; see{" "}
+            <Link className={linkClass} href="/learn/what-is-thc-distillate">what THC distillate is</Link>. The build follows every
+            Presidential moon rock: flower first, distillate carried through the flower, and kief as the dry finish. Don&apos;t grind
+            them, because the concentrate layer gums up a grinder and strips the kief. Pineapple also comes rolled as a{" "}
+            <Link className={linkClass} href="/pre-rolls/pineapple">Pineapple pre-roll</Link>.
+          </p>
+        </>
+      ) : null}
+      {/* SURFER-R17: NYC Diesel catalog H3, from its own page, /moon-rocks/24k and the label line. */}
+      {slug === "nyc-diesel" && series === "Gold Strain Series" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Where does NYC Diesel sit in the catalog?</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            NYC Diesel is a Gold Strain Series release{marking ? `, and Presidential packs mark it as ${marking}` : ""}. The{" "}
+            <Link className={linkClass} href="/moon-rocks/gold">Gold Strain Series moon rocks</Link> carry named strains and are
+            built on live resin: flower as the base, live resin as the coat, and diamonds as the crystalline outer layer that gives a
+            Presidential Moon Rock its density; see{" "}
+            <Link className={linkClass} href="/learn/what-is-live-resin">what live resin is</Link>. In the artwork, NYC Diesel belongs
+            to the darker half of the catalog, set against the bright packs such as Papaya Punch and Cherry Gelato. It also comes as
+            a <Link className={linkClass} href="/pre-rolls/nyc-diesel">NYC Diesel pre-roll</Link>. THC is batch-specific, so read
+            the current package label and its test results.
+          </p>
+        </>
+      ) : null}
       {/* SURFER-R16: Blue Dream Gold series H3, from its own page, /moon-rocks/24k and /learn. */}
       {slug === "blue-dream" && series === "Gold Strain Series" ? (
         <>
