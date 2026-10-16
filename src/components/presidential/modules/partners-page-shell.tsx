@@ -10,7 +10,10 @@ import { SceneStack } from '../layout/scene-stack';
 import styles from './partners-page-shell.module.css';
 
 export type Partner = {id:string;name:string;nationalDoors:number;website:string;logo:string|null;logoOnDark?:boolean;perState:Partial<Record<PartnerStateCode,{count:number;cities:string[]}>>};
-const brands: readonly Partner[] = snapshot.brands;
+// Chief order 2026-10-16: internal accounts never appear in a public partner list (AR HOLD, " - AU",
+// processor/distributor accounts, billing notes such as CANNOT PAY).
+const INTERNAL_ACCOUNT = /\bAR HOLD\b|\s-\s*\(?AU\)?\s*$|\bprocess(?:ing|or)\b|\bdistribut(?:ion|or)\b|\bdistro\b|cannot pay|\bbilling\b/i;
+const brands: readonly Partner[] = snapshot.brands.filter(b=>!INTERNAL_ACCOUNT.test(b.name));
 export function partnersForState(code:PartnerStateCode) {
   return brands.filter(b=>b.perState[code]).toSorted((a,b)=>(b.perState[code]!.count-a.perState[code]!.count)||a.name.localeCompare(b.name));
 }
