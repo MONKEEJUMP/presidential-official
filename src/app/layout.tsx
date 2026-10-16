@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import { headers } from "next/headers";
 import Script from "next/script";
 import { AgeGate } from "@/components/age-gate";
-import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { getGoogleSiteVerification } from "@/lib/analytics/google";
 import { METADATA_BASE } from "@/lib/seo/metadata";
 import "./globals.css";
@@ -70,7 +69,19 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <AgeGate siteName="Presidential">{children}</AgeGate>
-        <GoogleAnalytics nonce={nonce} />
+        {/* GA4 G-D6FB0E81YN on every page (1016-MR-GA4). Replaces the env-gated loader so the tag never fires twice. */}
+        <Script
+          id="presidential-ga4-loader"
+          nonce={nonce}
+          src="https://www.googletagmanager.com/gtag/js?id=G-D6FB0E81YN"
+          strategy="afterInteractive"
+        />
+        <Script id="presidential-ga4-init" nonce={nonce} strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){window.dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-D6FB0E81YN');`}
+        </Script>
         {/* InLinks pid 50409 (1014-MR-INLJS). */}
         <Script
           id="inlinks-50409"

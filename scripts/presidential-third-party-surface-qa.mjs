@@ -81,17 +81,54 @@ const inlinksSurface = {
   cspDirectives: ["script-src", "connect-src"],
   sourceFile: "src/app/layout.tsx",
 };
-// Drop only exact InLinks origin tokens from the directives it is allowed in; any other
-// token (including look-alikes such as https://jscloud.net.example) is kept and still checked.
+// GA4 G-D6FB0E81YN on every page (1016-MR-GA4, owner-requested): exact loader, exact ID, exact CSP tokens.
+const ga4Surface = {
+  ticket: "1016-MR-GA4",
+  measurementId: "G-D6FB0E81YN",
+  loaderSrc: "https://www.googletagmanager.com/gtag/js?id=G-D6FB0E81YN",
+  sourceFile: "src/app/layout.tsx",
+  cspTokens: {
+    "script-src": ["https://www.googletagmanager.com", "https://*.google-analytics.com"],
+    "connect-src": ["https://www.googletagmanager.com", "https://*.google-analytics.com", "https://*.analytics.google.com"],
+    "img-src": ["https://www.googletagmanager.com", "https://*.google-analytics.com", "https://*.analytics.google.com"],
+  },
+};
+// Exact approved GA4 snippet pieces (layout loader + init). Only these occurrences are exempt;
+// any other gtag/dataLayer use on the same built line still matches.
+const ga4ExactSnippets = [
+  "https://www.googletagmanager.com/gtag/js?id=G-D6FB0E81YN",
+  "presidential-ga4-loader",
+  "presidential-ga4-init",
+  "window.dataLayer = window.dataLayer || [];",
+  "function gtag(){window.dataLayer.push(arguments);}",
+  "gtag('js', new Date());",
+  "gtag('config', 'G-D6FB0E81YN');",
+];
+const withoutGa4Snippets = (line) => ga4ExactSnippets.reduce((value, snippet) => value.replaceAll(snippet, ""), line);
+const allowedCspTokens = (directiveName) => [
+  ...(inlinksSurface.cspDirectives.includes(directiveName) ? [inlinksSurface.origin] : []),
+  ...(ga4Surface.cspTokens[directiveName] ?? []),
+];
+// Drop only exact allowed tokens (InLinks origin, GA4 hosts) from the directives they are allowed in;
+// any other token (including look-alikes such as https://jscloud.net.example) is kept and still checked.
 const withoutAllowedCspSources = (csp) =>
   csp
     .split(";")
     .map((directive) => {
       const tokens = directive.trim().split(/\s+/).filter(Boolean);
-      if (!tokens.length || !inlinksSurface.cspDirectives.includes(tokens[0].toLowerCase())) return directive;
-      return tokens.filter((token, index) => index === 0 || token !== inlinksSurface.origin).join(" ");
+      if (!tokens.length) return directive;
+      const allowed = allowedCspTokens(tokens[0].toLowerCase());
+      if (!allowed.length) return directive;
+      return tokens.filter((token, index) => index === 0 || !allowed.includes(token)).join(" ");
     })
     .join(";");
+const ga4TokensInRuntimeCsp = (csp) =>
+  Object.entries(ga4Surface.cspTokens).every(([name, expected]) =>
+    csp.split(";").some((directive) => {
+      const tokens = directive.trim().split(/\s+/).filter(Boolean);
+      return tokens[0]?.toLowerCase() === name && expected.every((token) => tokens.includes(token));
+    }),
+  );
 const inlinksOriginOnlyInAllowedDirectives = (csp) =>
   csp.split(";").every((directive) => {
     const tokens = directive.trim().split(/\s+/).filter(Boolean);
@@ -165,7 +202,9 @@ function collectMatches(files, pattern, options = {}) {
     const lines = text.split(/\r?\n/);
     for (const [index, line] of lines.entries()) {
       pattern.lastIndex = 0;
-      if (pattern.test(line)) {
+      // GA4 exemption: remove only the exact approved snippet pieces before matching.
+      const tested = options.ga4Exempt ? withoutGa4Snippets(line) : line;
+      if (pattern.test(tested)) {
         matches.push(`${relativePath}:${index + 1}:${line.trim()}`);
       }
     }
@@ -318,7 +357,7 @@ async function main() {
   const sourceAnalyticsMatches = collectMatches(sourceFiles, analyticsVendorPattern, {
     skipApprovedGatedAnalyticsFile: true,
   });
-  const builtAnalyticsMatches = collectMatches(builtFiles, analyticsVendorPattern);
+  const builtAnalyticsMatches = collectMatches(builtFiles, analyticsVendorPattern, { ga4Exempt: true });
   const sourceExternalScripts = collectGlobalMatches(sourceFiles, externalScriptSrcPattern);
   const builtExternalScripts = collectGlobalMatches(builtFiles, externalScriptSrcPattern);
   const sourceExternalConnects = collectGlobalMatches(sourceFiles, externalConnectPattern);
@@ -348,8 +387,13 @@ async function main() {
     approvedGatedAnalyticsText.includes("getGoogleAnalyticsMeasurementId") &&
     approvedGatedAnalyticsText.includes("getGoogleSiteVerification") &&
     builtAnalyticsMatches.length === 0 &&
-    !runtimeCsp.includes("googletagmanager.com") &&
-    !runtimeCsp.includes("google-analytics.com");
+    !/googletagmanager\.com|google-analytics\.com/.test(withoutAllowedCspSources(runtimeCsp));
+  const ga4LayoutText = readIfExists(path.join(webRoot, ga4Surface.sourceFile));
+  const ga4SurfaceModeled =
+    ga4LayoutText.includes(`src="${ga4Surface.loaderSrc}"`) &&
+    ga4LayoutText.includes(`gtag('config', '${ga4Surface.measurementId}')`) &&
+    ga4LayoutText.includes('strategy="afterInteractive"') &&
+    ga4TokensInRuntimeCsp(runtimeCsp);
 
   const cspHasNoThirdPartySource =
     !forbiddenCspSourcePattern.test(withoutAllowedCspSources(reportOnlyCsp)) &&
@@ -392,6 +436,7 @@ async function main() {
     addCheck(rows, "csp.formActionSelf", cspHasSafeFormAction, effectiveCsp || "missing CSP"),
     addCheck(rows, "csp.objectSrcNone", cspHasSafeObjectSrc, effectiveCsp || "missing CSP"),
     addCheck(rows, "csp.frameAncestorsNone", cspHasSafeFrameAncestors, effectiveCsp || "missing CSP"),
+    addCheck(rows, "ga4.surfaceModeled", ga4SurfaceModeled, ga4SurfaceModeled ? `GA4 ${ga4Surface.measurementId} (${ga4Surface.ticket}): next/script ${ga4Surface.loaderSrc} afterInteractive in ${ga4Surface.sourceFile}; exact GA4 hosts in script-src, connect-src and img-src` : "GA4 loader/config or its CSP hosts are missing"),
     addCheck(rows, "inlinks.surfaceModeled", inlinksSurfaceModeled, inlinksSurfaceModeled ? `InLinks pid ${inlinksSurface.pid} (${inlinksSurface.ticket}): next/script ${inlinksSurface.scriptSrc} afterInteractive in ${inlinksSurface.sourceFile}; ${inlinksSurface.origin} only in script-src and connect-src` : "InLinks script or CSP origin is missing or appears outside script-src/connect-src"),
     addCheck(rows, "noPublicUnlockSignals", !publicUnlockPattern.test(combinedPublicText), "Third-party readiness does not approve tracking, analytics, scripts, connects, route publication, deployment, sitemap inclusion, indexability, or public SEO"),
   ];
@@ -454,7 +499,7 @@ async function main() {
     trackingApproved: false,
     thirdPartyScriptsApproved: inlinksSurfaceModeled,
     thirdPartyConnectSourcesApproved: inlinksSurfaceModeled,
-    allowedThirdPartySurface: [inlinksSurface],
+    allowedThirdPartySurface: [inlinksSurface, ga4Surface],
     iframeEmbedsApproved: false,
     externalFormActionsApproved: false,
     cspReportingEndpointApproved: false,

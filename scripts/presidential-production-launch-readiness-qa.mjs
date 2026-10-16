@@ -190,11 +190,12 @@ function main() {
   addCheck(
     rows,
     "launchReadiness.measurementRendering.localGate",
-    measurementRenderingText.includes("PASS_PRODUCTION_MEASUREMENT_RENDERING_LOCAL_GATED") &&
-      measurementRenderingText.includes("analyticsRenderedByDefault: false") &&
+    measurementRenderingText.includes("PASS_PRODUCTION_MEASUREMENT_RENDERING_OWNER_GA4_ALWAYS_ON") &&
+      measurementRenderingText.includes("analyticsRenderedByDefault: true") &&
+      measurementRenderingText.includes('analyticsMeasurementId: "G-D6FB0E81YN"') &&
       measurementRenderingText.includes("gscRenderedByDefault: false") &&
       measurementRenderingText.includes("deploymentExecuted: false"),
-    "analytics and Google site verification are locally proven gated and absent from default build output",
+    "owner GA4 tag G-D6FB0E81YN is the only analytics in the default build; Google site verification stays gated",
   );
   addCheck(
     rows,

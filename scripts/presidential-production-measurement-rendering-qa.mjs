@@ -130,11 +130,21 @@ function main() {
       analyticsComponentSource.includes("nonce={nonce}"),
     "GA4 scripts are helper-gated, encoded, nonce-aware, and anonymized",
   );
+  // 1016-MR-GA4: the owner-requested GA4 tag G-D6FB0E81YN renders on every page; any other
+  // measurement ID in the built loader still fails.
+  const builtGaIds = [
+    ...[...builtText.matchAll(/gtag\/js\?id=([A-Za-z0-9-]+)/g)].map((match) => match[1]),
+    // Configured destinations too: gtag('config', 'G-...') in plain or escaped (RSC/JSON) form.
+    ...[...builtText.matchAll(/gtag\(\s*\\?["']config\\?["']\s*,\s*\\?["']([A-Za-z0-9-]+)/g)].map((match) => match[1]),
+  ];
   addCheck(
     rows,
-    "analyticsRendering.defaultBuiltOutput.noGaLoader",
-    !builtText.includes(loaderNeedle) && !builtText.includes(initNeedle),
-    "default production build output has no GA4 loader/init marker",
+    "analyticsRendering.defaultBuiltOutput.onlyOwnerGa4",
+    builtText.includes(loaderNeedle) &&
+      builtText.includes(initNeedle) &&
+      builtGaIds.length > 0 &&
+      builtGaIds.every((id) => id === "G-D6FB0E81YN"),
+    "default production build output carries only the owner GA4 tag G-D6FB0E81YN",
   );
   addCheck(
     rows,
@@ -165,7 +175,7 @@ function main() {
   const passCount = rows.length - failCount;
   const verdict =
     failCount === 0
-      ? "PASS_PRODUCTION_MEASUREMENT_RENDERING_LOCAL_GATED"
+      ? "PASS_PRODUCTION_MEASUREMENT_RENDERING_OWNER_GA4_ALWAYS_ON"
       : "FAIL_PRODUCTION_MEASUREMENT_RENDERING_REVIEW_REQUIRED";
 
   console.log(JSON.stringify({
@@ -173,7 +183,9 @@ function main() {
     passCount,
     failCount,
     builtFileCount: builtFiles.length,
-    analyticsRenderedByDefault: false,
+    // 1016-MR-GA4: the owner GA4 tag renders in the default build; GSC stays gated.
+    analyticsRenderedByDefault: true,
+    analyticsMeasurementId: "G-D6FB0E81YN",
     gscRenderedByDefault: false,
     deploymentExecuted: false,
     providerMutated: false,

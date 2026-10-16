@@ -229,7 +229,13 @@ function findLineMatches(files, patterns) {
 
 // InLinks pid 50409 (1014-MR-INLJS, owner-requested): only this exact script URL and its bare
 // CSP origin are exempt; any other jscloud.net path or look-alike host still fails.
-const inlinksExactUrls = new Set(["https://jscloud.net/x/50409/inlinks.js", "https://jscloud.net"]);
+const inlinksExactUrls = new Set([
+  "https://jscloud.net/x/50409/inlinks.js",
+  "https://jscloud.net",
+  // GA4 G-D6FB0E81YN (1016-MR-GA4): exact loader URL and the bare CSP hosts only.
+  "https://www.googletagmanager.com/gtag/js?id=G-D6FB0E81YN",
+  "https://www.googletagmanager.com",
+]);
 
 function findUrlOriginViolations(files, { allowW3cSvg = false } = {}) {
   const violations = [];

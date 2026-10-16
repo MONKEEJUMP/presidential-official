@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { isGoogleAnalyticsEnabled } from "@/lib/analytics/google";
 import { hasPrivateDraftRouteAccess } from "@/lib/cms/draft-route-access";
 
 const canonicalHostname = "presidentialmoonrocks.com";
@@ -11,10 +10,8 @@ const nextImageStyleAttributeHashes = [
   "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='",
 ] as const;
 
-function buildContentSecurityPolicy(
-  nonce: string,
-  analyticsAllowed: boolean,
-): string {
+// GA4 hosts are always allowed now (1016-MR-GA4), so the CSP no longer depends on the analytics env gate.
+function buildContentSecurityPolicy(nonce: string): string {
   const isDev = process.env.NODE_ENV === "development";
   const scriptSrc = [
     "script-src 'self'",
@@ -22,7 +19,9 @@ function buildContentSecurityPolicy(
     "'strict-dynamic'",
     // InLinks (1014-MR-INLJS); the nonce covers it under strict-dynamic, the host covers older browsers.
     "https://jscloud.net",
-    analyticsAllowed ? "https://www.googletagmanager.com" : "",
+    // GA4 G-D6FB0E81YN (1016-MR-GA4): loaded on every page.
+    "https://www.googletagmanager.com",
+    "https://*.google-analytics.com",
     isDev ? "'unsafe-eval'" : "",
   ]
     .filter(Boolean)
@@ -30,14 +29,18 @@ function buildContentSecurityPolicy(
   const connectSrc = [
     "connect-src 'self'",
     "https://jscloud.net",
-    analyticsAllowed ? "https://www.google-analytics.com" : "",
-    analyticsAllowed ? "https://analytics.google.com" : "",
+    "https://www.googletagmanager.com",
+    "https://*.google-analytics.com",
+    // GA4 regional collection (EU/UK/CH) uses *.analytics.google.com.
+    "https://*.analytics.google.com",
   ]
     .filter(Boolean)
     .join(" ");
   const imgSrc = [
     "img-src 'self'",
-    analyticsAllowed ? "https://www.google-analytics.com" : "",
+    "https://www.googletagmanager.com",
+    "https://*.google-analytics.com",
+    "https://*.analytics.google.com",
   ]
     .filter(Boolean)
     .join(" ");
@@ -122,7 +125,7 @@ export function proxy(request: NextRequest) {
   }
 
   const nonce = btoa(crypto.randomUUID());
-  const csp = buildContentSecurityPolicy(nonce, isGoogleAnalyticsEnabled());
+  const csp = buildContentSecurityPolicy(nonce);
 
   if (request.nextUrl.pathname === "/find-us/fl") {
     const response = new NextResponse("Gone", {
