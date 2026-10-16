@@ -494,6 +494,16 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
             Liquid Diamonds, Live Resin, and Live Rosin.
           </li>
         </ul>
+        {/* SURFER-R18: Moon Pods under Presidential THC, from the /vapes system copy and answers. */}
+        <h3 className="mt-6 text-xl font-semibold">How do Moon Pods fit under Presidential THC?</h3>
+        <p>
+          Moon Pods are the vape side of the Presidential lineup and a separate family from the infused flower formats. The{" "}
+          <Link className={inlineLinkClass} href="/orbit">Orbit vape device</Link> is the reusable part, in four finishes, and Moon
+          Pods are the pods you replace; <Link className={inlineLinkClass} href="/moon-pods">explore Moon Pods</Link>. The pods come
+          in Liquid Diamonds, Live Resin, and Live Rosin families, and Orbit has a matching heat mode for each oil; see{" "}
+          <Link className={inlineLinkClass} href="/learn/what-are-liquid-diamonds">what liquid diamonds are</Link>. THC is
+          batch-specific, so read the package label and its test results.
+        </p>
       </TermSection>
 
       <TermSection id="presidential-thc-where" title="Where to find Presidential THC" tone="contrast">
