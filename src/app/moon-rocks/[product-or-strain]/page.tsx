@@ -246,14 +246,6 @@ export default async function CatalogProductDetailPage({
                     <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/moon-rocks">all Presidential Moon Rock flavors</Link>.
                   </p>
                 ) : null}
-                {/* MR /moon-rocks ("presidential moon rock"): House Line and collaboration SKUs have no
-                    series page, so they link back to the hub directly. */}
-                {slug !== "presidential-blunts" && slug !== "presidential-prerolls" && !seriesPath ? (
-                  <p className="mt-6 text-sm leading-6 text-po-body">
-                    See the full{" "}
-                    <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/moon-rocks">Presidential Moon Rocks collection</Link>.
-                  </p>
-                ) : null}
 
                 {relatedGuide ? (
                   <div className="mt-8 border-t border-po-line pt-5">
