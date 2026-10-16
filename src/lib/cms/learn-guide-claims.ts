@@ -5,10 +5,15 @@ const POTENCY_CLAIM =
 // Keeps a leading reach verb so "can reach 70%" becomes "can reach higher than flower alone".
 const POTENCY_FIGURE = /\b(?:(reach(?:es|ing)?)\s+(?:as high as\s+|up to\s+)?|as high as\s+|up to\s+)70\s*(?:%|percent)/gi;
 
+// Any leftover "three times the ceiling of top-shelf flower" comparison, whatever form
+// the figure before it took, is dropped as well.
+const THREE_TIMES_CLAIM = /\s*(?:[\u2014\u2013-]+|,)?\s*roughly three times the ceiling of top-shelf flower/gi;
+
 function soften(text: string): string {
   return text
     .replace(POTENCY_CLAIM, (_match, es?: string) => `${es ? "carries" : "carry"} concentrate and kief on top of the flower`)
-    .replace(POTENCY_FIGURE, (_match, verb?: string) => (verb ? `${verb} higher than flower alone` : "higher than flower alone"));
+    .replace(POTENCY_FIGURE, (_match, verb?: string) => (verb ? `${verb} higher than flower alone` : "higher than flower alone"))
+    .replace(THREE_TIMES_CLAIM, "");
 }
 
 // Text-level entry point for render paths that build strings themselves: the body
