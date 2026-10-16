@@ -151,6 +151,14 @@ export function RepoOwnedPageCopy({ path }: RepoOwnedPageCopyProps) {
             return <CopyTable block={block} key={key} keyPrefix={key} />;
           }
 
+          if (block.startsWith("### ") && !block.includes("\n")) {
+            return (
+              <h3 className="pt-2 text-xl font-semibold leading-snug text-po-ink" key={key}>
+                {block.slice(4)}
+              </h3>
+            );
+          }
+
           const subhead = block.match(SUBHEAD);
           if (subhead && !block.includes("\n")) {
             return (

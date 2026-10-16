@@ -230,6 +230,10 @@ Silver leads with a flavour idea. Gold leads with a strain name people already a
 
 Three names that arrive with weight already attached rather than describing a flavour — which is the pattern across the tier. Where the Silver series names a taste and the Gold series names a strain, Rose Gold names things that are already spoken about.
 
+### What makes Rose Gold different?
+
+Where Silver names a taste and Gold names a strain, Rose Gold is the solventless connoisseur tier, built on live rosin made with ice water, heat, and pressure. Its names include [Wedding Cake](/moon-rocks/wedding-cake), [God's Gift](/moon-rocks/gods-gift), and [White Walker](/moon-rocks/white-walker). Read [what live rosin is](/learn/what-is-live-rosin).
+
 Live rosin defines the Rose Gold Connoisseur Series — the solventless method, made without butane, propane, CO2 or ethanol at any stage. What that means in practice is covered in full on the [Live Rosin guide](/learn/what-is-live-rosin).
 
 **What every tier shares**
