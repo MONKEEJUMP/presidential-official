@@ -2925,7 +2925,7 @@
     },
     {
       "id": "emerald-bison-llc-humboldt-cannabis",
-      "name": "Humboldt Cannabis",
+      "name": "Humboldt Cannabis (Owasso)",
       "nationalDoors": 1,
       "website": "https://www.facebook.com/humboldtcannaok",
       "logo": null,
@@ -3587,7 +3587,7 @@
     },
     {
       "id": "flower-bowl",
-      "name": "Flower Bowl",
+      "name": "Flower Bowl (Inkster)",
       "nationalDoors": 1,
       "website": "https://flowerbowl.com",
       "logo": "/partners/logos/flower-bowl.webp",
@@ -3635,7 +3635,7 @@
     },
     {
       "id": "flowerbowl",
-      "name": "Flowerbowl",
+      "name": "Flower Bowl (River Rouge)",
       "nationalDoors": 1,
       "website": "https://flowerbowl.com",
       "logo": "/partners/logos/flowerbowl.webp",
@@ -5696,7 +5696,7 @@
     },
     {
       "id": "humboldt-cannabis",
-      "name": "Humboldt Cannabis",
+      "name": "Humboldt Cannabis (Bixby, Dewey, Edmond, Miami)",
       "nationalDoors": 4,
       "website": "",
       "logo": null,
@@ -5924,7 +5924,7 @@
     },
     {
       "id": "jade-room",
-      "name": "JADE ROOM",
+      "name": "Jade Room (Santa Ana)",
       "nationalDoors": 1,
       "website": "https://www.jaderoom.com/locations/santa-ana-dispensary/?utm_source=google&utm_medium=organic&utm_campaign=gbp",
       "logo": "/partners/logos/jade-room.svg",
@@ -5956,7 +5956,7 @@
     },
     {
       "id": "jaderoom",
-      "name": "JADEROOM",
+      "name": "Jade Room (Artesia)",
       "nationalDoors": 1,
       "website": "https://www.jaderoom.com/locations/artesia-dispensary/?utm_source=google&utm_medium=organic&utm_campaign=gbp",
       "logo": "/partners/logos/jaderoom.svg",
@@ -8877,7 +8877,7 @@
     },
     {
       "id": "panacea-farms-llc-sipkoi",
-      "name": "Sip Koi",
+      "name": "Sip Koi (Moreno Valley)",
       "nationalDoors": 1,
       "website": "http://www.sipkoi.com",
       "logo": "/partners/logos/panacea-farms-llc-sipkoi.webp",
@@ -10382,7 +10382,7 @@
     },
     {
       "id": "show-grow",
-      "name": "SHOW GROW",
+      "name": "ShowGrow (Long Beach)",
       "nationalDoors": 1,
       "website": "https://longbeach.showgrow.com",
       "logo": "/partners/logos/show-grow.webp",
@@ -10398,7 +10398,7 @@
     },
     {
       "id": "showgrow",
-      "name": "ShowGrow",
+      "name": "ShowGrow (Las Vegas)",
       "nationalDoors": 1,
       "website": "https://store.showgrowvegas.com",
       "logo": null,
@@ -10462,7 +10462,7 @@
     },
     {
       "id": "sipkoi",
-      "name": "Sipkoi",
+      "name": "Sip Koi (San Jacinto)",
       "nationalDoors": 1,
       "website": "https://www.sipkoi.com",
       "logo": "/partners/logos/sipkoi.webp",
@@ -13548,7 +13548,7 @@
     },
     {
       "id": "zen-leaf",
-      "name": "Zen Leaf",
+      "name": "Zen Leaf (Chandler, Las Vegas, Mesa, North Las Vegas, Phoenix, Prescott, Tempe)",
       "nationalDoors": 10,
       "website": "https://zenleafdispensaries.com/locations/phoenix-n-cave-creek?utm_campaign=phoenix-cave-creek&utm_medium=organic&utm_source=gbp",
       "logo": "/partners/logos/zen-leaf.svg",
@@ -13607,7 +13607,7 @@
     },
     {
       "id": "zenleaf",
-      "name": "Zenleaf",
+      "name": "Zen Leaf (Carson City, Reno)",
       "nationalDoors": 2,
       "website": "https://zenleafdispensaries.com/locations/carson-city?utm_campaign=nv-carson-city&utm_medium=organic&utm_source=gbp",
       "logo": "/partners/logos/zenleaf.svg",
