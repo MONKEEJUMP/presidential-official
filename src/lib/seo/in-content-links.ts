@@ -9,7 +9,7 @@ export type HardcodedInContentLinkRule = {
 // route instead of turning every matching word on a page into a link.
 export const HARDCODED_IN_CONTENT_LINKS = {
   "/": [
-    { href: "/about", anchor: "brand", context: "the real brand, straight" },
+    { href: "/about", anchor: "real brand", context: "the real brand, straight" },
     {
       href: "/moon-rocks/24k",
       anchor: "flower",
@@ -20,18 +20,18 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     // MR-TOP50 A11: the bare "flower" -> /moon-rocks/24k link was removed; /moon-rocks owns "presidential flower".
     {
       href: "/",
-      anchor: "retailers",
+      anchor: "licensed retailers",
       context: "licensed retailers carrying authentic product",
     },
   ],
   "/learn": [
-    { href: "/about", anchor: "brand", context: "Presidential is a wholesale brand" },
+    { href: "/about", anchor: "wholesale brand", context: "Presidential is a wholesale brand" },
     {
-      href: "/moon-rocks/24k",
-      anchor: "FLOWER",
-      context: "FLOWER · LIQUID LIVE RESIN · DIAMONDS on a third",
+      href: "/learn/what-are-moon-rocks",
+      anchor: "FLOWER · DISTILLATE · KIEF",
+      context: "FLOWER · DISTILLATE · KIEF on another",
     },
-    { href: "/", anchor: "retail", context: "the retail path" },
+    { href: "/", anchor: "the retail path", context: "the retail path" },
     {
       href: "/moon-rocks/presidential-x-thc-design",
       anchor: "Presidential x THC Design",
@@ -195,11 +195,11 @@ export const HARDCODED_IN_CONTENT_LINKS = {
   ],
   // MR-TOP50 A11: the bare "flower" -> /moon-rocks/24k rule for /moon-rocks was removed.
   "/moon-rocks/24k": [
-    { href: "/about", anchor: "brand", context: "Presidential is a wholesale brand" },
+    { href: "/about", anchor: "wholesale brand", context: "Presidential is a wholesale brand" },
     { href: "/find-us", anchor: "select state markets", context: "currently active across select state markets" },
     {
       href: "/",
-      anchor: "retailer",
+      anchor: "licensed retailer",
       context: "verified licensed retailer information",
     },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
@@ -237,24 +237,24 @@ export const HARDCODED_IN_CONTENT_LINKS = {
   "/moon-rocks/cereal-milk": [
     {
       href: "/",
-      anchor: "retailer",
+      anchor: "licensed retailer",
       context: "verified licensed retailer information",
     },
   ],
   "/moon-rocks/cosmic-cookies": [
     {
       href: "/",
-      anchor: "retailer",
+      anchor: "licensed retailer",
       context: "verified licensed retailer information",
     },
   ],
   "/moon-rocks/galactic-gas": [
     {
       href: "/about",
-      anchor: "brand",
+      anchor: "brand is called what it is called",
       context: "reason the brand is called what it is called",
     },
-    { href: "/", anchor: "retailers", context: "licensed retailers only" },
+    { href: "/", anchor: "licensed retailers", context: "licensed retailers only" },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
     {
       href: "/learn/what-is-live-resin",
@@ -269,13 +269,13 @@ export const HARDCODED_IN_CONTENT_LINKS = {
   ],
   "/moon-rocks/gods-gift": [
     {
-      href: "/moon-rocks/24k",
-      anchor: "FLOWER",
-      context: "FLOWER · LIQUID LIVE RESIN · DIAMONDS on Cap Junky",
+      href: "/learn/what-are-moon-rocks",
+      anchor: "FLOWER · DISTILLATE · KIEF",
+      context: "FLOWER · DISTILLATE · KIEF on the self-titled flagship",
     },
     {
       href: "/",
-      anchor: "retailer",
+      anchor: "licensed retailer",
       context: "licensed retailer carrying Presidential",
     },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
@@ -298,7 +298,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
   "/moon-rocks/king-louis": [
     {
       href: "/",
-      anchor: "shop",
+      anchor: "shop carries",
       context: "what a given shop carries varies more than usual",
     },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
@@ -314,10 +314,10 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     },
   ],
   "/moon-rocks/nyc-diesel": [
-    { href: "/about", anchor: "brand", context: "when the brand started" },
+    { href: "/about", anchor: "brand started in Los Angeles", context: "when the brand started in Los Angeles" },
     {
       href: "/",
-      anchor: "retailer",
+      anchor: "licensed retailer",
       context: "verified licensed retailer information",
     },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
@@ -334,13 +334,13 @@ export const HARDCODED_IN_CONTENT_LINKS = {
   ],
   "/moon-rocks/papaya-punch": [
     {
-      href: "/moon-rocks/24k",
-      anchor: "FLOWER",
+      href: "/learn/what-are-moon-rocks",
+      anchor: "FLOWER · LIVE RESIN · DIAMONDS",
       context: "FLOWER · LIVE RESIN · DIAMONDS",
     },
     {
       href: "/",
-      anchor: "retailer",
+      anchor: "licensed retailer",
       context: "licensed retailer carrying Presidential",
     },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
@@ -358,21 +358,21 @@ export const HARDCODED_IN_CONTENT_LINKS = {
   "/moon-rocks/presidential-house-line": [
     {
       href: "/",
-      anchor: "retailer",
+      anchor: "licensed retailer",
       context: "verified licensed retailer information",
     },
   ],
   "/moon-rocks/presidential-line": [
     {
       href: "/",
-      anchor: "retailer",
+      anchor: "licensed retailer",
       context: "verified licensed retailer information",
     },
   ],
   "/moon-rocks/presidential-line-guava-haze": [
     {
       href: "/",
-      anchor: "retailer",
+      anchor: "licensed retailer",
       context: "verified licensed retailer information",
     },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
@@ -390,19 +390,19 @@ export const HARDCODED_IN_CONTENT_LINKS = {
   "/moon-rocks/presidential-line-head-cheese": [
     {
       href: "/",
-      anchor: "retailer",
+      anchor: "licensed retailer",
       context: "verified licensed retailer information",
     },
   ],
   "/moon-rocks/presidential-line-iced-lemon": [
     {
       href: "/about",
-      anchor: "brand",
-      context: "wholesale brand operating across six state markets",
+      anchor: "wholesale brand",
+      context: "wholesale brand operating across",
     },
     {
       href: "/",
-      anchor: "retailer",
+      anchor: "licensed retailer",
       context: "verified licensed retailer information",
     },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
@@ -419,13 +419,13 @@ export const HARDCODED_IN_CONTENT_LINKS = {
   ],
   "/moon-rocks/presidential-moon-rocks": [
     {
-      href: "/moon-rocks/24k",
-      anchor: "FLOWER",
+      href: "/learn/what-are-moon-rocks",
+      anchor: "FLOWER · DISTILLATE · KIEF",
       context: "FLOWER · DISTILLATE · KIEF",
     },
     {
       href: "/",
-      anchor: "retailer",
+      anchor: "licensed retailer",
       context: "verified licensed retailer information",
     },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
@@ -436,8 +436,8 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     },
   ],
   "/moon-rocks/presidential-og": [
-    { href: "/moon-rocks/24k", anchor: "flower", context: "flower as the body" },
-    { href: "/", anchor: "retailer", context: "a retailer chooses to stock" },
+    { href: "/learn/what-are-moon-rocks", anchor: "flower as the body", context: "flower as the body" },
+    { href: "/", anchor: "retailer chooses to stock", context: "a retailer chooses to stock" },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
     {
       href: "/learn/what-is-live-resin",
@@ -456,11 +456,11 @@ export const HARDCODED_IN_CONTENT_LINKS = {
       anchor: "FLOWER",
       context: "Built on FLOWER · DISTILLATE · KIEF",
     },
-    { href: "/", anchor: "retailers", context: "licensed retailers only" },
+    { href: "/", anchor: "licensed retailers", context: "licensed retailers only" },
   ],
   "/moon-rocks/rainbow-belts": [
-    { href: "/moon-rocks/24k", anchor: "flower", context: "flower as the body" },
-    { href: "/", anchor: "retailer", context: "a retailer chooses to stock" },
+    { href: "/learn/what-are-moon-rocks", anchor: "flower as the body", context: "flower as the body" },
+    { href: "/", anchor: "retailer chooses to stock", context: "a retailer chooses to stock" },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
     {
       href: "/learn/what-is-live-resin",
@@ -474,10 +474,10 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     },
   ],
   "/moon-rocks/wedding-cake": [
-    { href: "/moon-rocks/24k", anchor: "Flower", context: "Flower as the base" },
+    { href: "/learn/what-are-moon-rocks", anchor: "Flower as the base", context: "Flower as the base" },
     {
       href: "/",
-      anchor: "retailers",
+      anchor: "licensed retailers",
       context: "licensed retailers nearest you carrying Presidential",
     },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
@@ -493,8 +493,8 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     },
   ],
   "/moon-rocks/white-walker": [
-    { href: "/moon-rocks/24k", anchor: "Flower", context: "Flower as the base" },
-    { href: "/", anchor: "retailer", context: "a retailer chooses to stock" },
+    { href: "/learn/what-are-moon-rocks", anchor: "Flower as the base", context: "Flower as the base" },
+    { href: "/", anchor: "retailer chooses to stock", context: "a retailer chooses to stock" },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
     {
       href: "/learn/what-is-live-resin",
@@ -584,10 +584,10 @@ export const HARDCODED_IN_CONTENT_LINKS = {
   ],
   // InLinks pid 50409 export 2026-10-06 (INLK-0001 follow-up).
   "/find-us/az": [
-    { href: "/about", anchor: "brand", context: "who carries the brand" },
+    { href: "/about", anchor: "carries the brand", context: "who carries the brand" },
   ],
   "/find-us/ny": [
-    { href: "/about", anchor: "brand", context: "who stocks the brand" },
+    { href: "/about", anchor: "stocks the brand", context: "who stocks the brand" },
   ],
 } as const satisfies Record<string, readonly HardcodedInContentLinkRule[]>;
 

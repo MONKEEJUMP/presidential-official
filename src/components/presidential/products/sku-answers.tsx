@@ -130,8 +130,8 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             <Link className={linkClass} href="/moon-rocks#moon-rocks-q-infused">every Presidential moon rock is built</Link>.
             {series === "Silver Flavor Series" ? (
               <>
-                {" Its concentrate is "}
-                <Link className={linkClass} href="/learn/what-is-thc-distillate">distillate</Link>.
+                {" Its "}
+                <Link className={linkClass} href="/learn/what-is-thc-distillate">concentrate is distillate</Link>.
               </>
             ) : null}
             {slug === "cherry-gelato" ? (
@@ -229,6 +229,22 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">What is the Gorilla Goo strain?</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">
             {`Gorilla Goo is a ${series} release, marked ${marking} on Presidential packs. It is made with ${materials}.`}
+          </p>
+        </>
+      ) : null}
+      {/* SURFER-R14: Gorilla Goo in the Gold Strain Series, from its own data, /moon-rocks/24k and /learn. */}
+      {slug === "gorilla-goo" && series === "Gold Strain Series" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">How does Gorilla Goo fit the Gold Strain Series?</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Gorilla Goo is a Gold Strain Series release{marking ? `, and Presidential packs mark it as ${marking}` : ""}. Like the rest
+            of the Gold series, it is built on live resin: flower forms the base, live resin is the coat, and diamonds are the
+            crystalline finish, layered the way every Presidential moon rock is built. The Gold Strain Series carries named strains
+            rather than flavor names, so the strain is the product&apos;s identity on the shelf. THC and cannabinoids are
+            batch-specific, so read the current package label and its test results. Gorilla Goo also comes as a{" "}
+            <Link className={linkClass} href="/mini-pre-rolls/gorilla-goo">Gorilla Goo mini pre-roll</Link> and a mini blunt. See{" "}
+            <Link className={linkClass} href="/moon-rocks/gold">Gold Strain Series moon rocks</Link> and{" "}
+            <Link className={linkClass} href="/learn/what-is-live-resin">what live resin is</Link>.
           </p>
         </>
       ) : null}

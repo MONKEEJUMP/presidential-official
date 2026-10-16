@@ -144,12 +144,25 @@ export const VAPES_ANSWERS: readonly AnswerItem[] = [
     id: "vapes-q-system",
     question: "Presidential Vapes: Orbit and Moon Pods",
     answer: (
+      <>
       <p>
         Presidential vapes are a two-part system. <Link className={a} href="/orbit">Orbit</Link> is the device, in four
         finishes: Black, Silver, Teal, and White. <Link className={a} href="/moon-pods">Moon Pods</Link> are the pods,
         in three extract families: Liquid Diamonds (LD) with a teal mouthpiece, Live Resin (LRE) with a clear mouthpiece,
         and Live Rosin (LRO) with a smoked mouthpiece.
       </p>
+      {/* SURFER-R14: heat modes, from the /vapes multi-mode section and answers. */}
+      <h3 className="mt-6 text-base font-semibold">Why does each Moon Pod family get its own heat mode?</h3>
+      <p className="mt-2">
+        <Link className={a} href="/learn/different-extracts-need-different-heat">Different extracts need different heat</Link>.
+        Orbit has three modes, one for each Moon Pod family: Liquid Diamond Mode (LD), Live Resin Mode (LR), and Live Rosin Mode
+        (LRO). Press the device button three times, then select the oil type, and the device applies the optimized heat for that
+        extract. Live Rosin Mode runs at a lower temperature to preserve natural flavor and terpenes; see{" "}
+        <Link className={a} href="/learn/what-is-live-rosin">what live rosin is</Link>. Orbit is the reusable device, and Moon Pods
+        are the pods you replace, so <Link className={a} href="/moon-pods">explore Moon Pods</Link> for each family. THC is
+        batch-specific, so read the package label and its test results.
+      </p>
+      </>
     ),
   },
   {
