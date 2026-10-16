@@ -239,6 +239,19 @@ export default async function CatalogProductDetailPage({
                   </p>
                 ) : null}
 
+                {/* InLinks r3: House Line and THC Design pages point to the pre-roll hub and the House Line pre-roll SKU. */}
+                {slug === "presidential-moon-rocks" ? (
+                  <p className="mt-6 text-sm leading-6 text-po-body">
+                    The House Line also includes a pre-roll, <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/moon-rocks/presidential-prerolls">the Presidential Prerolls pack</Link>,
+                    and the series&apos; <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/pre-rolls">pre-rolled Moon Rocks</Link> are collected on the pre-rolls page.
+                  </p>
+                ) : null}
+                {slug === "thc-design-prerolls" ? (
+                  <p className="mt-6 text-sm leading-6 text-po-body">
+                    The House Line pre-roll is <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/moon-rocks/presidential-prerolls">Presidential Prerolls</Link>, and{" "}
+                    <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/pre-rolls">all Presidential pre-rolls</Link> are on the pre-rolls page.
+                  </p>
+                ) : null}
                 {/* MR-ABOUT-MOONROCKS: series flavor pages link back to the full flavor list. */}
                 {slug !== "presidential-blunts" && slug !== "presidential-prerolls" && seriesPath ? (
                   <p className="mt-6 text-sm leading-6 text-po-body">

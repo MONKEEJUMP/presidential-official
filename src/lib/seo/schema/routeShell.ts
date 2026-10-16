@@ -86,6 +86,15 @@ export function buildRouteShellBreadcrumbItems(
     return [{name:'Home',path:'/'},{name:'Partners',path:'/partners'},...(route.path==='/partners'?[]:[{name:route.h1.replace(/ Partners$/,''),path:route.path}])];
   }
 
+  // Sitebulb: /moon-rocks/* pages match the visible breadcrumb (Presidential Moon Rocks > product).
+  if (route.path.startsWith("/moon-rocks/")) {
+    return [
+      { name: "Presidential", path: "/" },
+      { name: "Presidential Moon Rocks", path: "/moon-rocks" },
+      { name: getSafeRouteShellName(route), path: route.canonicalPath },
+    ];
+  }
+
   return [
     { name: "Presidential", path: "/" },
     { name: getSafeRouteShellName(route), path: route.canonicalPath },
