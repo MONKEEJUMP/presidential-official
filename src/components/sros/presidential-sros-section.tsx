@@ -95,7 +95,7 @@ const TIERS = [
     icon: Diamond,
     href: "/moon-rocks/silver",
     name: "SILVER",
-    extract: "LIQUID DIAMONDS",
+    extract: "DISTILLATE",
     descriptor: "MAX FLAVOR. MAX ACCESSIBILITY.",
   },
   {

@@ -43,7 +43,8 @@ export const TIER_SECTION_PRESENTATION: Readonly<
 > = {
   silver: {
     eyebrowLead: "SILVER",
-    eyebrowDetail: "LIQUID DIAMONDS",
+    // Chief ruling 2026-10-16: Moon Rocks Silver is the distillate series.
+    eyebrowDetail: "DISTILLATE",
     headline: "THE ULTIMATE FLAVOR & POTENCY EXPERIENCE",
     series: "Flavor Series",
     description:
