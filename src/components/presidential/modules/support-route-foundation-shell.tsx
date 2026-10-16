@@ -231,6 +231,43 @@ export async function SupportRouteFoundationShell({
           </div>
         </Scene>
 
+        {route.kind === "store_locator" ? (
+          <Scene
+            ariaLabelledBy="presidential-find-us-how-to"
+            className="po-gold-thread-inlay py-24 lg:py-32"
+            tone="default"
+          >
+            <div className="mx-auto w-full max-w-7xl">
+              <h2
+                className="max-w-4xl font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-6xl"
+                id="presidential-find-us-how-to"
+              >
+                How to find Presidential at a licensed retailer
+              </h2>
+              <ol className="mt-8 grid max-w-3xl list-decimal gap-4 pl-6 text-base leading-7 text-po-body">
+                <li>Pick your state from the seven Presidential states: California, Oklahoma, New York, Nevada, Michigan, Arizona, and Washington.</li>
+                <li>Use the locator: enter your zip code and it ranks the nearest official licensed retailers by distance.</li>
+                <li>
+                  At the shelf, check for the Presidential crest and the series name on the pack, such as the{" "}
+                  <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/silver">Silver Flavor Series</Link>,{" "}
+                  <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/gold">Gold Strain Series</Link>, or{" "}
+                  <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>. Stock varies by store and by day, so confirm the details with your retailer.
+                </li>
+              </ol>
+              <h3 className="mt-12 text-2xl font-semibold leading-snug text-po-ink">
+                Which Presidential formats can I look for?
+              </h3>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-po-body">
+                Presidential formats include{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks">Moon Rocks</Link>,{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/pre-rolls">pre-rolls</Link>,{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/vapes">vapes</Link> (Moon Pods and Orbit), and{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/mini-pre-rolls">Mini Pre-Rolls</Link>.
+              </p>
+            </div>
+          </Scene>
+        ) : null}
+
         {route.kind === "store_locator" ? <FindUsMiniBluntsGrid /> : null}
 
         {route.kind === "store_locator" ? (
