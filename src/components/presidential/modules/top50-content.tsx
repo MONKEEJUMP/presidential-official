@@ -36,10 +36,10 @@ const BLUNT_SERIES_ANSWER: AnswerItem = {
   question: "Which infused blunt is in each series?",
   answer: (
     <p>
-      Every Presidential infused blunt is 1.5g in a tobacco-free wrap, and the series sets the build. The{" "}
+      Every Presidential infused blunt is 1.5g in a tobacco-free wrap. The{" "}
       <Link className={a} href="/moon-rocks/silver">Silver Flavor Series</Link> blunts are flower, distillate, and kief.
-      The <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link> is built around live resin, for example
-      flower, live resin, and diamonds on Blue Dream. The{" "}
+      <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link> blunts vary by strain: Presidential OG,
+      Crescendo, and XJ-13 are flower, distillate, and kief, while Blue Dream is flower, live resin, and diamonds. The{" "}
       <Link className={a} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> blunts are flower, live rosin,
       and diamonds.
     </p>

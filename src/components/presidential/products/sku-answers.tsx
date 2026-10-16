@@ -118,7 +118,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
       ) : null}
       {marking ? (
         <>
-          <h2 className={`${materials || slug === "watermelon" ? "mt-6 " : ""}font-display text-2xl uppercase leading-tight text-po-ink`}>{slug === "presidential-og" && marking === "Indica" ? "Is Presidential OG an indica?" : `Is ${name} indica, sativa, or hybrid?`}</h2>
+          <h2 className={`${materials || slug === "watermelon" ? "mt-6 " : ""}font-display text-2xl uppercase leading-tight text-po-ink`}>{`Is ${name} indica, sativa, or hybrid?`}</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">{`Presidential packs mark ${name} as ${marking}.`}</p>
         </>
       ) : null}
