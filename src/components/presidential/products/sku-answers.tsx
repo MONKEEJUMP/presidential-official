@@ -155,6 +155,38 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
         </>
       ) : null}
+      {/* SURFER-R16: Blue Dream Gold series H3, from its own page, /moon-rocks/24k and /learn. */}
+      {slug === "blue-dream" && series === "Gold Strain Series" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Why does Blue Dream sit in the Gold Strain Series?</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Blue Dream is a named strain, and the{" "}
+            <Link className={linkClass} href="/moon-rocks/gold">Gold Strain Series moon rocks</Link> carry named strains rather than
+            flavor names. Like the rest of the Gold series it is built on live resin: flower is the foundation, live resin is the
+            coat, and diamonds are the crystalline finish; see{" "}
+            <Link className={linkClass} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. Presidential packs mark Blue
+            Dream as Sativa, and the character reads as berry-soft sweetness carried over something distinctly herbal. It also comes
+            as a <Link className={linkClass} href="/pre-rolls/blue-dream">Blue Dream pre-roll</Link>. THC is batch-specific, so
+            read the current package label and its test results.
+          </p>
+        </>
+      ) : null}
+      {/* SURFER-R16: Grape Silver series H3, from its own page, /moon-rocks/watermelon and /learn/what-is-live-resin. */}
+      {slug === "grape" && series === "Silver Flavor Series" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">What makes Grape a Silver Flavor Series moon rock?</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Grape is one of the flavor-led releases in the{" "}
+            <Link className={linkClass} href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link> lineup, alongside
+            Watermelon, Pineapple, and Peach Mango. Its concentrate is distillate, which is stripped and refined until it is
+            essentially neutral, so the series can lead with the flavor name; see{" "}
+            <Link className={linkClass} href="/learn/what-is-thc-distillate">what THC distillate is</Link>. The build is the same as
+            every Presidential moon rock: flower first, distillate carried through it, and kief as the finish. Don&apos;t grind
+            them; the concentrate layer gums up a grinder and strips the kief. Grape also comes as a{" "}
+            <Link className={linkClass} href="/pre-rolls/grape">Grape pre-roll</Link>.
+          </p>
+        </>
+      ) : null}
       {/* SURFER-R15: King Louis live resin H3, from its own page, /learn and the label line. */}
       {slug === "king-louis" && series === "Gold Strain Series" ? (
         <>
