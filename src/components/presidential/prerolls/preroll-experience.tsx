@@ -185,6 +185,27 @@ export function PreRollExperience({
             These are Moon Rock Prerolls™, the moonrock pre-rolls built with Moon Rocks inside: infused moonrock prerolls of cannabis flower and concentrate. Presidential rolls come in two sizes: the 1g pre-rolls on this page and <Link href="/mini-pre-rolls">Mini Pre-Rolls</Link>, three 0.5g rolls per pack. Get to know the flavor, infusion, and ingredients in each Moon Rock pre-roll from the Presidential brand. Flavor and aroma vary by batch; your retailer can confirm the current selection. The 1g lineup comes in three series: the Silver Flavor Series (flower, distillate, and kief), the Gold Strain Series, defined by live resin, and the Rose Gold Connoisseur Series, defined by solventless live rosin.
           </p>
         </div>
+        {/* INLINKS-COPY-R13: /pre-rolls build H3 (facts from this page, the series pages and the learn guides). */}
+        <div>
+          <h3>What goes into a Moon Rock pre-roll?</h3>
+          <p>
+            A Moon Rock pre-roll is a 1g joint with the Moon Rock construction inside. It&apos;s cannabis flower carried through with
+            concentrate. In the Silver Flavor Series, that concentrate is THC distillate, and the roll is finished with a kief coating.
+            Gold builds on live resin, and Rose Gold builds on solventless live rosin. Each guide explains its extract:{" "}
+            <Link href="/learn/what-is-thc-distillate">what is THC distillate</Link>,{" "}
+            <Link href="/learn/what-is-live-resin">what is live resin</Link> and{" "}
+            <Link href="/learn/what-is-live-rosin">what is live rosin</Link>.{" "}
+            <Link href="/learn/flavor-science">How terpenes shape flavor</Link> covers why two strains in the same series smell and
+            taste different.
+          </p>
+          <p>
+            The THC numbers and batch details belong to the package and its test record, so check the label for the exact figures on
+            the roll in your hand. Flavor and aroma vary by batch, and your retailer can confirm the current lineup. For a smaller
+            session, <Link href="/mini-pre-rolls">Mini Pre-Rolls</Link> come as three 0.5g rolls. Retailers set the price, so it
+            varies from store to store. Use the <Link href="/find-us">store finder</Link> to see the nearest licensed retailers
+            carrying Presidential.
+          </p>
+        </div>
         <div className={styles.tierSections}>
           {TIER_SECTION_ORDER.map((section) => {
             const entries = tieredArtwork.filter(({ placement }) => placement.section === section);
