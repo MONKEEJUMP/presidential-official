@@ -59,11 +59,6 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     },
   ],
   "/learn/what-are-liquid-diamonds": [
-    {
-      href: "/moon-rocks/silver",
-      anchor: "Silver lane",
-      context: "Liquid diamonds anchor the Silver lane of the Presidential catalog",
-    },
     { href: "/", anchor: "retailer", context: "Availability varies by licensed retailer" },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
     {
