@@ -215,13 +215,17 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     },
   ],
   "/moon-rocks/blue-dream": [
-    { href: "/about", anchor: "brand", context: "since the brand started" },
     {
-      href: "/moon-rocks/24k",
-      anchor: "flower",
+      href: "/about",
+      anchor: "brand started in Los Angeles in 2012",
+      context: "since the brand started in Los Angeles in 2012",
+    },
+    {
+      href: "/learn/what-are-moon-rocks",
+      anchor: "flower with something sprayed on it",
       context: "flower with something sprayed on it",
     },
-    { href: "/", anchor: "shop", context: "the shop's decision" },
+    { href: "/", anchor: "shop's decision", context: "the shop's decision" },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
     {
       href: "/learn/infusion-science",
@@ -612,14 +616,34 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   ],
 };
 
+// Standing no-state-counts rule: every /moon-rocks/* CMS body drops the market count, and the
+// first "select state markets" in each text links to the store finder.
+const MOON_ROCKS_MARKET_SWAPS: readonly (readonly [string, string])[] = [
+  ["Six state markets are active with two more opening.", "Presidential is active in select state markets."],
+  ["six state markets with two more opening", "select state markets"],
+];
+const SELECT_STATE_MARKETS = "select state markets";
+const SELECT_STATE_MARKETS_LINK = `[${SELECT_STATE_MARKETS}](/find-us)`;
+
+function linkSelectStateMarkets(sourcePath: string, value: string): string {
+  if (!sourcePath.startsWith("/moon-rocks/") || value.includes(SELECT_STATE_MARKETS_LINK)) return value;
+  const index = value.indexOf(SELECT_STATE_MARKETS);
+  if (index < 0) return value;
+  return `${value.slice(0, index)}${SELECT_STATE_MARKETS_LINK}${value.slice(index + SELECT_STATE_MARKETS.length)}`;
+}
+
 export function hardcodeInContentLinks(sourcePath: string, rawValue: string): string {
-  const value = (IN_CONTENT_TEXT_OVERRIDES[sourcePath] ?? []).reduce((text, [from, to]) => text.split(from).join(to), rawValue);
+  const swaps = [
+    ...(IN_CONTENT_TEXT_OVERRIDES[sourcePath] ?? []),
+    ...(sourcePath.startsWith("/moon-rocks/") ? MOON_ROCKS_MARKET_SWAPS : []),
+  ];
+  const value = swaps.reduce((text, [from, to]) => text.split(from).join(to), rawValue);
   const rules = HARDCODED_IN_CONTENT_LINKS[sourcePath as keyof typeof HARDCODED_IN_CONTENT_LINKS];
   if (!rules?.length) {
-    return value;
+    return linkSelectStateMarkets(sourcePath, value);
   }
 
-  return rules.reduce((output, rule) => {
+  return linkSelectStateMarkets(sourcePath, rules.reduce((output, rule) => {
     const marker = `[${rule.anchor}](${rule.href})`;
     if (output.includes(marker)) {
       return output;
@@ -640,5 +664,5 @@ export function hardcodeInContentLinks(sourcePath: string, rawValue: string): st
     }
 
     return `${output.slice(0, anchorStart)}${marker}${output.slice(anchorStart + rule.anchor.length)}`;
-  }, value);
+  }, value));
 }
