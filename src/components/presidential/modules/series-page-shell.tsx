@@ -154,6 +154,22 @@ export async function SeriesPageShell({
 
         {repoCopyPath ? <RepoOwnedPageCopy path={repoCopyPath} /> : null}
 
+        {/* SURFER-R12: Silver lineup and build (series registry; /moon-rocks/strawberry build; series tagline). */}
+        {definition.slug === "silver" ? (
+          <Scene ariaLabel="What is in a Silver Moon Rock" className="po-gold-thread-inlay py-12" tone="default">
+            <div className="mx-auto w-full max-w-7xl">
+              <h3 className="text-2xl font-semibold leading-snug text-po-ink">What is in a Silver Moon Rock?</h3>
+              <p className="mt-3 max-w-3xl text-base leading-7 text-po-body">
+                Silver is the flavor-first, fruit-forward series: Blue Raspberry, Grape, Peach Mango, Pineapple, Strawberry,
+                Tropical, and Watermelon. Each is made with flower, distillate, and kief, layered the way every Presidential
+                moon rock is built. Compare the <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/gold">Gold Strain Series</Link> and the{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>, or see all{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks">Presidential Moon Rocks</Link>.
+              </p>
+            </div>
+          </Scene>
+        ) : null}
+
         {catalog.items.length > 0 ? (
           <Scene
             ariaLabelledBy={`catalog-${meta.anchor}`}

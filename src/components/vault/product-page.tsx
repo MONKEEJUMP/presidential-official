@@ -19,7 +19,7 @@ export function vaultProductMetadata(product: VaultProduct): Metadata {
 }
 // InLinks r10/r11: the weakest mini pages, linked from their siblings (vault product names).
 const MINI_SIBLING_LINKS: Readonly<Record<string, { readonly heading: string; readonly links: readonly { readonly slug: string; readonly label: string }[] }>> = {
-  'mini-pre-rolls': { heading: 'More Mini Pre-Rolls', links: [{ slug: '24k', label: '24K' }, { slug: 'cherry-gelato', label: 'Cherry Gelato' }, { slug: 'gorilla-goo', label: 'Gorilla Goo' }] },
+  'mini-pre-rolls': { heading: 'More Mini Pre-Rolls', links: [{ slug: '24k', label: '24K' }, { slug: 'cherry-gelato', label: 'Cherry Gelato' }, { slug: 'gorilla-goo', label: 'Gorilla Goo' }, { slug: 'presidential-og', label: 'Presidential OG' }, { slug: 'skywalker', label: 'Skywalker' }] },
   'mini-blunts': { heading: 'More Mini Blunts', links: [{ slug: '24k', label: '24K' }] },
 };
 
