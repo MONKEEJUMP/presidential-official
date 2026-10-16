@@ -8,6 +8,7 @@ import type {
   SanityLinkedRecord,
   SanityPortableTextBlock,
 } from "@/lib/cms/homepage";
+import { softenLearnGuideText } from "@/lib/cms/learn-guide-claims";
 import { sanitizePublicCmsModule } from "@/lib/cms/public-content";
 
 type LearnGuideCmsBodyProps = {
@@ -91,7 +92,7 @@ function RelatedProductLinks({ records }: { readonly records?: readonly SanityLi
 
 function LearnGuideBodyModule({ module, index, sourcePath }: LearnGuideBodyModuleProps) {
   const id = moduleId(module, index);
-  const body = moduleBody(module);
+  const body = softenLearnGuideText(sourcePath.replace(/^\/learn\//, ""), moduleBody(module));
 
   return (
     <Scene

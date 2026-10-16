@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BLUNT_ARTWORKS } from "@/content/blunts-catalog";
 import { vaultProducts } from "@/content/vault/catalog";
 import descriptions from "@/content/vault/descriptions.json";
+import { vaultSpecs } from "@/content/vault/specs";
 import { resolveCatalogTier } from "@/lib/catalog/tier-map";
 import { PRE_ROLL_ARTWORKS } from "@/lib/prerolls/catalog";
 import { productDetailPath } from "@/lib/products/product-paths";
@@ -22,9 +23,11 @@ const FORMAT_LABEL: Readonly<Record<string, string>> = {
 };
 const vaultDescriptions = descriptions as Readonly<Record<string, string>>;
 const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
-// Catalog naming differences for the same strain.
+// Catalog naming differences for the same strain. Presidential OG is NOT aliased to
+// "Presidential (Classic)": they are two different products (OG is the live resin and
+// diamonds build; Classic is flower, distillate, and kief), so OG resolves to its own
+// vault records only.
 const NAME_ALIASES: Readonly<Record<string, string>> = {
-  presidentialog: "presidentialclassic",
   ghosthazetrain: "ghosttrainhaze",
 };
 
@@ -76,7 +79,8 @@ export function offersFor(name: string): readonly Offer[] {
   }
   for (const product of vaultProducts) {
     if (keys.has(normalize(product.strain)) && !offers.has(product.format)) {
-      offers.set(product.format, { format: product.format, weight: descriptionWeight(vaultDescriptions[product.slug]), href: product.productUrl });
+      const madeWith = vaultSpecs(product)?.madeWith;
+      offers.set(product.format, { format: product.format, weight: descriptionWeight(vaultDescriptions[product.slug]), build: madeWith?.length ? madeWith.join(" · ") : undefined, href: product.productUrl });
     }
   }
   return FORMAT_ORDER.flatMap((format) => offers.get(format) ?? []);

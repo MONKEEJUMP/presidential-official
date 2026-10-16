@@ -2,12 +2,20 @@
 // No lab result on the site backs the number, and the no-potency rule applies.
 const POTENCY_CLAIM =
   /reach(?:es)? as high as 70\s*%\s*(?:[\u2014\u2013-]+|,)?\s*roughly three times the ceiling of top-shelf flower/gi;
-const POTENCY_FIGURE = /\bas high as 70\s*%/gi;
+const POTENCY_FIGURE = /\b(?:as high as|up to|reach(?:es|ing)?)\s+70\s*(?:%|percent)/gi;
 
 function soften(text: string): string {
   return text
     .replace(POTENCY_CLAIM, "carry concentrate and kief on top of the flower")
     .replace(POTENCY_FIGURE, "higher than flower alone");
+}
+
+// Text-level entry point for render paths that build strings themselves: the body
+// renderer joins Portable Text spans before rendering (a figure split across spans,
+// e.g. a bold "70%", never matches span by span), and the record intro feeds the
+// guide header and the Learn discovery cards.
+export function softenLearnGuideText(slug: string, text: string): string {
+  return slug === "what-are-moon-rocks" ? soften(text) : text;
 }
 
 export function softenLearnGuideClaims<T>(slug: string, value: T): T {
