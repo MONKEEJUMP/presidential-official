@@ -447,7 +447,8 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
             <h2 className="mt-10 font-display text-2xl uppercase text-po-brand">What Presidential THC covers</h2>
             <div className="mt-5 grid max-w-2xl gap-5 text-lg leading-8 text-po-on-dark-muted">
               <p>
-                &ldquo;Presidential THC&rdquo; is how many retail menus list Presidential, the cannabis brand behind Moon Rocks made from{" "}
+                &ldquo;Presidential THC&rdquo; is how many retail menus list Presidential,{" "}
+                <Link className={inlineLinkClass} href="/about">the Presidential weed brand</Link> behind Moon Rocks made from{" "}
                 <Link className={inlineLinkClass} href="/moon-rocks">Presidential flower</Link>, <Link className={inlineLinkClass} href="/pre-rolls">Moon Rock pre-rolls</Link>,{" "}
                 <Link className={inlineLinkClass} href="/blunts">Moon Rock blunts</Link>, <Link className={inlineLinkClass} href="/mini-blunts">Mini Blunts</Link>, and{" "}
                 <Link className={inlineLinkClass} href="/vapes">Presidential vapes</Link>. This page is the official guide to Presidential&apos;s infused product system, its three extract-led series, and the numbers printed on a cannabis label.

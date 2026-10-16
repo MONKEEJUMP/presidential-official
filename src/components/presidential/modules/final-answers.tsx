@@ -48,6 +48,18 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
       </p>
     ),
   },
+  // MR-AHREFS-R3 ("presidential weed"): origin facts as published on /about and the Orbit answers.
+  {
+    id: "home-q-weed-brand",
+    question: "Is Presidential a weed brand?",
+    answer: (
+      <p>
+        Yes. Presidential is a cannabis brand that started in Los Angeles, California, in 2012, and it is known for Moon
+        Rocks. Read <Link className={a} href="/about">about Presidential</Link> or{" "}
+        <Link className={a} href="/presidential-cannabis">Presidential cannabis</Link> for the company and its lineup.
+      </p>
+    ),
+  },
 ];
 
 export const ORBIT_ANSWERS: readonly AnswerItem[] = [

@@ -315,6 +315,17 @@ export const PRE_ROLL_ANSWERS: readonly AnswerItem[] = [
       </p>
     ),
   },
+  // MR-AHREFS-R3 ("presidential joint"): format facts from /presidential-blunts and /blunts.
+  {
+    id: "pre-rolls-q-joint",
+    question: "Is a Presidential joint the same as a pre-roll?",
+    answer: (
+      <p>
+        Yes. A Presidential joint is a standard 1g Moon Rock pre-roll in rolling paper. The wrapped format is the{" "}
+        <Link className={a} href="/blunts">Moon Rock blunt</Link>: 1.5g in a tobacco-free hemp wrap.
+      </p>
+    ),
+  },
   // MR-LOW3 (source: /learn/what-are-moon-rocks).
   {
     id: "pre-rolls-q-prep",
