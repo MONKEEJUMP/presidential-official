@@ -69,7 +69,8 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
             <p>
               Each pack holds three 0.5g Moon Rock mini pre-rolls, 1.5g in total. The full-size{' '}
               <Link href="/pre-rolls">presidential pre rolls</Link> are a single 1g roll. The loose format is on{' '}
-              <Link href="/moon-rocks">the Moon Rocks platform</Link>.
+              <Link href="/moon-rocks">the Moon Rocks platform</Link>. Packs include{' '}
+              <Link href="/mini-pre-rolls/24k">24K</Link> and <Link href="/mini-pre-rolls/cherry-gelato">Cherry Gelato</Link>.
             </p>
           </div>
         ) : null}
