@@ -2,7 +2,14 @@
   "registry": "presidential-approved-visible-claims",
   "version": 2,
   "scope": "visible_copy_only",
-  "neverIn": ["title", "description", "openGraph", "twitter", "schema", "sitemap"],
+  "neverIn": [
+    "title",
+    "description",
+    "openGraph",
+    "twitter",
+    "schema",
+    "sitemap"
+  ],
   "authorization": "AUTH-2 (5521-FABL, 2026-07-10, PAULIEWOOD via BigC) + 7183-FABL Part A2",
   "clientMandate": "PRESIDENTIAL DIGITAL EXPERIENCE BLUEPRINT (SHA256 84669d84...4928)",
   "entries": [
@@ -68,6 +75,56 @@
           "route": "/",
           "element": "h2",
           "elementId": "presidential-act-moon-pods"
+        }
+      ]
+    },
+    {
+      "claim": "World's Strongest",
+      "match": "phrase",
+      "claimRecordId": "chief.2026-10-16.worlds-strongest",
+      "claimReviewDecisionId": "chief.2026-10-16.worlds-strongest",
+      "authorization": "Chief approval 2026-10-16 (brand lines; copy unchanged)",
+      "scope": "visible_copy_only",
+      "placements": [
+        {
+          "route": "/",
+          "element": "p"
+        },
+        {
+          "route": "/our-story",
+          "element": "p"
+        },
+        {
+          "route": "/learn",
+          "element": "p"
+        }
+      ]
+    },
+    {
+      "claim": "No carts, no checkout",
+      "match": "phrase",
+      "claimRecordId": "chief.2026-10-16.no-carts-no-checkout",
+      "claimReviewDecisionId": "chief.2026-10-16.no-carts-no-checkout",
+      "authorization": "Chief approval 2026-10-16 (brand lines; copy unchanged)",
+      "scope": "visible_copy_only",
+      "placements": [
+        {
+          "route": "/",
+          "element": "p"
+        }
+      ]
+    },
+    {
+      "claim": "build the best product on the shelf",
+      "match": "phrase",
+      "claimRecordId": "chief.2026-10-16.best-product-on-the-shelf",
+      "claimReviewDecisionId": "chief.2026-10-16.best-product-on-the-shelf",
+      "authorization": "Chief approval 2026-10-16 (brand lines; copy unchanged)",
+      "scope": "visible_copy_only",
+      "placements": [
+        {
+          "route": "/our-story",
+          "element": "p"
         }
       ]
     }
