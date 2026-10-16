@@ -159,7 +159,7 @@ export default async function CatalogProductDetailPage({
                     className="font-semibold underline-offset-4 hover:underline"
                     href="/moon-rocks"
                   >
-                    Moon Rocks
+                    Presidential Moon Rocks
                   </Link>
                 </li>
                 <li aria-hidden="true" className="text-po-body">
