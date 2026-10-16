@@ -310,7 +310,7 @@ export function AboutCompanyShell() {
               {/* ROUND2 MR 2 (Surfer 16649229): series-to-concentrate mapping as published on /learn and the SKU pages. */}
               <h3 className="mt-8 font-display text-2xl uppercase leading-tight text-po-ink">Which concentrate goes into each series?</h3>
               <p className="mt-3 max-w-3xl text-lg leading-8 text-po-body">
-                The <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/silver">Silver Flavor Series</Link> is built on THC distillate, with flavors such as Grape, Strawberry, and Watermelon.
+                The <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/silver">Silver Flavor Series</Link> is built on <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/learn/what-is-thc-distillate">THC distillate</Link>, with flavors such as Grape, Strawberry, and Watermelon.
                 The <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/gold">Gold Strain Series</Link> is built around live resin, and the{" "}
                 <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> uses solventless live
                 rosin. Each pack prints its own materials.

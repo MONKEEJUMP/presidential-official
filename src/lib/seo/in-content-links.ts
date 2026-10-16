@@ -73,6 +73,8 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     },
   ],
   "/learn/what-are-moon-rocks": [
+    // SURFER-R13: THC distillate guide.
+    { href: "/learn/what-is-thc-distillate", anchor: "distillate", context: "carries distillate through the flower" },
     {
       href: "/moon-rocks/24k",
       anchor: "flower",
@@ -96,6 +98,8 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     },
   ],
   "/learn/what-is-live-resin": [
+    // SURFER-R13: THC distillate guide.
+    { href: "/learn/what-is-thc-distillate", anchor: "distillate", context: "distillate is stripped and refined" },
     {
       href: "/moon-rocks/gold",
       anchor: "Gold Strain Series",
@@ -170,6 +174,8 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     },
   ],
   "/learn/different-extracts-need-different-heat": [
+    // SURFER-R13: THC distillate guide.
+    { href: "/learn/what-is-thc-distillate", anchor: "Distillate", context: "Distillate is the extract identified with the Silver Flavor Series" },
     {
       href: "/orbit",
       anchor: "Orbit",

@@ -128,6 +128,12 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <p className="mt-3 text-sm leading-6 text-po-body">
             {`${name} is made with ${materials}, layered the way `}
             <Link className={linkClass} href="/moon-rocks#moon-rocks-q-infused">every Presidential moon rock is built</Link>.
+            {series === "Silver Flavor Series" ? (
+              <>
+                {" Its concentrate is "}
+                <Link className={linkClass} href="/learn/what-is-thc-distillate">distillate</Link>.
+              </>
+            ) : null}
             {slug === "cherry-gelato" ? (
               <>
                 {" See "}

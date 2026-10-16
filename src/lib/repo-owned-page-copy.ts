@@ -1,6 +1,7 @@
 export type RepoOwnedPagePath =
   | "/learn"
   | "/learn/what-are-moon-rocks"
+  | "/learn/what-is-thc-distillate"
   | "/vapes"
   | "/find-us/wa"
   | "/find-us/az"
@@ -33,6 +34,8 @@ Most people never read them, because nobody has explained what the words mean. T
 *[What Are Moon Rocks](/learn/what-are-moon-rocks)* — the format the company is named for. What a moon rock physically is, how the layers stack, and why the density changes how it burns.
 
 *[What Is Live Resin](/learn/what-is-live-resin)* — the coat that appears across most of the Gold Strain Series, and what separates it from distillate.
+
+*[What Is THC Distillate](/learn/what-is-thc-distillate)* — the refined, essentially neutral concentrate behind the Silver Flavor Series.
 
 *[What Is Live Rosin](/learn/what-is-live-rosin)* — the solventless method, and how it differs from live resin.
 
@@ -69,6 +72,30 @@ Collaboration releases run alongside the three tiers. Presidential x THC Design 
 **Where to find Presidential**
 
 Presidential is a wholesale brand and sells exclusively through licensed retailers. Availability varies by retailer and stock changes by store and by day. Presidential's seven-state footprint spans California, Oklahoma, New York, Nevada, Michigan, Arizona and Washington. Use the zip search to find the nearest licensed retailer carrying Presidential. For adults 21+ where legal.`,
+  },
+  "/learn/what-is-thc-distillate": {
+    label: "What Is THC Distillate",
+    markdown: `Distillate is the extract identified with the [Silver Flavor Series](/moon-rocks/silver). It is stripped and refined until it is essentially neutral, which is why Silver can lead with flavor names such as Grape, Strawberry, and Watermelon. Every Silver moon rock is made with flower, distillate, and kief, layered the way every Presidential moon rock is built.
+
+**A refined, neutral concentrate**
+
+Distillate is stripped and refined until it is essentially neutral, while live resin smells like the strain it came from in a way distillate cannot. That neutrality is the difference to understand first. For the strain-forward alternative, read [What Is Live Resin](/learn/what-is-live-resin); for the solventless route, read [What Is Live Rosin](/learn/what-is-live-rosin).
+
+**Distillate in the Presidential infusion system**
+
+Each infused Presidential product starts with cannabis flower, adds a concentrate (distillate, live resin, or live rosin, depending on the series), and finishes with the dry material named on the package, such as kief. Presidential's infusion process carries distillate through the flower rather than only coating the surface, then applies the kief layer as the final step. See [What Are Moon Rocks](/learn/what-are-moon-rocks) for the three layers.
+
+**The Silver Flavor Series is built on distillate**
+
+The Silver Flavor Series is built on THC distillate. Its flavor-first, fruit-forward roster is [Blue Raspberry](/moon-rocks/blue-raspberry), [Grape](/moon-rocks/grape), [Peach Mango](/moon-rocks/peach-mango), [Pineapple](/moon-rocks/pineapple), [Strawberry](/moon-rocks/strawberry), [Tropical](/moon-rocks/tropical), and [Watermelon](/moon-rocks/watermelon). Presidential Classic, the house recipe, is also made with flower, distillate, and kief.
+
+**Distillate and the other Presidential extracts**
+
+Distillate is one of the concentrates in the Presidential catalog. Live resin is the coat that appears across most of the Gold Strain Series, and Rose Gold is the solventless tier built on live rosin. Presidential Moon Pods come in Liquid Diamonds, Live Resin, and Live Rosin families; see [What Are Liquid Diamonds](/learn/what-are-liquid-diamonds) and [Moon Pods](/moon-pods). Different extracts need different heat, so read [Different Extracts Need Different Heat](/learn/different-extracts-need-different-heat).
+
+**Reading a distillate product**
+
+When comparing infused products, look at what was infused, how, and with which concentrate: distillate, live resin, or live rosin each brings a different character. THC and cannabinoids are batch-specific, so read the current package label and its test results.`,
   },
   "/learn/what-are-moon-rocks": {
     label: "What Moon Rocks are and how to read the format",

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { REPO_LEARN_GUIDES } from "@/lib/learn/repo-learn-guides";
 
 import {
   readPublicRenderableLearnGuideSummaries,
@@ -13,7 +14,7 @@ const PARENT_GUIDE_SLUGS = {
   "/moon-rocks": "what-are-moon-rocks",
   "/moon-rocks/gold": "what-is-live-resin",
   "/moon-rocks/rose-gold": "what-is-live-rosin",
-  "/moon-rocks/silver": "what-are-liquid-diamonds",
+  "/moon-rocks/silver": "what-is-thc-distillate",
   "/about": "infusion-science",
   "/vapes": "flavor-science",
   "/orbit": "different-extracts-need-different-heat",
@@ -74,9 +75,13 @@ function GuideCard({
 }
 
 async function readGuideSummaries(): Promise<readonly SanityLearnGuideSummaryRecord[]> {
-  return readPublicRenderableLearnGuideSummaries({
+  const cms = await readPublicRenderableLearnGuideSummaries({
     next: { tags: ["sanity-learn-guide-summaries"] },
   });
+  const repo = Object.values(REPO_LEARN_GUIDES)
+    .filter((guide) => !cms.some((candidate) => candidate.slug === guide.slug))
+    .map(({ slug, title, intro }) => ({ slug, title, intro }));
+  return [...cms, ...repo];
 }
 
 export async function LearnGuideIndex() {
