@@ -198,7 +198,7 @@ export function buildTermSeoRoute(term: ConcreteTermPage): SeoRouteRecord {
     keywords: term.keywords,
     schema:
       term.slug === "presidential-cannabis"
-        ? ["Organization", "WebPage", "BreadcrumbList", "FAQPage"]
+        ? ["Organization", "WebPage", "BreadcrumbList"]
         : ["WebPage", "BreadcrumbList"],
     requiredData: ["owner-approved term-page copy", "approved Presidential imagery"],
     requiredApprovals: [],

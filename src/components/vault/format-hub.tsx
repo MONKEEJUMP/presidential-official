@@ -64,6 +64,14 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
       </section>
 
       <section aria-label={`Presidential ${label}`} className={shared.artIndex} id="collection">
+        {room.slug === 'mini-pre-rolls' ? (
+          <div className={shared.indexIntro}>
+            <p>
+              Each pack holds three 0.5g Moon Rock mini pre-rolls, 1.5g in total. The full-size{' '}
+              <Link href="/pre-rolls">presidential pre rolls</Link> are a single 1g roll.
+            </p>
+          </div>
+        ) : null}
         <div className={shared.tierSections}>
           <section className={shared.tierSection}>
             <div className={`${shared.artGrid} ${shared.tierGrid}`}>

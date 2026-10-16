@@ -52,7 +52,7 @@ Three of those change from product to product and the rest never do. The strain 
 
 **The format ladder**
 
-Moon Rock Blunt: one unit, 1.5 g, .053 oz. Moon Rock Preroll: one unit, 1 g, .035 oz. Moon Rocks loose: 2 g, 0.071 oz. Moon Rock Mini Blunts: three at 0.7 g, 2.1 g total. Moon Rock Mini Prerolls: three at 0.5 g, 1.5 g total.
+Moon Rock Blunt: one unit, 1.5 g, .053 oz. Moon Rock Preroll, [the Presidential pre-roll format](/pre-rolls): one unit, 1 g, .035 oz. Moon Rocks loose: 2 g, 0.071 oz. Moon Rock Mini Blunts: three at 0.7 g, 2.1 g total. Moon Rock Mini Prerolls: three at 0.5 g, 1.5 g total.
 
 The build does not change between them. Only the size and the count.
 
@@ -86,7 +86,7 @@ The main [Presidential Moon Rocks collection](/moon-rocks) organizes the approve
 
 **How Moon Rocks relate to other Presidential formats**
 
-Loose Moon Rocks show the layered construction directly. Infused pre-rolls place prepared cannabis material inside rolling paper, while [Presidential Blunts](/presidential-blunts) use a tobacco-free hemp-wrap format. These products can share brand and infusion context without becoming interchangeable names for the same physical format.
+Loose Moon Rocks show the layered construction directly. [Moon Rock pre-rolls](/pre-rolls) place prepared cannabis material inside rolling paper, while [Presidential Blunts](/presidential-blunts) use a tobacco-free hemp-wrap format. These products can share brand and infusion context without becoming interchangeable names for the same physical format.
 
 For deeper technical vocabulary, the [Presidential THC guide](/presidential-thc) explains infusion, extracts, and label reading. [Presidential Cannabis](/presidential-cannabis) provides the parent-brand context. [Presidential x THC Design](/moon-rocks/presidential-x-thc-design) shows how a collaboration remains part of the same official product system.
 

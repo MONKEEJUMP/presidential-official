@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { ProductImageLink, ProductMentions } from "@/components/presidential/products/product-mention";
 import type { ReactNode } from "react";
-import type { FAQPage, WithContext } from "schema-dts";
 
 import { buildRouteMetadata } from "@/lib/seo/metadata";
 import { canonicalUrl } from "@/lib/seo/schema/constants";
@@ -392,8 +391,7 @@ const PRESIDENTIAL_THC_QUESTIONS: readonly { readonly question: string; readonly
   },
 ];
 
-// Single source for the visible FAQ copy and the FAQPage JSON-LD so the two
-// can never drift apart.
+// Visible FAQ copy only. Sitebulb: MR emits no FAQPage JSON-LD.
 const PRESIDENTIAL_CANNABIS_FAQ = [
   {
     question: "What is Presidential Cannabis?",
@@ -416,21 +414,6 @@ const PRESIDENTIAL_CANNABIS_FAQ = [
       "Presidential Cannabis is sold through licensed retailers. Use the official Find Us path to locate participating stores, then confirm current product availability with the retailer. Adults 21+ where legal.",
   },
 ] as const;
-
-function buildPresidentialCannabisFaqSchema(): WithContext<FAQPage> {
-  return {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: PRESIDENTIAL_CANNABIS_FAQ.map((item) => ({
-      "@type": "Question",
-      name: item.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.answer,
-      },
-    })),
-  };
-}
 
 function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; route: SeoRouteRecord }) {
   return (
@@ -661,7 +644,6 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
 function PresidentialCannabisPage({ images, route }: { images: readonly TermImage[]; route: SeoRouteRecord }) {
   return (
     <>
-      <JsonLd data={buildPresidentialCannabisFaqSchema()} />
       <Scene ariaLabelledBy="presidential-cannabis-title" className="py-20 lg:py-28" tone="contrast">
         <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(360px,0.7fr)] lg:items-center lg:gap-16">
           <div>
