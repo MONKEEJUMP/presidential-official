@@ -128,6 +128,22 @@ export function VapeExperience({ page }: { page: VapePage }) {
         <div><p className={s.eyebrow}>Moon Pods</p><h2 id="moon-pods-chapters-heading">Three families.<br /><span>One Presidential standard.</span></h2></div>
         <p>Liquid Diamonds. Live Resin. Live Rosin.<br />A closer look at each expression.</p>
       </div>
+      {/* INLINKS-COPY-R14: /moon-pods families H3 (copy as written). */}
+      {page === 'moon-pods' ? (
+        <div>
+          <h3>How the three Moon Pod families differ</h3>
+          <p>
+            Moon Pods are the vaporizer side of Presidential, built to run on the Orbit device. Each pod family names its extract.{' '}
+            <Link href="/learn/what-are-liquid-diamonds">Liquid diamonds</Link> are crystallized cannabinoids paired with terpenes,{' '}
+            <Link href="/learn/what-is-live-resin">live resin</Link> is made from fresh-frozen plant material, and{' '}
+            <Link href="/learn/what-is-live-rosin">live rosin</Link> is solventless. These are different routes than distillation,
+            and each keeps a different share of the plant&apos;s terpenes, which <Link href="/learn/flavor-science">flavor science</Link>{' '}
+            explains. <Link href="/learn/different-extracts-need-different-heat">Why different extracts need different heat</Link>{' '}
+            covers how each one behaves in a vaporizer. To find a location carrying Moon Pods and Orbit, use the{' '}
+            <Link href="/find-us">Presidential store finder</Link>.
+          </p>
+        </div>
+      ) : null}
       <div className={s.chapterColors}><span className={s.label}>Orbit finish</span><ColorChoices value={finish} onChange={setFinish} label="Moon Pods chapter finish" /></div>
       <div className={s.familyCards}>
         {VAPE_FAMILIES.map((item, index) => {
