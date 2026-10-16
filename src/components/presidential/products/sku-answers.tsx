@@ -152,11 +152,11 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
         </>
       ) : null}
-      {slug === "presidential-og" && series && materials ? (
+      {slug === "presidential-og" && series ? (
         <>
           <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">What is the Presidential OG strain?</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">
-            {`Presidential OG is a ${series} release that carries the house name. It is made with ${materials}.`}
+            {`Presidential OG is a ${series} release that carries the house name, and its pack prints the build.`}
           </p>
         </>
       ) : null}
