@@ -64,6 +64,36 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
       </section>
 
       <section aria-label={`Presidential ${label}`} className={shared.artIndex} id="collection">
+        {/* INLINKS-COPY-R15: /mini-blunts H3s (copy as written; /blunts anchor reworded to avoid a "Presidential Blunts" anchor). */}
+        {room.slug === 'mini-blunts' ? (
+          <div className={shared.indexIntro}>
+            <h3>What&apos;s in a Presidential mini blunt pack</h3>
+            <p>
+              Every mini blunt pack holds three 0.7g Moon Rock mini blunts, 2.1g in total. Each one has the same build as the{' '}
+              <Link href="/blunts">full-size Moon Rock blunts</Link>: flower coated in live resin and finished with diamonds, rolled
+              in a 100% tobacco-free hemp wrap. Only the size and the count change. A mini blunt is a smaller version of the same
+              object, not a cheaper one.
+            </p>
+            <h3>Why a three-pack instead of one full blunt</h3>
+            <p>
+              The three-pack suits a customer who wants a strain spread across several occasions, or shared among three people. Each
+              pack is marked Indica or Hybrid on the front. Cherry Gelato carries the ROVE collaboration name. Gorilla Goo is the pick
+              for its reported sour fuel, pine and chocolate notes. You can compare packs on the{' '}
+              <Link href="/mini-blunts/24k">24K mini blunts</Link>,{' '}
+              <Link href="/mini-blunts/cherry-gelato">Cherry Gelato mini blunts</Link> and{' '}
+              <Link href="/mini-blunts/gorilla-goo">Gorilla Goo mini blunts</Link> pages.
+            </p>
+            <h3>THC, cannabinoids and the label</h3>
+            <p>
+              THC and other cannabinoid figures belong to the individual pack and its batch test record, so read the label on the
+              pack in your hand, not a strain name. The result in the wrap comes from the flower, the live resin and the diamonds
+              working together. <Link href="/learn/what-are-liquid-diamonds">What are liquid diamonds</Link> and{' '}
+              <Link href="/learn/what-is-live-resin">what is live resin</Link> explain each layer. Packs are sold through licensed
+              retailers only, and the <Link href="/find-us">Presidential store finder</Link> shows the nearest ones. If you want
+              paper in place of a hemp wrap, see <Link href="/mini-pre-rolls">Mini Pre-Rolls</Link>.
+            </p>
+          </div>
+        ) : null}
         {room.slug === 'mini-pre-rolls' ? (
           <div className={shared.indexIntro}>
             <p>
