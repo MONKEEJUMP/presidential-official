@@ -196,6 +196,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
   // MR-TOP50 A11: the bare "flower" -> /moon-rocks/24k rule for /moon-rocks was removed.
   "/moon-rocks/24k": [
     { href: "/about", anchor: "brand", context: "Presidential is a wholesale brand" },
+    { href: "/find-us", anchor: "select state markets", context: "currently active across select state markets" },
     {
       href: "/",
       anchor: "retailer",
@@ -594,7 +595,18 @@ export const HARDCODED_IN_CONTENT_LINK_COUNT = Object.values(
   HARDCODED_IN_CONTENT_LINKS,
 ).reduce((total, rules) => total + rules.length, 0);
 
-export function hardcodeInContentLinks(sourcePath: string, value: string): string {
+// Chief ruling (Oct 16): no state-market count on /moon-rocks/24k; CMS sentence rewritten here (no Sanity write access).
+const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
+  "/moon-rocks/24k": [
+    [
+      "Presidential is currently active across six state markets with two more opening.",
+      "Presidential is currently active across select state markets.",
+    ],
+  ],
+};
+
+export function hardcodeInContentLinks(sourcePath: string, rawValue: string): string {
+  const value = (IN_CONTENT_TEXT_OVERRIDES[sourcePath] ?? []).reduce((text, [from, to]) => text.split(from).join(to), rawValue);
   const rules = HARDCODED_IN_CONTENT_LINKS[sourcePath as keyof typeof HARDCODED_IN_CONTENT_LINKS];
   if (!rules?.length) {
     return value;

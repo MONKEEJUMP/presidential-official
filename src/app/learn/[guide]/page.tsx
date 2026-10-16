@@ -148,6 +148,9 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
         {slug === "what-are-moon-rocks" ? (
           <RepoOwnedPageCopy path="/learn/what-are-moon-rocks" />
         ) : null}
+        {slug === "flavor-science" ? (
+          <RepoOwnedPageCopy path="/learn/flavor-science" />
+        ) : null}
         <FindUsCtaShell
           className="po-gold-thread-inlay"
           compact

@@ -143,6 +143,18 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
         </>
       ) : null}
+      {/* SURFER-R13: 24K live resin H3, from 24K "What is in it" and "Where 24K sits in the catalogue". */}
+      {slug === "24k" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Why live resin in the Gold Strain Series?</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            24K belongs to the Gold Strain Series, which carries named strains, and live resin is the coat that appears across
+            most of that series. Flower is the base, live resin is the coat, and diamonds are the crystalline finish. See the full{" "}
+            <Link className={linkClass} href="/moon-rocks/gold">Gold Strain Series</Link> or read{" "}
+            <Link className={linkClass} href="/learn/what-is-live-resin">What Is Live Resin</Link>.
+          </p>
+        </>
+      ) : null}
       {marking ? (
         <>
           <h2 className={`${materials || slug === "watermelon" ? "mt-6 " : ""}font-display text-2xl uppercase leading-tight text-po-ink`}>{`Is ${name} indica, sativa, or hybrid?`}</h2>
