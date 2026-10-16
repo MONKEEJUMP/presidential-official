@@ -30,6 +30,22 @@ const BLUNT_BUILDS = Object.entries(
   }, {}),
 );
 
+// MR-GSC-R2: series-to-build map from blunts-catalog editions.
+const BLUNT_SERIES_ANSWER: AnswerItem = {
+  id: "blunts-q-series",
+  question: "Which infused blunt is in each series?",
+  answer: (
+    <p>
+      Every Presidential infused blunt is 1.5g in a tobacco-free wrap, and the series sets the build. The{" "}
+      <Link className={a} href="/moon-rocks/silver">Silver Flavor Series</Link> blunts are flower, distillate, and kief.
+      The <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link> is built around live resin, for example
+      flower, live resin, and diamonds on Blue Dream. The{" "}
+      <Link className={a} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> blunts are flower, live rosin,
+      and diamonds.
+    </p>
+  ),
+};
+
 export const BLUNT_ANSWERS: readonly AnswerItem[] = [
   {
     id: "blunts-q-inside",
@@ -102,6 +118,7 @@ export const BLUNT_ANSWERS: readonly AnswerItem[] = [
       </>
     ),
   },
+  BLUNT_SERIES_ANSWER,
 ];
 
 export const MINI_BLUNT_ANSWERS: readonly AnswerItem[] = [
@@ -142,6 +159,27 @@ export const VAPES_ANSWERS: readonly AnswerItem[] = [
         <Link className={a} href="/orbit">Orbit</Link> device. Moon Pods come in three families named for their extract:
         Liquid Diamonds (LD), Live Resin (LRE), and Live Rosin (LRO). THC is batch-specific, so read the package label and
         its test results.
+      </p>
+    ),
+  },
+  // MR-GSC-R2: Orbit battery/pod model and the LR mode label, from the /vapes copy.
+  {
+    id: "vapes-q-disposable",
+    question: "Is Orbit a disposable vape?",
+    answer: (
+      <p>
+        No. The Moon Pods vape system pairs a reusable battery with disposable pods: <Link className={a} href="/orbit">Orbit</Link>{" "}
+        is the reusable device, and <Link className={a} href="/moon-pods">Moon Pods</Link> are the pods you replace.
+      </p>
+    ),
+  },
+  {
+    id: "vapes-q-lr",
+    question: "What does LR mean on a Presidential vape?",
+    answer: (
+      <p>
+        LR is Orbit&apos;s Live Resin Mode, one of three modes alongside Liquid Diamond Mode (LD) and Live Rosin Mode (LRO).
+        Read <Link className={a} href="/learn/what-is-live-resin">what live resin is</Link> for the extract behind the name.
       </p>
     ),
   },

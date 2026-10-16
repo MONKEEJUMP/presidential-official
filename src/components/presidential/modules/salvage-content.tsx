@@ -212,8 +212,14 @@ export const ABOUT_ANSWERS: readonly AnswerItem[] = [
     question: "What flavors and strains does Presidential make?",
     answer: (
       <p>
-        The Silver Flavor Series carries flavor-led releases such as Grape, Pineapple,{" "}
-        <Link className={a} href="/moon-rocks/watermelon">Watermelon</Link>, and Peach Mango. The Gold Strain Series
+        The Silver Flavor Series carries flavor-led releases:{" "}
+        <Link className={a} href="/moon-rocks/blue-raspberry">Blue Raspberry</Link>,{" "}
+        <Link className={a} href="/moon-rocks/grape">Grape</Link>,{" "}
+        <Link className={a} href="/moon-rocks/peach-mango">Peach Mango</Link>,{" "}
+        <Link className={a} href="/moon-rocks/pineapple">Pineapple</Link>,{" "}
+        <Link className={a} href="/moon-rocks/strawberry">Strawberry</Link>,{" "}
+        <Link className={a} href="/moon-rocks/tropical">Tropical</Link>, and{" "}
+        <Link className={a} href="/moon-rocks/watermelon">Watermelon</Link>. The Gold Strain Series
         carries named strains built on live resin, such as 24K and Blue Dream. Presidential Classic, the house recipe, is
         made with flower, distillate, and kief.
       </p>
