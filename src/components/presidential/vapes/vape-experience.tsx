@@ -75,6 +75,34 @@ export function VapeExperience({ page }: { page: VapePage }) {
         <div><p className={s.eyebrow}>The product explorer</p><h2 id="vape-explorer-heading">Your Orbit.<br /><span>Your perspective.</span></h2></div>
         <p>Find your finish. Explore the pod families.<br />See the details from every side.</p>
       </div>
+      {/* INLINKS-COPY-R17: /orbit battery H3s (copy as written). */}
+      {page === 'orbit' ? (
+        <div>
+          <h3>What the Orbit battery does</h3>
+          <p>
+            Orbit is the battery behind Presidential vapes, built to pair with{' '}
+            <Link href="/moon-pods">Moon Pods vape cartridges</Link>. Instead of one fixed heat, Orbit has three oil modes, Liquid
+            Diamond (LD), Live Resin (LR) and Live Rosin (LRO). To pick one, press the device button three times, then select the oil
+            type, and the battery applies the heat set for that oil.{' '}
+            <Link href="/learn/different-extracts-need-different-heat">Why different extracts need different heat</Link> explains
+            the reasoning.
+          </p>
+          <h3>Matching the battery mode to the pod family</h3>
+          <p>
+            Each Moon Pods family has its own mouthpiece and display. Liquid Diamonds has the teal mouthpiece, Live Resin has a clear
+            mouthpiece and the LRE display, and Live Rosin has a smoked mouthpiece and the LRO display. Read{' '}
+            <Link href="/learn/what-are-liquid-diamonds">what liquid diamonds are</Link>,{' '}
+            <Link href="/learn/what-is-live-resin">what live resin is</Link> and{' '}
+            <Link href="/learn/what-is-live-rosin">what live rosin is</Link> before you choose a mode.
+          </p>
+          <h3>Four Orbit battery finishes</h3>
+          <p>
+            Orbit comes in four finishes, black, silver, teal and white, and each one shows the Presidential details front and back.
+            The <Link href="/vapes">full Presidential vape collection</Link> shows each finish. The{' '}
+            <Link href="/find-us">Presidential store finder</Link> lists retailers that carry Orbit.
+          </p>
+        </div>
+      ) : null}
       <div className={s.explorerGrid}>
         <div className={s.gallery}>
           <div className={s.galleryStage} data-view={current.view}>
