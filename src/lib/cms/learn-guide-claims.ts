@@ -1,7 +1,7 @@
 // Softens the CMS potency figure on /learn/what-are-moon-rocks to a non-numeric statement.
 // No lab result on the site backs the number, and the no-potency rule applies.
 const POTENCY_CLAIM =
-  /reach(?:es)? as high as 70\s*%\s*(?:[\u2014\u2013-]+|,)?\s*roughly three times the ceiling of top-shelf flower/gi;
+  /reach(?:es)? as high as 70\s*(?:%|percent)\s*(?:[\u2014\u2013-]+|,)?\s*roughly three times the ceiling of top-shelf flower/gi;
 // Keeps a leading reach verb so "can reach 70%" becomes "can reach higher than flower alone".
 const POTENCY_FIGURE = /\b(?:(reach(?:es|ing)?)\s+(?:as high as\s+|up to\s+)?|as high as\s+|up to\s+)70\s*(?:%|percent)/gi;
 
