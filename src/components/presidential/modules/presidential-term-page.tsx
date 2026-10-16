@@ -356,7 +356,8 @@ const PRESIDENTIAL_THC_QUESTIONS: readonly { readonly question: string; readonly
       <>
         Yes. &ldquo;Presidential THC&rdquo; is how many retail menus list Presidential, the brand behind Presidential Moon
         Rocks. The products are the same; the official company home is this site, and{" "}
-        <Link className={inlineLinkClass} href="/presidential-cannabis">Presidential cannabis</Link> covers the company.
+        <Link className={inlineLinkClass} href="/presidential-cannabis">Presidential cannabis</Link> covers the company. The history is in{" "}
+        <Link className={inlineLinkClass} href="/our-story">the Presidential story</Link>.
       </>
     ),
   },
@@ -489,7 +490,9 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
             1.5g in total).
           </li>
           <li>
-            <Link className={inlineLinkClass} href="/vapes">Presidential vapes</Link>: the Orbit device and Moon Pods in
+            <Link className={inlineLinkClass} href="/vapes">Presidential vapes</Link>: the{" "}
+            <Link className={inlineLinkClass} href="/orbit">Orbit</Link> device and{" "}
+            <Link className={inlineLinkClass} href="/moon-pods">Moon Pods</Link> in
             Liquid Diamonds, Live Resin, and Live Rosin.
           </li>
         </ul>
