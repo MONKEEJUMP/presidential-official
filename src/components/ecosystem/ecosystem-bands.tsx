@@ -94,7 +94,8 @@ const TIERS = [
     icon: Diamond,
     href: "/moon-rocks/silver",
     heading: "SILVER",
-    extract: "LIQUID DIAMONDS",
+    // Chief + Dr. Awesome ruling 2026-10-16: Silver is the distillate series (product data: flower, distillate, kief).
+    extract: "DISTILLATE",
     headline: "THE ULTIMATE FLAVOR & POTENCY EXPERIENCE",
     series: "Flavor Series",
     copy: [

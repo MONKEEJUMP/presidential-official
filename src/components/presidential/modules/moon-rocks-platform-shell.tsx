@@ -221,6 +221,31 @@ export async function MoonRocksPlatformShell({
                 explore every strain. Availability varies
                 by licensed retailer.
               </p>
+              {/* INLINKS-COPY-R12: build and where-to-buy sections (facts from series data, /about, the 2G MOON ROCKS label and /find-us). */}
+              <h3 className="mt-8 text-2xl font-semibold leading-snug">How Presidential Moon Rocks are made</h3>
+              <p className="mt-3">
+                Every Presidential Moon Rock starts with flower. Concentrate is added, then a kief finish. What separates the
+                series is the concentrate: Silver is the Flavor Series built on distillate, Gold is the Strain Series built on
+                live resin, and Rose Gold is the Connoisseur Series built on live rosin. Each guide explains its concentrate:{" "}
+                <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-thc-distillate">what is THC distillate</Link>,{" "}
+                <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-live-resin">what is live resin</Link> and{" "}
+                <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-live-rosin">what is live rosin</Link>.{" "}
+                <Link className="font-semibold underline underline-offset-4" href="/learn/what-are-moon-rocks">What are moon rocks</Link> covers the format from the beginning.
+              </p>
+              <p className="mt-3">
+                The same build carries across three formats. There&apos;s the 2G Moon Rock, the Moon Rock Preroll and the Moon
+                Rock Blunt, and each one comes in Silver, Gold and Rose Gold. Read why{" "}
+                <Link className="font-semibold underline underline-offset-4" href="/learn/different-extracts-need-different-heat">different extracts need different heat</Link>.
+                Cannabinoid and THC figures come from the current package and its batch test record, not from this page.
+              </p>
+              <h3 className="mt-8 text-2xl font-semibold leading-snug">Where to buy, and what it costs</h3>
+              <p className="mt-3">
+                Presidential Moon Rocks are sold only at licensed retailers, in person, to adults 21+ where it&apos;s legal.
+                There&apos;s no online checkout on this site. Prices are set by each retailer, so the price and the stock on
+                hand vary from store to store and state to state. To find a store near you, including in California and Los
+                Angeles, use <Link className="font-semibold underline underline-offset-4" href="/find-us">Find a Store</Link>. Retail partners can email
+                sales@presidentialmoonrocks.com or start on the <Link className="font-semibold underline underline-offset-4" href="/wholesale">Wholesale</Link> page.
+              </p>
             </div>
 
             <div className={shared.tierSections}>
