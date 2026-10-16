@@ -16,7 +16,7 @@ import { VAPES_ANSWERS } from '../modules/top50-content';
 import s from './showroom.module.css';
 
 const introductions = {
-  vapes: { line: 'Designed for flavor.', text: ['Different oils need different heat.', 'Every oil has a sweet spot.'], title: <>VAPES<span>DESIGNED FOR FLAVOR.</span></> },
+  vapes: { line: 'Designed for flavor.', text: ['Different oils need different heat.', 'Every oil has a sweet spot.'], title: <>VAPES{' '}<span>DESIGNED FOR FLAVOR.</span></> },
   'moon-pods': { line: 'Meet Moon Pods.', text: ['Liquid Diamonds, Live Resin and Live Rosin. Explore the Moon Pods family, photographed with Orbit.'], title: <>PRESIDENTIAL MOON PODS</> },
   orbit: { line: 'Make it your Orbit.', text: ['Black. Silver. Teal. White. Get to know the device behind the Presidential vape experience.'], title: <>PRESIDENTIAL ORBIT</> },
 } as const;

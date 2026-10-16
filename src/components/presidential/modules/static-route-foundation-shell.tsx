@@ -69,11 +69,11 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
     return [
       {
         title: "Where it started",
-        body: "Los Angeles, 2012. Founders Everett Smith and John Zapp built cannabis the way the great houses build anything worth owning — obsessively, no shortcuts. They didn't just launch a brand; they helped father the infused-product category in Southern California. Presidential was premium before 'premium cannabis' was a phrase.",
+        body: "Los Angeles, 2012. Founders Everett Smith and John Zapp built cannabis the way the great houses build anything worth owning — obsessively, no shortcuts. They didn't just launch a brand; they helped father the infused-product category in Southern California. Presidential was premium before 'premium cannabis' was a phrase. Read more [about the Presidential cannabis brand](/about).",
       },
       {
         title: "How it's built",
-        body: "A Presidential Moon Rock isn't flower with a dusting on top. It's the Presidential Infusion System™ — premium flower, rich resin, and a coat of the finest kief, fused into one complete product. Three layers, one hit, engineered for flavor and strength you actually feel. That's what Cannabis Evolved means — and why Moon Rocks earned the name.",
+        body: "A Presidential Moon Rock isn't flower with a dusting on top. It's the Presidential Infusion System™ — premium flower, rich resin, and a coat of the finest kief, fused into one complete product. Three layers, one hit, engineered for flavor and strength you actually feel. That's what Cannabis Evolved means — and why Moon Rocks earned the name. The series are the [Silver Flavor Series](/moon-rocks/silver), [Gold Strain Series](/moon-rocks/gold) and [Rose Gold Connoisseur Series](/moon-rocks/rose-gold).",
       },
       {
         title: "The reputation",
@@ -85,7 +85,7 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
       },
       {
         title: "What's next",
-        body: "Today Presidential is a full platform — Moon Rocks, Moon Pods, and Orbit — each engineered around flavor, all carrying the same standard. The belief that started it in 2012 hasn't moved: build it better, expect more, never miss. Then. Now. Next.",
+        body: "Today Presidential is a full platform — Moon Rocks, Moon Pods, and Orbit — each engineered around flavor, all carrying the same standard. The belief that started it in 2012 hasn't moved: build it better, expect more, never miss. Then. Now. Next. Moon Pods and Orbit are the [Presidential vapes](/vapes).",
       },
     ];
   }

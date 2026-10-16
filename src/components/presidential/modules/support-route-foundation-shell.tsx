@@ -245,10 +245,12 @@ export async function SupportRouteFoundationShell({
                 How to find Presidential at a licensed retailer
               </h2>
               <ol className="mt-8 grid max-w-3xl list-decimal gap-4 pl-6 text-base leading-7 text-po-body">
-                <li>Pick your state from the seven Presidential states: California, Oklahoma, New York, Nevada, Michigan, Arizona, and Washington.</li>
+                <li>Pick your state from the seven Presidential states: California, Oklahoma, New York, Nevada, Michigan, Arizona, and Washington. State pages include{" "}
+                  <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/find-us/ca">Presidential in California</Link> and{" "}
+                  <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/find-us/az">Presidential in Arizona</Link>.</li>
                 <li>Use the locator: enter your zip code and it ranks the nearest official licensed retailers by distance.</li>
                 <li>
-                  At the shelf, check for the Presidential crest and the series name on the pack, such as the{" "}
+                  At the shelf, check the series name on the pack, such as the{" "}
                   <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/silver">Silver Flavor Series</Link>,{" "}
                   <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/gold">Gold Strain Series</Link>, or{" "}
                   <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>. Stock varies by store and by day, so confirm the details with your retailer.

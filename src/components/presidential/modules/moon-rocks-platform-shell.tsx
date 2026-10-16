@@ -65,6 +65,8 @@ const moonRocksCatalogPathCopy = [
   "[Iced Lemon](/moon-rocks/presidential-line-iced-lemon) appears among the collaboration releases.",
   "[Rainbow Belts](/moon-rocks/rainbow-belts) carries another named product path.",
   "[Guava Haze](/moon-rocks/presidential-line-guava-haze) adds another collaboration product page to explore.",
+  "[Gorilla Goo Moon Rocks](/moon-rocks/gorilla-goo) sit in the Gold Strain Series.",
+  "[Cherry Gelato Moon Rocks](/moon-rocks/cherry-gelato) is one of the collaboration releases.",
 ] as const;
 
 const FLAVOR_SERIES_LABELS = {
