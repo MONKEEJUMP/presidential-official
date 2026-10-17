@@ -650,8 +650,9 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
           Peach Mango and Watermelon, sit in the Silver series, built on distillate; see the{" "}
           <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver distillate tier</Link>. Strain-led names such as the{" "}
           <Link className={inlineLinkClass} href="/blunts/cherry-gelato">Cherry Gelato moon rock blunt</Link> and Skywalker carry their own strain
-          identity. Every one is a moon rock blunt: flower, concentrate and a kief or diamond finish inside a tobacco-free hemp wrap,
-          in full-size and mini formats. Bring the exact name and size to a licensed retailer in{" "}
+          identity. Every one is a moon rock blunt: flower, concentrate and a kief or diamond finish inside a tobacco-free hemp wrap.
+          Some names also come as minis, so mini availability depends on the flavor. Bring the exact name and size to a licensed
+          retailer in{" "}
           <Link className={inlineLinkClass} href="/find-us">select state markets</Link>. Availability varies by retailer.
         </p>
       </TermSection>
