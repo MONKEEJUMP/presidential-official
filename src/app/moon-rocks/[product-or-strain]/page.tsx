@@ -231,10 +231,10 @@ export default async function CatalogProductDetailPage({
                   <ProductSpecBlock chips={chips} name={item.name} series={item.series} slug={slug} />
                 ) : null}
                 {slug !== "presidential-blunts" ? <SkuAnswers name={item.name} series={item.series} slug={slug} /> : null}
-                {/* SURFER-R24: /moon-rocks/presidential-blunts intro H3 (facts from /, /blunts and /presidential-blunts). Chief: /presidential-blunts is the main blunts page; no redirect or canonical change here. */}
+                {/* SURFER-R24: /moon-rocks/presidential-blunts intro H3 (facts from /, /blunts and /presidential-blunts). Chief: /presidential-blunts is the main blunts page; no redirect or canonical change here. H2, not H3: it directly follows the H1 on this SKU (no level skip). */}
                 {slug === "presidential-blunts" ? (
                   <div className="mt-8 border-t border-po-line pt-5">
-                    <h3 className="text-xl font-semibold leading-snug text-po-ink">Presidential Moon Rock blunts at a glance</h3>
+                    <h2 className="text-xl font-semibold leading-snug text-po-ink">Presidential Moon Rock blunts at a glance</h2>
                     <p className="mt-3 text-sm leading-6 text-po-body">
                       Presidential Moon Rock blunts carry the house infused build, flower, concentrate and a kief or diamond finish,
                       inside a tobacco-free hemp wrap, in full-size and mini formats. Each pack names its tier: Silver is distillate,
