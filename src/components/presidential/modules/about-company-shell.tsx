@@ -245,6 +245,18 @@ export function AboutCompanyShell() {
                 </article>
               ))}
             </div>
+            {/* SURFER-R19: format sizes, from /moon-rocks/rose-gold and /moon-rocks. */}
+            <div className="mt-14 max-w-3xl">
+              <h3 className="text-2xl font-semibold leading-snug text-po-ink">What sizes do the formats come in?</h3>
+              <p className="mt-3 text-base leading-7 text-po-body">
+                The formats are identical across all three series. A Moon Rock Blunt is one unit at 1.5 g (.053 oz). A Moon Rock Preroll is one unit at 1 g (.035 oz); see the{" "}
+                <Link className="font-semibold underline underline-offset-4" href="/pre-rolls">Presidential Moon Rock pre-rolls</Link>. Loose Moon Rocks come at 2 g (0.071 oz) in the self-titled flagship pack; see{" "}
+                <Link className="font-semibold underline underline-offset-4" href="/moon-rocks">all Presidential Moon Rocks</Link>.{" "}
+                <Link className="font-semibold underline underline-offset-4" href="/mini-pre-rolls">Presidential mini pre-rolls</Link>{" "}
+                are three rolls at 0.5 g each. THC and cannabinoids are batch-specific, so read the current package label and its
+                test results.
+              </p>
+            </div>
           </div>
         </Scene>
 
