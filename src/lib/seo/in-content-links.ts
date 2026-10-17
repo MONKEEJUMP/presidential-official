@@ -300,7 +300,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     },
   ],
   "/partners": [
-    { href: "/find-us", anchor: "select state markets", context: "1,223 doors across select state markets" },
+    { href: "/find-us", anchor: "select state markets", context: "doors across select state markets" },
   ],
   "/moon-rocks/king-louis": [
     { href: "/find-us", anchor: "select state markets", context: "currently active in select state markets" },

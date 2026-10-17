@@ -4005,11 +4005,11 @@
       "logoOnDark": false
     },
     {
-      "id": "gno-enterpises",
-      "name": "GNO ENTERPISES",
+      "id": "gno-enterprises",
+      "name": "GNO ENTERPRISES",
       "nationalDoors": 1,
       "website": "http://www.kernenterprises.com",
-      "logo": "/partners/logos/gno-enterpises.webp",
+      "logo": "/partners/logos/gno-enterprises.webp",
       "perState": {
         "mi": {
           "count": 1,
