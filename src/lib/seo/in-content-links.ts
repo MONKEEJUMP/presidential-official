@@ -617,6 +617,10 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
       "Presidential is currently active in select state markets.",
     ],
   ],
+  // Sitebulb R27 (chief ruling 1): the lineup line reads "kief or diamond finish".
+  "/learn/infusion-science": [
+    ["around deep infusion, finished with a kief coating.", "around deep infusion, closed with a kief or diamond finish."],
+  ],
   // Chief ruling (Sitebulb R26): lines describing the blunts or the whole lineup read "kief or diamond finish".
   "/moon-rocks/presidential-blunts": [
     [

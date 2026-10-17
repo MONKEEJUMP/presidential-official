@@ -39,7 +39,7 @@ export const MOON_ROCKS_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         Presidential flower is the cannabis flower at the base of every Presidential moon rock. It is moon rock infused:
-        a concentrate coat goes over the flower, and a dry finish such as kief or diamonds is bonded to that coat. The pack
+        a concentrate coat goes over the flower, and a kief finish is bonded to that coat. The pack
         prints the build, for example FLOWER · LIVE RESIN · DIAMONDS on 24K. THC is batch-specific, so read the package
         label and its test results; <Link className={a} href="/presidential-thc">Presidential THC flower</Link> explains
         those label numbers.

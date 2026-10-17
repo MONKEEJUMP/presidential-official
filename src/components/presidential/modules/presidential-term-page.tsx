@@ -368,11 +368,10 @@ const PRESIDENTIAL_THC_QUESTIONS: readonly { readonly question: string; readonly
       <>
         Yes. Menus and shoppers use several names for one brand: Presidential THC, Presidential weed, Presidential marijuana
         and Presidential cannabis all point to Presidential, the brand behind Moon Rocks. The product is the same infused
-        build: cannabis flower as the base, a concentrate coat, and a finish of kief or diamonds, printed on the pack; read{" "}
+        build: cannabis flower as the base, a concentrate coat, and a kief finish, printed on the pack; read{" "}
         <Link className={inlineLinkClass} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. The tier names the
-        extract. Silver is distillate,{" "}
-        <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold live resin moon rocks</Link> are built on live resin,
-        and Rose Gold is live rosin. THC values are batch-specific, so read the current package label and its test results.
+        extract. Silver is distillate, Gold is live resin, and Rose Gold is live rosin; see{" "}
+        <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold live resin moon rocks</Link>. THC values are batch-specific, so read the current package label and its test results.
         Presidential sells through licensed retailers in{" "}
         <Link className={inlineLinkClass} href="/find-us">select state markets</Link>.
       </>
@@ -479,7 +478,7 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
       <TermSection id="presidential-thc-flower" title="Presidential THC flower: Moon Rocks">
         <p>
           Presidential THC flower is the cannabis flower inside Presidential Moon Rocks. Each moon rock starts with flower as
-          the base, adds a concentrate coat, and finishes with a dry material such as kief or diamonds, with the build printed
+          the base, adds a concentrate coat, and finishes with kief, with the build printed
           on the pack. Browse the{" "}
           <Link className={inlineLinkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>; potency is
           batch-specific, so read the current package label and its test results.
@@ -490,8 +489,8 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
         <p>Presidential THC covers several product families, each with its own page. Moon Rocks, pre-rolls, blunts, and minis share the infused flower build; vapes are a separate family of pods and a device.</p>
         <ul className="grid list-disc gap-3 pl-6">
           <li>
-            <Link className={inlineLinkClass} href="/moon-rocks">Moon Rocks</Link>: flower, a concentrate coat, and a dry
-            finish such as kief or diamonds.
+            <Link className={inlineLinkClass} href="/moon-rocks">Moon Rocks</Link>: flower, a concentrate coat, and a kief
+            finish.
           </li>
           <li>
             <Link className={inlineLinkClass} href="/pre-rolls">Moon Rock pre-rolls</Link>: 1g rolls in rolling paper.
