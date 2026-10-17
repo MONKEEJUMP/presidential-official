@@ -127,6 +127,14 @@ export function VapeBuiltForOilBand() {
     <div className={s.pillarGrid}>{value.pillars.map(item => <article key={item.title}><VapeIcon name={item.icon} /><ItemTitle title={item.title} /><p>{item.description}</p></article>)}</div>
     {/* SURFER-R9: lineup carrier line; facts from the home platforms band and /about formats. */}
     <p>Moon Pods and Orbit sit inside the same Presidential lineup as <Link href="/moon-rocks">Presidential Moon Rocks</Link> and <Link href="/pre-rolls">infused pre-rolls</Link>; <Link href="/about">read about the brand</Link>.</p>
+    {/* INLINKS-COPY-R23: /vapes lineup H3 (copy as written). */}
+    <h3 className={s.smallHeading}>Vapes beside the rest of the Presidential lineup</h3>
+    <p>
+      Orbit and Moon Pods are the vape side of a catalog that started with Moon Rocks. Compare{' '}
+      <Link href="/moon-rocks">Presidential Moon Rocks</Link>, <Link href="/pre-rolls">Presidential infused pre-rolls</Link> and{' '}
+      <Link href="/mini-blunts">Presidential mini blunts</Link>, and read <Link href="/our-story">the Presidential story</Link> to
+      see where the vapes fit.
+    </p>
   </section>;
 }
 
