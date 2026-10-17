@@ -231,6 +231,22 @@ export default async function CatalogProductDetailPage({
                   <ProductSpecBlock chips={chips} name={item.name} series={item.series} slug={slug} />
                 ) : null}
                 {slug !== "presidential-blunts" ? <SkuAnswers name={item.name} series={item.series} slug={slug} /> : null}
+                {/* SURFER-R24: /moon-rocks/presidential-blunts intro H3 (facts from /, /blunts and /presidential-blunts). Chief: /presidential-blunts is the main blunts page; no redirect or canonical change here. */}
+                {slug === "presidential-blunts" ? (
+                  <div className="mt-8 border-t border-po-line pt-5">
+                    <h3 className="text-xl font-semibold leading-snug text-po-ink">Presidential Moon Rock blunts at a glance</h3>
+                    <p className="mt-3 text-sm leading-6 text-po-body">
+                      Presidential Moon Rock blunts carry the house infused build, flower, concentrate and a kief or diamond finish,
+                      inside a tobacco-free hemp wrap, in full-size and mini formats. Each pack names its tier: Silver is distillate,
+                      Gold is live resin, and Rose Gold is live rosin. Compared with a moon rock, which is the infused piece with no
+                      wrap at all, a blunt is ready to light and burns at a slower, wrapped pace. THC numbers are batch-specific, so
+                      read the package label and its test results. Products are sold through licensed retailers in{" "}
+                      <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/find-us">select state markets</Link>. Read{" "}
+                      <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/presidential-blunts">the full Presidential blunt guide</Link> or browse the{" "}
+                      <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/moon-rocks">Presidential Moon Rocks collection</Link>.
+                    </p>
+                  </div>
+                ) : null}
                 {/* MR-TOP50 L4: the House Line SKU hands the pre-roll queries up to /pre-rolls. */}
                 {slug === "presidential-prerolls" ? (
                   <p className="mt-6 text-sm leading-6 text-po-body">

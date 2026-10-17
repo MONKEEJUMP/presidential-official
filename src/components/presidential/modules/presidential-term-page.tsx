@@ -643,6 +643,17 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
           <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold live rosin tier</Link> is the solventless
           connoisseur series. THC numbers are batch-specific, so read the current package label and its test results.
         </p>
+        {/* SURFER-R24 Block 1b: /presidential-blunts buying-by-flavor H3 (facts from this page and the home tier tiles). */}
+        <h3 className="mt-6 text-xl font-semibold">Buying moon rock blunts by flavor</h3>
+        <p>
+          To buy Presidential Blunts, start with the flavor or strain name on the pack. The flavor-led names, such as Blue Raspberry,
+          Peach Mango and Watermelon, sit in the Silver series, built on distillate; see the{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver distillate tier</Link>. Strain-led names such as the{" "}
+          <Link className={inlineLinkClass} href="/blunts/cherry-gelato">Cherry Gelato moon rock blunt</Link> and Skywalker carry their own strain
+          identity. Every one is a moon rock blunt: flower, concentrate and a kief or diamond finish inside a tobacco-free hemp wrap,
+          in full-size and mini formats. Bring the exact name and size to a licensed retailer in{" "}
+          <Link className={inlineLinkClass} href="/find-us">select state markets</Link>. Availability varies by retailer.
+        </p>
       </TermSection>
 
       <TermSection id="presidential-blunts-smoking" images={[images[5]]} title="How to smoke an infused blunt">
