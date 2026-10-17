@@ -55,7 +55,7 @@ export type PartnerStateCode = (typeof PARTNER_STATES)[number]["code"];
 export const PARTNERS_COPY = {
   "hub": {
     "h1": "Our Partners",
-    "title": "Presidential Partners | Licensed Retailers Across Seven States",
+    "title": "Presidential Partners | Licensed Retailers in Select State Markets",
     "description": "Licensed dispensaries carrying authentic Presidential in California, Oklahoma, New York, Nevada, Michigan, Arizona and Washington. Find a retailer.",
     "body": [
       "Presidential doesn't sell direct. Never has.",
@@ -69,8 +69,8 @@ export const PARTNERS_COPY = {
   },
   "ca": {
     "h1": "California Partners",
-    "title": "Presidential Partners in California | 604 Licensed Retailers",
-    "description": "The 604 licensed California dispensaries carrying authentic Presidential, from Los Angeles County to the Bay Area and San Diego. Find one near you.",
+    "title": "Presidential Partners in California | Licensed Retailers",
+    "description": "California's licensed dispensaries carrying authentic Presidential, from Los Angeles County to the Bay Area and San Diego. Find one near you.",
     "body": [
       "California is where Presidential started, and it is still the largest network we have.",
       "Presidential was founded in Los Angeles in 2012, and the California retail map still reflects that - dense through LA County, deep into Orange County and the Inland Empire, running north through the Central Valley into Sacramento and the Bay Area, then south again to San Diego. Some of these partners have carried the brand since the early years. Some opened last spring.",
@@ -80,8 +80,8 @@ export const PARTNERS_COPY = {
   },
   "ok": {
     "h1": "Oklahoma Partners",
-    "title": "Presidential Partners in Oklahoma | 194 Licensed Retailers",
-    "description": "The 194 licensed Oklahoma dispensaries carrying authentic Presidential - across Frontier Country, Green Country and the whole state. Find one near you.",
+    "title": "Presidential Partners in Oklahoma | Licensed Retailers",
+    "description": "Oklahoma's licensed dispensaries carrying authentic Presidential - across Frontier Country, Green Country and the whole state. Find one near you.",
     "body": [
       "Oklahoma has more dispensaries per person than almost anywhere in the country, and many of them carry Presidential.",
       "The map splits the way Oklahoma splits. Frontier Country - the Oklahoma City metro - holds the largest share, across OKC, Edmond, Norman and the towns around them. Green Country and the Tulsa metro carry a large share too. The rest run out across Great Plains Country in the southwest, Choctaw Country in the southeast, and Chickasaw Country through the south central.",
@@ -92,8 +92,8 @@ export const PARTNERS_COPY = {
   },
   "ny": {
     "h1": "New York Partners",
-    "title": "Presidential Partners in New York | 170 Licensed Retailers",
-    "description": "The 170 licensed New York dispensaries carrying authentic Presidential - across the five boroughs, Long Island, the Hudson Valley and upstate. Find one.",
+    "title": "Presidential Partners in New York | Licensed Retailers",
+    "description": "New York's licensed dispensaries carrying authentic Presidential - across the five boroughs, Long Island, the Hudson Valley and upstate. Find one.",
     "body": [
       "New York is the newest of Presidential's major markets and already the third largest.",
       "The five boroughs carry the weight - Manhattan, Brooklyn, Queens, the Bronx, Staten Island - and the network runs out from there through Long Island, up the Hudson Valley, west to Buffalo and Rochester, north toward the Adirondacks.",
@@ -104,8 +104,8 @@ export const PARTNERS_COPY = {
   },
   "nv": {
     "h1": "Nevada Partners",
-    "title": "Presidential Partners in Nevada | 102 Licensed Retailers",
-    "description": "The 102 licensed Nevada dispensaries carrying authentic Presidential - from the Las Vegas Strip to Reno, Henderson and the Silver Trails. Find one.",
+    "title": "Presidential Partners in Nevada | Licensed Retailers",
+    "description": "Nevada's licensed dispensaries carrying authentic Presidential - from the Las Vegas Strip to Reno, Henderson and the Silver Trails. Find one.",
     "body": [
       "No state has a customer quite like Nevada.",
       "Las Vegas and Henderson hold most of the network, which makes sense - the Strip moves more visitors through a few square miles than most states see in a year. A Nevada dispensary serves locals on Tuesday and forty million annual visitors the rest of the week, and the shelf has to work for both.",
@@ -116,8 +116,8 @@ export const PARTNERS_COPY = {
   },
   "mi": {
     "h1": "Michigan Partners",
-    "title": "Presidential Partners in Michigan | 101 Licensed Retailers",
-    "description": "The 101 licensed Michigan dispensaries carrying authentic Presidential - across Detroit, Ann Arbor, Grand Rapids and the state. Find one near you.",
+    "title": "Presidential Partners in Michigan | Licensed Retailers",
+    "description": "Michigan's licensed dispensaries carrying authentic Presidential - across Detroit, Ann Arbor, Grand Rapids and the state. Find one near you.",
     "body": [
       "Licensed Michigan doors carry Presidential across the state.",
       "Detroit and the surrounding metro anchor it - Inkster, Center Line, River Rouge, Riverview, the corridor communities that built the state's retail market first. Ann Arbor and Kalamazoo hold their own clusters. The network runs west toward Grand Rapids and north into the towns along the lakes.",
@@ -127,8 +127,8 @@ export const PARTNERS_COPY = {
   },
   "az": {
     "h1": "Arizona Partners",
-    "title": "Presidential Partners in Arizona | 53 Licensed Retailers",
-    "description": "The 53 licensed Arizona dispensaries carrying authentic Presidential - across Phoenix, Tucson, Sedona and the state. Find one near you.",
+    "title": "Presidential Partners in Arizona | Licensed Retailers",
+    "description": "Arizona's licensed dispensaries carrying authentic Presidential - across Phoenix, Tucson, Sedona and the state. Find one near you.",
     "body": [
       "Arizona is the newest state on the Presidential map and the most concentrated.",
       "Unlike the other markets, Arizona doors run through a small set of established operators - the multi-state names that dominate Arizona retail, plus a handful of independents. Phoenix and the surrounding metro carry most of it. Tucson holds a cluster. The rest run north through Sedona and Flagstaff and out to the smaller desert towns.",
