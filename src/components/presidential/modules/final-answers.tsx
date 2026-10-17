@@ -25,13 +25,28 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
     id: "home-q-strain",
     question: "What strain is Presidential?",
     answer: (
-      <p>
-        Presidential is the brand, not a strain; <Link className={a} href="/about">about Presidential</Link> covers the
-        company. Each product names its own strain on the pack, along with its strain type:{" "}
-        <Link className={a} href="/moon-rocks/24k">24K</Link>, for example, is marked Indica. THC and other cannabinoids,
-        the chemical compounds listed on a cannabis label, are batch-specific, and burn and potency are not universal
-        across the line, so the package and batch record for the product in hand control those facts.
-      </p>
+      <>
+        <p>
+          Presidential is the brand, not a strain; <Link className={a} href="/about">about Presidential</Link> covers the
+          company. Each product names its own strain on the pack, along with its strain type:{" "}
+          <Link className={a} href="/moon-rocks/24k">24K</Link>, for example, is marked Indica. THC and other cannabinoids,
+          the chemical compounds listed on a cannabis label, are batch-specific, and burn and potency are not universal
+          across the line, so the package and batch record for the product in hand control those facts.
+        </p>
+        {/* SURFER-R21: home label-reading H3 (facts from this page: strain answer, Moon Rocks answer, tier tiles). */}
+        <h3 className="mt-8 text-2xl font-semibold leading-snug text-po-ink">How do you read a Presidential package label?</h3>
+        <p>
+          Start with the strain name and the strain type printed on the pack: the pack for{" "}
+          <Link className={a} href="/moon-rocks/24k">24K Indica moon rocks</Link>, for example, names 24K and marks it Indica.
+          Next, find the build. Each package names the materials in its infused construction: flower, then a concentrate such as
+          distillate or live resin, then a finish of kief or diamonds, which is{" "}
+          <Link className={a} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. The tier shows the extract
+          family: Silver is distillate, Gold is live resin, and Rose Gold is live rosin. THC and the other cannabinoids are
+          the chemical compounds listed on a cannabis label. They are batch-specific, so read the current package label and
+          its test results rather than a general number. Presidential is sold through licensed retailers in{" "}
+          <Link className={a} href="/find-us">select state markets</Link>.
+        </p>
+      </>
     ),
   },
   // ROUND2 MR 1 (Surfer 16649274): format-only answer; sources /about infusion copy and /learn/what-are-moon-rocks.
