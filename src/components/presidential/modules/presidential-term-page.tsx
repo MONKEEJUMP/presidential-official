@@ -361,6 +361,23 @@ const PRESIDENTIAL_THC_QUESTIONS: readonly { readonly question: string; readonly
       </>
     ),
   },
+  // SURFER-R26: brand-name H3 (facts from this page: "What Presidential THC covers", Moon Rocks build, extracts by series).
+  {
+    question: "Is Presidential weed the same as Presidential THC?",
+    answer: (
+      <>
+        Yes. Menus and shoppers use several names for one brand: Presidential THC, Presidential weed, Presidential marijuana
+        and Presidential cannabis all point to Presidential, the brand behind Moon Rocks. The product is the same infused
+        build: cannabis flower as the base, a concentrate coat, and a finish of kief or diamonds, printed on the pack; read{" "}
+        <Link className={inlineLinkClass} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. The tier names the
+        extract. Silver is distillate,{" "}
+        <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold live resin moon rocks</Link> are built on live resin,
+        and Rose Gold is live rosin. THC values are batch-specific, so read the current package label and its test results.
+        Presidential sells through licensed retailers in{" "}
+        <Link className={inlineLinkClass} href="/find-us">select state markets</Link>.
+      </>
+    ),
+  },
   {
     question: "What products does Presidential THC include?",
     answer: (
