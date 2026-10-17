@@ -59,7 +59,7 @@ export const PARTNERS_COPY = {
     "description": "Licensed dispensaries carrying authentic Presidential in California, Oklahoma, New York, Nevada, Michigan, Arizona and Washington. Find a retailer.",
     "body": [
       "Presidential doesn't sell direct. Never has.",
-      "Every jar, every blunt, every pre-roll reaches you through a licensed dispensary that chose to carry it - doors across select state markets, and every one of them made that call on their own.",
+      "Every jar, every blunt, every pre-roll reaches you through a licensed dispensary that chose to carry it - one of many doors across select state markets, and every one of them made that call on their own.",
       "This page is for them.",
       "These are the retailers who put Presidential on their shelves. Independent shops running one location and multi-state operators running thirty. Storefronts in downtown Los Angeles, in Tulsa, in Brooklyn, in Henderson, in Detroit, in Phoenix. Different markets, different customers, one shared decision.",
       "If you are holding a Presidential product, it came through one of them.",
