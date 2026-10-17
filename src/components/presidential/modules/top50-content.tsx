@@ -22,7 +22,6 @@ const BLUNT_EDITION_BUILDS: readonly string[] = [
       return madeWith ? [madeWith.join(" · ")] : [];
     }),
 ];
-const BLUNT_EDITION_COUNT = BLUNT_EDITION_BUILDS.length;
 const BLUNT_BUILDS = Object.entries(
   BLUNT_EDITION_BUILDS.reduce<Record<string, number>>((builds, build) => {
     builds[build] = (builds[build] ?? 0) + 1;
@@ -90,8 +89,8 @@ export const BLUNT_ANSWERS: readonly AnswerItem[] = [
     question: "Can you make blunts without tobacco?",
     answer: (
       <p>
-        Yes. Every Presidential Moon Rock blunt is rolled in a tobacco-free wrap, and each of the {BLUNT_EDITION_COUNT}{" "}
-        editions on this page states it: one 1.5g Moon Rock blunt in a tobacco-free wrap.
+        Yes. Every Presidential Moon Rock blunt is rolled in a tobacco-free wrap, and each
+        edition on this page states it: one 1.5g Moon Rock blunt in a tobacco-free wrap.
       </p>
     ),
   },
@@ -102,14 +101,12 @@ export const BLUNT_ANSWERS: readonly AnswerItem[] = [
       <>
         <p>
           This page does not publish reviews or ratings; it lists what each pack states. Every edition is one 1.5g Moon Rock
-          blunt: cannabis flower with a concentrate infused over it, in a tobacco-free wrap. The {BLUNT_EDITION_COUNT}{" "}
+          blunt: cannabis flower with a concentrate infused over it, in a tobacco-free wrap. The
           editions use these builds:
         </p>
         <ul className="list-disc pl-6">
-          {BLUNT_BUILDS.map(([build, count]) => (
-            <li key={build}>
-              {build}: {count} {count === 1 ? "edition" : "editions"}
-            </li>
+          {BLUNT_BUILDS.map(([build]) => (
+            <li key={build}>{build}</li>
           ))}
         </ul>
         <p>

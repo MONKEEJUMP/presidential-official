@@ -63,7 +63,7 @@ export default function WholesalePage() {
               <p className={styles.heroExistingCue}>Existing customer? Choose your market below.</p>
             </div>
             <div className={styles.heroRail} aria-label="Presidential wholesale markets">
-              <span className={styles.heroRailCount}>7 licensed markets</span>
+              <span className={styles.heroRailCount}>Select state markets</span>
               <span className={styles.heroRailStates}>AZ <i>·</i> CA <i>·</i> MI <i>·</i> NV <i>·</i> NY <i>·</i> OK <i>·</i> WA</span>
               <span className={styles.heroRailPlatform}>LeafLink + Distru</span>
             </div>
@@ -71,7 +71,7 @@ export default function WholesalePage() {
 
           <section className={styles.marketSection} aria-labelledby="market-heading">
             <header className={styles.sectionHeader}>
-              <div><span>Seven licensed markets</span><h2 id="market-heading">Choose your state.</h2></div>
+              <div><span>Select state markets</span><h2 id="market-heading">Choose your state.</h2></div>
               <p>Enter the ordering platform used for your Presidential market.</p>
             </header>
             <div className={styles.marketGrid}>

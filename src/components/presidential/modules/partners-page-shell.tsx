@@ -73,7 +73,7 @@ export function PartnersStateShell({code}:{code:PartnerStateCode}) {
   const singles=partners.filter(b=>b.perState[code]!.count===1).toSorted((a,b)=>a.name.localeCompare(b.name));
   return <PageFrame className={`po-home-canvas-dark ${styles.page}`}><SceneStack><PartnerHero code={code}/>
     {code==='wa'?<section className={`${styles.section} po-gold-thread-inlay`}><h2 className={styles.heading}>{PARTNERS_UI.landing}</h2></section>:null}
-    <section className={`${styles.section} po-gold-thread-inlay`}><div className={styles.copy}>{copy.body.map(p=><p key={p}>{p}</p>)}<ApplyLine/></div></section>
+    <section className={`${styles.section} po-gold-thread-inlay`}><div className={styles.copy}>{copy.body.map(p=><p key={p}><InContentText sourcePath={`/partners/${code}`} value={p}/></p>)}<ApplyLine/></div></section>
     {code!=='wa'?<>
       <section className={`${styles.section} po-gold-thread-inlay`}><p className={styles.count}>{partnersCountLine(state.name)}</p>
       <h2 className={styles.heading}>{PARTNERS_UI.chains}</h2><ul className={styles.wall}>{chains.map(b=><PartnerTile key={b.id} brand={b} code={code}/>)}</ul></section>
