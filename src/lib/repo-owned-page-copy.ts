@@ -84,7 +84,7 @@ Distillate is stripped and refined until it is essentially neutral, while live r
 
 **Distillate in the Presidential infusion system**
 
-Each infused Presidential product starts with cannabis flower, adds a concentrate (distillate, live resin, or live rosin, depending on the series), and finishes with the dry material named on the package, such as kief. Presidential's infusion process carries distillate through the flower rather than only coating the surface, then applies the kief layer as the final step. See [What Are Moon Rocks](/learn/what-are-moon-rocks) for the three layers.
+Each infused Presidential product starts with cannabis flower, adds a concentrate (distillate, live resin, or live rosin, depending on the series), and finishes with the dry material named on the package: a kief or diamond finish. Presidential's infusion process carries distillate through the flower rather than only coating the surface, then applies the kief layer as the final step. See [What Are Moon Rocks](/learn/what-are-moon-rocks) for the three layers.
 
 **The Silver Flavor Series is built on distillate**
 

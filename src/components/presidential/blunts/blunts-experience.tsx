@@ -83,7 +83,7 @@ export function BluntsExperience({
             <figcaption className={styles.filmCaption}><span>Presidential Moon Rock Blunts</span><span>30-second product film</span></figcaption>
           </figure>
         </div>
-        <div className={styles.heroFoot}><span>Flower. Concentrate. A Presidential finish.</span><a href="#collection">{BLUNT_ARTWORKS.length} selections <span aria-hidden="true">↓</span></a></div>
+        <div className={styles.heroFoot}><span>Flower. Concentrate. A Presidential finish.</span><a href="#collection">Explore the selection <span aria-hidden="true">↓</span></a></div>
       </section>
 
       <nav aria-label="Blunts page sections" className={shared.sectionNav}>

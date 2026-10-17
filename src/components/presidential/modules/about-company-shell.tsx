@@ -25,7 +25,7 @@ const platforms = [
   {
     title: "PRESIDENTIAL BLUNTS",
     tagline: '"The format that built the reputation."',
-    body: "A Presidential Blunt is the house method in its most complete form: flower, concentrate, and kief brought together in a single wrap, rolled to burn evenly and finish clean. The original argument — still winning it.",
+    body: "A Presidential Blunt is the house method in its most complete form: flower, concentrate, and a kief or diamond finish brought together in a single wrap, rolled to burn evenly and finish clean. The original argument — still winning it.",
     image: "/media/blunt-nino-brown.jpg" as const,
     imageAlt: "Nino Brown Presidential Moon Rock Blunt package artwork",
     // InLinks AB2 (chief-approved): the PRESIDENTIAL BLUNTS card points at the /blunts hub.
