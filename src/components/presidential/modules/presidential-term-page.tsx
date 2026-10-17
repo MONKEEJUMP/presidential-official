@@ -633,6 +633,16 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
         <p><ProductMentions format="Blunt">The Presidential Blunts catalog spans strain-led and flavor-led releases. Recognizable names include Cherry Gelato, Gorilla Goo, Cap Junky, Skywalker, Crescendo, XJ-13, Garlic Cookies, Ghost Haze Train, Nino Brown, and Whoa Si Whoa.</ProductMentions></p>
         <p><ProductMentions format="Blunt">Flavor-focused choices include Blue Raspberry, Peach Mango, Pineapple, Tropical, Grape, Strawberry, Watermelon, Orange Push Pop, Pink Cookies, Waui, and <Link className={inlineLinkClass} href="/blunts/xxx">XXX</Link>. That range gives the format a broad shelf presence while every package remains tied to a specific named selection.</ProductMentions></p>
         <p>Availability varies by licensed retailer.</p>
+        {/* SURFER-R23: /presidential-blunts tier H3 (facts from the home tier tiles and this page's strain list). */}
+        <h3 className="mt-6 text-xl font-semibold">Which tier does a Presidential Blunt belong to?</h3>
+        <p>
+          Check the tier on the pack. Presidential Blunts carry the same three experience tiers as the rest of the lineup, and each
+          tier names its extract. The <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver distillate tier</Link> is
+          the flavor series, so fruit names like Blue Raspberry and Peach Mango sit there. The{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold live resin tier</Link> is the strain series. The{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold live rosin tier</Link> is the solventless
+          connoisseur series. THC numbers are batch-specific, so read the current package label and its test results.
+        </p>
       </TermSection>
 
       <TermSection id="presidential-blunts-smoking" images={[images[5]]} title="How to smoke an infused blunt">
