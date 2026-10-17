@@ -56,7 +56,7 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
       },
       {
         title: "Find your nearest door",
-        body: "One search, one job: getting you from your zip code to the closest Presidential, fast. Search from downtown LA or the middle of Montana — we rank the nearest official retailers by distance and point the way. Coast to coast, your next Presidential run is always one search away.",
+        body: "One search, one job: getting you from your zip code to the closest Presidential, fast. We rank the nearest official retailers by distance and point the way. Coast to coast, your next Presidential run is always one search away.",
       },
       {
         title: "Find it all, right here",

@@ -68,13 +68,11 @@ export function CinematicStateWall({ states }: CinematicStateWallProps) {
                 </p>
 
                 <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6">
-                  <p className="font-display text-base font-bold uppercase text-po-gold">
-                    {isLive
-                      ? `${state.doorCount} DOORS`
-                      : state.doorCount === 0
-                        ? "LANDING SOON"
-                        : "STATUS UNAVAILABLE"}
-                  </p>
+                  {isLive ? null : (
+                    <p className="font-display text-base font-bold uppercase text-po-gold">
+                      {state.doorCount === 0 ? "LANDING SOON" : "STATUS UNAVAILABLE"}
+                    </p>
+                  )}
 
                   {isLive ? (
                     <Link
