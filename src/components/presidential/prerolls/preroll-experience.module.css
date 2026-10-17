@@ -594,6 +594,19 @@
   line-height: 1.65;
 }
 
+/* SURFER-R25: a question-and-answer pair kept together as one full-width grid item. */
+.indexIntroQa {
+  grid-column: 1 / -1;
+}
+
+.indexIntroQa > p {
+  max-width: 660px;
+  margin: 0 0 8px auto;
+  color: var(--pr-muted);
+  font-size: 20px;
+  line-height: 1.65;
+}
+
 .artGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -939,6 +952,7 @@
   .indexIntro { display: block; margin-bottom: 58px; }
   .indexIntro h2 { font-size: 74px; }
   .indexIntro > p { margin-top: 46px; font-size: 18px; }
+  .indexIntroQa > p { font-size: 18px; }
   .artGrid { display: block; }
   .tierGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px 16px; margin-top: 44px; }
   .tierGrid article + article { margin-top: 0; }
