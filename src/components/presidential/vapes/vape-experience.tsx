@@ -118,7 +118,16 @@ export function VapeExperience({ page }: { page: VapePage }) {
           <h3>Where to find Orbit</h3>
           <p>
             Use the <Link href="/find-us">Presidential retailer finder</Link> to check a store near you. Retail buyers can start with{' '}
-            <Link href="/wholesale">Presidential wholesale</Link>.
+            {/* INLINKS-COPY-R27: "Orbit for retail buyers" repeated this H3, so its partner link is merged here. */}
+            <Link href="/wholesale">Presidential wholesale</Link> or <Link href="/partners">the Presidential partner program</Link>.
+          </p>
+          {/* INLINKS-COPY-R27: /orbit vape lineup H3 (copy as written). */}
+          <h3>Orbit inside the Presidential vape lineup</h3>
+          <p>
+            Orbit is the battery, and the pods carry the extract. See every pod family in{' '}
+            <Link href="/moon-pods">Moon Pods vape cartridges</Link>, browse{' '}
+            <Link href="/vapes">the full Presidential vapes collection</Link>, and use{' '}
+            <Link href="/learn">the Presidential learn hub</Link> to read up on each extract before you pair it with a mode.
           </p>
         </div>
       ) : null}
