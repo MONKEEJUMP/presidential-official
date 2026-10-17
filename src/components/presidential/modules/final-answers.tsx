@@ -13,7 +13,7 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         Presidential Moon Rocks are cannabis flower coated with a concentrate, such as distillate or live resin, and
-        finished with kief or diamonds, with the materials printed on each package. The same infused build carries into
+        finished with kief, with the materials printed on each package. The same infused build carries into
         1g <Link className={a} href="/pre-rolls">Presidential pre-rolls</Link>, 1.5g{" "}
         <Link className={a} href="/blunts">Moon Rock blunts</Link> in a tobacco-free blunt wrap, Mini Pre-Rolls (3 × 0.5g)
         and Mini Blunts (3 × 0.7g). Browse the{" "}
@@ -39,12 +39,24 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
           Start with the strain name and the strain type printed on the pack: the pack for{" "}
           <Link className={a} href="/moon-rocks/24k">24K Indica moon rocks</Link>, for example, names 24K and marks it Indica.
           Next, find the build. Each package names the materials in its infused construction: flower, then a concentrate such as
-          distillate or live resin, then a finish of kief or diamonds, which is{" "}
+          distillate or live resin, then a kief finish, which is{" "}
           <Link className={a} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. The tier shows the extract
           family: Silver is distillate, Gold is live resin, and Rose Gold is live rosin. THC and the other cannabinoids are
           the chemical compounds listed on a cannabis label. They are batch-specific, so read the current package label and
           its test results rather than a general number. Presidential is sold through licensed retailers in{" "}
           <Link className={a} href="/find-us">select state markets</Link>.
+        </p>
+        {/* SURFER-R27: "presidential flower" H3 (facts: Moon Rocks answer, tier tiles, mini catalog; moon rock copy says "finished with kief"). */}
+        <h3 className="mt-8 text-2xl font-semibold leading-snug text-po-ink">What is Presidential flower?</h3>
+        <p>
+          Presidential flower is the cannabis flower at the base of every Presidential moon rock. Each moon rock starts with
+          that flower, adds a concentrate coat, and is finished with kief, with the build printed on the pack. The tier names
+          the extract: Silver is distillate, Gold is live resin, and Rose Gold is live rosin. The same flower also goes into
+          Moon Rock pre-rolls, blunts and minis; browse the{" "}
+          <Link className={a} href="/moon-rocks">Presidential Moon Rocks collection</Link> or{" "}
+          <Link className={a} href="/mini-blunts">Presidential mini blunts</Link>. Mini availability depends on the flavor;
+          Blue Raspberry, for example, has no mini. THC values are batch-specific, so read the current label. Presidential
+          sells through licensed retailers in <Link className={a} href="/find-us">select state markets</Link>.
         </p>
       </>
     ),
@@ -56,7 +68,7 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         That comes down to the format you want. A moon rock is not plain flower: it is cannabis flower coated with a
-        concentrate and finished with a dry material such as kief or diamonds, three layers in one product.
+        concentrate and finished with a dry material such as kief, three layers in one product.
         Presidential&apos;s <Link className={a} href="/about#about-craft-title">infusion process</Link> runs in that
         order: flower, then concentrate, then the dry finish. Read <Link className={a} href="/learn/what-are-moon-rocks">what moon rocks are</Link> for
         how the format differs from flower alone.
