@@ -51,6 +51,19 @@ if(process.argv.includes('--sanitize-logos-only')){
   await writeFile(path,JSON.stringify(snapshot,null,2)+'\n');console.log('Blocked placeholder logos removed:',removed);process.exit();
 }
 
+// Standing no-market-counts rule (Sitebulb R21): applied to regenerated owner copy.
+const COPY_COUNT_FIXES=[
+  [/1,223 doors across (?:seven states|select state markets)/,'one of many doors across select state markets'],
+  ['and 194 of them carry Presidential.','and many of them carry Presidential.'],
+  ['holds the largest share, a hundred doors across','holds the largest share, across'],
+  ['Green Country and the Tulsa metro carry fifty-one.','Green Country and the Tulsa metro carry a large share too.'],
+  ['Thirty-five Oklahoma towns hold exactly one','Many Oklahoma towns hold exactly one'],
+  ['A hundred and seventy licensed doors. The five boroughs','The five boroughs'],
+  ['Nevada is a hundred and two doors, and no state has a customer quite like it.','No state has a customer quite like Nevada.'],
+  ['A hundred and one Michigan doors carry Presidential.','Licensed Michigan doors carry Presidential across the state.'],
+  ['Fifty-three doors, and unlike the other markets they run through','Unlike the other markets, Arizona doors run through'],
+  ["Presidential's seven-state network includes Washington","Presidential's network of select state markets includes Washington"],
+];
 if(process.argv.includes('--copy-from')) {
   const brief=(await readFile(process.argv[process.argv.indexOf('--copy-from')+1],'utf8')).replaceAll('\r\n','\n');
   const chunks=brief.split(/--- \/partners/).slice(1); const content={};
@@ -60,10 +73,10 @@ if(process.argv.includes('--copy-from')) {
     let body=chunk.split('BODY:\n')[1]?.split(/\nRETAILER CALLOUT BLOCK|\n={5,}/)[0].trim();
     if(!body) throw Error('Missing copy '+code);
     if(code==='ca') body=body.replace('Six hundred and four doors. More than every other state combined.','Six hundred and four doors. The largest network in the country.');
-    content[code]={h1:field('H1'),title:field('TITLE'),description:field('META'),body:body.split(/\n\s*\n/).map(x=>x.replace(/\s*\n\s*/g,' '))};
+    content[code]={h1:field('H1'),title:field('TITLE'),description:field('META'),body:body.split(/\n\s*\n/).map(x=>x.replace(/\s*\n\s*/g,' ')).filter(x=>!/^Six hundred and four doors\./.test(x)).map(x=>COPY_COUNT_FIXES.reduce((t,[from,to])=>t.replace(from,to),x))};
   }
   const states=[['ca','California',604,'Pre-rolling High in the Golden State.','#FFD447'],['ok','Oklahoma',194,'The Sooner The Better. A Presidential High.','#C1502E'],['ny','New York',170,'Skyscraper High. Presidential Grade.','#3E6E9E'],['nv','Nevada',102,'From the Strip to Space - Presidential Moon Rocks Rock.','#C8CDD4'],['mi','Michigan',101,'Motor City High. Presidential Octane.','#2E7D8F'],['az','Arizona',53,'From the Canyon to the Cosmos - Presidential','#B5603A'],['wa','Washington',0,'Evergreen State. Presidential High.','#3C6E52']].map(([code,name,headlineDoors,tagline,color])=>({code,name,headlineDoors,tagline,color}));
-  const out=`// Owner copy: 0907-PRES-KVRT-0010 and count ruling. ASCII only.\nexport const PARTNERS_LABEL = "Partners";\nexport const PARTNER_STATES = ${JSON.stringify(states,null,2)} as const;\nexport type PartnerStateCode = (typeof PARTNER_STATES)[number]["code"];\nexport const PARTNERS_COPY = ${JSON.stringify(content,null,2)} as const;\nexport const PARTNERS_UI = {home:"Home", eyebrow:"Presidential", chains:"Multi-Location Partners", independents:"Independent Partners", landing:"LANDING SOON", contact:"Contact Presidential", close:"Find your nearest location", visit:"Visit site", callout:"Carry Presidential and want your logo on this page? Send it over. Every partner listed here gets their mark, their name, and a link out."} as const;\nexport const partnersCountLine = (brands:number,doors:number,state:string) => \`\${brands} partners operating \${doors} locations across \${state}.\`;\nexport const partnerLocations = (count:number) => \`\${count} locations\`;\nexport const partnerLogoAlt = (name:string,city:string,state:string) => \`\${name} - licensed Presidential retailer in \${city}, \${state}\`;\nexport const partnerExplore = (name:string) => \`Explore \${name}\`;\n`;
+  const out=`// Owner copy: 0907-PRES-KVRT-0010 and count ruling. ASCII only.\nexport const PARTNERS_LABEL = "Partners";\nexport const PARTNER_STATES = ${JSON.stringify(states,null,2)} as const;\nexport type PartnerStateCode = (typeof PARTNER_STATES)[number]["code"];\nexport const PARTNERS_COPY = ${JSON.stringify(content,null,2)} as const;\nexport const PARTNERS_UI = {home:"Home", eyebrow:"Presidential", chains:"Multi-Location Partners", independents:"Independent Partners", landing:"LANDING SOON", contact:"Contact Presidential", close:"Find your nearest location", visit:"Visit site", callout:"Carry Presidential and want your logo on this page? Send it over. Every partner listed here gets their mark, their name, and a link out."} as const;\nexport const partnersCountLine = (state:string) => \`Licensed Presidential partners across \${state}.\`;\nexport const partnerLocations = (count:number) => \`\${count} locations\`;\nexport const partnerLogoAlt = (name:string,city:string,state:string) => \`\${name} - licensed Presidential retailer in \${city}, \${state}\`;\nexport const partnerExplore = (name:string) => \`Explore \${name}\`;\n`;
   if(Object.keys(content).length!==8||/[^\x00-\x7f]/.test(out)) throw Error('Copy completeness/ASCII failure');
   await writeFile(resolve(root,'src/content/partners-copy.ts'),out+'export const PARTNERS_STATE_NAV_LABELS = {top:"Partner states - top",bottom:"Partner states - bottom"} as const;\n'); console.log('Owner copy extracted: 8 routes');process.exit();
 }
@@ -80,6 +93,9 @@ const ps=spawnSync('pwsh',['-NoProfile','-File',resolve(import.meta.dirname,'par
 if(ps.status!==0)throw Error(ps.stderr); const identities=JSON.parse(ps.stdout);
 const brands=csv(await readFile(resolve(source,'0907-PRES-KVRT-0002-partner-brands.csv'),'utf8'));
 const aliases={'Great Lakes Holistics':'GLH Kzoo','Leaf Society Salt n Sea':'Leaf Society','Livwell Meds of Calera':'LivWell Meds','Mr Nice Guy Moreno Valley':'Mr Nice Guy','Top Cannabis Outlet':'Top Cannabis','Tree House Cannabis':'Tree House','Aroma Cannabis':'Aroma','Budd Barn':'Canna Planet','Canna Health & Wellness':'Canna Health','Dank Headquarters':'House of Dank','LEVELS DISTRO':'LEVELS','OHANA Beverly Hills':'Ohana','Ohana Cannabis':'Ohana','SafePort Dispensary':'Safeport Cannabis','Traditional (DTLA)- OLYMPIC':'Traditional','Traditional (Mid-City)':'Traditional','Transcend Crown Heights':'Transcend Wellness'};
+// Sitebulb R21: source typos corrected on every regeneration (name, id and logo file).
+const nameCorrections={'GNO ENTERPISES':'GNO ENTERPRISES'};
+const logoOutputCorrections={'gno-enterpises.webp':'gno-enterprises.webp'};
 const websiteCorrections={'Medical Man Wellness':'https://www.leafly.com/dispensary-info/medical-man-wellness'};
 function validatedWebsite(value,name){
   const raw=ascii(value||'').trim();if(!raw)return '';
@@ -95,7 +111,7 @@ if(unmapped.length||mismatches.length){console.log(JSON.stringify({unmapped,mism
 const logoDir=resolve(root,'public/partners/logos');await mkdir(logoDir,{recursive:true});let beforeBytes=0,afterBytes=0;const logoMap=new Map();
 for(const file of await readdir(resolve(source,'logos'))){
   const input=resolve(source,'logos',file);beforeBytes+=(await stat(input)).size;
-  const output=extname(file).toLowerCase()==='.svg'?file:basename(file,extname(file))+'.webp';const target=resolve(logoDir,output);
+  const rawOutput=extname(file).toLowerCase()==='.svg'?file:basename(file,extname(file))+'.webp';const output=logoOutputCorrections[rawOutput]??rawOutput;const target=resolve(logoDir,output);
   if(output.endsWith('.svg'))await copyFile(input,target);
   else {
     try{await sharp(input).resize({width:400,height:400,fit:'inside',withoutEnlargement:true}).webp({quality:85}).toFile(target);}
@@ -104,7 +120,7 @@ for(const file of await readdir(resolve(source,'logos'))){
   afterBytes+=(await stat(target)).size;if(!(await logoIsBlocked(target)))logoMap.set(file,'/partners/logos/'+output);
 }
 const included=brands.filter(b=>b.account_type==='retail'&&!(b.brand_name==='PRESIDENTIAL'&&b.primary_city==='Costa Mesa'&&b.primary_state==='CA'));
-const records=included.map(b=>{const members=grouped.get(b.brand_name);const perState={};for(const d of members){const c=d.state.toLowerCase();perState[c]??={count:0,cities:[]};perState[c].count++;if(!perState[c].cities.includes(ascii(d.city)))perState[c].cities.push(ascii(d.city));}for(const v of Object.values(perState))v.cities.sort();return{id:key(b.brand_name).replaceAll(' ','-'),name:ascii(b.brand_name),nationalDoors:Number(b.door_count),website:validatedWebsite(websiteCorrections[b.brand_name]??b.website,b.brand_name),logo:logoMap.get(b.logo_file)||null,perState};});
+const records=included.map(b=>{const members=grouped.get(b.brand_name);const perState={};for(const d of members){const c=d.state.toLowerCase();perState[c]??={count:0,cities:[]};perState[c].count++;if(!perState[c].cities.includes(ascii(d.city)))perState[c].cities.push(ascii(d.city));}for(const v of Object.values(perState))v.cities.sort();const publicName=nameCorrections[b.brand_name]??b.brand_name;return{id:key(publicName).replaceAll(' ','-'),name:ascii(publicName),nationalDoors:Number(b.door_count),website:validatedWebsite(websiteCorrections[b.brand_name]??b.website,b.brand_name),logo:logoMap.get(b.logo_file)||null,perState};});
 const snapshot={stamp:'0907-PRES-KVRT-0010',sourceRows:total,contentRanges:ranges,sourceStateCounts:Object.fromEntries(['CA','OK','NY','NV','MI','AZ'].map(s=>[s,doors.filter(d=>d.state===s).length])),excludedBrands:brands.length-included.length,excludedDoors:total-records.reduce((s,b)=>s+b.nationalDoors,0),logoBytes:{before:beforeBytes,after:afterBytes,files:logoMap.size},mismatches,brands:records};
 for(const brand of records)brand.logoOnDark=brand.logo?await logoNeedsDark(resolve(root,'public'+brand.logo)):false;
 await writeFile(resolve(root,'src/content/partners.json'),JSON.stringify(snapshot,null,2)+'\n');

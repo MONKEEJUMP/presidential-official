@@ -44,7 +44,6 @@ function PartnerHero({code}:{code?:PartnerStateCode}) {
       <p className={styles.eyebrow}>{PARTNERS_UI.eyebrow}{state?` / ${state.code.toUpperCase()}`:''}</p>
       <h1 id="partners-title" className={styles.heroHeading}>{copy.h1}</h1>
       {state?<p className={styles.tagline}>{state.tagline}</p>:null}
-      {state?.code!=='wa'?<p className={styles.heroCount}>{partnerLocations(state?.headlineDoors??1223)}</p>:null}
     </div>
   </section>;
 }
@@ -70,14 +69,13 @@ function PartnerTile({brand,code}:{brand:Partner;code:PartnerStateCode}) {
 
 export function PartnersStateShell({code}:{code:PartnerStateCode}) {
   const state=PARTNER_STATES.find(s=>s.code===code)!; const copy=PARTNERS_COPY[code]; const partners=partnersForState(code);
-  const doors=partners.reduce((sum,b)=>sum+b.perState[code]!.count,0);
   const chains=partners.filter(b=>b.perState[code]!.count>1);
   const singles=partners.filter(b=>b.perState[code]!.count===1).toSorted((a,b)=>a.name.localeCompare(b.name));
   return <PageFrame className={`po-home-canvas-dark ${styles.page}`}><SceneStack><PartnerHero code={code}/>
     {code==='wa'?<section className={`${styles.section} po-gold-thread-inlay`}><h2 className={styles.heading}>{PARTNERS_UI.landing}</h2></section>:null}
     <section className={`${styles.section} po-gold-thread-inlay`}><div className={styles.copy}>{copy.body.map(p=><p key={p}>{p}</p>)}<ApplyLine/></div></section>
     {code!=='wa'?<>
-      <section className={`${styles.section} po-gold-thread-inlay`}><p className={styles.count}>{partnersCountLine(partners.length,doors,state.name)}</p>
+      <section className={`${styles.section} po-gold-thread-inlay`}><p className={styles.count}>{partnersCountLine(state.name)}</p>
       <h2 className={styles.heading}>{PARTNERS_UI.chains}</h2><ul className={styles.wall}>{chains.map(b=><PartnerTile key={b.id} brand={b} code={code}/>)}</ul></section>
       <section className={`${styles.section} po-gold-thread-inlay`}><h2 className={styles.heading}>{PARTNERS_UI.independents}</h2><ul className={styles.wall}>{singles.map(b=><PartnerTile key={b.id} brand={b} code={code}/>)}</ul></section>
     </>:null}
@@ -87,7 +85,7 @@ export function PartnersStateShell({code}:{code:PartnerStateCode}) {
 
 export function PartnersHubShell(){return <PageFrame className={`po-home-canvas-dark ${styles.page}`}><SceneStack><PartnerHero/>
   <section className={`${styles.section} po-gold-thread-inlay`}><div className={styles.copy}>{PARTNERS_COPY.hub.body.map(p=><p key={p}><InContentText sourcePath="/partners" value={p}/></p>)}<ApplyLine/></div></section>
-  <section className={`${styles.section} po-gold-thread-inlay`} aria-label={PARTNERS_LABEL}><ul className={styles.states}>{PARTNER_STATES.map(s=><li key={s.code}><Link href={`/partners/${s.code}`} className={styles.stateCard}><div><span className={styles.stateCode} aria-hidden="true">{s.code.toUpperCase()}</span><h2>{s.name}</h2><p>{s.tagline}</p><p className={styles.stateCount}>{s.code==='wa'?PARTNERS_UI.landing:partnerLocations(s.headlineDoors)}</p><span className={styles.explore}>{partnerExplore(s.name)}</span></div></Link></li>)}</ul></section>
+  <section className={`${styles.section} po-gold-thread-inlay`} aria-label={PARTNERS_LABEL}><ul className={styles.states}>{PARTNER_STATES.map(s=><li key={s.code}><Link href={`/partners/${s.code}`} className={styles.stateCard}><div><span className={styles.stateCode} aria-hidden="true">{s.code.toUpperCase()}</span><h2>{s.name}</h2><p>{s.tagline}</p>{s.code==='wa'?<p className={styles.stateCount}>{PARTNERS_UI.landing}</p>:null}<span className={styles.explore}>{partnerExplore(s.name)}</span></div></Link></li>)}</ul></section>
   <section className={`${styles.section} po-gold-thread-inlay`}><aside className={styles.callout}><p>{PARTNERS_UI.callout}</p><Link href="/contact" className={styles.close}>{PARTNERS_UI.contact}</Link><SalesEmail variant="strip" prefix="Send your logo to" /></aside></section>
   <PresidentialSrosSection/>
   <SalesEmail variant="band" copy="partner" />
