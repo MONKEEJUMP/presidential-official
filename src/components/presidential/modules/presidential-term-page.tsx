@@ -592,7 +592,7 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
               <p>Presidential Blunts bring the house infusion method into a slow-burning hemp wrap built for a longer session. Read more{" "}
                 <Link className={inlineLinkClass} href="/about">about the Presidential cannabis brand</Link>.</p>
               <p>
-                Flower, concentrate, kief, format, and finish work together here. The result is a distinctly Presidential way to enjoy{" "}
+                Flower, concentrate, a kief or diamond finish, and the format work together here. The result is a distinctly Presidential way to enjoy{" "}
                 <Link className={inlineLinkClass} href="/presidential-thc">infused cannabis</Link>.
               </p>
             </div>
@@ -617,7 +617,7 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
         <p>
           Presidential rolls its blunts in <strong>hemp wraps that are one hundred percent tobacco free.</strong>
         </p>
-        <p>That material choice keeps the focus on the flower, concentrate, kief, and strain or flavor profile selected for the package. It also creates a consistent physical foundation across the house blunt and Mini Blunt families.</p>
+        <p>That material choice keeps the focus on the flower, concentrate, kief or diamond finish, and strain or flavor profile selected for the package. It also creates a consistent physical foundation across the house blunt and Mini Blunt families.</p>
         <p>The wrap, fill, and infusion are treated as one system. Balanced airflow supports the light, the infused material carries the profile, and the finished roll gives the blend enough space to burn at its intended rhythm.</p>
       </TermSection>
 
@@ -658,7 +658,7 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
       </TermSection>
 
       <TermSection id="presidential-blunts-smoking" images={[images[5]]} title="How to smoke an infused blunt">
-        <p>An infused blunt rewards a measured approach. Concentrate and kief add density to the flower, while the hemp wrap creates a slower pace than a thin-paper pre-roll.</p>
+        <p>An infused blunt rewards a measured approach. Concentrate and a kief or diamond finish add density to the flower, while the hemp wrap creates a slower pace than a thin-paper pre-roll.</p>
         <p><strong>Start with an even light.</strong> Rotate the end near the flame so the full edge catches together. A balanced ember establishes the airflow that guides the rest of the session.</p>
         <p><strong>Use a relaxed draw.</strong> Steady pulls support the burn line and give the infused material time to warm through the wrap.</p>
         <p><strong>Set the pace early.</strong> The opening third establishes the rhythm. Allowing the ember to move naturally helps the blunt express its strain or flavor profile from start to finish.</p>
@@ -695,9 +695,9 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
       <TermSection id="presidential-cannabis-argument" images={[images[1]]} title="The argument">
         <p>
           The company began with the belief that infused cannabis could be treated as a complete product discipline.{" "}
-          Flower selection, extract choice, kief, airflow, packaging, and finish all contribute to what reaches the customer.
+          Flower selection, extract choice, a kief or diamond finish, airflow, and packaging all contribute to what reaches the customer.
         </p>
-        <p>That view became the foundation for the Presidential Infusion System™, a house approach that carries concentrate through the flower and finishes the material with kief. The method supports the burn, flavor, and consistency expected from the Moon Rocks, pre-rolls, blunts, and Mini Blunts that carry the name.</p>
+        <p>That view became the foundation for the Presidential Infusion System™, a house approach that carries concentrate through the flower and closes with a kief or diamond finish. The method supports the burn, flavor, and consistency expected from the Moon Rocks, pre-rolls, blunts, and Mini Blunts that carry the name.</p>
         <p>“Cannabis Evolved,” “Expect More,” and “Presidential Doesn&apos;t Miss” express the same operating idea in brand language: every format should feel intentional, every series should be easy to understand, and every release should belong inside one coherent catalog.</p>
       </TermSection>
 

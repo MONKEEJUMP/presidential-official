@@ -231,7 +231,7 @@ export const ABOUT_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         Each infused product starts with cannabis flower, adds a concentrate (distillate, live resin, or live rosin,
-        depending on the series), and finishes with the dry material named on the package, such as kief. Presidential calls
+        depending on the series), and finishes with the dry material named on the package: a kief or diamond finish. Presidential calls
         this the Presidential Infusion System™. THC is batch-specific, so the current package label and its test results
         are the reference for a specific product.
       </p>

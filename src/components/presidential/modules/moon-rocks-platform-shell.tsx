@@ -264,7 +264,7 @@ export async function MoonRocksPlatformShell({
                 <h3 className="mt-8 text-2xl font-semibold leading-snug">What are Presidential Moon Rocks called on a dispensary menu?</h3>
                 <p className="mt-3">
                   Retail menus often list them as{" "}
-                  <Link className="font-semibold underline underline-offset-4" href="/presidential-thc">Presidential THC on retail menus</Link>, under the product name and the series.
+                  <Link className="font-semibold underline underline-offset-4" href="/presidential-thc">Presidential THC</Link>, under the product name and the series.
                   Look for the strain or flavor name, the tier (Silver is distillate, Gold is live resin, Rose Gold is live rosin) and
                   the format, such as the 2G Moon Rocks jar. Some menus file moon rocks under infused flower; read{" "}
                   <Link className="font-semibold underline underline-offset-4" href="/learn/what-are-moon-rocks">what moon rocks are</Link> for the build. The pack confirms it: the

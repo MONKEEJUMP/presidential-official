@@ -617,6 +617,13 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
       "Presidential is currently active in select state markets.",
     ],
   ],
+  // Chief ruling (Sitebulb R26): lines describing the blunts or the whole lineup read "kief or diamond finish".
+  "/moon-rocks/presidential-blunts": [
+    [
+      "flower, concentrate, and kief brought together in a single wrap",
+      "flower, concentrate, and a kief or diamond finish brought together in a single wrap",
+    ],
+  ],
 };
 
 // Standing no-state-counts rule: every /moon-rocks/* CMS body drops the market count, and the
