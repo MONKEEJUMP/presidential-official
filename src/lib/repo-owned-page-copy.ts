@@ -72,7 +72,7 @@ Collaboration releases run alongside the three tiers. Presidential x THC Design 
 
 **Where to find Presidential**
 
-Presidential is a wholesale brand and sells exclusively through licensed retailers. Availability varies by retailer and stock changes by store and by day. Presidential's seven-state footprint spans California, Oklahoma, New York, Nevada, Michigan, Arizona and Washington. Use the zip search to find the nearest licensed retailer carrying Presidential. For adults 21+ where legal.`,
+Presidential is a wholesale brand and sells exclusively through licensed retailers. Availability varies by retailer and stock changes by store and by day. Presidential's footprint across [select state markets](/find-us) spans California, Oklahoma, New York, Nevada, Michigan, Arizona and Washington. Use the zip search to find the nearest licensed retailer carrying Presidential. For adults 21+ where legal.`,
   },
   "/learn/what-is-thc-distillate": {
     label: "What Is THC Distillate",
@@ -137,7 +137,7 @@ Presidential is landing soon in Washington.
 
 **What that means, plainly**
 
-Presidential's seven-state footprint spans California, Oklahoma, Nevada, New York, Michigan, Arizona and Washington.
+Presidential's footprint across [select state markets](/find-us) spans California, Oklahoma, Nevada, New York, Michigan, Arizona and Washington.
 
 The retailer search on this page goes live the moment verified licensed Washington retailers carrying Presidential are in the locator database. Until then this page says so rather than showing an empty list.
 
@@ -361,7 +361,7 @@ That composition line is the habit worth building. On the moon rock side it runs
 
 Presidential is wholesale. It does not sell direct, to anyone, in any category. Every product reaches you through a licensed retailer, and each shop decides independently what to carry. Availability varies by retailer, by market and by day.
 
-The brand's seven-state footprint spans California, Oklahoma, Nevada, New York, Michigan, Arizona and Washington.
+The brand's footprint across [select state markets](/find-us) spans California, Oklahoma, Nevada, New York, Michigan, Arizona and Washington.
 
 **Collaborations run across the line**
 

@@ -315,9 +315,6 @@ export function SeriesCatalogSection({
             {meta.positioning}
           </p>
         </div>
-        <p className="text-xs font-black uppercase text-po-brand-ink">
-          {items.length} {items.length === 1 ? "product" : "products"}
-        </p>
       </div>
       <div className="mt-10 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
         {items.map((item) => (
@@ -394,7 +391,6 @@ export function SeriesSelectorShell({
           description,
           accentBar,
           accentText,
-          count,
           href,
           buttonLabel,
         }) => {
@@ -408,11 +404,6 @@ export function SeriesSelectorShell({
               {title}
             </h2>
             <p className="mt-3 text-sm leading-6 text-po-body">{description}</p>
-            {count !== null ? (
-              <p className="mt-6 text-xs font-black uppercase text-po-brand-ink">
-                {count} {count === 1 ? "product" : "products"}
-              </p>
-            ) : null}
           </>
         );
 

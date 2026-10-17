@@ -112,17 +112,6 @@ export function StateLocatorSection({
               Find Presidential in {stateName}
             </h2>
           </div>
-          <div
-            aria-label={`${doorCount} live retailer doors in ${stateName}`}
-            className="border-t border-po-brand/40 pt-5 lg:min-w-56 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0"
-          >
-            <p className="font-display text-5xl leading-none text-po-brand sm:text-6xl">
-              {doorCount.toLocaleString("en-US")}
-            </p>
-            <p className="mt-2 text-xs font-black uppercase text-po-on-dark-muted">
-              Live retailer doors
-            </p>
-          </div>
         </div>
 
         <div className="po-gold-thread-inlay pt-12 lg:pt-16">

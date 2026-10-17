@@ -62,7 +62,7 @@ const COPY_COUNT_FIXES=[
   ['Nevada is a hundred and two doors, and no state has a customer quite like it.','No state has a customer quite like Nevada.'],
   ['A hundred and one Michigan doors carry Presidential.','Licensed Michigan doors carry Presidential across the state.'],
   ['Fifty-three doors, and unlike the other markets they run through','Unlike the other markets, Arizona doors run through'],
-  ["Presidential's seven-state network includes Washington","Presidential's network of select state markets includes Washington"],
+  ["Presidential's seven-state network includes Washington","Presidential's network of [select state markets](/find-us) includes Washington"],
 ];
 // R22 chief ruling: no counts in partner titles or metas; survives --copy-from regeneration.
 const fixTitle=t=>t?.replace(/\s*\|\s*[\d,]+ Licensed Retailers$/,' | Licensed Retailers').replace('Licensed Retailers Across Seven States','Licensed Retailers in Select State Markets');
