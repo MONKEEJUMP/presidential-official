@@ -206,6 +206,20 @@ export function PreRollExperience({
             carrying Presidential.
           </p>
         </div>
+        {/* SURFER-R20: /pre-rolls pack-reading H3 (facts from /moon-rocks/rose-gold and the pre-roll product cards). */}
+        <div>
+          <h3>How do you read a Moon Rock pre-roll pack?</h3>
+          <p>
+            Every pack carries the same architecture: the silver crown crest with the PRESIDENTIAL banner, the strain type in script,
+            the product name, and the format and weight. The pack also prints the build. Silver rolls read Flower · Distillate · Kief,
+            Gold rolls read Flower · Live resin · Diamonds (some Gold builds add distillate), and Rose Gold rolls read Flower · Live
+            rosin · Diamonds. Start with{" "}
+            <Link href="/learn/what-is-live-rosin">what live rosin is</Link> or{" "}
+            <Link href="/learn/what-is-thc-distillate">what THC distillate is</Link> to know what each build means, and compare{" "}
+            <Link href="/mini-pre-rolls">Presidential mini pre-rolls</Link> for a smaller format. Collaboration releases carry a
+            second name on the front, such as Rove or Nature&apos;s Chemistry.
+          </p>
+        </div>
         <div className={styles.tierSections}>
           {TIER_SECTION_ORDER.map((section) => {
             const entries = tieredArtwork.filter(({ placement }) => placement.section === section);

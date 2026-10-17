@@ -245,7 +245,7 @@ export async function SupportRouteFoundationShell({
                 How to find Presidential at a licensed retailer
               </h2>
               <ol className="mt-8 grid max-w-3xl list-decimal gap-4 pl-6 text-base leading-7 text-po-body">
-                <li>Pick your state from the seven Presidential states: California, Oklahoma, New York, Nevada, Michigan, Arizona, and Washington. State pages include{" "}
+                <li>Pick your state: California, Oklahoma, New York, Nevada, Michigan, Arizona, or Washington. State pages include{" "}
                   <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/find-us/ca">Presidential in California</Link> and{" "}
                   <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/find-us/az">Presidential in Arizona</Link>.</li>
                 <li>Use the locator: enter your zip code and it ranks the nearest official licensed retailers by distance.</li>
@@ -265,6 +265,21 @@ export async function SupportRouteFoundationShell({
                 <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/pre-rolls">pre-rolls</Link>,{" "}
                 <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/vapes">vapes</Link> (Moon Pods and Orbit), and{" "}
                 <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/mini-pre-rolls">Mini Pre-Rolls</Link>.
+              </p>
+              {/* SURFER-R20: /find-us visit-prep H3 (facts from /about, /moon-rocks, /vapes and the pack label). In-page anchor instead of a self-link. */}
+              <h3 className="mt-12 text-2xl font-semibold leading-snug text-po-ink">
+                What should you bring to a licensed retailer?
+              </h3>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-po-body">
+                Bring the exact product name, the series, and the format. Presidential is wholesale and does not sell direct, so
+                availability belongs to each licensed retailer in{" "}
+                <a className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="#presidential-find-us-map">select state markets</a>. The series tells the store which family
+                you mean: the{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link> are built on distillate, the Gold
+                Strain Series on live resin, and the Rose Gold Connoisseur Series on live rosin. Formats include Moon Rocks,{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/pre-rolls">Presidential Moon Rock pre-rolls</Link>, 1.5g blunts in a tobacco-free wrap, Mini
+                Pre-Rolls, and Moon Pods with the Orbit device. THC is batch-specific, so check the package label and its test
+                results at the counter.
               </p>
             </div>
           </Scene>

@@ -73,7 +73,7 @@ export function UsMapShell() {
         })}
       </ul>
       <p className="mt-6 text-xs leading-5 text-po-on-dark-muted">
-        Seven priority markets. Availability varies by licensed retailer;
+        Availability varies by licensed retailer;
         adults 21+ where legal.
       </p>
     </div>
