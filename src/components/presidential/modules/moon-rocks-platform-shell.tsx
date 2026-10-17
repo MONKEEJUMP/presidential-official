@@ -238,6 +238,19 @@ export async function MoonRocksPlatformShell({
                 <Link className="font-semibold underline underline-offset-4" href="/learn/different-extracts-need-different-heat">different extracts need different heat</Link>.
                 Cannabinoid and THC figures come from the current package and its batch test record, not from this page.
               </p>
+              {/* SURFER-R19: recognizing the series on a pack, from /moon-rocks/rose-gold, /about and /moon-rocks. */}
+              <h3 className="mt-8 text-2xl font-semibold leading-snug">How do you recognize the series on a pack?</h3>
+              <p className="mt-3">
+                Every Presidential pack carries the same architecture regardless of series: the silver crown crest with the
+                PRESIDENTIAL banner, the strain type in script, the product name, and the format and weight. The series shows in
+                the name and the art. The{" "}
+                <Link className="font-semibold underline underline-offset-4" href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link>{" "}
+                name a flavor, Gold names a strain, and the{" "}
+                <Link className="font-semibold underline underline-offset-4" href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>{" "}
+                carries the connoisseur names, built on live rosin; see{" "}
+                <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-live-rosin">what live rosin is</Link>. Gold
+                packs such as 24K and Blue Dream print FLOWER · LIVE RESIN · DIAMONDS.
+              </p>
               <h3 className="mt-8 text-2xl font-semibold leading-snug">Where to buy, and what it costs</h3>
               <p className="mt-3">
                 Presidential Moon Rocks are sold only at licensed retailers, in person, to adults 21+ where it&apos;s legal.
