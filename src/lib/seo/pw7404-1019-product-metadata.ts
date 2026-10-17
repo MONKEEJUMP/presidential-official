@@ -201,7 +201,7 @@ export const PRODUCT_METADATA_BY_SLUG: Readonly<
   "presidential-blunts": {
     seoTitle: "Moon Rock Blunts | Presidential Tobacco-Free Hemp Wraps",
     metaDescription:
-      "Explore Presidential Blunts, tobacco-free infused hemp wraps in the House Line. Review product details and find licensed retailers. Availability varies.",
+      "Explore Presidential moon rock blunts and Presidential wraps: tobacco-free infused hemp blunts in the House Line. Find licensed retailers. Availability varies.",
   },
   "presidential-moon-rocks": {
     seoTitle: "Presidential Moon Rocks | Presidential House Line",

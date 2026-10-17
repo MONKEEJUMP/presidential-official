@@ -153,7 +153,7 @@ export const APPROVED_TERM_ROUTE_ROWS = [
     slug: "presidential-blunts",
     title: "Presidential Moon Rock Blunts: Flavors, Sizes & Where to Buy",
     description:
-      "Infused blunts and minis rolled in tobacco-free hemp. Sizes, strains, how they burn, and how to smoke one properly. Through licensed retailers, adults 21+.",
+      "Presidential moon rock blunts and minis in tobacco-free hemp: flavors, sizes, how they burn, and where to buy through licensed retailers. Adults 21+.",
     h1: "Presidential Moon Rock Blunts: Flavors and Where to Buy",
     keywords: [
       "Presidential blunts",
