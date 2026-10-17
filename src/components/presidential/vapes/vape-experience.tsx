@@ -101,6 +101,25 @@ export function VapeExperience({ page }: { page: VapePage }) {
             The <Link href="/vapes">full Presidential vape collection</Link> shows each finish. The{' '}
             <Link href="/find-us">Presidential store finder</Link> lists retailers that carry Orbit.
           </p>
+          {/* INLINKS-COPY-R19: /orbit finish, mode and where-to-find H3s (copy as written). */}
+          <h3>Choosing an Orbit finish</h3>
+          <p>
+            Orbit comes in black, silver, teal and white, and every finish has the same three oil modes. Pick the finish you like,
+            then match the mode to the pod. <Link href="/moon-pods">Moon Pods vape cartridges</Link> and the{' '}
+            <Link href="/vapes">Presidential vapes collection</Link> show each pod family.
+          </p>
+          <h3>Setting the mode before the first draw</h3>
+          <p>
+            Press the button three times and select Liquid Diamond, Live Resin or Live Rosin to match the pod&apos;s display.{' '}
+            <Link href="/learn/different-extracts-need-different-heat">Why different extracts need different heat</Link> explains the
+            reason, and <Link href="/learn/flavor-science">how flavor science works</Link> covers why the right mode keeps the
+            extract&apos;s character.
+          </p>
+          <h3>Where to find Orbit</h3>
+          <p>
+            Use the <Link href="/find-us">Presidential retailer finder</Link> to check a store near you. Retail buyers can start with{' '}
+            <Link href="/wholesale">Presidential wholesale</Link>.
+          </p>
         </div>
       ) : null}
       <div className={s.explorerGrid}>
