@@ -220,6 +220,16 @@ export function PreRollExperience({
             second name on the front, such as Rove or Nature&apos;s Chemistry.
           </p>
         </div>
+        {/* INLINKS-COPY-R20: /pre-rolls recipe H3, trimmed to lines that don't repeat the Surfer R20 pack-reading H3. */}
+        <div>
+          <h3>Choosing a pre-roll by its recipe</h3>
+          <p>
+            Each Moon Rock pre-roll is 1g of flower and concentrate, and the recipe tells you what kind of concentrate it uses. For the
+            live-resin-and-diamond infusions, read{" "}
+            <Link href="/learn/what-is-live-resin">what live resin is</Link>, then see how each recipe is dressed in the{" "}
+            <Link href="/presidential-art/pre-rolls">pre-roll package art</Link>.
+          </p>
+        </div>
         <div className={styles.tierSections}>
           {TIER_SECTION_ORDER.map((section) => {
             const entries = tieredArtwork.filter(({ placement }) => placement.section === section);
