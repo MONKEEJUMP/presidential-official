@@ -72,7 +72,9 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
               Every mini blunt pack holds three 0.7g Moon Rock mini blunts, 2.1g in total. Each one has the same build as the{' '}
               <Link href="/blunts">full-size Moon Rock blunts</Link>: flower coated in live resin and finished with diamonds, rolled
               in a 100% tobacco-free hemp wrap. Only the size and the count change. A mini blunt is a smaller version of the same
-              object, not a cheaper one.
+              object, not a cheaper one. For the paper version, see{' '}
+              <Link href="/mini-pre-rolls">Presidential mini pre-rolls</Link> or the full-size{' '}
+              <Link href="/pre-rolls">Presidential infused pre-rolls</Link>.
             </p>
             <h3>Why a three-pack instead of one full blunt</h3>
             <p>
@@ -108,6 +110,13 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
               <Link href="/mini-blunts/waui">Waui mini blunts</Link> or <Link href="/mini-blunts/xxx">XXX mini blunts</Link> by
               name, then find the pack at a licensed store through the{' '}
               <Link href="/find-us">Presidential store finder</Link>.
+            </p>
+            {/* INLINKS-COPY-R26: /mini-blunts finding H3 (copy as written). Its "beside the full-size blunts" H3 repeated the pack-build answer above, so its paper-version links were merged there. */}
+            <h3>Finding a mini blunt pack near you</h3>
+            <p>
+              Mini blunt packs are sold through licensed retailers only, and mini availability depends on the strain. Bring the exact
+              strain name from the pack to <Link href="/find-us">the Presidential retailer finder</Link>, and check{' '}
+              <Link href="/presidential-art/mini-blunts">the mini blunt pack art</Link> so you know the package on the shelf.
             </p>
           </div>
         ) : null}
