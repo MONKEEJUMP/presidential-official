@@ -93,6 +93,9 @@ const ps=spawnSync('pwsh',['-NoProfile','-File',resolve(import.meta.dirname,'par
 if(ps.status!==0)throw Error(ps.stderr); const identities=JSON.parse(ps.stdout);
 const brands=csv(await readFile(resolve(source,'0907-PRES-KVRT-0002-partner-brands.csv'),'utf8'));
 const aliases={'Great Lakes Holistics':'GLH Kzoo','Leaf Society Salt n Sea':'Leaf Society','Livwell Meds of Calera':'LivWell Meds','Mr Nice Guy Moreno Valley':'Mr Nice Guy','Top Cannabis Outlet':'Top Cannabis','Tree House Cannabis':'Tree House','Aroma Cannabis':'Aroma','Budd Barn':'Canna Planet','Canna Health & Wellness':'Canna Health','Dank Headquarters':'House of Dank','LEVELS DISTRO':'LEVELS','OHANA Beverly Hills':'Ohana','Ohana Cannabis':'Ohana','SafePort Dispensary':'Safeport Cannabis','Traditional (DTLA)- OLYMPIC':'Traditional','Traditional (Mid-City)':'Traditional','Transcend Crown Heights':'Transcend Wellness'};
+// Sitebulb R21: source typos corrected on every regeneration (name, id and logo file).
+const nameCorrections={'GNO ENTERPISES':'GNO ENTERPRISES'};
+const logoOutputCorrections={'gno-enterpises.webp':'gno-enterprises.webp'};
 const websiteCorrections={'Medical Man Wellness':'https://www.leafly.com/dispensary-info/medical-man-wellness'};
 function validatedWebsite(value,name){
   const raw=ascii(value||'').trim();if(!raw)return '';
@@ -108,7 +111,7 @@ if(unmapped.length||mismatches.length){console.log(JSON.stringify({unmapped,mism
 const logoDir=resolve(root,'public/partners/logos');await mkdir(logoDir,{recursive:true});let beforeBytes=0,afterBytes=0;const logoMap=new Map();
 for(const file of await readdir(resolve(source,'logos'))){
   const input=resolve(source,'logos',file);beforeBytes+=(await stat(input)).size;
-  const output=extname(file).toLowerCase()==='.svg'?file:basename(file,extname(file))+'.webp';const target=resolve(logoDir,output);
+  const rawOutput=extname(file).toLowerCase()==='.svg'?file:basename(file,extname(file))+'.webp';const output=logoOutputCorrections[rawOutput]??rawOutput;const target=resolve(logoDir,output);
   if(output.endsWith('.svg'))await copyFile(input,target);
   else {
     try{await sharp(input).resize({width:400,height:400,fit:'inside',withoutEnlargement:true}).webp({quality:85}).toFile(target);}
@@ -117,7 +120,7 @@ for(const file of await readdir(resolve(source,'logos'))){
   afterBytes+=(await stat(target)).size;if(!(await logoIsBlocked(target)))logoMap.set(file,'/partners/logos/'+output);
 }
 const included=brands.filter(b=>b.account_type==='retail'&&!(b.brand_name==='PRESIDENTIAL'&&b.primary_city==='Costa Mesa'&&b.primary_state==='CA'));
-const records=included.map(b=>{const members=grouped.get(b.brand_name);const perState={};for(const d of members){const c=d.state.toLowerCase();perState[c]??={count:0,cities:[]};perState[c].count++;if(!perState[c].cities.includes(ascii(d.city)))perState[c].cities.push(ascii(d.city));}for(const v of Object.values(perState))v.cities.sort();return{id:key(b.brand_name).replaceAll(' ','-'),name:ascii(b.brand_name),nationalDoors:Number(b.door_count),website:validatedWebsite(websiteCorrections[b.brand_name]??b.website,b.brand_name),logo:logoMap.get(b.logo_file)||null,perState};});
+const records=included.map(b=>{const members=grouped.get(b.brand_name);const perState={};for(const d of members){const c=d.state.toLowerCase();perState[c]??={count:0,cities:[]};perState[c].count++;if(!perState[c].cities.includes(ascii(d.city)))perState[c].cities.push(ascii(d.city));}for(const v of Object.values(perState))v.cities.sort();const publicName=nameCorrections[b.brand_name]??b.brand_name;return{id:key(publicName).replaceAll(' ','-'),name:ascii(publicName),nationalDoors:Number(b.door_count),website:validatedWebsite(websiteCorrections[b.brand_name]??b.website,b.brand_name),logo:logoMap.get(b.logo_file)||null,perState};});
 const snapshot={stamp:'0907-PRES-KVRT-0010',sourceRows:total,contentRanges:ranges,sourceStateCounts:Object.fromEntries(['CA','OK','NY','NV','MI','AZ'].map(s=>[s,doors.filter(d=>d.state===s).length])),excludedBrands:brands.length-included.length,excludedDoors:total-records.reduce((s,b)=>s+b.nationalDoors,0),logoBytes:{before:beforeBytes,after:afterBytes,files:logoMap.size},mismatches,brands:records};
 for(const brand of records)brand.logoOnDark=brand.logo?await logoNeedsDark(resolve(root,'public'+brand.logo)):false;
 await writeFile(resolve(root,'src/content/partners.json'),JSON.stringify(snapshot,null,2)+'\n');
