@@ -189,6 +189,15 @@ export function VapeExperience({ page }: { page: VapePage }) {
             covers how each one behaves in a vaporizer. To find a location carrying Moon Pods and Orbit, use the{' '}
             <Link href="/find-us">Presidential store finder</Link>.
           </p>
+          {/* INLINKS-COPY-R21: /moon-pods mouthpiece H3 (copy as written; facts from src/lib/vapes/catalog.ts). */}
+          <h3>Telling the pod families apart by mouthpiece</h3>
+          <p>
+            You can tell each Moon Pod family by its mouthpiece. Liquid Diamonds has the teal mouthpiece, Live Resin has the clear one
+            and Live Rosin has the smoked one, and each pod runs on the <Link href="/orbit">Orbit vape device</Link>. Read{' '}
+            <Link href="/learn/what-are-liquid-diamonds">what liquid diamonds are</Link>,{' '}
+            <Link href="/learn/what-is-live-resin">what live resin is</Link> and{' '}
+            <Link href="/learn/what-is-live-rosin">what live rosin is</Link> to see what sits behind each color.
+          </p>
         </div>
       ) : null}
       <div className={s.chapterColors}><span className={s.label}>Orbit finish</span><ColorChoices value={finish} onChange={setFinish} label="Moon Pods chapter finish" /></div>
