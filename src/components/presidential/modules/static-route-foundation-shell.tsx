@@ -86,7 +86,7 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
       },
       {
         title: "The culture",
-        body: "Presidential never stayed in its lane. In West Hollywood, it opened Esco's — a New York-style pizzeria — and the Presidential Suite, a speakeasy-style lounge you enter through an NYC subway car built inside the restaurant. A brand this obsessed with experience was never going to stop at the product.",
+        body: "Presidential never stayed in its lane. In West Hollywood, it opened Esco's — a New York-style pizzeria — and the Presidential Suite, a speakeasy-style lounge you enter through an NYC subway car built inside the restaurant. A brand this obsessed with experience was never going to stop at the product. The pack art is part of that culture, and the [Presidential Vault gallery](/presidential-art) collects it in one place.",
       },
       {
         title: "What's next",

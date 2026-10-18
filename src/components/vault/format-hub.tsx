@@ -110,6 +110,8 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
               <Link href="/mini-blunts/waui">Waui mini blunts</Link> or <Link href="/mini-blunts/xxx">XXX mini blunts</Link> by
               name, then find the pack at a licensed store through the{' '}
               <Link href="/find-us">Presidential store finder</Link>.
+              More of the artwork behind every Presidential format sits in the{' '}
+              <Link href="/presidential-art">full Vault of pack art</Link>.
             </p>
             {/* INLINKS-COPY-R26: /mini-blunts finding H3 (copy as written). Its "beside the full-size blunts" H3 repeated the pack-build answer above, so its paper-version links were merged there. */}
             <h3>Finding a mini blunt pack near you</h3>

@@ -52,7 +52,7 @@ Most people never read them, because nobody has explained what the words mean. T
 
 The architecture is identical across the entire catalogue. WORLD'S STRONGEST runs across the top. The strain type — Indica, Sativa or Hybrid — sits in script directly beneath it. The silver crown crest carries the PRESIDENTIAL banner. A unit numeral sits inside a crescent moon: a 1 on single formats, a 3 on the three-packs, a 2 G on loose Moon Rocks. Then the format line, the strain name in a lozenge, and the composition line.
 
-Three of those change from product to product and the rest never do. The strain type, the format line and the composition line are the entire difference between one Presidential pack and another. Everything else is the house.
+Three of those change from product to product and the rest never do. The strain type, the format line and the composition line are the entire difference between one Presidential pack and another. Everything else is the house. To see the front of each pack, browse the [pack art collection](/presidential-art).
 
 **The format ladder**
 

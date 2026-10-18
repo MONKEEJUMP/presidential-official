@@ -8,6 +8,7 @@ import { imageAlt, vaultStrainSlug, type VaultProduct } from '@/content/vault/ca
 import descriptions from '@/content/vault/descriptions.json';
 import { vaultFormatHeading } from './format-cards';
 import { vaultMetaDescription } from '@/content/vault/specs';
+import { VaultSkuCopy } from './r34-copy';
 
 export function vaultProductMetadata(product: VaultProduct): Metadata {
   const title = `${product.strain} Moon Rock ${product.format} | Presidential`;
@@ -35,5 +36,5 @@ export function VaultProductPage({ product }: { product: VaultProduct }) {
   const categoryPath = `/${product.room}` as ProductCategoryPath;
   const record = { id: vaultStrainSlug(product), name: product.strain, edition: `Moon Rock ${product.format}`, description: (descriptions as Record<string, string>)[product.slug], src: image.full, alt: imageAlt(product, image) };
   // GSC 1012: no approved prices or reviews, so no Product schema (it requires offers/review/rating).
-  return <PageFrame className="bg-[#06100f]"><CatalogProductPage categoryLabel={product.room.replaceAll('-', ' ')} categoryPath={categoryPath} backPath={product.format.startsWith('Mini') ? `/presidential-art/${product.room}` : categoryPath} collection={product.tier ?? undefined} formatLabel={`Presidential Moon Rock ${product.format}`} headingFormat={vaultFormatHeading(product.format)} product={record} products={[record]} vaultProduct={product} /><MiniSiblings room={product.room} current={vaultStrainSlug(product)} /></PageFrame>;
+  return <PageFrame className="bg-[#06100f]"><CatalogProductPage categoryLabel={product.room.replaceAll('-', ' ')} categoryPath={categoryPath} backPath={product.format.startsWith('Mini') ? `/presidential-art/${product.room}` : categoryPath} collection={product.tier ?? undefined} formatLabel={`Presidential Moon Rock ${product.format}`} headingFormat={vaultFormatHeading(product.format)} product={record} products={[record]} vaultProduct={product} /><VaultSkuCopy room={product.room} slug={vaultStrainSlug(product)} /><MiniSiblings room={product.room} current={vaultStrainSlug(product)} /></PageFrame>;
 }
