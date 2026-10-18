@@ -858,7 +858,7 @@ export const ROUTE_REGISTRY = [
     canonicalPath: "/moon-rocks/presidential-x-thc-design",
     title: "Presidential x THC Design | Presidential Moon Rocks",
     description:
-      "Presidential x THC Design is a collaboration series of Moon Rocks, pre-rolls, and blunts built on flower, distillate, and kief. Find a licensed retailer.",
+      "Presidential x THC Design: a collaboration series of Moon Rocks, pre-rolls, and blunts built on flower, live resin, and diamonds. Find licensed retailers.",
     h1: "Presidential x THC Design",
     keywords: ["presidential x thc design", "presidential moon rocks"],
     schema: ["WebPage", "BreadcrumbList", "ItemList"],

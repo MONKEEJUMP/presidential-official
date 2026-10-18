@@ -327,7 +327,7 @@ THC Design sits with the cultivation and processing group, and the artwork on bo
 
 **What does not change in a collaboration**
 
-The build. Every partner release runs through the Presidential Infusion System exactly as the core catalogue does: flower as the base, a concentrate coat, and the finish printed on the pack bonded to the coat. A partner's name on the front changes the market, sometimes the strain, and often the artwork. It does not change the process.
+The build. Every partner release runs through the Presidential Infusion System exactly as the core catalogue does: flower as the base, a concentrate coat, and the finish printed on the pack bonded to the coat. Creskendo and XJ13 print FLOWER · LIVE RESIN · DIAMONDS. A partner's name on the front changes the market, sometimes the strain, and often the artwork. It does not change the process.
 
 **Formats and availability**
 

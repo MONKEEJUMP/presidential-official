@@ -606,7 +606,7 @@ export const HARDCODED_IN_CONTENT_LINK_COUNT = Object.values(
 // Chief ruling (Oct 16): no state-market count on /moon-rocks/24k or /moon-rocks/king-louis; CMS sentence rewritten here (no Sanity write access).
 const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
   "/moon-rocks/24k": [
-    ["Diamonds as the crystalline finish on the outside.", "Finished with kief or diamonds on the outside."],
+    ["Diamonds as the crystalline finish on the outside.", "Finished with diamonds on the outside."],
     [
       "Presidential is currently active across six state markets with two more opening.",
       "Presidential is currently active across select state markets.",
@@ -623,13 +623,17 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   "/moon-rocks/blue-dream": [
     [
       "Diamonds are the finish — the concentrated crystalline form that gives the outside of a Presidential Moon Rock its texture and its weight in the hand.",
-      "It is finished with kief or diamonds, which give the outside of a Presidential Moon Rock its texture and its weight in the hand.",
+      "It is finished with diamonds, which give the outside of a Presidential Moon Rock its texture and its weight in the hand.",
     ],
-    ["The same flower, the same live resin coat, the same diamond finish.", "The same flower, the same live resin coat, finished with kief or diamonds."],
+    ["The same flower, the same live resin coat, the same diamond finish.", "The same flower, the same live resin coat, finished with diamonds."],
   ],
   "/moon-rocks/gods-gift": [["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."]],
   "/moon-rocks/presidential-prerolls": [["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."]],
-  "/moon-rocks/thc-design-blunts": [["a dry material bonded to the coat as the finish.", "a kief or diamond finish bonded to the coat, as the pack prints."]],
+  // Chief R30 ruling: THC Design copy states the printed build (Creskendo and XJ13: flower, live resin, diamonds).
+  "/moon-rocks/thc-design-blunts": [
+    ["a dry material bonded to the coat as the finish.", "a diamond finish bonded to the coat, as the pack prints."],
+    ["Both are Sativa, both built on FLOWER · DISTILLATE · KIEF.", "Both are Sativa, both built on FLOWER · LIVE RESIN · DIAMONDS."],
+  ],
   "/moon-rocks/thc-design-moon-rocks": [["the dry finish bonded to the outside.", "the kief finish bonded to the outside."]],
   "/moon-rocks/wedding-cake": [["A dry finishing material bonded to the coat.", "A kief finish bonded to the coat."]],
   "/moon-rocks/white-walker": [["A dry material bonded to the coat as the finish.", "Kief bonded to the coat as the finish."]],
