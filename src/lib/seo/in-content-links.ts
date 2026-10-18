@@ -200,7 +200,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/",
       anchor: "licensed retailer",
-      context: "verified licensed retailer information",
+      context: "interest with licensed retailer information",
     },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
     {
@@ -242,14 +242,14 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/",
       anchor: "licensed retailer",
-      context: "verified licensed retailer information",
+      context: "interest with licensed retailer information",
     },
   ],
   "/moon-rocks/cosmic-cookies": [
     {
       href: "/",
       anchor: "licensed retailer",
-      context: "verified licensed retailer information",
+      context: "interest with licensed retailer information",
     },
   ],
   "/moon-rocks/galactic-gas": [
@@ -326,7 +326,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/",
       anchor: "licensed retailer",
-      context: "verified licensed retailer information",
+      context: "interest with licensed retailer information",
     },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
     {
@@ -367,21 +367,21 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/",
       anchor: "licensed retailer",
-      context: "verified licensed retailer information",
+      context: "interest with licensed retailer information",
     },
   ],
   "/moon-rocks/presidential-line": [
     {
       href: "/",
       anchor: "licensed retailer",
-      context: "verified licensed retailer information",
+      context: "interest with licensed retailer information",
     },
   ],
   "/moon-rocks/presidential-line-guava-haze": [
     {
       href: "/",
       anchor: "licensed retailer",
-      context: "verified licensed retailer information",
+      context: "interest with licensed retailer information",
     },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
     {
@@ -399,7 +399,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/",
       anchor: "licensed retailer",
-      context: "verified licensed retailer information",
+      context: "interest with licensed retailer information",
     },
   ],
   "/moon-rocks/presidential-line-iced-lemon": [
@@ -411,7 +411,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/",
       anchor: "licensed retailer",
-      context: "verified licensed retailer information",
+      context: "interest with licensed retailer information",
     },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
     {
@@ -434,7 +434,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/",
       anchor: "licensed retailer",
-      context: "verified licensed retailer information",
+      context: "interest with licensed retailer information",
     },
     // InLinks pid 50409 contextual same-site links (1006-PRES-INLK-0001).
     {
@@ -713,7 +713,43 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
     [" It appears on two releases: Creskendo, a Sativa on a purple pack with musical notes floating through erupting liquid, and XJ13, a Sativa on a mint-green pack with a molecular diagram and a chemical structure drawing threaded through gold and teal.", ""],
     ["Both leaning scientific in their artwork is not accidental. Of Presidential's ten collaboration partners, THC Design sits with the cultivation and processing group, and both its packs look the part.", ""],
   ],
-  "/moon-rocks/wedding-cake": [["A dry finishing material bonded to the coat.", "A kief finish bonded to the coat."]],
+  "/moon-rocks/wedding-cake": [
+    // Sitebulb R41 A20: Wedding Cake itself is diamonds, so the general line reads "kief or diamond".
+    ["A dry finishing material bonded to the coat.", "A kief or diamond finish bonded to the coat."],
+    ["A kief finish bonded to the coat.", "A kief or diamond finish bonded to the coat."],
+    [" Gorilla Goo carries four ingredients rather than three.", ""],
+    ["Gorilla Goo carries four ingredients rather than three.", ""],
+    // Sitebulb R41 A21: builds differ by format on some names, and no catalogue-wide scope.
+    [
+      "The build is identical across all five. Only the size and the count change, and the crescent numeral on the front of the pack tells you which you are holding.",
+      "Each format prints its own build, and the crescent numeral on the front of the pack tells you which you are holding.",
+    ],
+    ["The rest is the house, identical on every pack in the catalogue.", "The rest is the house design."],
+    // Sitebulb R41 B15.
+    ["What does not change", "How the build works"],
+  ],
+  // Sitebulb R41 A14-A16: no catalogue counts or scope, blunt-only lines cut from the jar page.
+  "/moon-rocks/presidential-line-guava-haze": [
+    ["are two of the three Platinum collaborations in the Presidential catalogue,", "are Platinum collaborations,"],
+    [
+      "appears on three Presidential packs: Guava Haze, Iced Lemon and Tropicana Cookies.",
+      "appears on the Guava Haze, Iced Lemon and Tropicana Cookies packs.",
+    ],
+    [" and to every Gold Strain Series release", ""],
+    ["Every format", "Formats"],
+    ["This page is the Moon Rock Blunt: one blunt, Net Wt. 1.5G (.053oz), printed legibly on the flat label.", ""],
+    ["The wider ladder holds constant across the catalogue.", "Each format has a fixed weight."],
+    ["100% TOBACCO FREE at the base — the wrap carries no tobacco, stated on the front of the pack rather than buried on the back.", ""],
+  ],
+  // Sitebulb R41 A17-A19.
+  "/moon-rocks/galactic-gas": [
+    ["Every format", "Formats"],
+    ["This page is the Moon Rock Blunt: one blunt, hand-finished.", ""],
+    ["on every single pack in the catalogue.", "on the pack."],
+    ["Most of the line puts a moon behind the product.", "Many packs put a moon behind the product."],
+    ["is constant across the entire catalogue.", "is the house design."],
+    ["The 100% Tobacco Free marking appears on this pack, partly covered by the artwork. The wrap carries no tobacco.", ""],
+  ],
   "/moon-rocks/white-walker": [
     ["A dry material bonded to the coat as the finish.", "Kief bonded to the coat as the finish."],
     // Sitebulb R40 A10.

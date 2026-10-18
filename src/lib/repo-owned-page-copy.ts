@@ -151,7 +151,7 @@ Presidential is landing soon in Washington.
 
 Presidential sells through licensed retailers in [select state markets](/find-us): California, Oklahoma, New York, Nevada, Michigan and Arizona, and Washington is landing soon.
 
-The retailer search on this page will show results once verified licensed Washington retailers carrying Presidential are confirmed.
+The retailer search on this page will show results once licensed Washington retailers carrying Presidential are confirmed.
 
 **What arrives when it does**
 

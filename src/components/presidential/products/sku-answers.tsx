@@ -100,7 +100,8 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h2 className="font-display text-2xl uppercase leading-tight text-po-ink">What are Watermelon Moon Rocks?</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">
             Moon rocks are cannabis flower coated with a concentrate and finished with kief.
-            Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongside Grape, Pineapple, and{" "}
+            Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongside Grape,{" "}
+            <Link className={linkClass} href="/moon-rocks/pineapple">the bright Pineapple Silver jar</Link>, and{" "}
             <Link className={linkClass} href="/moon-rocks/peach-mango">Peach Mango in the Silver lineup</Link>. See the <Link className={linkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>, the{" "}
             <Link className={linkClass} href="/learn/flavor-science">Flavor Science</Link> guide, and{" "}
             <Link className={linkClass} href="/learn/what-are-moon-rocks">What are moon rocks</Link> for the format itself.
@@ -114,7 +115,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
           {watermelonOffers.length > 0 ? (
             <>
-              <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Watermelon in Every Format</h2>
+              <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Watermelon formats</h2>
               <h3 className="mt-3 text-base font-semibold text-po-ink">What formats does Watermelon come in?</h3>
               <p className="mt-2 text-sm leading-6 text-po-body">
                 {`Watermelon comes as loose Moon Rocks and as a ${listMaterials(watermelonOffers.map((offer) => offer.format))}.`}
@@ -137,7 +138,8 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h2 className="font-display text-2xl uppercase leading-tight text-po-ink">What are Pineapple Moon Rocks?</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">
             Moon rocks are cannabis flower coated with a concentrate and finished with kief. Each
-            Pineapple moonrock is one of the flavor-led releases in the Silver Flavor Series, alongside Grape, Watermelon, and{" "}
+            Pineapple moonrock is one of the flavor-led releases in the Silver Flavor Series, alongside{" "}
+            <Link className={linkClass} href="/moon-rocks/grape">Grape, the deep-fruit Silver jar</Link>, Watermelon, and{" "}
             <Link className={linkClass} href="/moon-rocks/peach-mango">the Peach Mango Silver jar</Link>. Read <Link className={linkClass} href="/learn/what-are-moon-rocks">What are moon rocks</Link> for the
             format, or see the <Link className={linkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>.
           </p>
@@ -496,8 +498,8 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h3 className="mt-6 text-base font-semibold text-po-ink">What makes Grape a Silver Flavor Series moon rock?</h3>
           <p className="mt-2 text-sm leading-6 text-po-body">
             Grape is one of the flavor-led releases in the{" "}
-            <Link className={linkClass} href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link> lineup, alongside
-            Watermelon, Pineapple, and Peach Mango. Its concentrate is distillate, which is stripped and refined until it is
+            <Link className={linkClass} href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link> lineup, alongside{" "}
+            <Link className={linkClass} href="/moon-rocks/watermelon">the juicy Watermelon jar</Link>, Pineapple, and Peach Mango. Its concentrate is distillate, which is stripped and refined until it is
             essentially neutral, so the series can lead with the flavor name; see{" "}
             <Link className={linkClass} href="/learn/what-is-thc-distillate">what THC distillate is</Link>. The build is the same as
             every Presidential moon rock: flower first, distillate carried through it, and kief as the finish. Don&apos;t grind
@@ -638,7 +640,8 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             label lists flower and distillate, finished with kief, so it reads differently from the live resin build on many Gold names. The Gold Strain Series carries named strains
             rather than flavor names, so the strain is the product&apos;s identity on the shelf. THC and cannabinoids are
             batch-specific, so read the current package label and its test results. Gorilla Goo also comes as a{" "}
-            <Link className={linkClass} href="/mini-pre-rolls/gorilla-goo">Gorilla Goo mini pre-roll</Link> and a mini blunt. See{" "}
+            <Link className={linkClass} href="/mini-pre-rolls/gorilla-goo">Gorilla Goo mini pre-roll</Link> and a{" "}
+            <Link className={linkClass} href="/mini-blunts/gorilla-goo">Gorilla Goo mini blunt</Link>. See{" "}
             <Link className={linkClass} href="/moon-rocks/gold">Gold Strain Series moon rocks</Link> and{" "}
             <Link className={linkClass} href="/learn/what-is-live-resin">what live resin is</Link>.
           </p>
@@ -654,7 +657,8 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
         </>
       ) : null}
-      {(slug === "gorilla-goo" || slug === "presidential-og") && miniOffers.length > 0 ? (
+      {/* Sitebulb R41 B6: Gorilla Goo links its minis in the strain paragraph, so this block is OG only. */}
+      {slug === "presidential-og" && miniOffers.length > 0 ? (
         <p className="mt-6 text-sm leading-6 text-po-body">
           {`${name} also comes in the mini formats: `}
           {miniOffers.map((offer, index) => (
