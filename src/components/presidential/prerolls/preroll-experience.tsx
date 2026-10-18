@@ -200,7 +200,7 @@ export function PreRollExperience({
           </p>
           <p>
             The THC numbers and batch details belong to the package and its test record, so check the label for the exact figures on
-            the roll in your hand. Flavor and aroma vary by batch, and your retailer can confirm the current lineup. For a smaller
+            the roll in your hand; <Link href="/presidential-thc">the Presidential THC guide to infusion and extracts</Link> explains each one. Flavor and aroma vary by batch, and your retailer can confirm the current lineup. For a smaller
             session, <Link href="/mini-pre-rolls">Mini Pre-Rolls</Link> come as three 0.5g rolls. Retailers set the price, so it
             varies from store to store. Use the <Link href="/find-us">store finder</Link> to see the nearest licensed retailers
             carrying Presidential.

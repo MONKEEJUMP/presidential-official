@@ -25,7 +25,7 @@ const PARENT_GUIDE_SLUGS = {
 const CARD_INTRO_OVERRIDES: Readonly<Record<string, string>> = {
   // Sitebulb R29 B6: /about Infusion Science card gets the build summary (moon rocks kief; Gold/Rose Gold blunts kief or diamond).
   "/about:infusion-science":
-    "Infusion is how concentrate and flower become one product instead of two ingredients sitting side by side. Flower is the base, the series concentrate (distillate, live resin or live rosin) is carried through it, and the finish named on the pack completes the build: kief on Moon Rocks, and a kief or diamond finish on Gold and Rose Gold blunts. The Infusion Science guide explains how each layer is applied.",
+    "Infusion is how concentrate and flower become one product instead of two ingredients sitting side by side. Flower is the base, the series concentrate (distillate, live resin or live rosin) is carried through it, and the finish named on the pack completes the build: kief or diamonds on Moon Rocks, as the pack prints, and a kief or diamond finish on Gold and Rose Gold blunts. The Infusion Science guide explains how each layer is applied.",
   "/moon-rocks:what-are-moon-rocks":
     "Moon Rocks are a layered cannabis format: flower, concentrate, and kief working together in one complete product. Each Presidential moon rock infused with concentrate is finished with a coat of kief, built to be experienced as a single thing rather than three.",
 };
