@@ -92,7 +92,7 @@ The Silver Flavor Series is built on THC distillate. Its flavor-first, fruit-for
 
 **Distillate and the other Presidential extracts**
 
-Distillate is one of the concentrates in the Presidential catalog. Live resin is the coat that appears across most of the Gold Strain Series, and Rose Gold is the solventless tier built on live rosin. Presidential Moon Pods come in Liquid Diamonds, Live Resin, and Live Rosin families; see [What Are Liquid Diamonds](/learn/what-are-liquid-diamonds) and [Moon Pods](/moon-pods). Different extracts need different heat, so read [Different Extracts Need Different Heat](/learn/different-extracts-need-different-heat).
+Distillate is one of the concentrates in the Presidential catalog. Live resin is the coat that appears across most of the Gold Strain Series, and Rose Gold is the solventless tier built on live rosin. Some Gold names use distillate instead: [the Cherry Gelato jar with Rove](/moon-rocks/cherry-gelato) is flower and distillate, finished with kief. Presidential Moon Pods come in Liquid Diamonds, Live Resin, and Live Rosin families; see [What Are Liquid Diamonds](/learn/what-are-liquid-diamonds) and [Moon Pods](/moon-pods). Different extracts need different heat, so read [Different Extracts Need Different Heat](/learn/different-extracts-need-different-heat).
 
 **Reading a distillate product**
 

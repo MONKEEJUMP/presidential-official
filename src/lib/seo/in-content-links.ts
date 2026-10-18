@@ -636,7 +636,8 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   "/moon-rocks/cap-junky": [
     ["Planet 13 is one of the larger operators in the Nevada market, and Nevada is one of Presidential's active states.", "Planet 13 is a Nevada operator, and Nevada is one of Presidential's active states."],
     // Sitebulb R38 B5.
-    ["Cap Junky and Orange Push Pop are the two releases that carry it.", "Cap Junky and [Orange Push Pop, the other Trendi jar](/moon-rocks/orange-push-pop) are the two releases that carry it."],
+    // Sitebulb R39 A5: grammar fixed, no count.
+    ["Trendi is the Planet 13 line, and Cap Junky and Orange Push Pop are the two releases that carry it.", "Trendi is the Planet 13 line, carried by Cap Junky and [Orange Push Pop, the other Trendi jar](/moon-rocks/orange-push-pop)."],
   ],
   // Sitebulb R34 A2: mini pre-rolls are smaller, so drop the "smallest single unit" claim.
   "/moon-rocks/thc-design-prerolls": [["One gram. The smallest single unit Presidential rolls.", "One gram, one roll."]],
@@ -706,7 +707,12 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   ],
   "/moon-rocks/wedding-cake": [["A dry finishing material bonded to the coat.", "A kief finish bonded to the coat."]],
   "/moon-rocks/white-walker": [["A dry material bonded to the coat as the finish.", "Kief bonded to the coat as the finish."]],
-  "/moon-rocks/xxx": [["under a dry finish rather than a crystalline one.", "under a kief finish rather than a crystalline one."]],
+  "/moon-rocks/xxx": [
+    ["under a dry finish rather than a crystalline one.", "under a kief finish rather than a crystalline one."],
+    // Sitebulb R39 B15: the sentence left out the mini blunt pack.
+    ["the Mini Preroll three-pack at 3 x 0.5 grams.", "the Mini Preroll three-pack at 3 x 0.5 grams, and the Mini Blunt three-pack at 3 x 0.7 grams."],
+    ["the Mini Preroll three-pack at 3 \u00d7 0.5 grams.", "the Mini Preroll three-pack at 3 \u00d7 0.5 grams, and the Mini Blunt three-pack at 3 \u00d7 0.7 grams."],
+  ],
   "/moon-rocks/blue-raspberry": [["where it sits at thumbnail size next to forty other products and needs", "where it sits at thumbnail size and needs"]],
   "/learn/what-are-liquid-diamonds": [
     ["THCa is about 87.7% THC and 12.3% CO₂ by mass.", "THCa keeps about 0.877 of its mass as THC; the rest leaves as CO₂."],
