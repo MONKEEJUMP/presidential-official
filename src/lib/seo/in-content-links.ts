@@ -1176,9 +1176,6 @@ const R44_RULING_OVERRIDES: Readonly<Record<string, readonly (readonly [string, 
     ["runs through the same process the company has used since 2012, and", "runs through the same process, and"],
   ],
   "/moon-rocks/thc-design-prerolls": [[", which has run on that sequence since Los Angeles in 2012.", "."]],
-  "/learn/what-are-moon-rocks": [
-    ["Every pack in the Presidential Moon Rocks collection carries the same lines.", "Each pack in the Presidential Moon Rocks collection carries these lines."],
-  ],
 };
 
 // SURFER-R44: MR jar H2s, placed before "Where to find it" in the CMS body.
