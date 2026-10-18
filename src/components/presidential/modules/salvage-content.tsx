@@ -51,7 +51,7 @@ export const MOON_ROCKS_ANSWERS: readonly AnswerItem[] = [
     question: "Do Presidential Moon Rocks come in other formats?",
     answer: (
       <p>
-        Yes. The same build is rolled into 1g <Link className={a} href="/pre-rolls">Moon Rock pre-rolls</Link>, 1.5g
+        Yes. Moon Rocks also come as 1g <Link className={a} href="/pre-rolls">Moon Rock pre-rolls</Link>, 1.5g
         blunts in a tobacco-free wrap, <Link className={a} href="/mini-pre-rolls">Mini Pre-Rolls</Link> (three 0.5g, 1.5g
         in total), and <Link className={a} href="/mini-blunts">Presidential Mini Blunts</Link> (three 0.7g, 2.1g in
         total).
@@ -236,8 +236,7 @@ export const ABOUT_ANSWERS: readonly AnswerItem[] = [
     question: "How does the Presidential infusion process work?",
     answer: (
       <p>
-        Each infused product starts with cannabis flower, adds a concentrate (distillate, live resin, or live rosin,
-        depending on the series), and closes with a kief or diamond finish. Presidential calls
+        Each infused product starts with cannabis flower, adds a concentrate (distillate, live resin, or live rosin, as the label states), and closes with a kief or diamond finish. Presidential calls
         this the Presidential Infusion System™. THC is batch-specific, so the current package label and its test results
         are the reference for a specific product.
       </p>

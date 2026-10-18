@@ -570,9 +570,9 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
 
       <TermSection id="presidential-thc-extracts" images={[images[4], images[5], images[6]]} title="The extracts behind each series">
         <p>The catalog is organized by what goes into the product, not by marketing tier, so consumers can compare ingredients and flavor profiles.</p>
-        <p><strong>Distillate</strong> is the extract identified with the Silver Flavor Series.</p>
-        <p><strong>Live resin</strong> is the extract identified with the Gold Strain Series and is made from cannabis frozen at harvest rather than first dried and cured.</p>
-        <p><strong>Live rosin</strong> is the solventless extract identified with the Rose Gold Connoisseur Series. Ice water, heat, and pressure are used instead of chemical solvents.</p>
+        <p><strong>Distillate</strong> is a refined extract.</p>
+        <p><strong>Live resin</strong> is made from cannabis frozen at harvest rather than first dried and cured.</p>
+        <p><strong>Live rosin</strong> is a solventless extract. Ice water, heat, and pressure are used instead of chemical solvents.</p>
         <p>These series descriptions explain the catalog structure. The current package label and batch documentation remain authoritative for a specific product.</p>
         <p>
           Presidential&apos;s collaboration strains are grown with the cultivators and brands it works with. That same infused framework appears in the collaboration catalog as{" "}

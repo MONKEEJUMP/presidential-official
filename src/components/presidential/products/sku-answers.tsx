@@ -225,7 +225,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <p className="mt-2 text-sm leading-6 text-po-body">
             XJ-13 sits in the Gold Strain Series, with a citrus-forward, clean profile. The jar label reads flower, live resin,
             distillate, and diamonds. Live resin is
-            made from plants frozen at harvest, and it is the extract identified with the Gold Strain Series. The{" "}
+            made from plants frozen at harvest. The{" "}
             <Link className={linkClass} href="/learn/what-is-live-resin">guide to how live resin is made</Link> goes deeper. For
             another Gold jar with its own label, compare the{" "}
             <Link className={linkClass} href="/moon-rocks/24k">24K moon rocks</Link>. Some searchers know the brand as Presidential
