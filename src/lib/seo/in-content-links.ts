@@ -1042,10 +1042,52 @@ const R42_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [string, st
   ],
 };
 
+const SB43 = (heading: string, body: string) => `**${heading}**\n\n${body}\n\n**Where to find it**`;
+// SURFER-R43: MR jar H2s, placed before "Where to find it" in the CMS body.
+const R43_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
+  "/moon-rocks/presidential-prerolls": [
+    [
+      "**Where to find it**",
+      SB43(
+        "Choosing between the one-gram roll and the minis",
+        "The Presidential Preroll is a single one-gram roll under the House Line name. Shoppers who want smaller servings in one pack can look at the [three-pack mini pre-roll range](/mini-pre-rolls), where each pack holds three 0.5g rolls. Anyone who prefers to work with loose pieces can start from the [loose House Line Moon Rocks jar](/moon-rocks/presidential-moon-rocks), a two-gram pack under the same name. Each product prints its own composition line, so check the pack you are holding for the build and batch test results before you buy.",
+      ),
+    ],
+  ],
+  "/moon-rocks/presidential-moon-rocks": [
+    [
+      "**Where to find it**",
+      SB43(
+        "What distillate means on this label",
+        "The composition line on this jar reads FLOWER · DISTILLATE · KIEF, so the House Line jar uses distillate as its middle layer and is finished with kief. Distillate is refined until it is close to neutral, which leaves the flower and kief to carry most of the aroma. The [plain-language distillate explainer](/learn/what-is-thc-distillate) covers how it is made and how it differs from resin and rosin. For jars where a fruit name leads instead, browse the [fruit-led Silver Flavor jars](/moon-rocks/silver). Check the label in hand for batch details.",
+      ),
+    ],
+  ],
+  "/moon-rocks/gods-gift": [
+    [
+      "**Where to find it**",
+      SB43(
+        "God's Gift among the connoisseur names",
+        "God's Gift sits in the Rose Gold Connoisseur Series, where names often lean on reverence or rarity rather than flavor. Shoppers comparing it with other names in that tier can look at [Cereal Milk from the connoisseur tier](/moon-rocks/cereal-milk), which takes a breakfast-table theme, or the [dessert-named Wedding Cake jar](/moon-rocks/wedding-cake). Rose Gold comes in jars and blunts, so the format you want narrows the choice quickly. Each jar prints its own composition line and batch test results, so read the label on the pack in hand before deciding.",
+      ),
+    ],
+  ],
+  "/moon-rocks/nyc-diesel": [
+    [
+      "**Where to find it**",
+      SB43(
+        "NYC Diesel beside other place-named jars",
+        "NYC Diesel takes its name from a city, and its aroma leans fuel-forward rather than sweet. Shoppers who like names tied to a place can compare it with [SFV OG, the Los Angeles valley jar](/moon-rocks/sfv-og), which carries a regional name of its own. For a softer, berry-leaning option from the same strain-led series, look at the [berry-leaning Blue Dream jar](/moon-rocks/blue-dream). Each jar prints its own composition line, so read the label on the pack you pick up for its build and batch test results rather than assuming any two jars match.",
+      ),
+    ],
+  ],
+};
+
 export function hardcodeInContentLinks(sourcePath: string, rawValue: string): string {
   const swaps = [
     ...(IN_CONTENT_TEXT_OVERRIDES[sourcePath] ?? []),
     ...(R42_TEXT_OVERRIDES[sourcePath] ?? []),
+    ...(R43_TEXT_OVERRIDES[sourcePath] ?? []),
     ...(sourcePath.startsWith("/moon-rocks/") ? MOON_ROCKS_MARKET_SWAPS : []),
   ];
   const value = swaps.reduce((text, [from, to]) => text.split(from).join(to), rawValue);
