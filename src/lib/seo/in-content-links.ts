@@ -1000,6 +1000,10 @@ const R42_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [string, st
     // B12: Surfer R42 H2 after "The sweet end of the catalogue".
     ["**Rainbow Belts formats**", `${R42_RAINBOW_BELTS}**Rainbow Belts formats**`],
   ],
+  "/moon-rocks/pink-cookies": [
+    // A38.
+    ["The Gold Series' most indulgent handshake.", "A sweet Gold Series handshake."],
+  ],
   "/moon-rocks/presidential-x-thc-design": [
     // B10.
     ["Trendi, powered by Planet 13, on Cap Junky and Orange Push Pop.", "Trendi, powered by Planet 13, on [the Trendi Cap Junky release](/moon-rocks/cap-junky) and Orange Push Pop."],
@@ -1013,7 +1017,7 @@ const R42_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [string, st
   ],
   "/moon-rocks/white-walker": [
     // A24.
-    ["Skywalker, a ROVE collaboration that runs across every format in the line.", "Skywalker, a ROVE collaboration."],
+    ["**Skywalker**, a ROVE collaboration that runs across every format in the line.", "**Skywalker**, a ROVE collaboration."],
     ["The build, which does not vary by name", "How Moon Rocks are layered"],
     ["Kief bonded to the coat as the finish.", "A kief or diamond finish bonded to the coat."],
     ["That sequence is the Presidential Infusion System and it has run unchanged since Los Angeles in 2012.", "That sequence is the Presidential Infusion System."],
