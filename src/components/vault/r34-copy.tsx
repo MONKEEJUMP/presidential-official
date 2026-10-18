@@ -229,6 +229,37 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       exact pack and confirm current selection with the store.
     </Block>
   ),
+  // SURFER-R39: mini blunt SKU blocks (24K anchors reworded: already used on the site).
+  'mini-blunts/skywalker': (
+    <Block heading="Skywalker in full-size formats">
+      The Skywalker mini blunt pack carries the ROVE collaboration in a smaller size: flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a blueberry, tropical, and earthy aroma. Shoppers who would rather have one longer roll can look at the <Link className={L} href="/blunts/skywalker">full-size Skywalker blunt</Link>, which lists the same flower, live resin, and diamonds. For a paper-rolled option, the <Link className={L} href="/pre-rolls/skywalker">Skywalker infused pre-roll</Link> uses the same build. Picking between them comes down to size and wrap, since the label shows the same ingredients on each. Read the pack for batch details, and confirm with the store which Skywalker formats it carries.
+    </Block>
+  ),
+  'mini-blunts/waui': (
+    <Block heading="Waui from mini to full-size blunt">
+      Waui mini blunts carry the ROVE collaboration&apos;s pineapple-led tropical aroma, with flower, live resin, and diamonds in a tobacco-free wrap, marked Sativa. The same name also comes as a single longer roll: the <Link className={L} href="/blunts/waui">Waui hemp blunt in full size</Link> lists flower, live resin, and diamonds too. Live resin is made from plants frozen at harvest instead of dried first, and the <Link className={L} href="/learn/what-is-live-resin">frozen-harvest live resin primer</Link> explains why that step matters for aroma. The minis suit shorter sessions or sharing, while the full-size blunt is one longer roll. Read the pack for batch details and ask the store what is in stock.
+    </Block>
+  ),
+  'mini-blunts/xj-13': (
+    <Block heading="XJ-13 as a full-size blunt or pre-roll">
+      The XJ-13 mini blunt pack prints Jack Herer and G13 Haze as the strain&apos;s parentage, and each roll is flower, live resin, and diamonds in a tobacco-free wrap, marked Sativa. The aroma runs citrus, lemon, and pine. The same name comes in larger formats with the same listed build. For one longer hemp-wrapped roll, see the <Link className={L} href="/blunts/xj-13">XJ-13 blunt at full size</Link>. For paper instead of hemp, the <Link className={L} href="/pre-rolls/xj-13">1g XJ-13 pre-roll</Link> is the option. Each format prints its own label, so read it before buying, and confirm with the store which XJ-13 formats are on hand.
+    </Block>
+  ),
+  'mini-blunts/xxx': (
+    <Block heading="XXX in a jar or a single roll">
+      XXX mini blunts are flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a woodsy citrus aroma. The same name appears across other Presidential formats, and shoppers can move between them by size and wrap. To break up your own, look at <Link className={L} href="/moon-rocks/xxx">XXX loose in a moon rock jar</Link>. For a paper-rolled single, the <Link className={L} href="/pre-rolls/xxx">XXX 1g pre-roll</Link> lists flower, live resin, and diamonds. Builds can differ between formats, so read each pack&apos;s label rather than assuming they match. Confirm with the store which XXX formats it carries, and check batch details on the label.
+    </Block>
+  ),
+  'mini-blunts/cherry-gelato': (
+    <Block heading="Cherry Gelato mini blunt or mini pre-roll">
+      Cherry Gelato mini blunts carry the ROVE collaboration&apos;s sweet cherry and creamy aroma, with flower, live resin, and diamonds in a tobacco-free wrap, marked Hybrid. The closest sibling is the <Link className={L} href="/mini-pre-rolls/cherry-gelato">Cherry Gelato mini pre-roll pack</Link>, which lists the same flower, live resin, and diamonds in paper instead of hemp. The choice comes down to wrap. Cherry Gelato is also sold loose as the <Link className={L} href="/moon-rocks/cherry-gelato">Cherry Gelato moon rock jar</Link>, which prints its own build on the label. Read the pack before buying, since formats under one name are not always built the same, and confirm stock with the store.
+    </Block>
+  ),
+  'mini-blunts/24k': (
+    <Block heading="24K across jar and pre-roll">
+      The 24K mini blunt pack holds flower, live resin, and diamonds in a tobacco-free wrap, marked Indica. The same name runs through other Presidential formats, which helps when a store has one size and not another. <Link className={L} href="/pre-rolls/24k">24K in a 1g paper roll</Link> lists flower, live resin, and diamonds. For something to break up yourself, <Link className={L} href="/moon-rocks/24k">24K loose in the jar</Link> carries the name. Each format prints its own label, so check the build and batch details on the pack in hand. Ask the store which 24K formats are on the shelf before you make the trip.
+    </Block>
+  ),
 };
 
 export function VaultSkuCopy({ room, slug }: { readonly room: string; readonly slug: string }) {

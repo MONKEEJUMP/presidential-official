@@ -50,7 +50,9 @@ function descriptionMarking(name: string): string | undefined {
 // Chief R30 ruling (pack labels): these single jars print FLOWER · LIVE RESIN · DIAMONDS (no kief), so they read "finished with diamonds".
 const DIAMOND_FINISH_MOON_ROCKS = new Set(["24k", "blue-dream", "cap-junky"]);
 // Chief R38 rulings (pack labels): the Pink Cookies jar prints FLOWER · DISTILLATE · KIEF; the Presidential OG jar prints DIAMONDS.
+// Chief R39 ruling: the Cherry Gelato jar card prints FLOWER · DISTILLATE · KIEF (its rolled formats print live resin and diamonds).
 const LABEL_BUILD_OVERRIDES: Record<string, string> = {
+  "cherry-gelato": "flower and distillate, finished with kief",
   "pink-cookies": "flower and distillate, finished with kief",
   "presidential-og": "flower and live resin, finished with diamonds",
 };
@@ -354,6 +356,15 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">What makes the Waui jar</h2>
           <p className="mt-2 text-sm leading-6 text-po-body">
             Waui is a Gold Strain Series jar made in collaboration with Rove, and the label lists flower, live resin, and diamonds. The aroma is bright and tropical, sweeter than the denser Gold names. Live resin is extracted from plants frozen at harvest, and the <Link className={linkClass} href="/learn/what-is-live-resin">overview of live resin extraction</Link> covers how that preserves aroma. Shoppers drawn to the tropical side can also compare the distillate-based <Link className={linkClass} href="/moon-rocks/tropical">Tropical jar in the Silver series</Link>. Waui also appears in pre-roll, blunt, mini pre-roll, and mini blunt formats; each pack prints its own build, so read the label before buying and confirm current stock with the store.
+          </p>
+        </>
+      ) : null}
+      {/* SURFER-R39: Cherry Gelato jar H3 (jar label FLOWER · DISTILLATE · KIEF, chief R39). */}
+      {slug === "cherry-gelato" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">What the Cherry Gelato jar label lists</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Cherry Gelato is a Rove collaboration, and Presidential packs mark it as Hybrid. The jar label lists flower and distillate, finished with kief. Its aroma opens with dark cherry and settles into something creamier underneath. Distillate is a refined concentrate, and the <Link className={linkClass} href="/learn/what-is-thc-distillate">THC distillate refining guide</Link> explains how it is produced. Kief, the collected trichome material, forms the outer layer. The same name also comes in rolled formats, and each pack prints its own build, so read the label on the format you pick rather than assuming it matches the jar. Cannabinoid content is batch-specific; confirm stock with the store.
           </p>
         </>
       ) : null}
