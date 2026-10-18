@@ -102,6 +102,11 @@ export function BluntsExperience({
         <div className={shared.storyCopy}>
           <p>A Presidential Moon Rock blunt brings cannabis flower and concentrate together in a tobacco-free wrap. Explore fruit flavors, classic gas and pine, and cultivation collaborations—each with its own recipe and character.</p>
           <p>Choose the infusion that speaks to you: distillate and kief, live resin and diamonds, or a live-rosin selection. Each single blunt contains 1.5g. Find your favorite through a licensed retailer.</p>
+          {/* INLINKS-COPY-R39: /blunts extract and store H3s (no infusion count; reused learn-guide anchors reworded). */}
+          <h3>The extracts behind each blunt infusion</h3>
+          <p>Each Presidential Moon Rock blunt pack names its concentrate: distillate, live resin or live rosin. Read <Link href="/learn/what-is-thc-distillate">how distillate is made</Link>, <Link href="/learn/what-is-live-resin">the live resin process</Link> and <Link href="/learn/what-is-live-rosin">how live rosin is pressed</Link> before you pick one.</p>
+          <h3>Smaller blunts and store orders</h3>
+          <p>For a smaller roll, see the <Link href="/presidential-art/mini-blunts">Presidential mini blunt artwork</Link>. Stores that want to carry Moon Rock blunts can start with <Link href="/wholesale">wholesale for Presidential blunts</Link>.</p>
         </div>
         <div className={shared.featuredMosaic}>
           {featuredIndexes.map((index, position) => {
