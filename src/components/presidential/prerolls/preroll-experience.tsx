@@ -278,6 +278,28 @@ export function PreRollExperience({
             Questions can go through <Link href="/contact">the Presidential team&apos;s contact page</Link>.
           </p>
         </div>
+        {/* INLINKS-COPY-R46: /pre-rolls H3s (anchors reworded for uniqueness: "White Walker as a 1.5g blunt", "how infusion works on flower" and the "Presidential pre-rolls in ..." pattern exist or near-repeat). */}
+        <div>
+          <h3>Pre-roll names in other formats</h3>
+          <p>
+            Several pre-roll names also come as a hemp-wrap blunt. See <Link href="/blunts/24k">the 24K hemp-wrap blunt</Link> or{" "}
+            <Link href="/blunts/white-walker">White Walker in blunt form</Link>.
+          </p>
+        </div>
+        <div>
+          <h3>Pre-roll shoppers outside the Southwest</h3>
+          <p>
+            Store finder pages are sorted by state. Try <Link href="/find-us/ca">Presidential pre-rolls in California</Link>,{" "}
+            <Link href="/find-us/mi">where to buy in Michigan</Link> or <Link href="/find-us/ny">a New York retailer search</Link>.
+          </p>
+        </div>
+        <div>
+          <h3>Pre-roll reading on the Learn hub</h3>
+          <p>
+            Start at <Link href="/learn">the Learn guides index</Link>, or read{" "}
+            <Link href="/learn/infusion-science">what infusion does to flower</Link>.
+          </p>
+        </div>
         <div className={styles.tierSections}>
           {TIER_SECTION_ORDER.map((section) => {
             const entries = tieredArtwork.filter(({ placement }) => placement.section === section);

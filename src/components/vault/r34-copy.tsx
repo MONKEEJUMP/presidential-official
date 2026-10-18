@@ -263,7 +263,9 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       resin and finished with kief, and the <Link className={L} href="/blunts/xxx">XXX infused blunt</Link> puts the name in a
       hemp wrap. If you&apos;d rather have a smaller roll, the{' '}
       <Link className={L} href="/mini-pre-rolls/xxx">XXX mini pre-roll pack</Link> splits the same name into shorter rolls, and{' '}
-      <Link className={L} href="/mini-blunts/xxx">XXX mini blunts in a hemp wrap</Link> do the same in hemp. Read
+      <Link className={L} href="/mini-blunts/xxx">XXX mini blunts in a hemp wrap</Link> do the same in hemp. {/* INLINKS-COPY-R46: lost /moon-rocks/gold link (anchor reworded: "Gold Strain Series moon rocks" is an existing anchor). */}The
+      XXX jar sits on <Link className={L} href="/moon-rocks/gold">the Gold series jar listing</Link> with the other strain-led
+      names. Read
       the label on the exact pack and confirm current selection with the store.
     </Block>
       {/* SURFER-R45: /pre-rolls/xxx H2 ("simplest way" softened; art anchor reworded: "pre-roll pack art gallery" is part of an existing anchor). */}

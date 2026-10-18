@@ -332,6 +332,17 @@ export function VapeExperience({ page }: { page: VapePage }) {
             <Link href="/find-us/mi">Michigan store listings for Moon Pods</Link> or{' '}
             <Link href="/find-us/ny">New York store listings for Moon Pods</Link> before you look for a pod.
           </p>
+          {/* INLINKS-COPY-R46: /moon-pods H3s (anchors reworded: "Gold Strain Series" and "Blue Dream Moon Rocks" are existing anchors; state anchors kept clear of sale claims). */}
+          <h3>Moon Pods beside the jars</h3>
+          <p>
+            To compare a pod with a jar, open <Link href="/moon-rocks/gold">Presidential&apos;s Gold jars</Link> or{' '}
+            <Link href="/moon-rocks/blue-dream">a Blue Dream jar of moon rocks</Link>.
+          </p>
+          <h3>Moon Pods shoppers in other states</h3>
+          <p>
+            Store finder pages are sorted by state. Try <Link href="/find-us/az">the Arizona store finder page</Link>,{' '}
+            <Link href="/find-us/ok">Oklahoma&apos;s licensed-retailer page</Link> or <Link href="/find-us/nv">the Nevada lookup</Link>.
+          </p>
         </div>
       ) : null}
       <div className={s.chapterColors}><span className={s.label}>Orbit finish</span><ColorChoices value={finish} onChange={setFinish} label="Moon Pods chapter finish" /></div>
