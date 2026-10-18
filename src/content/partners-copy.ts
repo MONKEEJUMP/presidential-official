@@ -62,7 +62,7 @@ export const PARTNERS_COPY = {
       "Every jar, every blunt, every pre-roll reaches you through a licensed dispensary in select state markets that chose to carry it, and every one of them made that call on their own.",
       "These are the retailers who put Presidential on their shelves. Independent shops running one location and multi-state operators running thirty. Storefronts in downtown Los Angeles, in Tulsa, in Brooklyn, in Henderson, in Detroit, in Phoenix. Different markets, different customers, one shared decision.",
       "If you are holding a Presidential product, it came through one of them.",
-      "That matters for a second reason. Authentic Presidential moves through licensed channels - the dispensaries listed here are where you find it. Every partner on this page is a verified stop in that chain.",
+      "That matters for a second reason. Authentic Presidential moves through licensed channels - the dispensaries listed here are where you find it.",
       "Pick your state below. It lists licensed retailers that carry Presidential, with a direct route to the closest one."
     ]
   },
@@ -115,7 +115,7 @@ export const PARTNERS_COPY = {
     "description": "Michigan's licensed dispensaries carrying authentic Presidential - across Detroit, Ann Arbor, Grand Rapids and the state. Find one near you.",
     "body": [
       "Licensed Michigan retailers carry Presidential.",
-      "Detroit and the surrounding metro anchor it - Inkster, Center Line, River Rouge, Riverview, the corridor communities that built the state's retail market first. Ann Arbor and Kalamazoo hold their own clusters. Listings run west toward Grand Rapids and north into the towns along the lakes.",
+      "Detroit and the surrounding metro anchor it - Inkster, Center Line, River Rouge, Riverview. Ann Arbor and Kalamazoo hold their own clusters. Listings run west toward Grand Rapids and north into the towns along the lakes.",
       "Formats vary by store. The locator below will route you to your closest Michigan partner."
     ]
   },
