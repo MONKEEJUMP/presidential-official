@@ -638,6 +638,7 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   "/moon-rocks/thc-design-moon-rocks": [
   // Chief R31 ruling: collaboration page, no loose-jar specs (keep URL, no redirect).
     ["Two grams, loose, nothing rolled.", "Presidential x THC Design, built on live resin."],
+    ["This is the only Presidential \u00d7 THC Design format that arrives unfinished, and that changes what it is.", "This page covers the Presidential x THC Design collaboration: flower, live resin and diamonds, released as the Crescendo and XJ-13 Moon Rock blunts. The [Presidential x THC Design collection](/moon-rocks/presidential-x-thc-design) lists both releases."],
     ["This is the only Presidential x THC Design format that arrives unfinished, and that changes what it is.", "This page covers the Presidential x THC Design collaboration: flower, live resin and diamonds, released as the Crescendo and XJ-13 Moon Rock blunts. The [Presidential x THC Design collection](/moon-rocks/presidential-x-thc-design) lists both releases."],
     ["**Loose is a different decision**", ""],
     ["Every other format in the catalogue makes the choice for you. The Blunt is one object at 1.5 grams. The Preroll is one at 1 gram. The Mini three-packs are three at 0.7 or 0.5 grams. Each of those is a finished thing you take out and use.", ""],
