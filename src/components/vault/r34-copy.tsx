@@ -71,6 +71,59 @@ export function VaultRoomCopy({ room }: { readonly room: string }) {
 }
 
 const SKU_COPY: Readonly<Record<string, ReactNode>> = {
+  // SURFER-R37: pre-roll and mini pre-roll SKU blocks (builds from each SKU's description and pack).
+  'pre-rolls/crescendo': (
+    <Block heading="Crescendo as a jar and as a roll">
+      The Crescendo name runs across more than one Presidential format. The pre-roll puts flower, live resin, and diamonds into
+      one finished 1g roll, marked Sativa on the pack. Shoppers who would rather break up their own can look at the{' '}
+      <Link className={L} href="/moon-rocks/crescendo">Crescendo moon rock jar</Link>, which carries the same strain name. Both
+      sit in the Gold Strain Series, so the live resin build is the common thread between them. To compare Crescendo with other
+      strains built the same way, browse the <Link className={L} href="/moon-rocks/gold">live resin Gold lineup</Link>. Ask the
+      store which formats are on hand, and read the pack label for batch details before you buy.
+    </Block>
+  ),
+  'pre-rolls/gods-gift': (
+    <Block heading="Where live rosin fits in God's Gift">
+      God&apos;s Gift belongs to the Rose Gold Connoisseur Series, the solventless tier of the Presidential catalog. Each 1g
+      pre-roll is flower, live rosin, and diamonds, marked Indica on the pack. Live rosin is pressed from fresh material with ice
+      water, heat, and pressure, and no solvents are used along the way. The{' '}
+      <Link className={L} href="/learn/what-is-live-rosin">solventless rosin explainer</Link> covers that process step by step.
+      Shoppers who prefer a jar can find the same name as a{' '}
+      <Link className={L} href="/moon-rocks/gods-gift">God&apos;s Gift moon rock jar</Link>. Availability depends on the
+      retailer, so confirm the current selection with the store and check the label on each pack for batch information.
+    </Block>
+  ),
+  'mini-pre-rolls/waui': (
+    <Block heading="Waui in mini and full-size form">
+      Waui is a ROVE collaboration in the Gold Strain Series, and the mini pack splits it into three 0.5g rolls. Each one is
+      flower, live resin, and diamonds, marked Sativa, with a pineapple-led tropical aroma. The minis suit a shorter session or
+      sharing a pack among friends. Shoppers who want one larger roll can pick the{' '}
+      <Link className={L} href="/pre-rolls/waui">full-size Waui roll</Link>, which carries the same strain name. Another name
+      from the same partnership is <Link className={L} href="/moon-rocks/skywalker">Skywalker, another ROVE name</Link>, offered
+      as a jar. Retail stock varies from store to store, so confirm the format you want before the trip and read the pack label
+      for batch details.
+    </Block>
+  ),
+  'mini-pre-rolls/xj-13': (
+    <Block heading="Other ways to buy XJ-13">
+      XJ-13 lists Jack Herer and G13 Haze on the pack as its parentage, and the mini pack holds three 0.5g rolls of flower, live
+      resin, and diamonds, marked Sativa. Its aroma leans citrus and clean. The same strain also appears in larger and
+      hemp-wrapped formats. For a single larger roll, the <Link className={L} href="/pre-rolls/xj-13">full 1g XJ-13 roll</Link>{' '}
+      keeps the same build in one piece. For a tobacco-free option, look at{' '}
+      <Link className={L} href="/mini-blunts/xj-13">XJ-13 in a hemp mini wrap</Link>. Each format has its own label, so read the
+      pack for its build and batch details, and ask the store which XJ-13 formats it has in stock.
+    </Block>
+  ),
+  'mini-pre-rolls/xxx': (
+    <Block heading="XXX beyond the mini pack">
+      XXX comes from the Gold Strain Series, and the mini pack holds three 0.5g rolls, each one flower, live resin, and diamonds,
+      marked Indica. The aroma reads woodsy with a citrus edge. Some shoppers like the minis for a short session; others want a
+      single roll or a hemp wrap. The <Link className={L} href="/pre-rolls/xxx">single XXX roll</Link> offers the strain as one
+      1g pre-roll, and the <Link className={L} href="/mini-blunts/xxx">XXX mini blunt pack</Link> moves it into a tobacco-free
+      hemp wrap. Each format prints its own build on the label, so read the pack before buying, and confirm with the store which
+      XXX formats it currently has on hand.
+    </Block>
+  ),
   // SURFER-R36: Gorilla Goo mini blunts and the 24K blunt (single SKUs follow their labels).
   'mini-blunts/gorilla-goo': (
     <Block heading="Gorilla Goo at a smaller scale">
