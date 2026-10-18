@@ -51,7 +51,7 @@ const productLanes = [
   },
   {
     title: "Moon Rock blunts",
-    body: "A focused path for blunt-format interest without sending visitors away from the official Presidential site.",
+    body: "Moon Rocks rolled in a tobacco-free hemp wrap.",
   },
   {
     title: "Series architecture",

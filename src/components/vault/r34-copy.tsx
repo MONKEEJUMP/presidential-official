@@ -32,8 +32,7 @@ const ROOM_COPY: Readonly<Record<string, ReactNode>> = {
       Each work in this room fronts a Presidential Moon Rock mini blunt pack: the same illustrated identity as the full-size
       blunt, scaled to a smaller roll. Shoppers searching for Presidential mini blunts often meet the art first, so it helps to
       know what sits behind it. The label build is flower, live resin, and diamonds in a tobacco-free wrap, and each pack carries
-      the strain name and an Indica, Hybrid, or Sativa marking under the art. To read one pack in detail, open the{' '}
-      <Link className={L} href="/mini-blunts/pink-cookies">Pink Cookies three-pack</Link>. To see the art for every format, go
+      the strain name and an Indica, Hybrid, or Sativa marking under the art. To read one pack in detail, open its card below. To see the art for every format, go
       back to the <Link className={L} href="/presidential-art">Vault front room</Link>. When a pack catches your eye, use the ZIP
       search and confirm with the store.
     </Block>
@@ -75,7 +74,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   // SURFER-R35: mini and pre-roll SKU blocks (single SKUs follow their labels; jar builds follow the jar's own label).
   'mini-pre-rolls/presidential-og': (
     <Block heading="The house name in other sizes">
-      Presidential OG is the name the brand puts on its own house product, with the crest and no partner mark. The mini
+      Presidential OG carries the brand&apos;s own name, with the crest and no partner mark. The mini
       pre-rolls are flower, live resin, and diamonds in paper, marked Hybrid on the pack. If you searched for Presidential
       prerolls and want the house name in particular, this is the smallest paper version. The same name comes as a jar: the{' '}
       <Link className={L} href="/moon-rocks/presidential-og">Presidential OG moon rock jar</Link> holds the build without paper,
@@ -103,7 +102,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       you&apos;d rather have paper, the{' '}
       <Link className={L} href="/mini-pre-rolls/presidential-og">Presidential OG paper minis</Link> carry the same name in a
       different wrap. For the unrolled version, see the{' '}
-      <Link className={L} href="/moon-rocks/presidential-og">house-strain moon rock jar</Link>, which follows its own label. Read
+      <Link className={L} href="/moon-rocks/presidential-og">OG jar of moon rocks</Link>, which follows its own label. Read
       the label on the exact pack and confirm current selection with the store.
     </Block>
   ),

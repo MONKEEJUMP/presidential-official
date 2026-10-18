@@ -28,7 +28,7 @@ Every Presidential pack carries a composition line — three or four ingredients
 
 Those lines are not decoration and they are not marketing. They describe what is physically in the product, layer by layer, and they change from pack to pack. Two Presidential products with similar names can be built four different ways.
 
-Most people never read them, because nobody has explained what the words mean. That is what this section is for.
+This guide explains what the words mean.
 
 **What's here**
 
@@ -185,7 +185,7 @@ Presidential does not sell direct. Every product reaches you through a licensed 
 
 Flower, coated in a concentrate, finished with kief that bonds to the coat. Three stages, applied in sequence. That process is the Presidential Infusion System and the company has run on it since Los Angeles in 2012.
 
-The composition line printed on the front of every pack tells you which three materials were used. It changes from product to product — some packs print live resin and diamonds, others distillate and kief, and Cap Junky prints liquid live resin. It is the most useful thing to read on a Presidential label and most people never look at it.
+The composition line printed on the front of every pack tells you which three materials were used. It changes from product to product — some packs print live resin and diamonds, others distillate and kief, and Cap Junky prints liquid live resin. It is the most useful thing to read on a Presidential label.
 
 **The formats**
 
