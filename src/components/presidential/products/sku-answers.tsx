@@ -49,6 +49,8 @@ function descriptionMarking(name: string): string | undefined {
 
 // Chief R30 ruling (pack labels): these single jars print FLOWER · LIVE RESIN · DIAMONDS (no kief), so they read "finished with diamonds".
 const DIAMOND_FINISH_MOON_ROCKS = new Set(["24k", "blue-dream", "cap-junky"]);
+// Chief R38 ruling (pack label): the Pink Cookies jar prints FLOWER · DISTILLATE · KIEF.
+const LABEL_BUILD_OVERRIDES: Record<string, string> = { "pink-cookies": "flower and distillate, finished with kief" };
 
 function diamondFinishBuild(name: string): string | undefined {
   const build = offersFor(name).find((offer) => offer.build)?.build;
@@ -73,7 +75,7 @@ function madeWith(name: string, series?: string): string | undefined {
 
 export function SkuAnswers({ name, series, slug }: { readonly name: string; readonly series?: string; readonly slug: string }) {
   if (/pre-?roll|blunt/i.test(name)) return null;
-  const materials = (DIAMOND_FINISH_MOON_ROCKS.has(slug) ? diamondFinishBuild(name) : undefined) ?? madeWith(name, series);
+  const materials = LABEL_BUILD_OVERRIDES[slug] ?? (DIAMOND_FINISH_MOON_ROCKS.has(slug) ? diamondFinishBuild(name) : undefined) ?? madeWith(name, series);
   const marking = packMarking(name);
   const cherryGelatoMarking = slug === "cherry-gelato" ? descriptionMarking("Cherry Gelato") : undefined;
   const watermelonOffers = slug === "watermelon" ? offersFor(name) : [];
@@ -217,10 +219,10 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h3 className="mt-6 text-base font-semibold text-po-ink">Pink Cookies, jar and roll</h3>
           <p className="mt-2 text-sm leading-6 text-po-body">
             Pink Cookies is a Gold Strain Series name, marked Indica on Presidential packs, with a sweet, doughy, rich profile. The
-            jar label reads flower, live resin, distillate, and diamonds. The pre-roll, blunt, mini pre-rolls, and mini blunts read
-            flower, live resin, and diamonds, so the jar is the format that adds distillate. That makes it worth reading the label on each
+            jar label reads flower and distillate, finished with kief. The pre-roll, blunt, mini pre-rolls, and mini blunts read
+            flower, live resin, and diamonds, so the jar is the format built on distillate. That makes it worth reading the label on each
             format separately. Shoppers searching for the Presidential pink strain can start with the jar, then read{" "}
-            <Link className={linkClass} href="/learn/what-is-live-resin">how live resin is extracted</Link> for the concentrate the formats share. For what the
+            <Link className={linkClass} href="/learn/what-is-live-resin">how live resin is extracted</Link> for the concentrate in the rolls. For what the
             refined concentrate in the jar is, see the <Link className={linkClass} href="/learn/what-is-thc-distillate">distillate guide</Link>. Confirm
             current selection with the store.
           </p>
