@@ -739,7 +739,7 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
       <TermSection id="presidential-cannabis-catalog" title="What the company makes" wideMedia={<ProductCollage />}>
         <p><strong>Official products. Organized collections. One standard.</strong></p>
         <p>The catalog is organized to make the relationship between extract, profile, and format visible. Each grouping has a clear role while remaining part of the same Presidential product platform.</p>
-        <p>Collections include the Silver Flavor Series, Gold Strain Series, Rose Gold Connoisseur Series, Presidential Line, Presidential House Line, and Presidential x THC Design.</p>
+        <p>Collections include the Silver Flavor Series, Gold Strain Series, Rose Gold Connoisseur Series, <Link className={inlineLinkClass} href="/moon-rocks/presidential-line">Presidential Line partner releases</Link>, Presidential House Line, and Presidential x THC Design.</p>
         <p>
           Formats: the{" "}
           <Link className={inlineLinkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>,{" "}
@@ -759,8 +759,8 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
 
       <TermSection id="presidential-cannabis-markets" images={[images[5]]} title="Where it is carried" tone="contrast">
         <p>Presidential is sold through licensed retailers in California, Oklahoma, New York, Nevada, Michigan, and Arizona, and is landing soon in Washington.</p>
-        <p>Each state market has its own retailer network and product mix. California connects directly to the company&apos;s Los Angeles roots, while the other markets extend Presidential formats to customers through state-regulated cannabis programs.</p>
-        <p>The store finder turns that geographic footprint into a useful customer tool. Entering a ZIP code returns the nearest listed retailers with real mileage, so people can see the most practical path to a listed store.</p>
+        <p>Each state has its own licensed retailers and product mix. California connects directly to the company&apos;s Los Angeles roots, while the other markets extend Presidential formats to customers through state-regulated cannabis programs.</p>
+        <p>The store finder makes that practical. Entering a ZIP code returns the nearest listed retailers with real mileage, so people can see the most practical path to a listed store.</p>
         <Link className={buttonLinkClass} href="/find-us">Find a licensed retailer</Link>
         <p>Licensed-retailer availability varies by market, location, and timing.</p>
       </TermSection>

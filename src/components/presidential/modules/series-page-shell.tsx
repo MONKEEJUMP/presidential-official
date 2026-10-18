@@ -90,6 +90,17 @@ export async function SeriesPageShell({
   const seriesName = definition.productFilter.series;
   const title = route?.h1 || definition.title;
   const description = route?.description || definition.description;
+  // Sitebulb R36 B5: on-page link to Cereal Milk inside the Rose Gold intro line (the meta description stays as written).
+  const cerealTail = "and Cereal Milk.";
+  const descriptionNode =
+    definition.slug === "rose-gold" && description.endsWith(cerealTail) ? (
+      <>
+        {description.slice(0, -cerealTail.length)}and{" "}
+        <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/cereal-milk">the Cereal Milk Rose Gold jar</Link>.
+      </>
+    ) : (
+      description
+    );
   const meta = seriesMetaFor(seriesName);
   const catalog = await readSeriesItems(definition);
   const film = SERIES_FILMS[seriesName];
@@ -148,7 +159,7 @@ export async function SeriesPageShell({
               </section>
             ) : undefined
           }
-          supportingText={SERIES_INTROS[definition.slug] ? [meta.positioning, description, SERIES_INTROS[definition.slug]] : [meta.positioning, description]}
+          supportingText={SERIES_INTROS[definition.slug] ? [meta.positioning, descriptionNode, SERIES_INTROS[definition.slug]] : [meta.positioning, descriptionNode]}
           title={title}
         />
 
@@ -179,7 +190,7 @@ export async function SeriesPageShell({
                 follows its own label rather than a series rule. Garlic Cookies reads flower, distillate, and kief. Head Cheese reads
                 flower, live resin, and diamonds. Before you buy, check the composition line on the exact jar, along with the partner
                 name printed on the pack. For the line that carries the Presidential name with no strain or partner name, see the{" "}
-                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/presidential-house-line">house-named formats</Link>; its Moon Rocks are
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/presidential-house-line">house-named formats</Link>, whose Moon Rocks are
                 finished with kief. For how aroma is built into each profile, read the{" "}
                 <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/learn/flavor-science">flavor science guide</Link>. Then confirm with the store.
               </p>
@@ -198,7 +209,9 @@ export async function SeriesPageShell({
                 its own pack. The blunts carry a kief or diamond finish in a tobacco-free hemp wrap. For the
                 founding story behind these formats, read the <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/our-story">brand&apos;s Los Angeles beginnings</Link>.
                 To see strain-named jars instead, browse the <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/gold">Gold strain jars</Link>.
-                When you&apos;re ready to buy, use the store finder and confirm with the store.
+                For partner releases outside the house recipe, see{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/presidential-line">the Presidential Line jars</Link>. When you&apos;re ready
+                to buy, use the store finder and confirm with the store.
               </p>
             </div>
           </Scene>

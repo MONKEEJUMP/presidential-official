@@ -72,7 +72,7 @@ Collaboration releases run alongside the three tiers. Presidential x THC Design 
 
 **Where to find Presidential**
 
-Presidential is a wholesale brand and sells exclusively through licensed retailers. Availability varies by retailer and stock changes by store and by day. Presidential's footprint across [select state markets](/find-us) spans California, Oklahoma, New York, Nevada, Michigan, Arizona and Washington. Use the zip search to find the nearest licensed retailer carrying Presidential. For adults 21+ where legal.`,
+Presidential is a wholesale brand and sells exclusively through licensed retailers. Availability varies by retailer and stock changes by store and by day. Presidential sells through licensed retailers in [select state markets](/find-us): California, Oklahoma, New York, Nevada, Michigan and Arizona, and Washington is landing soon. Use the zip search to find the nearest licensed retailer carrying Presidential. For adults 21+ where legal.`,
   },
   "/learn/what-is-thc-distillate": {
     label: "What Is THC Distillate",
@@ -137,7 +137,7 @@ Presidential is landing soon in Washington.
 
 **What that means, plainly**
 
-Presidential's footprint across [select state markets](/find-us) spans California, Oklahoma, Nevada, New York, Michigan, Arizona and Washington.
+Presidential sells through licensed retailers in [select state markets](/find-us): California, Oklahoma, New York, Nevada, Michigan and Arizona, and Washington is landing soon.
 
 The retailer search on this page will show results once verified licensed Washington retailers carrying Presidential are confirmed.
 
@@ -197,9 +197,9 @@ The Gold Strain Series carries named strains — Blue Dream, King Louis, 24K, Pr
 
 Alongside them run the collaboration releases, each carrying a partner's mark on the front: Ball Family Farms, Nature's Chemistry of Las Vegas, Top Shelf Cultivation, THC Design, Trendi by Planet 13, Moxie, Polaris Cannabis, ROVE, Platinum and VladTV.
 
-**Arizona in the wider footprint**
+**Arizona and the other Presidential states**
 
-Presidential's footprint includes Washington; see the [Washington retailer finder](/find-us/wa). Arizona sits in that group alongside California, Oklahoma, Nevada, New York and Michigan.
+Arizona sits alongside California, Oklahoma, Nevada, New York and Michigan. For Washington, see the [Washington retailer finder](/find-us/wa).
 
 Each market carries its own mix. Some collaboration releases are market-specific — the Platinum partnership packs carry Michigan regulatory markings, and Nature's Chemistry prints Las Vegas, Nevada on its packs. What reaches Arizona shelves is decided by distribution and by the retailers themselves.
 
@@ -223,7 +223,7 @@ Presidential is wholesale and does not sell direct. Every product reaches you th
 
 NYC Diesel is in the catalogue, and its pack is the only one Presidential prints built around a landmark. A pale full moon fills the background. The Statue of Liberty stands in front of it, torch raised, flanked by the New York skyline, the whole scene rising out of rolling green-and-yellow smoke. Marked Hybrid, built on flower, live resin and diamonds.
 
-When the company started in Los Angeles in 2012, New York was not a legal market. It is now one of the largest in the footprint, and the strain that carries the city's name is sold in it.
+When the company started in Los Angeles in 2012, New York was not a legal market. It is now a legal market, and the strain that carries the city's name is sold there.
 
 **The formats**
 
@@ -237,9 +237,9 @@ Every Presidential pack carries the same architecture: WORLD'S STRONGEST across 
 
 That composition line is the one that matters. FLOWER · LIVE RESIN · DIAMONDS on Blue Dream and 24K. FLOWER · DISTILLATE · KIEF on the self-titled flagship. FLOWER · LIQUID LIVE RESIN · DIAMONDS on Cap Junky. Same house, same process, different builds — and the pack always says which.
 
-**The footprint**
+**Where Presidential is sold**
 
-Presidential's footprint spans California, Oklahoma, Nevada, Arizona, Michigan, New York and Washington. For Washington stores, use the [Washington retailer finder](/find-us/wa).
+Presidential sells through licensed retailers in California, Oklahoma, New York, Nevada, Michigan and Arizona, and Washington is landing soon. For Washington stores, use the [Washington retailer finder](/find-us/wa).
 
 **Start with the search**
 
@@ -257,7 +257,7 @@ Enter your zip code above to find the licensed New York retailers nearest you ca
 | Gold Strain Series | Named strains — Blue Dream, King Louis, 24K, Presidential OG, NYC Diesel, Galactic Gas and others |
 | **Rose Gold Connoisseur** | The tier above both |
 
-Silver leads with a flavour idea. Gold leads with a strain name people already ask for. Rose Gold is where the house puts its most selective work.
+Silver leads with a flavour idea. Gold leads with a strain name people already ask for. Rose Gold is the live rosin tier.
 
 **In the tier**
 
@@ -361,7 +361,7 @@ That composition line is the habit worth building. On the moon rock side it runs
 
 Presidential is wholesale. It does not sell direct, to anyone, in any category. Every product reaches you through a licensed retailer, and each shop decides independently what to carry. Availability varies by retailer, by market and by day.
 
-The brand's footprint across [select state markets](/find-us) spans California, Oklahoma, Nevada, New York, Michigan, Arizona and Washington.
+Presidential sells through licensed retailers in [select state markets](/find-us): California, Oklahoma, New York, Nevada, Michigan and Arizona, and Washington is landing soon.
 
 **Collaborations run across the line**
 

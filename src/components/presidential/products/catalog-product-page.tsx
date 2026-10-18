@@ -73,16 +73,25 @@ const FLAVOR_PAGE_BY_SKU_PATH: Readonly<Record<string, { readonly href: string; 
 // (pre-rolls, blunts, mini pre-rolls, mini blunts). Values come only from
 // src/content/vault/specs.json; a field with no data is left out.
 // Sitebulb R35 B7/B15/B16/B21/B22: cross-format inlinks placed right after the build line.
-const VAULT_BUILD_LINKS: Readonly<Record<string, { readonly lead: string; readonly href: string; readonly anchor: string }>> = {
-  "mini-pre-rolls/pink-cookies": { lead: "For the same name in a tobacco-free wrap, see", href: "/mini-blunts/pink-cookies", anchor: "Pink Cookies in a hemp-wrap three-pack" },
-  "pre-rolls/xj-13": { lead: "The same name comes loose as", href: "/moon-rocks/xj-13", anchor: "XJ-13 moon rocks in the jar" },
-  "mini-blunts/xj-13": { lead: "For the unrolled format, see", href: "/moon-rocks/xj-13", anchor: "the XJ-13 jar" },
-  "blunts/24k": { lead: "For paper instead of a wrap, see", href: "/pre-rolls/24k", anchor: "the 24K single pre-roll" },
-  "mini-pre-rolls/24k": { lead: "For one full roll, see", href: "/pre-rolls/24k", anchor: "24K at the 1g size" },
+// Sitebulb R36 B3/B7/B9/B10/B15 add more of these.
+type BuildLink = { readonly lead: string; readonly href: string; readonly anchor: string; readonly tail?: string };
+const VAULT_BUILD_LINKS: Readonly<Record<string, readonly BuildLink[]>> = {
+  "mini-pre-rolls/pink-cookies": [
+    { lead: "For the same name in a tobacco-free wrap, see", href: "/mini-blunts/pink-cookies", anchor: "Pink Cookies in a hemp-wrap three-pack" },
+    { lead: "The", href: "/moon-rocks/pink-cookies", anchor: "full Pink Cookies moon rock build", tail: " adds distillate" },
+  ],
+  "mini-pre-rolls/gorilla-goo": [{ lead: "For the tobacco-free wrap, see the", href: "/mini-blunts/gorilla-goo", anchor: "Gorilla Goo hemp-wrap minis" }],
+  "mini-blunts/skywalker": [{ lead: "The", href: "/moon-rocks/skywalker", anchor: "Skywalker moon rock jar", tail: " carries the same build loose" }],
+  "mini-pre-rolls/skywalker": [{ lead: "Or choose", href: "/moon-rocks/skywalker", anchor: "loose Skywalker moon rocks" }],
+  "mini-blunts/24k": [{ lead: "The full-size roll is the", href: "/blunts/24k", anchor: "24K 1.5g blunt" }],
+  "pre-rolls/xj-13": [{ lead: "The same name comes loose as", href: "/moon-rocks/xj-13", anchor: "XJ-13 moon rocks in the jar" }],
+  "mini-blunts/xj-13": [{ lead: "For the unrolled format, see", href: "/moon-rocks/xj-13", anchor: "the XJ-13 jar" }],
+  "blunts/24k": [{ lead: "For paper instead of a wrap, see", href: "/pre-rolls/24k", anchor: "the 24K single pre-roll" }],
+  "mini-pre-rolls/24k": [{ lead: "For one full roll, see", href: "/pre-rolls/24k", anchor: "24K at the 1g size" }],
 };
 
 function VaultSpecs({ product }: { readonly product: VaultProduct }) {
-  const buildLink = VAULT_BUILD_LINKS[`${product.room}/${vaultStrainSlug(product)}`];
+  const buildLinks = VAULT_BUILD_LINKS[`${product.room}/${vaultStrainSlug(product)}`] ?? [];
   const spec = vaultSpecs(product);
   const rows: { readonly label: string; readonly value: string }[] = [{ label: "Format", value: `Moon Rock ${product.format}` }];
   if (spec) {
@@ -103,7 +112,7 @@ function VaultSpecs({ product }: { readonly product: VaultProduct }) {
       <dl className={`${styles.facts} ${styles.specFacts}`}>
         {rows.map((row) => <div key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}
       </dl>
-      {sentence ? <p className={styles.specsNote}>{sentence}{buildLink ? <> {buildLink.lead} <Link href={buildLink.href}>{buildLink.anchor}</Link>.</> : null} <Link href="/find-us">Find a licensed retailer</Link> and confirm its current selection with the store.</p> : null}
+      {sentence ? <p className={styles.specsNote}>{sentence}{buildLinks.map((link) => <span key={link.href}> {link.lead} <Link href={link.href}>{link.anchor}</Link>{link.tail ?? ""}.</span>)} <Link href="/find-us">Find a licensed retailer</Link> and confirm its current selection with the store.</p> : null}
     </div>
   );
 }
