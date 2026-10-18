@@ -70,6 +70,18 @@ The Rose Gold Connoisseur tier sits above both. Cosmic Cookies is one approved p
 
 Collaboration releases run alongside the three tiers. Presidential x THC Design is a collaboration name, not a strain classification.
 
+### From the Learn guides to the rolled lineup
+
+The extracts explained here end up in rolled products too. Browse the [Moon Rock blunt lineup](/blunts), the [mini blunt lineup](/mini-blunts) and the [mini pre-roll lineup](/mini-pre-rolls) to see them on a pack.
+
+### Silver, Gold and Rose Gold on a Moon Rocks jar
+
+Each jar names its series. See the [Silver Moon Rocks series](/moon-rocks/silver), the [Gold Moon Rocks series](/moon-rocks/gold) and the [Rose Gold Moon Rocks series](/moon-rocks/rose-gold), then read the build line on the jar you pick.
+
+### Learn guides for store buyers
+
+Retailers who want to carry Presidential can start on [the Presidential wholesale page](/wholesale) or [get in touch with Presidential](/contact).
+
 **Where to find Presidential**
 
 Presidential is a wholesale brand and sells exclusively through licensed retailers. Availability varies by retailer and stock changes by store and by day. Presidential sells through licensed retailers in [select state markets](/find-us): California, Oklahoma, New York, Nevada, Michigan and Arizona, and Washington is landing soon. Use the zip search to find the nearest licensed retailer carrying Presidential. For adults 21+ where legal.`,

@@ -151,6 +151,19 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
               <Link href="/moon-rocks">the Moon Rocks platform</Link>. Packs include{' '}
               <Link href="/mini-pre-rolls/24k">24K</Link> and <Link href="/mini-pre-rolls/cherry-gelato">Cherry Gelato</Link>.
             </p>
+            {/* INLINKS-COPY-R40: /mini-pre-rolls H3s (reused anchors reworded). */}
+            <h3>The extract terms on a mini pre-roll pack</h3>
+            <p>
+              Mini pre-roll packs list flower, live resin and diamonds. Read{' '}
+              <Link href="/learn/what-is-live-resin">the live resin definition</Link> and{' '}
+              <Link href="/learn/infusion-science">Presidential infusion science</Link> to understand those terms before you buy.
+            </p>
+            <h3>Mini pre-roll or mini blunt</h3>
+            <p>
+              The same names also come in a tobacco-free hemp wrap. Compare the{' '}
+              <Link href="/mini-blunts">Presidential mini blunt packs</Link>, and see the{' '}
+              <Link href="/presidential-art/mini-pre-rolls">mini pre-roll pack artwork</Link> for each name.
+            </p>
           </div>
         ) : null}
         <div className={shared.tierSections}>
