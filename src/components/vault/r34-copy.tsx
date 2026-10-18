@@ -71,6 +71,29 @@ export function VaultRoomCopy({ room }: { readonly room: string }) {
 }
 
 const SKU_COPY: Readonly<Record<string, ReactNode>> = {
+  // SURFER-R36: Gorilla Goo mini blunts and the 24K blunt (single SKUs follow their labels).
+  'mini-blunts/gorilla-goo': (
+    <Block heading="Gorilla Goo at a smaller scale">
+      Gorilla Goo is a Gold Strain Series name with reported sour fuel, pine, and chocolate notes. The mini blunt label reads
+      flower, live resin, and diamonds in a tobacco-free wrap, and the pack is marked Hybrid. Shoppers searching for Presidential
+      mini blunts by strain often want this sticky, resinous profile in a size that spreads across several occasions. The same
+      name comes as a moon rock jar that follows its own label, listed in the{' '}
+      <Link className={L} href="/moon-rocks/gold">Gold strain lineup</Link>. If you prefer paper, see the{' '}
+      <Link className={L} href="/mini-pre-rolls/gorilla-goo">Gorilla Goo paper mini rolls</Link>. Read the label on the exact
+      pack, then use the store finder and confirm with the store.
+    </Block>
+  ),
+  'blunts/24k': (
+    <Block heading="24K as a jar and a mini">
+      The 24K Moon Rock blunt is a single 1.5g roll of flower, live resin, and diamonds in a tobacco-free wrap, marked Indica,
+      with no partner mark and no flavor name. For anyone searching for a moonrock blunt by name, 24K shows how the label reads
+      on a Gold Strain Series release. Live resin comes from plants frozen at harvest, which keeps more of the aromatic
+      compounds that shape how a strain smells. The same name comes as the{' '}
+      <Link className={L} href="/moon-rocks/24k">24K moon rock jar</Link>, finished with diamonds on its own label, and as the{' '}
+      <Link className={L} href="/mini-blunts/24k">24K mini blunt three-pack</Link>. Use the store finder and confirm with the
+      store.
+    </Block>
+  ),
   // SURFER-R35: mini and pre-roll SKU blocks (single SKUs follow their labels; jar builds follow the jar's own label).
   'mini-pre-rolls/presidential-og': (
     <Block heading="The house name in other sizes">

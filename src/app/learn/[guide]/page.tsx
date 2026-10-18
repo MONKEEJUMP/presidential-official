@@ -152,6 +152,7 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
           modules={softenLearnGuideClaims(slug, guide.modules)}
           sourcePath={`/learn/${slug}`}
         />
+        {slug === "different-extracts-need-different-heat" ? <ExtractSeriesBlock /> : null}
         {answers ? (
           <AnswerSections eyebrow={answers.eyebrow} id={`learn-${slug}-answers`} items={answers.items} />
         ) : null}
@@ -220,6 +221,26 @@ function RepoLearnGuidePage({
         <FindUsCtaShell className="po-gold-thread-inlay" compact sourcePath={route.path} />
       </SceneStack>
     </PageFrame>
+  );
+}
+
+// SURFER-R36: /learn/different-extracts-need-different-heat series-to-extract H3, after the CMS guide sections.
+function ExtractSeriesBlock() {
+  return (
+    <Scene ariaLabelledBy="learn-extract-series" tone="default">
+      <div className="mx-auto w-full max-w-3xl">
+        <h3 className="text-2xl font-semibold leading-snug text-po-ink" id="learn-extract-series">Which extract sits in which series</h3>
+        <p className="mt-4 text-base leading-7 text-po-body">
+          Each Presidential series is built on one extract, so the heat question starts with the series name. Silver uses
+          distillate, a refined concentrate. Gold uses live resin, made from cannabis frozen at harvest rather than dried first.
+          Rose Gold uses live rosin, the solventless extract pressed with ice water, heat, and pressure. Moon Pods come in Liquid
+          Diamonds, Live Resin, and Live Rosin pods, which is why a vape setting matters. For the rosin side in detail, read the{" "}
+          <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-live-rosin">live rosin primer</Link>. For the
+          device that handles pod heat, see the <Link className="font-semibold underline underline-offset-4" href="/orbit">Orbit device page</Link>.
+          Start with the label on the exact pack.
+        </p>
+      </div>
+    </Scene>
   );
 }
 

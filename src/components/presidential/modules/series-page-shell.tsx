@@ -169,6 +169,24 @@ export async function SeriesPageShell({
             </div>
           </Scene>
         ) : null}
+        {/* SURFER-R36: Presidential Line H3 (each partner jar follows its own label). */}
+        {definition.slug === "presidential-line" ? (
+          <Scene ariaLabel="Reading a Presidential Line jar" className="po-gold-thread-inlay py-12" tone="default">
+            <div className="mx-auto w-full max-w-7xl">
+              <h3 className="text-2xl font-semibold leading-snug text-po-ink">Reading a Presidential Line jar</h3>
+              <p className="mt-3 max-w-3xl text-base leading-7 text-po-body">
+                Presidential Line jars are partner releases that sit outside the Silver, Gold, and Rose Gold series, so each one
+                follows its own label rather than a series rule. Garlic Cookies reads flower, distillate, and kief. Head Cheese reads
+                flower, live resin, and diamonds. Before you buy, check the composition line on the exact jar, along with the partner
+                name printed on the pack. For the line that carries the Presidential name with no strain or partner name, see the{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/presidential-house-line">house-named formats</Link>; its Moon Rocks are
+                finished with kief. For how aroma is built into each profile, read the{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/learn/flavor-science">flavor science guide</Link>. Then confirm with the store.
+              </p>
+            </div>
+          </Scene>
+        ) : null}
+
         {/* SURFER-R35: House Line H3 (multi-build line: kief or diamonds; blunt line: kief or diamond finish). */}
         {definition.slug === "presidential-house-line" ? (
           <Scene ariaLabel="Where the House Line fits in the catalog" className="po-gold-thread-inlay py-12" tone="default">
