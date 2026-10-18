@@ -645,6 +645,8 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
     // Sitebulb R38 B7.
     ["SFV OG carries a place and a lineage in four letters.", "[SFV OG, the San Fernando Valley jar](/moon-rocks/sfv-og), carries a place and a lineage in four letters."],
   ],
+  // Chief R38 ruling: Ghost Train Haze is the pack-art spelling.
+  "/moon-rocks/presidential-line-ghost-haze-train": [["Ghost Haze Train", "Ghost Train Haze"]],
   // Sitebulb R38 A12: the jar page shows the blunt pack, so describe the pack, not the page.
   "/moon-rocks/presidential-og": [
     ["This page is the Moon Rock Blunt. One blunt,", "The pack shown is the Moon Rock Blunt: one blunt,"],

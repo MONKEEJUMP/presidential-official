@@ -126,7 +126,9 @@ export default async function CatalogProductDetailPage({
     notFound();
   }
 
-  const item = detail.item as typeof detail.item & { readonly name: string };
+  const rawItem = detail.item as typeof detail.item & { readonly name: string };
+  // Chief R38 ruling: the pack art prints GHOST TRAIN HAZE, so the CMS name is corrected for display (slug unchanged).
+  const item = { ...rawItem, name: rawItem.name.split("Ghost Haze Train").join("Ghost Train Haze") };
   const route = buildCatalogProductSeoRoute(item, slug);
   const meta = seriesMetaFor(item.series);
   const seriesPath = CONCRETE_SEO_SERIES_PATHS.find((path) => route.linksTo.includes(path));
