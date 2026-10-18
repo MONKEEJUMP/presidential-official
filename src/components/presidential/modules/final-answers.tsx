@@ -66,7 +66,7 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
           across the lineup the outside is kief or diamonds, depending on the label. That&apos;s why the jar label matters more than
           the word &quot;flower&quot; on a menu: it names the series and the build. Read the jar label for the build, then compare
           strain-led options on the <Link className={a} href="/moon-rocks/gold">Gold live resin collection</Link>, or start with
-          the <Link className={a} href="/moon-rocks/24k">24K jar</Link>, which is finished with diamonds.
+          the 24K jar, which is finished with diamonds.
         </p>
       </>
     ),

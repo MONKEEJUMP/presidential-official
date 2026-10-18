@@ -132,8 +132,7 @@ export const ABOUT_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         Presidential is a Los Angeles cannabis company, started in 2012. As{" "}
-        <Link className={a} href="/our-story">Our Story</Link> tells it, Presidential helped invent a category: infused
-        cannabis products. It builds three formats under one standard, Moon Rocks™, infused pre-rolls, and tobacco-free
+        <Link className={a} href="/our-story">Our Story</Link> tells it, Presidential has built infused cannabis products since 2012. It builds three formats under one standard, Moon Rocks™, infused pre-rolls, and tobacco-free
         blunts, across the Silver Flavor, Gold Strain, and Rose Gold Connoisseur series, and it sells only through licensed
         retailers.
       </p>
