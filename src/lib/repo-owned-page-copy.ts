@@ -80,6 +80,18 @@ Each jar names its series. See the [Silver Moon Rocks series](/moon-rocks/silver
 
 Retailers who want to carry Presidential can start on [the Presidential wholesale page](/wholesale) or [get in touch with Presidential](/contact).
 
+### Taking the Learn guides to a store
+
+Store finder pages are sorted by state. Start with [Oklahoma store finder for Presidential](/find-us/ok), [the Nevada Presidential retailer page](/find-us/nv) or [Arizona listings for Presidential](/find-us/az).
+
+### The Learn guides in pictures
+
+Pack art shows the same terms these guides explain. See [artwork on the pre-roll packs](/presidential-art/pre-rolls), [artwork on the blunt packs](/presidential-art/blunts) and [packaging for the mini blunts](/presidential-art/mini-blunts).
+
+### Learning the vape side
+
+The extracts covered here also come as oil in [the Presidential vape range](/vapes), and [the Presidential brand history](/our-story) covers where it all started.
+
 **Where to find Presidential**
 
 Presidential is a wholesale brand and sells exclusively through licensed retailers. Availability varies by retailer and stock changes by store and by day. Presidential sells through licensed retailers in [select state markets](/find-us): California, Oklahoma, New York, Nevada, Michigan and Arizona, and Washington is landing soon. Use the zip search to find the nearest licensed retailer carrying Presidential. For adults 21+ where legal.`,
