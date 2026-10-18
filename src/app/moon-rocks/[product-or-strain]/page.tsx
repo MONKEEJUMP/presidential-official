@@ -239,7 +239,8 @@ export default async function CatalogProductDetailPage({
                       Presidential Moon Rock blunts carry the house infused build, flower and concentrate, inside a tobacco-free hemp
                       wrap, in full-size and mini formats. Silver blunts are finished with kief, with Gold and Rose Gold carrying a kief
                       or diamond finish. Each pack names its tier: Silver is distillate,
-                      Gold is live resin, and Rose Gold is live rosin. Compared with a moon rock, which is the infused piece with no
+                      Gold is live resin, and Rose Gold is live rosin. Compared with{" "}
+                      <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/learn/what-are-moon-rocks">a Presidential moon rock</Link>, which is the infused piece with no
                       wrap at all, a blunt is ready to light and burns at a slower, wrapped pace. THC numbers are batch-specific, so
                       read the package label and its test results. Products are sold through licensed retailers in{" "}
                       <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/find-us">select state markets</Link>. Read{" "}
@@ -256,6 +257,31 @@ export default async function CatalogProductDetailPage({
                       The tier on each pack names the extract: Silver is distillate, Gold is live resin, and Rose Gold is live rosin. Mini
                       availability depends on the flavor. Presidential doesn&apos;t sell online; products reach licensed retailers in{" "}
                       <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/find-us">select state markets</Link>.
+                    </p>
+                    {/* SITEBULB-R28: size, tier and lighting H2s (facts: /blunts and /mini-blunts weights, blunt pack data, /presidential-blunts smoking copy). */}
+                    <h2 className="mt-8 text-xl font-semibold leading-snug text-po-ink">Moon rock blunt sizes: full-size and mini</h2>
+                    <p className="mt-3 text-sm leading-6 text-po-body">
+                      A full-size moon rock blunt is one 1.5 g roll (.053 oz) in a tobacco-free hemp wrap; see the{" "}
+                      <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/blunts">full-size Moon Rock blunts</Link>. Mini blunts come as a pack of three 0.7 g mini blunts,
+                      2.1 g in total, with the same infused build at a smaller size; see{" "}
+                      <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/mini-blunts">Presidential Mini Blunts</Link>. Mini availability depends on the flavor, so check
+                      the pack before you ask for a mini.
+                    </p>
+                    <h2 className="mt-8 text-xl font-semibold leading-snug text-po-ink">What goes into each moon rock blunt tier</h2>
+                    <p className="mt-3 text-sm leading-6 text-po-body">
+                      Silver Flavor Series blunts are flower, distillate and kief, named for fruit flavors such as Blue Raspberry and Peach
+                      Mango. Gold Strain Series blunts pair flower with live resin, as in{" "}
+                      <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/blunts/24k">the 24K Gold live resin blunt</Link>, and Rose Gold Connoisseur Series blunts pair flower
+                      with live rosin, as in{" "}
+                      <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/blunts/gods-gift">the God&apos;s Gift Rose Gold live rosin blunt</Link>; both carry a kief or diamond
+                      finish. The tier and the extract are printed on every pack.
+                    </p>
+                    <h2 className="mt-8 text-xl font-semibold leading-snug text-po-ink">How to light a moon rock blunt</h2>
+                    <p className="mt-3 text-sm leading-6 text-po-body">
+                      Start with an even light across the tip, then take steady pulls so the burn line moves evenly through the wrap. The
+                      concentrate and finish add density, so a hemp-wrapped moon rock blunt burns at a slower pace than a paper pre-roll.
+                      Set the pace early and let the ember move naturally. Read{" "}
+                      <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/learn/different-extracts-need-different-heat">why different extracts need different heat</Link>.
                     </p>
                   </div>
                 ) : null}
