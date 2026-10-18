@@ -60,7 +60,7 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
       },
       {
         title: "Find it all, right here",
-        body: "This is the official home of everything Presidential — the products, the story, the standard, and the shops that carry it. Explore the lineup, learn the craft, then find your closest door. Stock shifts by store and by day, so lock the final details with your retailer. Everything Presidential, all in one place.",
+        body: "This is [the official home of everything Presidential](/about) — the products, the story, the standard, and the shops that carry it. Explore the lineup, learn the craft, then find your closest door. Stock shifts by store and by day, so lock the final details with your retailer. Everything Presidential, all in one place.",
       },
     ];
   }
@@ -140,13 +140,13 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
 function getRouteSupportCallout(route: SeoRouteRecord): StaticRouteCallout | null {
   if (route.kind === "store_locator") {
     return {
-      title: "Locator readiness",
-      body: "Find authentic Presidential products through a first-party retail path once verified retailer records are ready. This page does not expose unverified retailer rows or generate local listing pages.",
+      // Sitebulb R29 A1: public copy replaces the developer gating checklist.
+      title: "The official retail path",
+      body: "Find authentic Presidential products through licensed retailers. Use the finder to see the nearest store, then confirm current stock with that store.",
       items: [
-        "Verified retailer source required",
-        "State and city pages stay gated",
-        "Retailer detail pages stay gated",
-        "Local listing markup stays off",
+        "Official licensed retailers",
+        "Nearest door first",
+        "Confirm stock with the store",
       ],
     };
   }

@@ -617,6 +617,18 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
       "Presidential is currently active in select state markets.",
     ],
   ],
+  // Sitebulb R29 A6/A8: no flower THC range, no "potent" in body copy.
+  "/learn/what-are-moon-rocks": [
+    ["Standard cannabis flower generally tests between 15% and 25% THC.", "THC in cannabis flower varies by batch, so read the tested label."],
+    ["the densest flower, the most potent coating, the finest kief.", "the densest flower, the richest coating, the finest kief."],
+  ],
+  // Sitebulb R29 A7: no unsourced multiplier.
+  "/learn/what-is-live-resin": [
+    [
+      "Cannabis concentrates as a category reach as high as 90% cannabinoid content — several times what any flower can carry.",
+      "Cannabis concentrates as a category carry far more cannabinoids by weight than flower; the batch label gives the tested figure.",
+    ],
+  ],
   // Sitebulb R27 (chief ruling 1): the lineup line reads "kief or diamond finish".
   "/learn/infusion-science": [
     ["around deep infusion, finished with a kief coating.", "around deep infusion, closed with a kief or diamond finish."],

@@ -121,7 +121,7 @@ The main [Presidential Moon Rocks collection](/moon-rocks) organizes the approve
 
 **How Moon Rocks relate to other Presidential formats**
 
-Loose Moon Rocks show the layered construction directly. [Moon Rock pre-rolls](/pre-rolls) place prepared cannabis material inside rolling paper, while [Presidential Blunts](/presidential-blunts) use a tobacco-free hemp-wrap format. These products can share brand and infusion context without becoming interchangeable names for the same physical format.
+Loose Moon Rocks show the layered construction directly. [Moon Rock pre-rolls](/pre-rolls) place prepared cannabis material inside rolling paper, while Presidential Blunts use [a tobacco-free hemp-wrap format](/presidential-blunts). These products can share brand and infusion context without becoming interchangeable names for the same physical format.
 
 For deeper technical vocabulary, the [Presidential THC guide](/presidential-thc) explains infusion, extracts, and label reading. [Presidential Cannabis](/presidential-cannabis) provides the parent-brand context. [Presidential x THC Design](/moon-rocks/presidential-x-thc-design) shows how a collaboration remains part of the same official product system.
 
@@ -139,7 +139,7 @@ Presidential is landing soon in Washington.
 
 Presidential's footprint across [select state markets](/find-us) spans California, Oklahoma, Nevada, New York, Michigan, Arizona and Washington.
 
-The retailer search on this page goes live the moment verified licensed Washington retailers carrying Presidential are in the locator database. Until then this page says so rather than showing an empty list.
+The retailer search on this page will show results once verified licensed Washington retailers carrying Presidential are confirmed.
 
 **What arrives when it does**
 
@@ -173,7 +173,7 @@ This page updates automatically when Presidential reaches licensed Washington re
     label: "Presidential in Arizona",
     markdown: `**From the Canyon to the Cosmos — Presidential**
 
-The retailer count on this page is live. It comes from the locator database and updates as new Arizona doors come online — no number in this copy, because the page already shows you the current one.
+The retailer list on this page updates as new Arizona stores come online.
 
 **Finding it**
 
@@ -211,7 +211,7 @@ Enter your zip code above to find the licensed Arizona retailers nearest you car
     label: "Presidential Near Me in New York",
     markdown: `**Skyscraper High. Presidential Grade.**
 
-The retailer count above is live, pulled from the locator database and updated as new doors come online.
+The retailer list above updates as new New York stores come online.
 
 **Finding it**
 

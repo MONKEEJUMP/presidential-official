@@ -54,7 +54,7 @@ export default function WholesalePage() {
                 <span className={styles.heroTitleLine}>to your</span>{" "}
                 <span className={styles.heroTitleLine}>market.</span>
               </h1>
-              <p className={styles.heroSupport}>Wholesale ordering and partnership applications for licensed retailers and distributors.</p>
+              <p className={styles.heroSupport}>Wholesale ordering and partnership applications for licensed retailers and distributors. New to the house? Start with <Link href="/about">the Presidential brand and its official site</Link>.</p>
               <div className={styles.heroActions}>
                 <Link className={styles.heroPrimaryAction} href="/wholesale/apply">Apply to partner <ArrowIcon /></Link>
                 <a className={styles.heroEmailAction} href={`mailto:${SALES_EMAIL}`}>Email sales</a>

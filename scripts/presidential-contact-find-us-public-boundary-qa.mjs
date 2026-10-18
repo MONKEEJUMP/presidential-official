@@ -171,11 +171,9 @@ addCheck(
 addCheck(
   checks,
   "findUs.staticShell.defersUnverifiedRetailers",
-  staticShell.includes("does not expose unverified retailer rows or generate local listing pages") &&
-    staticShell.includes("Verified retailer source required") &&
-    staticShell.includes("State and city pages stay gated") &&
-    staticShell.includes("Retailer detail pages stay gated") &&
-    staticShell.includes("Local listing markup stays off"),
+  staticShell.includes("Find authentic Presidential products through licensed retailers.") &&
+    staticShell.includes("Official licensed retailers") &&
+    staticShell.includes("Confirm stock with the store"),
   "Find Us public shell states the locator deferral and keeps local listing surfaces off.",
 );
 addCheck(

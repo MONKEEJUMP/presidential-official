@@ -63,6 +63,8 @@ const COPY_COUNT_FIXES=[
   ['A hundred and one Michigan doors carry Presidential.','Licensed Michigan doors carry Presidential across the state.'],
   ['Fifty-three doors, and unlike the other markets they run through','Unlike the other markets, Arizona doors run through'],
   ["Presidential's seven-state network includes Washington","Presidential's network of [select state markets](/find-us) includes Washington"],
+  // Sitebulb R29 A11: no locator-behaviour note on /partners/wa.
+  ["When the first Washington doors open they will be listed here, and the locator will start returning results for Washington zips the same day.","Washington retailers carrying Presidential will be listed here as they are confirmed."],
 ];
 // R22 chief ruling: no counts in partner titles or metas; survives --copy-from regeneration.
 const fixTitle=t=>t?.replace(/\s*\|\s*[\d,]+ Licensed Retailers$/,' | Licensed Retailers').replace('Licensed Retailers Across Seven States','Licensed Retailers in Select State Markets');

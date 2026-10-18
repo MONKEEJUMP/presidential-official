@@ -144,7 +144,7 @@ export const PARTNERS_COPY = {
       "Washington is next.",
       "Presidential's network of [select state markets](/find-us) includes Washington, where retail partnerships are in progress now - Seattle, Tacoma, Spokane, and the Evergreen corridor.",
       "Washington runs one of the oldest legal markets in the country, which means an experienced customer and a retail network that knows exactly what it is looking at. It is a good room for a brand that has been doing this since 2012.",
-      "Nothing is on shelves yet. When the first Washington doors open they will be listed here, and the locator will start returning results for Washington zips the same day.",
+      "Nothing is on shelves yet. Washington retailers carrying Presidential will be listed here as they are confirmed.",
       "Retailers interested in carrying Presidential in Washington can reach us through the contact page."
     ]
   }
