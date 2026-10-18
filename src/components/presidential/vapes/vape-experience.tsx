@@ -177,6 +177,18 @@ export function VapeExperience({ page }: { page: VapePage }) {
             <Link href="/our-story">Presidential brand story</Link> and the <Link href="/about">company behind Presidential</Link>{' '}
             pages cover who makes it.
           </p>
+          {/* INLINKS-COPY-R41: /orbit state-finder and Moon Rocks H3s (copy as written). */}
+          <h3>More state store finders for Orbit</h3>
+          <p>
+            Presidential keeps a store finder page by state. Check <Link href="/find-us/ca">the California store finder</Link>,{' '}
+            <Link href="/find-us/mi">the Michigan store finder</Link> or <Link href="/find-us/ny">the New York store finder</Link>{' '}
+            before you look for Orbit.
+          </p>
+          <h3>Orbit beside the Moon Rocks jar</h3>
+          <p>
+            Orbit heats the oil in a pod. <Link href="/moon-rocks">The Presidential Moon Rocks platform</Link> carries extract on
+            flower instead, and questions about either can go through <Link href="/contact">the Presidential contact page</Link>.
+          </p>
         </div>
       ) : null}
       <div className={s.explorerGrid}>
