@@ -271,6 +271,12 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       The Gorilla Goo mini pre-roll pack is marked Hybrid, and each roll is flower, live resin, and diamonds, carrying the strain&apos;s reported sour fuel, pine, and chocolate notes. Live resin comes from plants frozen at harvest rather than dried first, which helps keep those aroma notes intact. The <Link className={L} href="/learn/what-is-live-resin">guide to live resin extraction</Link> explains the process. For a closer look at the layered build these rolls start from, read <Link className={L} href="/learn/what-are-moon-rocks">what moon rocks are made of</Link>. Read the pack for batch details, and confirm with the store which Gorilla Goo formats it carries.
     </Block>
   ),
+  // SURFER-R42: the Pink Cookies mini pre-roll follows its own pack label.
+  'mini-pre-rolls/pink-cookies': (
+    <Block heading="Where the Pink Cookies minis sit in Gold">
+      The Pink Cookies mini pre-roll pack holds three 0.5g rolls, and the label lists flower, live resin, and diamonds in each, with the pack marked Indica. The aroma is sweet and doughy. The pack carries the Gold Strain Series name, and the <Link className={L} href="/moon-rocks/gold">Gold Strain Series jar lineup</Link> shows the other strain names in that tier. Live resin is extracted from plants frozen at harvest rather than dried first, and the <Link className={L} href="/learn/what-is-live-resin">guide to how frozen-harvest live resin is made</Link> explains that step. Read the pack for batch details before buying.
+    </Block>
+  ),
   'mini-blunts/skywalker': (
     <Block heading="Skywalker in full-size formats">
       Skywalker is a ROVE collaboration in the Gold Strain Series. The Skywalker mini blunt pack carries the ROVE collaboration in a smaller size: flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a blueberry, tropical, and earthy aroma. Shoppers comparing it with other small rolls can look at <Link className={L} href="/mini-blunts/gorilla-goo">Gorilla Goo in the same mini blunt size</Link>, which lists its own build on its pack. For a paper-rolled option, there is also the Skywalker infused pre-roll. Picking between the rolls comes down to size and wrap. Read the pack for batch details, and confirm with the store which Skywalker formats it carries.
