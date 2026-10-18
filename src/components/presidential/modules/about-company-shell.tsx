@@ -257,6 +257,19 @@ export function AboutCompanyShell() {
                 test results.
               </p>
             </div>
+            {/* SURFER-R29: blunt hand-off H3 (chief R24: /presidential-blunts is the main blunts page). "Presidential Blunts" stays plain text; no new link into /moon-rocks/presidential-blunts (standing rule). */}
+            <div className="mt-10 max-w-3xl">
+              <h3 className="text-2xl font-semibold leading-snug text-po-ink">Where does this site cover the blunt format?</h3>
+              <p className="mt-3 text-base leading-7 text-po-body">
+                This About page tells the company story. The blunt itself has its own page here: the{" "}
+                <Link className="font-semibold underline underline-offset-4" href="/presidential-blunts">infused blunt guide</Link> explains how Presidential packs flower, concentrate,
+                and a kief or diamond finish inside a tobacco-free hemp wrap, and how the Silver, Gold, and Rose Gold series map to
+                distillate, live resin, and live rosin. Searchers looking for Presidential Blunts on this site should start there
+                rather than here. When you&apos;re ready to buy, the store finder shows licensed retailers near your zip code, because
+                Presidential is
+                wholesale and doesn&apos;t sell direct.
+              </p>
+            </div>
           </div>
         </Scene>
 
