@@ -253,6 +253,19 @@ export function VapeExperience({ page }: { page: VapePage }) {
             Angeles company. Stores that want to carry Moon Pods and Orbit can start with the{' '}
             <Link href="/partners">Presidential retail partner program</Link>.
           </p>
+          {/* INLINKS-COPY-R38: /moon-pods live resin and retail-buyer H3s (reused anchors reworded). */}
+          <h3>Live resin outside the cartridge</h3>
+          <p>
+            Live resin, one of the three Moon Pods extracts, also coats the flower in{' '}
+            <Link href="/mini-blunts">hemp-wrapped mini blunt packs</Link>.{' '}
+            <Link href="/learn/infusion-science">How an extract is infused into flower</Link> explains how an extract is carried
+            through flower instead of sitting in a cartridge.
+          </p>
+          <h3>Moon Pods for retail buyers</h3>
+          <p>
+            Stores that want to carry Moon Pods can start with <Link href="/wholesale">the Presidential wholesale program</Link> or{' '}
+            <Link href="/contact">contact the Presidential team</Link>.
+          </p>
         </div>
       ) : null}
       <div className={s.chapterColors}><span className={s.label}>Orbit finish</span><ColorChoices value={finish} onChange={setFinish} label="Moon Pods chapter finish" /></div>
