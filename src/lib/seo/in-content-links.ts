@@ -1239,6 +1239,13 @@ const R45_SB_OVERRIDES: Readonly<Record<string, readonly (readonly [string, stri
   ],
 };
 
+// SITEBULB-R46: A9 24K superlative, A11 "same build" across formats.
+const R46_SB_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
+  "/moon-rocks/24k": [["24K is the most restrained pack Presidential prints.", "24K keeps its pack restrained."]],
+  "/moon-rocks/xxx": [[" Same build in every one.", ""]],
+  "/moon-rocks/king-louis": [[" Same build in all of them.", ""]],
+};
+
 export function hardcodeInContentLinks(sourcePath: string, rawValue: string): string {
   const swaps = [
     ...(IN_CONTENT_TEXT_OVERRIDES[sourcePath] ?? []),
@@ -1247,8 +1254,8 @@ export function hardcodeInContentLinks(sourcePath: string, rawValue: string): st
     ...(R43_SB_OVERRIDES[sourcePath] ?? []),
     ...(R44_RULING_OVERRIDES[sourcePath] ?? []),
     ...(R44_SURFER_OVERRIDES[sourcePath] ?? []),
-    ...(R45_SURFER_OVERRIDES[sourcePath] ?? []),    ...(R45_INLINKS_OVERRIDES[sourcePath] ?? []),
-    ...(R45_SB_OVERRIDES[sourcePath] ?? []),
+    ...(R45_SURFER_OVERRIDES[sourcePath] ?? []),    ...(R45_INLINKS_OVERRIDES[sourcePath] ?? []),    ...(R45_SB_OVERRIDES[sourcePath] ?? []),
+    ...(R46_SB_OVERRIDES[sourcePath] ?? []),
 ...(sourcePath.startsWith("/moon-rocks/") ? MOON_ROCKS_MARKET_SWAPS : []),
   ];
   const value = swaps.reduce((text, [from, to]) => text.split(from).join(to), rawValue);
