@@ -40,7 +40,7 @@ const HOMEPAGE_CANVAS_TONE: "dark" | "light" = "dark";
 const proofPoints = [
   {
     title: "Official source",
-    body: "This is the one official home of Presidential — the real brand, straight from the people who make it. Every product, every image, every word here traces back to Presidential itself. What you see is exactly what reaches the shelf: authentic Presidential, verified at the source. If it's here, it's real.",
+    body: "This is the one official home of Presidential — the real brand, straight from the people who make it. Every product, every image, every word here traces back to Presidential itself. What you see here is the official Presidential catalog.",
     image: {
       alt: "Pink Cookies Moon Rock product graphic",
       href: "/moon-rocks/pink-cookies",

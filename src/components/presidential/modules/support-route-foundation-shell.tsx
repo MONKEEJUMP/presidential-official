@@ -295,6 +295,14 @@ export async function SupportRouteFoundationShell({
                 <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/presidential-x-thc-design">THC Design collaboration releases</Link> pair flower and live
                 resin with diamonds. Pick one name, call the store or check its menu, then make the trip.
               </p>
+              {/* Sitebulb R32 B5: heading gap after the Surfer jar H3. */}
+              <h3 className="mt-12 text-2xl font-semibold leading-snug text-po-ink">
+                What if the nearest store doesn&apos;t have your jar?
+              </h3>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-po-body">
+                Move to the next store in your results and call ahead with the same name. Each licensed retailer chooses its own
+                assortment, so stock changes from store to store.
+              </p>
             </div>
           </Scene>
         ) : null}

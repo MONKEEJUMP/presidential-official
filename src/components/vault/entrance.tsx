@@ -63,5 +63,7 @@ export function VaultEntrance() {
     </section>
     <section className="vault-masterpieces"><p className="vault-eyebrow">FEATURED MASTERPIECES</p><h2>From the Collection</h2><div className="vault-masterpieces-row">{['gods-gift-blunt', '24k-blunt', 'gorilla-goo-pre-roll'].map(slug => <FramedPiece key={slug} product={vaultProducts.find(p => p.slug === slug)!} entrance />)}</div></section>
     <nav className="vault-entrance-rooms" aria-label="Enter the Vault rooms"><p className="vault-eyebrow">ENTER THE VAULT</p><div>{vaultRooms.map(room => <Link key={room.slug} href={`/presidential-art/${room.slug}`}><span>ROOM {room.numeral}</span><strong>{room.name}</strong><small>{productsInRoom(room.slug).length} WORKS</small></Link>)}</div></nav>
+    {/* Sitebulb R32 B2: Vault entrance inlink to the store finder. */}
+    <p className="vault-room-intro">Saw a pack you like? <Link href="/find-us">Track a Vault pack down by ZIP code</Link>.</p>
   </div>;
 }
