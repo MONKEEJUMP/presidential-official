@@ -169,6 +169,22 @@ export async function SeriesPageShell({
             </div>
           </Scene>
         ) : null}
+        {/* SURFER-R35: House Line H3 (multi-build line: kief or diamonds; blunt line: kief or diamond finish). */}
+        {definition.slug === "presidential-house-line" ? (
+          <Scene ariaLabel="Where the House Line fits in the catalog" className="po-gold-thread-inlay py-12" tone="default">
+            <div className="mx-auto w-full max-w-7xl">
+              <h3 className="text-2xl font-semibold leading-snug text-po-ink">Where the House Line fits in the catalog</h3>
+              <p className="mt-3 max-w-3xl text-base leading-7 text-po-body">
+                The House Line carries the Presidential name itself, with no strain or partner name, across Moon Rocks, pre-rolls,
+                and blunts. Across these house products the outer layer is kief or diamonds, depending on the label, so read the
+                composition line on the exact pack. The blunts carry a kief or diamond finish in a tobacco-free hemp wrap. For the
+                founding story behind these formats, read the <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/our-story">brand&apos;s Los Angeles beginnings</Link>.
+                To see strain-named jars instead, browse the <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/gold">Gold strain jars</Link>.
+                When you&apos;re ready to buy, use the store finder and confirm with the store.
+              </p>
+            </div>
+          </Scene>
+        ) : null}
 
         {catalog.items.length > 0 ? (
           <Scene

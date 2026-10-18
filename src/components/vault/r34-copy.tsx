@@ -26,6 +26,18 @@ export function VaultEntranceCopy() {
 }
 
 const ROOM_COPY: Readonly<Record<string, ReactNode>> = {
+  // SURFER-R35: mini blunt art room (every mini blunt pack: flower, live resin, diamonds; markings include Sativa).
+  'mini-blunts': (
+    <Block heading="The art behind each mini blunt pack">
+      Each work in this room fronts a Presidential Moon Rock mini blunt pack: the same illustrated identity as the full-size
+      blunt, scaled to a smaller roll. Shoppers searching for Presidential mini blunts often meet the art first, so it helps to
+      know what sits behind it. The label build is flower, live resin, and diamonds in a tobacco-free wrap, and each pack carries
+      the strain name and an Indica, Hybrid, or Sativa marking under the art. To read one pack in detail, open the{' '}
+      <Link className={L} href="/mini-blunts/pink-cookies">Pink Cookies three-pack</Link>. To see the art for every format, go
+      back to the <Link className={L} href="/presidential-art">Vault front room</Link>. When a pack catches your eye, use the ZIP
+      search and confirm with the store.
+    </Block>
+  ),
   'pre-rolls': (
     <Block heading="The art on Presidential pre-roll packs">
       Every Presidential Moon Rock pre-roll pack carries its own illustration above the product name. That art is how shoppers
@@ -60,6 +72,51 @@ export function VaultRoomCopy({ room }: { readonly room: string }) {
 }
 
 const SKU_COPY: Readonly<Record<string, ReactNode>> = {
+  // SURFER-R35: mini and pre-roll SKU blocks (single SKUs follow their labels; jar builds follow the jar's own label).
+  'mini-pre-rolls/presidential-og': (
+    <Block heading="The house name in other sizes">
+      Presidential OG is the name the brand puts on its own house product, with the crest and no partner mark. The mini
+      pre-rolls are flower, live resin, and diamonds in paper, marked Hybrid on the pack. If you searched for Presidential
+      prerolls and want the house name in particular, this is the smallest paper version. The same name comes as a jar: the{' '}
+      <Link className={L} href="/moon-rocks/presidential-og">Presidential OG moon rock jar</Link> holds the build without paper,
+      and its own label sets its composition. For a hemp wrap instead of paper, see{' '}
+      <Link className={L} href="/mini-blunts/presidential-og">Presidential OG in a hemp wrap</Link>. Read the label on the exact
+      pack, then use the store finder and confirm current selection with the store.
+    </Block>
+  ),
+  'mini-blunts/pink-cookies': (
+    <Block heading="Pink Cookies across formats">
+      Pink Cookies keeps its sweet vanilla character, balanced by earth and citrus, whether it comes as a jar, a full blunt, or
+      this mini three-pack. It&apos;s a Gold Strain Series name. The mini blunts are flower, live resin, and diamonds in
+      tobacco-free wraps, marked Indica on the pack. For shoppers searching for Presidential mini blunts, the three-pack is the
+      shareable size of the same cookie profile. To compare, open the{' '}
+      <Link className={L} href="/moon-rocks/pink-cookies">Pink Cookies moon rock jar</Link>, or choose paper with the{' '}
+      <Link className={L} href="/mini-pre-rolls/pink-cookies">Pink Cookies paper minis</Link>. Each format follows its own label,
+      so check the label on the exact pack and confirm with the store before you go.
+    </Block>
+  ),
+  'mini-blunts/presidential-og': (
+    <Block heading="Presidential OG, wrapped small">
+      The Presidential OG mini blunts put the house name in a tobacco-free wrap: flower, live resin, and diamonds, marked Hybrid,
+      with the crest on the front and no partner name. Anyone searching for Presidential mini blunts with the house name in mind
+      can start here. The three-pack splits the build into smaller rolls that suit a shorter session or a shared one. If
+      you&apos;d rather have paper, the{' '}
+      <Link className={L} href="/mini-pre-rolls/presidential-og">Presidential OG paper minis</Link> carry the same name in a
+      different wrap. For the unrolled version, see the{' '}
+      <Link className={L} href="/moon-rocks/presidential-og">house-strain moon rock jar</Link>, which follows its own label. Read
+      the label on the exact pack and confirm current selection with the store.
+    </Block>
+  ),
+  'pre-rolls/24k': (
+    <Block heading="24K beyond the single roll">
+      The 24K pre-roll is one 1g roll of flower, live resin, and diamonds in the Gold Strain Series, marked Indica. Like every 24K
+      release, it carries no flavor name and no partner mark. Shoppers searching for a Presidential moon rock pre-roll by name can
+      use 24K as a clear example of how the label reads. The name also comes as the{' '}
+      <Link className={L} href="/moon-rocks/24k">24K jar of moon rocks</Link>, which follows its own label and is finished with
+      diamonds. For a smaller roll, the <Link className={L} href="/mini-pre-rolls/24k">24K paper minis</Link> carry the same
+      build. Check the label on the exact pack, then use the store finder and confirm current selection with the store.
+    </Block>
+  ),
   'pre-rolls/xxx': (
     <Block heading="XXX in other formats">
       XXX is a Gold Strain Series name, and the pre-roll is one 1g roll of flower, live resin, and diamonds, marked Indica on
