@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { entrancePieces, pieceHref, vaultProducts, vaultRooms, productsInRoom } from '@/content/vault/catalog';
 import { FramedArt, FramedPiece, Placard } from './framed-piece';
+import { VaultEntranceCopy } from './r34-copy';
 
 export function VaultEntrance() {
   const [index, setIndex] = useState(0);
@@ -61,6 +62,8 @@ export function VaultEntrance() {
       </Link>
       <Placard product={current.product} /><p className="vault-piece-count">PIECE {String(index + 1).padStart(2, '0')} OF {entrancePieces.length}</p>
     </section>
+    {/* Sitebulb R34 B4: Vault copy as an H2 above From the Collection. */}
+    <VaultEntranceCopy />
     <section className="vault-masterpieces"><p className="vault-eyebrow">FEATURED MASTERPIECES</p><h2>From the Collection</h2><div className="vault-masterpieces-row">{['gods-gift-blunt', '24k-blunt', 'gorilla-goo-pre-roll'].map(slug => <FramedPiece key={slug} product={vaultProducts.find(p => p.slug === slug)!} entrance />)}</div></section>
     <nav className="vault-entrance-rooms" aria-label="Enter the Vault rooms"><p className="vault-eyebrow">ENTER THE VAULT</p><div>{vaultRooms.map(room => <Link key={room.slug} href={`/presidential-art/${room.slug}`}><span>ROOM {room.numeral}</span><strong>{room.name}</strong><small>{productsInRoom(room.slug).length} WORKS</small></Link>)}</div></nav>
     {/* Sitebulb R32 B2: Vault entrance inlink to the store finder. */}

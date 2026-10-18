@@ -148,27 +148,10 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
         </Scene>
 
         <LearnGuideCmsBody
+          insertAfter={slug === "infusion-science" ? { heading: "What kief adds", node: <InfusionPracticeBlock /> } : undefined}
           modules={softenLearnGuideClaims(slug, guide.modules)}
           sourcePath={`/learn/${slug}`}
         />
-      {/* SURFER-R34: /learn/infusion-science practice H3 (moon rock line: finished with kief; lineup: kief or diamonds). */}
-      {slug === "infusion-science" ? (
-        <Scene ariaLabelledBy="learn-infusion-practice" tone="default">
-          <div className="mx-auto w-full max-w-3xl">
-            <h3 className="text-2xl font-semibold leading-snug text-po-ink" id="learn-infusion-practice">Putting infusion into practice</h3>
-            <p className="mt-4 text-base leading-7 text-po-body">
-              Infusion is how concentrate and flower become one product. In a Presidential moon rock, flower is carried through with
-              concentrate and finished with kief. Across the lineup, the outer layer is kief or diamonds, depending on the label. The
-              concentrate changes by series: distillate, live resin, or live rosin. Each one handles heat differently, which is why
-              the{" "}
-              <Link className="font-semibold underline underline-offset-4" href="/learn/different-extracts-need-different-heat">guide to extracts and heat</Link>{" "}
-              matters for how an infused product burns. For the format itself, start with{" "}
-              <Link className="font-semibold underline underline-offset-4" href="/learn/what-are-moon-rocks">what moon rocks are</Link>, then
-              read the pack&apos;s composition line.
-            </p>
-          </div>
-        </Scene>
-      ) : null}
         {answers ? (
           <AnswerSections eyebrow={answers.eyebrow} id={`learn-${slug}-answers`} items={answers.items} />
         ) : null}
@@ -237,5 +220,26 @@ function RepoLearnGuidePage({
         <FindUsCtaShell className="po-gold-thread-inlay" compact sourcePath={route.path} />
       </SceneStack>
     </PageFrame>
+  );
+}
+
+// SURFER-R34 + Sitebulb R34 B25-B27: /learn/infusion-science practice H2, placed after the "What kief adds" CMS section.
+// Moon rock line: kief or diamonds by label; lineup concentrates by series.
+function InfusionPracticeBlock() {
+  return (
+    <Scene ariaLabelledBy="learn-infusion-practice" tone="default">
+      <div className="mx-auto w-full max-w-3xl">
+        <h2 className="text-2xl font-semibold leading-snug text-po-ink" id="learn-infusion-practice">Putting infusion into practice</h2>
+        <p className="mt-4 text-base leading-7 text-po-body">
+          Infusion is how concentrate and flower become one product. In a Presidential moon rock, flower is carried through with
+          concentrate, then finished with kief or diamonds, depending on the label. The concentrate changes by series: distillate,
+          live resin, or live rosin. Each one handles heat differently, which is why the{" "}
+          <Link className="font-semibold underline underline-offset-4" href="/learn/different-extracts-need-different-heat">guide to extracts and heat</Link>{" "}
+          matters for how an infused product burns. For the format itself, start with{" "}
+          <Link className="font-semibold underline underline-offset-4" href="/learn/what-are-moon-rocks">the moon rocks explainer</Link>, then
+          read the pack&apos;s composition line.
+        </p>
+      </div>
+    </Scene>
   );
 }

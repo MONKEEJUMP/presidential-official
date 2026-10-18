@@ -7,7 +7,7 @@ const L = 'font-semibold underline underline-offset-4';
 function Block({ heading, children }: { readonly heading: string; readonly children: ReactNode }) {
   return (
     <section className="mx-auto w-full max-w-3xl px-6 pb-12 text-sm leading-6 text-white/80">
-      <h3 className="mb-2 text-base font-semibold text-white">{heading}</h3>
+      <h2 className="mb-2 text-base font-semibold text-white">{heading}</h2>
       <p>{children}</p>
     </section>
   );
@@ -39,8 +39,8 @@ const ROOM_COPY: Readonly<Record<string, ReactNode>> = {
   blunts: (
     <Block heading="Pack art for Presidential Moon Rock blunts">
       Presidential Moon Rock blunts carry the same illustrated identity as the rest of the lineup. Each one is a tobacco-free
-      hemp wrap around flower, concentrate, and a kief or diamond finish. Gold blunts use live resin and Rose Gold blunts use
-      live rosin, and the art and series color make each one easy to spot. Read the label for the exact build, then search
+      hemp wrap around flower, concentrate, and a kief or diamond finish. Silver blunts use distillate, Gold blunts use live resin
+      and Rose Gold blunts use live rosin, and the art and series color make each one easy to spot. Read the label for the exact build, then search
       nearby stores and confirm with the store. Browse the <Link className={L} href="/blunts">Moon Rock blunt catalog</Link> for
       every name, or the smaller <Link className={L} href="/mini-blunts">mini blunt packs</Link>.
     </Block>
@@ -63,8 +63,9 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   'pre-rolls/xxx': (
     <Block heading="XXX in other formats">
       XXX is a Gold Strain Series name, and the pre-roll is one 1g roll of flower, live resin, and diamonds, marked Indica on
-      the pack. The same name also comes as a jar: the <Link className={L} href="/moon-rocks/xxx">XXX moon rock jar</Link> shows
-      the build without paper. If you&apos;d rather have a smaller roll, the{' '}
+      the pack. The same name also comes as the <Link className={L} href="/moon-rocks/xxx">XXX moon rock jar</Link>, built with live
+      resin and finished with kief, and the <Link className={L} href="/blunts/xxx">XXX infused blunt</Link> puts the name in a
+      hemp wrap. If you&apos;d rather have a smaller roll, the{' '}
       <Link className={L} href="/mini-pre-rolls/xxx">XXX mini pre-roll pack</Link> splits the same name into shorter rolls. Read
       the label on the exact pack and confirm current selection with the store.
     </Block>
@@ -72,7 +73,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   'pre-rolls/white-walker': (
     <Block heading="White Walker within the Rose Gold series">
       White Walker sits in the Rose Gold Connoisseur Series, the solventless side of Presidential. The pre-roll is flower, live
-      rosin, and diamonds in one 1g roll. Live rosin is pressed from ice-water hash with heat and pressure. The{' '}
+      rosin, and diamonds in one 1g roll. The{' '}
       <Link className={L} href="/learn/what-is-live-rosin">guide to live rosin</Link> covers how it&apos;s made. To compare White
       Walker with its series neighbors, browse the <Link className={L} href="/moon-rocks/rose-gold">Rose Gold collection</Link>,
       then confirm current selection with the store.

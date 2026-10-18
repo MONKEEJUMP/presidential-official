@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Fragment, type ReactNode } from "react";
 
 import { CmsHomepageModuleRenderer, Scene } from "@/components/presidential";
 import { InContentText } from "@/components/presidential/primitives/in-content-text";
@@ -14,6 +15,8 @@ import { sanitizePublicCmsModule } from "@/lib/cms/public-content";
 type LearnGuideCmsBodyProps = {
   readonly modules: readonly SanityHomepageModule[];
   readonly sourcePath: string;
+  /** Repo-owned block rendered right after the CMS section whose heading starts with `heading` (end of body if none matches). */
+  readonly insertAfter?: { readonly heading: string; readonly node: ReactNode };
 };
 
 type LearnGuideBodyModuleProps = {
@@ -120,21 +123,26 @@ function LearnGuideBodyModule({ module, index, sourcePath }: LearnGuideBodyModul
   );
 }
 
-export function LearnGuideCmsBody({ modules, sourcePath }: LearnGuideCmsBodyProps) {
+export function LearnGuideCmsBody({ insertAfter, modules, sourcePath }: LearnGuideCmsBodyProps) {
   const publicModules = modules.map(sanitizePublicCmsModule);
   const guideBodyModules = publicModules.filter((module) => module._type === "learnGuideBlock");
   const otherModules = publicModules.filter((module) => module._type !== "learnGuideBlock");
+  const insertKey = insertAfter?.heading.toLowerCase();
+  const insertIndex = insertKey
+    ? guideBodyModules.findIndex((module) =>
+        (module.heading || module.headline || module.title || "").trim().toLowerCase().startsWith(insertKey),
+      )
+    : -1;
 
   return (
     <>
       {guideBodyModules.map((module, index) => (
-        <LearnGuideBodyModule
-          index={index}
-          key={module._key || `${module._type}-${index}`}
-          module={module}
-          sourcePath={sourcePath}
-        />
+        <Fragment key={module._key || `${module._type}-${index}`}>
+          <LearnGuideBodyModule index={index} module={module} sourcePath={sourcePath} />
+          {index === insertIndex ? insertAfter?.node : null}
+        </Fragment>
       ))}
+      {insertAfter && insertIndex === -1 ? insertAfter.node : null}
       {otherModules.length ? (
         <CmsHomepageModuleRenderer heroHeadingLevel="h2" modules={otherModules} />
       ) : null}
