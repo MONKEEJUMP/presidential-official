@@ -633,6 +633,8 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
       "It is finished with diamonds, which give the outside of a Presidential Moon Rock its texture and its weight in the hand.",
     ],
     ["The same flower, the same live resin coat, the same diamond finish.", "The same flower, the same live resin coat, finished with diamonds."],
+    // Chief R42 ruling (d): blunt-only line cut from the jar page.
+    ["This page is the Moon Rock Blunt: one blunt, 1.5 grams net weight, printed on the pack as .053 oz, whole and hand-finished.", ""],
   ],
   // Sitebulb R33 A6: no unsourced market-size claim.
   "/moon-rocks/cap-junky": [
@@ -742,6 +744,12 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
     // SURFER-R41 H2 after "The collaboration and the market" (Sitebulb R41 placement).
     ["**Formats**", "**Guava Haze in the Presidential Line**\n\nGuava Haze is a Presidential Line jar. Its aroma runs warm and tropical, with guava at the front. Each Presidential Line name prints its own label design, so shoppers can compare them on aroma and art. For a savory contrast from the same line, look at [Garlic Cookies, a pungent Presidential Line jar](/moon-rocks/presidential-line-garlic-cookies). For how the layers are applied, read [how a moon rock is put together](/learn/what-are-moon-rocks). Read the current package label for the build and batch test results, and confirm stock with the store.\n\n**Formats**"],
     ["This page is the Moon Rock Blunt: one blunt, Net Wt. 1.5G (.053oz), printed legibly on the flat label.", ""],
+    // Chief R42 ruling (b): no Guava Haze jar art, so the "What is inside" copy names no build.
+    ["FLOWER · LIVE RESIN · DIAMONDS.", ""],
+    [
+      "Flower forms the body, live resin coats it, diamonds finish the outside. The three-stage Presidential Infusion System, applied here",
+      "Guava Haze goes through the three-stage Presidential Infusion System, applied here",
+    ],
     ["The wider ladder holds constant across the catalogue.", "Each format has a fixed weight."],
     ["100% TOBACCO FREE at the base — the wrap carries no tobacco, stated on the front of the pack rather than buried on the back.", ""],
   ],
@@ -751,6 +759,13 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
     // SURFER-R41 H2 after "What is inside" (Sitebulb R41 placement).
     ["**Formats**", "**Galactic Gas beside a resinous Gold jar**\n\nGalactic Gas is a Gold Strain Series jar. The name pairs a space theme with a gassy aroma. Shoppers who like heavier, resinous Gold profiles can compare it with [Gorilla Goo, a sticky Gold jar](/moon-rocks/gorilla-goo). For a refresher on how the layers come together, read [the layers inside a moon rock](/learn/what-are-moon-rocks). Each pack prints its own build, so check the label and its test results, and confirm stock with the store.\n\n**Formats**"],
     ["This page is the Moon Rock Blunt: one blunt, hand-finished.", ""],
+    // Chief R42 rulings (b) and (c): no Galactic Gas jar art, and no Gold-wide build claim.
+    ["FLOWER · LIVE RESIN · DIAMONDS.", ""],
+    ["Flower as the body. Live resin coating it. Diamonds — the crystalline concentrate — as the outer finish. ", ""],
+    [
+      "Three stages through the Presidential Infusion System, the same sequence applied to every Gold Strain Series release regardless of how the pack is decorated.",
+      "Three stages through the Presidential Infusion System. The jar label prints the materials.",
+    ],
     ["on every single pack in the catalogue.", "on the pack."],
     ["Most of the line puts a moon behind the product.", "Many packs put a moon behind the product."],
     ["is constant across the entire catalogue.", "is the house design."],
