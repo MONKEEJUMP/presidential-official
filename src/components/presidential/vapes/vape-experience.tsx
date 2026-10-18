@@ -150,6 +150,21 @@ export function VapeExperience({ page }: { page: VapePage }) {
             <Link href="/vapes">the full Presidential vapes collection</Link>, and use{' '}
             <Link href="/learn">the Presidential learn hub</Link> to read up on each extract before you pair it with a mode.
           </p>
+          {/* INLINKS-COPY-R37: /orbit state-finder and brand H3s ("about Presidential" anchor already used, reworded). */}
+          <h3>Checking your state before you look for Orbit</h3>
+          <p>
+            Presidential keeps a store finder page by state. Start with the{' '}
+            <Link href="/find-us/az">Arizona Presidential store finder</Link>, the{' '}
+            <Link href="/find-us/nv">Nevada Presidential store finder</Link> or the{' '}
+            <Link href="/find-us/ok">Oklahoma Presidential store finder</Link>, and ask the licensed retailer whether Orbit and Moon
+            Pods are on its shelf.
+          </p>
+          <h3>The brand behind the Orbit battery</h3>
+          <p>
+            Orbit carries the same Presidential crest as the Moon Rocks, blunts and pre-rolls. The{' '}
+            <Link href="/our-story">Presidential brand story</Link> and the <Link href="/about">company behind Presidential</Link>{' '}
+            pages cover who makes it.
+          </p>
         </div>
       ) : null}
       <div className={s.explorerGrid}>
