@@ -230,6 +230,22 @@ export function PreRollExperience({
             <Link href="/presidential-art/pre-rolls">pre-roll package art</Link>.
           </p>
         </div>
+        {/* INLINKS-COPY-R34: /pre-rolls extract and retail-buyer H3s (liquid diamonds link dropped: that extract is the vape side, not the pre-roll build). */}
+        <div>
+          <h3>The extract behind each pre-roll series</h3>
+          <p>
+            Each series is defined by its concentrate: distillate for Silver, live resin for Gold and live rosin for Rose Gold. Read{" "}
+            <Link href="/learn/different-extracts-need-different-heat">why different extracts need different heat</Link> before you
+            choose between a Silver, Gold or Rose Gold roll.
+          </p>
+        </div>
+        <div>
+          <h3>Pre-rolls for retail buyers</h3>
+          <p>
+            Stores that want to carry Moon Rock pre-rolls can start with <Link href="/wholesale">Presidential wholesale</Link> or{" "}
+            <Link href="/partners">the Presidential partners page</Link>.
+          </p>
+        </div>
         <div className={styles.tierSections}>
           {TIER_SECTION_ORDER.map((section) => {
             const entries = tieredArtwork.filter(({ placement }) => placement.section === section);
