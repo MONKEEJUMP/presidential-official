@@ -26,7 +26,7 @@ export const REPO_OWNED_PAGE_COPY: Readonly<
 
 Every Presidential pack carries a composition line — three or four ingredients separated by small pot-leaf dots. FLOWER · LIVE RESIN · DIAMONDS on one. FLOWER · DISTILLATE · KIEF on another. FLOWER · LIQUID LIVE RESIN · DIAMONDS on a third.
 
-Those lines are not decoration and they are not marketing. They describe what is physically in the product, layer by layer, and they change from pack to pack. Two Presidential products with similar names can be built four different ways.
+Those lines are not decoration and they are not marketing. They describe what is physically in the product, layer by layer, and they change from pack to pack. Two Presidential products with similar names can be built in different ways.
 
 This guide explains what the words mean.
 
@@ -60,7 +60,7 @@ Moon Rock Blunt: one unit, 1.5 g, .053 oz. Moon Rock Preroll, [the Presidential 
 
 The build does not change between them. Only the size and the count.
 
-**The catalogue, in three tiers**
+**The catalogue, by tier**
 
 The Silver Flavour Series carries flavour-led releases. The Gold Strain Series carries named strains. Papaya Punch is one approved product in the Gold catalogue.
 
@@ -68,7 +68,7 @@ Presidential OG has its own product page within that same Gold series. SFV OG is
 
 The Rose Gold Connoisseur tier sits above both. Cosmic Cookies is one approved product in the Rose Gold catalogue.
 
-Collaboration releases run alongside the three tiers. Presidential x THC Design is a collaboration name, not a strain classification.
+Collaboration releases run alongside the tiers. Presidential x THC Design is a collaboration name, not a strain classification.
 
 ### From the Learn guides to the rolled lineup
 
@@ -100,7 +100,7 @@ Each infused Presidential product starts with cannabis flower, adds a concentrat
 
 **The Silver Flavor Series is built on distillate**
 
-The Silver Flavor Series is built on THC distillate. Its flavor-first, fruit-forward roster is [Blue Raspberry](/moon-rocks/blue-raspberry), [Grape](/moon-rocks/grape), [Peach Mango](/moon-rocks/peach-mango), [Pineapple](/moon-rocks/pineapple), [Strawberry](/moon-rocks/strawberry), [Tropical](/moon-rocks/tropical), and [Watermelon](/moon-rocks/watermelon). Presidential Classic, the house recipe, is also made with flower, distillate, and kief. [Presidential Moon Rocks and the three series](/) shows where distillate sits in the lineup.
+The Silver Flavor Series is built on THC distillate. Its flavor-first, fruit-forward roster is [Blue Raspberry](/moon-rocks/blue-raspberry), [Grape](/moon-rocks/grape), [Peach Mango](/moon-rocks/peach-mango), [Pineapple](/moon-rocks/pineapple), [Strawberry](/moon-rocks/strawberry), [Tropical](/moon-rocks/tropical), and [Watermelon](/moon-rocks/watermelon). Presidential Classic, the house recipe, is also made with flower, distillate, and kief. [Presidential Moon Rocks and its series](/) shows where distillate sits in the lineup.
 
 **Distillate and the other Presidential extracts**
 
@@ -163,9 +163,9 @@ The build does not change between them. Only the size and the count, and the cre
 
 **The catalogue**
 
-Three tiers. The Silver Flavour Series carries flavour-led releases — Grape, Pineapple, Watermelon, Peach Mango, Strawberry, Tropical, Blue Raspberry. The Gold Strain Series carries named strains — Blue Dream, King Louis, 24K, NYC Diesel, Presidential OG, Galactic Gas, Cap Junky and others. The Rose Gold Connoisseur tier sits above both, defined by live rosin — the solventless method, made without butane, propane, CO2 or ethanol at any stage.
+The Silver Flavour Series carries flavour-led releases — Grape, Pineapple, Watermelon, Peach Mango, Strawberry, Tropical, Blue Raspberry. The Gold Strain Series carries named strains — Blue Dream, King Louis, 24K, NYC Diesel, Presidential OG, Galactic Gas, Cap Junky and others. The Rose Gold Connoisseur tier sits above both, defined by live rosin — the solventless method, made without butane, propane, CO2 or ethanol at any stage.
 
-Running across all three are the collaboration releases, each carrying a partner's mark printed on the front of the pack: Ball Family Farms, Nature's Chemistry of Las Vegas, Top Shelf Cultivation, THC Design, Trendi by Planet 13, Moxie, Polaris Cannabis, ROVE, Platinum and VladTV.
+Running across the tiers are the collaboration releases, each carrying a partner's mark printed on the front of the pack: Ball Family Farms, Nature's Chemistry of Las Vegas, Top Shelf Cultivation, THC Design, Trendi by Planet 13, Moxie, Polaris Cannabis, ROVE, Platinum and VladTV.
 
 **Reading a Presidential pack when it gets here**
 
@@ -259,9 +259,9 @@ Enter your zip code above to find the licensed New York retailers nearest you ca
   },
   "/moon-rocks/rose-gold": {
     label: "Rose Gold Connoisseur tier",
-    markdown: `Presidential's catalogue is organised into three tiers, and Rose Gold sits at the top of them.
+    markdown: `Presidential's catalogue is organised into tiers, and Rose Gold sits at the top.
 
-**The three tiers**
+**The tiers**
 
 | Tier | What it carries |
 |---|---|
@@ -291,7 +291,7 @@ Every Presidential moon rock is built the same way: flower as the base, a concen
 
 What changes across the catalogue is which materials fill the three roles, and the pack always prints it. Some carry FLOWER · LIVE RESIN · DIAMONDS. Some carry FLOWER · DISTILLATE · KIEF. Cap Junky carries FLOWER · LIQUID LIVE RESIN · DIAMONDS.
 
-**The formats, identical across all three tiers**
+**The formats, identical across every tier**
 
 Moon Rock Blunt: one unit, 1.5 g, .053 oz. Moon Rock Preroll: one unit, 1 g, .035 oz. Moon Rocks loose: 2 g, 0.071 oz, sold in the self-titled flagship pack. Mini Blunts: three at 0.7 g, 2.1 g total. Mini Prerolls: three at 0.5 g, 1.5 g total.
 
@@ -305,7 +305,7 @@ The house does not use a different crest for a different tier. What differs is t
 
 **Alongside the tiers: the collaborations**
 
-Running across all three are the partner releases, each carrying a second mark printed on the front: Ball Family Farms, Nature's Chemistry of Las Vegas, Top Shelf Cultivation, THC Design, Trendi by Planet 13, Moxie, Polaris Cannabis, ROVE, Platinum and VladTV.
+Running across the tiers are the partner releases, each carrying a second mark printed on the front: Ball Family Farms, Nature's Chemistry of Las Vegas, Top Shelf Cultivation, THC Design, Trendi by Planet 13, Moxie, Polaris Cannabis, ROVE, Platinum and VladTV.
 
 Those releases are frequently market-specific — the Platinum packs carry Michigan regulatory markings, and the Moxie mark appears on a California variant.
 

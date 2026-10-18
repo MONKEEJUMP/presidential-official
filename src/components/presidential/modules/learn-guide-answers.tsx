@@ -50,9 +50,9 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
         question: "Which Presidential product is made with liquid diamonds?",
         answer: (
           <p>
-            Liquid Diamonds (LD) is one of the three <Link className={a} href="/moon-pods">Moon Pods</Link> families,
+            Liquid Diamonds (LD) is one of the <Link className={a} href="/moon-pods">Moon Pods</Link> families,
             shown with the <Link className={a} href="/orbit">Orbit</Link> device and marked by its teal mouthpiece. The
-            other two families are named for their extracts: Live Resin (LRE) and Live Rosin (LRO).
+            other families are named for their extracts: Live Resin (LRE) and Live Rosin (LRO).
           </p>
         ),
       },
@@ -83,7 +83,7 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
           <p>
             Yes. Each pack prints the strain type alongside the format line and the composition line. The{" "}
             <Link className={a} href="/moon-rocks/24k">24K</Link> pack, for example, is marked Indica. Every pack in the{" "}
-            <Link className={a} href="/moon-rocks">Presidential Moon Rocks collection</Link> carries the same three lines.
+            <Link className={a} href="/moon-rocks">Presidential Moon Rocks collection</Link> carries the same lines.
             The <Link className={a} href="/presidential-thc">Presidential THC guide</Link> explains the flower, concentrate,
             and kief roles behind them.
           </p>
@@ -113,8 +113,8 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
           <p>
             <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link> Moon Rocks such as{" "}
             <Link className={a} href="/moon-rocks/24k">24K</Link> and Blue Dream print FLOWER · LIVE RESIN · DIAMONDS.
-            Gold Strain Series 1g pre-rolls combine flower, live resin, and diamonds; 1.5g blunts come with live resin and
-            diamonds; and Cap Junky prints liquid live resin. Live Resin (LRE) is also one of the three{" "}
+            Gold Strain Series 1g pre-rolls, <Link className={a} href="/pre-rolls/xj-13">XJ-13 in paper</Link> among them, combine flower, live resin, and diamonds; 1.5g blunts come with live resin and
+            diamonds; and Cap Junky prints liquid live resin. Live Resin (LRE) is also one of the{" "}
             <Link className={a} href="/moon-pods">Moon Pods</Link> families.
           </p>
         ),
@@ -157,7 +157,8 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
         answer: (
           <p>
             Rose Gold Connoisseur Series Moon Rocks, Rose Gold 1g pre-rolls built from flower, live rosin, and diamonds, a
-            live-rosin selection of 1.5g <Link className={a} href="/blunts">blunts</Link>, and the Live Rosin (LRO){" "}
+            live-rosin selection of 1.5g <Link className={a} href="/blunts">blunts</Link>, such as{" "}
+            <Link className={a} href="/blunts/gods-gift">God&apos;s Gift in a hemp wrap</Link>, and the Live Rosin (LRO){" "}
             <Link className={a} href="/moon-pods">Moon Pods</Link> family with its smoked mouthpiece.
           </p>
         ),

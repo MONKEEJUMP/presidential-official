@@ -4,9 +4,21 @@ import { vaultProducts } from '@/content/vault/catalog';
 import { vaultProductForImage, vaultProductForName, vaultProductForAlt } from '@/lib/products/vault-links';
 
 export const productInlineClass = 'font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand';
+// Sitebulb R40 B9: these legacy product pages are noindex, so a name mention points at the indexable jar page,
+// or stays plain text when the jar is a different product (XJ13 vs XJ-13).
+const NOINDEX_MENTION_TARGETS: Readonly<Record<string, string | null>> = {
+  '/blunts/skywalker': '/moon-rocks/skywalker',
+  '/pre-rolls/skywalker': '/moon-rocks/skywalker',
+  '/blunts/cherry-gelato': '/moon-rocks/cherry-gelato',
+  '/blunts/gorilla-goo': '/moon-rocks/gorilla-goo',
+  '/pre-rolls/gorilla-goo': '/moon-rocks/gorilla-goo',
+  '/blunts/waui': '/moon-rocks/waui',
+  '/blunts/xj-13': null,
+};
 export function ProductNameLink({ name, format, children, className = productInlineClass, currentPath }: { name: string; format: string; children: ReactNode; className?: string; currentPath?: string }) {
   const p = vaultProductForName(name, format);
-  return p && p.productUrl !== currentPath ? <Link className={className} href={p.productUrl}>{children}</Link> : <>{children}</>;
+  const href = p ? (p.productUrl in NOINDEX_MENTION_TARGETS ? NOINDEX_MENTION_TARGETS[p.productUrl] : p.productUrl) : null;
+  return href && href !== currentPath ? <Link className={className} href={href}>{children}</Link> : <>{children}</>;
 }
 export function ProductImageLink({ src, alt, children, className, currentPath, disabled = false, fallbackContainer = false }: { src: string; alt?: string; children: ReactNode; className?: string; currentPath?: string; disabled?: boolean; fallbackContainer?: boolean }) {
   const p = vaultProductForImage(src) ?? (alt ? vaultProductForAlt(alt) : undefined);

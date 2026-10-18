@@ -98,7 +98,8 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       <Link className={L} href="/learn/what-is-live-rosin">solventless rosin explainer</Link> covers that process step by step.
       Shoppers who prefer a jar can find the same name as a{' '}
       <Link className={L} href="/moon-rocks/gods-gift">God&apos;s Gift moon rock jar</Link>. Availability depends on the
-      retailer, so confirm the current selection with the store and check the label on each pack for batch information.
+      retailer, so confirm the current selection with the store and check the label on each pack for batch information. In a
+      tobacco-free wrap, the same name comes as <Link className={L} href="/blunts/gods-gift">the 1.5g God&apos;s Gift blunt</Link>.
     </Block>
   ),
   'mini-pre-rolls/waui': (
@@ -154,7 +155,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       compounds that shape how a strain smells. The same name comes as the{' '}
       <Link className={L} href="/moon-rocks/24k">24K moon rock jar</Link>, finished with diamonds on its own label, and as the{' '}
       <Link className={L} href="/mini-blunts/24k">24K mini blunt three-pack</Link>. Use the store finder and confirm with the
-      store.
+      store. In paper, see <Link className={L} href="/mini-pre-rolls/24k">the 24K mini pre-roll three-pack</Link>.
     </Block>
   ),
   // SURFER-R35: mini and pre-roll SKU blocks (single SKUs follow their labels; jar builds follow the jar's own label).
@@ -219,7 +220,8 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       rosin, and diamonds in one 1g roll. The{' '}
       <Link className={L} href="/learn/what-is-live-rosin">guide to live rosin</Link> covers how it&apos;s made. To compare White
       Walker with its series neighbors, browse the <Link className={L} href="/moon-rocks/rose-gold">Rose Gold collection</Link>,
-      then confirm current selection with the store.
+      then confirm current selection with the store. For a tobacco-free wrap, see{' '}
+      <Link className={L} href="/blunts/white-walker">White Walker as a 1.5g blunt</Link>.
     </Block>
   ),
   'pre-rolls/waui': (
@@ -251,12 +253,12 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   'blunts/white-walker': (
     <Block heading="White Walker within Rose Gold">
-      White Walker is a Rose Gold Connoisseur Series blunt: 1.5g of flower, live rosin, and diamonds in a tobacco-free wrap, marked Sativa. It is a different product from Skywalker, even though the names sit close on a menu. Rose Gold groups the solventless names together, and the <Link className={L} href="/moon-rocks/rose-gold">Rose Gold Connoisseur lineup</Link> shows where White Walker sits among them. Live rosin is pressed with ice water, heat, and pressure, and the <Link className={L} href="/learn/what-is-live-rosin">solventless pressing explainer</Link> covers that process in more depth. Read the pack for batch test results, and confirm with the store before you go.
+      White Walker is a Rose Gold Connoisseur Series blunt: 1.5g of flower, live rosin, and diamonds in a tobacco-free wrap, marked Sativa. Rose Gold groups the solventless names together, and the <Link className={L} href="/moon-rocks/rose-gold">Rose Gold Connoisseur lineup</Link> shows where White Walker sits among them. Live rosin is pressed with ice water, heat, and pressure, and the <Link className={L} href="/learn/what-is-live-rosin">solventless pressing explainer</Link> covers that process in more depth. Read the pack for batch test results, and confirm with the store before you go.
     </Block>
   ),
   'mini-pre-rolls/skywalker': (
     <Block heading="Skywalker among the Gold Strain Series">
-      The Skywalker mini pre-roll pack carries the ROVE collaboration in paper: each roll is flower, live resin, and diamonds, marked Indica, with an earthy profile. Skywalker is part of the Gold Strain Series, the strain-named tier, and each name in it prints its own build. To compare it with other names in that tier, browse <Link className={L} href="/moon-rocks/gold">Skywalker&apos;s fellow Gold strain jars</Link>. For background on the extract itself, the <Link className={L} href="/learn/what-is-live-resin">frozen-at-harvest live resin explainer</Link> covers how it is made. Read the pack for batch details, and confirm with the store which Skywalker formats are on hand.
+      The Skywalker mini pre-roll pack carries the ROVE collaboration in paper: each roll is flower, live resin, and diamonds, marked Indica, with an earthy profile. Skywalker is part of the Gold Strain Series, where most strain names are built on live resin. To compare it with other names in that tier, browse <Link className={L} href="/moon-rocks/gold">Skywalker&apos;s fellow Gold strain jars</Link>. For background on the extract itself, the <Link className={L} href="/learn/what-is-live-resin">frozen-at-harvest live resin explainer</Link> covers how it is made. Read the pack for batch details, and confirm with the store which Skywalker formats are on hand.
     </Block>
   ),
   'mini-pre-rolls/24k': (
@@ -271,7 +273,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   'mini-blunts/skywalker': (
     <Block heading="Skywalker in full-size formats">
-      Skywalker is a ROVE collaboration in the Gold Strain Series. The Skywalker mini blunt pack carries the ROVE collaboration in a smaller size: flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a blueberry, tropical, and earthy aroma. Shoppers comparing it with other small rolls can look at <Link className={L} href="/mini-blunts/gorilla-goo">Gorilla Goo in the same mini blunt size</Link>, which lists its own build on its pack. For a paper-rolled option, the Skywalker infused pre-roll uses the same build as the minis. Picking between the rolls comes down to size and wrap. Read the pack for batch details, and confirm with the store which Skywalker formats it carries.
+      Skywalker is a ROVE collaboration in the Gold Strain Series. The Skywalker mini blunt pack carries the ROVE collaboration in a smaller size: flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a blueberry, tropical, and earthy aroma. Shoppers comparing it with other small rolls can look at <Link className={L} href="/mini-blunts/gorilla-goo">Gorilla Goo in the same mini blunt size</Link>, which lists its own build on its pack. For a paper-rolled option, there is also the Skywalker infused pre-roll. Picking between the rolls comes down to size and wrap. Read the pack for batch details, and confirm with the store which Skywalker formats it carries.
     </Block>
   ),
   'mini-blunts/waui': (

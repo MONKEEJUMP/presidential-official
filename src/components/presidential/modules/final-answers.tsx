@@ -106,8 +106,8 @@ export const ORBIT_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         Orbit is the Presidential vape device that <Link className={a} href="/moon-pods">Moon Pods</Link> are shown with. It
-        comes in four finishes: Black, Silver, Teal, and White. Moon Pods come in three families: Liquid Diamonds (LD), Live
-        Resin (LRE), and Live Rosin (LRO).
+        comes in four finishes: Black, Silver, Teal, and White. Moon Pods come in Liquid Diamonds (LD), Live
+        Resin (LRE), and Live Rosin (LRO) families.
       </p>
     ),
   },

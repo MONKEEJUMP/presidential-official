@@ -636,6 +636,8 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   ],
   // Sitebulb R33 A6: no unsourced market-size claim.
   "/moon-rocks/cap-junky": [
+    // Sitebulb R40 A9: no composition count.
+    ["Across the catalogue the middle ingredient runs four ways", "Across the catalogue the middle ingredient varies"],
     ["Planet 13 is one of the larger operators in the Nevada market, and Nevada is one of Presidential's active states.", "Planet 13 is a Nevada operator, and Nevada is one of Presidential's active states."],
     // Sitebulb R38 B5.
     // Sitebulb R39 A5: grammar fixed, no count.
@@ -660,6 +662,8 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   "/moon-rocks/presidential-prerolls": [
     // R40 chief ruling: no format counts.
     ["Five formats, one build, five different occasions.", "Every format, one build, a different occasion for each."],
+    // Sitebulb R40 A8.
+    ["Across the catalogue that line runs four ways:", "Across the catalogue that line varies:"],
     ["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."],
     // Sitebulb R35 A6: unsourced consumer-behavior claim.
     ["It is the entry point to the line, and it is the format most people meet first.", "It is the entry point to the line."],
@@ -710,7 +714,11 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
     ["Both leaning scientific in their artwork is not accidental. Of Presidential's ten collaboration partners, THC Design sits with the cultivation and processing group, and both its packs look the part.", ""],
   ],
   "/moon-rocks/wedding-cake": [["A dry finishing material bonded to the coat.", "A kief finish bonded to the coat."]],
-  "/moon-rocks/white-walker": [["A dry material bonded to the coat as the finish.", "Kief bonded to the coat as the finish."]],
+  "/moon-rocks/white-walker": [
+    ["A dry material bonded to the coat as the finish.", "Kief bonded to the coat as the finish."],
+    // Sitebulb R40 A10.
+    ["Across the catalogue those lines run four ways.", "Across the catalogue those lines vary."],
+  ],
   "/moon-rocks/xxx": [
     ["under a dry finish rather than a crystalline one.", "under a kief finish rather than a crystalline one."],
     // Sitebulb R39 B15: the sentence left out the mini blunt pack.
@@ -731,6 +739,9 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
     [" — finishing above 90% total cannabinoid content while retaining the strain's aromatic profile.", ", while retaining the strain's aromatic profile."],
   ],
   "/learn/what-are-moon-rocks": [
+    // Sitebulb R40 A13: no series counts.
+    ["organizes Moon Rocks into three series,", "organizes Moon Rocks into series,"],
+    ["Beyond the three series sit", "Beyond the Silver, Gold, and Rose Gold series sit"],
     ["The coating alone can run as high as 90% THC, depending on the concentrate used. ", ""],
     ["Standard cannabis flower generally tests between 15% and 25% THC.", "THC in cannabis flower varies by batch, so read the tested label."],
     ["the densest flower, the most potent coating, the finest kief.", "the densest flower, the richest coating, the finest kief."],
