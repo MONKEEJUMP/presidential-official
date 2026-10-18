@@ -145,7 +145,7 @@ The retailer search on this page will show results once verified licensed Washin
 
 Presidential builds moon rocks. Flower, coated in a concentrate, finished with kief that bonds to the coat — three stages applied in sequence, a process the company has run under the name the Presidential Infusion System since Los Angeles in 2012.
 
-Five formats, with weights fixed in every market. The Moon Rock Blunt is one unit at 1.5 grams, .053 oz. The Moon Rock Preroll is one at 1 gram, .035 oz. Loose Moon Rocks come at 2 grams, 0.071 oz. Mini Blunts are three at 0.7 grams for 2.1 grams total. Mini Prerolls are three at 0.5 grams for 1.5 grams total.
+Every format has a weight fixed in every market. The Moon Rock Blunt is one unit at 1.5 grams, .053 oz. The Moon Rock Preroll is one at 1 gram, .035 oz. Loose Moon Rocks come at 2 grams, 0.071 oz. Mini Blunts are three at 0.7 grams for 2.1 grams total. Mini Prerolls are three at 0.5 grams for 1.5 grams total.
 
 The build does not change between them. Only the size and the count, and the crescent numeral on the front of each pack tells you which you are holding at a glance.
 
@@ -189,7 +189,7 @@ The composition line printed on the front of every pack tells you which three ma
 
 **The formats**
 
-Five, with weights fixed across every market. The Moon Rock Blunt is a single blunt at 1.5 grams, printed as .053 oz. The Moon Rock Preroll is a single unit at 1 gram, .035 oz. Loose Moon Rocks come at 2 grams, 0.071 oz. The Mini Blunt three-pack is three at 0.7 grams each, 2.1 grams total. The Mini Preroll three-pack is three at 0.5 grams each, 1.5 grams total.
+Each format has a weight fixed across every market. The Moon Rock Blunt is a single blunt at 1.5 grams, printed as .053 oz. The Moon Rock Preroll is a single unit at 1 gram, .035 oz. Loose Moon Rocks come at 2 grams, 0.071 oz. The Mini Blunt three-pack is three at 0.7 grams each, 2.1 grams total. The Mini Preroll three-pack is three at 0.5 grams each, 1.5 grams total.
 
 **The catalogue**
 

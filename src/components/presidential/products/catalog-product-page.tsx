@@ -81,7 +81,7 @@ const VAULT_BUILD_LINKS: Readonly<Record<string, readonly BuildLink[]>> = {
     { lead: "The", href: "/moon-rocks/pink-cookies", anchor: "loose Pink Cookies jar", tail: " is flower and distillate, finished with kief" },
   ],
   "mini-pre-rolls/gorilla-goo": [{ lead: "For the tobacco-free wrap, see the", href: "/mini-blunts/gorilla-goo", anchor: "Gorilla Goo hemp-wrap minis" }],
-  "mini-blunts/skywalker": [{ lead: "The", href: "/moon-rocks/skywalker", anchor: "Skywalker moon rock jar", tail: " carries the same build loose" }],
+  "mini-blunts/skywalker": [{ lead: "The", href: "/moon-rocks/skywalker", anchor: "Skywalker moon rock jar", tail: " follows its own label: flower and distillate, finished with kief" }],
   "mini-pre-rolls/skywalker": [
     { lead: "Or choose", href: "/moon-rocks/skywalker", anchor: "loose Skywalker moon rocks" },
     { lead: "For a tobacco-free wrap, see", href: "/mini-blunts/skywalker", anchor: "the Skywalker mini blunt three-pack" },
