@@ -16,7 +16,7 @@ const platforms = [
   {
     title: "MOON ROCKS™",
     tagline: '"The Highest Form Of Cannabis."',
-    body: "The flagship, and the reason the name travels. Premium flower as the base, rich resin, and a coat of the finest kief fused into one complete product — built to be experienced as a single thing rather than three. Available as moon rocks, blunts, pre-rolls, and mini blunts.",
+    body: "The flagship, and the reason the name travels. Premium flower as the base, rich resin, and a coat of the finest kief fused into one complete product — built to be experienced as a single thing rather than three. Available as moon rocks, and as blunts, pre-rolls and mini blunts with a kief or diamond finish.",
     image: "/media/moonrock-cherrygelato.jpg" as const,
     imageAlt: "Cherry Gelato Presidential Moon Rocks package artwork",
     href: "/moon-rocks" as const,
@@ -265,7 +265,8 @@ export function AboutCompanyShell() {
                 <Link className="font-semibold underline underline-offset-4" href="/presidential-blunts">infused blunt guide</Link> explains how Presidential packs flower, concentrate,
                 and a kief or diamond finish inside a tobacco-free hemp wrap, and how the Silver, Gold, and Rose Gold series map to
                 distillate, live resin, and live rosin. Searchers looking for Presidential Blunts on this site should start there
-                rather than here. When you&apos;re ready to buy, the store finder shows licensed retailers near your zip code, because
+                rather than here. If you want the moon rock version in a wrap, see the{" "}
+                <Link className="font-semibold underline underline-offset-4" href="/moon-rocks/presidential-blunts">moon rock blunt page</Link>. When you&apos;re ready to buy, the store finder shows licensed retailers near your zip code, because
                 Presidential is
                 wholesale and doesn&apos;t sell direct.
               </p>
@@ -371,7 +372,7 @@ export function AboutCompanyShell() {
             <SectionIntro
               eyebrow="THE HERITAGE"
               id="about-heritage-title"
-              title="TEN YEARS OF NOT SETTLING."
+              title="MORE THAN A DECADE OF NOT SETTLING."
               titleSize="balanced"
             />
             <div className="lg:pt-8">

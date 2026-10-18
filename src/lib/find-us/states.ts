@@ -137,8 +137,8 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Washington — through licensed retailers, adults 21+.",
     siteLink: {
       before: "",
-      anchor: "Presidential THC Washington",
-      after: " is live ahead of the state's market opening.",
+      anchor: "Presidential's Washington retailer listings",
+      after: " will appear here once verified.",
     },
   },
 ] as const;

@@ -13,6 +13,7 @@ import { Scene } from "../layout/scene";
 import { SceneStack } from "../layout/scene-stack";
 import { FindUsNationwideVideo } from "../media/find-us-nationwide-video";
 import { CtaLink } from "../primitives/cta-link";
+import { InContentText } from "../primitives/in-content-text";
 import {
   CinematicStateWall,
   type CinematicStateWallState,
@@ -223,7 +224,8 @@ export async function SupportRouteFoundationShell({
                     {panel.title}
                   </h3>
                   <p className="mt-4 text-sm leading-6 text-po-body">
-                    {panel.body}
+                    {/* Sitebulb R29 B2: panel copy may carry a same-site markdown link. */}
+                    <InContentText sourcePath={route.path} value={panel.body} />
                   </p>
                 </article>
               ))}
