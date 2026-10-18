@@ -414,11 +414,11 @@ export function PresidentialSrosSection() {
         <div className={styles.inner}>
           <BandHeading id="sros-ecosystem-heading">THE PRESIDENTIAL ECOSYSTEM™</BandHeading>
           <p className={styles.goldLead} data-sros-line>
-            3 EXPERIENCES. 2 PLATFORMS. 4 EXPRESSIONS. 1 STANDARD.
+            EVERY EXPERIENCE. 2 PLATFORMS. EVERY EXPRESSION. 1 STANDARD.
           </p>
 
           <p className={styles.rowLabel} data-sros-line>
-            3 EXPERIENCE TIERS
+            EXPERIENCE TIERS
           </p>
           <div className={styles.tierGrid}>
             {TIERS.map(({ tier, icon: Icon, href, name, extract, descriptor }) => {
@@ -469,7 +469,7 @@ export function PresidentialSrosSection() {
           </div>
 
           <p className={styles.rowLabel} data-sros-line>
-            4 EXPRESSIONS
+            EXPRESSIONS
           </p>
           <div className={styles.expressionLinks}>
             {EXPRESSIONS.map(({ href, label }) => (

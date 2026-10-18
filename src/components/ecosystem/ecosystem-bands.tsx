@@ -40,12 +40,13 @@ const ARCHITECTURE_STEPS = [
     sentence: "Choose your experience format.",
   },
   {
-    number: "3",
+    // R40 chief ruling: no tier or expression numerals.
+    number: "",
     label: "EXPERIENCE TIERS",
     sentence: "Choose your experience profile.",
   },
   {
-    number: "4",
+    number: "",
     label: "EXPRESSIONS",
     sentence: "Choose your preferred way to enjoy.",
   },
@@ -64,12 +65,12 @@ const ECOSYSTEM_PILLARS = [
   },
   {
     icon: CirclesThree,
-    heading: "THREE EXPERIENCE TIERS",
+    heading: "EXPERIENCE TIERS",
     copy: "Silver, Gold, and Rose Gold make every profile easy to choose.",
   },
   {
     icon: Diamond,
-    heading: "FOUR EXPRESSIONS",
+    heading: "EXPRESSIONS",
     copy: "Moon Rocks, pre-rolls, blunts, and vapes. Endless choice.",
   },
 ] as const;
@@ -78,7 +79,7 @@ const MOON_ROCKS_PLATFORM_FEATURES = [
   { icon: Crown, label: "Premium Flower Base" },
   { icon: Drop, label: "Precision Oil Infusion" },
   { icon: Diamond, label: "Kief-Coated Finish" },
-  { icon: CirclesThree, label: "Three Experience Tiers" },
+  { icon: CirclesThree, label: "Experience Tiers" },
 ] as const;
 
 const OIL_PLATFORM_FEATURES = [
@@ -287,8 +288,8 @@ function ClosingStrip({
   return (
     <div className={styles.closingStrip}>
       <div className={styles.closingGoldLines}>
-        <p>THREE EXPERIENCES.</p>
-        <p>FOUR EXPRESSIONS.</p>
+        <p>EVERY EXPERIENCE.</p>
+        <p>EVERY EXPRESSION.</p>
         <p>ONE STANDARD.</p>
       </div>
       <div className={styles.closingChoiceCell}>{choice}</div>
@@ -383,7 +384,7 @@ export function HomeEcosystemBand() {
           THE PRESIDENTIAL ECOSYSTEM™
         </h2>
         <p className={styles.goldLead}>
-          ONE ECOSYSTEM. TWO PLATFORMS. THREE EXPERIENCES. FOUR EXPRESSIONS.
+          ONE ECOSYSTEM. TWO PLATFORMS. EVERY EXPERIENCE. EVERY EXPRESSION.
         </p>
         <div className={styles.introLines}>
           <p>A complete premium cannabis experience built for how consumers choose.</p>
@@ -414,8 +415,8 @@ export function HomeArchitectureBand() {
         </h2>
         <div className={styles.architectureSteps}>
           {ARCHITECTURE_STEPS.map((step) => (
-            <article key={step.number}>
-              <p className={styles.stepNumber}>{step.number}</p>
+            <article key={step.label}>
+              {step.number ? <p className={styles.stepNumber}>{step.number}</p> : null}
               <h3>{step.label}</h3>
               <p>{step.sentence}</p>
             </article>
@@ -502,7 +503,7 @@ export function HomePlatformsAndTiersBand() {
 
         <div aria-labelledby="home-tiers-heading" className={styles.tierPart}>
           <h2 className={styles.numberedHeading} id="home-tiers-heading">
-            3 EXPERIENCE TIERS
+            EXPERIENCE TIERS
           </h2>
           <p className={styles.sectionSubline}>Choose your experience profile.</p>
           <p className={styles.sectionSubline}>
@@ -544,7 +545,7 @@ export function HomeExpressionsBand() {
     >
       <div className={styles.inner}>
         <h2 className={styles.numberedHeading} id="home-expressions-heading">
-          4 EXPRESSIONS
+          EXPRESSIONS
         </h2>
         <p className={styles.sectionSubline}>Choose your preferred way to enjoy.</p>
         <div className={styles.expressionGrid} data-count="4">
@@ -590,7 +591,7 @@ export function MoonRocksPlatformBand() {
         </h2>
         <p className={styles.sectionSubline}>The Ultimate Flower Experience.</p>
         <p className={styles.goldLead}>
-          ONE ECOSYSTEM. TWO PLATFORMS. THREE EXPERIENCES. FOUR EXPRESSIONS.
+          ONE ECOSYSTEM. TWO PLATFORMS. EVERY EXPERIENCE. EVERY EXPRESSION.
         </p>
         <div className={styles.expressionGrid} data-count="3">
           <ExpressionCard kind="moon-rocks" linked={false} scope="moon-platform" />

@@ -1,6 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ProductMentions } from "./product-mention";
+import { ProductMentions, productInlineClass } from "./product-mention";
+
+// R40 standing rule: no one-word links. On these two pages the Skywalker mention links to the indexable jar page
+// with a multi-word anchor instead of the automatic one-word product-name link.
+const DESCRIPTION_PHRASE_LINKS: Readonly<Record<string, { readonly find: string; readonly anchor: string; readonly href: string }>> = {
+  "/blunts/white-walker": { find: "Skywalker", anchor: "Skywalker in the Gold series", href: "/moon-rocks/skywalker" },
+  "/pre-rolls/white-walker": { find: "Skywalker", anchor: "Skywalker from the Gold series", href: "/moon-rocks/skywalker" },
+};
+function withPhraseLink(path: string, text: string) {
+  const rule = DESCRIPTION_PHRASE_LINKS[path];
+  const at = rule ? text.indexOf(rule.find) : -1;
+  if (!rule || at < 0) return text;
+  return [text.slice(0, at), <Link className={productInlineClass} href={rule.href} key="phrase-link">{rule.anchor}</Link>, text.slice(at + rule.find.length)];
+}
 
 import {
   productDetailPath,
@@ -181,7 +194,7 @@ export function CatalogProductPage({
               <h1 id="product-title">{headingFormat ? `${product.name} ${headingFormat}` : product.name}</h1>
               {collection ? <p className={styles.collection}>{collection}</p> : null}
               <p className={styles.edition}>{product.edition}</p>
-              <p className={styles.description}><ProductMentions format={categoryPath === "/blunts" ? "Blunt" : categoryPath === "/pre-rolls" ? "Pre-roll" : categoryPath === "/mini-blunts" ? "Mini Blunt" : "Mini Pre-roll"} currentPath={productDetailPath(categoryPath, product.id)}>{product.description}</ProductMentions></p>
+              <p className={styles.description}><ProductMentions format={categoryPath === "/blunts" ? "Blunt" : categoryPath === "/pre-rolls" ? "Pre-roll" : categoryPath === "/mini-blunts" ? "Mini Blunt" : "Mini Pre-roll"} currentPath={productDetailPath(categoryPath, product.id)}>{withPhraseLink(productDetailPath(categoryPath, product.id), product.description)}</ProductMentions></p>
 
               {vaultProduct ? <VaultSpecs product={vaultProduct} /> : <dl className={styles.facts}>
                 <div><dt>Format</dt><dd>{format}</dd></div>
