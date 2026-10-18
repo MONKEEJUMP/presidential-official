@@ -69,6 +69,27 @@ export function VapeExperience({ page }: { page: VapePage }) {
   return <>
     {page === 'vapes' ? <><VapeModeSystemSection />{orbitFinishesSection}</> : null}
     {page === 'vapes' ? <VapeBuiltForOilBand /> : null}
+    {/* INLINKS-COPY-R36: /vapes H3s placed right after the "Vapes beside the rest of the Presidential lineup" band
+        (vape-system-sections.tsx left untouched per chief ruling). Reused anchor "what THC distillate is" replaced;
+        state line made neutral (no availability claim). */}
+    {page === 'vapes' ? (
+      <section className={`${s.section} ${s.systemSection} ${s.cardBand}`} aria-label="From vape oil to infused flower">
+        <h3 className={s.smallHeading}>From vape oil to infused flower</h3>
+        <p>
+          The extract names behind the Moon Pod families also appear in Presidential&apos;s infused flower formats.{' '}
+          <Link href="/learn/infusion-science">How Presidential infusion works</Link> covers how concentrate is carried through
+          flower, and <Link href="/learn/what-is-thc-distillate">a primer on THC distillate</Link> explains the refined extract that
+          none of the three pod families is built on.
+        </p>
+        <h3 className={s.smallHeading}>Checking a state for Orbit and Moon Pods</h3>
+        <p>
+          To check a specific state, start with its store finder page, such as the{' '}
+          <Link href="/find-us/ca">California store finder page</Link>, the <Link href="/find-us/mi">Michigan store finder page</Link>{' '}
+          or the <Link href="/find-us/ny">New York store finder page</Link>, and ask the store whether it carries Orbit and the pod
+          family you want by name.
+        </p>
+      </section>
+    ) : null}
 
     <section className={`${s.section} ${s.explorer}`} id="explore" ref={explorerRef} aria-labelledby="vape-explorer-heading">
       <div className={s.sectionHeading}>
