@@ -208,6 +208,15 @@ export function VapeExperience({ page }: { page: VapePage }) {
             <Link href="/learn/what-is-live-resin">what live resin is</Link> and{' '}
             <Link href="/learn/what-is-live-rosin">what live rosin is</Link> to see what sits behind each color.
           </p>
+          {/* INLINKS-COPY-R35: /moon-pods distillate H3 (reused anchors "what THC distillate is" / "what moon rocks are" replaced). */}
+          <h3>Moon Pods beside the distillate route</h3>
+          <p>
+            None of the three Moon Pod families is built on distillate. Read{' '}
+            <Link href="/learn/what-is-thc-distillate">the THC distillate explainer</Link> to see the refined extract the pod families
+            differ from, and the guide to <Link href="/learn/what-are-moon-rocks">the flagship moon rock format</Link> from the same Los
+            Angeles company. Stores that want to carry Moon Pods and Orbit can start with the{' '}
+            <Link href="/partners">Presidential retail partner program</Link>.
+          </p>
         </div>
       ) : null}
       <div className={s.chapterColors}><span className={s.label}>Orbit finish</span><ColorChoices value={finish} onChange={setFinish} label="Moon Pods chapter finish" /></div>
