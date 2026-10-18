@@ -1243,7 +1243,7 @@ const R45_SB_OVERRIDES: Readonly<Record<string, readonly (readonly [string, stri
 const R46_SB_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
   "/moon-rocks/24k": [["24K is the most restrained pack Presidential prints.", "24K keeps its pack restrained."]],
   "/moon-rocks/xxx": [[" Same build in every one.", ""]],
-  "/moon-rocks/king-louis": [[" Same build in all of them.", ""]],
+  "/moon-rocks/king-louis": [["Same build in all of them.", ""]],
 };
 
 export function hardcodeInContentLinks(sourcePath: string, rawValue: string): string {
