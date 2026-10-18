@@ -49,8 +49,11 @@ function descriptionMarking(name: string): string | undefined {
 
 // Chief R30 ruling (pack labels): these single jars print FLOWER · LIVE RESIN · DIAMONDS (no kief), so they read "finished with diamonds".
 const DIAMOND_FINISH_MOON_ROCKS = new Set(["24k", "blue-dream", "cap-junky"]);
-// Chief R38 ruling (pack label): the Pink Cookies jar prints FLOWER · DISTILLATE · KIEF.
-const LABEL_BUILD_OVERRIDES: Record<string, string> = { "pink-cookies": "flower and distillate, finished with kief" };
+// Chief R38 rulings (pack labels): the Pink Cookies jar prints FLOWER · DISTILLATE · KIEF; the Presidential OG jar prints DIAMONDS.
+const LABEL_BUILD_OVERRIDES: Record<string, string> = {
+  "pink-cookies": "flower and distillate, finished with kief",
+  "presidential-og": "flower and live resin, finished with diamonds",
+};
 
 function diamondFinishBuild(name: string): string | undefined {
   const build = offersFor(name).find((offer) => offer.build)?.build;
@@ -180,7 +183,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             Presidential Line name, see the{" "}
             <Link className={linkClass} href="/moon-rocks/presidential-line-head-cheese">Head Cheese moon rocks</Link>, a Polaris
             collaboration with its own label. Nature&apos;s Chemistry&apos;s other jar is{" "}
-              <Link className={linkClass} href="/moon-rocks/presidential-line-ghost-haze-train">Ghost Haze Train, a haze-forward partner release</Link>. Batch figures are on the package, so read it and confirm current selection with the
+              <Link className={linkClass} href="/moon-rocks/presidential-line-ghost-haze-train">Ghost Train Haze, a haze-forward partner release</Link>. Batch figures are on the package, so read it and confirm current selection with the
             store.
           </p>
         </>
@@ -300,9 +303,9 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
       {/* SURFER-R38: MR jar H3s (Crescendo construction line softened; Waui list adds the blunt). */}
       {slug === "presidential-line-ghost-haze-train" ? (
         <>
-          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Inside a Ghost Haze Train jar</h2>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Inside a Ghost Train Haze jar</h2>
           <p className="mt-2 text-sm leading-6 text-po-body">
-            Ghost Haze Train is a Presidential Line collaboration with Nature&apos;s Chemistry. The label lists flower and distillate, finished with kief, and the aroma is bright, spiced, and haze-forward. Distillate is a refined concentrate, and the <Link className={linkClass} href="/learn/what-is-thc-distillate">guide to how distillate is refined</Link> explains the process from start to finish. Kief, the collected trichome material, forms the dusty outer layer you see in the jar. The same partner also appears on <Link className={linkClass} href="/moon-rocks/presidential-line-garlic-cookies">Garlic Cookies, another Nature&apos;s Chemistry jar</Link>, which leans savory. Cannabinoid content is batch-specific, so read the current package label and its test results, and confirm stock with the store.
+            Ghost Train Haze is a Presidential Line collaboration with Nature&apos;s Chemistry. The label lists flower and distillate, finished with kief, and the aroma is bright, spiced, and haze-forward. Distillate is a refined concentrate, and the <Link className={linkClass} href="/learn/what-is-thc-distillate">guide to how distillate is refined</Link> explains the process from start to finish. Kief, the collected trichome material, forms the dusty outer layer you see in the jar. The same partner also appears on <Link className={linkClass} href="/moon-rocks/presidential-line-garlic-cookies">Garlic Cookies, another Nature&apos;s Chemistry jar</Link>, which leans savory. Cannabinoid content is batch-specific, so read the current package label and its test results, and confirm stock with the store.
           </p>
         </>
       ) : null}
@@ -318,7 +321,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
         <>
           <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">SFV OG and its OG neighbor</h2>
           <p className="mt-2 text-sm leading-6 text-po-body">
-            SFV OG takes its name from the San Fernando Valley, and the jar is made with flower, live resin, and diamonds. Presidential packs mark it as Hybrid, and the aroma runs pine, fuel, and dry earth. It is part of the Gold Strain Series, where OG profiles have company. Shoppers who like that piney, fuel-forward style can compare it with <Link className={linkClass} href="/moon-rocks/presidential-og">Presidential OG in the Gold series</Link>. The Presidential OG jar is also flower, live resin, and diamonds. Pre-roll and blunt versions of SFV OG list the same flower, live resin, and diamonds. Read the current label for batch test results, and confirm with the store which formats it carries.
+            SFV OG takes its name from the San Fernando Valley, and the jar is made with flower, live resin, and diamonds. Presidential packs mark it as Hybrid, and the aroma runs pine, fuel, and dry earth. It is part of the Gold Strain Series, where OG profiles have company. Shoppers who like that piney, fuel-forward style can compare it with <Link className={linkClass} href="/moon-rocks/presidential-og">Presidential OG in the Gold series</Link>. The Presidential OG jar is flower and live resin, finished with diamonds. Pre-roll and blunt versions of SFV OG list the same flower, live resin, and diamonds. Read the current label for batch test results, and confirm with the store which formats it carries.
           </p>
         </>
       ) : null}

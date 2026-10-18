@@ -646,7 +646,12 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
     ["SFV OG carries a place and a lineage in four letters.", "[SFV OG, the San Fernando Valley jar](/moon-rocks/sfv-og), carries a place and a lineage in four letters."],
   ],
   // Sitebulb R38 A12: the jar page shows the blunt pack, so describe the pack, not the page.
-  "/moon-rocks/presidential-og": [["This page is the Moon Rock Blunt. One blunt,", "The pack shown is the Moon Rock Blunt: one blunt,"]],
+  "/moon-rocks/presidential-og": [
+    ["This page is the Moon Rock Blunt. One blunt,", "The pack shown is the Moon Rock Blunt: one blunt,"],
+    // Chief R38 ruling: the OG blunt art marks Hybrid, so the conflicting Type row is cut.
+    ["| Type | Indica | Indica |\n", ""],
+    ["| Type | Indica | Indica |", ""],
+  ],
   "/moon-rocks/presidential-prerolls": [
     ["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."],
     // Sitebulb R35 A6: unsourced consumer-behavior claim.

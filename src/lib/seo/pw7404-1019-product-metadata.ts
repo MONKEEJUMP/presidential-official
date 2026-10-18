@@ -169,9 +169,9 @@ export const PRODUCT_METADATA_BY_SLUG: Readonly<
       "Explore Garlic Cookies in the Presidential Line. Review product details and find licensed retailers near you. Availability varies by retailer.",
   },
   "presidential-line-ghost-haze-train": {
-    seoTitle: "Ghost Haze Train Moon Rocks | Presidential Line",
+    seoTitle: "Ghost Train Haze Moon Rocks | Presidential Line",
     metaDescription:
-      "Explore Ghost Haze Train in the Presidential Line. Review product details and find licensed retailers near you. Availability varies by retailer.",
+      "Explore Ghost Train Haze in the Presidential Line. Review product details and find licensed retailers near you. Availability varies by retailer.",
   },
   "presidential-line-guava-haze": {
     seoTitle: "Guava Haze Moon Rocks | Presidential Line",

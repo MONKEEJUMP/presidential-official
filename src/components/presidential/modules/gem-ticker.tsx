@@ -82,9 +82,9 @@ const CONVEYOR_PACKS: readonly ConveyorPack[] = [
     src: "/media/blunt-crescendo.jpg",
   },
   {
-    alt: "Ghost Haze Train Presidential blunt product graphic",
+    alt: "Ghost Train Haze Presidential blunt product graphic",
     href: "/moon-rocks/presidential-line-ghost-haze-train",
-    name: "Ghost Haze Train",
+    name: "Ghost Train Haze",
     objectPosition: "center 55%",
     src: "/media/blunt-ghost-haze-train.jpg",
   },

@@ -34,7 +34,7 @@ const GEM_PRODUCT_ROWS = [
   { productKey: "gold-xj-13", name: "XJ-13", series: "Gold Strain Series" },
   { productKey: "gold-xxx", name: "XXX", series: "Gold Strain Series" },
   { productKey: "presidential-line-garlic-cookies", name: "Garlic Cookies", series: "Presidential Line" },
-  { productKey: "presidential-line-ghost-haze-train", name: "Ghost Haze Train", series: "Presidential Line" },
+  { productKey: "presidential-line-ghost-haze-train", name: "Ghost Train Haze", series: "Presidential Line" },
   { productKey: "presidential-line-guava-haze", name: "Guava Haze", series: "Presidential Line" },
   { productKey: "presidential-line-head-cheese", name: "Head Cheese", series: "Presidential Line" },
   { productKey: "presidential-line-iced-lemon", name: "Iced Lemon", series: "Presidential Line" },
