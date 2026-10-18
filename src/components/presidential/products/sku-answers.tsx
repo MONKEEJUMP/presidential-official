@@ -419,6 +419,13 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             <Link className={linkClass} href="/moon-rocks/watermelon">Watermelon, a juicy Silver jar</Link>, which leans sweeter and softer. For a broader blend from the same series, the{" "}
             <Link className={linkClass} href="/moon-rocks/tropical">Tropical jar&apos;s mixed-fruit aroma</Link> layers citrus and stone fruit together. Pineapple also comes as a 1g pre-roll and a 1.5g blunt, both listed with flower, distillate, and kief. Read the package label for batch test results.
           </p>
+          {/* SURFER-R45: Pineapple smaller-formats H2. */}
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Pineapple in smaller formats</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Pineapple&apos;s aroma is bright and tart, and some shoppers prefer to try a flavor like that in a smaller format first. The{" "}
+            <Link className={linkClass} href="/mini-blunts">compact mini blunt packs</Link> show the names available in that size, each with its own pack art. For a softer fruit option in jar form, look at the{" "}
+            <Link className={linkClass} href="/moon-rocks/strawberry">sweet Strawberry moon rocks</Link>, which lean sweeter and rounder. Comparing size and aroma together makes the choice simpler. Each product prints its own composition line, so read the label in hand for its build and batch details.
+          </p>
         </>
       ) : null}
       {/* SURFER-R17: NYC Diesel catalog H3, from its own page, /moon-rocks/24k and the label line. */}
@@ -516,6 +523,13 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             Watermelon is a Silver Flavor Series jar, and the label lists flower and distillate, finished with kief. The aroma is bright and juicy. It sits among the Silver fruit names, which are easy to compare on aroma because most share the same distillate and kief build. For a darker fruit profile from the same tier, see the{" "}
             <Link className={linkClass} href="/moon-rocks/grape">deep-fruit Grape jar in Silver</Link>. For a mixed tropical blend, the{" "}
             <Link className={linkClass} href="/moon-rocks/tropical">Silver Tropical moon rocks</Link> layer citrus with stone fruit. Watermelon also comes as a 1.5g blunt listed with flower, distillate, and kief. Check the package label for batch test results and cannabinoid content.
+          </p>
+          {/* SURFER-R45: Watermelon berry-names H2 (blunt art anchor reworded: "blunt pack art gallery" is part of existing anchors). */}
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Watermelon and the berry-sweet Silver names</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Watermelon&apos;s aroma is bright and juicy, and shoppers who like that profile often look at berry names next. The{" "}
+            <Link className={linkClass} href="/moon-rocks/strawberry">berry-sweet Strawberry Silver jar</Link> leans sweeter and softer, which makes it a natural comparison. If you choose by pack art as much as flavor, the{" "}
+            <Link className={linkClass} href="/presidential-art/blunts">illustrated blunt packs</Link> show how fruit names are illustrated on rolled formats. Comparing aroma notes and art side by side helps narrow the choice. Read the label on the pack in hand for its build and batch details.
           </p>
         </>
       ) : null}

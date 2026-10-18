@@ -46,6 +46,7 @@ const ROOM_COPY: Readonly<Record<string, ReactNode>> = {
     </Block>
   ),
   'pre-rolls': (
+    <>
     <Block heading="The art on Presidential pre-roll packs">
       Every Presidential Moon Rock pre-roll pack carries its own illustration above the product name. That art is how shoppers
       spot the series on a crowded shelf. Across the pre-roll lineup, each roll pairs flower and concentrate with a kief or
@@ -54,6 +55,19 @@ const ROOM_COPY: Readonly<Record<string, ReactNode>> = {
       <Link className={L} href="/pre-rolls">Moon Rock pre-roll lineup</Link>, or step back to the{' '}
       <Link className={L} href="/presidential-art">main Vault room</Link>.
     </Block>
+      {/* SURFER-R45: H3 under the art H2 (White Walker line follows its page: a cold name, no cold-art claim). */}
+      <section className="mx-auto w-full max-w-3xl px-6 pb-12 text-sm leading-6 text-white/80">
+        <h3 className="mb-2 text-base font-semibold text-white">Matching the art to a single roll</h3>
+        <p>
+          Pack art works best when you can see how it carries over to a specific product. A plain, letters-only design shows up on
+          the <Link className={L} href="/pre-rolls/xxx">woodsy XXX pre-roll</Link>, where the name does the work instead of an
+          illustration. A cold-leaning name shows up on the{' '}
+          <Link className={L} href="/pre-rolls/white-walker">frost-themed White Walker pre-roll</Link>, part of the group of names
+          that reach for cold and frost. Looking at a few product pages side by side makes it easier to recognise a pack on a busy
+          shelf. Read the label on the roll in hand for its build and batch details.
+        </p>
+      </section>
+    </>
   ),
   blunts: (
     <Block heading="Pack art for Presidential Moon Rock blunts">
@@ -203,6 +217,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
     </Block>
   ),
   'pre-rolls/xxx': (
+    <>
     <Block heading="XXX in other formats">
       XXX is a Gold Strain Series name, and the pre-roll is one 1g roll of flower, live resin, and diamonds, marked Indica on
       the pack. The same name also comes as the <Link className={L} href="/moon-rocks/xxx">XXX moon rock jar</Link>, built with live
@@ -212,6 +227,16 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       <Link className={L} href="/mini-blunts/xxx">XXX mini blunts in a hemp wrap</Link> do the same in hemp. Read
       the label on the exact pack and confirm current selection with the store.
     </Block>
+      {/* SURFER-R45: /pre-rolls/xxx H2 ("simplest way" softened; art anchor reworded: "pre-roll pack art gallery" is part of an existing anchor). */}
+      <Block heading="Comparing the XXX roll with other single rolls">
+        The XXX pre-roll has a woodsy, citrus-leaning aroma with an earthy edge. Shoppers comparing it with other single rolls can
+        look at the <Link className={L} href="/pre-rolls/gods-gift">God&apos;s Gift single pre-roll</Link>, whose name reaches for
+        reverence rather than flavor. For what the art signals, see{' '}
+        <Link className={L} href="/presidential-art/pre-rolls">how pre-roll packs are illustrated</Link>. Comparing aroma and pack
+        art helps you choose between single rolls. Each pre-roll prints its own composition line, so read the label in hand for its
+        build and batch details.
+      </Block>
+    </>
   ),
   'pre-rolls/white-walker': (
     <Block heading="White Walker within the Rose Gold series">
