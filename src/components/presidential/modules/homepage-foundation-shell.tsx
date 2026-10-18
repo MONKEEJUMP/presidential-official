@@ -108,7 +108,7 @@ const brandChapters = [
     title: "Then",
     body: (
       <>
-        Presidential launched in 2012 and established its brand in Los Angeles,
+        Presidential established its brand in Los Angeles,
         building an identity around infused cannabis and Moon Rocks. The{" "}
         <Link
           className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand"
@@ -229,8 +229,7 @@ export function HomepageFoundationShell({
                   Expect more.
                 </h2>
                 <p className="po-home-canvas-muted mt-3 max-w-md text-base leading-7">
-                  Cannabis Deserves Better — so we built it. Since 2012,
-                  Presidential has created cannabis engineered for better flavor,
+                  Cannabis Deserves Better — so we built it. Presidential has created cannabis engineered for better flavor,
                   greater consistency, and premium experiences. Its infused
                   construction starts with flower, adds concentrate or resin, and
                   is finished with kief or diamonds, as named on the package. That infused

@@ -318,7 +318,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/learn/infusion-science",
       anchor: "Presidential Infusion System",
-      context: "through the Presidential Infusion System the company has run since",
+      context: "in that order, through the Presidential Infusion System.",
     },
   ],
   "/moon-rocks/nyc-diesel": [
@@ -360,7 +360,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/learn/infusion-science",
       anchor: "Presidential Infusion System",
-      context: "The Presidential Infusion System has run on this sequence",
+      context: "The Presidential Infusion System runs on this sequence",
     },
   ],
   "/moon-rocks/presidential-house-line": [
@@ -440,7 +440,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/learn/infusion-science",
       anchor: "Presidential Infusion System",
-      context: "That process is the Presidential Infusion System, and it has been",
+      context: "That process is the Presidential Infusion System, and it is",
     },
   ],
   "/moon-rocks/presidential-og": [
@@ -497,7 +497,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/learn/infusion-science",
       anchor: "Presidential Infusion System",
-      context: "through the Presidential Infusion System the company has run since",
+      context: "in that order, through the Presidential Infusion System.",
     },
   ],
   "/moon-rocks/white-walker": [
@@ -1142,12 +1142,45 @@ const R43_SB_OVERRIDES: Readonly<Record<string, readonly (readonly [string, stri
   ],
 };
 
+// Chief R44 rulings (3) and (4): no "sits above both" ranking line; no "since 2012" or founding year on product pages.
+const SIT = ["The Rose Gold Connoisseur tier sits above both.", "The Rose Gold Connoisseur tier leads with connoisseur names."] as const;
+const IS_2012 = ["the Presidential Infusion System the company has run since Los Angeles in 2012.", "the Presidential Infusion System."] as const;
+const R44_RULING_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
+  "/moon-rocks/24k": [SIT],
+  "/moon-rocks/papaya-punch": [
+    SIT,
+    [" has run on this sequence since 2012, and a flavour-forward name", " runs on this sequence, and a flavour-forward name"],
+  ],
+  "/moon-rocks/blue-dream": [
+    ["and the Rose Gold Connoisseur tier sits above both.", "and the Rose Gold Connoisseur tier leads with connoisseur names."],
+    [" has been refined around since the brand started in Los Angeles in 2012.", " is built around."],
+  ],
+  "/moon-rocks/galactic-gas": [
+    ["The company has been building that language since Los Angeles, 2012, and it is the reason", "That language is the reason"],
+  ],
+  "/moon-rocks/king-louis": [IS_2012],
+  "/moon-rocks/wedding-cake": [IS_2012],
+  "/moon-rocks/nyc-diesel": [["when the brand started in Los Angeles in 2012,", "when the brand started in Los Angeles,"]],
+  "/moon-rocks/presidential-line-guava-haze": [
+    ["The process has not changed since Los Angeles in 2012 — what changes from pack to pack", "What changes from pack to pack"],
+  ],
+  "/moon-rocks/presidential-line-iced-lemon": [
+    [" build, unchanged from Los Angeles in 2012 and applied identically whether the pack carries", " build, the same whether the pack carries"],
+  ],
+  "/moon-rocks/presidential-moon-rocks": [
+    [", and it has been the company's whole argument since Los Angeles, 2012.", ", and it is the company's whole argument."],
+  ],
+  "/moon-rocks/rainbow-belts": [["runs through the same process the company has used since 2012, and", "runs through the same process, and"]],
+  "/moon-rocks/thc-design-prerolls": [[", which has run on that sequence since Los Angeles in 2012.", "."]],
+};
+
 export function hardcodeInContentLinks(sourcePath: string, rawValue: string): string {
   const swaps = [
     ...(IN_CONTENT_TEXT_OVERRIDES[sourcePath] ?? []),
     ...(R42_TEXT_OVERRIDES[sourcePath] ?? []),
     ...(R43_TEXT_OVERRIDES[sourcePath] ?? []),
     ...(R43_SB_OVERRIDES[sourcePath] ?? []),
+    ...(R44_RULING_OVERRIDES[sourcePath] ?? []),
     ...(sourcePath.startsWith("/moon-rocks/") ? MOON_ROCKS_MARKET_SWAPS : []),
   ];
   const value = swaps.reduce((text, [from, to]) => text.split(from).join(to), rawValue);

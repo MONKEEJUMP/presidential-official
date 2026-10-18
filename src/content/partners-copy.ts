@@ -72,7 +72,7 @@ export const PARTNERS_COPY = {
     "description": "California's licensed dispensaries carrying authentic Presidential, from Los Angeles County to the Bay Area and San Diego. Find one near you.",
     "body": [
       "California is where Presidential started.",
-      "Presidential was founded in Los Angeles in 2012, and the California retail map still reflects that - dense through LA County, deep into Orange County and the Inland Empire, running north through the Central Valley into Sacramento and the Bay Area, then south again to San Diego. Some of these partners have carried the brand since the early years. Some opened last spring.",
+      "Presidential was founded in Los Angeles, and the California retail map still reflects that - dense through LA County, deep into Orange County and the Inland Empire, running north through the Central Valley into Sacramento and the Bay Area, then south again to San Diego. Some of these partners have carried the brand since the early years. Some opened last spring.",
       "The mix tells you something about the state. California retail is not one thing. It is thirty-store operators and single-location shops on the same street, and Presidential sits on shelves in both.",
       "What is carried varies by store. Some run the full ladder - Moon Rocks, blunts, pre-rolls, minis. Some carry a few. The retailers below are licensed California partners; the locator will tell you which one is closest."
     ]

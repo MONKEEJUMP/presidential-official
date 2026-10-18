@@ -227,7 +227,7 @@ export async function BentolioHeroShell({
               label: "BLUNTS",
             },
             {
-              description: "the company, since 2012",
+              description: "the company",
               href: "/presidential-cannabis",
               label: "CANNABIS",
             },

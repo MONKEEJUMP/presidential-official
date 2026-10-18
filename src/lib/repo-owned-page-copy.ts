@@ -42,7 +42,7 @@ This guide explains what the words mean.
 
 *[What Are Liquid Diamonds](/learn/what-are-liquid-diamonds)* — the crystalline finish, and the difference between diamonds and liquid diamonds on a label.
 
-*[Infusion Science](/learn/infusion-science)* — the Presidential Infusion System itself, the three-stage sequence the company has run since Los Angeles in 2012.
+*[Infusion Science](/learn/infusion-science)* — the Presidential Infusion System itself and its three-stage sequence.
 
 *[Flavor Science](/learn/flavor-science)* — where flavour actually comes from in an infused product, and why the same strain name reads differently across two builds.
 
@@ -64,7 +64,7 @@ The Silver Flavour Series carries flavour-led releases. The Gold Strain Series c
 
 Presidential OG has its own product page within that same Gold series. SFV OG is documented separately so the product names remain distinct.
 
-The Rose Gold Connoisseur tier sits above both. Cosmic Cookies is one approved product in the Rose Gold catalogue.
+The Rose Gold Connoisseur tier leads with connoisseur names. Cosmic Cookies is one approved product in the Rose Gold catalogue.
 
 Collaboration releases run alongside the tiers. Presidential x THC Design is a collaboration name, not a strain classification.
 
@@ -157,11 +157,11 @@ The retailer search on this page will show results once licensed Washington reta
 
 **What arrives when it does**
 
-Presidential builds moon rocks. Flower, coated in a concentrate, finished with kief that bonds to the coat — three stages applied in sequence, a process the company has run under the name the Presidential Infusion System since Los Angeles in 2012.
+Presidential builds moon rocks. Flower, coated in a concentrate, finished with kief that bonds to the coat — three stages applied in sequence, a process the company calls the Presidential Infusion System.
 
 **The catalogue**
 
-The Silver Flavour Series carries flavour-led releases — Grape, Pineapple, Watermelon, Peach Mango, Strawberry, Tropical, Blue Raspberry. The Gold Strain Series carries named strains — Blue Dream, King Louis, 24K, NYC Diesel, Presidential OG, Galactic Gas, Cap Junky and others. The Rose Gold Connoisseur tier sits above both, defined by live rosin — the solventless method, made without butane, propane, CO2 or ethanol at any stage.
+The Silver Flavour Series carries flavour-led releases — Grape, Pineapple, Watermelon, Peach Mango, Strawberry, Tropical, Blue Raspberry. The Gold Strain Series carries named strains — Blue Dream, King Louis, 24K, NYC Diesel, Presidential OG, Galactic Gas, Cap Junky and others. The Rose Gold Connoisseur tier leads with connoisseur names.
 
 Running across the tiers are the collaboration releases, each carrying a partner's mark printed on the front of the pack: Ball Family Farms, Nature's Chemistry of Las Vegas, Top Shelf Cultivation, THC Design, Trendi by Planet 13, Moxie, Polaris Cannabis, ROVE, Platinum and VladTV.
 
@@ -193,7 +193,7 @@ Presidential does not sell direct. Every product reaches you through a licensed 
 
 **What Presidential makes**
 
-Flower, coated in a concentrate, finished with kief that bonds to the coat. Three stages, applied in sequence. That process is the Presidential Infusion System and the company has run on it since Los Angeles in 2012.
+Flower, coated in a concentrate, finished with kief that bonds to the coat. Three stages, applied in sequence. That process is the Presidential Infusion System.
 
 The composition line printed on the front of every pack tells you which three materials were used. It changes from product to product — some packs print live resin and diamonds, others distillate and kief, and Cap Junky prints liquid live resin. It is the most useful thing to read on a Presidential label.
 
@@ -203,7 +203,7 @@ Each format has a weight fixed across every market. The Moon Rock Blunt is a sin
 
 **The catalogue**
 
-The Gold Strain Series carries named strains — Blue Dream, King Louis, 24K, Presidential OG, NYC Diesel, Galactic Gas and others. The Silver Flavour Series carries flavour-led releases. The Rose Gold Connoisseur tier sits above both.
+The Gold Strain Series carries named strains — Blue Dream, King Louis, 24K, Presidential OG, NYC Diesel, Galactic Gas and others. The Silver Flavour Series carries flavour-led releases. The Rose Gold Connoisseur tier leads with connoisseur names.
 
 Alongside them run the collaboration releases, each carrying a partner's mark on the front: Ball Family Farms, Nature's Chemistry of Las Vegas, Top Shelf Cultivation, THC Design, Trendi by Planet 13, Moxie, Polaris Cannabis, ROVE, Platinum and VladTV.
 
@@ -233,7 +233,7 @@ Presidential is wholesale and does not sell direct. Every product reaches you th
 
 NYC Diesel is in the catalogue, and its pack is the only one Presidential prints built around a landmark. A pale full moon fills the background. The Statue of Liberty stands in front of it, torch raised, flanked by the New York skyline, the whole scene rising out of rolling green-and-yellow smoke. Marked Hybrid, built on flower, live resin and diamonds.
 
-When the company started in Los Angeles in 2012, New York was not a legal market. It is now a legal market, and the strain that carries the city's name is sold there.
+New York is a legal market, and the strain that carries the city's name is sold there.
 
 **The formats**
 
@@ -357,7 +357,7 @@ Wholesale, licensed retailers only. Presidential is available in [select state m
 
 **What the brand brings to it**
 
-Presidential has built one thing since Los Angeles in 2012: infused product, made by layering. Flower as a base, a concentrate coat over it, a kief finish bonded to the coat. That is the Presidential Infusion System, and the vocabulary printed on every moon rock pack — live resin, liquid live resin, distillate, kief, diamonds — is a vocabulary of concentrates.
+Presidential builds one thing: infused product, made by layering. Flower as a base, a concentrate coat over it, a kief finish bonded to the coat. That is the Presidential Infusion System, and the vocabulary printed on every moon rock pack — live resin, liquid live resin, distillate, kief, diamonds — is a vocabulary of concentrates.
 
 Concentrates are the shared ground between a moon rock and a vape. The company works in the same materials in both categories.
 

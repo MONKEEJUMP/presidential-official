@@ -288,9 +288,8 @@ export async function SupportRouteFoundationShell({
               </h3>
               <p className="mt-4 max-w-3xl text-base leading-7 text-po-body">
                 A ZIP search shows where Presidential is carried. It doesn&apos;t show which jar is on the shelf today, so arrive with a
-                specific name. Moon Rocks are flower carried through with concentrate and finished with kief, and the series names
-                the extract: Silver for distillate, Gold for live resin, Rose Gold for live rosin. A few products follow their own
-                label: <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/blue-dream">Blue Dream moon rocks</Link> are finished with diamonds, and the{" "}
+                specific name. Moon Rocks are flower carried through with concentrate and a kief or diamond finish, and each pack prints its own build. For example,{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/blue-dream">Blue Dream moon rocks</Link> are finished with diamonds, and the{" "}
                 <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/presidential-x-thc-design">THC Design collaboration releases</Link> pair flower and live
                 resin with diamonds. Pick one name, call the store or check its menu, then make the trip.
               </p>

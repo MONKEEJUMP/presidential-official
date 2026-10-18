@@ -68,11 +68,7 @@ export const MOON_ROCKS_ANSWERS: readonly AnswerItem[] = [
           diamond finish bonded to the coat. Presidential calls this framework the Presidential Infusion System™.
         </p>
         <p>
-          The concentrate follows the series: distillate in the{" "}
-          <Link className={a} href="/moon-rocks/silver">Silver Flavor Series</Link>, live resin in the{" "}
-          <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link>, and solventless live rosin in the{" "}
-          <Link className={a} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>. The finish is printed on
-          the pack: kief on builds such as FLOWER · DISTILLATE · KIEF, diamonds on builds such as FLOWER · LIVE RESIN ·
+          Each pack prints its own concentrate and finish on the composition line: kief on builds such as FLOWER · DISTILLATE · KIEF, diamonds on builds such as FLOWER · LIVE RESIN ·
           DIAMONDS. Kief is the collected trichome material used for the exterior finish.
         </p>
       </>
@@ -83,9 +79,7 @@ export const MOON_ROCKS_ANSWERS: readonly AnswerItem[] = [
     question: "Are Presidential Moon Rocks made with live resin?",
     answer: (
       <p>
-        The <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link> are the live resin Moon Rocks: packs such
-        as Blue Dream print FLOWER · LIVE RESIN · DIAMONDS. The Silver Flavor Series uses distillate, and the Rose
-        Gold Connoisseur Series uses solventless live rosin.
+        Some are. <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link> packs such as Blue Dream print FLOWER · LIVE RESIN · DIAMONDS. Other jars list distillate or live rosin, so read the composition line on the pack you pick up.
       </p>
     ),
   },
