@@ -524,10 +524,10 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
         <h3 className="mt-6 text-xl font-semibold">Turning &ldquo;Presidential weed&rdquo; into a specific order</h3>
         <p>
           &ldquo;Presidential weed&rdquo; names the brand, not a product, so a budtender will ask what you want next. Answer in order:
-          format, series, then the name on the pack. For Moon Rocks, the pack prints the extract inside.{" "}
+          format, series, then the name on the pack. For Moon Rocks, the pack prints the extract inside; if a label reads live rosin, see{" "}
+          <Link className={inlineLinkClass} href="/learn/what-is-live-rosin">live rosin, explained</Link>.{" "}
           <Link className={inlineLinkClass} href="/moon-rocks/silver">Fruit-named Silver jars</Link> lead with flavor, Gold with
-          strain names, and Rose Gold with connoisseur names (see{" "}
-          <Link className={inlineLinkClass} href="/learn/what-is-live-rosin">what live rosin is</Link>). Each one starts with flower
+          strain names, and Rose Gold with connoisseur names. Each one starts with flower
           carried through with concentrate and is finished with kief or diamonds, as the pack prints. Blunts and pre-rolls carry
           the same series names, and blunts close with a kief or diamond finish inside a hemp wrap. With the format and name ready,
           the licensed-retailer search shows where to ask.
