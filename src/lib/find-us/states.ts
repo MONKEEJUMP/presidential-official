@@ -60,7 +60,7 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in California — the brand's home state, through licensed retailers, adults 21+.",
     siteLink: {
-      before: "The full California retail network has its own home at ",
+      before: "California retail listings have their own home at ",
       anchor: "Presidential THC California",
       after: ".",
     },
@@ -75,7 +75,7 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
     seoLine:
       "Presidential Moon Rocks, infused prerolls, and tobacco-free blunts in Michigan — through licensed retailers, adults 21+.",
     siteLink: {
-      before: "Michigan's retail network has its own home at ",
+      before: "Michigan retail listings have their own home at ",
       anchor: "Presidential THC Michigan",
       after: ".",
     },
@@ -123,7 +123,7 @@ export const PRESIDENTIAL_STATES: readonly PresidentialState[] = [
       before: "",
       anchor: "Presidential THC Oklahoma",
       after:
-        " carries the statewide retail map, grouped by Oklahoma's tourism regions.",
+        " carries the Oklahoma retail map, grouped by Oklahoma's tourism regions.",
     },
   },
   {

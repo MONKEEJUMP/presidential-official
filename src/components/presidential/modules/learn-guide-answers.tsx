@@ -141,7 +141,8 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
           <p>
             Live rosin is a solventless extract. Ice water, heat, and pressure are used instead of chemical solvents. At
             Presidential it is the extract identified with the{" "}
-            <Link className={a} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>.
+            <Link className={a} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>. Heat matters again at the device:
+            see <Link className={a} href="/learn/different-extracts-need-different-heat">why extract type changes the right temperature</Link>.
           </p>
         ),
       },

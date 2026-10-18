@@ -128,7 +128,7 @@ const brandChapters = [
   },
   {
     title: "Next",
-    body: "The mission from here is simple — get people from 'I want it' to 'here's where to buy it.' Every path connects: discover the product, learn the craft, land at a licensed retailer near you. More states. More doors. The same standard, everywhere. Then. Now. & Next.",
+    body: "The mission from here is simple — get people from 'I want it' to 'here's where to buy it.' Every path connects: discover the product, learn the craft, land at a licensed retailer near you. The same standard in every pack. Then. Now. & Next.",
   },
 ] as const;
 
@@ -229,7 +229,7 @@ export function HomepageFoundationShell({
                   Expect more.
                 </h2>
                 <p className="po-home-canvas-muted mt-3 max-w-md text-base leading-7">
-                  Cannabis Deserves Better — so we built it. For over a decade,
+                  Cannabis Deserves Better — so we built it. Since 2012,
                   Presidential has created cannabis engineered for better flavor,
                   greater consistency, and premium experiences. Its infused
                   construction starts with flower, adds concentrate or resin, and
