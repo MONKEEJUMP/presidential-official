@@ -189,7 +189,8 @@ export function VapeExperience({ page }: { page: VapePage }) {
         <div>
           <h3>How the three Moon Pod families differ</h3>
           <p>
-            Moon Pods are the vaporizer side of Presidential, built to run on the Orbit device. Each pod family names its extract.{' '}
+            Moon Pods are the vaporizer side of Presidential, built to run on the Orbit device. They come from{' '}
+            <Link href="/about">the same Los Angeles cannabis company behind Moon Rocks</Link>. Each pod family names its extract.{' '}
             <Link href="/learn/what-are-liquid-diamonds">Liquid diamonds</Link> are crystallized cannabinoids paired with terpenes,{' '}
             <Link href="/learn/what-is-live-resin">live resin</Link> is made from fresh-frozen plant material, and{' '}
             <Link href="/learn/what-is-live-rosin">live rosin</Link> is solventless. These are different routes than distillation,
@@ -230,7 +231,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
           </article>;
         })}
       </div>
-      <p className={s.sectionNote}>Moon Pods photographed on Orbit. Explore the device separately on the <Link href="/orbit">Orbit page</Link>.</p>
+      <p className={s.sectionNote}>Moon Pods photographed on Orbit.</p>
     </section>
 
     {page !== 'vapes' ? orbitFinishesSection : null}

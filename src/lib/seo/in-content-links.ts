@@ -621,11 +621,18 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   // Sitebulb R29 A6/A8: no flower THC range, no "potent" in body copy.
   // Chief R29 ruling (b): pack labels decide the moon rock finish; (c) no unsourced percentages; (d) no catalog count.
   "/moon-rocks/blue-dream": [
+    // Sitebulb R33 A5: no unsourced "most requested" / "most recognisable" claims.
+    ["Blue Dream is the most requested name in cannabis, and that is exactly the problem", "Blue Dream is a familiar name in cannabis, and that is exactly the problem"],
+    ["It is that method applied to the most recognisable name in the room.", "It is that method applied to a name everyone already knows."],
     [
       "Diamonds are the finish — the concentrated crystalline form that gives the outside of a Presidential Moon Rock its texture and its weight in the hand.",
       "It is finished with diamonds, which give the outside of a Presidential Moon Rock its texture and its weight in the hand.",
     ],
     ["The same flower, the same live resin coat, the same diamond finish.", "The same flower, the same live resin coat, finished with diamonds."],
+  ],
+  // Sitebulb R33 A6: no unsourced market-size claim.
+  "/moon-rocks/cap-junky": [
+    ["Planet 13 is one of the larger operators in the Nevada market, and Nevada is one of Presidential's active states.", "Planet 13 is a Nevada operator, and Nevada is one of Presidential's active states."],
   ],
   "/moon-rocks/gods-gift": [["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."]],
   "/moon-rocks/presidential-prerolls": [["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."]],

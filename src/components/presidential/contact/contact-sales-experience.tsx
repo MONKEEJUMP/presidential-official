@@ -40,7 +40,8 @@ const paths = [
   {
     number: "01",
     title: "Find Presidential",
-    body: "Shopping for yourself? Find a licensed retailer carrying Presidential near you.",
+    // Sitebulb R33 B2: /about inlink.
+    body: <>Shopping for yourself? Find a licensed retailer carrying Presidential near you. New to the brand? Read <Link href="/about">who Presidential is as a cannabis company</Link>.</>,
     href: "/find-us",
     cta: "Find a retailer",
   },
