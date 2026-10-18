@@ -1174,6 +1174,28 @@ const R44_RULING_OVERRIDES: Readonly<Record<string, readonly (readonly [string, 
   "/moon-rocks/thc-design-prerolls": [[", which has run on that sequence since Los Angeles in 2012.", "."]],
 };
 
+// SURFER-R44: MR jar H2s, placed before "Where to find it" in the CMS body.
+const R44_SURFER_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
+  "/moon-rocks/presidential-og": [
+    [
+      "**Where to find it**",
+      SB43(
+        "Comparing Presidential OG with other named jars",
+        "Shoppers weighing Presidential OG often compare it with other names that arrive with their own identity. The [Cap Junky collaboration jar](/moon-rocks/cap-junky) carries a partner's logo on the front, while the [familiar Blue Dream strain jar](/moon-rocks/blue-dream) leans on a well-known strain name. Aroma is the most useful way to compare them: OG names tend toward pine and earth, while Blue Dream leans toward berry. Each jar prints its own composition line, so read the label on the pack in hand for its build and batch test results.",
+      ),
+    ],
+  ],
+  "/moon-rocks/blue-dream": [
+    [
+      "**Where to find it**",
+      SB43(
+        "Blue Dream next to darker strain names",
+        "Blue Dream's aroma leans toward sweet berry, which sets it apart from heavier names on the same shelf. For a fuel-forward contrast, look at the [fuel-forward NYC Diesel jar](/moon-rocks/nyc-diesel), named for a city rather than a fruit. For a name that carries the brand's own crest instead of a strain reputation, see the [crest-only Presidential OG jar](/moon-rocks/presidential-og). Comparing jars by aroma and pack art is the quickest way to choose. Each jar prints its own composition line, so read the label in hand for batch test results.",
+      ),
+    ],
+  ],
+};
+
 export function hardcodeInContentLinks(sourcePath: string, rawValue: string): string {
   const swaps = [
     ...(IN_CONTENT_TEXT_OVERRIDES[sourcePath] ?? []),
@@ -1181,6 +1203,7 @@ export function hardcodeInContentLinks(sourcePath: string, rawValue: string): st
     ...(R43_TEXT_OVERRIDES[sourcePath] ?? []),
     ...(R43_SB_OVERRIDES[sourcePath] ?? []),
     ...(R44_RULING_OVERRIDES[sourcePath] ?? []),
+    ...(R44_SURFER_OVERRIDES[sourcePath] ?? []),
     ...(sourcePath.startsWith("/moon-rocks/") ? MOON_ROCKS_MARKET_SWAPS : []),
   ];
   const value = swaps.reduce((text, [from, to]) => text.split(from).join(to), rawValue);
