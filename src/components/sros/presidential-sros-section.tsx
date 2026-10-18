@@ -414,7 +414,7 @@ export function PresidentialSrosSection() {
         <div className={styles.inner}>
           <BandHeading id="sros-ecosystem-heading">THE PRESIDENTIAL ECOSYSTEM™</BandHeading>
           <p className={styles.goldLead} data-sros-line>
-            EVERY EXPERIENCE. 2 PLATFORMS. EVERY EXPRESSION. 1 STANDARD.
+            EVERY EXPERIENCE. EVERY PLATFORM. EVERY EXPRESSION. ONE STANDARD.
           </p>
 
           <p className={styles.rowLabel} data-sros-line>
@@ -447,7 +447,7 @@ export function PresidentialSrosSection() {
           </div>
 
           <p className={styles.rowLabel} data-sros-line>
-            2 PLATFORMS
+            PLATFORMS
           </p>
           <div className={styles.platformGrid}>
             {PLATFORMS.map(({ href, name, descriptor }, index) => {

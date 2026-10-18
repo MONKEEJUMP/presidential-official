@@ -30,12 +30,13 @@ const VALUE_LINES = [
 
 const ARCHITECTURE_STEPS = [
   {
-    number: "1",
+    // R41 chief ruling: no step is numbered.
+    number: "",
     label: "ECOSYSTEM",
     sentence: "A unified brand built around exceptional cannabis experiences.",
   },
   {
-    number: "2",
+    number: "",
     label: "PLATFORMS",
     sentence: "Choose your experience format.",
   },
@@ -60,7 +61,7 @@ const ECOSYSTEM_PILLARS = [
   },
   {
     icon: Gear,
-    heading: "TWO PLATFORMS",
+    heading: "PLATFORMS",
     copy: "Moon Rocks and Moon Pods + Orbit. One connected system.",
   },
   {
@@ -384,7 +385,7 @@ export function HomeEcosystemBand() {
           THE PRESIDENTIAL ECOSYSTEM™
         </h2>
         <p className={styles.goldLead}>
-          ONE ECOSYSTEM. TWO PLATFORMS. EVERY EXPERIENCE. EVERY EXPRESSION.
+          ONE ECOSYSTEM. EVERY PLATFORM. EVERY EXPERIENCE. EVERY EXPRESSION.
         </p>
         <div className={styles.introLines}>
           <p>A complete premium cannabis experience built for how consumers choose.</p>
@@ -424,7 +425,7 @@ export function HomeArchitectureBand() {
         </div>
         <div aria-labelledby="home-ecosystem-architecture-heading" className={styles.ecosystemPart}>
           <h2 className={styles.numberedHeading} id="home-ecosystem-architecture-heading">
-            1 ECOSYSTEM
+            ECOSYSTEM
           </h2>
           <p className={styles.sectionSubline}>A complete cannabis ecosystem.</p>
           <div className={styles.ecosystemGrid}>
@@ -452,7 +453,7 @@ export function HomePlatformsAndTiersBand() {
       <div className={styles.inner}>
         <div aria-labelledby="home-platforms-heading">
           <h2 className={styles.numberedHeading} id="home-platforms-heading">
-            2 PLATFORMS
+            PLATFORMS
           </h2>
           <p className={styles.sectionSubline}>Choose your experience format.</p>
           <div className={styles.platformGrid}>
@@ -591,7 +592,7 @@ export function MoonRocksPlatformBand() {
         </h2>
         <p className={styles.sectionSubline}>The Ultimate Flower Experience.</p>
         <p className={styles.goldLead}>
-          ONE ECOSYSTEM. TWO PLATFORMS. EVERY EXPERIENCE. EVERY EXPRESSION.
+          ONE ECOSYSTEM. EVERY PLATFORM. EVERY EXPERIENCE. EVERY EXPRESSION.
         </p>
         <div className={styles.expressionGrid} data-count="3">
           <ExpressionCard kind="moon-rocks" linked={false} scope="moon-platform" />
