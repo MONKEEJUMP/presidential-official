@@ -100,7 +100,7 @@ export const BLUNT_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <>
         <p>
-          This page does not publish reviews or ratings; it lists what each pack states. Every edition is one 1.5g Moon Rock
+          Every edition is one 1.5g Moon Rock
           blunt: cannabis flower with a concentrate infused over it, in a tobacco-free wrap. The
           editions use these builds:
         </p>

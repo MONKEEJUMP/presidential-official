@@ -12,7 +12,7 @@ export const REPO_LEARN_GUIDES: Readonly<Record<string, RepoLearnGuide>> = {
     slug: "what-is-thc-distillate",
     title: "What Is THC Distillate",
     intro:
-      "THC distillate is a refined, essentially neutral concentrate, and it is the extract behind the Presidential Silver Flavor Series.",
+      "THC distillate is a refined, essentially neutral concentrate.",
     guideTopic: "THC distillate",
   },
 };

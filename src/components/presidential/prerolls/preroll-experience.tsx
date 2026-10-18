@@ -210,7 +210,7 @@ export function PreRollExperience({
         <div>
           <h3>How do you read a Moon Rock pre-roll pack?</h3>
           <p>
-            Every pack carries the same architecture: the silver crown crest with the PRESIDENTIAL banner, the strain type in script,
+            The pack carries the silver crown crest with the PRESIDENTIAL banner, the strain type in script,
             the product name, and the format and weight. The pack also prints the build. Silver rolls read Flower · Distillate · Kief,
             Gold rolls read Flower · Live resin · Diamonds (some Gold builds add distillate), and Rose Gold rolls read Flower · Live
             rosin · Diamonds. Start with{" "}

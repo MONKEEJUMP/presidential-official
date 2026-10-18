@@ -114,11 +114,18 @@ export function sortCatalogItems(
   );
 }
 
+// Sitebulb R43 A12 (chief ruling): card copy fixes on CMS description strings; card component unchanged.
+const CARD_COPY_FIXES: readonly (readonly [RegExp, string])[] = [
+  [/Sticky, resinous, and named with complete honesty\./g, "Sticky and resinous."],
+  [/\s*The Gold Series['\u2019] most indulgent handshake\./g, ""],
+];
+
 function consumerDescription(description?: string): string | undefined {
   if (!description) return undefined;
 
   const sourceIndex = description.search(/\bSOURCE:\s*/i);
-  const value = (sourceIndex >= 0 ? description.slice(0, sourceIndex) : description).trim();
+  const raw = (sourceIndex >= 0 ? description.slice(0, sourceIndex) : description).trim();
+  const value = CARD_COPY_FIXES.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), raw).trim();
   return value || undefined;
 }
 

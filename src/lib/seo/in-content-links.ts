@@ -296,7 +296,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/learn/infusion-science",
       anchor: "Presidential Infusion System",
-      context: "That sequence is the Presidential Infusion System and it has not changed",
+      context: "That sequence is the Presidential Infusion System.",
     },
   ],
   "/partners": [
@@ -569,7 +569,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/learn/infusion-science",
       anchor: "Presidential Infusion System",
-      context: "That is the Presidential Infusion System, unchanged since",
+      context: "That is the Presidential Infusion System, and it is the reason",
     },
   ],
   "/moon-rocks/xxx": [
@@ -587,7 +587,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/learn/infusion-science",
       anchor: "Presidential Infusion System",
-      context: "That sequence is the Presidential Infusion System, and it has run",
+      context: "That sequence is the Presidential Infusion System. What varies",
     },
   ],
   // InLinks pid 50409 export 2026-10-06 (INLK-0001 follow-up).
@@ -687,7 +687,7 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   // Chief R30 ruling + Sitebulb R31 A1: THC Design moon rocks match the hub and repo build (flower, live resin, diamonds); no Creskendo/XJ13 jar claims.
   "/moon-rocks/thc-design-moon-rocks": [
   // Chief R31 ruling: collaboration page, no loose-jar specs (keep URL, no redirect).
-    ["Two grams, loose, nothing rolled.", "Presidential x THC Design, built on live resin."],
+    ["Two grams, loose, nothing rolled.", "Presidential x THC Design."],
     ["This is the only Presidential \u00d7 THC Design format that arrives unfinished, and that changes what it is.", "The Presidential x THC Design collaboration is flower, live resin and diamonds, released as the Creskendo and XJ13 Moon Rock blunts. The [Presidential x THC Design collection](/moon-rocks/presidential-x-thc-design) lists both releases."],
     ["This is the only Presidential x THC Design format that arrives unfinished, and that changes what it is.", "The Presidential x THC Design collaboration is flower, live resin and diamonds, released as the Creskendo and XJ13 Moon Rock blunts. The [Presidential x THC Design collection](/moon-rocks/presidential-x-thc-design) lists both releases."],
     ["**Loose is a different decision**", ""],
@@ -730,7 +730,7 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
     // Sitebulb R41 B15.
     ["What does not change", "How the build works"],
     // SURFER-R41 H2 after "The sweet side" (Sitebulb R41 placement).
-    ["**How the build works**", "**Wedding Cake among the Rose Gold jars**\n\nWedding Cake is a Rose Gold Connoisseur Series jar. Its aroma sits at the dessert end of the catalog. Rose Gold is the solventless tier, and its names differ on aroma. For another sweet, dough-led name, see [Cosmic Cookies in Rose Gold](/moon-rocks/cosmic-cookies). For a cereal-sweet profile, look at [the lactic Cereal Milk jar in Rose Gold](/moon-rocks/cereal-milk). Read the package label for its build and batch test results, and confirm with the store which Wedding Cake formats it carries.\n\n**How the build works**"],
+    ["**How the build works**", "**Wedding Cake among the Rose Gold jars**\n\nWedding Cake is a Rose Gold Connoisseur Series jar. Its aroma sits at the dessert end of the catalog. Rose Gold is the solventless tier, and its names differ on aroma. For another sweet, dough-led name, see [Cosmic Cookies in Rose Gold](/moon-rocks/cosmic-cookies). For a cereal-sweet profile, look at [the lactic Cereal Milk jar in Rose Gold](/moon-rocks/cereal-milk). Read the package label for its build and batch test results, and confirm with the store which Wedding Cake formats it carries. For a name that leans on reverence, see [the God's Gift connoisseur jar](/moon-rocks/gods-gift).\n\n**How the build works**"],
   ],
   // Sitebulb R41 A14-A16: no catalogue counts or scope, blunt-only lines cut from the jar page.
   "/moon-rocks/presidential-line-guava-haze": [
@@ -1042,44 +1042,103 @@ const R42_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [string, st
   ],
 };
 
-const SB43 = (heading: string, body: string) => `**${heading}**\n\n${body}\n\n**Where to find it**`;
-// SURFER-R43: MR jar H2s, placed before "Where to find it" in the CMS body.
+const SB43 = (heading: string, body: string, next = "Where to find it") => `**${heading}**\n\n${body}\n\n**${next}**`;
+// SURFER-R43: MR jar H2s. Sitebulb R43 B10/B14/B18/B22: each block goes before the named CMS heading.
 const R43_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
   "/moon-rocks/presidential-prerolls": [
     [
-      "**Where to find it**",
+      "**The series this format spans**",
       SB43(
         "Choosing between the one-gram roll and the minis",
-        "The Presidential Preroll is a single one-gram roll under the House Line name. Shoppers who want smaller servings in one pack can look at the [three-pack mini pre-roll range](/mini-pre-rolls), where each pack holds three 0.5g rolls. Anyone who prefers to work with loose pieces can start from the [loose House Line Moon Rocks jar](/moon-rocks/presidential-moon-rocks), a two-gram pack under the same name. Each product prints its own composition line, so check the pack you are holding for the build and batch test results before you buy.",
+        "The Presidential Preroll is a single one-gram roll under the House Line name. Shoppers who want smaller servings in one pack can look at the [three-pack mini pre-roll range](/mini-pre-rolls). Anyone who prefers to work with loose pieces can start from the [loose House Line Moon Rocks jar](/moon-rocks/presidential-moon-rocks), a two-gram pack under the same name. Each product prints its own composition line, so check the pack you are holding for the build and batch test results before you buy.", "The series this format spans",
       ),
     ],
   ],
   "/moon-rocks/presidential-moon-rocks": [
     [
-      "**Where to find it**",
+      "**The format, and why loose is a different decision**",
       SB43(
         "What distillate means on this label",
-        "The composition line on this jar reads FLOWER · DISTILLATE · KIEF, so the House Line jar uses distillate as its middle layer and is finished with kief. Distillate is refined until it is close to neutral, which leaves the flower and kief to carry most of the aroma. The [plain-language distillate explainer](/learn/what-is-thc-distillate) covers how it is made and how it differs from resin and rosin. For jars where a fruit name leads instead, browse the [fruit-led Silver Flavor jars](/moon-rocks/silver). Check the label in hand for batch details.",
+        "On this jar, distillate is the middle layer. Distillate is refined until it is close to neutral, which leaves the flower and kief to carry most of the aroma. The [plain-language distillate explainer](/learn/what-is-thc-distillate) covers how it is made and how it differs from resin and rosin. For jars where a fruit name leads instead, browse the [fruit-led Silver Flavor jars](/moon-rocks/silver). Check the label in hand for batch details.", "The format, and why loose is a different decision",
       ),
     ],
   ],
   "/moon-rocks/gods-gift": [
     [
-      "**Where to find it**",
+      "**What is actually in a Presidential moon rock**",
       SB43(
         "God's Gift among the connoisseur names",
-        "God's Gift sits in the Rose Gold Connoisseur Series, where names often lean on reverence or rarity rather than flavor. Shoppers comparing it with other names in that tier can look at [Cereal Milk from the connoisseur tier](/moon-rocks/cereal-milk), which takes a breakfast-table theme, or the [dessert-named Wedding Cake jar](/moon-rocks/wedding-cake). Rose Gold comes in jars and blunts, so the format you want narrows the choice quickly. Each jar prints its own composition line and batch test results, so read the label on the pack in hand before deciding.",
+        "God's Gift sits in the Rose Gold Connoisseur Series, and its name leans on reverence rather than flavor. Shoppers comparing it with other names in that tier can look at [Cereal Milk from the connoisseur tier](/moon-rocks/cereal-milk), which takes a breakfast-table theme, or the [dessert-named Wedding Cake jar](/moon-rocks/wedding-cake). Each jar prints its own composition line and batch test results, so read the label on the pack in hand before deciding.", "What is actually in a Presidential moon rock",
       ),
     ],
   ],
   "/moon-rocks/nyc-diesel": [
     [
-      "**Where to find it**",
+      "**The build**",
       SB43(
         "NYC Diesel beside other place-named jars",
-        "NYC Diesel takes its name from a city, and its aroma leans fuel-forward rather than sweet. Shoppers who like names tied to a place can compare it with [SFV OG, the Los Angeles valley jar](/moon-rocks/sfv-og), which carries a regional name of its own. For a softer, berry-leaning option from the same strain-led series, look at the [berry-leaning Blue Dream jar](/moon-rocks/blue-dream). Each jar prints its own composition line, so read the label on the pack you pick up for its build and batch test results rather than assuming any two jars match.",
+        "NYC Diesel takes its name from a city, and its aroma leans fuel-forward rather than sweet. Shoppers who like names tied to a place can compare it with [SFV OG, the Los Angeles valley jar](/moon-rocks/sfv-og), which carries a regional name of its own. For a softer, berry-leaning option from the same strain-led series, look at the [berry-leaning Blue Dream jar](/moon-rocks/blue-dream). Each jar prints its own composition line, so read the label on the pack you pick up for its build and batch test results rather than assuming any two jars match.", "The build",
       ),
     ],
+  ],
+};
+
+// Sitebulb R43 MR: CMS copy swaps (A1, A5, A7-A15, A17; A16 WA launch rows dropped per chief ruling, "When it lands" kept).
+const R43_SB_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
+  "/moon-rocks/blue-raspberry": [
+    [" — as distinct from the live-resin construction used on Blue Dream, 24K, Presidential OG, King Louis and most of the Gold Strain Series.", " — and it differs from other jars; each label prints its own build."],
+  ],
+  "/moon-rocks/presidential-moon-rocks": [
+    ["Presidential OG — despite sharing the house name with this pack — is built on live resin and diamonds, not distillate and kief.", "Presidential OG — despite sharing the house name with this pack — prints its own composition line."],
+    ["Cap Junky carries LIQUID LIVE RESIN.", "Cap Junky's blunt carries LIQUID LIVE RESIN."],
+    [" It is the most useful thing to read on a Presidential label.", ""],
+    ["It is the most Los Angeles piece of artwork in the entire catalogue, and", "The flagship's artwork is pure Los Angeles, and"],
+    ["The self-titled pack, the flagship, and the format that gave every other product in the catalogue its architecture.", "The self-titled pack and the flagship."],
+  ],
+  "/moon-rocks/nyc-diesel": [
+    ["Flower as the base. Live resin as the coat. Diamonds as the finish — the crystalline outer layer that gives a Presidential Moon Rock its density. Three stages, applied in sequence, through the Presidential Infusion System.", ""],
+    ["FLOWER · LIVE RESIN · DIAMONDS.", "The NYC Diesel blunt pack reads FLOWER · LIVE RESIN · DIAMONDS. Read the jar's own label for its build."],
+    ["The Presidential ladder is fixed across the catalogue. ", ""],
+    [" It is the most monumental pack Presidential prints and the only one built around a landmark.", ""],
+    ["NYC Diesel is the largest-feeling of them. It is the only pack that uses a monument rather than an object, and at that scale", "At that scale"],
+  ],
+  "/moon-rocks/xxx": [
+    ["with FLOWER · LIVE RESIN · KIEF beneath it", "with FLOWER · LIVE RESIN · DIAMONDS beneath it"],
+    [", and it has run unchanged since the company started in Los Angeles in 2012.", "."],
+  ],
+  "/moon-rocks/presidential-prerolls": [
+    [", unchanged since Los Angeles in 2012, and it is the reason", ", and it is the reason"],
+    ["The house name on the smallest single format in the catalogue.", "The house name in a one-gram roll."],
+    ["Not because it is lesser — the build is identical to everything else Presidential rolls — but because", "Not because it is lesser, but because"],
+    ["Kief is bonded to the coat as a finish.", "A kief or diamond finish is bonded to the coat."],
+    ["Prerolls run across the whole catalogue rather than belonging to one part of it.", "Prerolls appear across the series."],
+    ["The Rose Gold Connoisseur tier sits above both.", "The Rose Gold Connoisseur tier leads with connoisseur names."],
+  ],
+  "/moon-rocks/24k": [
+    [", unchanged since the company started in Los Angeles in 2012 and applied identically across the catalogue whether the pack is illustrated or flat.", "."],
+  ],
+  "/moon-rocks/gods-gift": [
+    [" and it has not changed since the company started in Los Angeles in 2012.", "."],
+    ["The architecture is constant across the catalogue: the WORLD'S STRONGEST tagline,", "The pack carries the WORLD'S STRONGEST tagline,"],
+    ["Five, with fixed weights across every market.", "Pack weights:"],
+    ["There is a naming tradition in cannabis that reaches for reverence, and Presidential has more of it than most catalogues.", "There is a naming tradition in cannabis that reaches for reverence."],
+    ["The Rose Gold Connoisseur tier sits above both.", "The Rose Gold Connoisseur tier leads with connoisseur names."],
+  ],
+  "/moon-rocks/papaya-punch": [
+    ["Every Presidential pack carries the same architecture: WORLD'S STRONGEST", "The pack carries WORLD'S STRONGEST"],
+  ],
+  "/moon-rocks/thc-design-prerolls": [
+    ["Every Presidential pack carries the same architecture: WORLD'S STRONGEST", "The pack carries WORLD'S STRONGEST"],
+  ],
+  "/moon-rocks/white-walker": [
+    ["— is identical across the entire catalogue.", "— follow the house layout."],
+  ],
+  "/moon-rocks/rainbow-belts": [
+    ["The build is identical in all five. ", ""],
+  ],
+  "/moon-rocks/king-louis": [
+    ["This page is the Moon Rock Blunt: one blunt, hand-finished, 1.5 grams net weight, .053 oz.", "The Moon Rock Blunt is one blunt, hand-finished, 1.5 grams net weight, .053 oz."],
+    ["a city skyline for NYC Diesel", "a city skyline for [the Statue of Liberty NYC Diesel pack](/moon-rocks/nyc-diesel)"],
   ],
 };
 
@@ -1088,6 +1147,7 @@ export function hardcodeInContentLinks(sourcePath: string, rawValue: string): st
     ...(IN_CONTENT_TEXT_OVERRIDES[sourcePath] ?? []),
     ...(R42_TEXT_OVERRIDES[sourcePath] ?? []),
     ...(R43_TEXT_OVERRIDES[sourcePath] ?? []),
+    ...(R43_SB_OVERRIDES[sourcePath] ?? []),
     ...(sourcePath.startsWith("/moon-rocks/") ? MOON_ROCKS_MARKET_SWAPS : []),
   ];
   const value = swaps.reduce((text, [from, to]) => text.split(from).join(to), rawValue);

@@ -39,7 +39,7 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
           Start with the strain name and the strain type printed on the pack: the pack for{" "}
           <Link className={a} href="/moon-rocks/24k">24K Indica moon rocks</Link>, for example, names 24K and marks it Indica.
           Next, find the build. Each package names the materials in its infused construction: flower, then a concentrate such as
-          distillate or live resin, then a kief finish, which is{" "}
+          distillate or live resin, then a kief or diamond finish, which is{" "}
           <Link className={a} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. The tier shows the extract
           family: Silver is distillate, Gold is live resin, and Rose Gold is live rosin. THC and the other cannabinoids are
           the chemical compounds listed on a cannabis label. They are batch-specific, so read the current package label and
@@ -50,7 +50,7 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
         <h3 className="mt-8 text-2xl font-semibold leading-snug text-po-ink">What is Presidential flower?</h3>
         <p>
           Presidential flower is the cannabis flower at the base of every Presidential moon rock. Each moon rock starts with
-          that flower, adds a concentrate coat, and is finished with kief, with the build printed on the pack. The tier names
+          that flower, adds a concentrate coat, and is finished with kief or diamonds, with the build printed on the pack. The tier names
           the extract: Silver is distillate, Gold is live resin, and Rose Gold is live rosin. The same flower also goes into
           Moon Rock pre-rolls, blunts and minis; browse the{" "}
           <Link className={a} href="/moon-rocks">Presidential Moon Rocks collection</Link> or{" "}
@@ -80,7 +80,7 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
         That comes down to the format you want. A moon rock is not plain flower: it is cannabis flower coated with a
         concentrate and finished with kief, three layers in one product.
         Presidential&apos;s <Link className={a} href="/about#about-craft-title">infusion process</Link> runs in that
-        order: flower, then concentrate, then the kief finish. Read <Link className={a} href="/learn/what-are-moon-rocks">what moon rocks are</Link> for
+        order: flower, then concentrate, then the kief or diamond finish. Read <Link className={a} href="/learn/what-are-moon-rocks">what moon rocks are</Link> for
         how the format differs from flower alone.
       </p>
     ),
