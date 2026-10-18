@@ -197,6 +197,63 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
         </>
       ) : null}
+      {/* SURFER-R36: Cereal Milk, Pink Cookies, Skywalker and Tropical H3s (labels from each live product page). */}
+      {slug === "cereal-milk" && series === "Rose Gold Connoisseur Series" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Cereal Milk inside the Rose Gold series</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Cereal Milk is a Rose Gold Connoisseur Series name, marked Hybrid on Presidential packs. Its profile is sweet, lactic,
+            and faintly grainy. The jar label reads flower, live rosin, and diamonds, and the same build carries into the Cereal
+            Milk pre-roll and blunt. Live rosin is the solventless concentrate behind the series, pressed with ice water, heat, and
+            pressure instead of chemical solvents. Anyone searching for cereal moon rocks can compare it with other Rose Gold jars
+            like <Link className={linkClass} href="/moon-rocks/wedding-cake">Wedding Cake moon rocks</Link> or{" "}
+            <Link className={linkClass} href="/moon-rocks/cosmic-cookies">Cosmic Cookies moon rocks</Link>. Read the batch label on the exact jar, then
+            confirm with the store before you go.
+          </p>
+        </>
+      ) : null}
+      {slug === "pink-cookies" && series === "Gold Strain Series" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Pink Cookies, jar and roll</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Pink Cookies is a Gold Strain Series name, marked Indica on Presidential packs, with a sweet, doughy, rich profile. The
+            jar label reads flower, live resin, distillate, and diamonds. The full pre-roll and blunt share that build, while the
+            mini pre-rolls and mini blunts read flower, live resin, and diamonds. That makes it worth reading the label on each
+            format separately. Shoppers searching for the Presidential pink strain can start with the jar, then read{" "}
+            <Link className={linkClass} href="/learn/what-is-live-resin">how live resin is extracted</Link> for the concentrate the formats share. For what the
+            refined concentrate in the jar is, see the <Link className={linkClass} href="/learn/what-is-thc-distillate">distillate guide</Link>. Confirm
+            current selection with the store.
+          </p>
+        </>
+      ) : null}
+      {slug === "skywalker" && series === "Gold Strain Series" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Skywalker and its Rove neighbors</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Skywalker is a Gold Strain Series name from the Rove collaboration. It runs earthy and full-spectrum with a clean,
+            almost cool finish. The jar label reads flower, live resin, and diamonds, and the same build carries into the Skywalker
+            pre-roll, blunt, mini pre-rolls, and mini blunts. On the official Presidential Moon Rocks website, each format has its
+            own page and label. For the concentrate behind every format, see the{" "}
+            <Link className={linkClass} href="/learn/what-is-live-resin">primer on live resin extraction</Link>. For another Rove release in the Gold series,
+            compare the <Link className={linkClass} href="/moon-rocks/waui">Waui moon rocks</Link>. Read the label on the exact pack and confirm current
+            selection with the store.
+          </p>
+        </>
+      ) : null}
+      {slug === "tropical" && series === "Silver Flavor Series" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Tropical among the Silver flavors</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Tropical is a Silver Flavor Series name that layers citrus, stone fruit, and something faintly floral into one profile.
+            The jar label reads flower, distillate, and kief, so these moon rocks are finished with kief, and the Tropical blunt
+            shares the same build. Distillate is the refined concentrate that defines the Silver series. For how the three layers
+            come together, see <Link className={linkClass} href="/learn/what-are-moon-rocks">the three-layer moon rock build</Link>. If you like a single-fruit
+            name instead of a blend, compare <Link className={linkClass} href="/moon-rocks/pineapple">the Pineapple Silver jar</Link>, another Silver release.
+            Shoppers using the Presidential Moon Rocks website can check the label here, then find a licensed retailer and confirm
+            with the store.
+          </p>
+        </>
+      ) : null}
       {/* SURFER-R17: Pineapple distillate H3, from its own page, /learn/what-is-live-resin and /moon-rocks/watermelon. */}
       {slug === "pineapple" && series === "Silver Flavor Series" ? (
         <>
