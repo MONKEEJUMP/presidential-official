@@ -1200,6 +1200,28 @@ const R44_SURFER_OVERRIDES: Readonly<Record<string, readonly (readonly [string, 
   ],
 };
 
+// SURFER-R45: MR jar H2s, placed before "Where to find it" in the CMS body (superlatives and "test results" softened per standing rules).
+const R45_SURFER_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
+  "/moon-rocks/xxx": [
+    [
+      "**Where to find it**",
+      SB43(
+        "XXX beside other plain-label names",
+        "XXX keeps its label spare: three letters and no illustrated story. Shoppers who like names that let the product speak can compare it with the [King Louis media-collaboration jar](/moon-rocks/king-louis), which prints a partner name on the front, or the [SFV OG strain jar](/moon-rocks/sfv-og), which carries a regional name. Aroma is another guide when names give little away, so ask about the profile as well as the name. Each jar prints its own composition line, so read the pack in hand for its build and batch details.",
+      ),
+    ],
+  ],
+  "/moon-rocks/king-louis": [
+    [
+      "**Where to find it**",
+      SB43(
+        "King Louis next to other partner-label jars",
+        "King Louis prints a collaboration name on its pack, which makes it easy to spot on a shelf. Shoppers interested in partner releases can compare it with the [Cap Junky partner-label jar](/moon-rocks/cap-junky), which carries a collaborator's logo on the front. For a contrast with no artwork story at all, see the [three-letter XXX jar](/moon-rocks/xxx). Aroma and pack art help you choose between them. Each jar prints its own composition line, so read the label in hand for its build and batch details.",
+      ),
+    ],
+  ],
+};
+
 export function hardcodeInContentLinks(sourcePath: string, rawValue: string): string {
   const swaps = [
     ...(IN_CONTENT_TEXT_OVERRIDES[sourcePath] ?? []),
@@ -1208,6 +1230,7 @@ export function hardcodeInContentLinks(sourcePath: string, rawValue: string): st
     ...(R43_SB_OVERRIDES[sourcePath] ?? []),
     ...(R44_RULING_OVERRIDES[sourcePath] ?? []),
     ...(R44_SURFER_OVERRIDES[sourcePath] ?? []),
+    ...(R45_SURFER_OVERRIDES[sourcePath] ?? []),
     ...(sourcePath.startsWith("/moon-rocks/") ? MOON_ROCKS_MARKET_SWAPS : []),
   ];
   const value = swaps.reduce((text, [from, to]) => text.split(from).join(to), rawValue);

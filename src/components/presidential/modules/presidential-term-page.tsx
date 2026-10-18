@@ -770,6 +770,13 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
         <p><strong>Match the package to the catalog.</strong> Product pages show the named releases, series, formats, and packaging artwork associated with the Presidential lineup. That reference makes it easier to recognize the selection before visiting a store.</p>
         <p><strong>Confirm local selection.</strong> Retail teams hold the current details for stock, formats, and fresh arrivals. A quick check with the chosen store completes the path from product research to an informed visit.</p>
         <p>Together, those steps make this website the official starting point for learning the company&apos;s history, exploring its infused cannabis, and finding licensed Presidential retail.</p>
+        {/* SURFER-R45: pack-art H3 ("fastest" and "each package carries an illustration" softened: some packs are letters or crest only). */}
+        <h3 className="text-xl font-semibold leading-snug text-po-ink">Recognising Presidential by its pack art</h3>
+        <p>
+          One reliable way to recognise a genuine Presidential product is the pack itself. Each package carries the crest, a series color, and the product name, and many carry an illustration tied to that name, so the art does much of the identification before you read a word. The{" "}
+          <Link className={inlineLinkClass} href="/presidential-art">Presidential pack art gallery</Link> collects those designs in one place, which helps when you are matching a menu listing to a real package. For the company background behind the brand, read{" "}
+          <Link className={inlineLinkClass} href="/our-story">how the brand began in Los Angeles</Link>. Check the label for the exact product name and batch results.
+        </p>
       </TermSection>
 
       <TermSection id="presidential-cannabis-faq" title="Presidential Cannabis FAQ">
