@@ -623,6 +623,8 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   // Sitebulb R29 A6/A8: no flower THC range, no "potent" in body copy.
   // Chief R29 ruling (b): pack labels decide the moon rock finish; (c) no unsourced percentages; (d) no catalog count.
   "/moon-rocks/blue-dream": [
+    // R40 chief ruling: no format counts.
+    ["Presidential runs five formats and the weights are fixed across the entire catalogue.", "Presidential fixes the weight of every format across the entire catalogue."],
     // Sitebulb R33 A5: no unsourced "most requested" / "most recognisable" claims.
     ["Blue Dream is the most requested name in cannabis, and that is exactly the problem", "Blue Dream is a familiar name in cannabis, and that is exactly the problem"],
     ["It is that method applied to the most recognisable name in the room.", "It is that method applied to a name everyone already knows."],
@@ -656,6 +658,8 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
     ["| Type | Indica | Indica |", ""],
   ],
   "/moon-rocks/presidential-prerolls": [
+    // R40 chief ruling: no format counts.
+    ["Five formats, one build, five different occasions.", "Every format, one build, a different occasion for each."],
     ["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."],
     // Sitebulb R35 A6: unsourced consumer-behavior claim.
     ["It is the entry point to the line, and it is the format most people meet first.", "It is the entry point to the line."],

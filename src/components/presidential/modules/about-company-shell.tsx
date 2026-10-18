@@ -212,7 +212,7 @@ export function AboutCompanyShell() {
               eyebrow="THE PLATFORMS"
               id="about-platforms-title"
               intro="Presidential doesn't make a catalog. It builds formats — each one engineered around a different way to experience the same obsession."
-              title="THREE FORMATS. ONE STANDARD."
+              title="EVERY FORMAT. ONE STANDARD."
             />
             <div className="mt-14 grid gap-8 lg:grid-cols-3">
               {platforms.map((platform, index) => (

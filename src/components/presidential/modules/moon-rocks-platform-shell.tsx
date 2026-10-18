@@ -233,7 +233,7 @@ export async function MoonRocksPlatformShell({
                 <Link className="font-semibold underline underline-offset-4" href="/learn/what-are-moon-rocks">What are moon rocks</Link> covers the format from the beginning.
               </p>
               <p className="mt-3">
-                The same build carries across three formats. There&apos;s the 2G Moon Rock, the Moon Rock Preroll and the Moon
+                The same build carries across the formats, from the 2G Moon Rock to the Moon Rock Preroll and the Moon
                 Rock Blunt, and each one comes in Silver, Gold and Rose Gold. Read why{" "}
                 <Link className="font-semibold underline underline-offset-4" href="/learn/different-extracts-need-different-heat">different extracts need different heat</Link>.
                 Cannabinoid and THC figures come from the current package and its batch test record, not from this page.
