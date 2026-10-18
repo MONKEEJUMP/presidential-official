@@ -185,7 +185,7 @@ export const PRE_ROLL_ARTWORKS = [
     name: "Presidential (Classic)",
     edition: "1g infused pre-roll · Flower · Live resin · Diamonds",
     collection: "Gold Strain Series",
-    description: "The original Presidential selection pairs cannabis flower with live resin and diamonds. Its reported earthy, mint, and floral character makes Classic a useful starting point for consumers who want the house Moon Rock recipe. One 1g Moon Rock pre-roll, prepared in rolling paper.",
+    description: "Presidential OG carries the house name on the pack. One 1g Moon Rock pre-roll of flower, live resin, and diamonds, prepared in rolling paper and marked Hybrid on the pack.",
     src: "/media/pre-rolls/presidential-og.webp",
     alt: "Presidential Presidential (Classic) 1g Moon Rock pre-roll product",
     shape: "square",
