@@ -69,10 +69,9 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
           <div className={shared.indexIntro}>
             <h3>What&apos;s in a Presidential mini blunt pack</h3>
             <p>
-              Every mini blunt pack holds three 0.7g Moon Rock mini blunts, 2.1g in total. Each one has the same build as the{' '}
-              <Link href="/blunts">full-size Moon Rock blunts</Link>: flower coated in live resin with a kief or diamond finish, rolled
-              in a 100% tobacco-free hemp wrap. Only the size and the count change. A mini blunt is a smaller version of the same
-              object, not a cheaper one. For the paper version, see{' '}
+              A Presidential mini blunt pack holds three 0.7g Moon Rock mini blunts, 2.1g in total. Like the{' '}
+              <Link href="/blunts">full-size Moon Rock blunts</Link>, each one is rolled in a 100% tobacco-free hemp wrap, and each
+              pack prints its own build. For the paper version, see{' '}
               <Link href="/mini-pre-rolls">Presidential mini pre-rolls</Link> or the full-size{' '}
               <Link href="/pre-rolls">Presidential infused pre-rolls</Link>.
             </p>

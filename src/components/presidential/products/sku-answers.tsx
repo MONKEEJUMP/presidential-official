@@ -517,7 +517,7 @@ Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongs
         <>
           <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Watermelon and its Silver neighbors</h2>
           <p className="mt-2 text-sm leading-6 text-po-body">
-            Watermelon is a Silver Flavor Series jar, and the label lists flower and distillate, finished with kief. The aroma is bright and juicy. It sits among the Silver fruit names, which are easy to compare on aroma because most share the same distillate and kief build. For a darker fruit profile from the same tier, see the{" "}
+            Watermelon is a Silver Flavor Series jar, and the label lists flower and distillate, finished with kief. The aroma is bright and juicy. It sits among the Silver fruit names, which are easy to compare on aroma. For a darker fruit profile from the same tier, see the{" "}
             <Link className={linkClass} href="/moon-rocks/grape">deep-fruit Grape jar in Silver</Link>. For a mixed tropical blend, the{" "}
             <Link className={linkClass} href="/moon-rocks/tropical">Silver Tropical moon rocks</Link> layer citrus with stone fruit. Watermelon also comes as a 1.5g blunt listed with flower, distillate, and kief. Check the package label for batch test results and cannabinoid content.
           </p>
