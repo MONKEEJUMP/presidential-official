@@ -200,6 +200,21 @@ Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongs
           </p>
         </>
       ) : null}
+      {/* SURFER-R46: 24K plain-label H2 ("most useful guide" softened; XXX anchor reworded: "three-letter XXX jar" exists). */}
+      {slug === "24k" ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">24K beside other plain-label names</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            24K keeps its pack spare, with a brushed-gold label and no illustrated scene. Shoppers who prefer names that let the
+            label speak can compare it with the{" "}
+            <Link className={linkClass} href="/moon-rocks/xxx">plain-label XXX moon rocks</Link>, which also skip the artwork story. For a
+            name that adds a partner credit instead, see the{" "}
+            <Link className={linkClass} href="/moon-rocks/king-louis">King Louis collaboration jar</Link>. When the pack art gives little
+            away, aroma is a good guide, so ask about the profile as well as the name. Each jar prints its own composition line,
+            so read the label in hand for batch details.
+          </p>
+        </>
+      ) : null}
       {/* SURFER-R35: Garlic Cookies H3 (jar label FLOWER · DISTILLATE · KIEF; pre-roll and blunt match; Head Cheese is a Polaris release). */}
       {slug === "presidential-line-garlic-cookies" ? (
         <>
@@ -611,6 +626,20 @@ Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongs
           </p>
         </>
       ) : null}
+      {/* SURFER-R46: Strawberry fruit-names H2 ("quickest way" softened; "jammy" not on the Grape page). */}
+      {slug === "strawberry" ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Strawberry beside darker and stone-fruit flavors</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Strawberry&apos;s aroma is ripe and sweet without leaning syrupy, and shoppers who like it often compare it with other
+            fruit names. For a deeper, darker profile, look at the{" "}
+            <Link className={linkClass} href="/moon-rocks/grape">deep, dark Grape jar</Link>. For something softer and more tropical, the{" "}
+            <Link className={linkClass} href="/moon-rocks/peach-mango">Peach Mango stone-fruit jar</Link> pairs two fruits in one name.
+            Comparing aroma notes side by side helps narrow a fruit-led choice. Each jar prints its own composition line, so read
+            the label on the pack in hand for its build and batch details.
+          </p>
+        </>
+      ) : null}
       {slug === "gorilla-goo" && series && marking && materials ? (
         <>
           <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">What is the Gorilla Goo strain?</h2>
@@ -643,6 +672,21 @@ Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongs
             Gorilla Goo is a Gold Strain Series jar, and the label lists flower and distillate, finished with kief, with the pack marked Hybrid. Its aroma is heavy and resinous. Shoppers who like that weighty style can compare it with{" "}
             <Link className={linkClass} href="/moon-rocks/galactic-gas">Galactic Gas in the Gold series</Link>, another gassy Gold name. For a plain explanation of how flower, concentrate, and the finish come together, read{" "}
             <Link className={linkClass} href="/learn/what-are-moon-rocks">the basics of a layered moon rock</Link>. Each pack prints its own build, so read the label for batch test results.
+          </p>
+        </>
+      ) : null}
+      {/* SURFER-R46: Gorilla Goo H2 (Cap Junky line follows its page: texture-and-weight art; XJ-13 is the live slug). */}
+      {slug === "gorilla-goo" ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Gorilla Goo next to other heavy-aroma names</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Gorilla Goo&apos;s aroma is sticky and resinous, and shoppers who like that weight often compare it with other
+            strain-led names. The{" "}
+            <Link className={linkClass} href="/moon-rocks/cap-junky">textured Cap Junky jar</Link> has pack art built on texture and
+            weight. For another strain-led option, look at the{" "}
+            <Link className={linkClass} href="/moon-rocks/xj-13">XJ-13 strain jar</Link>, which leans citrus and clean. Comparing aroma
+            notes and pack art side by side helps you choose. Each jar prints its own composition line, so read the label in hand
+            for its build and batch details.
           </p>
         </>
       ) : null}

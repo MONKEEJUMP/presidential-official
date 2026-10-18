@@ -70,20 +70,49 @@ const ROOM_COPY: Readonly<Record<string, ReactNode>> = {
     </>
   ),
   blunts: (
+    <>
     <Block heading="Pack art for Presidential Moon Rock blunts">
       Presidential Moon Rock blunts carry the same illustrated identity as the rest of the lineup. Each one is a tobacco-free
       hemp wrap around flower, concentrate, and a kief or diamond finish. The art and series color make each one easy to spot. Read the label for the exact build, then search
       nearby stores and confirm with the store. Browse the <Link className={L} href="/blunts">Moon Rock blunt catalog</Link> for
       every name, or the smaller <Link className={L} href="/mini-blunts">mini blunt packs</Link>.
     </Block>
+      {/* SURFER-R46: H3 under the blunt art H2 ("batch results" -> "batch details"). */}
+      <section className="mx-auto w-full max-w-3xl px-6 pb-12 text-sm leading-6 text-white/80">
+        <h3 className="mb-2 text-base font-semibold text-white">Moving between the art rooms</h3>
+        <p>
+          Blunt art is one room of a larger collection. Shoppers who recognise a name from a blunt pack often want to see how the
+          same name looks on other formats. The <Link className={L} href="/presidential-art">Presidential art vault rooms</Link> group
+          the illustrations by format, so each room shows a different set of packs. For single rolls, the{' '}
+          <Link className={L} href="/presidential-art/pre-rolls">pre-roll room of the art vault</Link> collects those designs.
+          Comparing the rooms makes it easier to spot a familiar name on a crowded shelf. Read the label on the pack in hand for its
+          build and batch details.
+        </p>
+      </section>
+    </>
   ),
   'mini-pre-rolls': (
+    <>
     <Block heading="From the mini pre-roll art to the pack">
       Each work in this room fronts a Presidential Moon Rock mini pre-roll pack, the shorter version of the full pre-roll. The
       rolls are made with flower, live resin, and diamonds, and the pack shows the strain name under the art. To compare the
       products themselves, open the <Link className={L} href="/mini-pre-rolls">mini pre-roll packs</Link>. For the rest of the
       collection, return to the <Link className={L} href="/presidential-art">Vault entrance</Link>.
     </Block>
+      {/* SURFER-R46: H3 under the mini pre-roll art H2 (XXX anchor reworded: "three-letter XXX jar" exists). */}
+      <section className="mx-auto w-full max-w-3xl px-6 pb-12 text-sm leading-6 text-white/80">
+        <h3 className="mb-2 text-base font-semibold text-white">From a mini artwork to a product page</h3>
+        <p>
+          Each artwork in this room links a name to a pack, and the product pages carry the detail. A pack whose art leads with a
+          name rather than a scene is the{' '}
+          <Link className={L} href="/mini-pre-rolls/presidential-og">Presidential OG mini three-pack</Link>, where the label does most
+          of the work. For a short, letters-only name, open the{' '}
+          <Link className={L} href="/mini-pre-rolls/xxx">XXX minis in paper</Link>. Seeing the art and the product page together
+          makes the pack easier to recognise on a shelf. Each product page lists the build printed on that pack, so read it before
+          you buy.
+        </p>
+      </section>
+    </>
   ),
 };
 
@@ -172,6 +201,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   // SURFER-R35: mini and pre-roll SKU blocks (single SKUs follow their labels; jar builds follow the jar's own label).
   'mini-pre-rolls/presidential-og': (
+    <>
     <Block heading="The house name in other sizes">
       Presidential OG carries the brand&apos;s own name, with the crest and no partner mark. The mini
       pre-rolls are flower, live resin, and diamonds in paper, marked Hybrid on the pack. If you searched for Presidential
@@ -181,6 +211,16 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       <Link className={L} href="/mini-blunts/presidential-og">Presidential OG in a hemp wrap</Link>. Read the label on the exact
       pack, then use the store finder and confirm current selection with the store.
     </Block>
+      {/* SURFER-R46: OG mini H2 (XJ-13 art not confirmed, so no art claim for the pair). */}
+      <Block heading="Other mini pre-roll packs to compare">
+        Mini pre-roll packs make it easy to try a name in a smaller size, and the format includes different profiles. For a
+        sweet, doughy option, look at the{' '}
+        <Link className={L} href="/mini-pre-rolls/pink-cookies">doughy Pink Cookies minis</Link>. For a strain-led name with a
+        citrus-leaning profile, see the <Link className={L} href="/mini-pre-rolls/xj-13">XJ-13 mini pre-rolls</Link>. Their names
+        and aromas make them easy to tell apart. Comparing aroma and pack art side by side makes the choice simpler. Each pack
+        prints its own build line, so read the label in hand before you buy, and bring the exact name to the counter.
+      </Block>
+    </>
   ),
   'mini-blunts/pink-cookies': (
     <Block heading="Pink Cookies across formats">
@@ -238,6 +278,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
     </>
   ),
   'pre-rolls/white-walker': (
+    <>
     <Block heading="White Walker within the Rose Gold series">
       White Walker sits in the Rose Gold Connoisseur Series, the connoisseur side of Presidential. The pre-roll is flower, live
       rosin, and diamonds in one 1g roll. The{' '}
@@ -246,6 +287,17 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       then confirm current selection with the store. For a tobacco-free wrap, see{' '}
       <Link className={L} href="/blunts/white-walker">White Walker as a 1.5g blunt</Link>.
     </Block>
+      {/* SURFER-R46: White Walker H2 (cold-art claim reworded to its page's "cold end"; "quickest way" softened; anchors reworded: "woodsy XXX pre-roll" and "how pre-roll packs are illustrated" exist). */}
+      <Block heading="Comparing White Walker with other single rolls">
+        White Walker sits at the cold end of the Presidential catalog, and its name points the same way. Shoppers comparing
+        single rolls often look at a contrasting name next, such as{' '}
+        <Link className={L} href="/pre-rolls/xxx">XXX as a single 1g roll</Link>, which keeps its label to three letters. For a
+        broader look at single-roll pack designs,{' '}
+        <Link className={L} href="/presidential-art/pre-rolls">the single-roll art room</Link> collects them in one place.
+        Comparing aroma and pack art side by side helps you choose. Read the label on the roll in hand for its build and batch
+        details.
+      </Block>
+    </>
   ),
   'pre-rolls/waui': (
     <Block heading="Waui beyond the single pre-roll">
