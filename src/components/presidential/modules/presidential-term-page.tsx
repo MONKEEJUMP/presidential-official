@@ -654,7 +654,7 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
         <p><strong>The Presidential Blunt</strong> is the flagship wrapped format. It carries recognizable strain and flavor names in a full-size presentation designed around a steady burn and a complete session.</p>
         <p><strong>Mini Blunts</strong> provide the same family character in a smaller package. Their compact scale broadens the ways licensed retailers can present Presidential infused cannabis and gives customers another practical format choice.</p>
         <p><strong>The Presidential Line</strong> connects core house names across formats, while the <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver Flavor Series</Link>, <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold Strain Series</Link>, and <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> organize products by their featured profile and extract approach.</p>
-        <p>The catalog also includes <strong>Presidential House Line</strong> selections and <strong>Presidential x THC Design</strong> releases. Together, these groupings position the blunt program inside the broader Presidential product system with a clear, connected presence across the Presidential catalog.</p>
+        <p>The catalog also includes <Link className={inlineLinkClass} href="/moon-rocks/presidential-house-line">House Line blunt selections</Link> and <strong>Presidential x THC Design</strong> releases. Together, these groupings position the blunt program inside the broader Presidential product system with a clear, connected presence across the Presidential catalog.</p>
         <p>Packaging carries the strain or flavor identity forward with bold color, Presidential branding, and format information that helps customers recognize the exact release they selected.</p>
       </TermSection>
 
@@ -732,8 +732,8 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
 
       <TermSection id="presidential-cannabis-wholesale" images={[images[2]]} title="Wholesale only, on purpose" tone="contrast">
         <p>Presidential operates through licensed cannabis retail. The brand supplies the regulated market, and licensed stores provide the local shelf, customer service, and current selection for adults 21+ where legal.</p>
-        <p>This structure gives every customer a direct path from official brand information to an approved retail destination. The nationwide finder accepts a ZIP code, ranks nearby locations by distance, and helps people plan the shortest practical route to a store carrying Presidential.</p>
-        <p>The model also keeps the website focused on education, product discovery, brand history, and retailer connection. Visitors can understand the lineup here, then confirm the products and formats currently available with their chosen licensed retailer.</p>
+        <p>This structure gives every customer a direct path from official brand information to an approved retail destination. The store finder accepts a ZIP code, ranks nearby locations by distance, and helps people plan the shortest practical route to a store carrying Presidential.</p>
+        <p>Visitors can learn the lineup here, then confirm the products and formats currently available with their chosen licensed retailer.</p>
       </TermSection>
 
       <TermSection id="presidential-cannabis-catalog" title="What the company makes" wideMedia={<ProductCollage />}>
@@ -758,9 +758,9 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
       </TermSection>
 
       <TermSection id="presidential-cannabis-markets" images={[images[5]]} title="Where it is carried" tone="contrast">
-        <p>Presidential has an active licensed-retail presence in California, Oklahoma, New York, Nevada, Michigan, Arizona, and Washington.</p>
+        <p>Presidential is sold through licensed retailers in California, Oklahoma, New York, Nevada, Michigan, and Arizona, and is landing soon in Washington.</p>
         <p>Each state market has its own retailer network and product mix. California connects directly to the company&apos;s Los Angeles roots, while the other markets extend Presidential formats to customers through state-regulated cannabis programs.</p>
-        <p>The store finder turns that geographic footprint into a useful customer tool. Entering a ZIP code returns the nearest listed retailers with real mileage, allowing people anywhere in the country to see the most practical path toward an official store.</p>
+        <p>The store finder turns that geographic footprint into a useful customer tool. Entering a ZIP code returns the nearest listed retailers with real mileage, so people can see the most practical path to a listed store.</p>
         <Link className={buttonLinkClass} href="/find-us">Find a licensed retailer</Link>
         <p>Licensed-retailer availability varies by market, location, and timing.</p>
       </TermSection>

@@ -177,10 +177,12 @@ function EditorialRouteFoundationShell({
               ? [
                   "Los Angeles, 2012. Two founders, Everett Smith and John Zapp, set out with one stubborn belief: cannabis deserves better. Not better marketing — better cannabis. They weren't interested in growing flower and calling it premium; they wanted to build the best product on the shelf and obsess over every gram to get there. What they made became the Presidential Infusion System. In Southern California, Presidential made the World's Strongest™ pre-rolls and moon rock blunts, stocked across licensed California retailers. Presidential kept chasing better — better flavor, greater consistency, a premium experience pack after pack, no misses. More than a decade later, that obsession has grown into a full platform: Moon Rocks, Moon Pods, and Orbit. The name on the box hasn't changed, and neither has the standard behind it. Cannabis Evolved. Expect More. Because Presidential Doesn't Miss.",
                 ]
-              : [
-                  route.description,
-                  "A focused official section inside the Presidential digital experience for adults 21+ where legal.",
-                ]
+              : route.id === "learn"
+                ? [route.description] // Sitebulb R35 A2: meta note cut on /learn.
+                : [
+                    route.description,
+                    "A focused official section inside the Presidential digital experience for adults 21+ where legal.",
+                  ]
           }
           title={route.h1}
         />
@@ -365,10 +367,12 @@ export function StaticRouteFoundationShell({
                   kicker="Official Presidential"
                   title={route.h1}
                 />
-                <p className="max-w-2xl text-sm leading-6 text-po-muted">
-                  A focused official section inside the Presidential digital
-                  experience for adults 21+ where legal.
-                </p>
+                {route.id !== "learn" ? (
+                  <p className="max-w-2xl text-sm leading-6 text-po-muted">
+                    A focused official section inside the Presidential digital
+                    experience for adults 21+ where legal.
+                  </p>
+                ) : null}
               </div>
 
               <MediaSlot

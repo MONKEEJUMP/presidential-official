@@ -11,6 +11,7 @@ import styles from "./catalog-product-page.module.css";
 import type { VaultProduct } from '@/content/vault/catalog';
 import { imageAlt } from '@/content/vault/catalog';
 import { vaultMadeWithSentence, vaultSpecs } from '@/content/vault/specs';
+import { vaultStrainSlug } from '@/content/vault/catalog';
 import { sanityImage } from "@/lib/cms/sanity-image";
 
 type CatalogProduct = {
@@ -71,7 +72,17 @@ const FLAVOR_PAGE_BY_SKU_PATH: Readonly<Record<string, { readonly href: string; 
 // Sitebulb oct06d #2: the Product specs block for the Vault format SKU pages
 // (pre-rolls, blunts, mini pre-rolls, mini blunts). Values come only from
 // src/content/vault/specs.json; a field with no data is left out.
+// Sitebulb R35 B7/B15/B16/B21/B22: cross-format inlinks placed right after the build line.
+const VAULT_BUILD_LINKS: Readonly<Record<string, { readonly lead: string; readonly href: string; readonly anchor: string }>> = {
+  "mini-pre-rolls/pink-cookies": { lead: "For the same name in a tobacco-free wrap, see", href: "/mini-blunts/pink-cookies", anchor: "Pink Cookies in a hemp-wrap three-pack" },
+  "pre-rolls/xj-13": { lead: "The same name comes loose as", href: "/moon-rocks/xj-13", anchor: "XJ-13 moon rocks in the jar" },
+  "mini-blunts/xj-13": { lead: "For the unrolled format, see", href: "/moon-rocks/xj-13", anchor: "the XJ-13 jar" },
+  "blunts/24k": { lead: "For paper instead of a wrap, see", href: "/pre-rolls/24k", anchor: "the 24K single pre-roll" },
+  "mini-pre-rolls/24k": { lead: "For one full roll, see", href: "/pre-rolls/24k", anchor: "24K at the 1g size" },
+};
+
 function VaultSpecs({ product }: { readonly product: VaultProduct }) {
+  const buildLink = VAULT_BUILD_LINKS[`${product.room}/${vaultStrainSlug(product)}`];
   const spec = vaultSpecs(product);
   const rows: { readonly label: string; readonly value: string }[] = [{ label: "Format", value: `Moon Rock ${product.format}` }];
   if (spec) {
@@ -92,7 +103,7 @@ function VaultSpecs({ product }: { readonly product: VaultProduct }) {
       <dl className={`${styles.facts} ${styles.specFacts}`}>
         {rows.map((row) => <div key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}
       </dl>
-      {sentence ? <p className={styles.specsNote}>{sentence} <Link href="/find-us">Find a licensed retailer</Link> and confirm its current selection with the store.</p> : null}
+      {sentence ? <p className={styles.specsNote}>{sentence}{buildLink ? <> {buildLink.lead} <Link href={buildLink.href}>{buildLink.anchor}</Link>.</> : null} <Link href="/find-us">Find a licensed retailer</Link> and confirm its current selection with the store.</p> : null}
     </div>
   );
 }

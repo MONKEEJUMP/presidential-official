@@ -637,7 +637,20 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   // Sitebulb R34 A2: mini pre-rolls are smaller, so drop the "smallest single unit" claim.
   "/moon-rocks/thc-design-prerolls": [["One gram. The smallest single unit Presidential rolls.", "One gram, one roll."]],
   "/moon-rocks/gods-gift": [["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."]],
-  "/moon-rocks/presidential-prerolls": [["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."]],
+  "/moon-rocks/presidential-prerolls": [
+    ["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."],
+    // Sitebulb R35 A6: unsourced consumer-behavior claim.
+    ["It is the entry point to the line, and it is the format most people meet first.", "It is the entry point to the line."],
+  ],
+  "/moon-rocks/presidential-moon-rocks": [
+    // Sitebulb R35 A6: unsourced consumer-behavior claim.
+    ["It is the single most useful thing to read on a Presidential label and most people never look at it.", "It is the most useful thing to read on a Presidential label."],
+  ],
+  // Sitebulb R35 B12: Head Cheese inlink to Garlic Cookies after the tasting line.
+  "/moon-rocks/presidential-line-head-cheese": [
+    ["Never claimed to be a beginner's flavor.", "Never claimed to be a beginner's flavor. For another pungent Presidential Line jar, see [Garlic Cookies with Nature's Chemistry](/moon-rocks/presidential-line-garlic-cookies)."],
+    ["Never claimed to be a beginner’s flavor.", "Never claimed to be a beginner’s flavor. For another pungent Presidential Line jar, see [Garlic Cookies with Nature's Chemistry](/moon-rocks/presidential-line-garlic-cookies)."],
+  ],
   // Chief R30 ruling: THC Design copy states the printed build (Creskendo and XJ13: flower, live resin, diamonds).
   "/moon-rocks/thc-design-blunts": [
     ["a dry material bonded to the coat as the finish.", "a diamond finish bonded to the coat, as the pack prints."],

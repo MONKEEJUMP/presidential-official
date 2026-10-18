@@ -83,7 +83,7 @@ export const PARTNERS_COPY = {
     "title": "Presidential Partners in Oklahoma | Licensed Retailers",
     "description": "Oklahoma's licensed dispensaries carrying authentic Presidential - across Frontier Country, Green Country and the whole state. Find one near you.",
     "body": [
-      "Oklahoma has more dispensaries per person than almost anywhere in the country, and many of them carry Presidential.",
+      "Licensed Oklahoma dispensaries carry Presidential.",
       "The map splits the way Oklahoma splits. Frontier Country - the Oklahoma City metro - holds the largest share, across OKC, Edmond, Norman and the towns around them. Green Country and the Tulsa metro carry a large share too. The rest run out across Great Plains Country in the southwest, Choctaw Country in the southeast, and Chickasaw Country through the south central.",
       "Then there is the long tail, and it is the part worth noticing. Many Oklahoma towns hold exactly one Presidential retailer. One shop, sometimes the only shop for thirty miles, and they chose to stock it.",
       "That is not a chain decision. That is an owner behind a counter deciding what is worth the shelf space.",
