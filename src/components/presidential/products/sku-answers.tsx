@@ -377,6 +377,67 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
         </>
       ) : null}
+      {/* SURFER-R42: MR jar blocks as H2s, name-only (no jar build words). */}
+      {slug === "white-walker" ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">White Walker beside other Rose Gold names</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            White Walker sits in the Rose Gold Connoisseur Series, and Presidential packs mark it as Sativa. Its name points to the cold end of the catalog, and the pack art leans the same way. Rose Gold is the solventless tier, so shoppers often compare its names on aroma and art. For a dessert-leaning name from the same tier, see{" "}
+            <Link className={linkClass} href="/moon-rocks/wedding-cake">Wedding Cake from the same Rose Gold tier</Link>. For a sweeter, dough-led option, look at the{" "}
+            <Link className={linkClass} href="/moon-rocks/cosmic-cookies">cookie-sweet Cosmic Cookies jar</Link>. Each jar prints its own build on the label, so read the pack in hand for batch test results.
+          </p>
+        </>
+      ) : null}
+      {slug === "blue-raspberry" ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Blue Raspberry among the Silver fruit jars</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Blue Raspberry is a Silver Flavor Series jar with a bright, candied berry aroma. Silver is the flavor-first tier, so its fruit names are easy to compare side by side before choosing. For a darker fruit profile from the same series, look at{" "}
+            <Link className={linkClass} href="/moon-rocks/grape">dark-fruit Grape moon rocks</Link>. For something lighter and juicier, the{" "}
+            <Link className={linkClass} href="/moon-rocks/watermelon">summery Watermelon moon rocks</Link> lean sweet and fresh. Blue Raspberry also comes as a pre-roll and a blunt, and each format prints its own composition line, so read the label on the pack you pick up for its build and batch test results.
+          </p>
+        </>
+      ) : null}
+      {slug === "cap-junky" ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Cap Junky next to other Gold names</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Cap Junky carries the Gold Strain Series name, and its pack prints its own composition line, which is worth reading closely before you buy. Gold groups strain-led names, so shoppers often compare them on aroma and pack art. For a space-themed name in the same tier, look at{" "}
+            <Link className={linkClass} href="/moon-rocks/galactic-gas">Galactic Gas, a space-named Gold jar</Link>. For a heavier, stickier profile, see the{" "}
+            <Link className={linkClass} href="/moon-rocks/gorilla-goo">heavy, resinous Gorilla Goo jar</Link>. Each jar prints its build on its own label, so check the pack in hand for the composition line and batch test results rather than assuming jars match.
+          </p>
+        </>
+      ) : null}
+      {slug === "rainbow-belts" ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Rainbow Belts and other sweet Gold names</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Rainbow Belts carries the Gold Strain Series name and is marked Indica on Presidential packs. Its art and aroma sit at the candy end of the catalog. Shoppers drawn to sweet profiles can compare it with the{" "}
+            <Link className={linkClass} href="/moon-rocks/cherry-gelato">dessert-style Cherry Gelato jar</Link>, which pairs dark cherry with something creamy. For a fruit-forward option instead of candy, see the{" "}
+            <Link className={linkClass} href="/moon-rocks/papaya-punch">tropical Papaya Punch moon rocks</Link>. Each jar prints its own build on the label, so read the pack for the composition line and batch test results before you choose.
+          </p>
+        </>
+      ) : null}
+      {slug === "papaya-punch" ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Papaya Punch beside other fruit-led jars</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Papaya Punch carries the Gold Strain Series name, with pack art built around tropical fruit. Its aroma follows the art: papaya at the front with citrus around it. Shoppers who like sweet, bright profiles can compare it with the{" "}
+            <Link className={linkClass} href="/moon-rocks/rainbow-belts">candy-sweet Rainbow Belts jar</Link> from the same tier. For a fruit blend from the flavor-first Silver tier, look at the{" "}
+            <Link className={linkClass} href="/moon-rocks/tropical">mixed-fruit Tropical moon rocks in Silver</Link>. Each jar prints its own composition line, so read the label on the pack in hand for the build and batch test results.
+          </p>
+        </>
+      ) : null}
+      {slug === "presidential-line-iced-lemon" ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Iced Lemon within the Presidential Line</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Iced Lemon is a Presidential Line jar made with Platinum, and its pale-blue, ice-textured label signals the cold, citrus-forward aroma inside. The Presidential Line groups collaboration names, each with its own label design. For a savory contrast from the same line, look at the{" "}
+            <Link className={linkClass} href="/moon-rocks/presidential-line-garlic-cookies">savory Garlic Cookies collaboration jar</Link>. New to the format? The{" "}
+            <Link className={linkClass} href="/learn/what-are-moon-rocks">primer on how moon rocks are built</Link> explains the layers in plain terms. Each jar prints its own build, so read the current package label for the composition line and batch test results.
+          </p>
+        </>
+      ) : null}
       {/* SURFER-R17: Pineapple distillate H3, from its own page, /learn/what-is-live-resin and /moon-rocks/watermelon. */}
       {slug === "pineapple" && series === "Silver Flavor Series" ? (
         <>
