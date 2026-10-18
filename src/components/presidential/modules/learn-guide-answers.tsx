@@ -37,7 +37,8 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
             A Presidential pack prints a composition line. Diamonds are the finishing material on builds such as
             FLOWER · LIVE RESIN · DIAMONDS on Blue Dream, and
             FLOWER · LIQUID LIVE RESIN · DIAMONDS on Cap Junky. The build runs in layers: flower as the base, a
-            concentrate coat over it, and the finish bonded to the coat.
+            concentrate coat over it, and the finish bonded to the coat. To see strain-led names together, open{" "}
+            <Link className={a} href="/moon-rocks/gold">the Gold Strain Series jar listings</Link> and read each label.
           </p>
         ),
       },
@@ -197,7 +198,9 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
             batch-specific, so read the label and its test record;{" "}
             <Link className={a} href="/presidential-thc">Presidential THC</Link> explains those numbers. Presidential is
             sold through{" "}
-            <Link className={a} href="/">licensed retailers</Link>.
+            <Link className={a} href="/">licensed retailers</Link>. Series pages group jars by name. Browse{" "}
+            <Link className={a} href="/moon-rocks/rose-gold">the Rose Gold Connoisseur Series jars</Link> and check each pack&apos;s
+            label for its build.
           </p>
         ),
       },
@@ -272,7 +275,9 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
           <p>
             A Presidential moon rock uses flower as the base, a concentrate coat over it, and a kief
             finish, kief being the collected trichome material. {extractsLine} More guides are in the{" "}
-            <Link className={a} href="/learn">Learn hub</Link>.
+            <Link className={a} href="/learn">Learn hub</Link>. Flavor-led names sit together on{" "}
+            <Link className={a} href="/moon-rocks/silver">the Silver Flavor Series jars page</Link>; the label on each pack names its
+            extract.
           </p>
         ),
       },

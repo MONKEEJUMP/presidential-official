@@ -1222,6 +1222,13 @@ const R45_SURFER_OVERRIDES: Readonly<Record<string, readonly (readonly [string, 
   ],
 };
 
+// INLINKS-COPY-R45: Blue Dream /about restore (new sentence under "Where to find it").
+const R45_INLINKS_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
+  "/moon-rocks/blue-dream": [
+    ["**Where to find it**\n\nPresidential is wholesale.", "**Where to find it**\n\nTo learn who makes this jar, read [about the Presidential company](/about). Presidential is wholesale."],
+  ],
+};
+
 export function hardcodeInContentLinks(sourcePath: string, rawValue: string): string {
   const swaps = [
     ...(IN_CONTENT_TEXT_OVERRIDES[sourcePath] ?? []),
@@ -1231,6 +1238,7 @@ export function hardcodeInContentLinks(sourcePath: string, rawValue: string): st
     ...(R44_RULING_OVERRIDES[sourcePath] ?? []),
     ...(R44_SURFER_OVERRIDES[sourcePath] ?? []),
     ...(R45_SURFER_OVERRIDES[sourcePath] ?? []),
+    ...(R45_INLINKS_OVERRIDES[sourcePath] ?? []),
     ...(sourcePath.startsWith("/moon-rocks/") ? MOON_ROCKS_MARKET_SWAPS : []),
   ];
   const value = swaps.reduce((text, [from, to]) => text.split(from).join(to), rawValue);

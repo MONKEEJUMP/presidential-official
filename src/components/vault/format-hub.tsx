@@ -128,6 +128,19 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
               build, and <Link href="/learn/infusion-science">how infusion science works</Link> explains how the concentrate is carried
               through the flower.
             </p>
+            {/* INLINKS-COPY-R45: /mini-blunts H3s ("a live rosin primer" overlaps the existing "the live rosin primer" anchor, reworded). */}
+            <h3>Extract guides for mini blunt shoppers</h3>
+            <p>
+              Read the label, then the matching guide: <Link href="/learn/what-is-thc-distillate">a plain guide to distillate</Link>,{' '}
+              <Link href="/learn/what-is-live-rosin">an explainer on live rosin</Link> or{' '}
+              <Link href="/learn/different-extracts-need-different-heat">why extracts take different heat</Link>.
+            </p>
+            <h3>Finding mini blunts in a store</h3>
+            <p>
+              Start with <Link href="/find-us/az">Presidential stores in Arizona</Link> or{' '}
+              <Link href="/find-us/nv">Presidential stores in Nevada</Link>, and read{' '}
+              <Link href="/about">the people behind Presidential</Link>.
+            </p>
             <h3>The same strain names as mini pre-rolls</h3>
             <p>
               Several mini blunt names also come in paper as mini pre-rolls. Compare{' '}
