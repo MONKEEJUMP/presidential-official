@@ -260,7 +260,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h3 className="mt-6 text-base font-semibold text-po-ink">Head Cheese in jar and blunt form</h3>
           <p className="mt-2 text-sm leading-6 text-po-body">
             Head Cheese is a Presidential Line collaboration with Polaris. The jar is built from flower, live resin, and diamonds,
-            and its aroma is funky and savory, the kind of smell people notice as soon as the lid comes off. The same build also
+            and its aroma is funky and savory. The same build also
             comes rolled as a 1.5g Head Cheese blunt. For more jars that use live resin, browse the{" "}
             <Link className={linkClass} href="/moon-rocks/gold">Gold live resin jars</Link>. Live resin starts from plants frozen at harvest, a
             step laid out in the <Link className={linkClass} href="/learn/what-is-live-resin">frozen-at-harvest extract guide</Link>. THC figures are
@@ -273,7 +273,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h3 className="mt-6 text-base font-semibold text-po-ink">What goes into a Whoa Si Whoa jar</h3>
           <p className="mt-2 text-sm leading-6 text-po-body">
             Whoa Si Whoa is a Presidential Line collaboration with Top Shelf Cultivation. The jar is built from flower and
-            distillate, then finished with kief. Its aroma is loud and fruit-forward, with nothing held back for later. Distillate
+            distillate, then finished with kief. Its aroma is loud and fruit-forward. Distillate
             is a refined cannabis concentrate, and the <Link className={linkClass} href="/learn/what-is-thc-distillate">distillate basics guide</Link> explains
             how it is made and where it sits among Presidential concentrates. To compare it with jars built on live resin, see the{" "}
             <Link className={linkClass} href="/moon-rocks/gold">Gold Strain Series jars</Link>. Read the current package label for batch test results.
@@ -285,8 +285,8 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h3 className="mt-6 text-base font-semibold text-po-ink">Nino Brown&apos;s build and aroma</h3>
           <p className="mt-2 text-sm leading-6 text-po-body">
             Nino Brown is a Presidential Line collaboration with Ball Family Farms. The jar is flower and distillate finished with
-            kief, with a dark, earthy aroma and a sweetness that shows up late. Kief is the collected trichome material that forms
-            the outer layer. For a refresher on the concentrate inside, the{" "}
+            kief, with a dark, earthy aroma and a sweetness that shows up late. Kief, the collected trichome material, forms the
+            outer layer. For a refresher on the concentrate inside, the{" "}
             <Link className={linkClass} href="/learn/what-is-thc-distillate">guide to THC distillate</Link> covers how it is refined. Collectors comparing
             Presidential Line names can also look at the{" "}
             <Link className={linkClass} href="/moon-rocks/presidential-line-head-cheese">Head Cheese collaboration jar</Link>, which uses live resin and diamonds

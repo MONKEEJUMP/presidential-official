@@ -4,10 +4,18 @@ import type { ReactNode } from 'react';
 // SURFER-R34: server-rendered body copy for the thin Vault art rooms and pre-roll SKU pages.
 const L = 'font-semibold underline underline-offset-4';
 
-function Block({ heading, children }: { readonly heading: string; readonly children: ReactNode }) {
+// sitebulb-R37 B4-B10: an optional parent H2 puts the block heading under it as an H3.
+function Block({ heading, parent, children }: { readonly heading: string; readonly parent?: string; readonly children: ReactNode }) {
   return (
     <section className="mx-auto w-full max-w-3xl px-6 pb-12 text-sm leading-6 text-white/80">
-      <h2 className="mb-2 text-base font-semibold text-white">{heading}</h2>
+      {parent ? (
+        <>
+          <h2 className="mb-2 text-lg font-semibold text-white">{parent}</h2>
+          <h3 className="mb-2 text-base font-semibold text-white">{heading}</h3>
+        </>
+      ) : (
+        <h2 className="mb-2 text-base font-semibold text-white">{heading}</h2>
+      )}
       <p>{children}</p>
     </section>
   );
@@ -77,13 +85,13 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       The Crescendo name runs across more than one Presidential format. The pre-roll puts flower, live resin, and diamonds into
       one finished 1g roll, marked Sativa on the pack. Shoppers who would rather break up their own can look at the{' '}
       <Link className={L} href="/moon-rocks/crescendo">Crescendo moon rock jar</Link>, which carries the same strain name. Both
-      sit in the Gold Strain Series, so the live resin build is the common thread between them. To compare Crescendo with other
+      sit in the Gold Strain Series, so both are built on live resin. To compare Crescendo with other
       strains built the same way, browse the <Link className={L} href="/moon-rocks/gold">live resin Gold lineup</Link>. Ask the
       store which formats are on hand, and read the pack label for batch details before you buy.
     </Block>
   ),
   'pre-rolls/gods-gift': (
-    <Block heading="Where live rosin fits in God's Gift">
+    <Block parent="How God's Gift is built" heading="Where live rosin fits in God's Gift">
       God&apos;s Gift belongs to the Rose Gold Connoisseur Series, the solventless tier of the Presidential catalog. Each 1g
       pre-roll is flower, live rosin, and diamonds, marked Indica on the pack. Live rosin is pressed from fresh material with ice
       water, heat, and pressure, and no solvents are used along the way. The{' '}
@@ -94,7 +102,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
     </Block>
   ),
   'mini-pre-rolls/waui': (
-    <Block heading="Waui in mini and full-size form">
+    <Block parent="How Waui is built" heading="Waui in mini and full-size form">
       Waui is a ROVE collaboration in the Gold Strain Series, and the mini pack splits it into three 0.5g rolls. Each one is
       flower, live resin, and diamonds, marked Sativa, with a pineapple-led tropical aroma. The minis suit a shorter session or
       sharing a pack among friends. Shoppers who want one larger roll can pick the{' '}
@@ -105,7 +113,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
     </Block>
   ),
   'mini-pre-rolls/xj-13': (
-    <Block heading="Other ways to buy XJ-13">
+    <Block parent="How XJ-13 is built" heading="Other ways to buy XJ-13">
       XJ-13 lists Jack Herer and G13 Haze on the pack as its parentage, and the mini pack holds three 0.5g rolls of flower, live
       resin, and diamonds, marked Sativa. Its aroma leans citrus and clean. The same strain also appears in larger and
       hemp-wrapped formats. For a single larger roll, the <Link className={L} href="/pre-rolls/xj-13">full 1g XJ-13 roll</Link>{' '}
@@ -115,7 +123,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
     </Block>
   ),
   'mini-pre-rolls/xxx': (
-    <Block heading="XXX beyond the mini pack">
+    <Block parent="How XXX is built" heading="XXX beyond the mini pack">
       XXX comes from the Gold Strain Series, and the mini pack holds three 0.5g rolls, each one flower, live resin, and diamonds,
       marked Indica. The aroma reads woodsy with a citrus edge. Some shoppers like the minis for a short session; others want a
       single roll or a hemp wrap. The <Link className={L} href="/pre-rolls/xxx">single XXX roll</Link> offers the strain as one
