@@ -240,8 +240,7 @@ export default async function CatalogProductDetailPage({
                     <p className="mt-3 text-sm leading-6 text-po-body">
                       Presidential Moon Rock blunts carry the house infused build, flower and concentrate, inside a tobacco-free hemp
                       wrap, in full-size and mini formats. Silver blunts are finished with kief, with Gold and Rose Gold carrying a kief
-                      or diamond finish. Each pack names its tier: Silver is distillate,
-                      Gold is live resin, and Rose Gold is live rosin. Compared with{" "}
+                      or diamond finish. Each pack prints its own build. Compared with{" "}
                       <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/learn/what-are-moon-rocks">a Presidential moon rock</Link>, which is the infused piece with no
                       wrap at all, a blunt is ready to light and burns at a slower, wrapped pace. THC numbers are batch-specific, so
                       read the package label and its test results. Products are sold through licensed retailers in{" "}
@@ -255,7 +254,7 @@ export default async function CatalogProductDetailPage({
                       Yes. It covers{" "}
                       <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/moon-rocks/presidential-house-line">the Presidential House Line</Link> Moon Rock blunts: infused
                       flower and concentrate inside a tobacco-free hemp wrap. Gold and Rose Gold blunts carry a kief or diamond finish.
-                      The tier on each pack names the extract: Silver is distillate, Gold is live resin, and Rose Gold is live rosin. Mini
+                      Each pack prints its own build. Mini
                       availability depends on the flavor. Presidential doesn&apos;t sell online; products reach licensed retailers in{" "}
                       <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/find-us">select state markets</Link>.
                     </p>

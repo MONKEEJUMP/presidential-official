@@ -369,9 +369,8 @@ const PRESIDENTIAL_THC_QUESTIONS: readonly { readonly question: string; readonly
         Yes. Menus and shoppers use several names for one brand: Presidential THC, Presidential weed, Presidential marijuana
         and Presidential cannabis all point to Presidential, the brand behind Moon Rocks. The product is the same infused
         build: cannabis flower as the base, a concentrate coat, and a kief finish, printed on the pack; read{" "}
-        <Link className={inlineLinkClass} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. The tier names the
-        extract. Silver is distillate, Gold is live resin, and Rose Gold is live rosin; see{" "}
-        <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold live resin moon rocks</Link>. THC values are batch-specific, so read the current package label and its test results.
+        <Link className={inlineLinkClass} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. Each pack prints its own build; for strain-led jars, see{" "}
+        <Link className={inlineLinkClass} href="/moon-rocks/gold">strain-led Gold moon rocks</Link>. THC values are batch-specific, so read the current package label and its test results.
         Presidential sells through licensed retailers in{" "}
         <Link className={inlineLinkClass} href="/find-us">select state markets</Link>.
       </>
@@ -749,7 +748,7 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
           products as <Link className={inlineLinkClass} href="/presidential-thc">Presidential THC</Link>.
         </p>
         <p>
-          The Silver Flavor Series centers deliberate flavor profiles. The Gold Strain Series organizes strain-led releases around live resin. The Rose Gold Connoisseur Series features live rosin. The Presidential Line and Presidential House Line extend the catalog through named house releases, while the collaboration is represented by{" "}
+          The Silver Flavor Series centers deliberate flavor profiles. The Gold Strain Series organizes strain-led releases. The Rose Gold Connoisseur Series carries the connoisseur names. The Presidential Line and Presidential House Line extend the catalog through named house releases, while the collaboration is represented by{" "}
           <Link className={inlineLinkClass} href="/moon-rocks/thc-design-moon-rocks">Presidential x THC Design Moon Rocks</Link>,{" "}
           <Link className={inlineLinkClass} href="/moon-rocks/thc-design-prerolls">Presidential x THC Design Prerolls</Link>, and{" "}
           <Link className={inlineLinkClass} href="/moon-rocks/thc-design-blunts">Presidential x THC Design Blunts</Link>.

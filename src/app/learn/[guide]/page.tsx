@@ -229,11 +229,11 @@ function ExtractSeriesBlock() {
   return (
     <Scene ariaLabelledBy="learn-extract-series" tone="default">
       <div className="mx-auto w-full max-w-3xl">
-        <h3 className="text-2xl font-semibold leading-snug text-po-ink" id="learn-extract-series">Which extract sits in which series</h3>
+        <h3 className="text-2xl font-semibold leading-snug text-po-ink" id="learn-extract-series">Reading the extract before you set the heat</h3>
         <p className="mt-4 text-base leading-7 text-po-body">
-          Each Presidential series is built on one extract, so the heat question starts with the series name. Silver uses
-          distillate, a refined concentrate. Gold uses live resin, made from cannabis frozen at harvest rather than dried first.
-          Rose Gold uses live rosin, the solventless extract pressed with ice water, heat, and pressure. Moon Pods come in Liquid
+          Each pack prints its own extract, so the heat question starts with the label. Distillate is a refined concentrate. Live
+          resin is made from cannabis frozen at harvest rather than dried first. Live rosin is the solventless extract pressed
+          with ice water, heat, and pressure. Moon Pods come in Liquid
           Diamonds, Live Resin, and Live Rosin pods, which is why a vape setting matters. For the rosin side in detail, read the{" "}
           <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-live-rosin">live rosin primer</Link>. For the
           device that handles pod heat, see the <Link className="font-semibold underline underline-offset-4" href="/orbit">Orbit device page</Link>.

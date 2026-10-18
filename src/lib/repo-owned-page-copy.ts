@@ -197,7 +197,7 @@ Presidential is wholesale and does not sell direct, in any state. Every product 
 
 **Check back**
 
-This page updates automatically when Presidential reaches licensed Washington retailers. For adults 21+ where legal.`,
+This page will list licensed Washington retailers when Presidential arrives. For adults 21+ where legal.`,
   },
   "/find-us/az": {
     label: "Presidential in Arizona",
