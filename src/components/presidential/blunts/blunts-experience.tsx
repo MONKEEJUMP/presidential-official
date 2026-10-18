@@ -107,6 +107,13 @@ export function BluntsExperience({
           <p>Each Presidential Moon Rock blunt pack names its concentrate: distillate, live resin or live rosin. Read <Link href="/learn/what-is-thc-distillate">how distillate is made</Link>, <Link href="/learn/what-is-live-resin">the live resin process</Link> and <Link href="/learn/what-is-live-rosin">how live rosin is pressed</Link> before you pick one.</p>
           <h3>Smaller blunts and store orders</h3>
           <p>For a smaller roll, see the <Link href="/presidential-art/mini-blunts">Presidential mini blunt artwork</Link>. Stores that want to carry Moon Rock blunts can start with <Link href="/wholesale">wholesale for Presidential blunts</Link>.</p>
+          {/* INLINKS-COPY-R43: /blunts pod, extract-reading and team H3s (copy as written). */}
+          <h3>From a blunt to a pod</h3>
+          <p>Live resin and live rosin also come as oil. See <Link href="/moon-pods">Presidential Moon Pods</Link> and <Link href="/orbit">the Orbit vaporizer</Link>.</p>
+          <h3>Reading the extract behind a blunt</h3>
+          <p>Start with <Link href="/learn/what-are-liquid-diamonds">what liquid diamonds are made of</Link>, <Link href="/learn/different-extracts-need-different-heat">the right heat for each extract</Link> and <Link href="/learn/flavor-science">where blunt flavor comes from</Link>.</p>
+          <h3>Blunt questions for the team</h3>
+          <p><Link href="/our-story">The brand story from Los Angeles</Link> covers where the brand started, and <Link href="/contact">the contact page for blunt questions</Link> reaches the team.</p>
         </div>
         <div className={shared.featuredMosaic}>
           {featuredIndexes.map((index, position) => {
