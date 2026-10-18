@@ -141,6 +141,21 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
               The 24K mini blunt shares its name and build with the{' '}
               <Link href="/blunts/24k">full-size 24K Moon Rock blunt</Link>. Only the size and the count change.
             </p>
+            {/* INLINKS-COPY-R41: /mini-blunts paper and store-buyer H3s (copy as written). */}
+            <h3>The same names as mini pre-rolls in paper</h3>
+            <p>
+              Several mini blunt names also come in paper. See{' '}
+              <Link href="/mini-pre-rolls/cherry-gelato">Cherry Gelato mini pre-rolls</Link>,{' '}
+              <Link href="/mini-pre-rolls/gorilla-goo">Gorilla Goo mini pre-rolls</Link>,{' '}
+              <Link href="/mini-pre-rolls/presidential-og">Presidential OG mini pre-rolls</Link> and{' '}
+              <Link href="/mini-pre-rolls/waui">Waui mini pre-rolls</Link>, and read each pack&apos;s own label.
+            </p>
+            <h3>Mini blunts for store buyers</h3>
+            <p>
+              Retailers who want to carry mini blunts can start with{' '}
+              <Link href="/wholesale">Presidential wholesale for mini blunts</Link> or{' '}
+              <Link href="/contact">contact the team about mini blunts</Link>.
+            </p>
           </div>
         ) : null}
         {room.slug === 'mini-pre-rolls' ? (
