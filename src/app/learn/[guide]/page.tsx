@@ -136,7 +136,7 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
               {slug === "infusion-science" ? (
                 <p className="mt-4 text-sm leading-6 text-po-body">
                   The Presidential Infusion System is the house method of{" "}
-                  <Link className="font-semibold underline underline-offset-4" href="/about">Presidential, the cannabis company founded in Los Angeles in 2012</Link>:
+                  <Link className="font-semibold underline underline-offset-4" href="/about">Presidential, the Los Angeles cannabis company</Link>:
                   flower first, the series concentrate carried through it, then the finish named on the pack.
                 </p>
               ) : null}

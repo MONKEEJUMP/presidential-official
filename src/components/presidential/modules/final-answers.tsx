@@ -91,8 +91,7 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
     question: "Is Presidential a weed brand?",
     answer: (
       <p>
-        Yes. Presidential is a cannabis brand that started in Los Angeles, California, in 2012, and it is known for Moon
-        Rocks. Read <Link className={a} href="/about">about Presidential</Link> or{" "}
+        Yes. Presidential is a cannabis brand that started in Los Angeles, California, and it is known for Moon Rocks. Read <Link className={a} href="/about">about Presidential</Link> or{" "}
         <Link className={a} href="/presidential-cannabis">Presidential cannabis</Link> for the company and its lineup.
       </p>
     ),
@@ -128,8 +127,7 @@ export const ORBIT_ANSWERS: readonly AnswerItem[] = [
     question: "Who makes Orbit, and where is it sold?",
     answer: (
       <p>
-        Orbit is part of the Presidential platform alongside Moon Rocks and Moon Pods. Presidential started in Los Angeles,
-        California, in 2012, and it sells through <Link className={a} href="/">licensed retailers</Link>; availability
+        Orbit is part of the Presidential platform alongside Moon Rocks and Moon Pods. Presidential started in Los Angeles, California, and it sells through <Link className={a} href="/">licensed retailers</Link>; availability
         varies by retailer.
       </p>
     ),

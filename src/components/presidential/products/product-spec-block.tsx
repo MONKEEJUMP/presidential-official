@@ -109,7 +109,8 @@ export function ProductSpecBlock({
   // Backed by /presidential-thc: "Potency is batch-specific. Read the current package label and its associated test results."
   rows.push({ label: "THC and cannabinoids", value: "Batch-specific. Read the current package label and its test results." });
   // Backed by /about: "Presidential is the Los Angeles cannabis brand ... started in 2012" / "Los Angeles, California".
-  rows.push({ label: "Brand", value: "Presidential, Los Angeles, California, since 2012" });
+  // Chief R44 ruling (4): no founding year outside /about and /our-story.
+  rows.push({ label: "Brand", value: "Presidential, Los Angeles, California" });
   const mentionsKief = [...chips, ...offers.map((offer) => offer.build ?? "")].some((text) => /kief/i.test(text));
 
   return (

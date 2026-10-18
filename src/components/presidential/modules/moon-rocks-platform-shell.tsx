@@ -263,7 +263,7 @@ export async function MoonRocksPlatformShell({
                 <p className="mt-3">
                   Retail menus often list them as{" "}
                   <Link className="font-semibold underline underline-offset-4" href="/presidential-thc">Presidential THC</Link>, under the product name and the series.
-                  Look for the strain or flavor name, the tier (Silver is distillate, Gold is live resin, Rose Gold is live rosin) and
+                  Look for the strain or flavor name, the tier and
                   the format, such as the 2G Moon Rocks jar. Some menus file moon rocks under infused flower; read{" "}
                   <Link className="font-semibold underline underline-offset-4" href="/learn/what-are-moon-rocks">what moon rocks are</Link> for the build. The pack confirms it: the
                   crown crest, the PRESIDENTIAL banner and the product name. Presidential is carried by licensed retailers in{" "}
