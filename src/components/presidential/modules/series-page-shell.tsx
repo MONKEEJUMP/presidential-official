@@ -96,10 +96,24 @@ export async function SeriesPageShell({
     definition.slug === "rose-gold" && description.endsWith(cerealTail) ? (
       <>
         {description.slice(0, -cerealTail.length)}and{" "}
-        <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/cereal-milk">the Cereal Milk Rose Gold jar</Link>.
+        <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/cereal-milk">the Cereal Milk Rose Gold jar</Link>.{" "}
+        <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/cosmic-cookies">Cosmic Cookies, a Hybrid Rose Gold jar</Link>, sits in the same series.
       </>
     ) : (
       description
+    );
+  // Sitebulb R38 B2: link Ghost Haze Train inside the Presidential Line intro.
+  const ghostSplit = "Nature's Chemistry on Garlic Cookies and Ghost Haze Train,";
+  const introText = SERIES_INTROS[definition.slug];
+  const introNode =
+    definition.slug === "presidential-line" && introText?.includes(ghostSplit) ? (
+      <>
+        {introText.split(ghostSplit)[0]}Nature&apos;s Chemistry on Garlic Cookies and{" "}
+        <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/presidential-line-ghost-haze-train">the Ghost Haze Train jar</Link>,
+        {introText.split(ghostSplit)[1]}
+      </>
+    ) : (
+      introText
     );
   const meta = seriesMetaFor(seriesName);
   const catalog = await readSeriesItems(definition);
@@ -159,7 +173,7 @@ export async function SeriesPageShell({
               </section>
             ) : undefined
           }
-          supportingText={SERIES_INTROS[definition.slug] ? [meta.positioning, descriptionNode, SERIES_INTROS[definition.slug]] : [meta.positioning, descriptionNode]}
+          supportingText={introText ? [meta.positioning, descriptionNode, introNode] : [meta.positioning, descriptionNode]}
           title={title}
         />
 
