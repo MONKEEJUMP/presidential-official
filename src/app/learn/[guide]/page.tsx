@@ -153,6 +153,7 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
           sourcePath={`/learn/${slug}`}
         />
         {slug === "different-extracts-need-different-heat" ? <ExtractSeriesBlock /> : null}
+        <SurferR44LearnBlock slug={slug} />
         {answers ? (
           <AnswerSections eyebrow={answers.eyebrow} id={`learn-${slug}-answers`} items={answers.items} />
         ) : null}
@@ -221,6 +222,66 @@ function RepoLearnGuidePage({
         <FindUsCtaShell className="po-gold-thread-inlay" compact sourcePath={route.path} />
       </SceneStack>
     </PageFrame>
+  );
+}
+
+// SURFER-R44: H3 blocks on three CMS learn guides, after the guide sections.
+const SURFER_R44_LEARN: Readonly<Record<string, { readonly id: string; readonly heading: string; readonly body: React.ReactNode }>> = {
+  "what-is-live-resin": {
+    id: "learn-r44-resin-vs-distillate",
+    heading: "Live resin compared with refined distillate",
+    body: (
+      <>
+        Live resin and distillate sit at opposite ends of how much plant character survives extraction. Live resin starts from
+        plants frozen at harvest, so more of the plant&apos;s aroma carries through. Distillate is refined until it is close to
+        neutral, which is why it often pairs with fruit-forward flavor names. The{" "}
+        <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-thc-distillate">explainer on how distillate differs from resin</Link> covers that refining step. For how
+        those aroma compounds affect what you taste, read{" "}
+        <Link className="font-semibold underline underline-offset-4" href="/learn/flavor-science">aroma compounds and how they reach the palate</Link>. The composition line on each pack names
+        the extract used.
+      </>
+    ),
+  },
+  "what-is-live-rosin": {
+    id: "learn-r44-side-by-side",
+    heading: "Rosin, resin and distillate side by side",
+    body: (
+      <>
+        Live rosin, live resin, and distillate are easiest to understand side by side. Rosin is pressed with heat and pressure.
+        Live resin is extracted from plants frozen at harvest. Distillate is refined until it is close to neutral in aroma. For
+        the frozen-harvest method, read about{" "}
+        <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-live-resin">frozen-harvest live resin, for comparison</Link>. For the most refined of the three, see{" "}
+        <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-thc-distillate">refined distillate, for contrast</Link>. Whichever extract you are curious about, the
+        composition line on the pack in hand names what that product uses.
+      </>
+    ),
+  },
+  "what-are-liquid-diamonds": {
+    id: "learn-r44-diamond-heat",
+    heading: "Heat and handling for diamond builds",
+    body: (
+      <>
+        Diamonds and the concentrates around them respond to heat differently from flower alone, so a gentle, even light
+        matters. Rushing the flame can scorch the outer layer before the inside catches. The guide to the{" "}
+        <Link className="font-semibold underline underline-offset-4" href="/learn/different-extracts-need-different-heat">right temperature for each extract type</Link> explains why each
+        concentrate prefers its own range. For background on a concentrate often discussed alongside diamonds, read the{" "}
+        <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-live-resin">live resin background guide</Link>. Always check the pack&apos;s printed composition line
+        to confirm whether diamonds are part of that build.
+      </>
+    ),
+  },
+};
+
+function SurferR44LearnBlock({ slug }: { readonly slug: string }) {
+  const block = SURFER_R44_LEARN[slug];
+  if (!block) return null;
+  return (
+    <Scene ariaLabelledBy={block.id} tone="default">
+      <div className="mx-auto w-full max-w-3xl">
+        <h3 className="text-2xl font-semibold leading-snug text-po-ink" id={block.id}>{block.heading}</h3>
+        <p className="mt-4 text-base leading-7 text-po-body">{block.body}</p>
+      </div>
+    </Scene>
   );
 }
 

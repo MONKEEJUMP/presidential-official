@@ -117,7 +117,11 @@ When comparing infused products, look at what was infused, how, and with which c
     label: "Which extract sits behind each series",
     markdown: `### Which extract sits behind each series?
 
-The [Silver Flavor Series](/moon-rocks/silver) is built on flower, [THC distillate](/learn/what-is-thc-distillate), and kief. The [Gold Strain Series](/moon-rocks/gold) carries strain-led releases such as 24K, with live resin as the coat across most of the series. The [Rose Gold Connoisseur Series](/moon-rocks/rose-gold) is the solventless tier built on live rosin, and [different extracts need different heat](/learn/different-extracts-need-different-heat).`,
+The [Silver Flavor Series](/moon-rocks/silver) is built on flower, [THC distillate](/learn/what-is-thc-distillate), and kief. The [Gold Strain Series](/moon-rocks/gold) carries strain-led releases such as 24K, with live resin as the coat across most of the series. The [Rose Gold Connoisseur Series](/moon-rocks/rose-gold) is the solventless tier built on live rosin, and [different extracts need different heat](/learn/different-extracts-need-different-heat).
+
+### Why extract type changes the aroma
+
+Two jars with similar names can smell different because of what sits between the flower and the finish. Some extracts are refined until they are close to neutral, which leaves the flower and kief to carry the aroma. Others are made from fresh-frozen plants and hold onto more of the plant's terpene profile. The guide on [how live resin keeps strain aroma](/learn/what-is-live-resin) explains that process. If you are new to the format, start with [the layered moon rock format explained](/learn/what-are-moon-rocks). Read each pack's composition line to see which extract it uses.`,
   },
   "/learn/what-are-moon-rocks": {
     label: "What Moon Rocks are and how to read the format",
@@ -141,7 +145,11 @@ For deeper technical vocabulary, the [Presidential THC guide](/presidential-thc)
 
 **Where to find Presidential Moon Rocks**
 
-Presidential operates through licensed retailers rather than direct online cannabis sales. Availability varies by market, retailer, product, and date. Use the official [Find Us](/find-us) path, then confirm the current product and package with the licensed retailer. For adults 21+ where legal.`,
+Presidential operates through licensed retailers rather than direct online cannabis sales. Availability varies by market, retailer, product, and date. Use the official [Find Us](/find-us) path, then confirm the current product and package with the licensed retailer. For adults 21+ where legal.
+
+### Reading aroma before you choose a jar
+
+Moon rocks are often chosen by name, but aroma is a more reliable guide. Fruit names lean sweet, strain names lean toward pine, fuel, or earth, and dessert names lean toward dough and cream. The guide on [how terpenes drive moon rock aroma](/learn/flavor-science) explains why those differences appear. For an example of a strain-named jar with a berry-leaning profile, look at the [berry-forward Blue Dream jar](/moon-rocks/blue-dream). Each pack prints its strain type and composition line, so read both before you decide.`,
   },
   "/find-us/wa": {
     label: "Presidential in Washington",
