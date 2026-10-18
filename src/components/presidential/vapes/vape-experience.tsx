@@ -100,6 +100,18 @@ export function VapeExperience({ page }: { page: VapePage }) {
           <Link href="/blunts">Moon Rock blunts in a hemp wrap</Link> carry extract in a tobacco-free wrap instead, and{' '}
           <Link href="/learn/what-are-moon-rocks">the flower build behind Moon Rocks</Link> explains how they are made.
         </p>
+        {/* INLINKS-COPY-R43: /vapes extract-guide and pack-art H3s (copy as written). */}
+        <h3 className={s.smallHeading}>Learning the oils before you pick a mode</h3>
+        <p>
+          Each mode is named for an extract. <Link href="/learn">The Presidential extract guides</Link> explains those extracts in
+          plain terms.
+        </p>
+        <h3 className={s.smallHeading}>Package art beyond the vape</h3>
+        <p>
+          <Link href="/presidential-art">The Presidential art gallery</Link> shows the pack art for the rolled formats, including{' '}
+          <Link href="/presidential-art/mini-pre-rolls">the mini pre-roll packaging gallery</Link> for{' '}
+          <Link href="/mini-pre-rolls">mini pre-rolls in paper</Link>.
+        </p>
       </section>
     ) : null}
 
