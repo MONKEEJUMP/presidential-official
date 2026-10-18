@@ -113,7 +113,20 @@ export async function SeriesPageShell({
       <>
         {introText.split(ghostSplit)[0]}Nature&apos;s Chemistry on Garlic Cookies and{" "}
         <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/presidential-line-ghost-haze-train">the Ghost Train Haze jar</Link>,
-        {introText.split(ghostSplit)[1]}
+        {(() => {
+          // Sitebulb R41 B10: link Guava Haze in the partner sentence.
+          const rest = introText.split(ghostSplit)[1];
+          const guavaSplit = "Platinum on Guava Haze and Iced Lemon.";
+          if (!rest.includes(guavaSplit)) return rest;
+          const [head, tail] = rest.split(guavaSplit);
+          return (
+            <>
+              {head}Platinum on{" "}
+              <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/presidential-line-guava-haze">Guava Haze, the warm Platinum jar</Link>{" "}
+              and Iced Lemon.{tail}
+            </>
+          );
+        })()}
       </>
     ) : (
       introText

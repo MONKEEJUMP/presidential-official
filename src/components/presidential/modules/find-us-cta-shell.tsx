@@ -57,10 +57,10 @@ export function FindUsCtaShell({
             {sourcePath ? (
               <InContentText
                 sourcePath={sourcePath}
-                value="Use the official retail path to connect product interest with verified licensed retailer information. Availability varies by retailer."
+                value="Use the official retail path to connect product interest with licensed retailer information. Availability varies by retailer."
               />
             ) : (
-              "Use the official retail path to connect product interest with verified licensed retailer information. Availability varies by retailer."
+              "Use the official retail path to connect product interest with licensed retailer information. Availability varies by retailer."
             )}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">

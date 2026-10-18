@@ -328,8 +328,8 @@ export async function SupportRouteFoundationShell({
                 </h2>
                 <p className="mt-6 max-w-xl text-base leading-7 text-po-on-dark-muted">
                   Choose a state to step into its Presidential experience.
-                  Licensed retailer listings publish per state once verified
-                  sources are confirmed.
+                  Licensed retailer listings publish per state once sources
+                  are confirmed.
                 </p>
               </div>
               <UsMapShell />

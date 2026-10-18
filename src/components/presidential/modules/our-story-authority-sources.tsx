@@ -42,7 +42,7 @@ export function OurStoryAuthoritySources() {
           </ul>
         </div>
         <div>
-          <p className="text-xs font-black uppercase text-po-brand-ink">Verified identity</p>
+          <p className="text-xs font-black uppercase text-po-brand-ink">Official identity</p>
           <h2 className="mt-5 font-display text-4xl uppercase leading-[0.92] text-po-ink sm:text-5xl">Official profiles</h2>
           <p className="mt-6 max-w-xl text-base leading-7 text-po-body">These are the same owner-approved profiles connected to the Presidential Organization entity in structured data.</p>
           <ul className="mt-8 border-t border-po-line">

@@ -84,7 +84,7 @@ export function StateLocatorSection({
             LANDING SOON
           </h2>
           <p className="mt-6 max-w-xl text-base leading-7 text-po-on-dark-muted">
-            Verified licensed retailer listings for {stateName} will appear
+            Licensed retailer listings for {stateName} will appear
             here when live records are available.{" "}
             <StateSiteSentence stateSiteLink={stateSiteLink} />
           </p>
@@ -103,7 +103,7 @@ export function StateLocatorSection({
         <div className="grid gap-8 border border-po-brand/30 bg-[#111313] px-6 py-10 sm:px-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div>
             <p className="text-xs font-black uppercase text-po-brand">
-              Verified licensed retail
+              Licensed retail
             </p>
             <h2
               className="mt-5 font-display text-3xl uppercase leading-[0.95] text-po-on-dark sm:text-5xl"

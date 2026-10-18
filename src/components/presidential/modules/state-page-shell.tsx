@@ -294,7 +294,7 @@ export async function StatePageShell({ state }: { readonly state: PresidentialSt
                 <p className="mt-3 text-sm leading-6 text-po-body">
                   {hasVerifiedDoors ? (
                     <>
-                      The locator above lists verified licensed
+                      The locator above lists licensed
                       retailers in {state.name}. Search by ZIP or location for the current
                       results. Availability varies by retailer. Adults 21+ where
                       legal.

@@ -156,7 +156,8 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
         question: "Which Presidential products use live rosin?",
         answer: (
           <p>
-            Rose Gold Connoisseur Series Moon Rocks, Rose Gold 1g pre-rolls built from flower, live rosin, and diamonds, a
+            Rose Gold Connoisseur Series Moon Rocks such as{" "}
+            <Link className={a} href="/moon-rocks/wedding-cake">the Wedding Cake Rose Gold jar</Link>, Rose Gold 1g pre-rolls built from flower, live rosin, and diamonds, a
             live-rosin selection of 1.5g <Link className={a} href="/blunts">blunts</Link>, such as{" "}
             <Link className={a} href="/blunts/gods-gift">God&apos;s Gift in a hemp wrap</Link>, and the Live Rosin (LRO){" "}
             <Link className={a} href="/moon-pods">Moon Pods</Link> family with its smoked mouthpiece.
