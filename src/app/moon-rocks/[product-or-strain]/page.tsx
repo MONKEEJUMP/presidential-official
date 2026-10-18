@@ -269,12 +269,11 @@ export default async function CatalogProductDetailPage({
                     </p>
                     <h2 className="mt-8 text-xl font-semibold leading-snug text-po-ink">What goes into each moon rock blunt tier</h2>
                     <p className="mt-3 text-sm leading-6 text-po-body">
-                      Silver Flavor Series blunts are flower, distillate and kief, named for fruit flavors such as Blue Raspberry and Peach
-                      Mango. Gold Strain Series blunts pair flower with live resin, as in{" "}
-                      <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/blunts/24k">the 24K Gold live resin blunt</Link>, and Rose Gold Connoisseur Series blunts pair flower
-                      with live rosin, as in{" "}
-                      <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/blunts/gods-gift">the God&apos;s Gift Rose Gold live rosin blunt</Link>; both carry a kief or diamond
-                      finish. The tier and the extract are printed on every pack.
+                      Silver Flavor Series blunts are named for fruit flavors such as Blue Raspberry and Peach
+                      Mango. Gold Strain Series blunts include{" "}
+                      <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/blunts/24k">the 24K Gold blunt</Link>, and Rose Gold Connoisseur Series blunts include{" "}
+                      <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/blunts/gods-gift">the God&apos;s Gift Rose Gold blunt</Link>; each pack prints its own
+                      build.
                     </p>
                     <h2 className="mt-8 text-xl font-semibold leading-snug text-po-ink">How to light a moon rock blunt</h2>
                     <p className="mt-3 text-sm leading-6 text-po-body">

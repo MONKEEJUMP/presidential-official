@@ -48,9 +48,9 @@ const ROOM_COPY: Readonly<Record<string, ReactNode>> = {
   'pre-rolls': (
     <>
     <Block heading="The art on Presidential pre-roll packs">
-      Every Presidential Moon Rock pre-roll pack carries its own illustration above the product name. That art is how shoppers
+      Each Presidential Moon Rock pre-roll pack carries its own illustration above the product name. That art is how shoppers
       spot the series on a crowded shelf. Across the pre-roll lineup, each roll pairs flower and concentrate with a kief or
-      diamond finish, and the series sets the concentrate: distillate for Silver, live resin for Gold, live rosin for Rose Gold.
+      diamond finish.
       The art helps you recognize a pack. The label tells you exactly what&apos;s inside. Compare the products in the{' '}
       <Link className={L} href="/pre-rolls">Moon Rock pre-roll lineup</Link>, or step back to the{' '}
       <Link className={L} href="/presidential-art">main Vault room</Link>.
@@ -72,8 +72,7 @@ const ROOM_COPY: Readonly<Record<string, ReactNode>> = {
   blunts: (
     <Block heading="Pack art for Presidential Moon Rock blunts">
       Presidential Moon Rock blunts carry the same illustrated identity as the rest of the lineup. Each one is a tobacco-free
-      hemp wrap around flower, concentrate, and a kief or diamond finish. Silver blunts use distillate, Gold blunts use live resin
-      and Rose Gold blunts use live rosin, and the art and series color make each one easy to spot. Read the label for the exact build, then search
+      hemp wrap around flower, concentrate, and a kief or diamond finish. The art and series color make each one easy to spot. Read the label for the exact build, then search
       nearby stores and confirm with the store. Browse the <Link className={L} href="/blunts">Moon Rock blunt catalog</Link> for
       every name, or the smaller <Link className={L} href="/mini-blunts">mini blunt packs</Link>.
     </Block>
@@ -105,7 +104,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   'pre-rolls/gods-gift': (
     <Block parent="How God's Gift is built" heading="Where live rosin fits in God's Gift">
-      God&apos;s Gift belongs to the Rose Gold Connoisseur Series, the solventless tier of the Presidential catalog. Each 1g
+      God&apos;s Gift belongs to the Rose Gold Connoisseur Series, the connoisseur tier of the Presidential catalog. Each 1g
       pre-roll is flower, live rosin, and diamonds, marked Indica on the pack. Live rosin is pressed from fresh material with ice
       water, heat, and pressure, and no solvents are used along the way. The{' '}
       <Link className={L} href="/learn/what-is-live-rosin">solventless rosin explainer</Link> covers that process step by step.
@@ -240,7 +239,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   'pre-rolls/white-walker': (
     <Block heading="White Walker within the Rose Gold series">
-      White Walker sits in the Rose Gold Connoisseur Series, the solventless side of Presidential. The pre-roll is flower, live
+      White Walker sits in the Rose Gold Connoisseur Series, the connoisseur side of Presidential. The pre-roll is flower, live
       rosin, and diamonds in one 1g roll. The{' '}
       <Link className={L} href="/learn/what-is-live-rosin">guide to live rosin</Link> covers how it&apos;s made. To compare White
       Walker with its series neighbors, browse the <Link className={L} href="/moon-rocks/rose-gold">Rose Gold collection</Link>,
@@ -267,7 +266,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   'blunts/gods-gift': (
     <Block heading="God&apos;s Gift outside the blunt">
-      God&apos;s Gift belongs to the Rose Gold Connoisseur Series, and the blunt is 1.5g of flower, live rosin, and diamonds in a tobacco-free wrap, marked Indica. Rose Gold is the solventless tier, and the <Link className={L} href="/learn/what-is-live-rosin">guide to pressing live rosin</Link> covers the ice water, heat, and pressure behind it. The same name also comes as <Link className={L} href="/moon-rocks/gods-gift">God&apos;s Gift loose in a jar</Link> and as a <Link className={L} href="/pre-rolls/gods-gift">God&apos;s Gift 1g pre-roll</Link>, and each format prints its own label. Read the pack for batch details, and confirm with the store which God&apos;s Gift formats it carries.
+      God&apos;s Gift belongs to the Rose Gold Connoisseur Series, and the blunt is 1.5g of flower, live rosin, and diamonds in a tobacco-free wrap, marked Indica. Rose Gold is the connoisseur tier, and the <Link className={L} href="/learn/what-is-live-rosin">guide to pressing live rosin</Link> covers the ice water, heat, and pressure behind it. The same name also comes as <Link className={L} href="/moon-rocks/gods-gift">God&apos;s Gift loose in a jar</Link> and as a <Link className={L} href="/pre-rolls/gods-gift">God&apos;s Gift 1g pre-roll</Link>, and each format prints its own label. Read the pack for batch details, and confirm with the store which God&apos;s Gift formats it carries.
     </Block>
   ),
   'mini-pre-rolls/cherry-gelato': (
@@ -277,7 +276,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   'blunts/white-walker': (
     <Block heading="White Walker within Rose Gold">
-      White Walker is a Rose Gold Connoisseur Series blunt: 1.5g of flower, live rosin, and diamonds in a tobacco-free wrap, marked Sativa. Rose Gold groups the solventless names together, and the <Link className={L} href="/moon-rocks/rose-gold">Rose Gold Connoisseur lineup</Link> shows where White Walker sits among them. Live rosin is pressed with ice water, heat, and pressure, and the <Link className={L} href="/learn/what-is-live-rosin">solventless pressing explainer</Link> covers that process in more depth. Read the pack for batch test results, and confirm with the store before you go.
+      White Walker is a Rose Gold Connoisseur Series blunt: 1.5g of flower, live rosin, and diamonds in a tobacco-free wrap, marked Sativa. Rose Gold groups the connoisseur names together, and the <Link className={L} href="/moon-rocks/rose-gold">Rose Gold Connoisseur lineup</Link> shows where White Walker sits among them. Live rosin is pressed with ice water, heat, and pressure, and the <Link className={L} href="/learn/what-is-live-rosin">solventless pressing explainer</Link> covers that process in more depth. Read the pack for batch test results, and confirm with the store before you go.
     </Block>
   ),
   'mini-pre-rolls/skywalker': (

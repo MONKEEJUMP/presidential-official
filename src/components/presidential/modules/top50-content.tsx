@@ -36,11 +36,11 @@ const BLUNT_SERIES_ANSWER: AnswerItem = {
   answer: (
     <p>
       Every Presidential infused blunt is 1.5g in a tobacco-free wrap. The{" "}
-      <Link className={a} href="/moon-rocks/silver">Silver Flavor Series</Link> blunts are flower, distillate, and kief.{" "}
+      <Link className={a} href="/moon-rocks/silver">Silver Flavor Series</Link> blunts carry fruit names.{" "}
       <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link> blunts such as Blue Dream
       are flower, live resin, and diamonds. The{" "}
-      <Link className={a} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> blunts are flower, live rosin,
-      and diamonds.
+      <Link className={a} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> blunts carry the
+      connoisseur names.
     </p>
   ),
 };
@@ -53,7 +53,7 @@ export const BLUNT_ANSWERS: readonly AnswerItem[] = [
       <p>
         A Presidential Moon Rock blunt is 1.5g of the moon rock build in a tobacco-free wrap: cannabis flower, a concentrate
         infused over it, and a kief or diamond finish. Each moonrock blunt pack prints its build, for example FLOWER · DISTILLATE · KIEF
-        on Watermelon, FLOWER · LIVE RESIN · DIAMONDS on Blue Dream, and FLOWER · LIVE ROSIN · DIAMONDS on Wedding Cake. The
+        on Watermelon and FLOWER · LIVE RESIN · DIAMONDS on Blue Dream. The
         unrolled format is in the{" "}
         <Link className={a} href="/moon-rocks">Presidential Moon Rocks collection</Link>, and a selection of pack designs is in the{" "}
         <Link className={a} href="/presidential-art/blunts">Presidential blunt pack art</Link> gallery. The company behind the packs is{" "}

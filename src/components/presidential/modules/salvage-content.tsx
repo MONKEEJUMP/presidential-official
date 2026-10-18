@@ -274,9 +274,9 @@ export const PRE_ROLL_ANSWERS: readonly AnswerItem[] = [
     question: "What's inside a Moon Rock pre-roll?",
     answer: (
       <p>
-        Each standard Moon Rock pre-roll is a 1g roll, and the pack prints its build. For example,{" "}
-        <Link className={a} href="/pre-rolls/grape">Grape</Link> is flower, distillate, and kief; <Link className={a} href="/pre-rolls/blue-dream">Blue Dream</Link> is flower, live resin, and diamonds; and{" "}
-        <Link className={a} href="/pre-rolls/wedding-cake">Wedding Cake</Link> is flower, live rosin, and diamonds. Read{" "}
+        Each standard Moon Rock pre-roll is a 1g roll, and the pack prints its build: read it on{" "}
+        <Link className={a} href="/pre-rolls/grape">Grape</Link>, <Link className={a} href="/pre-rolls/blue-dream">Blue Dream</Link>, or{" "}
+        <Link className={a} href="/pre-rolls/wedding-cake">Wedding Cake</Link> before you choose. Read{" "}
         <Link className={a} href="/learn/what-are-moon-rocks">what moon rocks are</Link> for the layered build itself.
       </p>
     ),
@@ -286,9 +286,8 @@ export const PRE_ROLL_ANSWERS: readonly AnswerItem[] = [
     question: "How are Presidential pre rolls made?",
     answer: (
       <p>
-        Every Presidential pre-roll follows the same infusion process as a Presidential moon rock: cannabis flower as the
-        base, a concentrate infused over it, and a kief or diamond finish. The pack prints the build, for example FLOWER · DISTILLATE ·
-        KIEF on Grape, FLOWER · LIVE RESIN · DIAMONDS on Blue Dream, and FLOWER · LIVE ROSIN · DIAMONDS on Wedding Cake.
+        A Presidential pre-roll is built like a Presidential moon rock: cannabis flower as the
+        base, a concentrate infused over it, and a kief or diamond finish. The pack prints the build.
         Presidential pre rolls are sold through licensed dispensaries; the{" "}
         <Link className={a} href="/find-us">store finder</Link> lists licensed retailers carrying Presidential.
       </p>

@@ -401,7 +401,7 @@ const PRESIDENTIAL_THC_QUESTIONS: readonly { readonly question: string; readonly
     question: "How strong is Presidential THC flower?",
     answer: (
       <>
-        Potency is batch-specific, so check the tested label. Batch-to-batch consistency is read from the label:
+        Cannabinoid content is batch-specific, so check the tested label. Batch-to-batch consistency is read from the label:
         check the current package label and its test results for delta-9 THC, THCa, and total THC.
       </>
     ),
@@ -480,7 +480,7 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
           Presidential THC flower is the cannabis flower inside Presidential Moon Rocks. Each moon rock starts with flower as
           the base, adds a concentrate coat, and finishes with kief, with the build printed
           on the pack. Browse the{" "}
-          <Link className={inlineLinkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>; potency is
+          <Link className={inlineLinkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>; cannabinoid content is
           batch-specific, so read the current package label and its test results.
         </p>
       </TermSection>
@@ -524,9 +524,9 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
         <h3 className="mt-6 text-xl font-semibold">Turning &ldquo;Presidential weed&rdquo; into a specific order</h3>
         <p>
           &ldquo;Presidential weed&rdquo; names the brand, not a product, so a budtender will ask what you want next. Answer in order:
-          format, series, then the name on the pack. For Moon Rocks, the series tells you the extract inside.{" "}
-          <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver distillate moon rocks</Link> lead with flavor, Gold uses
-          live resin, and Rose Gold uses live rosin (see{" "}
+          format, series, then the name on the pack. For Moon Rocks, the pack prints the extract inside.{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/silver">Fruit-named Silver jars</Link> lead with flavor, Gold with
+          strain names, and Rose Gold with connoisseur names (see{" "}
           <Link className={inlineLinkClass} href="/learn/what-is-live-rosin">what live rosin is</Link>). Each one starts with flower
           carried through with concentrate and is finished with kief or diamonds, as the pack prints. Blunts and pre-rolls carry
           the same series names, and blunts close with a kief or diamond finish inside a hemp wrap. With the format and name ready,
@@ -555,7 +555,7 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
       <TermSection id="presidential-thc-ingredients" images={[images[1]]} title="Flower, concentrate, and kief">
         <p><Link className={inlineLinkClass} href="/about">Presidential brand materials</Link> describe the flagship Moon Rocks format through three visible roles: flower as the base, cannabis concentrate as the infused component, and kief as the finish.</p>
         <p><strong>Flower</strong> supplies the plant material and the named product identity. <strong>Concentrate</strong> supplies the extract component. <strong>Kief</strong> is the collected trichome material used for the exterior finish.</p>
-        <p>Potency is batch-specific. Read the current package label and its associated test results rather than inferring a fixed percentage from a format, series, or product name.</p>
+        <p>Cannabinoid content is batch-specific. Read the current package label and its associated test results rather than inferring a fixed percentage from a format, series, or product name.</p>
       </TermSection>
 
       <TermSection id="presidential-thc-infusion" images={[images[2], images[3]]} title="The Presidential Infusion System™" tone="contrast">
@@ -564,7 +564,7 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
           <Link className={inlineLinkClass} href="/learn/infusion-science">Infusion Science guide</Link> explains the distinction between concentrate placed on a surface and concentrate{" "}
           carried through the flower.
         </p>
-        <p>The system name identifies Presidential&apos;s brand architecture. It does not establish a universal potency, burn, or performance result; the specific package and batch record control those facts.</p>
+        <p>The system name identifies Presidential&apos;s brand architecture. It does not establish a universal cannabinoid content, burn, or performance result; the specific package and batch record control those facts.</p>
       </TermSection>
 
       <TermSection id="presidential-thc-extracts" images={[images[4], images[5], images[6]]} title="The extracts behind each series">
@@ -585,7 +585,7 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
         <p>A cannabis label may show delta-9 THC, THCa, and a calculated total THC value. Those numbers describe different measurements and should be read with their units and the batch&apos;s testing record.</p>
         <p>Heat can convert THCa into delta-9 THC through decarboxylation. The conventional total-THC calculation applies a <strong>0.877</strong> conversion factor based on the compounds&apos; molar-mass ratio.</p>
         <p><strong>Total THC = (THCa × 0.877) + THC</strong></p>
-        <p>This formula is documented in NIST&apos;s hemp reference-material guidance. It explains the calculation; it does not supply the potency of any Presidential product. Use the product&apos;s current label and test record for that.</p>
+        <p>This formula is documented in NIST&apos;s hemp reference-material guidance. It explains the calculation; it does not supply the cannabinoid content of any Presidential product. Use the product&apos;s current label and test record for that.</p>
       </TermSection>
 
       <TermSection id="presidential-thc-terpenes" title="What terpenes contribute to aroma">
@@ -665,11 +665,11 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
         <h3 className="mt-6 text-xl font-semibold">Which tier does a Presidential Blunt belong to?</h3>
         <p>
           Check the tier on the pack. Presidential Blunts carry the same experience tiers as the rest of the lineup, and each
-          tier names its extract. The <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver distillate tier</Link> is
-          the flavor series, so fruit names like Blue Raspberry and Peach Mango sit there. The{" "}
-          <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold live resin tier</Link> is the strain series. The{" "}
-          <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold live rosin tier</Link> is the solventless
-          connoisseur series. THC numbers are batch-specific, so read the current package label and its test results.
+          pack prints its own build. The <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver flavor tier</Link> holds
+          fruit names like Blue Raspberry and Peach Mango. The{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold strain tier</Link> carries strain names, and the{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold connoisseur tier</Link> carries the
+          connoisseur names. THC numbers are batch-specific, so read the current package label and its test results.
         </p>
         {/* SURFER-R24 Block 1b: /presidential-blunts buying-by-flavor H3 (facts from this page and the home tier tiles). */}
         <h3 className="mt-6 text-xl font-semibold">Buying moon rock blunts by flavor</h3>
@@ -712,7 +712,7 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
             <h1 className="font-display text-5xl uppercase leading-[0.9] text-po-on-dark sm:text-7xl lg:text-8xl" id="presidential-cannabis-title">{route.h1}</h1>
             <h2 className="mt-10 font-display text-2xl uppercase text-po-brand">Opening</h2>
             <div className="mt-5 grid max-w-2xl gap-5 text-lg leading-8 text-po-on-dark-muted">
-              <p>Presidential Cannabis, also searched as Presidential weed or Presidential marijuana, builds infused products around disciplined craft, recognizable formats, and a consistent house standard.</p>
+              <p>Presidential Cannabis, also searched as Presidential weed or Presidential marijuana, builds infused products around disciplined craft, recognizable formats, and a consistent standard.</p>
               <p>The official product system connects Moon Rocks, pre-rolls, tobacco-free blunts, and minis with organized collections and a licensed-retailer path.</p>
             </div>
           </div>
@@ -726,7 +726,7 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
           Flower selection, extract choice, a kief or diamond finish, airflow, and packaging all contribute to what reaches the customer.
         </p>
         <p>That view became the foundation for the Presidential Infusion System™, a house approach that carries concentrate through the flower and closes with a kief or diamond finish. The method supports the burn, flavor, and consistency expected from the Moon Rocks, pre-rolls, blunts, and Mini Blunts that carry the name.</p>
-        <p>“Cannabis Evolved,” “Expect More,” and “Presidential Doesn&apos;t Miss” express the same operating idea in brand language: every format should feel intentional, every series should be easy to understand, and every release should belong inside one coherent catalog.</p>
+        <p>“Cannabis Evolved,” “Expect More,” and “Presidential Doesn&apos;t Miss” express the same operating idea in brand language: each format should feel intentional, each series should be easy to understand, and each release should belong inside one coherent catalog.</p>
       </TermSection>
 
       <TermSection id="presidential-cannabis-wholesale" images={[images[2]]} title="Wholesale only, on purpose" tone="contrast">

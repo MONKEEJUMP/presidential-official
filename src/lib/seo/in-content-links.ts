@@ -730,7 +730,7 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
     // Sitebulb R41 B15.
     ["What does not change", "How the build works"],
     // SURFER-R41 H2 after "The sweet side" (Sitebulb R41 placement).
-    ["**How the build works**", "**Wedding Cake among the Rose Gold jars**\n\nWedding Cake is a Rose Gold Connoisseur Series jar. Its aroma sits at the dessert end of the catalog. Rose Gold is the solventless tier, and its names differ on aroma. For another sweet, dough-led name, see [Cosmic Cookies in Rose Gold](/moon-rocks/cosmic-cookies). For a cereal-sweet profile, look at [the lactic Cereal Milk jar in Rose Gold](/moon-rocks/cereal-milk). Read the package label for its build and batch test results, and confirm with the store which Wedding Cake formats it carries. For a name that leans on reverence, see [the God's Gift connoisseur jar](/moon-rocks/gods-gift).\n\n**How the build works**"],
+    ["**How the build works**", "**Wedding Cake among the Rose Gold jars**\n\nWedding Cake is a Rose Gold Connoisseur Series jar. Its aroma sits at the dessert end of the catalog. Rose Gold is the connoisseur tier, and its names differ on aroma. For another sweet, dough-led name, see [Cosmic Cookies in Rose Gold](/moon-rocks/cosmic-cookies). For a cereal-sweet profile, look at [the lactic Cereal Milk jar in Rose Gold](/moon-rocks/cereal-milk). Read the package label for its build and batch test results, and confirm with the store which Wedding Cake formats it carries. For a name that leans on reverence, see [the God's Gift connoisseur jar](/moon-rocks/gods-gift).\n\n**How the build works**"],
   ],
   // Sitebulb R41 A14-A16: no catalogue counts or scope, blunt-only lines cut from the jar page.
   "/moon-rocks/presidential-line-guava-haze": [
@@ -852,7 +852,7 @@ function linkSelectStateMarkets(sourcePath: string, value: string): string {
 const SB = (heading: string, body: string) => `**${heading}**\n\n${body}\n\n`;
 const R42_WHITE_WALKER = SB(
   "White Walker beside other Rose Gold names",
-  "White Walker sits in the Rose Gold Connoisseur Series, and Presidential packs mark it as Sativa. Rose Gold is the solventless tier, so shoppers often compare its names on aroma and art. For a dessert-leaning name from the same tier, see [Wedding Cake from the same Rose Gold tier](/moon-rocks/wedding-cake). For a sweeter, dough-led option, look at the [cookie-sweet Cosmic Cookies jar](/moon-rocks/cosmic-cookies). Each jar prints its own build on the label, so read the pack in hand for batch test results.",
+  "White Walker sits in the Rose Gold Connoisseur Series, and Presidential packs mark it as Sativa. Rose Gold is the connoisseur tier, so shoppers often compare its names on aroma and art. For a dessert-leaning name from the same tier, see [Wedding Cake from the same Rose Gold tier](/moon-rocks/wedding-cake). For a sweeter, dough-led option, look at the [cookie-sweet Cosmic Cookies jar](/moon-rocks/cosmic-cookies). Each jar prints its own build on the label, so read the pack in hand for batch test results.",
 );
 const R42_BLUE_RASPBERRY = SB(
   "Blue Raspberry among the Silver fruit jars",
@@ -1229,6 +1229,16 @@ const R45_INLINKS_OVERRIDES: Readonly<Record<string, readonly (readonly [string,
   ],
 };
 
+// SITEBULB-R45: A6 XXX superlative, A7 Rainbow Belts "Every one", B12 King Louis unsourced lines.
+const R45_SB_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
+  "/moon-rocks/xxx": [["XXX is the Gold Strain Series at its most direct — a name", "XXX is a name"]],
+  "/moon-rocks/rainbow-belts": [["Every one of them runs through the same process, and several of them", "Several of them"]],
+  "/moon-rocks/king-louis": [
+    ["That is unusual for a cannabis product and it is worth saying plainly:", "It is worth saying plainly:"],
+    ["It is the only pack in the catalogue that reads as a portrait.", "The pack reads as a portrait."],
+  ],
+};
+
 export function hardcodeInContentLinks(sourcePath: string, rawValue: string): string {
   const swaps = [
     ...(IN_CONTENT_TEXT_OVERRIDES[sourcePath] ?? []),
@@ -1237,9 +1247,9 @@ export function hardcodeInContentLinks(sourcePath: string, rawValue: string): st
     ...(R43_SB_OVERRIDES[sourcePath] ?? []),
     ...(R44_RULING_OVERRIDES[sourcePath] ?? []),
     ...(R44_SURFER_OVERRIDES[sourcePath] ?? []),
-    ...(R45_SURFER_OVERRIDES[sourcePath] ?? []),
-    ...(R45_INLINKS_OVERRIDES[sourcePath] ?? []),
-    ...(sourcePath.startsWith("/moon-rocks/") ? MOON_ROCKS_MARKET_SWAPS : []),
+    ...(R45_SURFER_OVERRIDES[sourcePath] ?? []),    ...(R45_INLINKS_OVERRIDES[sourcePath] ?? []),
+    ...(R45_SB_OVERRIDES[sourcePath] ?? []),
+...(sourcePath.startsWith("/moon-rocks/") ? MOON_ROCKS_MARKET_SWAPS : []),
   ];
   const value = swaps.reduce((text, [from, to]) => text.split(from).join(to), rawValue);
   const rules = HARDCODED_IN_CONTENT_LINKS[sourcePath as keyof typeof HARDCODED_IN_CONTENT_LINKS];

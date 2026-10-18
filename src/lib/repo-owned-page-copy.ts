@@ -251,7 +251,7 @@ Presidential is wholesale and does not sell direct. Every product reaches you th
 
 **The strain named for the city**
 
-NYC Diesel is in the catalogue, and its pack is the only one Presidential prints built around a landmark. A pale full moon fills the background. The Statue of Liberty stands in front of it, torch raised, flanked by the New York skyline, the whole scene rising out of rolling green-and-yellow smoke. Marked Hybrid, built on flower, live resin and diamonds.
+NYC Diesel is in the catalogue. A pale full moon fills the background. The Statue of Liberty stands in front of it, torch raised, flanked by the New York skyline, the whole scene rising out of rolling green-and-yellow smoke. Marked Hybrid, built on flower, live resin and diamonds.
 
 New York is a legal market, and the strain that carries the city's name is sold there.
 

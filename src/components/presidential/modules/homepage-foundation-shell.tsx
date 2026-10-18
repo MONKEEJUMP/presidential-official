@@ -229,8 +229,7 @@ export function HomepageFoundationShell({
                   Expect more.
                 </h2>
                 <p className="po-home-canvas-muted mt-3 max-w-md text-base leading-7">
-                  Cannabis Deserves Better — so we built it. Presidential has created cannabis engineered for better flavor,
-                  greater consistency, and premium experiences. Its infused
+                  Cannabis Deserves Better — so we built it. Presidential creates infused cannabis built around flavor and consistency. Its infused
                   construction starts with flower, adds concentrate or resin, and
                   is finished with kief or diamonds, as named on the package. That infused
                   build keeps flower, concentrate, and the finishing layer together

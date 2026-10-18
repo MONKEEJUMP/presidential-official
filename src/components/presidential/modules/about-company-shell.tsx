@@ -263,8 +263,8 @@ export function AboutCompanyShell() {
               <p className="mt-3 text-base leading-7 text-po-body">
                 This About page tells the company story. The blunt itself has its own page here: the{" "}
                 <Link className="font-semibold underline underline-offset-4" href="/presidential-blunts">infused blunt guide</Link> explains how Presidential packs flower, concentrate,
-                and a kief or diamond finish inside a tobacco-free hemp wrap, and how the Silver, Gold, and Rose Gold series map to
-                distillate, live resin, and live rosin. Searchers looking for Presidential Blunts on this site should start there
+                and a kief or diamond finish inside a tobacco-free hemp wrap, and how the Silver, Gold, and Rose Gold series
+                are named. Searchers looking for Presidential Blunts on this site should start there
                 rather than here. When you&apos;re ready to buy, the store finder shows licensed retailers near your zip code, because
                 Presidential is
                 wholesale and doesn&apos;t sell direct.
@@ -332,9 +332,9 @@ export function AboutCompanyShell() {
                 />
               </p>
               {/* ROUND2 MR 2 (Surfer 16649229): series-to-concentrate mapping as published on /learn and the SKU pages. */}
-              <h3 className="mt-8 font-display text-2xl uppercase leading-tight text-po-ink">Which concentrate goes into each series?</h3>
+              <h3 className="mt-8 font-display text-2xl uppercase leading-tight text-po-ink">What does each series lead with?</h3>
               <p className="mt-3 max-w-3xl text-lg leading-8 text-po-body">
-                The <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/silver">Silver Flavor Series</Link> is built on <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/learn/what-is-thc-distillate">THC distillate</Link>, with flavors such as Grape, Strawberry, and Watermelon.
+                The <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/silver">Silver Flavor Series</Link> leads with flavor names such as Grape, Strawberry, and Watermelon; the Watermelon pack lists <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/learn/what-is-thc-distillate">THC distillate</Link>.
                 The <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/gold">Gold Strain Series</Link> leads with strain names and the{" "}
                 <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> with connoisseur names; each pack prints its own build.
               </p>

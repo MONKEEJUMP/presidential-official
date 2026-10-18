@@ -110,8 +110,8 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
         <>
           <h2 className="font-display text-2xl uppercase leading-tight text-po-ink">What are Watermelon Moon Rocks?</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">
-            Moon rocks are cannabis flower coated with a concentrate and finished with kief.
-            Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongside Grape,{" "}
+            Moon rocks are cannabis flower coated with a concentrate and finished with kief or diamonds.
+Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongside Grape,{" "}
             <Link className={linkClass} href="/moon-rocks/pineapple">the bright Pineapple Silver jar</Link>, and{" "}
             <Link className={linkClass} href="/moon-rocks/peach-mango">Peach Mango in the Silver lineup</Link>. See the <Link className={linkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>, the{" "}
             <Link className={linkClass} href="/learn/flavor-science">Flavor Science</Link> guide, and{" "}
@@ -401,9 +401,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <p className="mt-2 text-sm leading-6 text-po-body">
             {/* Chief R42 ruling (b): no Pineapple jar art, so no jar build here. */}
             Pineapple is one of the flavor-led releases in the{" "}
-            <Link className={linkClass} href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link> lineup. Distillate is
-            stripped and refined until it is essentially neutral, which lets a Silver name lead with the flavor rather than the
-            strain; see{" "}
+            <Link className={linkClass} href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link> lineup. To read a distillate label, see{" "}
             <Link className={linkClass} href="/learn/what-is-thc-distillate">what THC distillate is</Link>. Read the jar label for
             its build. Don&apos;t grind them, because the concentrate layer gums up a grinder. Pineapple also comes rolled as a{" "}
             <Link className={linkClass} href="/pre-rolls/pineapple">Pineapple pre-roll</Link>.
@@ -424,7 +422,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <p className="mt-2 text-sm leading-6 text-po-body">
             Pineapple&apos;s aroma is bright and tart, and some shoppers prefer to try a flavor like that in a smaller format first. The{" "}
             <Link className={linkClass} href="/mini-blunts">compact mini blunt packs</Link> show the names available in that size, each with its own pack art. For a softer fruit option in jar form, look at the{" "}
-            <Link className={linkClass} href="/moon-rocks/strawberry">sweet Strawberry moon rocks</Link>, which lean sweeter and rounder. Comparing size and aroma together makes the choice simpler. Each product prints its own composition line, so read the label in hand for its build and batch details.
+            <Link className={linkClass} href="/moon-rocks/strawberry">sweet Strawberry moon rocks</Link>. Comparing size and aroma together makes the choice simpler. Each product prints its own composition line, so read the label in hand for its build and batch details.
           </p>
         </>
       ) : null}
@@ -502,12 +500,11 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
       {/* SURFER-R15: Watermelon distillate H3, from its own page, /learn/what-is-live-resin and /about. */}
       {slug === "watermelon" && series === "Silver Flavor Series" ? (
         <>
-          <h3 className="mt-6 text-base font-semibold text-po-ink">What does distillate do in a Silver moon rock?</h3>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">What does distillate do in Watermelon Moon Rocks?</h3>
           <p className="mt-2 text-sm leading-6 text-po-body">
             Watermelon is a flavor-led release in the{" "}
             <Link className={linkClass} href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link> lineup, and its concentrate
-            is distillate. Distillate is stripped and refined until it is essentially neutral, which lets the Silver series lead
-            with flavor names such as Watermelon, Grape, Pineapple, and Peach Mango; see{" "}
+            is distillate. Distillate is stripped and refined until it is essentially neutral; see{" "}
             <Link className={linkClass} href="/learn/what-is-thc-distillate">what THC distillate is</Link>. The label lists
             flower first, distillate carried through it, and kief as the finish, as explained in{" "}
             <Link className={linkClass} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. Don&apos;t grind them. The
