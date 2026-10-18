@@ -201,6 +201,23 @@ export function VapeExperience({ page }: { page: VapePage }) {
             Orbit heats the oil in a pod. <Link href="/moon-rocks">The Presidential Moon Rocks platform</Link> carries extract on
             flower instead, and questions about either can go through <Link href="/contact">the Presidential contact page</Link>.
           </p>
+          {/* INLINKS-COPY-R45: /orbit H3s ("the mini pre-roll packs" is an existing anchor, reworded). */}
+          <h3>Orbit and the smaller formats</h3>
+          <p>
+            For something sized for a short session, look at <Link href="/mini-blunts">the Presidential mini blunt range</Link> or{' '}
+            <Link href="/mini-pre-rolls">the three-pack mini pre-rolls</Link>.
+          </p>
+          <h3>Background reading before Orbit</h3>
+          <p>
+            Three Learn guides cover the basics: <Link href="/learn/what-is-thc-distillate">THC distillate, explained</Link>,{' '}
+            <Link href="/learn/infusion-science">how infusion works on flower</Link> and{' '}
+            <Link href="/learn/what-are-moon-rocks">an introduction to Moon Rocks</Link>.
+          </p>
+          <h3>Orbit beside the hemp-wrap blunts</h3>
+          <p>
+            If you prefer a wrap, see <Link href="/blunts/gods-gift">the God&apos;s Gift blunt</Link> or{' '}
+            <Link href="/blunts/white-walker">the White Walker blunt</Link>.
+          </p>
         </div>
       ) : null}
       <div className={s.explorerGrid}>
