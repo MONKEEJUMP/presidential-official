@@ -12,7 +12,7 @@ const OUR_STORY_INDEPENDENT_COVERAGE = [
   },
   {
     href: "https://www.newcannabisventures.com/this-california-cannabis-brand-is-headed-to-three-new-markets/",
-    label: "This California Cannabis Brand Is Headed to Three New Markets",
+    label: "This California Cannabis Brand Is Headed to New Markets",
     publisher: "New Cannabis Ventures",
   },
 ] as const;

@@ -84,7 +84,7 @@ Distillate is stripped and refined until it is essentially neutral, while live r
 
 **Distillate in the Presidential infusion system**
 
-Each infused Presidential product starts with cannabis flower, adds a concentrate (distillate, live resin, or live rosin, depending on the series), and finishes with the dry material named on the package: a kief or diamond finish. Presidential's infusion process carries distillate through the flower rather than only coating the surface, then applies the kief layer as the final step. See [What Are Moon Rocks](/learn/what-are-moon-rocks) for the three layers.
+Each infused Presidential product starts with cannabis flower, adds a concentrate (distillate, live resin, or live rosin, depending on the series), and closes with a kief or diamond finish. Presidential's infusion process carries distillate through the flower rather than only coating the surface, then applies the kief layer as the final step. See [What Are Moon Rocks](/learn/what-are-moon-rocks) for the three layers.
 
 **The Silver Flavor Series is built on distillate**
 
@@ -143,7 +143,7 @@ The retailer search on this page will show results once verified licensed Washin
 
 **What arrives when it does**
 
-Presidential builds moon rocks. Flower, coated in a concentrate, finished in a dry material that bonds to the coat — three stages applied in sequence, a process the company has run under the name the Presidential Infusion System since Los Angeles in 2012.
+Presidential builds moon rocks. Flower, coated in a concentrate, finished with kief that bonds to the coat — three stages applied in sequence, a process the company has run under the name the Presidential Infusion System since Los Angeles in 2012.
 
 Five formats, with weights fixed in every market. The Moon Rock Blunt is one unit at 1.5 grams, .053 oz. The Moon Rock Preroll is one at 1 gram, .035 oz. Loose Moon Rocks come at 2 grams, 0.071 oz. Mini Blunts are three at 0.7 grams for 2.1 grams total. Mini Prerolls are three at 0.5 grams for 1.5 grams total.
 
@@ -183,7 +183,7 @@ Presidential does not sell direct. Every product reaches you through a licensed 
 
 **What Presidential makes**
 
-Flower, coated in a concentrate, finished in a dry material that bonds to the coat. Three stages, applied in sequence. That process is the Presidential Infusion System and the company has run on it since Los Angeles in 2012.
+Flower, coated in a concentrate, finished with kief that bonds to the coat. Three stages, applied in sequence. That process is the Presidential Infusion System and the company has run on it since Los Angeles in 2012.
 
 The composition line printed on the front of every pack tells you which three materials were used. It changes from product to product — some packs print live resin and diamonds, others distillate and kief, and Cap Junky prints liquid live resin. It is the most useful thing to read on a Presidential label and most people never look at it.
 
@@ -275,7 +275,7 @@ Live rosin defines the Rose Gold Connoisseur Series — the solventless method, 
 
 The process does not change between them.
 
-Every Presidential moon rock is built the same way: flower as the base, a concentrate coat applied over it, a dry finishing material bonded to the coat. Three stages, in that order. The Presidential Infusion System has run on that sequence since Los Angeles in 2012, and a Silver Flavour Series pack goes through exactly what a Rose Gold pack goes through.
+Every Presidential moon rock is built the same way: flower as the base, a concentrate coat applied over it, a kief finish bonded to the coat. Three stages, in that order. The Presidential Infusion System has run on that sequence since Los Angeles in 2012, and a Silver Flavour Series pack goes through exactly what a Rose Gold pack goes through.
 
 What changes across the catalogue is which materials fill the three roles, and the pack always prints it. Some carry FLOWER · LIVE RESIN · DIAMONDS. Some carry FLOWER · DISTILLATE · KIEF. Cap Junky carries FLOWER · LIQUID LIVE RESIN · DIAMONDS.
 
@@ -327,7 +327,7 @@ THC Design sits with the cultivation and processing group, and the artwork on bo
 
 **What does not change in a collaboration**
 
-The build. Every partner release runs through the Presidential Infusion System exactly as the core catalogue does: flower as the base, a concentrate coat, a dry finish bonded to the coat. A partner's name on the front changes the market, sometimes the strain, and often the artwork. It does not change the process.
+The build. Every partner release runs through the Presidential Infusion System exactly as the core catalogue does: flower as the base, a concentrate coat, a kief finish bonded to the coat. A partner's name on the front changes the market, sometimes the strain, and often the artwork. It does not change the process.
 
 **Formats and availability**
 
@@ -347,7 +347,7 @@ Wholesale, licensed retailers only. Presidential is available in [select state m
 
 **What the brand brings to it**
 
-Presidential has built one thing since Los Angeles in 2012: infused product, made by layering. Flower as a base, a concentrate coat over it, a dry finishing material bonded to the coat. That is the Presidential Infusion System, and the vocabulary printed on every moon rock pack — live resin, liquid live resin, distillate, kief, diamonds — is a vocabulary of concentrates.
+Presidential has built one thing since Los Angeles in 2012: infused product, made by layering. Flower as a base, a concentrate coat over it, a kief finish bonded to the coat. That is the Presidential Infusion System, and the vocabulary printed on every moon rock pack — live resin, liquid live resin, distillate, kief, diamonds — is a vocabulary of concentrates.
 
 Concentrates are the shared ground between a moon rock and a vape. The company works in the same materials in both categories.
 

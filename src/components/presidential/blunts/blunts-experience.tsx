@@ -25,6 +25,9 @@ function ArrowIcon({ direction }: { readonly direction: "left" | "right" }) {
   );
 }
 
+// Chief R29: Silver blunt cards read "Kief or Diamonds".
+const silverCardEdition = (edition: string) => edition.replace("Flower · Distillate · Kief", "Flower · Distillate · Kief or Diamonds");
+
 export function BluntsExperience({
   afterCollection,
   afterStory,
@@ -130,7 +133,7 @@ export function BluntsExperience({
                         <p>Presidential Moon Rock Blunts</p>
                         <h3><ProductNameLink name={artwork.name} format="Blunt" className="text-inherit no-underline">{placement.displayName || artwork.name}</ProductNameLink></h3>
                         {placement.collabPartner ? <strong className={shared.collabPartner}>with {placement.collabPartner}</strong> : null}
-                        <span>{artwork.edition}</span>
+                        <span>{silverCardEdition(artwork.edition)}</span>
                         <p><ProductMentions format="Blunt">{artwork.description}</ProductMentions></p>
                       </div>
                     </article>
@@ -147,7 +150,7 @@ export function BluntsExperience({
                 {tieredArtwork.filter(({ placement }) => placement.section === "more").map(({ artwork, placement }) => (
                   <article className={artwork.shape === "square" ? shared.artCardSquare : shared.artCardPortrait} key={artwork.id}>
                     <Link aria-label={`View ${artwork.name} product page`} className={shared.artCardImage} href={productDetailPath("/blunts", artwork.id)}><Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" {...sanityImage(artwork.src)} /></Link>
-                    <div className={shared.artCardCopy}><p>Presidential Moon Rock Blunts</p><h3><ProductNameLink name={artwork.name} format="Blunt" className="text-inherit no-underline">{placement.displayName || artwork.name}</ProductNameLink></h3><span>{artwork.edition}</span><p><ProductMentions format="Blunt">{artwork.description}</ProductMentions></p></div>
+                    <div className={shared.artCardCopy}><p>Presidential Moon Rock Blunts</p><h3><ProductNameLink name={artwork.name} format="Blunt" className="text-inherit no-underline">{placement.displayName || artwork.name}</ProductNameLink></h3><span>{silverCardEdition(artwork.edition)}</span><p><ProductMentions format="Blunt">{artwork.description}</ProductMentions></p></div>
                   </article>
                 ))}
               </div>

@@ -606,6 +606,7 @@ export const HARDCODED_IN_CONTENT_LINK_COUNT = Object.values(
 // Chief ruling (Oct 16): no state-market count on /moon-rocks/24k or /moon-rocks/king-louis; CMS sentence rewritten here (no Sanity write access).
 const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
   "/moon-rocks/24k": [
+    ["Diamonds as the crystalline finish on the outside.", "Finished with kief or diamonds on the outside."],
     [
       "Presidential is currently active across six state markets with two more opening.",
       "Presidential is currently active across select state markets.",
@@ -618,12 +619,45 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
     ],
   ],
   // Sitebulb R29 A6/A8: no flower THC range, no "potent" in body copy.
+  // Chief R29 ruling (b): pack labels decide the moon rock finish; (c) no unsourced percentages; (d) no catalog count.
+  "/moon-rocks/blue-dream": [
+    [
+      "Diamonds are the finish — the concentrated crystalline form that gives the outside of a Presidential Moon Rock its texture and its weight in the hand.",
+      "It is finished with kief or diamonds, which give the outside of a Presidential Moon Rock its texture and its weight in the hand.",
+    ],
+    ["The same flower, the same live resin coat, the same diamond finish.", "The same flower, the same live resin coat, finished with kief or diamonds."],
+  ],
+  "/moon-rocks/gods-gift": [["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."]],
+  "/moon-rocks/presidential-prerolls": [["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."]],
+  "/moon-rocks/thc-design-blunts": [["a dry material bonded to the coat as the finish.", "kief bonded to the coat as the finish."]],
+  "/moon-rocks/thc-design-moon-rocks": [["the dry finish bonded to the outside.", "the kief finish bonded to the outside."]],
+  "/moon-rocks/wedding-cake": [["A dry finishing material bonded to the coat.", "A kief finish bonded to the coat."]],
+  "/moon-rocks/white-walker": [["A dry material bonded to the coat as the finish.", "Kief bonded to the coat as the finish."]],
+  "/moon-rocks/xxx": [["under a dry finish rather than a crystalline one.", "under a kief finish rather than a crystalline one."]],
+  "/moon-rocks/blue-raspberry": [["where it sits at thumbnail size next to forty other products and needs", "where it sits at thumbnail size and needs"]],
+  "/learn/what-are-liquid-diamonds": [
+    ["THCa is about 87.7% THC and 12.3% CO₂ by mass.", "THCa keeps about 0.877 of its mass as THC; the rest leaves as CO₂."],
+    [
+      "So a concentrate testing at 99% THCa carries a theoretical maximum of about 87% THC after complete conversion.",
+      "So a THCa reading multiplied by 0.877 gives the theoretical maximum THC after complete conversion.",
+    ],
+    [
+      "Most cannabis concentrates land somewhere below 90% cannabinoid content. THCa diamonds reach as high as 99% and above — the highest purity anything in cannabis achieves.",
+      "THCa diamonds are among the purest forms a cannabis concentrate takes; the batch label gives the tested figure.",
+    ],
+    [" — finishing above 90% total cannabinoid content while retaining the strain's aromatic profile.", ", while retaining the strain's aromatic profile."],
+  ],
   "/learn/what-are-moon-rocks": [
+    ["The coating alone can run as high as 90% THC, depending on the concentrate used. ", ""],
     ["Standard cannabis flower generally tests between 15% and 25% THC.", "THC in cannabis flower varies by batch, so read the tested label."],
     ["the densest flower, the most potent coating, the finest kief.", "the densest flower, the richest coating, the finest kief."],
   ],
   // Sitebulb R29 A7: no unsourced multiplier.
   "/learn/what-is-live-resin": [
+    [
+      "Within that, the two resin styles land in slightly different places. Cured resin reaches as high as 90%. Live resin reaches as high as 85%.",
+      "Within that, cured resin and live resin test in slightly different places.",
+    ],
     [
       "Cannabis concentrates as a category reach as high as 90% cannabinoid content — several times what any flower can carry.",
       "Cannabis concentrates as a category carry far more cannabinoids by weight than flower; the batch label gives the tested figure.",
