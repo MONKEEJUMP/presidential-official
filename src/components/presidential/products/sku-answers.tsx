@@ -54,6 +54,8 @@ const DIAMOND_FINISH_MOON_ROCKS = new Set(["24k", "blue-dream", "cap-junky"]);
 const LABEL_BUILD_OVERRIDES: Record<string, string> = {
   "cherry-gelato": "flower and distillate, finished with kief",
   "pink-cookies": "flower and distillate, finished with kief",
+  // R40: the Skywalker jar art (cards/skywalker.webp) prints FLOWER · DISTILLATE · KIEF.
+  skywalker: "flower and distillate, finished with kief",
   "presidential-og": "flower and live resin, finished with diamonds",
 };
 
@@ -237,11 +239,10 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h3 className="mt-6 text-base font-semibold text-po-ink">Skywalker and its Rove neighbors</h3>
           <p className="mt-2 text-sm leading-6 text-po-body">
             Skywalker is a Gold Strain Series name from the Rove collaboration. It runs earthy and full-spectrum with a clean,
-            almost cool finish. The jar label reads flower, live resin, and diamonds, and the same build carries into the Skywalker
-            pre-roll, blunt, mini pre-rolls, and mini blunts. On the official Presidential Moon Rocks website, each format has its
-            own page and label. For the concentrate behind every format, see the{" "}
+            almost cool finish. The jar label reads flower, distillate, and kief, and each other Skywalker format prints its own label. On the official Presidential Moon Rocks website, each format has its
+            own page and label. For the concentrate behind most Gold names, see the{" "}
             <Link className={linkClass} href="/learn/what-is-live-resin">primer on live resin extraction</Link>. For another Rove release in the Gold series,
-            compare the <Link className={linkClass} href="/moon-rocks/waui">Waui moon rocks</Link>. Another Gold live resin jar is{" "}
+            compare the <Link className={linkClass} href="/moon-rocks/waui">Waui moon rocks</Link>. A Gold live resin jar is{" "}
             <Link className={linkClass} href="/moon-rocks/crescendo">Crescendo, marked Sativa</Link>. Read the label on the exact pack and confirm current
             selection with the store.
           </p>

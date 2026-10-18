@@ -25,7 +25,7 @@ export const MOON_ROCKS_ANSWERS: readonly AnswerItem[] = [
     question: "Presidential Moon Rock strains by series",
     answer: (
       <p>
-        Presidential weed strains are grouped into three series. The Silver Flavor Series carries flavor-led releases such
+        Presidential weed strains are grouped into the Silver, Gold, and Rose Gold series. The Silver Flavor Series carries flavor-led releases such
         as Grape, <Link className={a} href="/moon-rocks/pineapple">Pineapple</Link>, and{" "}
         <Link className={a} href="/moon-rocks/watermelon">Watermelon</Link>. The Gold Strain Series carries named strains
         such as Blue Dream, <Link className={a} href="/moon-rocks/gorilla-goo">Gorilla Goo</Link>, and NYC Diesel. The Rose
@@ -132,8 +132,8 @@ export const ABOUT_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         Presidential is a Los Angeles cannabis company, started in 2012. As{" "}
-        <Link className={a} href="/our-story">Our Story</Link> tells it, Presidential has built infused cannabis products since 2012. It builds every format to one standard, including Moon Rocks™, infused pre-rolls, and tobacco-free
-        blunts, across the Silver Flavor, Gold Strain, and Rose Gold Connoisseur series, and it sells only through licensed
+        <Link className={a} href="/our-story">Our Story</Link> tells it, Presidential has built infused cannabis products since 2012. It builds Moon Rocks™, infused pre-rolls, and tobacco-free
+        blunts under one standard, across the Silver Flavor, Gold Strain, and Rose Gold Connoisseur series, and it sells only through licensed
         retailers.
       </p>
     ),

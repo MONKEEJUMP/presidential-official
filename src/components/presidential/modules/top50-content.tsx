@@ -145,7 +145,7 @@ export const VAPES_ANSWERS: readonly AnswerItem[] = [
       <p>
         Presidential vapes are a two-part system. <Link className={a} href="/orbit">Orbit</Link> is the device, in four
         finishes: Black, Silver, Teal, and White. <Link className={a} href="/moon-pods">Moon Pods</Link> are the pods,
-        in three extract families: Liquid Diamonds (LD) with a teal mouthpiece, Live Resin (LRE) with a clear mouthpiece,
+        in extract families: Liquid Diamonds (LD) with a teal mouthpiece, Live Resin (LRE) with a clear mouthpiece,
         and Live Rosin (LRO) with a smoked mouthpiece.
       </p>
       {/* SURFER-R14: heat modes, from the /vapes multi-mode section and answers. */}
@@ -168,7 +168,7 @@ export const VAPES_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         Yes. Presidential vapes are <Link className={a} href="/moon-pods">Moon Pods</Link>, shown with the{" "}
-        <Link className={a} href="/orbit">Orbit</Link> device. Moon Pods come in three families named for their extract:
+        <Link className={a} href="/orbit">Orbit</Link> device. Moon Pods come in families named for their extract:
         Liquid Diamonds (LD), Live Resin (LRE), and Live Rosin (LRO). THC is batch-specific, so read the package label and
         its test results.
       </p>

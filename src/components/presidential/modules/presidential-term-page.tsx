@@ -452,7 +452,7 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
                 <Link className={inlineLinkClass} href="/about">the Presidential weed brand</Link> behind Moon Rocks made from{" "}
                 <Link className={inlineLinkClass} href="/moon-rocks">Presidential flower</Link>, <Link className={inlineLinkClass} href="/pre-rolls">Moon Rock pre-rolls</Link>,{" "}
                 <Link className={inlineLinkClass} href="/blunts">Moon Rock blunts</Link>, <Link className={inlineLinkClass} href="/mini-blunts">Mini Blunts</Link>, and{" "}
-                <Link className={inlineLinkClass} href="/vapes">Presidential vapes</Link>. This page is the official guide to Presidential&apos;s infused product system, its three extract-led series, and the numbers printed on a cannabis label.
+                <Link className={inlineLinkClass} href="/vapes">Presidential vapes</Link>. This guide covers Presidential&apos;s infused product system, its extract-led series, and the numbers printed on a cannabis label.
               </p>
               <p>
                 It explains flower, concentrate, kief, distillate, live resin, live rosin, THCa, and total THC for Presidential
@@ -568,7 +568,7 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
         <p>The system name identifies Presidential&apos;s brand architecture. It does not establish a universal potency, burn, or performance result; the specific package and batch record control those facts.</p>
       </TermSection>
 
-      <TermSection id="presidential-thc-extracts" images={[images[4], images[5], images[6]]} title="Three extracts, three series">
+      <TermSection id="presidential-thc-extracts" images={[images[4], images[5], images[6]]} title="The extracts behind each series">
         <p>The catalog is organized by what goes into the product, not by marketing tier, so consumers can compare ingredients and flavor profiles.</p>
         <p><strong>Distillate</strong> is the extract identified with the Silver Flavor Series.</p>
         <p><strong>Live resin</strong> is the extract identified with the Gold Strain Series and is made from cannabis frozen at harvest rather than first dried and cured.</p>
@@ -665,7 +665,7 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
         {/* SURFER-R23: /presidential-blunts tier H3 (facts from the home tier tiles and this page's strain list). */}
         <h3 className="mt-6 text-xl font-semibold">Which tier does a Presidential Blunt belong to?</h3>
         <p>
-          Check the tier on the pack. Presidential Blunts carry the same three experience tiers as the rest of the lineup, and each
+          Check the tier on the pack. Presidential Blunts carry the same experience tiers as the rest of the lineup, and each
           tier names its extract. The <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver distillate tier</Link> is
           the flavor series, so fruit names like Blue Raspberry and Peach Mango sit there. The{" "}
           <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold live resin tier</Link> is the strain series. The{" "}

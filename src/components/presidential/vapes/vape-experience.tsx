@@ -79,7 +79,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
           The extract names behind the Moon Pod families also appear in Presidential&apos;s infused flower formats.{' '}
           <Link href="/learn/infusion-science">How Presidential infusion works</Link> covers how concentrate is carried through
           flower, and <Link href="/learn/what-is-thc-distillate">a primer on THC distillate</Link> explains the refined extract that
-          none of the three pod families is built on.
+          none of the pod families is built on.
         </p>
         <h3 className={s.smallHeading}>Checking a state for Orbit and Moon Pods</h3>
         <p>
@@ -229,13 +229,13 @@ export function VapeExperience({ page }: { page: VapePage }) {
 
     <section className={`${s.section} ${s.families}`} id="moon-pods" aria-labelledby="moon-pods-chapters-heading">
       <div className={s.sectionHeading}>
-        <div><p className={s.eyebrow}>Moon Pods</p><h2 id="moon-pods-chapters-heading">Three families.<br /><span>One Presidential standard.</span></h2></div>
+        <div><p className={s.eyebrow}>Moon Pods</p><h2 id="moon-pods-chapters-heading">Every family.<br /><span>One Presidential standard.</span></h2></div>
         <p>Liquid Diamonds. Live Resin. Live Rosin.<br />A closer look at each expression.</p>
       </div>
       {/* INLINKS-COPY-R14: /moon-pods families H3 (copy as written). */}
       {page === 'moon-pods' ? (
         <div>
-          <h3>How the three Moon Pod families differ</h3>
+          <h3>How the Moon Pod families differ</h3>
           <p>
             Moon Pods are the vaporizer side of Presidential, built to run on the Orbit device. They come from{' '}
             <Link href="/about">the same Los Angeles cannabis company behind Moon Rocks</Link>. Each pod family names its extract.{' '}
@@ -259,7 +259,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
           {/* INLINKS-COPY-R35: /moon-pods distillate H3 (reused anchors "what THC distillate is" / "what moon rocks are" replaced). */}
           <h3>Moon Pods beside the distillate route</h3>
           <p>
-            None of the three Moon Pod families is built on distillate. Read{' '}
+            None of the Moon Pod families is built on distillate. Read{' '}
             <Link href="/learn/what-is-thc-distillate">the THC distillate explainer</Link> to see the refined extract the pod families
             differ from, and the guide to <Link href="/learn/what-are-moon-rocks">the flagship moon rock format</Link> from the same Los
             Angeles company. Stores that want to carry Moon Pods and Orbit can start with the{' '}
@@ -268,7 +268,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
           {/* INLINKS-COPY-R38: /moon-pods live resin and retail-buyer H3s (reused anchors reworded). */}
           <h3>Live resin outside the cartridge</h3>
           <p>
-            Live resin, one of the three Moon Pods extracts, also coats the flower in{' '}
+            Live resin, one of the Moon Pods extracts, also coats the flower in{' '}
             <Link href="/mini-blunts">hemp-wrapped mini blunt packs</Link>.{' '}
             <Link href="/learn/infusion-science">How an extract is infused into flower</Link> explains how an extract is carried
             through flower instead of sitting in a cartridge.

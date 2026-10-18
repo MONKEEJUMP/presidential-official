@@ -12,7 +12,7 @@ export const MOON_PODS_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         Moon Pods are the Presidential pods shown with the <Link className={a} href="/orbit">Orbit</Link> device. They
-        come in three families, each named for its extract: Liquid Diamonds (LD) with a teal mouthpiece, Live Resin (LRE)
+        come in families, each named for its extract: Liquid Diamonds (LD) with a teal mouthpiece, Live Resin (LRE)
         with a clear mouthpiece, and Live Rosin (LRO) with a smoked mouthpiece.
       </p>
     ),
