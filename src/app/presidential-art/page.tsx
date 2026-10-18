@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { VaultEntrance } from '@/components/vault/entrance';
-import { VaultEntranceCopy } from '@/components/vault/r34-copy';
 import { buildSocialMetadata } from '@/lib/seo/metadata';
 import { buildBreadcrumbSchema, buildWebPageSchema, JsonLd } from '@/lib/seo/schema';
 
@@ -23,7 +22,6 @@ export default function VaultPage() {
       <JsonLd data={buildWebPageSchema({ path: '/presidential-art', name: 'Presidential Art', description: DESCRIPTION })} />
       <JsonLd data={buildBreadcrumbSchema([{ name: 'Presidential', path: '/' }, { name: 'Presidential Art', path: '/presidential-art' }])} />
       <VaultEntrance />
-      <VaultEntranceCopy />
     </>
   );
 }

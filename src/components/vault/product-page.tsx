@@ -31,10 +31,18 @@ function MiniSiblings({ room, current }: { room: string; current: string }) {
   return <p className="mx-auto w-full max-w-7xl px-6 pb-12 text-sm leading-6 text-white/80">{group.heading}:{' '}{links.map((link, index) => <span key={link.slug}>{index > 0 ? (index === links.length - 1 ? ' and ' : ', ') : ''}<Link className="font-semibold underline underline-offset-4" href={`/${room}/${link.slug}`}>{link.label}</Link></span>)}.</p>;
 }
 
+// Sitebulb R34 A1: mini SKU back links go to the product list; this line keeps the art-room inlink.
+const MINI_ART_ROOM: Readonly<Record<string, string>> = { 'mini-pre-rolls': 'mini pre-roll pack art', 'mini-blunts': 'mini blunt pack art' };
+function MiniArtRoomLine({ room }: { room: string }) {
+  const label = MINI_ART_ROOM[room];
+  if (!label) return null;
+  return <p className="mx-auto w-full max-w-7xl px-6 pb-6 text-sm leading-6 text-white/80">See this pack in the <Link className="font-semibold underline underline-offset-4" href={`/presidential-art/${room}`}>{label}</Link> room.</p>;
+}
+
 export function VaultProductPage({ product }: { product: VaultProduct }) {
   const image = product.scenes[0] ?? product.pack;
   const categoryPath = `/${product.room}` as ProductCategoryPath;
   const record = { id: vaultStrainSlug(product), name: product.strain, edition: `Moon Rock ${product.format}`, description: (descriptions as Record<string, string>)[product.slug], src: image.full, alt: imageAlt(product, image) };
   // GSC 1012: no approved prices or reviews, so no Product schema (it requires offers/review/rating).
-  return <PageFrame className="bg-[#06100f]"><CatalogProductPage categoryLabel={product.room.replaceAll('-', ' ')} categoryPath={categoryPath} backPath={product.format.startsWith('Mini') ? `/presidential-art/${product.room}` : categoryPath} collection={product.tier ?? undefined} formatLabel={`Presidential Moon Rock ${product.format}`} headingFormat={vaultFormatHeading(product.format)} product={record} products={[record]} vaultProduct={product} /><VaultSkuCopy room={product.room} slug={vaultStrainSlug(product)} /><MiniSiblings room={product.room} current={vaultStrainSlug(product)} /></PageFrame>;
+  return <PageFrame className="bg-[#06100f]"><CatalogProductPage categoryLabel={product.room.replaceAll('-', ' ')} categoryPath={categoryPath} backPath={categoryPath} collection={product.tier ?? undefined} formatLabel={`Presidential Moon Rock ${product.format}`} headingFormat={vaultFormatHeading(product.format)} product={record} products={[record]} vaultProduct={product} /><VaultSkuCopy room={product.room} slug={vaultStrainSlug(product)} /><MiniArtRoomLine room={product.room} /><MiniSiblings room={product.room} current={vaultStrainSlug(product)} /></PageFrame>;
 }

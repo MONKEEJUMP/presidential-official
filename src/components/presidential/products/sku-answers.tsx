@@ -165,20 +165,6 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
         </>
       ) : null}
-      {/* SURFER-R34: Strawberry Silver H3 (Silver Flavor Series: distillate, finished with kief). */}
-      {slug === "strawberry" ? (
-        <>
-          <h3 className="mt-6 text-base font-semibold text-po-ink">Strawberry next to the other Silver flavors</h3>
-          <p className="mt-2 text-sm leading-6 text-po-body">
-            Strawberry is one of the fruit names in the Silver Flavor Series, built on distillate and finished with kief. If you
-            like its ripe, restrained profile, compare it with the{" "}
-            <Link className={linkClass} href="/moon-rocks/watermelon">Silver Watermelon jar</Link>, another fruit-led Silver
-            release. For how the three layers come together in any jar, read{" "}
-            <Link className={linkClass} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. THC figures are
-            batch-specific, so read the current package label.
-          </p>
-        </>
-      ) : null}
       {/* SURFER-R17: Pineapple distillate H3, from its own page, /learn/what-is-live-resin and /moon-rocks/watermelon. */}
       {slug === "pineapple" && series === "Silver Flavor Series" ? (
         <>
@@ -341,6 +327,20 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             <Link className={linkClass} href="/pre-rolls">Presidential pre-rolls</Link>
             {" and "}
             <Link className={linkClass} href="/blunts">Moon Rock blunts</Link>.
+          </p>
+        </>
+      ) : null}
+      {/* SURFER-R34: Strawberry Silver H2, after the pre-roll FAQ (Sitebulb R34 B20/B21) (Silver Flavor Series: distillate, finished with kief). */}
+      {slug === "strawberry" ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Strawberry next to the other Silver flavors</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Strawberry is one of the fruit names in the Silver Flavor Series, built on distillate and finished with kief. If you
+            like its ripe, restrained profile, compare it with the{" "}
+            <Link className={linkClass} href="/moon-rocks/watermelon">Silver Watermelon jar</Link>, another fruit-led Silver
+            release. For how the three layers come together in any jar, read{" "}
+            <Link className={linkClass} href="/learn/what-are-moon-rocks">how a moon rock is layered</Link>. THC figures are
+            batch-specific, so read the current package label.
           </p>
         </>
       ) : null}
