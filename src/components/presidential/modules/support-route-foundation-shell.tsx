@@ -283,6 +283,18 @@ export async function SupportRouteFoundationShell({
                 Pre-Rolls, and Moon Pods with the Orbit device. THC is batch-specific, so check the package label and its test
                 results at the counter.
               </p>
+              {/* SURFER-R32: /find-us jar H3 (facts: tier tiles, Blue Dream pack line FLOWER · LIVE RESIN · DIAMONDS, THC Design hub build). */}
+              <h3 className="mt-12 text-2xl font-semibold leading-snug text-po-ink">
+                Narrowing a nearby search to one jar
+              </h3>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-po-body">
+                A ZIP search shows where Presidential is carried. It doesn&apos;t show which jar is on the shelf today, so arrive with a
+                specific name. Moon Rocks are flower carried through with concentrate and finished with kief, and the series names
+                the extract: Silver for distillate, Gold for live resin, Rose Gold for live rosin. A few products follow their own
+                label: <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/blue-dream">Blue Dream moon rocks</Link> are finished with diamonds, and the{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/presidential-x-thc-design">THC Design collaboration releases</Link> pair flower and live
+                resin with diamonds. Pick one name, call the store or check its menu, then make the trip.
+              </p>
             </div>
           </Scene>
         ) : null}
