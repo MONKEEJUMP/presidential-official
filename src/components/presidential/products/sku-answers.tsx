@@ -165,6 +165,38 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
         </>
       ) : null}
+      {/* SURFER-R35: Garlic Cookies H3 (jar label FLOWER · DISTILLATE · KIEF; pre-roll and blunt match; Head Cheese is a Polaris release). */}
+      {slug === "presidential-line-garlic-cookies" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Garlic Cookies and its Presidential Line neighbor</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Garlic Cookies is a Presidential Line release made with Nature&apos;s Chemistry. It opens pungent and herbal, with a
+            doughy sweetness underneath. The jar label reads flower, distillate, and kief, so these moon rocks are finished with
+            kief. Distillate is the refined concentrate inside, and the explainer on{" "}
+            <Link className={linkClass} href="/learn/what-is-thc-distillate">how distillate is refined</Link> covers how it&apos;s
+            made. The same name also comes as a pre-roll and a blunt with the same distillate and kief build. For another savory
+            Presidential Line name, see the{" "}
+            <Link className={linkClass} href="/moon-rocks/presidential-line-head-cheese">Head Cheese moon rocks</Link>, a Polaris
+            collaboration with its own label. Batch figures are on the package, so read it and confirm current selection with the
+            store.
+          </p>
+        </>
+      ) : null}
+      {/* SURFER-R35: XJ-13 H3 (jar and every XJ-13 format: flower, live resin, diamonds). */}
+      {slug === "xj-13" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">What live resin brings to XJ-13</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            XJ-13 sits in the Gold Strain Series, with a citrus-forward, clean profile. The jar label reads flower, live resin, and
+            diamonds, and the same build carries into the XJ-13 pre-roll, blunt, mini pre-rolls, and mini blunts. Live resin is
+            extracted from plants frozen at harvest, which is why it defines the Gold series. The{" "}
+            <Link className={linkClass} href="/learn/what-is-live-resin">guide to how live resin is made</Link> goes deeper. For
+            another Gold jar that follows its own diamond label, compare the{" "}
+            <Link className={linkClass} href="/moon-rocks/24k">24K moon rocks</Link>. Some searchers know the brand as Presidential
+            RX. It&apos;s the same Presidential, so search by the XJ-13 name and confirm current selection with the store.
+          </p>
+        </>
+      ) : null}
       {/* SURFER-R17: Pineapple distillate H3, from its own page, /learn/what-is-live-resin and /moon-rocks/watermelon. */}
       {slug === "pineapple" && series === "Silver Flavor Series" ? (
         <>
