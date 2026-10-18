@@ -103,7 +103,8 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   'mini-pre-rolls/waui': (
     <Block parent="How Waui is built" heading="Waui in mini and full-size form">
-      Waui is a ROVE collaboration in the Gold Strain Series, and the mini pack splits it into three 0.5g rolls. Each one is
+      Waui is a ROVE collaboration in the Gold Strain Series, and the mini pack splits it into three 0.5g rolls. The loose build is{' '}
+      <Link className={L} href="/moon-rocks/waui">Waui moon rocks in the jar</Link>. Each one is
       flower, live resin, and diamonds, marked Sativa, with a pineapple-led tropical aroma. The minis suit a shorter session or
       sharing a pack among friends. Shoppers who want one larger roll can pick the{' '}
       <Link className={L} href="/pre-rolls/waui">full-size Waui roll</Link>, which carries the same strain name. Another name

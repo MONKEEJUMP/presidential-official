@@ -30,7 +30,7 @@ const BLUNT_GRAPHICS = [
     src: "/media/blunt-garlic-cookies.jpg",
   },
   {
-    alt: "Ghost Haze Train Presidential blunt product graphic",
+    alt: "Ghost Train Haze Presidential blunt product graphic",
     href: "/moon-rocks/presidential-line-ghost-haze-train",
     src: "/media/blunt-ghost-haze-train.jpg",
   },

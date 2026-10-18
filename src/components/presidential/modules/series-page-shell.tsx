@@ -41,7 +41,7 @@ const SERIES_FILMS: Record<string, { slug: SiteVideoSlug; label: string }> = {
 // 1008-004); partners are the ones named in the repo-owned partner roster copy.
 const SERIES_INTROS: Partial<Record<string, string>> = {
   "presidential-line":
-    "The Presidential Line is the set of named Presidential Moon Rock strains that sit outside the Silver, Gold and Rose Gold series: Garlic Cookies, Ghost Haze Train, Guava Haze, Head Cheese, Iced Lemon, Nino Brown and Whoa Si Whoa. They are partner releases: Nature's Chemistry on Garlic Cookies and Ghost Haze Train, Polaris Cannabis on Head Cheese, Ball Family Farms on Nino Brown, Top Shelf Cultivation on Whoa Si Whoa, and Platinum on Guava Haze and Iced Lemon. Retired releases are no longer listed.",
+    "The Presidential Line is the set of named Presidential Moon Rock strains that sit outside the Silver, Gold and Rose Gold series: Garlic Cookies, Ghost Train Haze, Guava Haze, Head Cheese, Iced Lemon, Nino Brown and Whoa Si Whoa. They are partner releases: Nature's Chemistry on Garlic Cookies and Ghost Train Haze, Polaris Cannabis on Head Cheese, Ball Family Farms on Nino Brown, Top Shelf Cultivation on Whoa Si Whoa, and Platinum on Guava Haze and Iced Lemon. Retired releases are no longer listed.",
   "presidential-house-line":
     "The Presidential House Line is Moon Rocks, infused pre-rolls and blunts sold under the Presidential name itself rather than a strain or partner name. Availability varies by licensed retailer.",
 };
@@ -96,10 +96,24 @@ export async function SeriesPageShell({
     definition.slug === "rose-gold" && description.endsWith(cerealTail) ? (
       <>
         {description.slice(0, -cerealTail.length)}and{" "}
-        <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/cereal-milk">the Cereal Milk Rose Gold jar</Link>.
+        <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/cereal-milk">the Cereal Milk Rose Gold jar</Link>.{" "}
+        <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/cosmic-cookies">Cosmic Cookies, a Hybrid Rose Gold jar</Link>, sits in the same series.
       </>
     ) : (
       description
+    );
+  // Sitebulb R38 B2: link Ghost Train Haze inside the Presidential Line intro.
+  const ghostSplit = "Nature's Chemistry on Garlic Cookies and Ghost Train Haze,";
+  const introText = SERIES_INTROS[definition.slug];
+  const introNode =
+    definition.slug === "presidential-line" && introText?.includes(ghostSplit) ? (
+      <>
+        {introText.split(ghostSplit)[0]}Nature&apos;s Chemistry on Garlic Cookies and{" "}
+        <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/presidential-line-ghost-haze-train">the Ghost Train Haze jar</Link>,
+        {introText.split(ghostSplit)[1]}
+      </>
+    ) : (
+      introText
     );
   const meta = seriesMetaFor(seriesName);
   const catalog = await readSeriesItems(definition);
@@ -159,7 +173,7 @@ export async function SeriesPageShell({
               </section>
             ) : undefined
           }
-          supportingText={SERIES_INTROS[definition.slug] ? [meta.positioning, descriptionNode, SERIES_INTROS[definition.slug]] : [meta.positioning, descriptionNode]}
+          supportingText={introText ? [meta.positioning, descriptionNode, introNode] : [meta.positioning, descriptionNode]}
           title={title}
         />
 

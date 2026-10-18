@@ -78,7 +78,7 @@ type BuildLink = { readonly lead: string; readonly href: string; readonly anchor
 const VAULT_BUILD_LINKS: Readonly<Record<string, readonly BuildLink[]>> = {
   "mini-pre-rolls/pink-cookies": [
     { lead: "For the same name in a tobacco-free wrap, see", href: "/mini-blunts/pink-cookies", anchor: "Pink Cookies in a hemp-wrap three-pack" },
-    { lead: "The", href: "/moon-rocks/pink-cookies", anchor: "full Pink Cookies moon rock build", tail: " adds distillate" },
+    { lead: "The", href: "/moon-rocks/pink-cookies", anchor: "loose Pink Cookies jar", tail: " is flower and distillate, finished with kief" },
   ],
   "mini-pre-rolls/gorilla-goo": [{ lead: "For the tobacco-free wrap, see the", href: "/mini-blunts/gorilla-goo", anchor: "Gorilla Goo hemp-wrap minis" }],
   "mini-blunts/skywalker": [{ lead: "The", href: "/moon-rocks/skywalker", anchor: "Skywalker moon rock jar", tail: " carries the same build loose" }],
@@ -87,6 +87,8 @@ const VAULT_BUILD_LINKS: Readonly<Record<string, readonly BuildLink[]>> = {
   "pre-rolls/xj-13": [{ lead: "The same name comes loose as", href: "/moon-rocks/xj-13", anchor: "XJ-13 moon rocks in the jar" }],
   "mini-blunts/xj-13": [{ lead: "For the unrolled format, see", href: "/moon-rocks/xj-13", anchor: "the XJ-13 jar" }],
   "blunts/24k": [{ lead: "For paper instead of a wrap, see", href: "/pre-rolls/24k", anchor: "the 24K single pre-roll" }],
+  // Sitebulb R38 B20.
+  "mini-blunts/waui": [{ lead: "Or choose", href: "/moon-rocks/waui", anchor: "Waui loose in a Gold jar" }],
   "mini-pre-rolls/24k": [{ lead: "For one full roll, see", href: "/pre-rolls/24k", anchor: "24K at the 1g size" }],
 };
 

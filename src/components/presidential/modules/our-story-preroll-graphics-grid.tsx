@@ -25,7 +25,7 @@ const PREROLL_GRAPHICS = [
     src: "/media/preroll-garlic-cookies.jpg",
   },
   {
-    alt: "Ghost Haze Train Presidential preroll product graphic",
+    alt: "Ghost Train Haze Presidential preroll product graphic",
     href: "/moon-rocks/presidential-line-ghost-haze-train",
     src: "/media/preroll-ghost-haze-train.jpg",
   },

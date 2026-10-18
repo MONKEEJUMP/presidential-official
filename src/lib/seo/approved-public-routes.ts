@@ -63,7 +63,7 @@ const APPROVED_PRODUCT_ROUTE_ROWS = [
   { slug: "wedding-cake", name: "Wedding Cake", series: "Rose Gold Connoisseur Series" },
   { slug: "white-walker", name: "White Walker", series: "Rose Gold Connoisseur Series" },
   { slug: "presidential-line-garlic-cookies", name: "Garlic Cookies", series: "Presidential Line" },
-  { slug: "presidential-line-ghost-haze-train", name: "Ghost Haze Train", series: "Presidential Line" },
+  { slug: "presidential-line-ghost-haze-train", name: "Ghost Train Haze", series: "Presidential Line" },
   { slug: "presidential-line-guava-haze", name: "Guava Haze", series: "Presidential Line" },
   { slug: "presidential-line-head-cheese", name: "Head Cheese", series: "Presidential Line" },
   { slug: "presidential-line-iced-lemon", name: "Iced Lemon", series: "Presidential Line" },

@@ -613,6 +613,8 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
     ],
   ],
   "/moon-rocks/king-louis": [
+    // Sitebulb R38 A14: no unsourced superlative in the pack heading.
+    ["The pack, and why it is the best-designed in the line", "The King Louis pack design"],
     [
       "Presidential is currently active in six state markets with two more opening.",
       "Presidential is currently active in select state markets.",
@@ -633,10 +635,25 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   // Sitebulb R33 A6: no unsourced market-size claim.
   "/moon-rocks/cap-junky": [
     ["Planet 13 is one of the larger operators in the Nevada market, and Nevada is one of Presidential's active states.", "Planet 13 is a Nevada operator, and Nevada is one of Presidential's active states."],
+    // Sitebulb R38 B5.
+    ["Cap Junky and Orange Push Pop are the two releases that carry it.", "Cap Junky and [Orange Push Pop, the other Trendi jar](/moon-rocks/orange-push-pop) are the two releases that carry it."],
   ],
   // Sitebulb R34 A2: mini pre-rolls are smaller, so drop the "smallest single unit" claim.
   "/moon-rocks/thc-design-prerolls": [["One gram. The smallest single unit Presidential rolls.", "One gram, one roll."]],
-  "/moon-rocks/gods-gift": [["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."]],
+  "/moon-rocks/gods-gift": [
+    ["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."],
+    // Sitebulb R38 B7.
+    ["SFV OG carries a place and a lineage in four letters.", "[SFV OG, the San Fernando Valley jar](/moon-rocks/sfv-og), carries a place and a lineage in four letters."],
+  ],
+  // Chief R38 ruling: Ghost Train Haze is the pack-art spelling.
+  "/moon-rocks/presidential-line-ghost-haze-train": [["Ghost Haze Train", "Ghost Train Haze"]],
+  // Sitebulb R38 A12: the jar page shows the blunt pack, so describe the pack, not the page.
+  "/moon-rocks/presidential-og": [
+    ["This page is the Moon Rock Blunt. One blunt,", "The pack shown is the Moon Rock Blunt: one blunt,"],
+    // Chief R38 ruling: the OG blunt art marks Hybrid, so the conflicting Type row is cut.
+    ["| Type | Indica | Indica |\n", ""],
+    ["| Type | Indica | Indica |", ""],
+  ],
   "/moon-rocks/presidential-prerolls": [
     ["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."],
     // Sitebulb R35 A6: unsourced consumer-behavior claim.
@@ -660,8 +677,8 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   "/moon-rocks/thc-design-moon-rocks": [
   // Chief R31 ruling: collaboration page, no loose-jar specs (keep URL, no redirect).
     ["Two grams, loose, nothing rolled.", "Presidential x THC Design, built on live resin."],
-    ["This is the only Presidential \u00d7 THC Design format that arrives unfinished, and that changes what it is.", "This page covers the Presidential x THC Design collaboration: flower, live resin and diamonds, released as the Creskendo and XJ13 Moon Rock blunts. The [Presidential x THC Design collection](/moon-rocks/presidential-x-thc-design) lists both releases."],
-    ["This is the only Presidential x THC Design format that arrives unfinished, and that changes what it is.", "This page covers the Presidential x THC Design collaboration: flower, live resin and diamonds, released as the Creskendo and XJ13 Moon Rock blunts. The [Presidential x THC Design collection](/moon-rocks/presidential-x-thc-design) lists both releases."],
+    ["This is the only Presidential \u00d7 THC Design format that arrives unfinished, and that changes what it is.", "The Presidential x THC Design collaboration is flower, live resin and diamonds, released as the Creskendo and XJ13 Moon Rock blunts. The [Presidential x THC Design collection](/moon-rocks/presidential-x-thc-design) lists both releases."],
+    ["This is the only Presidential x THC Design format that arrives unfinished, and that changes what it is.", "The Presidential x THC Design collaboration is flower, live resin and diamonds, released as the Creskendo and XJ13 Moon Rock blunts. The [Presidential x THC Design collection](/moon-rocks/presidential-x-thc-design) lists both releases."],
     ["**Loose is a different decision**", ""],
     ["Every other format in the catalogue makes the choice for you. The Blunt is one object at 1.5 grams. The Preroll is one at 1 gram. The Mini three-packs are three at 0.7 or 0.5 grams. Each of those is a finished thing you take out and use.", ""],
     ["Loose Moon Rocks are 2 grams, printed as 0.071 oz, and the crescent on the front of the pack reads **2 G** instead of a unit count—because there is no unit. What happens next is yours: a bowl, a joint you roll yourself, a blunt broken down and rebuilt.", ""],
