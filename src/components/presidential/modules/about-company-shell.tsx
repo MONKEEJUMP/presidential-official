@@ -16,7 +16,7 @@ const platforms = [
   {
     title: "MOON ROCKS™",
     tagline: '"The Highest Form Of Cannabis."',
-    body: "The flagship, and the reason the name travels. Premium flower as the base, rich resin, and a coat of the finest kief fused into one complete product — built to be experienced as a single thing rather than three. Available as moon rocks, and as blunts, pre-rolls and mini blunts with a kief or diamond finish.",
+    body: "The flagship, and the reason the name travels. Premium flower as the base, rich resin, and a kief or diamond finish fused into one product — built to be experienced as a single thing rather than three. Available as moon rocks, and as blunts, pre-rolls and mini blunts with a kief or diamond finish.",
     image: "/media/moonrock-cherrygelato.jpg" as const,
     imageAlt: "Cherry Gelato Presidential Moon Rocks package artwork",
     href: "/moon-rocks" as const,
@@ -25,7 +25,7 @@ const platforms = [
   {
     title: "PRESIDENTIAL BLUNTS",
     tagline: '"The format that built the reputation."',
-    body: "A Presidential Blunt is the house method in its most complete form: flower, concentrate, and a kief or diamond finish brought together in a single wrap, rolled to burn evenly and finish clean. The original argument — still winning it.",
+    body: "A Presidential Blunt is the house method in rolled form: flower, concentrate, and a kief or diamond finish brought together in a single wrap, rolled to burn evenly and finish clean. The original argument — still winning it.",
     image: "/media/blunt-nino-brown.jpg" as const,
     imageAlt: "Nino Brown Presidential Moon Rock Blunt package artwork",
     // InLinks AB2 (chief-approved): the PRESIDENTIAL BLUNTS card points at the /blunts hub.
@@ -328,7 +328,7 @@ export function AboutCompanyShell() {
               <p className="mt-7 max-w-3xl text-lg leading-8 text-po-body">
                 <InContentText
                   sourcePath="/about"
-                  value="A Presidential Moon Rock isn't flower with something dusted on top. It's a system: premium flower, rich resin, and the finest kief brought together so the layers stop behaving like layers. Three components, one product, engineered to burn evenly and finish clean. That process has a name because it took years to earn one. Cannabis Evolved."
+                  value="A Presidential Moon Rock isn't flower with something dusted on top. It's a system: premium flower, rich resin, and a kief or diamond finish brought together so the layers stop behaving like layers. Three components, one product, engineered to burn evenly and finish clean. That process has a name because it took years to earn one. Cannabis Evolved."
                 />
               </p>
               {/* ROUND2 MR 2 (Surfer 16649229): series-to-concentrate mapping as published on /learn and the SKU pages. */}

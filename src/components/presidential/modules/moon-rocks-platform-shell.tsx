@@ -241,7 +241,7 @@ export async function MoonRocksPlatformShell({
               {/* SURFER-R19: recognizing the series on a pack, from /moon-rocks/rose-gold, /about and /moon-rocks. */}
               <h3 className="mt-8 text-2xl font-semibold leading-snug">How do you recognize the series on a pack?</h3>
               <p className="mt-3">
-                Every Presidential pack carries the same architecture regardless of series: the silver crown crest with the
+                Presidential packs share one architecture across the series: the silver crown crest with the
                 PRESIDENTIAL banner, the strain type in script, the product name, and the format and weight. The series shows in
                 the name and the art. The{" "}
                 <Link className="font-semibold underline underline-offset-4" href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link>{" "}
@@ -249,7 +249,7 @@ export async function MoonRocksPlatformShell({
                 <Link className="font-semibold underline underline-offset-4" href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>{" "}
                 carries the connoisseur names, built on live rosin; see{" "}
                 <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-live-rosin">what live rosin is</Link>. Gold
-                packs such as 24K and Blue Dream print FLOWER · LIVE RESIN · DIAMONDS.
+                packs such as Blue Dream print FLOWER · LIVE RESIN · DIAMONDS.
               </p>
               <h3 className="mt-8 text-2xl font-semibold leading-snug">Where to buy, and what it costs</h3>
               <p className="mt-3">

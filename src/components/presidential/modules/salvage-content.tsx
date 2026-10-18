@@ -64,8 +64,8 @@ export const MOON_ROCKS_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <>
         <p>
-          Every Presidential moon rock is built the same way: flower as the base, a concentrate coat applied over it, and a
-          kief finish bonded to the coat. Presidential calls this framework the Presidential Infusion System™.
+          Presidential Moon Rocks are built in layers: flower as the base, a concentrate coat applied over it, and a kief or
+          diamond finish bonded to the coat. Presidential calls this framework the Presidential Infusion System™.
         </p>
         <p>
           The concentrate follows the series: distillate in the{" "}
@@ -84,7 +84,7 @@ export const MOON_ROCKS_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         The <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link> are the live resin Moon Rocks: packs such
-        as 24K and Blue Dream print FLOWER · LIVE RESIN · DIAMONDS. The Silver Flavor Series uses distillate, and the Rose
+        as Blue Dream print FLOWER · LIVE RESIN · DIAMONDS. The Silver Flavor Series uses distillate, and the Rose
         Gold Connoisseur Series uses solventless live rosin.
       </p>
     ),

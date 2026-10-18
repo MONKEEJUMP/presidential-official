@@ -651,7 +651,7 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
       </TermSection>
 
       <TermSection id="presidential-blunts-lineup" images={[images[3], images[4]]} title="The lineup">
-        <p><strong>The Presidential Blunt</strong> is the flagship wrapped format. It carries recognizable strain and flavor names in a full-size presentation designed around a steady burn and a complete session.</p>
+        <p><strong>The Presidential Blunt</strong> is the flagship wrapped format. It carries recognizable strain and flavor names in a full-size presentation designed around a steady burn and a full session.</p>
         <p><strong>Mini Blunts</strong> provide the same family character in a smaller package. Their compact scale broadens the ways licensed retailers can present Presidential infused cannabis and gives customers another practical format choice.</p>
         <p><strong>The Presidential Line</strong> connects core house names across formats, while the <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver Flavor Series</Link>, <Link className={inlineLinkClass} href="/moon-rocks/gold">Gold Strain Series</Link>, and <Link className={inlineLinkClass} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> organize products by their featured profile and extract approach.</p>
         <p>The catalog also includes <Link className={inlineLinkClass} href="/moon-rocks/presidential-house-line">House Line blunt selections</Link> and <strong>Presidential x THC Design</strong> releases. Together, these groupings position the blunt program inside the broader Presidential product system with a clear, connected presence across the Presidential catalog.</p>
@@ -723,7 +723,7 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
 
       <TermSection id="presidential-cannabis-argument" images={[images[1]]} title="The argument">
         <p>
-          The company began with the belief that infused cannabis could be treated as a complete product discipline.{" "}
+          The company began with the belief that infused cannabis could be treated as a product discipline.{" "}
           Flower selection, extract choice, a kief or diamond finish, airflow, and packaging all contribute to what reaches the customer.
         </p>
         <p>That view became the foundation for the Presidential Infusion System™, a house approach that carries concentrate through the flower and closes with a kief or diamond finish. The method supports the burn, flavor, and consistency expected from the Moon Rocks, pre-rolls, blunts, and Mini Blunts that carry the name.</p>

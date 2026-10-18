@@ -39,7 +39,7 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
         answer: (
           <p>
             Every Presidential pack prints a composition line. Diamonds are the finishing material on builds such as
-            FLOWER · LIVE RESIN · DIAMONDS on <Link className={a} href="/moon-rocks/24k">24K</Link> and Blue Dream, and
+            FLOWER · LIVE RESIN · DIAMONDS on Blue Dream, and
             FLOWER · LIQUID LIVE RESIN · DIAMONDS on Cap Junky. The build is the same each time: flower as the base, a
             concentrate coat over it, and the finish bonded to the coat.
           </p>
@@ -111,8 +111,7 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
         question: "Which Presidential products use live resin?",
         answer: (
           <p>
-            <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link> Moon Rocks such as{" "}
-            <Link className={a} href="/moon-rocks/24k">24K</Link> and Blue Dream print FLOWER · LIVE RESIN · DIAMONDS.
+            <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link> Moon Rocks such as Blue Dream print FLOWER · LIVE RESIN · DIAMONDS.
             Gold Strain Series 1g pre-rolls, <Link className={a} href="/pre-rolls/xj-13">XJ-13 in paper</Link> among them, combine flower, live resin, and diamonds; 1.5g blunts come with live resin and
             diamonds; and Cap Junky prints liquid live resin. Live Resin (LRE) is also one of the{" "}
             <Link className={a} href="/moon-pods">Moon Pods</Link> families.

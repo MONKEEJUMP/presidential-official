@@ -62,7 +62,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
           </button>;
         })}
       </div>
-      <p className={s.sectionNote}>Tap a finish to explore its complete gallery. Devices shown with LD Moon Pods attached.</p>
+      <p className={s.sectionNote}>Tap a finish to explore its gallery. Devices shown with LD Moon Pods attached.</p>
     </section>
   );
 
@@ -230,7 +230,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
               {VAPE_FAMILIES.map(item => <button type="button" key={item.id} aria-pressed={family === item.id} onClick={() => setFamily(item.id)}><span>{item.name}</span><small>{item.code}</small></button>)}
             </div>
           </fieldset>
-          <p className={s.productNote}>Moon Pods shown with the Orbit device. Explore the front, back, side angles, display and complete design overview.</p>
+          <p className={s.productNote}>Moon Pods shown with the Orbit device. Explore the front, back, side angles, display and design overview.</p>
           <Link href="/find-us" className={s.primaryButton}>Find a licensed retailer <VapeIcon name="arrow" /></Link>
           <Link href={selectedFamily.guide} className={s.textLink}>Get to know {selectedFamily.name.toLowerCase()} <VapeIcon name="arrow" /></Link>
         </div>
@@ -345,7 +345,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
           return <article className={`${s.detailCard} ${item.style}`} key={item.view}><button type="button" onClick={() => openImage(item.index)} aria-label={`Enlarge ${item.title}`}><Image {...sanityImage(image.src)} alt={image.alt} width={1200} height={1500} sizes="(min-width: 900px) 550px, 92vw" /><span><VapeIcon name="expand" /></span></button><div><h3>{item.title}</h3><p>{item.text}</p></div></article>;
         })}
       </div>
-      <div className={s.portDetail}><p>Explore the mouthpiece, sides and base together in the matching design overview.</p><button className={s.textLink} type="button" onClick={() => openImage(7)}>View the complete design <VapeIcon name="arrow" /></button></div>
+      <div className={s.portDetail}><p>Explore the mouthpiece, sides and base together in the matching design overview.</p><button className={s.textLink} type="button" onClick={() => openImage(7)}>View the design <VapeIcon name="arrow" /></button></div>
     </section>
 
     {page === 'vapes' ? <VapeTechnologyBand /> : null}
@@ -365,7 +365,7 @@ export function VapeExperience({ page }: { page: VapePage }) {
       <details className={s.archive} onToggle={(event) => {
         if (event.currentTarget.open) setArchiveOpened(true);
       }}>
-        <summary>Browse the complete photo library <span>96 views <VapeIcon name="plus" /></span></summary>
+        <summary>Browse the photo library <span>96 views <VapeIcon name="plus" /></span></summary>
         {archiveOpened ? <div className={s.archiveContents}>
           {VAPE_MODEL_SETS.map(set => <section key={`${set.finish}-${set.family}`} aria-label={`${set.finish} ${set.family.toUpperCase()} photo collection`}>
             <h3>{VAPE_FINISHES.find(item => item.id === set.finish)!.name} <span>/ {VAPE_FAMILIES.find(item => item.id === set.family)!.name}</span></h3>

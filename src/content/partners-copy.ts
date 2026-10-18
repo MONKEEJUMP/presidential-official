@@ -94,7 +94,7 @@ export const PARTNERS_COPY = {
     "body": [
       "Listings start in the five boroughs - Manhattan, Brooklyn, Queens, the Bronx, Staten Island - and run out through Long Island, up the Hudson Valley, west to Buffalo and Rochester, and north toward the Adirondacks.",
       "New York's legal market opened late and moved fast.",
-      "That is worth saying plainly: a New York licensed dispensary is a verified operator. When you buy Presidential from one, the chain of custody is documented end to end.",
+      "That is worth saying plainly: a New York licensed dispensary is a licensed operator. When you buy Presidential from one, the chain of custody is documented end to end.",
       "The locator will find you the nearest."
     ]
   },

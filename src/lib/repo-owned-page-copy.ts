@@ -58,8 +58,6 @@ Three of those change from product to product and the rest never do. The strain 
 
 Moon Rock Blunt: one unit, 1.5 g, .053 oz. Moon Rock Preroll, [the Presidential pre-roll format](/pre-rolls): one unit, 1 g, .035 oz. Moon Rocks loose: 2 g, 0.071 oz. Moon Rock Mini Blunts: three at 0.7 g, 2.1 g total. Moon Rock Mini Prerolls: three at 0.5 g, 1.5 g total.
 
-The build does not change between them. Only the size and the count.
-
 **The catalogue, by tier**
 
 The Silver Flavour Series carries flavour-led releases. The Gold Strain Series carries named strains. Papaya Punch is one approved product in the Gold catalogue.
@@ -88,7 +86,7 @@ Presidential is a wholesale brand and sells exclusively through licensed retaile
   },
   "/learn/what-is-thc-distillate": {
     label: "What Is THC Distillate",
-    markdown: `Distillate is the extract identified with the [Silver Flavor Series](/moon-rocks/silver). It is stripped and refined until it is essentially neutral, which is why Silver can lead with flavor names such as Grape, Strawberry, and Watermelon. Every Silver moon rock is made with flower, distillate, and kief, layered the way every Presidential moon rock is built.
+    markdown: `Distillate is the extract identified with the [Silver Flavor Series](/moon-rocks/silver). It is stripped and refined until it is essentially neutral, which is why Silver can lead with flavor names such as Grape, Strawberry, and Watermelon. Silver jars such as Grape and Watermelon list flower, distillate, and kief on the label.
 
 **A refined, neutral concentrate**
 
@@ -123,7 +121,7 @@ The [Silver Flavor Series](/moon-rocks/silver) is built on flower, [THC distilla
 
 **Flower, concentrate, and kief**
 
-Those three components explain why Moon Rocks look and handle differently from plain flower. The concentrate and kief change the surface and density, but the finished product should still be identified from its own package and batch information. A percentage reported for one ingredient is not automatically the percentage of the complete Moon Rock. Use the finished-product label and associated test record for cannabinoid information.
+Those three components explain why Moon Rocks look and handle differently from plain flower. The concentrate and kief change the surface and density, but the finished product should still be identified from its own package and batch information. A percentage reported for one ingredient is not automatically the percentage of the whole Moon Rock. Use the finished-product label and associated test record for cannabinoid information.
 
 **A format, not a strain name**
 
@@ -237,13 +235,13 @@ When the company started in Los Angeles in 2012, New York was not a legal market
 
 Five, with weights fixed across every market. Moon Rock Blunt: one unit, 1.5 g, .053 oz. Moon Rock Preroll: one unit, 1 g, .035 oz. Moon Rocks loose: 2 g, 0.071 oz. Mini Blunts: three at 0.7 g, 2.1 g total. Mini Prerolls: three at 0.5 g, 1.5 g total.
 
-The build is identical in all five. Only the size and the count change, and the crescent numeral on the front of the pack tells you which you are holding.
+The crescent numeral on the front of the pack tells you which you are holding.
 
 **How to read what you pick up**
 
-Every Presidential pack carries the same architecture: WORLD'S STRONGEST across the top, the strain type in script beneath it, the silver crown crest and PRESIDENTIAL banner, the crescent-moon unit numeral, the format line, the strain name, and the composition line separated by pot-leaf dots.
+Presidential packs share one architecture: WORLD'S STRONGEST across the top, the strain type in script beneath it, the silver crown crest and PRESIDENTIAL banner, the crescent-moon unit numeral, the format line, the strain name, and the composition line separated by pot-leaf dots.
 
-That composition line is the one that matters. FLOWER · LIVE RESIN · DIAMONDS on Blue Dream and 24K. FLOWER · DISTILLATE · KIEF on the self-titled flagship. FLOWER · LIQUID LIVE RESIN · DIAMONDS on Cap Junky. Same house, same process, different builds — and the pack always says which.
+That composition line is the one that matters. FLOWER · LIVE RESIN · DIAMONDS on Blue Dream. FLOWER · DISTILLATE · KIEF on the self-titled flagship. FLOWER · LIQUID LIVE RESIN · DIAMONDS on Cap Junky. Same house, same process, different builds — and the pack always says which.
 
 **Where Presidential is sold**
 
@@ -281,9 +279,7 @@ Live rosin defines the Rose Gold Connoisseur Series — the solventless method, 
 
 **What every tier shares**
 
-The process does not change between them.
-
-Every Presidential moon rock is built the same way: flower as the base, a concentrate coat applied over it, a kief finish bonded to the coat. Three stages, in that order. The Presidential Infusion System has run on that sequence since Los Angeles in 2012, and a Silver Flavour Series pack goes through exactly what a Rose Gold pack goes through.
+Presidential Moon Rocks are built in layers: flower as the base, a concentrate coat applied over it, a kief or diamond finish bonded to the coat. Three stages, in that order. The Presidential Infusion System has run on that sequence since Los Angeles in 2012, and a Silver Flavour Series pack goes through exactly what a Rose Gold pack goes through.
 
 What changes across the catalogue is which materials fill the three roles, and the pack always prints it. Some carry FLOWER · LIVE RESIN · DIAMONDS. Some carry FLOWER · DISTILLATE · KIEF. Cap Junky carries FLOWER · LIQUID LIVE RESIN · DIAMONDS.
 
@@ -295,7 +291,7 @@ A tier is not a format and a format is not a tier. Which combinations reach a gi
 
 **How to recognise the tier on a shelf**
 
-Every Presidential pack carries the same architecture regardless of tier — WORLD'S STRONGEST across the top, the strain type in script beneath, the silver crown crest with the PRESIDENTIAL banner, the crescent-moon unit numeral, the format line, the name lozenge, and the composition line separated by pot-leaf dots.
+Presidential packs share one architecture across the tiers — WORLD'S STRONGEST across the top, the strain type in script beneath, the silver crown crest with the PRESIDENTIAL banner, the crescent-moon unit numeral, the format line, the name lozenge, and the composition line separated by pot-leaf dots.
 
 The house does not use a different crest for a different tier. What differs is the artwork, the name and what is printed on the composition line.
 
