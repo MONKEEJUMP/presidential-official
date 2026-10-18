@@ -142,10 +142,23 @@ export const ABOUT_ANSWERS: readonly AnswerItem[] = [
     id: "about-q-company",
     question: "Is Presidential a cannabis company or a product line?",
     answer: (
-      <p>
-        A company. Presidential is the cannabis company; Moon Rocks™ is its flagship product platform. Pre-rolls, blunts,
-        Mini Blunts, Mini Pre-Rolls, and Moon Pods for the Orbit device are its other product lines.
-      </p>
+      <>
+        <p>
+          A company. Presidential is the cannabis company; Moon Rocks™ is its flagship product platform. Pre-rolls, blunts,
+          Mini Blunts, Mini Pre-Rolls, and Moon Pods for the Orbit device are its other product lines.
+        </p>
+        {/* SURFER-R33: /about company H3 (facts: our-story founding line, pack build rulings, THC Design hub, /moon-pods). */}
+        <h3 className="mt-8 text-2xl font-semibold leading-snug text-po-ink">One cannabis company, several product families</h3>
+        <p>
+          Presidential Cannabis is the company. Founded in Los Angeles in 2012, it makes several product families under one
+          name. Moon Rocks are the infused flower format, and across the lineup the outer layer is kief or diamonds, depending
+          on the jar. Collaboration releases follow their own labels: the{" "}
+          <Link className={a} href="/moon-rocks/presidential-x-thc-design">THC Design collaboration releases</Link> pair flower and
+          live resin with diamonds. Away from flower, the <Link className={a} href="/moon-pods">Moon Pods vape line</Link> is the
+          vape side of the lineup, built on liquid diamonds. Blunts carry a kief or diamond finish, and pre-rolls cover the
+          paper side of the same company.
+        </p>
+      </>
     ),
   },
   {
