@@ -393,7 +393,8 @@ const PRESIDENTIAL_THC_QUESTIONS: readonly { readonly question: string; readonly
       <>
         Presidential THC products are sold through licensed retailers, not direct. Use the{" "}
         <Link className={inlineLinkClass} href="/find-us">store finder</Link>, then confirm the current selection with the
-        store.
+        store. Ask by format first (Moon Rocks, pre-roll, blunt or mini), then by series (Silver, Gold or Rose Gold), then by
+        the exact name on the pack. Retail menus often list the products as Presidential THC.
       </>
     ),
   },
@@ -401,7 +402,7 @@ const PRESIDENTIAL_THC_QUESTIONS: readonly { readonly question: string; readonly
     question: "How strong is Presidential THC flower?",
     answer: (
       <>
-        Potency is batch-specific, so this page gives no fixed number. Batch-to-batch consistency is read from the label:
+        Potency is batch-specific, so check the tested label. Batch-to-batch consistency is read from the label:
         check the current package label and its test results for delta-9 THC, THCa, and total THC.
       </>
     ),
@@ -528,9 +529,9 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
           <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver distillate moon rocks</Link> lead with flavor, Gold uses
           live resin, and Rose Gold uses live rosin (see{" "}
           <Link className={inlineLinkClass} href="/learn/what-is-live-rosin">what live rosin is</Link>). Each one starts with flower
-          carried through with concentrate and is finished with kief or diamonds, as the pack label shows. Blunts and pre-rolls carry
+          carried through with concentrate and is finished with kief or diamonds, as the pack prints. Blunts and pre-rolls carry
           the same series names, and blunts close with a kief or diamond finish inside a hemp wrap. With the format and name ready,
-          the <Link className={inlineLinkClass} href="/find-us">licensed-retailer search</Link> shows where to ask.
+          the licensed-retailer search shows where to ask.
         </p>
       </TermSection>
 
@@ -738,7 +739,7 @@ function PresidentialCannabisPage({ images, route }: { images: readonly TermImag
       <TermSection id="presidential-cannabis-catalog" title="What the company makes" wideMedia={<ProductCollage />}>
         <p><strong>Official products. Organized collections. One standard.</strong></p>
         <p>The catalog is organized to make the relationship between extract, profile, and format visible. Each grouping has a clear role while remaining part of the same Presidential product platform.</p>
-        <p>Collections include the Silver Flavor Series, Gold Strain Series, Rose Gold Connoisseur Series, Presidential Line, Presidential House Line, and Presidential x THC Design. Current product records—not fixed counts in evergreen copy—define the catalog.</p>
+        <p>Collections include the Silver Flavor Series, Gold Strain Series, Rose Gold Connoisseur Series, Presidential Line, Presidential House Line, and Presidential x THC Design.</p>
         <p>
           Formats: the{" "}
           <Link className={inlineLinkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>,{" "}

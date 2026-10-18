@@ -629,7 +629,7 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   ],
   "/moon-rocks/gods-gift": [["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."]],
   "/moon-rocks/presidential-prerolls": [["A dry material is bonded to the coat as a finish.", "Kief is bonded to the coat as a finish."]],
-  "/moon-rocks/thc-design-blunts": [["a dry material bonded to the coat as the finish.", "kief bonded to the coat as the finish."]],
+  "/moon-rocks/thc-design-blunts": [["a dry material bonded to the coat as the finish.", "a kief or diamond finish bonded to the coat, as the pack prints."]],
   "/moon-rocks/thc-design-moon-rocks": [["the dry finish bonded to the outside.", "the kief finish bonded to the outside."]],
   "/moon-rocks/wedding-cake": [["A dry finishing material bonded to the coat.", "A kief finish bonded to the coat."]],
   "/moon-rocks/white-walker": [["A dry material bonded to the coat as the finish.", "Kief bonded to the coat as the finish."]],

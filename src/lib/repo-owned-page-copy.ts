@@ -96,7 +96,7 @@ Distillate is one of the concentrates in the Presidential catalog. Live resin is
 
 **Reading a distillate product**
 
-When comparing infused products, look at what was infused, how, and with which concentrate: distillate, live resin, or live rosin each brings a different character. THC and cannabinoids are batch-specific, so read the current package label and its test results.`,
+When comparing infused products, look at what was infused, how, and with which concentrate: distillate, live resin, or live rosin each brings a different character. THC and cannabinoids are batch-specific, so read the current package label and its test results. [How to read Presidential THC label numbers](/presidential-thc) covers delta-9 THC, THCa and total THC.`,
   },
   // SURFER-R13 MR: flavor-science extract-by-series H3, from the flavor-science series answer, /learn hub, /moon-rocks/rose-gold and /about.
   "/learn/flavor-science": {
@@ -327,7 +327,7 @@ THC Design sits with the cultivation and processing group, and the artwork on bo
 
 **What does not change in a collaboration**
 
-The build. Every partner release runs through the Presidential Infusion System exactly as the core catalogue does: flower as the base, a concentrate coat, a kief finish bonded to the coat. A partner's name on the front changes the market, sometimes the strain, and often the artwork. It does not change the process.
+The build. Every partner release runs through the Presidential Infusion System exactly as the core catalogue does: flower as the base, a concentrate coat, and the finish printed on the pack bonded to the coat. A partner's name on the front changes the market, sometimes the strain, and often the artwork. It does not change the process.
 
 **Formats and availability**
 
