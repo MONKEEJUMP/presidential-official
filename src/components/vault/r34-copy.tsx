@@ -233,9 +233,45 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
     </Block>
   ),
   // SURFER-R39: mini blunt SKU blocks (24K anchors reworded: already used on the site).
+  // SURFER-R40: MR blocks (targets checked index, follow).
+  'pre-rolls/xj-13': (
+    <Block heading="XJ-13 in paper, from single roll to minis">
+      The XJ-13 pre-roll is a single 1g paper roll of flower, live resin, and diamonds, marked Sativa, with Jack Herer and G13 Haze printed on the pack as its parentage. Its aroma is citrus-forward and clean. Shoppers who like the paper format but want smaller rolls can look at the <Link className={L} href="/mini-pre-rolls/xj-13">XJ-13 paper mini pack</Link>, which keeps the same name in a compact size. Live resin comes from plants frozen at harvest, and the <Link className={L} href="/learn/what-is-live-resin">live resin primer for Gold rolls</Link> explains why that step matters for aroma. Read the pack for batch details, and confirm current stock with the store.
+    </Block>
+  ),
+  'blunts/gods-gift': (
+    <Block heading="God&apos;s Gift outside the blunt">
+      God&apos;s Gift belongs to the Rose Gold Connoisseur Series, and the blunt is 1.5g of flower, live rosin, and diamonds in a tobacco-free wrap, marked Indica. Rose Gold is the solventless tier, and the <Link className={L} href="/learn/what-is-live-rosin">guide to pressing live rosin</Link> covers the ice water, heat, and pressure behind it. The same name also comes as <Link className={L} href="/moon-rocks/gods-gift">God&apos;s Gift loose in a jar</Link> and as a <Link className={L} href="/pre-rolls/gods-gift">God&apos;s Gift 1g pre-roll</Link>, and each format prints its own label. Read the pack for batch details, and confirm with the store which God&apos;s Gift formats it carries.
+    </Block>
+  ),
+  'mini-pre-rolls/cherry-gelato': (
+    <Block heading="Why the Cherry Gelato minis use live resin">
+      The Cherry Gelato mini pre-roll pack is made with ROVE, marked Hybrid, and each roll is flower, live resin, and diamonds, with a dark cherry and creamy aroma. Live resin is extracted from plants frozen at harvest instead of dried and cured first, which is why it is tied to aroma. The <Link className={L} href="/learn/what-is-live-resin">explainer on why live resin starts frozen</Link> walks through that process. Formats under the Cherry Gelato name do not all share one build, so read the label on the pack in hand rather than assuming it matches another size. Check batch details on the pack, and confirm stock with the store.
+    </Block>
+  ),
+  'blunts/white-walker': (
+    <Block heading="White Walker within Rose Gold">
+      White Walker is a Rose Gold Connoisseur Series blunt: 1.5g of flower, live rosin, and diamonds in a tobacco-free wrap, marked Sativa. It is a different product from Skywalker, even though the names sit close on a menu. Rose Gold groups the solventless names together, and the <Link className={L} href="/moon-rocks/rose-gold">Rose Gold Connoisseur lineup</Link> shows where White Walker sits among them. Live rosin is pressed with ice water, heat, and pressure, and the <Link className={L} href="/learn/what-is-live-rosin">solventless pressing explainer</Link> covers that process in more depth. Read the pack for batch test results, and confirm with the store before you go.
+    </Block>
+  ),
+  'mini-pre-rolls/skywalker': (
+    <Block heading="Skywalker among the Gold Strain Series">
+      The Skywalker mini pre-roll pack carries the ROVE collaboration in paper: each roll is flower, live resin, and diamonds, marked Indica, with an earthy profile. Skywalker is part of the Gold Strain Series, the strain-named tier, and each name in it prints its own build. To compare it with other names in that tier, browse <Link className={L} href="/moon-rocks/gold">Skywalker&apos;s fellow Gold strain jars</Link>. For background on the extract itself, the <Link className={L} href="/learn/what-is-live-resin">frozen-at-harvest live resin explainer</Link> covers how it is made. Read the pack for batch details, and confirm with the store which Skywalker formats are on hand.
+    </Block>
+  ),
+  'mini-pre-rolls/24k': (
+    <Block heading="24K beyond the mini pack">
+      The 24K mini pre-roll pack is flower, live resin, and diamonds in paper, marked Indica, under a name Presidential takes from a purity measure. It belongs to the Gold Strain Series. Shoppers who want the name unrolled can look at <Link className={L} href="/moon-rocks/24k">24K as loose moon rocks</Link>, which follow their own jar label. For a larger hemp-wrapped roll, the <Link className={L} href="/blunts/24k">1.5g 24K blunt</Link> lists flower, live resin, and diamonds in a tobacco-free wrap. Each format prints its own label, so read the pack in hand for batch details, and ask the store which 24K formats are on the shelf.
+    </Block>
+  ),
+  'mini-pre-rolls/gorilla-goo': (
+    <Block heading="How live resin carries Gorilla Goo&apos;s aroma">
+      The Gorilla Goo mini pre-roll pack is marked Hybrid, and each roll is flower, live resin, and diamonds, carrying the strain&apos;s reported sour fuel, pine, and chocolate notes. Live resin comes from plants frozen at harvest rather than dried first, which helps keep those aroma notes intact. The <Link className={L} href="/learn/what-is-live-resin">guide to live resin extraction</Link> explains the process. For a closer look at the layered build these rolls start from, read <Link className={L} href="/learn/what-are-moon-rocks">what moon rocks are made of</Link>. Read the pack for batch details, and confirm with the store which Gorilla Goo formats it carries.
+    </Block>
+  ),
   'mini-blunts/skywalker': (
     <Block heading="Skywalker in full-size formats">
-      Skywalker is a ROVE collaboration in the Gold Strain Series. The Skywalker mini blunt pack carries the ROVE collaboration in a smaller size: flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a blueberry, tropical, and earthy aroma. Shoppers who would rather have the name unrolled can look at <Link className={L} href="/moon-rocks/skywalker">Skywalker as loose moon rocks</Link>, which follow their own jar label. For a paper-rolled option, the <Link className={L} href="/pre-rolls/skywalker">Skywalker infused pre-roll</Link> uses the same build as the minis. Picking between the rolls comes down to size and wrap. Read the pack for batch details, and confirm with the store which Skywalker formats it carries.
+      Skywalker is a ROVE collaboration in the Gold Strain Series. The Skywalker mini blunt pack carries the ROVE collaboration in a smaller size: flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a blueberry, tropical, and earthy aroma. Shoppers comparing it with other small rolls can look at <Link className={L} href="/mini-blunts/gorilla-goo">Gorilla Goo in the same mini blunt size</Link>, which lists its own build on its pack. For a paper-rolled option, the Skywalker infused pre-roll uses the same build as the minis. Picking between the rolls comes down to size and wrap. Read the pack for batch details, and confirm with the store which Skywalker formats it carries.
     </Block>
   ),
   'mini-blunts/waui': (
