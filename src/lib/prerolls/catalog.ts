@@ -173,9 +173,9 @@ export const PRE_ROLL_ARTWORKS = [
   {
     id: "pink-cookies",
     name: "Pink Cookies",
-    edition: "1g infused pre-roll · Flower · Live resin · Distillate · Diamonds",
+    edition: "1g infused pre-roll · Flower · Live resin · Diamonds",
     collection: "Gold Strain Series",
-    description: "Pink Cookies is associated with a sweet vanilla profile balanced by earth and citrus. This version brings together flower, live resin, distillate, and diamonds for consumers who enjoy creamy strain character with a layered infusion. One 1g Moon Rock pre-roll, prepared in rolling paper.",
+    description: "Pink Cookies is associated with a sweet vanilla profile balanced by earth and citrus. This version brings together flower, live resin, and diamonds for consumers who enjoy creamy strain character with a layered infusion. One 1g Moon Rock pre-roll, prepared in rolling paper.",
     src: "/media/pre-rolls/pink-cookies.webp",
     alt: "Presidential Pink Cookies 1g Moon Rock pre-roll product",
     shape: "portrait",

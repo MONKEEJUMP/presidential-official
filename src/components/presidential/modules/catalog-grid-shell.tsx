@@ -73,7 +73,7 @@ const SERIES_META = new Map<string, SeriesMeta>([
     {
       anchor: "presidential-house-line",
       eyebrow: "Heritage",
-      positioning: "The formats that built the Presidential name.",
+      positioning: "Moon Rocks, pre-rolls and blunts sold under the Presidential name.",
       accentBar: "bg-po-brand",
       accentText: "text-po-brand-ink",
       canvas: "from-po-brand/20",

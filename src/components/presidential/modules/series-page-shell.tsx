@@ -43,7 +43,7 @@ const SERIES_INTROS: Partial<Record<string, string>> = {
   "presidential-line":
     "The Presidential Line is the set of named Presidential Moon Rock strains that sit outside the Silver, Gold and Rose Gold series: Garlic Cookies, Ghost Haze Train, Guava Haze, Head Cheese, Iced Lemon, Nino Brown and Whoa Si Whoa. They are partner releases: Nature's Chemistry on Garlic Cookies and Ghost Haze Train, Polaris Cannabis on Head Cheese, Ball Family Farms on Nino Brown, Top Shelf Cultivation on Whoa Si Whoa, and Platinum on Guava Haze and Iced Lemon. Retired releases are no longer listed.",
   "presidential-house-line":
-    "The Presidential House Line is the original set of Presidential formats: Moon Rocks, infused pre-rolls and blunts, the formats that built the Presidential name. Each House Line product is sold under the Presidential name itself rather than a strain or partner name. Availability varies by licensed retailer.",
+    "The Presidential House Line is Moon Rocks, infused pre-rolls and blunts sold under the Presidential name itself rather than a strain or partner name. Availability varies by licensed retailer.",
 };
 
 type SeriesPageShellProps = {

@@ -217,8 +217,8 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h3 className="mt-6 text-base font-semibold text-po-ink">Pink Cookies, jar and roll</h3>
           <p className="mt-2 text-sm leading-6 text-po-body">
             Pink Cookies is a Gold Strain Series name, marked Indica on Presidential packs, with a sweet, doughy, rich profile. The
-            jar label reads flower, live resin, distillate, and diamonds. The full pre-roll and blunt share that build, while the
-            mini pre-rolls and mini blunts read flower, live resin, and diamonds. That makes it worth reading the label on each
+            jar label reads flower, live resin, distillate, and diamonds. The pre-roll, blunt, mini pre-rolls, and mini blunts read
+            flower, live resin, and diamonds, so the jar is the format that adds distillate. That makes it worth reading the label on each
             format separately. Shoppers searching for the Presidential pink strain can start with the jar, then read{" "}
             <Link className={linkClass} href="/learn/what-is-live-resin">how live resin is extracted</Link> for the concentrate the formats share. For what the
             refined concentrate in the jar is, see the <Link className={linkClass} href="/learn/what-is-thc-distillate">distillate guide</Link>. Confirm
