@@ -53,9 +53,9 @@ export const PRE_ROLL_ARTWORKS = [
   {
     id: "cherry-gelato",
     name: "Cherry Gelato",
-    edition: "1g infused pre-roll · Flower · Distillate · Kief",
+    edition: "1g infused pre-roll · Flower · Live resin · Diamonds",
     collection: "Gold Strain Series",
-    description: "Cherry Gelato pairs a sweet cherry and creamy Gelato profile with Presidential's Rove collaboration. Cannabis flower, distillate, and kief bring the infusion, making this a selection for people drawn to fruit with a rounded, creamy character. One 1g Moon Rock pre-roll, prepared in rolling paper.",
+    description: "Cherry Gelato pairs a sweet cherry and creamy Gelato profile with Presidential's Rove collaboration. Cannabis flower, live resin, and diamonds bring the infusion, making this a selection for people drawn to fruit with a rounded, creamy character. One 1g Moon Rock pre-roll, prepared in rolling paper.",
     src: "/media/pre-rolls/cherry-gelato.webp",
     alt: "Presidential Cherry Gelato 1g Moon Rock pre-roll product",
     shape: "square",
