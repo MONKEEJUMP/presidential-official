@@ -1142,18 +1142,20 @@ const R43_SB_OVERRIDES: Readonly<Record<string, readonly (readonly [string, stri
   ],
 };
 
-// Chief R44 rulings (3) and (4): no "sits above both" ranking line; no "since 2012" or founding year on product pages.
-const SIT = ["The Rose Gold Connoisseur tier sits above both.", "The Rose Gold Connoisseur tier leads with connoisseur names."] as const;
+// Chief R44 rulings (3) and (4) (PR #232) + Sitebulb R44 A7/A8/B9: no "sits above both" ranking line; no "since 2012" on product pages.
 const IS_2012 = ["the Presidential Infusion System the company has run since Los Angeles in 2012.", "the Presidential Infusion System."] as const;
 const R44_RULING_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
-  "/moon-rocks/24k": [SIT],
+  "/moon-rocks/24k": [
+    ["The Rose Gold Connoisseur tier sits above both.", "The Rose Gold Connoisseur tier leads with connoisseur names. [Blue Dream, another strain-named Gold jar](/moon-rocks/blue-dream), sits in the same series as 24K."],
+  ],
   "/moon-rocks/papaya-punch": [
-    SIT,
+    ["The Rose Gold Connoisseur tier sits above both.", "The Rose Gold Connoisseur tier leads with connoisseur names."],
     [" has run on this sequence since 2012, and a flavour-forward name", " runs on this sequence, and a flavour-forward name"],
   ],
   "/moon-rocks/blue-dream": [
     ["and the Rose Gold Connoisseur tier sits above both.", "and the Rose Gold Connoisseur tier leads with connoisseur names."],
     [" has been refined around since the brand started in Los Angeles in 2012.", " is built around."],
+    [" and the one people recognise from across a shelf.", "."],
   ],
   "/moon-rocks/galactic-gas": [
     ["The company has been building that language since Los Angeles, 2012, and it is the reason", "That language is the reason"],
@@ -1170,8 +1172,13 @@ const R44_RULING_OVERRIDES: Readonly<Record<string, readonly (readonly [string, 
   "/moon-rocks/presidential-moon-rocks": [
     [", and it has been the company's whole argument since Los Angeles, 2012.", ", and it is the company's whole argument."],
   ],
-  "/moon-rocks/rainbow-belts": [["runs through the same process the company has used since 2012, and", "runs through the same process, and"]],
+  "/moon-rocks/rainbow-belts": [
+    ["runs through the same process the company has used since 2012, and", "runs through the same process, and"],
+  ],
   "/moon-rocks/thc-design-prerolls": [[", which has run on that sequence since Los Angeles in 2012.", "."]],
+  "/learn/what-are-moon-rocks": [
+    ["Every pack in the Presidential Moon Rocks collection carries the same lines.", "Each pack in the Presidential Moon Rocks collection carries these lines."],
+  ],
 };
 
 // SURFER-R44: MR jar H2s, placed before "Where to find it" in the CMS body.
@@ -1181,7 +1188,7 @@ const R44_SURFER_OVERRIDES: Readonly<Record<string, readonly (readonly [string, 
       "**Where to find it**",
       SB43(
         "Comparing Presidential OG with other named jars",
-        "Shoppers weighing Presidential OG often compare it with other names that arrive with their own identity. The [Cap Junky collaboration jar](/moon-rocks/cap-junky) carries a partner's logo on the front, while the [familiar Blue Dream strain jar](/moon-rocks/blue-dream) leans on a well-known strain name. Aroma is the most useful way to compare them: OG names tend toward pine and earth, while Blue Dream leans toward berry. Each jar prints its own composition line, so read the label on the pack in hand for its build and batch test results.",
+        "Shoppers weighing Presidential OG often compare it with other names that arrive with their own identity. The [Cap Junky collaboration jar](/moon-rocks/cap-junky) carries a partner's logo on the front, while the [familiar Blue Dream strain jar](/moon-rocks/blue-dream) leans on a well-known strain name. Aroma is one way to compare them: OG names tend toward pine and earth, while Blue Dream leans toward berry. Each jar prints its own composition line, so read the label on the pack in hand for its build and batch details.",
       ),
     ],
   ],
@@ -1190,7 +1197,7 @@ const R44_SURFER_OVERRIDES: Readonly<Record<string, readonly (readonly [string, 
       "**Where to find it**",
       SB43(
         "Blue Dream next to darker strain names",
-        "Blue Dream's aroma leans toward sweet berry, which sets it apart from heavier names on the same shelf. For a fuel-forward contrast, look at the [fuel-forward NYC Diesel jar](/moon-rocks/nyc-diesel), named for a city rather than a fruit. For a name that carries the brand's own crest instead of a strain reputation, see the [crest-only Presidential OG jar](/moon-rocks/presidential-og). Comparing jars by aroma and pack art is the quickest way to choose. Each jar prints its own composition line, so read the label in hand for batch test results.",
+        "Blue Dream's aroma leans toward sweet berry, which sets it apart from heavier names on the same shelf. For a fuel-forward contrast, look at the [fuel-forward NYC Diesel jar](/moon-rocks/nyc-diesel), named for a city rather than a fruit. For a name that carries the brand's own crest instead of a strain reputation, see the [crest-only Presidential OG jar](/moon-rocks/presidential-og). Aroma and pack art help you choose. Each jar prints its own composition line, so read the label in hand for its build and batch details.",
       ),
     ],
   ],

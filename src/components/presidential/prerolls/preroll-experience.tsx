@@ -152,7 +152,7 @@ export function PreRollExperience({
             Presidential pre-rolls, sold as infused Moon Rock pre-rolls, combine cannabis flower with concentrate in a finished 1g roll. From berry and tropical selections to fuel, pine, and savory strains, the lineup gives you a flavor to make your own. For a smaller format, <Link href="/mini-pre-rolls">Presidential Mini Pre-Rolls</Link> come as three 0.5g Moon Rock mini pre-rolls, 1.5g in total.
           </p>
           <p>
-            Explore distillate recipes coated in kief, live-resin-and-diamond infusions, and the live-rosin selections in Rose Gold. Compare ingredients and flavor profiles, then ask your licensed retailer for the pre-roll you want.
+            Explore the Silver, Gold and Rose Gold pre-rolls. Compare ingredients and flavor profiles, then ask your licensed retailer for the pre-roll you want.
           </p>
           <p>
             Where to buy: Presidential pre-rolls are sold through licensed retailers. Enter your zip code in the <Link href="/find-us">Presidential store finder</Link> to see the nearest licensed retailers carrying Presidential, ranked by distance.
@@ -190,8 +190,7 @@ export function PreRollExperience({
           <h3>What goes into a Moon Rock pre-roll?</h3>
           <p>
             A Moon Rock pre-roll is a 1g joint with the Moon Rock construction inside. It&apos;s cannabis flower carried through with
-            concentrate. In the Silver Flavor Series, that concentrate is THC distillate, and the roll is finished with a kief coating.
-            Gold builds on live resin, and Rose Gold builds on solventless live rosin. Each guide explains its extract:{" "}
+            concentrate. Each guide explains its extract:{" "}
             <Link href="/learn/what-is-thc-distillate">what is THC distillate</Link>,{" "}
             <Link href="/learn/what-is-live-resin">what is live resin</Link> and{" "}
             <Link href="/learn/what-is-live-rosin">what is live rosin</Link>.{" "}
@@ -211,9 +210,7 @@ export function PreRollExperience({
           <h3>How do you read a Moon Rock pre-roll pack?</h3>
           <p>
             The pack carries the silver crown crest with the PRESIDENTIAL banner, the strain type in script,
-            the product name, and the format and weight. The pack also prints the build. Silver rolls read Flower · Distillate · Kief,
-            Gold rolls read Flower · Live resin · Diamonds (some Gold builds add distillate), and Rose Gold rolls read Flower · Live
-            rosin · Diamonds. Start with{" "}
+            the product name, and the format and weight. The pack also prints the build, so read it on the roll in hand. Start with{" "}
             <Link href="/learn/what-is-live-rosin">what live rosin is</Link> or{" "}
             <Link href="/learn/what-is-thc-distillate">what THC distillate is</Link> to know what each build means, and compare{" "}
             <Link href="/mini-pre-rolls">Presidential mini pre-rolls</Link> for a smaller format. Collaboration releases carry a
@@ -234,7 +231,7 @@ export function PreRollExperience({
         <div>
           <h3>The extract behind each pre-roll series</h3>
           <p>
-            Each series is defined by its concentrate: distillate for Silver, live resin for Gold and live rosin for Rose Gold. Read{" "}
+            Each pack prints its own concentrate. Read{" "}
             <Link href="/learn/different-extracts-need-different-heat">why different extracts need different heat</Link> before you
             choose between a Silver, Gold or Rose Gold roll.
           </p>
@@ -248,9 +245,9 @@ export function PreRollExperience({
         </div>
         {/* INLINKS-COPY-R38: /pre-rolls Silver and format H3s (distillate guide already linked twice on this page, so that link is dropped; reused anchors reworded). */}
         <div>
-          <h3>Silver pre-rolls and THC distillate</h3>
+          <h3>Silver pre-rolls</h3>
           <p>
-            Silver is the distillate series, named by fruit. Blue Raspberry, Grape, Peach Mango, Pineapple and Strawberry pre-rolls
+            Silver is the fruit-named series. Blue Raspberry, Grape, Peach Mango, Pineapple and Strawberry pre-rolls
             carry that series.
           </p>
         </div>

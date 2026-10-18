@@ -22,9 +22,7 @@ export const MOON_PODS_ANSWERS: readonly AnswerItem[] = [
     question: "How do Moon Pods relate to Presidential Moon Rocks?",
     answer: (
       <p>
-        Both are built around the same extracts. In <Link className={a} href="/moon-rocks">Moon Rocks</Link>, live resin
-        is the extract identified with the Gold Strain Series and live rosin with the Rose Gold Connoisseur Series, infused
-        over flower. Moon Pods carry those extracts in the LRE and LRO families. THC is batch-specific, so read the package
+        Both are built around the same extracts. In <Link className={a} href="/moon-rocks">Moon Rocks</Link>, live resin and live rosin are infused over flower where the pack lists them. Moon Pods carry those extracts in the LRE and LRO families. THC is batch-specific, so read the package
         label and its test results.
       </p>
     ),

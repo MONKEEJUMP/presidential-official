@@ -101,6 +101,9 @@ function productSpec(productType: string | undefined) {
   return productType;
 }
 
+// Sitebulb R44 A4: drop the "every other product ... its architecture" line from the house card excerpt.
+const ARCHITECTURE_LINE = "The self-titled pack, the flagship, and the format that gave every other product in the catalogue its architecture.";
+
 function descriptionExcerpt(description: string | undefined) {
   if (!description) return null;
 
@@ -289,7 +292,7 @@ export async function MoonRocksPlatformShell({
                           const art = resolveMoonRocksCardArt(slug);
                           if (!art) return null;
                           const spec = productSpec(item.productType);
-                          const description = descriptionExcerpt(item.description);
+                          const description = descriptionExcerpt(item.description?.replace(ARCHITECTURE_LINE, "The self-titled pack and the flagship."));
                           return (
                             <article className={shared.artCardSquare} key={item._id}>
                               {/* InLinks MR1: the tier badge sits outside the link, so "gold" is not anchor text for SKU pages. */}
@@ -344,7 +347,7 @@ export async function MoonRocksPlatformShell({
                       const art = resolveMoonRocksCardArt(slug);
                       if (!art) return null;
                       const spec = productSpec(item.productType);
-                      const description = descriptionExcerpt(item.description);
+                      const description = descriptionExcerpt(item.description?.replace(ARCHITECTURE_LINE, "The self-titled pack and the flagship."));
                       return (
                         <article className={shared.artCardSquare} key={item._id}>
                           <Link
