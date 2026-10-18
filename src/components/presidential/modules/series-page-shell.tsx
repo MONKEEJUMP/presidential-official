@@ -207,6 +207,17 @@ export async function SeriesPageShell({
                 <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>, or see all{" "}
                 <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks">Presidential Moon Rocks</Link>.
               </p>
+              {/* SURFER-R43: Silver H3 (Grape and Watermelon labels; other jars follow their own). */}
+              <h3 className="mt-8 text-2xl font-semibold leading-snug text-po-ink">How Silver jars lead with fruit</h3>
+              <p className="mt-3 max-w-3xl text-base leading-7 text-po-body">
+                Silver is the flavor-first series, so each jar is named for the fruit it smells like rather than for a strain.
+                Labels on jars such as Grape and Watermelon list flower, distillate, and kief, and other jars in the series carry
+                their own composition lines. If you are new to the format, the{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/learn/what-are-moon-rocks">beginner&apos;s primer on moon rocks</Link> explains what the layers
+                are. For why a fruit name can come through so clearly, read{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/learn/flavor-science">the science of flavor in infused flower</Link>. Read the pack in hand for
+                its build and batch test results.
+              </p>
             </div>
           </Scene>
         ) : null}

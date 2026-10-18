@@ -100,6 +100,10 @@ Each infused Presidential product starts with cannabis flower, adds a concentrat
 
 The Silver Flavor Series is built on THC distillate. Its flavor-first, fruit-forward roster is [Blue Raspberry](/moon-rocks/blue-raspberry), [Grape](/moon-rocks/grape), [Peach Mango](/moon-rocks/peach-mango), [Pineapple](/moon-rocks/pineapple), [Strawberry](/moon-rocks/strawberry), [Tropical](/moon-rocks/tropical), and [Watermelon](/moon-rocks/watermelon). Presidential Classic, the house recipe, is also made with flower, distillate, and kief. [Presidential Moon Rocks and its series](/) shows where distillate sits in the lineup.
 
+### Seeing distillate on a House Line label
+
+Distillate also appears outside the fruit-led jars. The self-titled House Line pack prints FLOWER · DISTILLATE · KIEF on its composition line, and the [self-titled House Line Moon Rocks jar](/moon-rocks/presidential-moon-rocks) shows that label and its two-gram pack. Because distillate is close to neutral, the flower and kief set most of the aroma in that jar. For why neutral extracts and strain-forward ones smell so different, the guide to [how aroma compounds carry flavor](/learn/flavor-science) covers the chemistry. Always read the label in hand, since composition lines can change between batches.
+
 **Distillate and the other Presidential extracts**
 
 Distillate is one of the concentrates in the Presidential catalog. Live resin is the coat that appears across most of the Gold Strain Series, and Rose Gold is the solventless tier built on live rosin. Some Gold names use distillate instead: [the Cherry Gelato jar with Rove](/moon-rocks/cherry-gelato) is flower and distillate, finished with kief. Presidential Moon Pods come in Liquid Diamonds, Live Resin, and Live Rosin families; see [What Are Liquid Diamonds](/learn/what-are-liquid-diamonds) and [Moon Pods](/moon-pods). Different extracts need different heat, so read [Different Extracts Need Different Heat](/learn/different-extracts-need-different-heat).
@@ -276,6 +280,10 @@ Three names that arrive with weight already attached rather than describing a fl
 Where Silver names a taste and Gold names a strain, Rose Gold is the solventless connoisseur tier, built on live rosin made with ice water, heat, and pressure. Its names include [Wedding Cake](/moon-rocks/wedding-cake), [God's Gift](/moon-rocks/gods-gift), and [White Walker](/moon-rocks/white-walker). Read [what live rosin is](/learn/what-is-live-rosin).
 
 Live rosin defines the Rose Gold Connoisseur Series — the solventless method, made without butane, propane, CO2 or ethanol at any stage. What that means in practice is covered in full on the [Live Rosin guide](/learn/what-is-live-rosin).
+
+### Rose Gold next to the collaboration jars
+
+Rose Gold is the connoisseur series, but it is not the only place to find named releases with distinct pack art. The [Presidential Line collaboration jars](/moon-rocks/presidential-line) bring partner names and their own label designs, and they sit beside the series rather than inside one. Shoppers new to the format can start with the [primer on what moon rocks are](/learn/what-are-moon-rocks) before comparing names. Whether a jar is part of Rose Gold or the Presidential Line, its own label prints the composition line and batch test results, so read the pack in hand.
 
 **What every tier shares**
 
