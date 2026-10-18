@@ -233,7 +233,7 @@ export function HomepageFoundationShell({
                   Presidential has created cannabis engineered for better flavor,
                   greater consistency, and premium experiences. Its infused
                   construction starts with flower, adds concentrate or resin, and
-                  finishes with the dry material named on the package. That infused
+                  is finished with kief, as named on the package. That infused
                   build keeps flower, concentrate, and the finishing layer together
                   as one Moon Rocks format. More flavor. More consistency. More
                   innovation. More experience. Every product, every proof, and every

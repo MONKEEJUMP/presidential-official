@@ -47,6 +47,16 @@ function descriptionMarking(name: string): string | undefined {
   return found.size === 1 ? [...found][0] : undefined;
 }
 
+// Chief R29 ruling (pack labels): only these moon rock builds read "finished with kief or diamonds".
+const KIEF_OR_DIAMOND_MOON_ROCKS = new Set(["24k", "blue-dream", "cap-junky"]);
+
+function kiefOrDiamondBuild(name: string): string | undefined {
+  const build = offersFor(name).find((offer) => offer.build)?.build;
+  if (!build) return undefined;
+  const parts = build.split("·").map((part) => part.trim()).filter((part) => part && !/^(diamonds|kief)$/i.test(part));
+  return `${listMaterials(parts)}, finished with kief or diamonds`;
+}
+
 const CHERRY_GELATO_SIBLINGS = new Set(["24k", "blue-dream", "blue-raspberry", "cap-junky"]);
 
 function listMaterials(parts: readonly string[]): string {
@@ -63,7 +73,7 @@ function madeWith(name: string, series?: string): string | undefined {
 
 export function SkuAnswers({ name, series, slug }: { readonly name: string; readonly series?: string; readonly slug: string }) {
   if (/pre-?roll|blunt/i.test(name)) return null;
-  const materials = madeWith(name, series);
+  const materials = (KIEF_OR_DIAMOND_MOON_ROCKS.has(slug) ? kiefOrDiamondBuild(name) : undefined) ?? madeWith(name, series);
   const marking = packMarking(name);
   const cherryGelatoMarking = slug === "cherry-gelato" ? descriptionMarking("Cherry Gelato") : undefined;
   const watermelonOffers = slug === "watermelon" ? offersFor(name) : [];
@@ -78,7 +88,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
         <>
           <h2 className="font-display text-2xl uppercase leading-tight text-po-ink">What are Watermelon Moon Rocks?</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">
-            Moon rocks are cannabis flower coated with a concentrate and finished with a dry material such as kief.
+            Moon rocks are cannabis flower coated with a concentrate and finished with kief.
             Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongside Grape, Pineapple, and Peach
             Mango. See the <Link className={linkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>, the{" "}
             <Link className={linkClass} href="/learn/flavor-science">Flavor Science</Link> guide, and{" "}
@@ -115,7 +125,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
         <>
           <h2 className="font-display text-2xl uppercase leading-tight text-po-ink">What are Pineapple Moon Rocks?</h2>
           <p className="mt-3 text-sm leading-6 text-po-body">
-            Moon rocks are cannabis flower coated with a concentrate and finished with a dry material such as kief. Each
+            Moon rocks are cannabis flower coated with a concentrate and finished with kief. Each
             Pineapple moonrock is one of the flavor-led releases in the Silver Flavor Series, alongside Grape, Watermelon, and
             Peach Mango. Read <Link className={linkClass} href="/learn/what-are-moon-rocks">What are moon rocks</Link> for the
             format, or see the <Link className={linkClass} href="/moon-rocks">Presidential Moon Rocks collection</Link>.
@@ -149,7 +159,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           <h3 className="mt-6 text-base font-semibold text-po-ink">Why live resin in the Gold Strain Series?</h3>
           <p className="mt-2 text-sm leading-6 text-po-body">
             24K belongs to the Gold Strain Series, which carries named strains, and live resin is the coat that appears across
-            most of that series. Flower is the base, live resin is the coat, and diamonds are the crystalline finish. See the full{" "}
+            most of that series. Flower is the base, live resin is the coat, and it is finished with kief or diamonds. See the full{" "}
             <Link className={linkClass} href="/moon-rocks/gold">Gold Strain Series</Link> or read{" "}
             <Link className={linkClass} href="/learn/what-is-live-resin">What Is Live Resin</Link>.
           </p>
@@ -165,7 +175,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             is distillate. Distillate is stripped and refined until it is essentially neutral, so the series can lead with the
             flavor name rather than the strain; see{" "}
             <Link className={linkClass} href="/learn/what-is-thc-distillate">what THC distillate is</Link>. The build follows every
-            Presidential moon rock: flower first, distillate carried through the flower, and kief as the dry finish. Don&apos;t grind
+            Presidential moon rock: flower first, distillate carried through the flower, and kief as the finish. Don&apos;t grind
             them, because the concentrate layer gums up a grinder and strips the kief. Pineapple also comes rolled as a{" "}
             <Link className={linkClass} href="/pre-rolls/pineapple">Pineapple pre-roll</Link>.
           </p>
@@ -195,7 +205,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             Blue Dream is a named strain, and the{" "}
             <Link className={linkClass} href="/moon-rocks/gold">Gold Strain Series moon rocks</Link> carry named strains rather than
             flavor names. Like the rest of the Gold series it is built on live resin: flower is the foundation, live resin is the
-            coat, and diamonds are the crystalline finish; see{" "}
+            coat, and it is finished with kief or diamonds; see{" "}
             <Link className={linkClass} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. Presidential packs mark Blue
             Dream as Sativa, and the character reads as berry-soft sweetness carried over something distinctly herbal. It also comes
             as a <Link className={linkClass} href="/pre-rolls/blue-dream">Blue Dream pre-roll</Link>. THC is batch-specific, so
@@ -245,7 +255,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             is distillate. Distillate is stripped and refined until it is essentially neutral, which lets the Silver series lead
             with flavor names such as Watermelon, Grape, Pineapple, and Peach Mango; see{" "}
             <Link className={linkClass} href="/learn/what-is-thc-distillate">what THC distillate is</Link>. The build is the same as
-            every Presidential moon rock: flower first, distillate carried through it, and kief as the dry finish, as explained in{" "}
+            every Presidential moon rock: flower first, distillate carried through it, and kief as the finish, as explained in{" "}
             <Link className={linkClass} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. Don&apos;t grind them. The
             concentrate layer gums up a grinder and strips the kief, so layer pieces in when rolling or packing a bowl.
           </p>

@@ -68,9 +68,9 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         That comes down to the format you want. A moon rock is not plain flower: it is cannabis flower coated with a
-        concentrate and finished with a dry material such as kief, three layers in one product.
+        concentrate and finished with kief, three layers in one product.
         Presidential&apos;s <Link className={a} href="/about#about-craft-title">infusion process</Link> runs in that
-        order: flower, then concentrate, then the dry finish. Read <Link className={a} href="/learn/what-are-moon-rocks">what moon rocks are</Link> for
+        order: flower, then concentrate, then the kief finish. Read <Link className={a} href="/learn/what-are-moon-rocks">what moon rocks are</Link> for
         how the format differs from flower alone.
       </p>
     ),

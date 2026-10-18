@@ -265,8 +265,7 @@ export function AboutCompanyShell() {
                 <Link className="font-semibold underline underline-offset-4" href="/presidential-blunts">infused blunt guide</Link> explains how Presidential packs flower, concentrate,
                 and a kief or diamond finish inside a tobacco-free hemp wrap, and how the Silver, Gold, and Rose Gold series map to
                 distillate, live resin, and live rosin. Searchers looking for Presidential Blunts on this site should start there
-                rather than here. If you want the moon rock version in a wrap, see the{" "}
-                <Link className="font-semibold underline underline-offset-4" href="/moon-rocks/presidential-blunts">moon rock blunt page</Link>. When you&apos;re ready to buy, the store finder shows licensed retailers near your zip code, because
+                rather than here. When you&apos;re ready to buy, the store finder shows licensed retailers near your zip code, because
                 Presidential is
                 wholesale and doesn&apos;t sell direct.
               </p>

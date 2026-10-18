@@ -65,7 +65,7 @@ export const MOON_ROCKS_ANSWERS: readonly AnswerItem[] = [
       <>
         <p>
           Every Presidential moon rock is built the same way: flower as the base, a concentrate coat applied over it, and a
-          dry finishing material bonded to the coat. Presidential calls this framework the Presidential Infusion System™.
+          kief finish bonded to the coat. Presidential calls this framework the Presidential Infusion System™.
         </p>
         <p>
           The concentrate follows the series: distillate in the{" "}
@@ -231,7 +231,7 @@ export const ABOUT_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         Each infused product starts with cannabis flower, adds a concentrate (distillate, live resin, or live rosin,
-        depending on the series), and finishes with the dry material named on the package: a kief or diamond finish. Presidential calls
+        depending on the series), and closes with a kief or diamond finish. Presidential calls
         this the Presidential Infusion System™. THC is batch-specific, so the current package label and its test results
         are the reference for a specific product.
       </p>
@@ -283,7 +283,7 @@ export const PRE_ROLL_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         Every Presidential pre-roll follows the same infusion process as a Presidential moon rock: cannabis flower as the
-        base, a concentrate infused over it, and a dry finish. The pack prints the build, for example FLOWER · DISTILLATE ·
+        base, a concentrate infused over it, and a kief or diamond finish. The pack prints the build, for example FLOWER · DISTILLATE ·
         KIEF on Grape, FLOWER · LIVE RESIN · DIAMONDS on Blue Dream, and FLOWER · LIVE ROSIN · DIAMONDS on Wedding Cake.
         Presidential pre rolls are sold through licensed dispensaries; the{" "}
         <Link className={a} href="/find-us">store finder</Link> lists licensed retailers carrying Presidential.

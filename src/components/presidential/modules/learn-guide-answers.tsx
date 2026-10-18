@@ -38,7 +38,7 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
         question: "Where do diamonds appear on a Presidential pack?",
         answer: (
           <p>
-            Every Presidential pack prints a composition line. Diamonds are the dry finishing material on builds such as
+            Every Presidential pack prints a composition line. Diamonds are the finishing material on builds such as
             FLOWER · LIVE RESIN · DIAMONDS on <Link className={a} href="/moon-rocks/24k">24K</Link> and Blue Dream, and
             FLOWER · LIQUID LIVE RESIN · DIAMONDS on Cap Junky. The build is the same each time: flower as the base, a
             concentrate coat over it, and the finish bonded to the coat.
@@ -244,8 +244,8 @@ export const LEARN_GUIDE_ANSWERS: Readonly<
         question: "Where do flower, trichomes, and extracts fit in?",
         answer: (
           <p>
-            A Presidential moon rock uses flower as the base, a concentrate coat over it, and a dry finishing material such
-            as kief, the collected trichome material. {extractsLine} More guides are in the{" "}
+            A Presidential moon rock uses flower as the base, a concentrate coat over it, and a kief
+            finish, kief being the collected trichome material. {extractsLine} More guides are in the{" "}
             <Link className={a} href="/learn">Learn hub</Link>.
           </p>
         ),
