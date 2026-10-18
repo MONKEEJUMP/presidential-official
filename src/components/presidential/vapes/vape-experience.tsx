@@ -290,6 +290,19 @@ export function VapeExperience({ page }: { page: VapePage }) {
             Stores that want to carry Moon Pods can start with <Link href="/wholesale">the Presidential wholesale program</Link> or{' '}
             <Link href="/contact">contact the Presidential team</Link>.
           </p>
+          {/* INLINKS-COPY-R42: /moon-pods rolled-format and state H3s (pre-roll and mini pre-roll anchors were already used, so reworded). */}
+          <h3>Moon Pods beside the rolled formats</h3>
+          <p>
+            For a rolled format instead of a pod, see <Link href="/pre-rolls">Presidential pre-rolls in rolling paper</Link>,{' '}
+            <Link href="/blunts">Presidential infused blunts</Link> and{' '}
+            <Link href="/mini-pre-rolls">the Presidential mini pre-roll range</Link>.
+          </p>
+          <h3>Finding Moon Pods by state</h3>
+          <p>
+            Check <Link href="/find-us/ca">California store listings for Moon Pods</Link>,{' '}
+            <Link href="/find-us/mi">Michigan store listings for Moon Pods</Link> or{' '}
+            <Link href="/find-us/ny">New York store listings for Moon Pods</Link> before you look for a pod.
+          </p>
         </div>
       ) : null}
       <div className={s.chapterColors}><span className={s.label}>Orbit finish</span><ColorChoices value={finish} onChange={setFinish} label="Moon Pods chapter finish" /></div>
