@@ -373,77 +373,6 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
         </>
       ) : null}
-      {/* SURFER-R41: MR jar blocks as H2s. Builds only where the jar art is in the repo (Grape, Watermelon, Gorilla Goo). */}
-      {slug === "grape" ? (
-        <>
-          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Grape next to the other Silver fruit jars</h2>
-          <p className="mt-2 text-sm leading-6 text-po-body">
-            Grape is a Silver Flavor Series jar, and the label lists flower and distillate, finished with kief. Its aroma leans toward dark fruit rather than candy. Silver is the flavor-first tier, so shoppers often compare its fruit names side by side before choosing. For a softer, warmer fruit pairing from the same series, look at{" "}
-            <Link className={linkClass} href="/moon-rocks/peach-mango">Peach Mango, a fellow Silver fruit jar</Link>. For how the flower, distillate, and kief come together, read{" "}
-            <Link className={linkClass} href="/learn/what-are-moon-rocks">how a Silver moon rock is layered</Link>. Cannabinoid content is batch-specific, so check the package label and its test results.
-          </p>
-        </>
-      ) : null}
-      {slug === "pineapple" ? (
-        <>
-          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Pineapple among the Silver fruit names</h2>
-          <p className="mt-2 text-sm leading-6 text-po-body">
-            Pineapple is a Silver Flavor Series jar, and its pack label lists the build. The aroma is bright and acidic with a sunlit sweetness. Shoppers who like that direct fruit style can compare it with{" "}
-            <Link className={linkClass} href="/moon-rocks/watermelon">Watermelon, a juicy Silver jar</Link>, which leans sweeter and softer. For a broader blend from the same series, the{" "}
-            <Link className={linkClass} href="/moon-rocks/tropical">Tropical jar&apos;s mixed-fruit aroma</Link> layers citrus and stone fruit together. Pineapple also comes as a 1g pre-roll and a 1.5g blunt, both listed with flower, distillate, and kief. Read the package label for batch test results.
-          </p>
-        </>
-      ) : null}
-      {slug === "gorilla-goo" ? (
-        <>
-          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Gorilla Goo beside another Gold jar</h2>
-          <p className="mt-2 text-sm leading-6 text-po-body">
-            Gorilla Goo is a Gold Strain Series jar, and the label lists flower and distillate, finished with kief, with the pack marked Hybrid. Its aroma is heavy and resinous. Shoppers who like that weighty style can compare it with{" "}
-            <Link className={linkClass} href="/moon-rocks/galactic-gas">Galactic Gas in the Gold series</Link>, another gassy Gold name. For a plain explanation of how flower, concentrate, and the finish come together, read{" "}
-            <Link className={linkClass} href="/learn/what-are-moon-rocks">the basics of a layered moon rock</Link>. Each pack prints its own build, so read the label for batch test results.
-          </p>
-        </>
-      ) : null}
-      {slug === "watermelon" ? (
-        <>
-          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Watermelon and its Silver neighbors</h2>
-          <p className="mt-2 text-sm leading-6 text-po-body">
-            Watermelon is a Silver Flavor Series jar, and the label lists flower and distillate, finished with kief. The aroma is bright and juicy. It sits among the Silver fruit names, which are easy to compare on aroma because most share the same distillate and kief build. For a darker fruit profile from the same tier, see the{" "}
-            <Link className={linkClass} href="/moon-rocks/grape">deep-fruit Grape jar in Silver</Link>. For a mixed tropical blend, the{" "}
-            <Link className={linkClass} href="/moon-rocks/tropical">Silver Tropical moon rocks</Link> layer citrus with stone fruit. Watermelon also comes as a 1.5g blunt listed with flower, distillate, and kief. Check the package label for batch test results and cannabinoid content.
-          </p>
-        </>
-      ) : null}
-      {slug === "presidential-line-guava-haze" ? (
-        <>
-          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Guava Haze in the Presidential Line</h2>
-          <p className="mt-2 text-sm leading-6 text-po-body">
-            Guava Haze is a Presidential Line jar. Its aroma runs warm and tropical, with guava at the front. Each Presidential Line name prints its own label design, so shoppers can compare them on aroma and art. For a savory contrast from the same line, look at{" "}
-            <Link className={linkClass} href="/moon-rocks/presidential-line-garlic-cookies">Garlic Cookies, a pungent Presidential Line jar</Link>. For how the layers are applied, read{" "}
-            <Link className={linkClass} href="/learn/what-are-moon-rocks">how a moon rock is put together</Link>. Read the current package label for the build and batch test results, and confirm stock with the store.
-          </p>
-        </>
-      ) : null}
-      {slug === "galactic-gas" ? (
-        <>
-          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Galactic Gas beside a resinous Gold jar</h2>
-          <p className="mt-2 text-sm leading-6 text-po-body">
-            Galactic Gas is a Gold Strain Series jar. The name pairs a space theme with a gassy aroma. Shoppers who like heavier, resinous Gold profiles can compare it with{" "}
-            <Link className={linkClass} href="/moon-rocks/gorilla-goo">Gorilla Goo, a sticky Gold jar</Link>. For a refresher on how the layers come together, read{" "}
-            <Link className={linkClass} href="/learn/what-are-moon-rocks">the layers inside a moon rock</Link>. Each pack prints its own build, so check the label and its test results, and confirm stock with the store.
-          </p>
-        </>
-      ) : null}
-      {slug === "wedding-cake" ? (
-        <>
-          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Wedding Cake among the Rose Gold jars</h2>
-          <p className="mt-2 text-sm leading-6 text-po-body">
-            Wedding Cake is a Rose Gold Connoisseur Series jar. Its aroma sits at the dessert end of the catalog. Rose Gold is the solventless tier, and its names differ on aroma. For another sweet, dough-led name, see{" "}
-            <Link className={linkClass} href="/moon-rocks/cosmic-cookies">Cosmic Cookies in Rose Gold</Link>. For a cereal-sweet profile, look at{" "}
-            <Link className={linkClass} href="/moon-rocks/cereal-milk">the lactic Cereal Milk jar in Rose Gold</Link>. Read the package label for its build and batch test results, and confirm with the store which Wedding Cake formats it carries.
-          </p>
-        </>
-      ) : null}
       {/* SURFER-R17: Pineapple distillate H3, from its own page, /learn/what-is-live-resin and /moon-rocks/watermelon. */}
       {slug === "pineapple" && series === "Silver Flavor Series" ? (
         <>
@@ -457,6 +386,17 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             Presidential moon rock: flower first, distillate carried through the flower, and kief as the finish. Don&apos;t grind
             them, because the concentrate layer gums up a grinder and strips the kief. Pineapple also comes rolled as a{" "}
             <Link className={linkClass} href="/pre-rolls/pineapple">Pineapple pre-roll</Link>.
+          </p>
+        </>
+      ) : null}
+      {/* SURFER-R41: H2 after H3 "Why distillate for a flavor-led moon rock?" (Sitebulb R41 placement). */}
+      {slug === "pineapple" ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Pineapple among the Silver fruit names</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Pineapple is a Silver Flavor Series jar, and its pack label lists the build. The aroma is bright and acidic with a sunlit sweetness. Shoppers who like that direct fruit style can compare it with{" "}
+            <Link className={linkClass} href="/moon-rocks/watermelon">Watermelon, a juicy Silver jar</Link>, which leans sweeter and softer. For a broader blend from the same series, the{" "}
+            <Link className={linkClass} href="/moon-rocks/tropical">Tropical jar&apos;s mixed-fruit aroma</Link> layers citrus and stone fruit together. Pineapple also comes as a 1g pre-roll and a 1.5g blunt, both listed with flower, distillate, and kief. Read the package label for batch test results.
           </p>
         </>
       ) : null}
@@ -508,6 +448,17 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
         </>
       ) : null}
+      {/* SURFER-R41: H2 after H3 "What makes Grape a Silver Flavor Series moon rock?" (Sitebulb R41 placement). */}
+      {slug === "grape" ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Grape next to the other Silver fruit jars</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Grape is a Silver Flavor Series jar, and the label lists flower and distillate, finished with kief. Its aroma leans toward dark fruit rather than candy. Silver is the flavor-first tier, so shoppers often compare its fruit names side by side before choosing. For a softer, warmer fruit pairing from the same series, look at{" "}
+            <Link className={linkClass} href="/moon-rocks/peach-mango">Peach Mango, a fellow Silver fruit jar</Link>. For how the flower, distillate, and kief come together, read{" "}
+            <Link className={linkClass} href="/learn/what-are-moon-rocks">how a Silver moon rock is layered</Link>. Cannabinoid content is batch-specific, so check the package label and its test results.
+          </p>
+        </>
+      ) : null}
       {/* SURFER-R15: King Louis live resin H3, from its own page, /learn and the label line. */}
       {slug === "king-louis" && series === "Gold Strain Series" ? (
         <>
@@ -537,6 +488,17 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             every Presidential moon rock: flower first, distillate carried through it, and kief as the finish, as explained in{" "}
             <Link className={linkClass} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. Don&apos;t grind them. The
             concentrate layer gums up a grinder and strips the kief, so layer pieces in when rolling or packing a bowl.
+          </p>
+        </>
+      ) : null}
+      {/* SURFER-R41: H2 after H3 "What does distillate do in a Silver moon rock?" (Sitebulb R41 placement). */}
+      {slug === "watermelon" ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Watermelon and its Silver neighbors</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Watermelon is a Silver Flavor Series jar, and the label lists flower and distillate, finished with kief. The aroma is bright and juicy. It sits among the Silver fruit names, which are easy to compare on aroma because most share the same distillate and kief build. For a darker fruit profile from the same tier, see the{" "}
+            <Link className={linkClass} href="/moon-rocks/grape">deep-fruit Grape jar in Silver</Link>. For a mixed tropical blend, the{" "}
+            <Link className={linkClass} href="/moon-rocks/tropical">Silver Tropical moon rocks</Link> layer citrus with stone fruit. Watermelon also comes as a 1.5g blunt listed with flower, distillate, and kief. Check the package label for batch test results and cannabinoid content.
           </p>
         </>
       ) : null}
@@ -644,6 +606,17 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             <Link className={linkClass} href="/mini-blunts/gorilla-goo">Gorilla Goo mini blunt</Link>. See{" "}
             <Link className={linkClass} href="/moon-rocks/gold">Gold Strain Series moon rocks</Link> and{" "}
             <Link className={linkClass} href="/learn/what-is-live-resin">what live resin is</Link>.
+          </p>
+        </>
+      ) : null}
+      {/* SURFER-R41: H2 after H3 "How does Gorilla Goo fit the Gold Strain Series?" (Sitebulb R41 placement). */}
+      {slug === "gorilla-goo" ? (
+        <>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Gorilla Goo beside another Gold jar</h2>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Gorilla Goo is a Gold Strain Series jar, and the label lists flower and distillate, finished with kief, with the pack marked Hybrid. Its aroma is heavy and resinous. Shoppers who like that weighty style can compare it with{" "}
+            <Link className={linkClass} href="/moon-rocks/galactic-gas">Galactic Gas in the Gold series</Link>, another gassy Gold name. For a plain explanation of how flower, concentrate, and the finish come together, read{" "}
+            <Link className={linkClass} href="/learn/what-are-moon-rocks">the basics of a layered moon rock</Link>. Each pack prints its own build, so read the label for batch test results.
           </p>
         </>
       ) : null}
