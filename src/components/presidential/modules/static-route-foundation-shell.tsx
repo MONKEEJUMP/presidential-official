@@ -52,7 +52,7 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
     return [
       {
         title: "Find the real thing",
-        body: "Every location here is an official, licensed Presidential retailer — verified at the source. Official licensed retailers only. When you find us, you find the real house stocking the real product. Authenticity, confirmed before you ever walk in the door.",
+        body: "Every location here is a licensed retailer that carries Presidential. Official licensed retailers only. When you find us, you find the real house stocking the real product. Authenticity, confirmed before you ever walk in the door.",
       },
       {
         title: "Find your nearest door",
