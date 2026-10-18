@@ -115,7 +115,7 @@ export const PARTNERS_COPY = {
     "description": "Michigan's licensed dispensaries carrying authentic Presidential - across Detroit, Ann Arbor, Grand Rapids and the state. Find one near you.",
     "body": [
       "Licensed Michigan retailers carry Presidential.",
-      "Detroit and the surrounding metro anchor it - Inkster, Center Line, River Rouge, Riverview. Ann Arbor and Kalamazoo hold their own clusters. Listings run west toward Grand Rapids and north into the towns along the lakes.",
+      "Listings start in Detroit and the surrounding metro - Inkster, Center Line, River Rouge, Riverview. Ann Arbor and Kalamazoo hold their own clusters. Listings run west toward Grand Rapids and north into the towns along the lakes.",
       "Formats vary by store. The locator below will route you to your closest Michigan partner."
     ]
   },
