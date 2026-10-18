@@ -246,6 +246,22 @@ export function PreRollExperience({
             <Link href="/partners">the Presidential partners page</Link>.
           </p>
         </div>
+        {/* INLINKS-COPY-R38: /pre-rolls Silver and format H3s (distillate guide already linked twice on this page, so that link is dropped; reused anchors reworded). */}
+        <div>
+          <h3>Silver pre-rolls and THC distillate</h3>
+          <p>
+            Silver is the distillate series, named by fruit. Blue Raspberry, Grape, Peach Mango, Pineapple and Strawberry pre-rolls
+            carry that series.
+          </p>
+        </div>
+        <div>
+          <h3>The same infused idea in a hemp wrap or a cartridge</h3>
+          <p>
+            For a smaller hemp-wrap roll, see <Link href="/mini-blunts">infused mini blunt packs</Link> and the{" "}
+            <Link href="/presidential-art/mini-blunts">pack art for the mini blunts</Link>. For an extract in cartridge form, browse
+            the <Link href="/vapes">vape cartridge lineup</Link>.
+          </p>
+        </div>
         <div className={styles.tierSections}>
           {TIER_SECTION_ORDER.map((section) => {
             const entries = tieredArtwork.filter(({ placement }) => placement.section === section);
