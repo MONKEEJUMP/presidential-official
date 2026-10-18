@@ -262,6 +262,25 @@ export function PreRollExperience({
             the <Link href="/vapes">vape cartridge lineup</Link>.
           </p>
         </div>
+        {/* INLINKS-COPY-R42: /pre-rolls series and state H3s (copy as written). */}
+        <div>
+          <h3>Pre-roll names beside their Moon Rocks series</h3>
+          <p>
+            Pre-roll names follow the same series as the jars. Compare{" "}
+            <Link href="/moon-rocks/silver">the Silver Moon Rocks series</Link>,{" "}
+            <Link href="/moon-rocks/gold">the Gold Moon Rocks series</Link> and{" "}
+            <Link href="/moon-rocks/rose-gold">the Rose Gold Moon Rocks series</Link>, then read each pre-roll pack for its own
+            build line.
+          </p>
+        </div>
+        <div>
+          <h3>Looking for pre-rolls by state</h3>
+          <p>
+            Presidential store listings are sorted by state, including <Link href="/find-us/az">Arizona store listings</Link>,{" "}
+            <Link href="/find-us/nv">Nevada store listings</Link> and <Link href="/find-us/ok">Oklahoma store listings</Link>.
+            Questions can go through <Link href="/contact">the Presidential team&apos;s contact page</Link>.
+          </p>
+        </div>
         <div className={styles.tierSections}>
           {TIER_SECTION_ORDER.map((section) => {
             const entries = tieredArtwork.filter(({ placement }) => placement.section === section);
