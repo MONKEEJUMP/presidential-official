@@ -296,6 +296,63 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
           </p>
         </>
       ) : null}
+      {/* SURFER-R38: MR jar H3s (Crescendo construction line softened; Waui list adds the blunt). */}
+      {slug === "presidential-line-ghost-haze-train" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Inside a Ghost Haze Train jar</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Ghost Haze Train is a Presidential Line collaboration with Nature&apos;s Chemistry. The label lists flower and distillate, finished with kief, and the aroma is bright, spiced, and haze-forward. Distillate is a refined concentrate, and the <Link className={linkClass} href="/learn/what-is-thc-distillate">guide to how distillate is refined</Link> explains the process from start to finish. Kief, the collected trichome material, forms the dusty outer layer you see in the jar. The same partner also appears on <Link className={linkClass} href="/moon-rocks/presidential-line-garlic-cookies">Garlic Cookies, another Nature&apos;s Chemistry jar</Link>, which leans savory. Cannabinoid content is batch-specific, so read the current package label and its test results, and confirm stock with the store.
+          </p>
+        </>
+      ) : null}
+      {slug === "orange-push-pop" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">The Orange Push Pop build</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Orange Push Pop sits in the Gold Strain Series, and the jar is made with flower, live resin, and diamonds. The aroma is creamsicle-bright citrus over something soft and close to vanilla. Live resin starts with plants frozen at harvest instead of dried and cured, and the <Link className={linkClass} href="/learn/what-is-live-resin">explainer on what live resin is</Link> walks through why that step matters for aroma. The same strain also comes as a 1g pre-roll and a 1.5g blunt, each listed with flower, live resin, and diamonds. Cannabinoid content changes by batch, so check the package label and its test results, and ask the store what is on hand.
+          </p>
+        </>
+      ) : null}
+      {slug === "sfv-og" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">SFV OG and its OG neighbor</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            SFV OG takes its name from the San Fernando Valley, and the jar is made with flower, live resin, and diamonds. Presidential packs mark it as Hybrid, and the aroma runs pine, fuel, and dry earth. It is part of the Gold Strain Series, where OG profiles have company. Shoppers who like that piney, fuel-forward style can compare it with <Link className={linkClass} href="/moon-rocks/presidential-og">Presidential OG in the Gold series</Link>. Both carry the series&apos; live resin build. Pre-roll and blunt versions of SFV OG list the same flower, live resin, and diamonds. Read the current label for batch test results, and confirm with the store which formats it carries.
+          </p>
+        </>
+      ) : null}
+      {slug === "peach-mango" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Peach Mango beside other Silver fruit</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Peach Mango is a Silver Flavor Series jar made with flower and distillate, finished with kief. Peach brings a soft sweetness and mango adds warmth, so the aroma lands somewhere ripe and easygoing. Silver is the flavor-first tier, and its fruit names sit side by side on the shelf. For a broader fruit blend from the same series, look at <Link className={linkClass} href="/moon-rocks/tropical">Tropical, a Silver jar with a citrus and stone-fruit aroma</Link>. Peach Mango also comes as a 1g pre-roll and a 1.5g blunt, both listed with flower, distillate, and kief. Cannabinoid content is batch-specific, so read the package label and its test results before buying.
+          </p>
+        </>
+      ) : null}
+      {slug === "cosmic-cookies" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">Cosmic Cookies in the Rose Gold series</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Cosmic Cookies belongs to the Rose Gold Connoisseur Series, and the jar is made with flower, live rosin, and diamonds. Presidential packs mark it as Hybrid. The aroma keeps the doughy sweetness of the cookie family, with a cooler, mineral note underneath. Live rosin is the solventless extract that defines Rose Gold, pressed with ice water, heat, and pressure. Another sweet, dessert-leaning name in the same series is <Link className={linkClass} href="/moon-rocks/cereal-milk">Cereal Milk, a Rose Gold jar</Link>, with a lactic, grainy aroma. Cosmic Cookies also comes as a 1g pre-roll and a 1.5g blunt with live rosin and diamonds. Check the label for batch test results.
+          </p>
+        </>
+      ) : null}
+      {slug === "crescendo" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">How Crescendo fits the Gold Strain Series</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Crescendo is a Gold Strain Series jar made with flower, live resin, and diamonds, and Presidential packs mark it as Sativa. Its aroma builds gradually rather than opening all at once. Gold groups cannabis-first strain names around live resin, so shoppers can compare jars on aroma. For another Gold name with an earthy profile and a cool finish, see <Link className={linkClass} href="/moon-rocks/skywalker">Skywalker in the Gold Strain Series</Link>. Crescendo is also offered as a 1g pre-roll and a 1.5g blunt, both listed with flower, live resin, and diamonds. Read the package label for batch test results, and confirm stock with the store.
+          </p>
+        </>
+      ) : null}
+      {slug === "waui" ? (
+        <>
+          <h3 className="mt-6 text-base font-semibold text-po-ink">What makes the Waui jar</h3>
+          <p className="mt-2 text-sm leading-6 text-po-body">
+            Waui is a Gold Strain Series jar made in collaboration with Rove, and the label lists flower, live resin, and diamonds. The aroma is bright and tropical, sweeter than the denser Gold names. Live resin is extracted from plants frozen at harvest, and the <Link className={linkClass} href="/learn/what-is-live-resin">overview of live resin extraction</Link> covers how that preserves aroma. Shoppers drawn to the tropical side can also compare the distillate-based <Link className={linkClass} href="/moon-rocks/tropical">Tropical jar in the Silver series</Link>. Waui also appears in pre-roll, blunt, mini pre-roll, and mini blunt formats; each pack prints its own build, so read the label before buying and confirm current stock with the store.
+          </p>
+        </>
+      ) : null}
       {/* SURFER-R17: Pineapple distillate H3, from its own page, /learn/what-is-live-resin and /moon-rocks/watermelon. */}
       {slug === "pineapple" && series === "Silver Flavor Series" ? (
         <>
