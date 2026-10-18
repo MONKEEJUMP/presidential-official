@@ -36,11 +36,11 @@ const BLUNT_SERIES_ANSWER: AnswerItem = {
   answer: (
     <p>
       Every Presidential infused blunt is 1.5g in a tobacco-free wrap. The{" "}
-      <Link className={a} href="/moon-rocks/silver">Silver Flavor Series</Link> blunts are flower, distillate, and kief.{" "}
+      <Link className={a} href="/moon-rocks/silver">Silver Flavor Series</Link> blunts carry fruit names.{" "}
       <Link className={a} href="/moon-rocks/gold">Gold Strain Series</Link> blunts such as Blue Dream
       are flower, live resin, and diamonds. The{" "}
-      <Link className={a} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> blunts are flower, live rosin,
-      and diamonds.
+      <Link className={a} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> blunts carry the
+      connoisseur names.
     </p>
   ),
 };

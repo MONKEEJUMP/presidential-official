@@ -30,7 +30,7 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
           Presidential is the brand, not a strain; <Link className={a} href="/about">about Presidential</Link> covers the
           company. Each product names its own strain on the pack, along with its strain type:{" "}
           <Link className={a} href="/moon-rocks/24k">24K</Link>, for example, is marked Indica. THC and other cannabinoids,
-          the chemical compounds listed on a cannabis label, are batch-specific, and burn and potency are not universal
+          the chemical compounds listed on a cannabis label, are batch-specific, and burn and cannabinoid content are not universal
           across the line, so the package and batch record for the product in hand control those facts.
         </p>
         {/* SURFER-R21: home label-reading H3 (facts from this page: strain answer, Moon Rocks answer, tier tiles). */}
@@ -63,7 +63,7 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
           it and the outer layer. Each jar&apos;s label names its concentrate, and the outside is kief or diamonds,
           depending on the label. That&apos;s why the jar label matters more than
           the word &quot;flower&quot; on a menu: it names the series and the build. Read the jar label for the build, then compare
-          strain-led options on the <Link className={a} href="/moon-rocks/gold">Gold live resin collection</Link>, or start with
+          strain-led options on the <Link className={a} href="/moon-rocks/gold">Presidential Gold collection</Link>, or start with
           the 24K jar.
         </p>
       </>

@@ -77,8 +77,8 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
       },
       // SURFER-R18: series-to-extract panel, from /about, /learn, /moon-rocks/rose-gold, /vapes and /moon-pods.
       {
-        title: "Which extract goes into each series?",
-        body: "The Presidential Infusion System™ uses a different concentrate for each series. The [Silver Flavor Series moon rocks](/moon-rocks/silver) are built on THC distillate, the [Gold Strain Series moon rocks](/moon-rocks/gold) on live resin, and the Rose Gold Connoisseur Series on live rosin. Every infused product starts with flower, adds that concentrate, and closes with a kief or diamond finish. Moon Pods are a separate vape family, used with the Orbit device and led by liquid diamonds; [explore Moon Pods](/moon-pods).",
+        title: "How are the series named?",
+        body: "The [Silver Flavor Series moon rocks](/moon-rocks/silver) name flavors, the [Gold Strain Series moon rocks](/moon-rocks/gold) name strains, and the Rose Gold Connoisseur Series carries the connoisseur names. Each infused product starts with flower, adds a concentrate, and closes with a kief or diamond finish, and each pack prints its own build. Moon Pods are a separate vape family, used with the Orbit device and led by liquid diamonds; [explore Moon Pods](/moon-pods).",
       },
       {
         title: "The reputation",
