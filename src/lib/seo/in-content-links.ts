@@ -727,6 +727,8 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
     ["The rest is the house, identical on every pack in the catalogue.", "The rest is the house design."],
     // Sitebulb R41 B15.
     ["What does not change", "How the build works"],
+    // SURFER-R41 H2 after "The sweet side" (Sitebulb R41 placement).
+    ["**How the build works**", "**Wedding Cake among the Rose Gold jars**\n\nWedding Cake is a Rose Gold Connoisseur Series jar. Its aroma sits at the dessert end of the catalog. Rose Gold is the solventless tier, and its names differ on aroma. For another sweet, dough-led name, see [Cosmic Cookies in Rose Gold](/moon-rocks/cosmic-cookies). For a cereal-sweet profile, look at [the lactic Cereal Milk jar in Rose Gold](/moon-rocks/cereal-milk). Read the package label for its build and batch test results, and confirm with the store which Wedding Cake formats it carries.\n\n**How the build works**"],
   ],
   // Sitebulb R41 A14-A16: no catalogue counts or scope, blunt-only lines cut from the jar page.
   "/moon-rocks/presidential-line-guava-haze": [
@@ -737,6 +739,8 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
     ],
     [" and to every Gold Strain Series release", ""],
     ["Every format", "Formats"],
+    // SURFER-R41 H2 after "The collaboration and the market" (Sitebulb R41 placement).
+    ["**Formats**", "**Guava Haze in the Presidential Line**\n\nGuava Haze is a Presidential Line jar. Its aroma runs warm and tropical, with guava at the front. Each Presidential Line name prints its own label design, so shoppers can compare them on aroma and art. For a savory contrast from the same line, look at [Garlic Cookies, a pungent Presidential Line jar](/moon-rocks/presidential-line-garlic-cookies). For how the layers are applied, read [how a moon rock is put together](/learn/what-are-moon-rocks). Read the current package label for the build and batch test results, and confirm stock with the store.\n\n**Formats**"],
     ["This page is the Moon Rock Blunt: one blunt, Net Wt. 1.5G (.053oz), printed legibly on the flat label.", ""],
     ["The wider ladder holds constant across the catalogue.", "Each format has a fixed weight."],
     ["100% TOBACCO FREE at the base — the wrap carries no tobacco, stated on the front of the pack rather than buried on the back.", ""],
@@ -744,6 +748,8 @@ const IN_CONTENT_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [str
   // Sitebulb R41 A17-A19.
   "/moon-rocks/galactic-gas": [
     ["Every format", "Formats"],
+    // SURFER-R41 H2 after "What is inside" (Sitebulb R41 placement).
+    ["**Formats**", "**Galactic Gas beside a resinous Gold jar**\n\nGalactic Gas is a Gold Strain Series jar. The name pairs a space theme with a gassy aroma. Shoppers who like heavier, resinous Gold profiles can compare it with [Gorilla Goo, a sticky Gold jar](/moon-rocks/gorilla-goo). For a refresher on how the layers come together, read [the layers inside a moon rock](/learn/what-are-moon-rocks). Each pack prints its own build, so check the label and its test results, and confirm stock with the store.\n\n**Formats**"],
     ["This page is the Moon Rock Blunt: one blunt, hand-finished.", ""],
     ["on every single pack in the catalogue.", "on the pack."],
     ["Most of the line puts a moon behind the product.", "Many packs put a moon behind the product."],
