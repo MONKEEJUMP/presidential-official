@@ -93,9 +93,9 @@ export const PRE_ROLL_ARTWORKS = [
   {
     id: "gorilla-goo",
     name: "Gorilla Goo",
-    edition: "1g infused pre-roll · Flower · Live resin · Diamonds",
+    edition: "1g infused pre-roll",
     collection: "Gold Strain Series",
-    description: "Gorilla Goo's reported sour fuel, pine, and chocolate notes give it a rich, gassy character. This version combines flower, live resin, and diamonds for consumers who want a layered infusion around that robust strain profile. One 1g Moon Rock pre-roll, prepared in rolling paper.",
+    description: "Gorilla Goo's reported sour fuel, pine, and chocolate notes give it a rich, gassy character. One 1g Moon Rock pre-roll, prepared in rolling paper.",
     src: "/media/pre-rolls/gorilla-goo.webp",
     alt: "Presidential Gorilla Goo 1g Moon Rock pre-roll product",
     shape: "portrait",

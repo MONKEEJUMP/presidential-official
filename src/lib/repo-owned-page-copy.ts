@@ -34,7 +34,7 @@ This guide explains what the words mean.
 
 *[What Are Moon Rocks](/learn/what-are-moon-rocks)* — the format the company is named for. What a moon rock physically is, how the layers stack, and why the density changes how it burns.
 
-*[What Is Live Resin](/learn/what-is-live-resin)* — the coat that appears across most of the Gold Strain Series, and what separates it from distillate.
+*[What Is Live Resin](/learn/what-is-live-resin)* — the strain-forward concentrate, and what separates it from distillate.
 
 *[What Is THC Distillate](/learn/what-is-thc-distillate)* — the refined, essentially neutral concentrate behind the Silver Flavor Series.
 
@@ -50,7 +50,7 @@ This guide explains what the words mean.
 
 **How to read any Presidential pack**
 
-The architecture is identical across the entire catalogue. WORLD'S STRONGEST runs across the top. The strain type — Indica, Sativa or Hybrid — sits in script directly beneath it. The silver crown crest carries the PRESIDENTIAL banner. A unit numeral sits inside a crescent moon: a 1 on single formats, a 3 on the three-packs, a 2 G on loose Moon Rocks. Then the format line, the strain name in a lozenge, and the composition line.
+WORLD'S STRONGEST runs across the top. The strain type — Indica, Sativa or Hybrid — sits in script directly beneath it. The silver crown crest carries the PRESIDENTIAL banner. A unit numeral sits inside a crescent moon: a 1 on single formats, a 3 on the three-packs, a 2 G on loose Moon Rocks. Then the format line, the strain name in a lozenge, and the composition line.
 
 Three of those change from product to product and the rest never do. The strain type, the format line and the composition line are the entire difference between one Presidential pack and another. Everything else is the house. To see the front of each pack, browse the [pack art collection](/presidential-art).
 
@@ -86,7 +86,7 @@ Presidential is a wholesale brand and sells exclusively through licensed retaile
   },
   "/learn/what-is-thc-distillate": {
     label: "What Is THC Distillate",
-    markdown: `Distillate is the extract identified with the [Silver Flavor Series](/moon-rocks/silver). It is stripped and refined until it is essentially neutral, which is why Silver can lead with flavor names such as Grape, Strawberry, and Watermelon. Silver jars such as Grape and Watermelon list flower, distillate, and kief on the label.
+    markdown: `Distillate is stripped and refined until it is essentially neutral. Silver jars such as Grape and Watermelon list flower, distillate, and kief on the label.
 
 **A refined, neutral concentrate**
 
@@ -94,19 +94,19 @@ Distillate is stripped and refined until it is essentially neutral, while live r
 
 **Distillate in the Presidential infusion system**
 
-Each infused Presidential product starts with cannabis flower, adds a concentrate (distillate, live resin, or live rosin, depending on the series), and closes with a kief or diamond finish. Presidential's infusion process carries distillate through the flower rather than only coating the surface, then applies the kief layer as the final step. See [What Are Moon Rocks](/learn/what-are-moon-rocks) for the three layers.
-
-**The Silver Flavor Series is built on distillate**
-
-The Silver Flavor Series is built on THC distillate. Its flavor-first, fruit-forward roster is [Blue Raspberry](/moon-rocks/blue-raspberry), [Grape](/moon-rocks/grape), [Peach Mango](/moon-rocks/peach-mango), [Pineapple](/moon-rocks/pineapple), [Strawberry](/moon-rocks/strawberry), [Tropical](/moon-rocks/tropical), and [Watermelon](/moon-rocks/watermelon). Presidential Classic, the house recipe, is also made with flower, distillate, and kief. [Presidential Moon Rocks and its series](/) shows where distillate sits in the lineup.
+Each infused Presidential product starts with cannabis flower, adds a concentrate (distillate, live resin, or live rosin, as the label states), and closes with a kief or diamond finish. Presidential's infusion process carries distillate through the flower rather than only coating the surface, then applies the kief layer as the final step. See [What Are Moon Rocks](/learn/what-are-moon-rocks) for the three layers.
 
 ### Seeing distillate on a House Line label
 
-Distillate also appears outside the fruit-led jars. The self-titled House Line pack prints FLOWER · DISTILLATE · KIEF on its composition line, and the [self-titled House Line Moon Rocks jar](/moon-rocks/presidential-moon-rocks) shows that label and its two-gram pack. Because distillate is close to neutral, the flower and kief set most of the aroma in that jar. For why neutral extracts and strain-forward ones smell so different, the guide to [how aroma compounds carry flavor](/learn/flavor-science) covers the chemistry. Always read the label in hand, since composition lines can change between batches.
+Distillate is not limited to Silver jars. The self-titled House Line pack prints FLOWER · DISTILLATE · KIEF on its composition line, and the [self-titled House Line Moon Rocks jar](/moon-rocks/presidential-moon-rocks) shows that label and its two-gram pack. Because distillate is close to neutral, the flower and kief set most of the aroma in that jar. For why neutral extracts and strain-forward ones smell so different, the guide to [how aroma compounds carry flavor](/learn/flavor-science) covers the chemistry. Always read the label in hand.
+
+**Silver jars that list distillate**
+
+Silver jars such as Grape and Watermelon list distillate on the label. Its flavor-first, fruit-forward roster is [Blue Raspberry](/moon-rocks/blue-raspberry), [Grape](/moon-rocks/grape), [Peach Mango](/moon-rocks/peach-mango), [Pineapple](/moon-rocks/pineapple), [Strawberry](/moon-rocks/strawberry), [Tropical](/moon-rocks/tropical), and [Watermelon](/moon-rocks/watermelon). Presidential Classic, the house recipe, is also made with flower, distillate, and kief. [Presidential Moon Rocks and its series](/) shows where distillate sits in the lineup.
 
 **Distillate and the other Presidential extracts**
 
-Distillate is one of the concentrates in the Presidential catalog. Live resin is the coat that appears across most of the Gold Strain Series, and Rose Gold is the solventless tier built on live rosin. Some Gold names use distillate instead: [the Cherry Gelato jar with Rove](/moon-rocks/cherry-gelato) is flower and distillate, finished with kief. Presidential Moon Pods come in Liquid Diamonds, Live Resin, and Live Rosin families; see [What Are Liquid Diamonds](/learn/what-are-liquid-diamonds) and [Moon Pods](/moon-pods). Different extracts need different heat, so read [Different Extracts Need Different Heat](/learn/different-extracts-need-different-heat).
+Distillate is one of the concentrates in the Presidential catalog. Live resin and live rosin are the other concentrates that appear on Presidential labels. Some Gold names use distillate instead: [the Cherry Gelato jar with Rove](/moon-rocks/cherry-gelato) is flower and distillate, finished with kief. Presidential Moon Pods come in Liquid Diamonds, Live Resin, and Live Rosin families; see [What Are Liquid Diamonds](/learn/what-are-liquid-diamonds) and [Moon Pods](/moon-pods). Different extracts need different heat, so read [Different Extracts Need Different Heat](/learn/different-extracts-need-different-heat).
 
 **Reading a distillate product**
 
@@ -121,9 +121,9 @@ The [Silver Flavor Series](/moon-rocks/silver) is built on flower, [THC distilla
   },
   "/learn/what-are-moon-rocks": {
     label: "What Moon Rocks are and how to read the format",
-    markdown: `Moon rock weed is a layered cannabis format made from flower, concentrate, and kief. It is a product category, not one strain and not a reference to material from the Moon. The flower provides the plant structure, concentrate adds the infused layer, and kief finishes the exterior with collected trichome material.
+    markdown: `Moon rock weed is a layered cannabis format made from flower, concentrate, and kief or diamonds. It is a product category, not one strain and not a reference to material from the Moon. The flower provides the plant structure, concentrate adds the infused layer, and a kief or diamond finish covers the exterior.
 
-**Flower, concentrate, and kief**
+**Flower, concentrate, and a kief or diamond finish**
 
 Those three components explain why Moon Rocks look and handle differently from plain flower. The concentrate and kief change the surface and density, but the finished product should still be identified from its own package and batch information. A percentage reported for one ingredient is not automatically the percentage of the whole Moon Rock. Use the finished-product label and associated test record for cannabinoid information.
 
@@ -167,13 +167,13 @@ Running across the tiers are the collaboration releases, each carrying a partner
 
 **Reading a Presidential pack when it gets here**
 
-Every pack carries the same architecture — WORLD'S STRONGEST across the top, the strain type in script beneath it, the silver crown crest with the PRESIDENTIAL banner, a crescent-moon unit numeral, the format line, the strain name in its lozenge, and the composition line separated by pot-leaf marks.
+The pack carries WORLD'S STRONGEST across the top, the strain type in script beneath it, the silver crown crest with the PRESIDENTIAL banner, a crescent-moon unit numeral, the format line, the strain name in its lozenge, and the composition line separated by pot-leaf marks.
 
 Three of those differ from product to product: the strain type, the format line and the composition line. That last one is the description that matters. Some packs print live resin and diamonds. Some print distillate and kief. Cap Junky prints liquid live resin. They are different builds from the same process, and the pack tells you which one you have.
 
 **How Presidential reaches shelves anywhere**
 
-Presidential is wholesale and does not sell direct, in any state. Every product reaches you through a licensed retailer, and each shop decides independently which strains and formats to carry. That is why availability varies by store and by week, and why this page will point you at retailers rather than at a checkout.
+Presidential is wholesale and does not sell direct, in any state. Every product reaches you through a licensed retailer, and each shop decides independently which strains and formats to carry. That is why availability varies by store and by week.
 
 **Check back**
 
@@ -257,7 +257,7 @@ Enter your zip code above to find the licensed New York retailers nearest you ca
   },
   "/moon-rocks/rose-gold": {
     label: "Rose Gold Connoisseur tier",
-    markdown: `Presidential's catalogue is organised into tiers, and Rose Gold sits at the top.
+    markdown: `Presidential's catalogue is organised into tiers.
 
 **The tiers**
 
@@ -265,41 +265,35 @@ Enter your zip code above to find the licensed New York retailers nearest you ca
 |---|---|
 | Silver Flavour Series | Flavour-led releases — Grape, Pineapple, Watermelon, Peach Mango, Strawberry, Tropical, Blue Raspberry |
 | Gold Strain Series | Named strains — Blue Dream, King Louis, 24K, Presidential OG, NYC Diesel, Galactic Gas and others |
-| **Rose Gold Connoisseur** | The tier above both |
+| **Rose Gold Connoisseur** | Connoisseur names — Cereal Milk, Cosmic Cookies, God's Gift, Wedding Cake, White Walker |
 
-Silver leads with a flavour idea. Gold leads with a strain name people already ask for. Rose Gold is the live rosin tier.
+Silver leads with a flavour idea. Gold leads with a strain name people already ask for.
 
 **In the tier**
 
 [Wedding Cake](/moon-rocks/wedding-cake). [God's Gift](/moon-rocks/gods-gift). [White Walker](/moon-rocks/white-walker).
 
-Three names that arrive with weight already attached rather than describing a flavour — which is the pattern across the tier. Where the Silver series names a taste and the Gold series names a strain, Rose Gold names things that are already spoken about.
+Three names that arrive with weight already attached rather than describing a flavour. Where the Silver series names a taste and the Gold series names a strain, Rose Gold names things that are already spoken about.
 
 ### What makes Rose Gold different?
 
-Where Silver names a taste and Gold names a strain, Rose Gold is the solventless connoisseur tier, built on live rosin made with ice water, heat, and pressure. Its names include [Wedding Cake](/moon-rocks/wedding-cake), [God's Gift](/moon-rocks/gods-gift), and [White Walker](/moon-rocks/white-walker). Read [what live rosin is](/learn/what-is-live-rosin).
+Where Silver names a taste and Gold names a strain, Rose Gold is the connoisseur tier. Its names include [Wedding Cake](/moon-rocks/wedding-cake), [God's Gift](/moon-rocks/gods-gift), and [White Walker](/moon-rocks/white-walker). Read [what live rosin is](/learn/what-is-live-rosin).
 
-Live rosin defines the Rose Gold Connoisseur Series — the solventless method, made without butane, propane, CO2 or ethanol at any stage. What that means in practice is covered in full on the [Live Rosin guide](/learn/what-is-live-rosin).
+**How the layers work**
 
-### Rose Gold next to the collaboration jars
-
-Rose Gold is the connoisseur series, but it is not the only place to find named releases with distinct pack art. The [Presidential Line collaboration jars](/moon-rocks/presidential-line) bring partner names and their own label designs, and they sit beside the series rather than inside one. Shoppers new to the format can start with the [primer on what moon rocks are](/learn/what-are-moon-rocks) before comparing names. Whether a jar is part of Rose Gold or the Presidential Line, its own label prints the composition line and batch test results, so read the pack in hand.
-
-**What every tier shares**
-
-Presidential Moon Rocks are built in layers: flower as the base, a concentrate coat applied over it, a kief or diamond finish bonded to the coat. Three stages, in that order. The Presidential Infusion System has run on that sequence since Los Angeles in 2012, and a Silver Flavour Series pack goes through exactly what a Rose Gold pack goes through.
+Presidential Moon Rocks are built in layers: flower as the base, a concentrate coat applied over it, a kief or diamond finish bonded to the coat. Three stages, in that order.
 
 What changes across the catalogue is which materials fill the three roles, and the pack always prints it. Some carry FLOWER · LIVE RESIN · DIAMONDS. Some carry FLOWER · DISTILLATE · KIEF. Cap Junky carries FLOWER · LIQUID LIVE RESIN · DIAMONDS.
 
-**The formats, identical across every tier**
+**The formats**
 
-Moon Rock Blunt: one unit, 1.5 g, .053 oz. Moon Rock Preroll: one unit, 1 g, .035 oz. Moon Rocks loose: 2 g, 0.071 oz, sold in the self-titled flagship pack. Mini Blunts: three at 0.7 g, 2.1 g total. Mini Prerolls: three at 0.5 g, 1.5 g total.
+Moon Rock Blunt: one unit, 1.5 g, .053 oz. Moon Rock Preroll: one unit, 1 g, .035 oz. Moon Rocks loose: 2 g, 0.071 oz. Mini Blunts: three at 0.7 g, 2.1 g total. Mini Prerolls: three at 0.5 g, 1.5 g total.
 
 A tier is not a format and a format is not a tier. Which combinations reach a given shelf is decided by distribution and by the retailer.
 
 **How to recognise the tier on a shelf**
 
-Presidential packs share one architecture across the tiers — WORLD'S STRONGEST across the top, the strain type in script beneath, the silver crown crest with the PRESIDENTIAL banner, the crescent-moon unit numeral, the format line, the name lozenge, and the composition line separated by pot-leaf dots.
+The pack carries WORLD'S STRONGEST across the top, the strain type in script beneath, the silver crown crest with the PRESIDENTIAL banner, the crescent-moon unit numeral, the format line, the name lozenge, and the composition line separated by pot-leaf dots.
 
 The house does not use a different crest for a different tier. What differs is the artwork, the name and what is printed on the composition line.
 
@@ -308,6 +302,10 @@ The house does not use a different crest for a different tier. What differs is t
 Running across the tiers are the partner releases, each carrying a second mark printed on the front: Ball Family Farms, Nature's Chemistry of Las Vegas, Top Shelf Cultivation, THC Design, Trendi by Planet 13, Moxie, Polaris Cannabis, ROVE, Platinum and VladTV.
 
 Those releases are frequently market-specific — the Platinum packs carry Michigan regulatory markings, and the Moxie mark appears on a California variant.
+
+### Rose Gold next to the collaboration jars
+
+Rose Gold is the connoisseur series, but it is not the only place to find named releases with distinct pack art. The [Presidential Line collaboration jars](/moon-rocks/presidential-line) bring partner names and their own label designs, and they sit outside the Silver, Gold and Rose Gold series. Shoppers new to the format can start with the [primer on what moon rocks are](/learn/what-are-moon-rocks) before comparing names. Whether a jar is part of Rose Gold or the Presidential Line, its own label prints the composition line and batch test results, so read the pack in hand.
 
 **Where to find Presidential**
 

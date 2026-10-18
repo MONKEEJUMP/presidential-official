@@ -27,7 +27,7 @@ const CARD_INTRO_OVERRIDES: Readonly<Record<string, string>> = {
   "/about:infusion-science":
     "Infusion is how concentrate and flower become one product instead of two ingredients sitting side by side. Flower is the base, the series concentrate (distillate, live resin or live rosin) is carried through it, and the finish named on the pack completes the build: kief or diamonds on Moon Rocks, as the pack prints, and a kief or diamond finish on Gold and Rose Gold blunts. The Infusion Science guide explains how each layer is applied.",
   "/moon-rocks:what-are-moon-rocks":
-    "Moon Rocks are a layered cannabis format: flower, concentrate, and kief working together in one product. Each Presidential moon rock infused with concentrate is finished with a coat of kief, built to be experienced as a single thing rather than three.",
+    "Moon Rocks are a layered cannabis format: flower, concentrate, and kief working together in one product. Each Presidential moon rock infused with concentrate is finished with a coat of kief or diamonds, built to be experienced as a single thing rather than three.",
 };
 
 function GuideCard({

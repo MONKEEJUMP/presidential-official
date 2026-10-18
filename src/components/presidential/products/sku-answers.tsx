@@ -174,6 +174,12 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
                 <Link className={linkClass} href="/learn/what-is-thc-distillate">concentrate is distillate</Link>.
               </>
             ) : null}
+            {slug === "grape" ? (
+              <>
+                {" For the same composition line under the house name, see "}
+                <Link className={linkClass} href="/moon-rocks/presidential-moon-rocks">the House Line flagship jar with the same label</Link>.
+              </>
+            ) : null}
             {slug === "cherry-gelato" ? (
               <>
                 {" See "}
@@ -236,7 +242,8 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
             and faintly grainy. Live rosin is the solventless concentrate behind the series, pressed with ice water, heat, and
             pressure instead of chemical solvents. Anyone searching for cereal moon rocks can compare it with other Rose Gold jars
             like <Link className={linkClass} href="/moon-rocks/wedding-cake">Wedding Cake moon rocks</Link> or{" "}
-            <Link className={linkClass} href="/moon-rocks/cosmic-cookies">Cosmic Cookies moon rocks</Link>. Read the batch label on the exact jar, then
+            <Link className={linkClass} href="/moon-rocks/cosmic-cookies">Cosmic Cookies moon rocks</Link>. For a name that leans on reverence, see{" "}
+            <Link className={linkClass} href="/moon-rocks/gods-gift">God&apos;s Gift, a reverence-named Rose Gold jar</Link>. Read the batch label on the exact jar, then
             confirm with the store before you go.
           </p>
         </>
@@ -341,7 +348,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
         <>
           <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">SFV OG and its OG neighbor</h2>
           <p className="mt-2 text-sm leading-6 text-po-body">
-            SFV OG takes its name from the San Fernando Valley. Presidential packs mark it as Hybrid, and the aroma runs pine, fuel, and dry earth. It is part of the Gold Strain Series, where OG profiles have company. Shoppers who like that piney, fuel-forward style can compare it with <Link className={linkClass} href="/moon-rocks/presidential-og">Presidential OG in the Gold series</Link>. Pre-roll and blunt versions of SFV OG list flower, live resin, and diamonds. Read the current label for batch test results, and confirm with the store which formats it carries.
+            SFV OG takes its name from the San Fernando Valley. Presidential packs mark it as Hybrid, and the aroma runs pine, fuel, and dry earth. It is part of the Gold Strain Series, where OG profiles have company. Shoppers who like that piney, fuel-forward style can compare it with <Link className={linkClass} href="/moon-rocks/presidential-og">Presidential OG in the Gold series</Link>. For another place-named jar, see <Link className={linkClass} href="/moon-rocks/nyc-diesel">NYC Diesel, the New York City jar</Link>. Pre-roll and blunt versions of SFV OG list flower, live resin, and diamonds. Read the current label for batch test results, and confirm with the store which formats it carries.
           </p>
         </>
       ) : null}
@@ -584,7 +591,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
         <>
           <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Strawberry next to the other Silver flavors</h2>
           <p className="mt-2 text-sm leading-6 text-po-body">
-            Strawberry is one of the fruit names in the Silver Flavor Series, built on distillate and finished with kief. If you
+            Strawberry is a Silver Flavor Series name, and its label reads flower, distillate and kief. If you
             like its ripe, restrained profile, compare it with the{" "}
             <Link className={linkClass} href="/moon-rocks/watermelon">Silver Watermelon jar</Link>, another fruit-led Silver
             release. For how the three layers come together in any jar, read{" "}

@@ -49,7 +49,7 @@ const proofPoints = [
   },
   {
     title: "Product clarity",
-    body: "Presidential Moon Rocks are an infused cannabis product format — flower coated with concentrate or resin and finished with kief, as identified on the package — not NASA lunar samples or space rocks. That infused construction layers flower with concentrate or resin, then adds the kief finish identified for the release. Reading an infused Moon Rocks package means reading those layers together, not treating the brand as a strain. Presidential is the brand; Moon Rocks describes the format, while cultivars such as Skywalker and Cherry Gelato remain distinct. Within that format, infused flower is paired with concentrate; a live resin label identifies that concentrate for the release. Labels may list terpenes and cannabinoids for the named release and batch.",
+    body: "Presidential Moon Rocks are an infused cannabis product format — flower coated with concentrate or resin and finished with kief or diamonds, as identified on the package — not NASA lunar samples or space rocks. That infused construction layers flower with concentrate or resin, then adds the kief or diamond finish identified for the release. Reading an infused Moon Rocks package means reading those layers together, not treating the brand as a strain. Presidential is the brand; Moon Rocks describes the format, while cultivars such as Skywalker and Cherry Gelato remain distinct. Within that format, infused flower is paired with concentrate; a live resin label identifies that concentrate for the release. Labels may list terpenes and cannabinoids for the named release and batch.",
     image: {
       alt: "Skywalker Moon Rock product graphic",
       href: "/moon-rocks/skywalker",
@@ -233,7 +233,7 @@ export function HomepageFoundationShell({
                   Presidential has created cannabis engineered for better flavor,
                   greater consistency, and premium experiences. Its infused
                   construction starts with flower, adds concentrate or resin, and
-                  is finished with kief, as named on the package. That infused
+                  is finished with kief or diamonds, as named on the package. That infused
                   build keeps flower, concentrate, and the finishing layer together
                   as one Moon Rocks format. More flavor. More consistency. More
                   innovation. More experience. Every product, every proof, and every

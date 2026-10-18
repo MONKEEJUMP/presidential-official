@@ -676,8 +676,8 @@ function PresidentialBluntsPage({ images, route }: { images: readonly TermImage[
         <h3 className="mt-6 text-xl font-semibold">Buying moon rock blunts by flavor</h3>
         <p>
           To buy Presidential Blunts, start with the flavor or strain name on the pack. The flavor-led names, such as Blue Raspberry,
-          Peach Mango and Watermelon, sit in the Silver series, built on distillate; see the{" "}
-          <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver distillate tier</Link>. Strain-led names such as the{" "}
+          Peach Mango and Watermelon, sit in the Silver series; see{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/silver">the Silver Flavor Series names</Link>. Strain-led names such as the{" "}
           <Link className={inlineLinkClass} href="/mini-blunts/cherry-gelato">Cherry Gelato mini blunt pack</Link> and Skywalker carry their own strain
           identity. Every one is a moon rock blunt: flower, concentrate and a kief or diamond finish inside a tobacco-free hemp wrap.
           Some names also come as minis, so mini availability depends on the flavor. Bring the exact name and size to a licensed

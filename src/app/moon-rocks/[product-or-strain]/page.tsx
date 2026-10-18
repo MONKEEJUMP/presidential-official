@@ -252,8 +252,7 @@ export default async function CatalogProductDetailPage({
                     {/* SURFER-R28: official-page H3 (facts: MR home official source and licensed retail path, tier tiles, blunt pack data, chief rulings). */}
                     <h3 className="mt-6 text-lg font-semibold leading-snug text-po-ink">Is this the official Moon Rock blunt page?</h3>
                     <p className="mt-3 text-sm leading-6 text-po-body">
-                      Yes. This page is part of Presidential&apos;s official site, where every product and image traces back to Presidential
-                      itself. It covers{" "}
+                      Yes. It covers{" "}
                       <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/moon-rocks/presidential-house-line">the Presidential House Line</Link> Moon Rock blunts: infused
                       flower and concentrate inside a tobacco-free hemp wrap. Gold and Rose Gold blunts carry a kief or diamond finish.
                       The tier on each pack names the extract: Silver is distillate, Gold is live resin, and Rose Gold is live rosin. Mini

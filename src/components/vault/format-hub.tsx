@@ -177,7 +177,8 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
             <p>
               The same names also come in a tobacco-free hemp wrap. Compare the{' '}
               <Link href="/mini-blunts">Presidential mini blunt packs</Link>, and see the{' '}
-              <Link href="/presidential-art/mini-pre-rolls">mini pre-roll pack artwork</Link> for each name.
+              <Link href="/presidential-art/mini-pre-rolls">mini pre-roll pack artwork</Link> for each name. For a single roll instead of a three-pack, see{' '}
+              <Link href="/moon-rocks/presidential-prerolls">the one-gram Presidential Preroll</Link>.
             </p>
           </div>
         ) : null}

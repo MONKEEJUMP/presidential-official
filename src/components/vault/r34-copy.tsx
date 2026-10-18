@@ -85,8 +85,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       The Crescendo name runs across more than one Presidential format. The pre-roll puts flower, live resin, and diamonds into
       one finished 1g roll, marked Sativa on the pack. Shoppers who would rather break up their own can look at the{' '}
       <Link className={L} href="/moon-rocks/crescendo">Crescendo moon rock jar</Link>, which carries the same strain name. Both
-      sit in the Gold Strain Series, so both are built on live resin. To compare Crescendo with other
-      strains built the same way, browse the <Link className={L} href="/moon-rocks/gold">live resin Gold lineup</Link>. Ask the
+      sit in the Gold Strain Series. To compare Crescendo with other strain names, browse <Link className={L} href="/moon-rocks/gold">Crescendo&apos;s Gold Strain Series neighbors</Link>. Ask the
       store which formats are on hand, and read the pack label for batch details before you buy.
     </Block>
   ),
@@ -258,7 +257,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   'mini-pre-rolls/skywalker': (
     <Block heading="Skywalker among the Gold Strain Series">
-      The Skywalker mini pre-roll pack carries the ROVE collaboration in paper: each roll is flower, live resin, and diamonds, marked Indica, with an earthy profile. Skywalker is part of the Gold Strain Series, where most strain names are built on live resin. To compare it with other names in that tier, browse <Link className={L} href="/moon-rocks/gold">Skywalker&apos;s fellow Gold strain jars</Link>. For background on the extract itself, the <Link className={L} href="/learn/what-is-live-resin">frozen-at-harvest live resin explainer</Link> covers how it is made. Read the pack for batch details, and confirm with the store which Skywalker formats are on hand.
+      The Skywalker mini pre-roll pack carries the ROVE collaboration in paper: each roll is flower, live resin, and diamonds, marked Indica, with an earthy profile. Skywalker is part of the Gold Strain Series. To compare it with other names in that tier, browse <Link className={L} href="/moon-rocks/gold">Skywalker&apos;s fellow Gold strain jars</Link>. For background on the extract itself, the <Link className={L} href="/learn/what-is-live-resin">frozen-at-harvest live resin explainer</Link> covers how it is made. Read the pack for batch details, and confirm with the store which Skywalker formats are on hand.
     </Block>
   ),
   'mini-pre-rolls/24k': (

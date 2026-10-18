@@ -224,9 +224,7 @@ export async function MoonRocksPlatformShell({
               {/* INLINKS-COPY-R12: build and where-to-buy sections (facts from series data, /about, the 2G MOON ROCKS label and /find-us). */}
               <h3 className="mt-8 text-2xl font-semibold leading-snug">How Presidential Moon Rocks are made</h3>
               <p className="mt-3">
-                Every Presidential Moon Rock starts with flower. Concentrate is added, then a kief finish. What separates the
-                series is the concentrate: Silver is the Flavor Series built on distillate, Gold is the Strain Series built on
-                live resin, and Rose Gold is the Connoisseur Series built on live rosin. Each guide explains its concentrate:{" "}
+                Every Presidential Moon Rock starts with flower. Concentrate is added, then a kief or diamond finish. What separates the series is the naming: Silver leads with flavor, Gold with strain names, Rose Gold with connoisseur names. Each guide explains its concentrate:{" "}
                 <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-thc-distillate">what is THC distillate</Link>,{" "}
                 <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-live-resin">what is live resin</Link> and{" "}
                 <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-live-rosin">what is live rosin</Link>.{" "}
@@ -247,7 +245,7 @@ export async function MoonRocksPlatformShell({
                 <Link className="font-semibold underline underline-offset-4" href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link>{" "}
                 name a flavor, Gold names a strain, and the{" "}
                 <Link className="font-semibold underline underline-offset-4" href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>{" "}
-                carries the connoisseur names, built on live rosin; see{" "}
+                carries the connoisseur names; see{" "}
                 <Link className="font-semibold underline underline-offset-4" href="/learn/what-is-live-rosin">what live rosin is</Link>. Gold
                 packs such as Blue Dream print FLOWER · LIVE RESIN · DIAMONDS.
               </p>

@@ -49,7 +49,7 @@ const series = [
   },
   {
     title: "GOLD STRAIN SERIES",
-    body: "Balanced. Authentic. Full-spectrum. Cannabis-forward. The strains people ask for by name, treated with the seriousness they stopped receiving years ago. Built on live resin.",
+    body: "Balanced. Authentic. Full-spectrum. Cannabis-forward. The strains people ask for by name, treated with the seriousness they stopped receiving years ago.",
   },
   {
     title: "ROSE GOLD CONNOISSEUR SERIES",
@@ -249,7 +249,7 @@ export function AboutCompanyShell() {
             <div className="mt-14 max-w-3xl">
               <h3 className="text-2xl font-semibold leading-snug text-po-ink">What sizes do the formats come in?</h3>
               <p className="mt-3 text-base leading-7 text-po-body">
-                The formats are identical across every series. A Moon Rock Blunt is one unit at 1.5 g (.053 oz). A Moon Rock Preroll is one unit at 1 g (.035 oz); see the{" "}
+                A Moon Rock Blunt is one unit at 1.5 g (.053 oz). A Moon Rock Preroll is one unit at 1 g (.035 oz); see the{" "}
                 <Link className="font-semibold underline underline-offset-4" href="/pre-rolls">Presidential Moon Rock pre-rolls</Link>. Loose Moon Rocks come at 2 g (0.071 oz) in the self-titled flagship pack; see{" "}
                 <Link className="font-semibold underline underline-offset-4" href="/moon-rocks">all Presidential Moon Rocks</Link>.{" "}
                 <Link className="font-semibold underline underline-offset-4" href="/mini-pre-rolls">Presidential mini pre-rolls</Link>{" "}
@@ -335,9 +335,8 @@ export function AboutCompanyShell() {
               <h3 className="mt-8 font-display text-2xl uppercase leading-tight text-po-ink">Which concentrate goes into each series?</h3>
               <p className="mt-3 max-w-3xl text-lg leading-8 text-po-body">
                 The <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/silver">Silver Flavor Series</Link> is built on <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/learn/what-is-thc-distillate">THC distillate</Link>, with flavors such as Grape, Strawberry, and Watermelon.
-                The <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/gold">Gold Strain Series</Link> is built around live resin, and the{" "}
-                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> uses solventless live
-                rosin. Each pack prints its own materials.
+                The <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/gold">Gold Strain Series</Link> leads with strain names and the{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link> with connoisseur names; each pack prints its own build.
               </p>
             </div>
             <AboutImage

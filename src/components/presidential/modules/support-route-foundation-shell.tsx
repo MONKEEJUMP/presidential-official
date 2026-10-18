@@ -277,8 +277,7 @@ export async function SupportRouteFoundationShell({
                 availability belongs to each licensed retailer in{" "}
                 <a className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="#presidential-find-us-map">select state markets</a>. The series tells the store which family
                 you mean: the{" "}
-                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link> are built on distillate, the Gold
-                Strain Series on live resin, and the Rose Gold Connoisseur Series on live rosin. Formats include Moon Rocks,{" "}
+                <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link>, the Gold Strain Series or the Rose Gold Connoisseur Series — each pack prints its own build. Formats include Moon Rocks,{" "}
                 <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/pre-rolls">Presidential Moon Rock pre-rolls</Link>, 1.5g blunts in a tobacco-free wrap, Mini
                 Pre-Rolls, and Moon Pods with the Orbit device. THC is batch-specific, so check the package label and its test
                 results at the counter.
