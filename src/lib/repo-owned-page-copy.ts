@@ -88,7 +88,7 @@ Each infused Presidential product starts with cannabis flower, adds a concentrat
 
 **The Silver Flavor Series is built on distillate**
 
-The Silver Flavor Series is built on THC distillate. Its flavor-first, fruit-forward roster is [Blue Raspberry](/moon-rocks/blue-raspberry), [Grape](/moon-rocks/grape), [Peach Mango](/moon-rocks/peach-mango), [Pineapple](/moon-rocks/pineapple), [Strawberry](/moon-rocks/strawberry), [Tropical](/moon-rocks/tropical), and [Watermelon](/moon-rocks/watermelon). Presidential Classic, the house recipe, is also made with flower, distillate, and kief.
+The Silver Flavor Series is built on THC distillate. Its flavor-first, fruit-forward roster is [Blue Raspberry](/moon-rocks/blue-raspberry), [Grape](/moon-rocks/grape), [Peach Mango](/moon-rocks/peach-mango), [Pineapple](/moon-rocks/pineapple), [Strawberry](/moon-rocks/strawberry), [Tropical](/moon-rocks/tropical), and [Watermelon](/moon-rocks/watermelon). Presidential Classic, the house recipe, is also made with flower, distillate, and kief. [Presidential Moon Rocks and the three series](/) shows where distillate sits in the lineup.
 
 **Distillate and the other Presidential extracts**
 
