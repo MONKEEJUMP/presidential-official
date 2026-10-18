@@ -88,6 +88,18 @@ export function VapeExperience({ page }: { page: VapePage }) {
           or the <Link href="/find-us/ny">New York store finder page</Link>, and ask the store whether it carries Orbit and the pod
           family you want by name.
         </p>
+        {/* INLINKS-COPY-R39: /vapes store-buyer and blunt H3s (reused anchors reworded). */}
+        <h3 className={s.smallHeading}>Orbit and Moon Pods for store buyers</h3>
+        <p>
+          Stores that want to stock Orbit batteries and Moon Pods can start with{' '}
+          <Link href="/wholesale">Presidential wholesale for vape buyers</Link> or <Link href="/contact">reach the Presidential team</Link>.
+        </p>
+        <h3 className={s.smallHeading}>From a vape cartridge to a Moon Rock blunt</h3>
+        <p>
+          Moon Pods hold liquid diamond, live resin or live rosin oil.{' '}
+          <Link href="/blunts">Moon Rock blunts in a hemp wrap</Link> carry extract in a tobacco-free wrap instead, and{' '}
+          <Link href="/learn/what-are-moon-rocks">the flower build behind Moon Rocks</Link> explains how they are made.
+        </p>
       </section>
     ) : null}
 
