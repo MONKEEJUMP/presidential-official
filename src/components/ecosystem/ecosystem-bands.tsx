@@ -388,7 +388,7 @@ export function HomeEcosystemBand() {
           ONE ECOSYSTEM. EVERY PLATFORM. EVERY EXPERIENCE. EVERY EXPRESSION.
         </p>
         <div className={styles.introLines}>
-          <p>A complete premium cannabis experience built for how consumers choose.</p>
+          <p>A premium cannabis experience built for how consumers choose.</p>
           <p>Same quality. Same craftsmanship. Every time.</p>
         </div>
         <div className={styles.valueGrid}>
@@ -427,7 +427,7 @@ export function HomeArchitectureBand() {
           <h2 className={styles.numberedHeading} id="home-ecosystem-architecture-heading">
             ECOSYSTEM
           </h2>
-          <p className={styles.sectionSubline}>A complete cannabis ecosystem.</p>
+          <p className={styles.sectionSubline}>A cannabis ecosystem.</p>
           <div className={styles.ecosystemGrid}>
             {ECOSYSTEM_PILLARS.map(({ icon: Icon, heading, copy }) => (
               <article className={`${styles.card} ${styles.ecosystemFeatureCard}`} key={heading}>

@@ -473,7 +473,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/learn/what-is-live-resin",
       anchor: "live resin",
-      context: "Flower, live resin, diamonds. The same three-stage",
+      context: "Flower, live resin, diamonds. On this pack",
     },
     {
       href: "/learn/infusion-science",
@@ -517,7 +517,7 @@ export const HARDCODED_IN_CONTENT_LINKS = {
     {
       href: "/learn/infusion-science",
       anchor: "Presidential Infusion System",
-      context: "That sequence is the Presidential Infusion System and it has run unchanged",
+      context: "That sequence is the Presidential Infusion System.",
     },
   ],
   "/our-story": [
@@ -848,9 +848,200 @@ function linkSelectStateMarkets(sourcePath: string, value: string): string {
   return `${value.slice(0, index)}${SELECT_STATE_MARKETS_LINK}${value.slice(index + SELECT_STATE_MARKETS.length)}`;
 }
 
+// Sitebulb R42 MR Part A/B and Surfer R42 placement: applied after IN_CONTENT_TEXT_OVERRIDES, on the swapped text.
+const SB = (heading: string, body: string) => `**${heading}**\n\n${body}\n\n`;
+const R42_WHITE_WALKER = SB(
+  "White Walker beside other Rose Gold names",
+  "White Walker sits in the Rose Gold Connoisseur Series, and Presidential packs mark it as Sativa. Rose Gold is the solventless tier, so shoppers often compare its names on aroma and art. For a dessert-leaning name from the same tier, see [Wedding Cake from the same Rose Gold tier](/moon-rocks/wedding-cake). For a sweeter, dough-led option, look at the [cookie-sweet Cosmic Cookies jar](/moon-rocks/cosmic-cookies). Each jar prints its own build on the label, so read the pack in hand for batch test results.",
+);
+const R42_BLUE_RASPBERRY = SB(
+  "Blue Raspberry among the Silver fruit jars",
+  "Blue Raspberry is a Silver Flavor Series jar with a bright, candied berry aroma. Silver is the flavor-first tier, so its fruit names are easy to compare side by side before choosing. For a darker fruit profile from the same series, look at [dark-fruit Grape moon rocks](/moon-rocks/grape). For something lighter and juicier, the [summery Watermelon moon rocks](/moon-rocks/watermelon) lean sweet and fresh. Blue Raspberry also comes as a pre-roll and a blunt, and each format prints its own composition line, so read the label on the pack you pick up for its build and batch test results.",
+);
+const R42_CAP_JUNKY = SB(
+  "Cap Junky next to other Gold names",
+  "Cap Junky carries the Gold Strain Series name, and its pack prints its own composition line, which is worth reading closely before you buy. Gold groups strain-led names, so shoppers often compare them on aroma and pack art. For a space-themed name in the same tier, look at [Galactic Gas, a space-named Gold jar](/moon-rocks/galactic-gas). For a heavier, stickier profile, see the [heavy, sticky Gorilla Goo jar](/moon-rocks/gorilla-goo). Each jar prints its build on its own label, so check the pack in hand for the composition line and batch test results rather than assuming jars match.",
+);
+const R42_RAINBOW_BELTS = SB(
+  "Rainbow Belts and other sweet Gold names",
+  "Rainbow Belts carries the Gold Strain Series name and is marked Indica on Presidential packs. Shoppers drawn to sweet profiles can compare it with the [dessert-style Cherry Gelato jar](/moon-rocks/cherry-gelato), which pairs dark cherry with something creamy. For a fruit-forward option instead of candy, see the [tropical Papaya Punch moon rocks](/moon-rocks/papaya-punch). Each jar prints its own build on the label, so read the pack for the composition line and batch test results before you choose.",
+);
+const R42_PAPAYA_PUNCH = SB(
+  "Papaya Punch beside other fruit-led jars",
+  "Papaya Punch carries the Gold Strain Series name, with pack art built around tropical fruit. Its aroma follows the art: papaya at the front with citrus around it. Shoppers who like sweet, bright profiles can compare it with the [candy-sweet Rainbow Belts jar](/moon-rocks/rainbow-belts) from the same tier. For a fruit blend from the flavor-first Silver tier, look at the [mixed-fruit Tropical moon rocks in Silver](/moon-rocks/tropical). Each jar prints its own composition line, so read the label on the pack in hand for the build and batch test results.",
+);
+const R42_ICED_LEMON = SB(
+  "Iced Lemon within the Presidential Line",
+  "Iced Lemon is a Presidential Line jar made with Platinum, and its pale-blue, ice-textured label signals the cold, citrus-forward aroma inside. The Presidential Line groups collaboration names, each with its own label design. For a savory contrast from the same line, look at the [savory Garlic Cookies collaboration jar](/moon-rocks/presidential-line-garlic-cookies). New to the format? The [primer on how moon rocks are built](/learn/what-are-moon-rocks) explains the layers in plain terms. Each jar prints its own build, so read the current package label for the composition line and batch test results.",
+);
+const R42_TEXT_OVERRIDES: Readonly<Record<string, readonly (readonly [string, string])[]>> = {
+  "/moon-rocks/24k": [
+    // A2 (no 24K art of any kind): no jar build words.
+    ["FLOWER · LIVE RESIN · DIAMONDS.", ""],
+    ["Flower as the base. Live resin as the coat. Finished with diamonds on the outside. ", ""],
+    // B13.
+    ["Rainbow Belts has candy coiled around a moon.", "[Rainbow Belts, the candy-belt Gold pack](/moon-rocks/rainbow-belts), has candy coiled around a moon."],
+  ],
+  "/moon-rocks/blue-dream": [
+    // A3.
+    [" Everything else in the catalogue — every strain, every flavour, every format — runs through the same method.", ""],
+    ["Presidential fixes the weight of every format across the entire catalogue. ", ""],
+    ["What does not change between them is the build. The same flower, the same live resin coat, finished with diamonds. A Mini Blunt is a smaller version of the same object, not a cheaper one. ", ""],
+    ["Every format, and what changes between them", "Blue Dream formats"],
+  ],
+  "/moon-rocks/blue-raspberry": [
+    // A4.
+    ["Every format", "Blue Raspberry formats"],
+    ["This page is the Moon Rock Blunt: one blunt, 1.5 grams, .053 oz on the flat label.", ""],
+    ["is the only description worth trusting.", "is the description to read."],
+    // B6: Surfer R42 H2 after "Two designs, two jobs".
+    ["**Where to find it**", `${R42_BLUE_RASPBERRY}**Where to find it**`],
+  ],
+  "/moon-rocks/cap-junky": [
+    // A5.
+    ["Every other blunt in the Gold Strain Series prints LIVE RESIN. ", ""],
+    [
+      "Across the catalogue the middle ingredient varies — distillate on the flagship and Blue Raspberry, live resin on Blue Dream and 24K, liquid live resin here, and on Gorilla Goo a four-ingredient line that carries both live resin and distillate. ",
+      "",
+    ],
+    // B20.
+    ["Platinum on Iced Lemon, Guava Haze and Tropicana Cookies.", "Platinum on [the ice-textured Iced Lemon jar](/moon-rocks/presidential-line-iced-lemon), Guava Haze and Tropicana Cookies."],
+    // B9: Surfer R42 H2 after "The pack".
+    ["**Where to find it**", `${R42_CAP_JUNKY}**Where to find it**`],
+  ],
+  "/moon-rocks/gods-gift": [
+    // A10.
+    ["Kief is bonded to the coat as a finish.", "A kief or diamond finish is bonded to the coat."],
+    ["FLOWER · LIVE RESIN · DIAMONDS on Blue Dream and 24K.", "FLOWER · LIVE RESIN · DIAMONDS on Blue Dream."],
+    [" Four ingredients on Gorilla Goo.", ""],
+  ],
+  "/moon-rocks/gorilla-goo": [
+    // A39.
+    ["named with complete honesty", "named honestly"],
+  ],
+  "/moon-rocks/king-louis": [
+    // B16.
+    ["fruit for Papaya Punch, planets for Galactic Gas", "fruit for [the tropical Papaya Punch pack](/moon-rocks/papaya-punch), planets for Galactic Gas"],
+  ],
+  "/moon-rocks/nyc-diesel": [
+    // A12.
+    ["Every format", "NYC Diesel formats"],
+    [
+      "The build does not change between them — only the size and the number in the pack, which the crescent numeral on the front tells you at a glance.",
+      "The crescent numeral on the front tells you the size and the number in the pack at a glance.",
+    ],
+    ["This page is the Moon Rock Blunt: one blunt, 1.5 grams net weight, .053 oz.", ""],
+    // B11.
+    [
+      "Trendi, the partner on Cap Junky and Orange Push Pop, is powered by Planet 13.",
+      "Trendi, the partner on [Cap Junky, its gassy Gold collaboration](/moon-rocks/cap-junky), and Orange Push Pop, is powered by Planet 13.",
+    ],
+  ],
+  "/moon-rocks/papaya-punch": [
+    // A14.
+    [
+      "For all the colour on the outside, the construction is the same one the house applies to everything: FLOWER · LIVE RESIN · DIAMONDS.",
+      "The blunt pack prints FLOWER · LIVE RESIN · DIAMONDS.",
+    ],
+    ["Every format, with the numbers", "Papaya Punch formats"],
+    [
+      "The build does not change between them. Only the size, the count and the crescent numeral on the front of the pack",
+      "Each format shows its size and count in the crescent numeral on the front of the pack",
+    ],
+    ["This page is the Moon Rock Blunt: one blunt, 1.5 grams, .053 oz on the pack.", ""],
+    ["The build underneath the fruit", "The blunt pack's composition line"],
+    // B15: Surfer R42 H2 after "Flavour-forward, by design".
+    ["**The blunt pack's composition line**", `${R42_PAPAYA_PUNCH}**The blunt pack's composition line**`],
+  ],
+  "/moon-rocks/presidential-line-iced-lemon": [
+    // A18 (no Iced Lemon art of any kind): no jar build words.
+    ["FLOWER · LIVE RESIN · DIAMONDS.", ""],
+    ["Flower as the body, live resin as the coat, diamonds as the crystalline finish. ", ""],
+    ["Iced Lemon is one of three Presidential releases built with Platinum", "Iced Lemon is a Presidential release built with Platinum"],
+    ["Every format", "Iced Lemon formats"],
+    [
+      "This page is the Moon Rock Blunt: one blunt, Net Wt. 1.5G (.053oz), printed clearly — the flat-label designs carry legible weights where the illustrated packs often obscure them behind artwork.",
+      "",
+    ],
+    // B18: Surfer R42 H2 after "The collaboration, and where it is made".
+    ["**What is inside**", `${R42_ICED_LEMON}**What is inside**`],
+  ],
+  "/moon-rocks/presidential-og": [
+    // A19.
+    [", which has run on the same sequence since Los Angeles in 2012:", ":"],
+  ],
+  "/moon-rocks/presidential-moon-rocks": [
+    // A32.
+    [" Every Gold Strain Series pack, every Silver Flavour Series pack, every collaboration release runs through it.", ""],
+    ["Cap Junky carries LIQUID LIVE RESIN, a fourth variant.", "Cap Junky carries LIQUID LIVE RESIN."],
+    [" Gorilla Goo runs four ingredients rather than three.", ""],
+  ],
+  "/moon-rocks/presidential-prerolls": [
+    // A35, A36.
+    ["Every format, one build, a different occasion for each.", "Each format prints its own build, with a different occasion for each."],
+    ["flower with live resin and diamonds across most of the Gold Strain Series,", "flower with live resin and diamonds on Blue Dream,"],
+  ],
+  "/moon-rocks/presidential-blunts": [
+    // A39.
+    ["the house method in its most complete form", "the house method in rolled form"],
+  ],
+  "/moon-rocks/rainbow-belts": [
+    // A20.
+    [
+      "The composition line reads LIVE RESIN · DIAMONDS, with the leading word covered by the artwork on this pack. Across the Gold Strain Series that leading word is FLOWER.",
+      "The composition line reads FLOWER · LIVE RESIN · DIAMONDS.",
+    ],
+    ["The same three-stage construction as every other Gold Series release — ", "On this pack that means "],
+    ["Every format", "Rainbow Belts formats"],
+    ["Candy on the outside, house build underneath", "Candy on the outside"],
+    ["This page is the Moon Rock Blunt: one blunt, hand-finished.", ""],
+    // B7.
+    ["Blue Raspberry has raspberries and a helix of red and blue liquid chrome.", "[Blue Raspberry's berry-and-chrome pack](/moon-rocks/blue-raspberry) has raspberries and a helix of red and blue liquid chrome."],
+    // B12: Surfer R42 H2 after "The sweet end of the catalogue".
+    ["**Rainbow Belts formats**", `${R42_RAINBOW_BELTS}**Rainbow Belts formats**`],
+  ],
+  "/moon-rocks/presidential-x-thc-design": [
+    // B10.
+    ["Trendi, powered by Planet 13, on Cap Junky and Orange Push Pop.", "Trendi, powered by Planet 13, on [the Trendi Cap Junky release](/moon-rocks/cap-junky) and Orange Push Pop."],
+  ],
+  "/moon-rocks/wedding-cake": [
+    // A23.
+    [", and the group has a rule: the packaging goes loud and the product does not change.", "."],
+    ["Every Presidential moon rock is built the same way.", "Presidential Moon Rocks are built in layers."],
+    // B14.
+    ["Rainbow Belts puts sugared candy belts around a cratered grey moon", "[The sugared Rainbow Belts pack](/moon-rocks/rainbow-belts) puts candy belts around a cratered grey moon"],
+  ],
+  "/moon-rocks/white-walker": [
+    // A24.
+    ["Skywalker, a ROVE collaboration that runs across every format in the line.", "Skywalker, a ROVE collaboration."],
+    ["The build, which does not vary by name", "How Moon Rocks are layered"],
+    ["Kief bonded to the coat as the finish.", "A kief or diamond finish bonded to the coat."],
+    ["That sequence is the Presidential Infusion System and it has run unchanged since Los Angeles in 2012.", "That sequence is the Presidential Infusion System."],
+    [" Live resin and diamonds on most of the Gold Strain Series.", ""],
+    // B4, B8.
+    ["First, the one that gets confused with it.", "White Walker and Skywalker"],
+    ["Blue Raspberry runs a frosty silver-blue cannabis leaf", "[The frosty Blue Raspberry label](/moon-rocks/blue-raspberry) runs a frosty silver-blue cannabis leaf"],
+    // B3: Surfer R42 H2 after "The cold end of the catalogue".
+    ["**How Moon Rocks are layered**", `${R42_WHITE_WALKER}**How Moon Rocks are layered**`],
+  ],
+  "/moon-rocks/xxx": [
+    // A25: the blunt art prints FLOWER · LIVE RESIN · DIAMONDS.
+    ["The pack reads FLOWER · LIVE RESIN · KIEF.", "The pack reads FLOWER · LIVE RESIN · DIAMONDS."],
+    [
+      "Kief finishes the outside — the dry, powdery layer that bonds to the resin and gives the rock its matte surface and its weight in the hand.",
+      "Diamonds finish the outside.",
+    ],
+    [
+      "XXX runs live resin and kief — a combination that puts a resin coat under a kief finish rather than a crystalline one.",
+      "XXX runs live resin and diamonds.",
+    ],
+  ],
+};
+
 export function hardcodeInContentLinks(sourcePath: string, rawValue: string): string {
   const swaps = [
     ...(IN_CONTENT_TEXT_OVERRIDES[sourcePath] ?? []),
+    ...(R42_TEXT_OVERRIDES[sourcePath] ?? []),
     ...(sourcePath.startsWith("/moon-rocks/") ? MOON_ROCKS_MARKET_SWAPS : []),
   ];
   const value = swaps.reduce((text, [from, to]) => text.split(from).join(to), rawValue);

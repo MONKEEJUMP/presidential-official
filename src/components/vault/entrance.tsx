@@ -54,7 +54,7 @@ export function VaultEntrance() {
     if (!href?.startsWith('/presidential-art/') || !href.includes('?piece=')) return;
     try { sessionStorage.setItem('presidential-vault-origin', JSON.stringify({ href, y: window.scrollY, time: Date.now() })); } catch { /* Native history still returns to the entrance. */ }
   }}>
-    <header className="vault-title-block"><p className="vault-eyebrow">THE COLLECTION</p><h1>THE PRESIDENTIAL VAULT</h1><span className="vault-rule" /><p className="vault-intro">The complete collection of Presidential art.</p></header>
+    <header className="vault-title-block"><p className="vault-eyebrow">THE COLLECTION</p><h1>THE PRESIDENTIAL VAULT</h1><span className="vault-rule" /><p className="vault-intro">The collection of Presidential art.</p></header>
     <section className="vault-masterpiece" aria-label="The collection procession">
       <Link href={pieceHref(current.product)} className="vault-procession-stage vault-piece" aria-label={`Open ${current.product.strain} ${current.product.format} artwork`}>
         <div className={`vault-procession-current ${fading ? 'vault-dissolving' : ''}`} key={index}><FramedArt product={current.product} image={current.image} full priority /></div>

@@ -73,7 +73,7 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
       },
       {
         title: "How it's built",
-        body: "A Presidential Moon Rock isn't flower with a dusting on top. It's the Presidential Infusion System™ — premium flower, rich resin, and a coat of the finest kief, fused into one complete product. Three layers, one hit, engineered for flavor and strength you actually feel. That's what Cannabis Evolved means — and why Moon Rocks earned the name. The series are the [Silver Flavor Series](/moon-rocks/silver), [Gold Strain Series](/moon-rocks/gold) and [Rose Gold Connoisseur Series](/moon-rocks/rose-gold).",
+        body: "A Presidential Moon Rock isn't flower with a dusting on top. It's the Presidential Infusion System™ — premium flower, rich resin, and a kief or diamond finish, fused into one product. Three layers, one hit, engineered for flavor and strength you actually feel. That's what Cannabis Evolved means — and why Moon Rocks earned the name. The series are the [Silver Flavor Series](/moon-rocks/silver), [Gold Strain Series](/moon-rocks/gold) and [Rose Gold Connoisseur Series](/moon-rocks/rose-gold).",
       },
       // SURFER-R18: series-to-extract panel, from /about, /learn, /moon-rocks/rose-gold, /vapes and /moon-pods.
       {

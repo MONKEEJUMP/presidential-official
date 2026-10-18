@@ -267,14 +267,14 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
     </Block>
   ),
   'mini-pre-rolls/gorilla-goo': (
-    <Block heading="How live resin carries Gorilla Goo&apos;s aroma">
-      The Gorilla Goo mini pre-roll pack is marked Hybrid, and each roll is flower, live resin, and diamonds, carrying the strain&apos;s reported sour fuel, pine, and chocolate notes. Live resin comes from plants frozen at harvest rather than dried first, which helps keep those aroma notes intact. The <Link className={L} href="/learn/what-is-live-resin">guide to live resin extraction</Link> explains the process. For a closer look at the layered build these rolls start from, read <Link className={L} href="/learn/what-are-moon-rocks">what moon rocks are made of</Link>. Read the pack for batch details, and confirm with the store which Gorilla Goo formats it carries.
+    <Block heading="How Gorilla Goo&apos;s aroma comes through">
+      The Gorilla Goo mini pre-roll pack is marked Hybrid, and each roll carries the strain&apos;s reported sour fuel, pine, and chocolate notes. For a closer look at the layered build these rolls start from, read <Link className={L} href="/learn/what-are-moon-rocks">what moon rocks are made of</Link>. Read the pack for batch details, and confirm with the store which Gorilla Goo formats it carries.
     </Block>
   ),
   // SURFER-R42: the Pink Cookies mini pre-roll follows its own pack label.
   'mini-pre-rolls/pink-cookies': (
     <Block heading="Where the Pink Cookies minis sit in Gold">
-      The Pink Cookies mini pre-roll pack holds three 0.5g rolls, and the label lists flower, live resin, and diamonds in each, with the pack marked Indica. The aroma is sweet and doughy. The pack carries the Gold Strain Series name, and the <Link className={L} href="/moon-rocks/gold">Gold Strain Series jar lineup</Link> shows the other strain names in that tier. Live resin is extracted from plants frozen at harvest rather than dried first, and the <Link className={L} href="/learn/what-is-live-resin">guide to how frozen-harvest live resin is made</Link> explains that step. Read the pack for batch details before buying.
+      The Pink Cookies mini pre-roll pack holds three 0.5g rolls, with the pack marked Indica. The aroma is sweet and doughy. Pink Cookies carries the Gold Strain Series name, and the <Link className={L} href="/moon-rocks/gold">Gold Strain Series jar collection</Link> shows the other strain names in that tier. Read the pack for batch details before buying.
     </Block>
   ),
   'mini-blunts/skywalker': (
@@ -294,7 +294,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   'mini-blunts/xxx': (
     <Block heading="XXX in a jar or a single roll">
-      XXX mini blunts are flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a woodsy citrus aroma. The same name appears across other Presidential formats, and shoppers can move between them by size and wrap. To break up your own, look at <Link className={L} href="/moon-rocks/xxx">XXX loose in a moon rock jar</Link>, which prints flower, live resin, and kief. For a paper-rolled single, the <Link className={L} href="/pre-rolls/xxx">XXX 1g pre-roll</Link> lists flower, live resin, and diamonds. Builds can differ between formats, so read each pack&apos;s label rather than assuming they match. Confirm with the store which XXX formats it carries, and check batch details on the label.
+      XXX mini blunts are flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a woodsy citrus aroma. The same name appears across other Presidential formats, and shoppers can move between them by size and wrap. To break up your own, look at <Link className={L} href="/moon-rocks/xxx">XXX loose in a moon rock jar</Link>, which follows its own label. For a paper-rolled single, the <Link className={L} href="/pre-rolls/xxx">XXX 1g pre-roll</Link> lists flower, live resin, and diamonds. Builds can differ between formats, so read each pack&apos;s label rather than assuming they match. Confirm with the store which XXX formats it carries, and check batch details on the label.
     </Block>
   ),
   'mini-blunts/cherry-gelato': (

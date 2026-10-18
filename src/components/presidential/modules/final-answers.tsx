@@ -62,11 +62,11 @@ export const HOME_ANSWERS: readonly AnswerItem[] = [
         <h3 className="mt-8 text-2xl font-semibold leading-snug text-po-ink">From the flower to the jar you pick</h3>
         <p>
           Every Presidential Moon Rock starts as cannabis flower. What changes from jar to jar is the concentrate carried through
-          it and the outer layer. Silver jars use distillate, Gold jars use live resin, and Rose Gold jars use live rosin, and
-          across the lineup the outside is kief or diamonds, depending on the label. That&apos;s why the jar label matters more than
+          it and the outer layer. Each jar&apos;s label names its concentrate, and the outside is kief or diamonds,
+          depending on the label. That&apos;s why the jar label matters more than
           the word &quot;flower&quot; on a menu: it names the series and the build. Read the jar label for the build, then compare
           strain-led options on the <Link className={a} href="/moon-rocks/gold">Gold live resin collection</Link>, or start with
-          the 24K jar, which is finished with diamonds.
+          the 24K jar.
         </p>
       </>
     ),

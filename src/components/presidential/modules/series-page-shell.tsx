@@ -123,7 +123,8 @@ export async function SeriesPageShell({
             <>
               {head}Platinum on{" "}
               <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/presidential-line-guava-haze">Guava Haze, the warm Platinum jar</Link>{" "}
-              and Iced Lemon.{tail}
+              and{" "}
+              <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/presidential-line-iced-lemon">Iced Lemon, its ice-labelled pair</Link>.{tail}
             </>
           );
         })()}
@@ -202,8 +203,7 @@ export async function SeriesPageShell({
               <h3 className="text-2xl font-semibold leading-snug text-po-ink">What is in a Silver Moon Rock?</h3>
               <p className="mt-3 max-w-3xl text-base leading-7 text-po-body">
                 Silver is the flavor-first, fruit-forward series: Blue Raspberry, Grape, Peach Mango, Pineapple, Strawberry,
-                Tropical, and Watermelon. Each is made with flower, distillate, and kief, layered the way every Presidential
-                moon rock is built. Compare the <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/gold">Gold Strain Series</Link> and the{" "}
+                Tropical, and Watermelon. Silver jars such as Grape and Watermelon list flower, distillate, and kief on the label. Compare the <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/gold">Gold Strain Series</Link> and the{" "}
                 <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>, or see all{" "}
                 <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks">Presidential Moon Rocks</Link>.
               </p>
