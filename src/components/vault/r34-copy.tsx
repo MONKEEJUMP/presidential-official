@@ -110,7 +110,8 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       <Link className={L} href="/pre-rolls/waui">full-size Waui roll</Link>, which carries the same strain name. Another name
       from the same partnership is <Link className={L} href="/moon-rocks/skywalker">Skywalker, another ROVE name</Link>, offered
       as a jar. Retail stock varies from store to store, so confirm the format you want before the trip and read the pack label
-      for batch details.
+      for batch details. For the same three-roll idea in hemp, see{' '}
+      <Link className={L} href="/mini-blunts/waui">the Waui mini blunt three-pack</Link>.
     </Block>
   ),
   'mini-pre-rolls/xj-13': (
@@ -198,7 +199,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       use 24K as a clear example of how the label reads. The name also comes as the{' '}
       <Link className={L} href="/moon-rocks/24k">24K jar of moon rocks</Link>, which follows its own label and is finished with
       diamonds. For a smaller roll, the <Link className={L} href="/mini-pre-rolls/24k">24K paper minis</Link> carry the same
-      build. Check the label on the exact pack, then use the store finder and confirm current selection with the store.
+      build, and <Link className={L} href="/mini-blunts/24k">24K as a three-roll mini blunt pack</Link> puts it in three hemp-wrapped rolls. Check the label on the exact pack, then use the store finder and confirm current selection with the store.
     </Block>
   ),
   'pre-rolls/xxx': (
@@ -207,7 +208,8 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       the pack. The same name also comes as the <Link className={L} href="/moon-rocks/xxx">XXX moon rock jar</Link>, built with live
       resin and finished with kief, and the <Link className={L} href="/blunts/xxx">XXX infused blunt</Link> puts the name in a
       hemp wrap. If you&apos;d rather have a smaller roll, the{' '}
-      <Link className={L} href="/mini-pre-rolls/xxx">XXX mini pre-roll pack</Link> splits the same name into shorter rolls. Read
+      <Link className={L} href="/mini-pre-rolls/xxx">XXX mini pre-roll pack</Link> splits the same name into shorter rolls, and{' '}
+      <Link className={L} href="/mini-blunts/xxx">XXX mini blunts in a hemp wrap</Link> do the same in hemp. Read
       the label on the exact pack and confirm current selection with the store.
     </Block>
   ),
@@ -225,14 +227,15 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       Waui is a Gold Strain Series name from the Presidential and ROVE collaboration. The pre-roll is one 1g roll of flower, live
       resin, and diamonds, marked Sativa on the pack. The same name also comes as the{' '}
       <Link className={L} href="/moon-rocks/waui">Waui moon rock jar</Link>, and as the{' '}
-      <Link className={L} href="/mini-pre-rolls/waui">Waui mini pre-roll pack</Link> for shorter sessions. Check the label on the
+      <Link className={L} href="/mini-pre-rolls/waui">Waui mini pre-roll pack</Link> for shorter sessions, and as{' '}
+      <Link className={L} href="/mini-blunts/waui">Waui in three 0.7g mini blunts</Link>. Check the label on the
       exact pack and confirm current selection with the store.
     </Block>
   ),
   // SURFER-R39: mini blunt SKU blocks (24K anchors reworded: already used on the site).
   'mini-blunts/skywalker': (
     <Block heading="Skywalker in full-size formats">
-      The Skywalker mini blunt pack carries the ROVE collaboration in a smaller size: flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a blueberry, tropical, and earthy aroma. Shoppers who would rather have one longer roll can look at the <Link className={L} href="/blunts/skywalker">full-size Skywalker blunt</Link>, which lists the same flower, live resin, and diamonds. For a paper-rolled option, the <Link className={L} href="/pre-rolls/skywalker">Skywalker infused pre-roll</Link> uses the same build. Picking between them comes down to size and wrap, since the label shows the same ingredients on each. Read the pack for batch details, and confirm with the store which Skywalker formats it carries.
+      Skywalker is a ROVE collaboration in the Gold Strain Series. The Skywalker mini blunt pack carries the ROVE collaboration in a smaller size: flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a blueberry, tropical, and earthy aroma. Shoppers who would rather have one longer roll can look at the <Link className={L} href="/blunts/skywalker">full-size Skywalker blunt</Link>, which lists the same flower, live resin, and diamonds. For a paper-rolled option, the <Link className={L} href="/pre-rolls/skywalker">Skywalker infused pre-roll</Link> uses the same build. Picking between them comes down to size and wrap, since the label shows the same ingredients on each. Read the pack for batch details, and confirm with the store which Skywalker formats it carries.
     </Block>
   ),
   'mini-blunts/waui': (
@@ -247,7 +250,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   'mini-blunts/xxx': (
     <Block heading="XXX in a jar or a single roll">
-      XXX mini blunts are flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a woodsy citrus aroma. The same name appears across other Presidential formats, and shoppers can move between them by size and wrap. To break up your own, look at <Link className={L} href="/moon-rocks/xxx">XXX loose in a moon rock jar</Link>. For a paper-rolled single, the <Link className={L} href="/pre-rolls/xxx">XXX 1g pre-roll</Link> lists flower, live resin, and diamonds. Builds can differ between formats, so read each pack&apos;s label rather than assuming they match. Confirm with the store which XXX formats it carries, and check batch details on the label.
+      XXX mini blunts are flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a woodsy citrus aroma. The same name appears across other Presidential formats, and shoppers can move between them by size and wrap. To break up your own, look at <Link className={L} href="/moon-rocks/xxx">XXX loose in a moon rock jar</Link>, which prints flower, live resin, and kief. For a paper-rolled single, the <Link className={L} href="/pre-rolls/xxx">XXX 1g pre-roll</Link> lists flower, live resin, and diamonds. Builds can differ between formats, so read each pack&apos;s label rather than assuming they match. Confirm with the store which XXX formats it carries, and check batch details on the label.
     </Block>
   ),
   'mini-blunts/cherry-gelato': (

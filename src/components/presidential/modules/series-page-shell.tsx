@@ -65,7 +65,10 @@ async function readSeriesItems(definition: CatalogSeriesDefinition): Promise<{
   const publicCatalog = await readPublicRenderableCatalogItems("/moon-rocks", {
     next: { tags: ["sanity-catalog-moon-rocks"] },
   });
-  const publicItems = filterCatalogSeriesProducts(definition, publicCatalog.items).filter(keepActive);
+  // Sitebulb R39 A2 (chief R38 ruling): the pack art prints Ghost Train Haze, so the CMS card name is corrected.
+  const fixName = (item: SanityCatalogItem): SanityCatalogItem =>
+    item.name?.includes("Ghost Haze Train") ? { ...item, name: item.name.split("Ghost Haze Train").join("Ghost Train Haze") } : item;
+  const publicItems = filterCatalogSeriesProducts(definition, publicCatalog.items).filter(keepActive).map(fixName);
   if (publicItems.length > 0) {
     return { items: publicItems, mode: "public" };
   }
@@ -75,7 +78,7 @@ async function readSeriesItems(definition: CatalogSeriesDefinition): Promise<{
   });
   if (draftCatalog.ok) {
     return {
-      items: filterCatalogSeriesProducts(definition, draftCatalog.items).filter(keepActive),
+      items: filterCatalogSeriesProducts(definition, draftCatalog.items).filter(keepActive).map(fixName),
       mode: "preview",
     };
   }
@@ -277,8 +280,8 @@ export async function SeriesPageShell({
             <p className="mx-auto w-full max-w-7xl text-base leading-7 text-po-body">
               <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/gorilla-goo">Gorilla Goo Moon Rocks</Link> are part of the Gold Strain
               Series.{" "}
-              <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/cherry-gelato">Cherry Gelato Moon Rocks</Link> sit outside the Gold series,
-              with the collaboration releases.
+              <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks/cherry-gelato">Cherry Gelato Moon Rocks</Link> are a Gold Strain Series
+              collaboration release with Rove.
             </p>
           </Scene>
         ) : null}

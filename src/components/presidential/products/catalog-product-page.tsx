@@ -82,14 +82,28 @@ const VAULT_BUILD_LINKS: Readonly<Record<string, readonly BuildLink[]>> = {
   ],
   "mini-pre-rolls/gorilla-goo": [{ lead: "For the tobacco-free wrap, see the", href: "/mini-blunts/gorilla-goo", anchor: "Gorilla Goo hemp-wrap minis" }],
   "mini-blunts/skywalker": [{ lead: "The", href: "/moon-rocks/skywalker", anchor: "Skywalker moon rock jar", tail: " carries the same build loose" }],
-  "mini-pre-rolls/skywalker": [{ lead: "Or choose", href: "/moon-rocks/skywalker", anchor: "loose Skywalker moon rocks" }],
+  "mini-pre-rolls/skywalker": [
+    { lead: "Or choose", href: "/moon-rocks/skywalker", anchor: "loose Skywalker moon rocks" },
+    { lead: "For a tobacco-free wrap, see", href: "/mini-blunts/skywalker", anchor: "the Skywalker mini blunt three-pack" },
+  ],
+  // Sitebulb R39 B17/B3.
+  "mini-pre-rolls/cherry-gelato": [
+    { lead: "For the same name in a tobacco-free wrap, see", href: "/mini-blunts/cherry-gelato", anchor: "Cherry Gelato mini blunts in hemp" },
+    { lead: "The", href: "/moon-rocks/cherry-gelato", anchor: "loose Cherry Gelato moon rocks", tail: " follow their own jar label" },
+  ],
   "mini-blunts/24k": [{ lead: "The full-size roll is the", href: "/blunts/24k", anchor: "24K 1.5g blunt" }],
-  "pre-rolls/xj-13": [{ lead: "The same name comes loose as", href: "/moon-rocks/xj-13", anchor: "XJ-13 moon rocks in the jar" }],
+  "pre-rolls/xj-13": [
+    { lead: "The same name comes loose as", href: "/moon-rocks/xj-13", anchor: "XJ-13 moon rocks in the jar" },
+    { lead: "For three smaller hemp-wrapped rolls, see", href: "/mini-blunts/xj-13", anchor: "XJ-13 mini blunts, three 0.7g rolls" },
+  ],
   "mini-blunts/xj-13": [{ lead: "For the unrolled format, see", href: "/moon-rocks/xj-13", anchor: "the XJ-13 jar" }],
   "blunts/24k": [{ lead: "For paper instead of a wrap, see", href: "/pre-rolls/24k", anchor: "the 24K single pre-roll" }],
   // Sitebulb R38 B20.
   "mini-blunts/waui": [{ lead: "Or choose", href: "/moon-rocks/waui", anchor: "Waui loose in a Gold jar" }],
-  "mini-pre-rolls/24k": [{ lead: "For one full roll, see", href: "/pre-rolls/24k", anchor: "24K at the 1g size" }],
+  "mini-pre-rolls/24k": [
+    { lead: "For one full roll, see", href: "/pre-rolls/24k", anchor: "24K at the 1g size" },
+    { lead: "For the same name in hemp, see", href: "/mini-blunts/24k", anchor: "24K mini blunts, three 0.7g rolls" },
+  ],
 };
 
 function VaultSpecs({ product }: { readonly product: VaultProduct }) {

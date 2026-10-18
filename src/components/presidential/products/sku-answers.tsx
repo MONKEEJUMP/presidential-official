@@ -362,7 +362,7 @@ export function SkuAnswers({ name, series, slug }: { readonly name: string; read
       {/* SURFER-R39: Cherry Gelato jar H3 (jar label FLOWER · DISTILLATE · KIEF, chief R39). */}
       {slug === "cherry-gelato" ? (
         <>
-          <h3 className="mt-6 text-base font-semibold text-po-ink">What the Cherry Gelato jar label lists</h3>
+          <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">What the Cherry Gelato jar label lists</h2>
           <p className="mt-2 text-sm leading-6 text-po-body">
             Cherry Gelato is a Rove collaboration, and Presidential packs mark it as Hybrid. The jar label lists flower and distillate, finished with kief. Its aroma opens with dark cherry and settles into something creamier underneath. Distillate is a refined concentrate, and the <Link className={linkClass} href="/learn/what-is-thc-distillate">THC distillate refining guide</Link> explains how it is produced. Kief, the collected trichome material, forms the outer layer. The same name also comes in rolled formats, and each pack prints its own build, so read the label on the format you pick rather than assuming it matches the jar. Cannabinoid content is batch-specific; confirm stock with the store.
           </p>
