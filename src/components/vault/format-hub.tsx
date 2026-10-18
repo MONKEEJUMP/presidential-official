@@ -100,7 +100,7 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
               Each mini blunt pack takes its name from the full-size line, so a familiar strain carries over. Compare{' '}
               <Link href="/mini-blunts/presidential-og">Presidential OG mini blunts</Link>,{' '}
               <Link href="/mini-blunts/skywalker">Skywalker mini blunts</Link> and{' '}
-              <Link href="/mini-blunts/xj-13">XJ-13 mini blunts</Link>. Then check whether the pack is marked Indica or Hybrid.
+              <Link href="/mini-blunts/xj-13">XJ-13 mini blunts</Link>. Then check whether the pack is marked Indica, Hybrid, or Sativa.
             </p>
             <h3>The craft on the outside of the pack</h3>
             <p>
@@ -119,6 +119,27 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
               Mini blunt packs are sold through licensed retailers only, and mini availability depends on the strain. Bring the exact
               strain name from the pack to <Link href="/find-us">the Presidential retailer finder</Link>, and check{' '}
               <Link href="/presidential-art/mini-blunts">the mini blunt pack art</Link> so you know the package on the shelf.
+            </p>
+            {/* INLINKS-COPY-R37: /mini-blunts H3s (mini blunts follow their diamond label; reused anchors reworded). */}
+            <h3>From Moon Rock to mini blunt</h3>
+            <p>
+              A Presidential mini blunt starts from the same idea as a Moon Rock: flower coated in live resin, finished with diamonds
+              as the mini blunt labels print. <Link href="/learn/what-are-moon-rocks">The layered moon rock format</Link> covers that
+              build, and <Link href="/learn/infusion-science">how infusion science works</Link> explains how the concentrate is carried
+              through the flower.
+            </p>
+            <h3>The same strain names as mini pre-rolls</h3>
+            <p>
+              Several mini blunt names also come in paper as mini pre-rolls. Compare{' '}
+              <Link href="/mini-pre-rolls/24k">24K mini pre-rolls</Link>,{' '}
+              <Link href="/mini-pre-rolls/skywalker">Skywalker mini pre-rolls</Link> and{' '}
+              <Link href="/mini-pre-rolls/pink-cookies">Pink Cookies mini pre-rolls</Link>, and see the{' '}
+              <Link href="/presidential-art/mini-pre-rolls">mini pre-roll art room</Link> to tell the two packs apart.
+            </p>
+            <h3>A full-size 24K beside the mini</h3>
+            <p>
+              The 24K mini blunt shares its name and build with the{' '}
+              <Link href="/blunts/24k">full-size 24K Moon Rock blunt</Link>. Only the size and the count change.
             </p>
           </div>
         ) : null}
