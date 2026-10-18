@@ -155,7 +155,7 @@ export const ABOUT_ANSWERS: readonly AnswerItem[] = [
           on the jar. Collaboration releases follow their own labels: the{" "}
           <Link className={a} href="/moon-rocks/presidential-x-thc-design">THC Design collaboration releases</Link> pair flower and
           live resin with diamonds. Away from flower, the <Link className={a} href="/moon-pods">Moon Pods vape line</Link> is the
-          vape side of the lineup, built on liquid diamonds. Blunts carry a kief or diamond finish, and pre-rolls cover the
+          vape side of the lineup, with Liquid Diamonds, Live Resin, and Live Rosin pods. Blunts carry a kief or diamond finish, and pre-rolls cover the
           paper side of the same company.
         </p>
       </>

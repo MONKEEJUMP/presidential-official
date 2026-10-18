@@ -69,7 +69,7 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
     return [
       {
         title: "Where it started",
-        body: "Los Angeles, 2012. Founders Everett Smith and John Zapp built cannabis the way the great houses build anything worth owning — obsessively, no shortcuts. They didn't just launch a brand; they helped father the infused-product category in Southern California. Presidential was premium before 'premium cannabis' was a phrase. Read more [about the Presidential cannabis brand](/about).",
+        body: "Los Angeles, 2012. Founders Everett Smith and John Zapp built cannabis the way the great houses build anything worth owning — obsessively, no shortcuts. They launched a brand built on infused products in Southern California. Read more [about the Presidential cannabis brand](/about).",
       },
       {
         title: "How it's built",
@@ -82,7 +82,7 @@ function getRoutePanels(route: SeoRouteRecord): readonly StaticRoutePanel[] {
       },
       {
         title: "The reputation",
-        body: "Presidential became the house behind the World's Strongest™ pre-rolls and the moon rock blunt the whole market tried to copy — carried across licensed California retailers. The reputation wasn't marketed into existence. It was earned, one pack at a time.",
+        body: "Presidential became the house behind the World's Strongest™ pre-rolls and moon rock blunts, carried across licensed California retailers. The reputation wasn't marketed into existence. It was earned, one pack at a time.",
       },
       {
         title: "The culture",

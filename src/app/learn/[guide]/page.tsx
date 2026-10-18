@@ -10,6 +10,7 @@ import { AnswerSections } from "@/components/presidential/modules/answer-section
 import { FindUsCtaShell } from "@/components/presidential/modules/find-us-cta-shell";
 import { LEARN_GUIDE_ANSWERS } from "@/components/presidential/modules/learn-guide-answers";
 import { RepoOwnedPageCopy } from "@/components/presidential/modules/repo-owned-page-copy";
+import Link from "next/link";
 import { CtaLink } from "@/components/presidential/primitives/cta-link";
 import { SectionHeading } from "@/components/presidential/primitives/section-heading";
 import {
@@ -131,6 +132,14 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
               <p className="mt-3 text-xl font-semibold text-po-ink">
                 {guide.record.guideTopic!}
               </p>
+              {/* Sitebulb R33 B4: intro under the topic label, with the /about inlink. */}
+              {slug === "infusion-science" ? (
+                <p className="mt-4 text-sm leading-6 text-po-body">
+                  The Presidential Infusion System is the house method of{" "}
+                  <Link className="font-semibold underline underline-offset-4" href="/about">Presidential, the cannabis company founded in Los Angeles in 2012</Link>:
+                  flower first, the series concentrate carried through it, then the finish named on the pack.
+                </p>
+              ) : null}
               <p className="mt-4 text-sm leading-6 text-po-body">
                 Adults 21+ where legal. Guide content is informational.
               </p>

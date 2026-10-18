@@ -76,7 +76,7 @@ export const VAPES_ADDITIONS = {
       {
         number: "03",
         title: "BETTER HARDWARE. MADE TO PERFORM.",
-        intro: "Unlike most value disposables, Orbit includes premium features that elevate every hit.",
+        intro: "Orbit includes premium features that elevate every hit.",
         features: [
           { icon: "Monitor", title: "LED SCREEN", description: "See everything. Stay in control." },
           { icon: "Lightning", title: "VARIABLE VOLTAGE", description: "Dial in your perfect experience." },
