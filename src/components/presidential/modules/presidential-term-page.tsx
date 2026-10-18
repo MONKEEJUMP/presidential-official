@@ -520,6 +520,18 @@ function PresidentialThcPage({ images, route }: { images: readonly TermImage[]; 
           <Link className={inlineLinkClass} href="/learn/what-are-liquid-diamonds">what liquid diamonds are</Link>. THC is
           batch-specific, so read the package label and its test results.
         </p>
+        {/* SURFER-R30: "presidential weed" ordering H3 (facts: this page's FAQ and formats list, tier tiles, pack-label finish ruling). */}
+        <h3 className="mt-6 text-xl font-semibold">Turning &ldquo;Presidential weed&rdquo; into a specific order</h3>
+        <p>
+          &ldquo;Presidential weed&rdquo; names the brand, not a product, so a budtender will ask what you want next. Answer in order:
+          format, series, then the name on the pack. For Moon Rocks, the series tells you the extract inside.{" "}
+          <Link className={inlineLinkClass} href="/moon-rocks/silver">Silver distillate moon rocks</Link> lead with flavor, Gold uses
+          live resin, and Rose Gold uses live rosin (see{" "}
+          <Link className={inlineLinkClass} href="/learn/what-is-live-rosin">what live rosin is</Link>). Each one starts with flower
+          carried through with concentrate and is finished with kief or diamonds, as the pack label shows. Blunts and pre-rolls carry
+          the same series names, and blunts close with a kief or diamond finish inside a hemp wrap. With the format and name ready,
+          the <Link className={inlineLinkClass} href="/find-us">licensed-retailer search</Link> shows where to ask.
+        </p>
       </TermSection>
 
       <TermSection id="presidential-thc-where" title="Where to find Presidential THC" tone="contrast">
