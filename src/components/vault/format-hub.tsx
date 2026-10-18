@@ -180,6 +180,23 @@ export function VaultFormatHub({ room }: { room: VaultRoom }) {
               <Link href="/presidential-art/mini-pre-rolls">mini pre-roll pack artwork</Link> for each name. For a single roll instead of a three-pack, see{' '}
               <Link href="/moon-rocks/presidential-prerolls">the one-gram Presidential Preroll</Link>.
             </p>
+            {/* INLINKS-COPY-R44: /mini-pre-rolls H3s. */}
+            <h3>Reading the extracts in a mini pre-roll</h3>
+            <p>
+              Start with <Link href="/learn/what-are-liquid-diamonds">how liquid diamonds are made</Link>,{' '}
+              <Link href="/learn/what-are-moon-rocks">the Moon Rocks basics</Link> and{' '}
+              <Link href="/learn/different-extracts-need-different-heat">heat for each extract type</Link>.
+            </p>
+            <h3>Mini pre-rolls next to full-size blunts</h3>
+            <p>
+              For a hemp wrap, see <Link href="/blunts">Presidential blunts in full size</Link>, or read{' '}
+              <Link href="/about">who makes Presidential mini pre-rolls</Link>.
+            </p>
+            <h3>Mini pre-rolls for store buyers</h3>
+            <p>
+              Retailers can start with <Link href="/wholesale">wholesale mini pre-roll orders</Link> or{' '}
+              <Link href="/contact">ask the team about mini pre-rolls</Link>.
+            </p>
           </div>
         ) : null}
         <div className={shared.tierSections}>
