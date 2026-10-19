@@ -142,7 +142,8 @@ export function SalesRow({
 
       <div className={styles.rowField}>
         <span>Address</span>
-        <a href={mapHref} rel="noreferrer" target="_blank">{door.streetAddress || "Open map"}</a>
+        <a href={mapHref} rel="noreferrer" target="_blank">{address || "Address needs verification"}</a>
+        {!door.zip ? <small>ZIP needs verification</small> : null}
       </div>
 
       {door.isPurchasing ? (
