@@ -28,12 +28,13 @@ export async function requireSalesWorkflowActor() {
 
   const admin = createSalesAdminClient();
   const profile = await admin.from("sales_rep_profiles")
-    .select("user_id,username,display_name,role,active")
+    .select("user_id,username,display_name,role,active,must_change_pin")
     .eq("user_id", data.user.id).eq("active", true).maybeSingle();
   if (profile.error) throw new SalesWorkflowError("The sales workspace is temporarily unavailable.", 503);
   if (!profile.data || !["super_master", "master", "sales_rep"].includes(profile.data.role)) {
     throw new SalesWorkflowError("This sales account is not active. Contact Paulie.", 403);
   }
+  if (profile.data.must_change_pin) throw new SalesWorkflowError("Change your PIN before opening the CRM.", 403);
   return { admin, actor: profile.data as WorkflowActor };
 }
 
