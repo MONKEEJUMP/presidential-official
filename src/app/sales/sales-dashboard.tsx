@@ -37,6 +37,8 @@ type BrowseFilters = { city: string; search: string; filter: DispensaryFilter; q
 
 type ApiResponse = Readonly<{
   success?: boolean;
+  mustChangePin?: boolean;
+  username?: string;
   authenticated?: boolean;
   error?: string;
   call?: SalesCall;
@@ -114,6 +116,9 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
   const [changingTeamCode, setChangingTeamCode] = useState(false);
   const [changePinOpen, setChangePinOpen] = useState(false);
   const [changingPin, setChangingPin] = useState(false);
+  const [pinChangeRequired, setPinChangeRequired] = useState(false);
+  const [creatingRep, setCreatingRep] = useState(false);
+  const [createdRepMessage, setCreatedRepMessage] = useState("");
   const [pinMessage, setPinMessage] = useState("");
   const [search, setSearch] = useState("");
   const [city, setCity] = useState("ALL CITIES");
@@ -164,9 +169,16 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
         }
         return null;
       }
-      const payload = (await response.json()) as SalesSnapshot & { error?: string };
+      const payload = (await response.json()) as SalesSnapshot & { error?: string; mustChangePin?: boolean };
       if (!response.ok || !payload.authenticated) throw new Error(payload.error ?? "Sales data is temporarily unavailable.");
       if (sequence !== requestSequence.current) return null;
+      if (payload.mustChangePin) {
+        setSnapshot(null);
+        setPinChangeRequired(true);
+        setActivity([]); setAdminEvents([]); setTeamPanelOpen(false); setActivityOpen(false);
+        return null;
+      }
+      setPinChangeRequired(false);
       setSnapshot((current) => ({
         ...payload,
         doors: payload.doors.map((door) => {
@@ -403,18 +415,13 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     event.preventDefault();
     if (settingUp) return;
     const form = new FormData(event.currentTarget);
-    const pin = String(form.get("password") ?? "");
-    if (pin !== String(form.get("confirmPassword") ?? "")) {
-      setLoginError("The two PIN entries do not match.");
-      return;
-    }
     setSettingUp(true);
     setLoginError("");
     try {
       const response = await fetch("/api/sales", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "setup_rep", setupCode: form.get("setupCode"), username: form.get("username"), password: pin }),
+        body: JSON.stringify({ action: "setup_rep", setupCode: form.get("setupCode"), username: form.get("username") }),
       });
       const payload = (await response.json()) as ApiResponse;
       if (!response.ok || !payload.authenticated) throw new Error(payload.error ?? "Account setup failed.");
@@ -488,10 +495,30 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       await postAction({ action: "change_pin", password: pin });
       formElement.reset();
       setPinMessage("PIN UPDATED. Use the new PIN next time you sign in.");
+      if (pinChangeRequired) await loadSnapshot();
     } catch (error) {
       setPinMessage(error instanceof Error ? error.message : "Your PIN could not be changed.");
     } finally {
       setChangingPin(false);
+    }
+  }
+
+  async function createRep(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (creatingRep) return;
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
+    setCreatingRep(true);
+    setCreatedRepMessage("");
+    try {
+      const created = await postAction({ action: "create_rep", username: form.get("username"), displayName: form.get("displayName") });
+      formElement.reset();
+      setCreatedRepMessage(`Account created: ${created.username}. Temporary PIN: 0000. They must choose a new 4-digit PIN at first login.`);
+      await loadActivity(true);
+    } catch (error) {
+      setCreatedRepMessage(error instanceof Error ? error.message : "Account creation failed.");
+    } finally {
+      setCreatingRep(false);
     }
   }
 
@@ -504,9 +531,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       body.username = username;
     }
     if (accountAction === "reset_pin") {
-      const pin = window.prompt(`Enter a replacement 6-digit PIN for ${rep.displayName}:`);
-      if (!pin) return;
-      body.pin = pin;
+      if (!window.confirm(`Reset ${rep.displayName} to temporary PIN 0000? They must choose a new PIN at next login.`)) return;
     }
     if (accountAction === "set_role") body.role = rep.role === "master" ? "sales_rep" : "master";
     if (accountAction === "deactivate" && !window.confirm(`Deactivate ${rep.displayName} and revoke active sessions?`)) return;
@@ -548,6 +573,7 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
     await fetch("/api/sales", { method: "DELETE" });
     try { const prefix = `presidential.sales.draft:${snapshot?.user.id}:`; for (const key of Object.keys(sessionStorage)) if (key.startsWith(prefix)) sessionStorage.removeItem(key); } catch { /* Optional drafts. */ }
     setSnapshot(null);
+    setPinChangeRequired(false);
     setActivity([]);
     setAdminEvents([]);
     setActivityOpen(false);
@@ -820,6 +846,21 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
 
   if (!ready) return <><SiteHeader /><main className={styles.loginPage}><p>Opening Presidential Sales…</p></main><SiteFooter /></>;
 
+  if (pinChangeRequired) {
+    return <><SiteHeader /><main className={styles.loginPage}>
+      <form className={styles.loginCard} onSubmit={changePin}>
+        <span>PRESIDENTIAL INTERNAL</span>
+        <h1>CHANGE YOUR PIN</h1>
+        <p>Choose your own 4-digit PIN to finish signing in. The temporary PIN cannot be reused.</p>
+        <label><span>New 4-digit PIN</span><input autoComplete="new-password" inputMode="numeric" maxLength={4} minLength={4} name="newPin" pattern="[0-9]{4}" required type="password" /></label>
+        <label><span>Confirm 4-digit PIN</span><input autoComplete="new-password" inputMode="numeric" maxLength={4} minLength={4} name="confirmNewPin" pattern="[0-9]{4}" required type="password" /></label>
+        <button disabled={changingPin} type="submit">{changingPin ? "UPDATING…" : "SAVE PIN AND OPEN CRM"}</button>
+        {pinMessage || pageError ? <p className={styles.errorMessage} role="status">{pinMessage || pageError}</p> : null}
+        <button disabled={changingPin} onClick={() => void logout()} type="button">SIGN OUT</button>
+      </form>
+    </main><SiteFooter /></>;
+  }
+
   if (!snapshot) {
     return (
       <><SiteHeader />
@@ -833,13 +874,12 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
             <button className={authMode === "login" ? styles.activeAuthMode : ""} onClick={() => { setAuthMode("login"); setLoginError(""); }} type="button">SIGN IN</button>
             <button className={authMode === "setup" ? styles.activeAuthMode : ""} onClick={() => { setAuthMode("setup"); setLoginError(""); }} type="button">CREATE USERNAME + PIN</button>
           </div>
-          <p>{authMode === "login" ? "Use your first-name username and 6-digit PIN." : "Enter the shared sales team signup code, then choose your username and PIN."}</p>
+          <p>{authMode === "login" ? "Use your username and 4-digit PIN. First time signing in? Start with 0000, then choose your own PIN." : "Enter the shared sales team signup code and choose your username. Your temporary PIN is 0000; choose your own PIN on the next screen."}</p>
           {authMode === "setup" ? (
             <label><span>Sales team signup code</span><input autoCapitalize="characters" autoComplete="off" maxLength={40} name="setupCode" placeholder="ABCD-EFGH" required type="text" /></label>
           ) : null}
-          <label><span>First-name username</span><input autoCapitalize="none" autoComplete="username" maxLength={32} name="username" pattern="[A-Za-z][A-Za-z0-9]*" placeholder="paulie" required type="text" /></label>
-          <label><span>6-digit PIN</span><input autoComplete={authMode === "setup" ? "new-password" : "current-password"} inputMode="numeric" maxLength={6} minLength={6} name="password" pattern="[0-9]{6}" required type="password" /></label>
-          {authMode === "setup" ? <label><span>Confirm 6-digit PIN</span><input autoComplete="new-password" inputMode="numeric" maxLength={6} minLength={6} name="confirmPassword" pattern="[0-9]{6}" required type="password" /></label> : null}
+          <label><span>Username</span><input autoCapitalize="none" autoComplete="username" maxLength={32} name="username" pattern="[A-Za-z][A-Za-z0-9]*" placeholder="joemason" required type="text" /></label>
+          {authMode === "login" ? <label><span>4-digit PIN</span><input autoComplete="current-password" inputMode="numeric" maxLength={4} minLength={4} name="password" pattern="[0-9]{4}" required type="password" /></label> : <p>Temporary PIN: 0000</p>}
           <button disabled={loggingIn || settingUp} type="submit">{authMode === "login" ? loggingIn ? "SIGNING IN…" : "SIGN IN" : settingUp ? "CREATING…" : "CREATE MY LOGIN"}</button>
           {loginError || pageError ? <p className={styles.errorMessage}>{loginError || pageError}</p> : null}
         </form>
@@ -867,6 +907,14 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
 
       {teamPanelOpen && isSuper ? (
         <section className={styles.teamAdminPanel}>
+          <form className={styles.teamCodeForm} onSubmit={createRep}>
+            <strong>CREATE SALES REP</strong>
+            <label><span>Full name</span><input maxLength={120} name="displayName" required type="text" /></label>
+            <label><span>Username</span><input autoCapitalize="none" maxLength={32} name="username" pattern="[A-Za-z][A-Za-z0-9]*" required type="text" /></label>
+            <p>Temporary PIN: 0000. The new rep must change it before using the CRM.</p>
+            <button disabled={creatingRep} type="submit">{creatingRep ? "CREATING…" : "CREATE USER"}</button>
+            {createdRepMessage ? <p role="status">{createdRepMessage}</p> : null}
+          </form>
           <div className={styles.teamCodeBlock}>
             <span>CURRENT SALES TEAM SIGNUP CODE</span>
             <strong>{snapshot.user.teamSetupCode}</strong>
@@ -888,8 +936,8 @@ export function SalesDashboard({ initiallyAuthenticated }: Readonly<{ initiallyA
       {changePinOpen ? (
         <form className={styles.pinPanel} onSubmit={changePin}>
           <strong>CHOOSE YOUR NEW PIN</strong>
-          <label><span>New 6-digit PIN</span><input autoComplete="new-password" inputMode="numeric" maxLength={6} minLength={6} name="newPin" pattern="[0-9]{6}" required type="password" /></label>
-          <label><span>Confirm PIN</span><input autoComplete="new-password" inputMode="numeric" maxLength={6} minLength={6} name="confirmNewPin" pattern="[0-9]{6}" required type="password" /></label>
+          <label><span>New 4-digit PIN</span><input autoComplete="new-password" inputMode="numeric" maxLength={4} minLength={4} name="newPin" pattern="[0-9]{4}" required type="password" /></label>
+          <label><span>Confirm PIN</span><input autoComplete="new-password" inputMode="numeric" maxLength={4} minLength={4} name="confirmNewPin" pattern="[0-9]{4}" required type="password" /></label>
           <button disabled={changingPin} type="submit">{changingPin ? "UPDATING…" : "SAVE MY PIN"}</button>
           {pinMessage ? <p role="status">{pinMessage}</p> : null}
         </form>

@@ -1,6 +1,6 @@
 import "server-only";
 
-import { createHash, randomUUID } from "node:crypto";
+import { createHash } from "node:crypto";
 
 import { NextResponse } from "next/server";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
@@ -19,6 +19,7 @@ import {
 import { createSalesAdminClient, createSalesAuthClient } from "@/lib/supabase/sales-server";
 import { browseSales, readSalesActivity, readSalesContactProgress, readSalesHistory, readSalesRequests } from "@/lib/sales-browse-server";
 import { consumeSalesAttempt, requireSalesClaim, SalesWorkflowError } from "@/lib/sales-workflow-server";
+import { createSalesRepAccount, SALES_PIN_PATTERN, salesAuthPassword, setSalesPin } from "@/lib/sales-pin";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -26,7 +27,7 @@ export const runtime = "nodejs";
 const PAGE_SIZE = 1000;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const USERNAME_PATTERN = /^[a-z][a-z0-9]{0,31}$/;
-const PIN_PATTERN = /^\d{6}$/;
+const PIN_PATTERN = SALES_PIN_PATTERN;
 const TEAM_CODE_PATTERN = /^[A-Z0-9]{4,32}$/;
 const VALID_STATUSES = new Set<DoorStatus>(["stocked", "prospect", "review", "closed"]);
 
@@ -55,6 +56,8 @@ type RepProfile = Readonly<{
   active: boolean;
   deactivated_at: string | null;
   activity_counters_reset_at: string | null;
+  must_change_pin: boolean;
+  pin_key: string | null;
 }>;
 
 type TeamSettings = Readonly<{
@@ -111,7 +114,7 @@ async function authenticatedUser(): Promise<User | null> {
 async function fetchRepProfile(admin: SupabaseClient, userId: string): Promise<RepProfile | null> {
   const { data, error } = await admin
     .from("sales_rep_profiles")
-    .select("user_id,username,display_name,can_invite,role,active,deactivated_at,activity_counters_reset_at")
+    .select("user_id,username,display_name,can_invite,role,active,deactivated_at,activity_counters_reset_at,must_change_pin,pin_key")
     .eq("user_id", userId)
     .maybeSingle();
   if (error) throw error;
@@ -258,6 +261,10 @@ export async function GET(request: Request) {
     const admin = createSalesAdminClient();
     const profile = await fetchRepProfile(admin, user.id);
     if (!profile?.active) return json({ error: "This sales account is inactive." }, 403);
+    if (profile.must_change_pin) {
+      return json({ authenticated: true, mustChangePin: true,
+        user: { id: user.id, name: profile.display_name, username: profile.username } });
+    }
     const params = new URL(request.url).searchParams;
     const resource = params.get("resource");
     if (resource === "activity") {
@@ -369,10 +376,7 @@ async function manageAccount(admin: SupabaseClient, actor: RepProfile, input: Re
     return json({ success: true });
   }
   if (action === "reset_pin") {
-    const pin = typeof input.pin === "string" ? input.pin : "";
-    if (!PIN_PATTERN.test(pin)) return json({ error: "Enter an exactly 6-digit replacement PIN." }, 400);
-    const { error } = await admin.auth.admin.updateUserById(target.user_id, { password: pin });
-    if (error) throw error;
+    await setSalesPin(admin, target, "0000", true);
     await addAudit(admin, actor, "pin_reset", { target, reason });
     return json({ success: true });
   }
@@ -409,7 +413,7 @@ export async function POST(request: Request) {
       const bucket = (value: string) => createHash("sha256").update(value).digest("hex");
       const limits = await Promise.all([
         consumeSalesAttempt(admin, bucket(`${input.action}:ip:${ip}`), input.action === "login" ? 80 : 15, 300),
-        consumeSalesAttempt(admin, bucket(`${input.action}:account:${username}`), 12, 300),
+        consumeSalesAttempt(admin, bucket(`${input.action}:account:${username}`), 5, 900),
       ]);
       const blocked = limits.find((limit) => !limit.allowed);
       if (blocked) return NextResponse.json({ error: "Too many attempts. Please wait a few minutes, then try again." }, { status: 429, headers: { "Retry-After": String(blocked.retryAfter), "Cache-Control": "no-store" } });
@@ -422,11 +426,11 @@ export async function POST(request: Request) {
     const username = typeof input.username === "string" ? input.username.trim().toLowerCase() : "";
     const password = typeof input.password === "string" ? input.password : "";
     if (!USERNAME_PATTERN.test(username) || !PIN_PATTERN.test(password)) {
-      return json({ error: "Enter your first-name username and 6-digit PIN." }, 400);
+      return json({ error: "Enter your username and 4-digit PIN." }, 400);
     }
     const admin = createSalesAdminClient();
     const { data, error } = await admin.from("sales_rep_profiles")
-      .select("user_id,username,display_name,can_invite,role,active,deactivated_at,activity_counters_reset_at")
+      .select("user_id,username,display_name,can_invite,role,active,deactivated_at,activity_counters_reset_at,must_change_pin,pin_key")
       .eq("username", username).maybeSingle();
     if (error || !data) return json({ error: "Username or PIN was not recognized." }, 401);
     const profile = data as RepProfile;
@@ -435,17 +439,19 @@ export async function POST(request: Request) {
     const email = owner.data.user?.email;
     if (owner.error || !email) return json({ error: "Username or PIN was not recognized." }, 401);
     const auth = await createSalesAuthClient();
-    const signedIn = await auth.auth.signInWithPassword({ email, password });
+    if (!profile.pin_key) return json({ error: "Account setup is temporarily unavailable." }, 503);
+    const signedIn = await auth.auth.signInWithPassword({ email, password: salesAuthPassword(password, profile.pin_key) });
     if (signedIn.error || !signedIn.data.user) return json({ error: "Username or PIN was not recognized." }, 401);
-    return json({ authenticated: true, name: profile.display_name, username: profile.username });
+    const mustChangePin = profile.must_change_pin;
+    return json({ authenticated: true, mustChangePin, name: profile.display_name, username: profile.username });
   }
 
   if (input.action === "setup_rep") {
     const username = typeof input.username === "string" ? input.username.trim().toLowerCase() : "";
-    const pin = typeof input.password === "string" ? input.password : "";
+    const pin = "0000";
     const setupCode = typeof input.setupCode === "string" ? normalizeTeamCode(input.setupCode) : "";
     if (!USERNAME_PATTERN.test(username) || !PIN_PATTERN.test(pin) || !TEAM_CODE_PATTERN.test(setupCode)) {
-      return json({ error: "Enter the sales team signup code, username, and 6-digit PIN." }, 400);
+      return json({ error: "Enter the sales team signup code and username." }, 400);
     }
     const admin = createSalesAdminClient();
     const duplicate = await admin.from("sales_rep_profiles").select("user_id").eq("username", username).maybeSingle();
@@ -455,30 +461,13 @@ export async function POST(request: Request) {
     if (!settings.onboarding_open) return json({ error: "New sales-account creation is temporarily closed. Contact Paulie." }, 403);
     if (settings.setup_code !== setupCode) return json({ error: "That sales team signup code is not valid." }, 401);
     const displayName = username[0].toUpperCase() + username.slice(1);
-    const email = `${username}.${randomUUID()}@sales.presidential.internal`;
-    const created = await admin.auth.admin.createUser({
-      email,
-      password: pin,
-      email_confirm: true,
-      user_metadata: { display_name: displayName },
-    });
-    if (created.error || !created.data.user) return json({ error: "Account setup is temporarily unavailable." }, 503);
-    const inserted = await admin.from("sales_rep_profiles").insert({
-      user_id: created.data.user.id,
-      username,
-      display_name: displayName,
-      role: "sales_rep",
-      active: true,
-      can_invite: false,
-    });
-    if (inserted.error) {
-      await admin.auth.admin.deleteUser(created.data.user.id);
-      return json({ error: inserted.error.code === "23505" ? "That username is taken. Add a digit or initial." : "Account setup is temporarily unavailable." }, inserted.error.code === "23505" ? 409 : 503);
-    }
+    const created = await createSalesRepAccount(admin, { username, displayName, pin, temporary: true });
     const auth = await createSalesAuthClient();
-    const signedIn = await auth.auth.signInWithPassword({ email, password: pin });
+    const profile = await fetchRepProfile(admin, created.userId);
+    if (!profile?.pin_key) return json({ error: "Account created. Please sign in." }, 201);
+    const signedIn = await auth.auth.signInWithPassword({ email: created.email, password: salesAuthPassword(pin, profile.pin_key) });
     if (signedIn.error || !signedIn.data.user) return json({ error: "Account created. Please sign in." }, 201);
-    return json({ authenticated: true, name: displayName, username }, 201);
+    return json({ authenticated: true, mustChangePin: true, name: displayName, username }, 201);
   }
 
   const user = await authenticatedUser();
@@ -489,18 +478,37 @@ export async function POST(request: Request) {
     const profile = await fetchRepProfile(admin, user.id);
     if (!profile?.active) return json({ error: "This sales account is inactive." }, 403);
 
+    if (input.action === "change_pin") {
+      const pin = typeof input.password === "string" ? input.password : "";
+      if (!PIN_PATTERN.test(pin) || pin === "0000") return json({ error: "Choose a 4-digit PIN other than the temporary PIN." }, 400);
+      await setSalesPin(admin, profile, pin);
+      const updatedProfile = await fetchRepProfile(admin, user.id);
+      if (!updatedProfile?.pin_key || !user.email) return json({ error: "Your PIN was saved. Please sign in with your new PIN." }, 401);
+      const auth = await createSalesAuthClient();
+      const signedIn = await auth.auth.signInWithPassword({ email: user.email, password: salesAuthPassword(pin, updatedProfile.pin_key) });
+      if (signedIn.error) return json({ error: "Your PIN was saved. Please sign in with your new PIN." }, 401);
+      return json({ success: true });
+    }
+    if (profile.must_change_pin) return json({ error: "Change your PIN before opening the CRM.", mustChangePin: true }, 403);
+
+    if (input.action === "create_rep") {
+      if (!isSuper(profile)) return json({ error: "Super Master access is required." }, 403);
+      const username = String(input.username ?? "").trim().toLowerCase();
+      const displayName = String(input.displayName ?? "").trim();
+      if (!USERNAME_PATTERN.test(username) || !displayName || displayName.length > 120) return json({ error: "Enter the user's full name and a username using letters and numbers." }, 400);
+      const existing = await admin.from("sales_rep_profiles").select("user_id").eq("username", username).maybeSingle();
+      if (existing.error) throw existing.error;
+      if (existing.data) return json({ error: "That username is already taken." }, 409);
+      const created = await createSalesRepAccount(admin, { username, displayName, pin: "0000", temporary: true });
+      await addAudit(admin, profile, "rep_created", { targetUsername: username,
+        reason: "Owner created a Sales Rep with mandatory first-login PIN change." });
+      return json({ success: true, username: created.username, name: created.name }, 201);
+    }
+
     if (input.action === "link_customer_source") {
       if (!isSuper(profile)) return json({ error: "Only Paulie can link customer source records." }, 403);
       const { error } = await admin.rpc("link_sales_customer_source", { p_actor_id: user.id, p_customer_id: Number(input.customerId), p_door_id: Number(input.doorId), p_evidence: safeReason(input.evidence) ?? "" });
       return error ? json({ error: "The source link could not be made. Check both records, their state and your evidence." }, 409) : json({ success: true });
-    }
-
-    if (input.action === "change_pin") {
-      const pin = typeof input.password === "string" ? input.password : "";
-      if (!PIN_PATTERN.test(pin)) return json({ error: "Enter an exactly 6-digit PIN." }, 400);
-      const auth = await createSalesAuthClient();
-      const { error } = await auth.auth.updateUser({ password: pin });
-      return error ? json({ error: "Your PIN could not be changed." }, 503) : json({ success: true });
     }
 
     if (input.action === "reset_my_daily_calls") {
