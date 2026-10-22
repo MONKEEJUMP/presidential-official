@@ -631,8 +631,7 @@ Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongs
         <>
           <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Strawberry beside darker and stone-fruit flavors</h2>
           <p className="mt-2 text-sm leading-6 text-po-body">
-            Strawberry&apos;s aroma is ripe and sweet without leaning syrupy, and shoppers who like it often compare it with other
-            fruit names. For a deeper, darker profile, look at the{" "}
+            Strawberry&apos;s aroma is ripe and sweet without leaning syrupy. For a deeper, darker profile, look at the{" "}
             <Link className={linkClass} href="/moon-rocks/grape">deep, dark Grape jar</Link>. For something softer and more tropical, the{" "}
             <Link className={linkClass} href="/moon-rocks/peach-mango">Peach Mango stone-fruit jar</Link> pairs two fruits in one name.
             Comparing aroma notes side by side helps narrow a fruit-led choice. Each jar prints its own composition line, so read
@@ -680,9 +679,8 @@ Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongs
         <>
           <h2 className="mt-6 font-display text-2xl uppercase leading-tight text-po-ink">Gorilla Goo next to other heavy-aroma names</h2>
           <p className="mt-2 text-sm leading-6 text-po-body">
-            Gorilla Goo&apos;s aroma is sticky and resinous, and shoppers who like that weight often compare it with other
-            strain-led names. The{" "}
-            <Link className={linkClass} href="/moon-rocks/cap-junky">textured Cap Junky jar</Link> has pack art built on texture and
+            For other strain-led names to compare, start with these two. The{" "}
+            <Link className={linkClass} href="/moon-rocks/cap-junky">Trendi-line Cap Junky jar</Link> has pack art built on texture and
             weight. For another strain-led option, look at the{" "}
             <Link className={linkClass} href="/moon-rocks/xj-13">XJ-13 strain jar</Link>, which leans citrus and clean. Comparing aroma
             notes and pack art side by side helps you choose. Each jar prints its own composition line, so read the label in hand

@@ -10,11 +10,11 @@ import { VaultRoomCopy } from '@/components/vault/r34-copy';
 // build are the ones every mini pack states in src/content/vault/specs.json.
 const ROOM_INTROS: Readonly<Record<string, (count: number) => ReactNode>> = {
   // Sitebulb R32 B3/B4: store-finder inlinks for the blunt and pre-roll rooms.
-  blunts: () => <>Every blunt in this room is sold in licensed stores; <Link href="/find-us">search nearby stores for this blunt art</Link>.</>,
+  blunts: () => <>Blunts in this room are sold in licensed stores; <Link href="/find-us">search nearby stores for this blunt art</Link>.</>,
   'pre-rolls': () => <><Link href="/find-us">Find a licensed store that stocks these pre-rolls</Link>.</>,
   // MR-TOP50 L17: the art room hands "presidential mini blunts" to /mini-blunts.
-  'mini-blunts': count => <>{`Room III of the Presidential Vault holds the art for Presidential Moon Rock Mini Blunts: ${count} works, one per strain, each shown with its pack. Every pack holds three 0.7g Moon Rock mini blunts, 2.1g in total, made with flower, live resin, and diamonds in a tobacco-free wrap. Select a work to open it, or see the product line at `}<Link href="/mini-blunts">Presidential Mini Blunts</Link>.</>,
-  'mini-pre-rolls': count => `Room IV of the Presidential Vault holds the art for Presidential Moon Rock Mini Pre-rolls: ${count} works, one per strain, each shown with its pack. Every pack holds three 0.5g Moon Rock mini pre-rolls, 1.5g in total, made with flower, live resin, and diamonds. Select a work to open it, or its name to see the product.`,
+  'mini-blunts': count => <>{`Room III of the Presidential Vault holds the art for Presidential Moon Rock Mini Blunts: ${count} works, one per strain, each shown with its pack. Each pack holds three 0.7g Moon Rock mini blunts, 2.1g in total: flower carried through with concentrate, with a kief or diamond finish, in a tobacco-free wrap. Select a work to open it, or see the product line at `}<Link href="/mini-blunts">Presidential Mini Blunts</Link>.</>,
+  'mini-pre-rolls': count => `Room IV of the Presidential Vault holds the art for Presidential Moon Rock Mini Pre-rolls: ${count} works, one per strain, each shown with its pack. Each pack holds three 0.5g Moon Rock mini pre-rolls, 1.5g in total: flower carried through with concentrate, with a kief or diamond finish. Select a work to open it, or its name to see the product.`,
 };
 
 export function generateStaticParams() { return vaultRooms.map(room => ({ room: room.slug })); }

@@ -39,7 +39,7 @@ const ROOM_COPY: Readonly<Record<string, ReactNode>> = {
     <Block heading="The art behind each mini blunt pack">
       Each work in this room fronts a Presidential Moon Rock mini blunt pack: the same illustrated identity as the full-size
       blunt, scaled to a smaller roll. Shoppers searching for Presidential mini blunts often meet the art first, so it helps to
-      know what sits behind it. The label build is flower, live resin, and diamonds in a tobacco-free wrap, and each pack carries
+      know what sits behind it. Each pack prints its own build and carries
       the strain name and an Indica, Hybrid, or Sativa marking under the art. To read one pack in detail, open its card below. To see the art for every format, go
       back to the <Link className={L} href="/presidential-art">Vault front room</Link>. When a pack catches your eye, use the ZIP
       search and confirm with the store.
@@ -72,7 +72,7 @@ const ROOM_COPY: Readonly<Record<string, ReactNode>> = {
   blunts: (
     <>
     <Block heading="Pack art for Presidential Moon Rock blunts">
-      Presidential Moon Rock blunts carry the same illustrated identity as the rest of the lineup. Each one is a tobacco-free
+      Presidential Moon Rock blunts carry illustrated pack art, like the other Presidential formats. Each one is a tobacco-free
       hemp wrap around flower, concentrate, and a kief or diamond finish. The art and series color make each one easy to spot. Read the label for the exact build, then search
       nearby stores and confirm with the store. Browse the <Link className={L} href="/blunts">Moon Rock blunt catalog</Link> for
       every name, or the smaller <Link className={L} href="/mini-blunts">mini blunt packs</Link>.
@@ -81,8 +81,7 @@ const ROOM_COPY: Readonly<Record<string, ReactNode>> = {
       <section className="mx-auto w-full max-w-3xl px-6 pb-12 text-sm leading-6 text-white/80">
         <h3 className="mb-2 text-base font-semibold text-white">Moving between the art rooms</h3>
         <p>
-          Blunt art is one room of a larger collection. Shoppers who recognise a name from a blunt pack often want to see how the
-          same name looks on other formats. The <Link className={L} href="/presidential-art">Presidential art vault rooms</Link> group
+          Blunt art is one room of a larger collection. Shoppers who recognise a name from a blunt pack may want to see how the same name looks on other formats. The <Link className={L} href="/presidential-art">Presidential art vault rooms</Link> group
           the illustrations by format, so each room shows a different set of packs. For single rolls, the{' '}
           <Link className={L} href="/presidential-art/pre-rolls">pre-roll room of the art vault</Link> collects those designs.
           Comparing the rooms makes it easier to spot a familiar name on a crowded shelf. Read the label on the pack in hand for its
@@ -95,7 +94,7 @@ const ROOM_COPY: Readonly<Record<string, ReactNode>> = {
     <>
     <Block heading="From the mini pre-roll art to the pack">
       Each work in this room fronts a Presidential Moon Rock mini pre-roll pack, the shorter version of the full pre-roll. The
-      rolls are made with flower, live resin, and diamonds, and the pack shows the strain name under the art. To compare the
+      pack prints its own build and shows the strain name under the art. To compare the
       products themselves, open the <Link className={L} href="/mini-pre-rolls">mini pre-roll packs</Link>. For the rest of the
       collection, return to the <Link className={L} href="/presidential-art">Vault entrance</Link>.
     </Block>
@@ -216,8 +215,8 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
         Mini pre-roll packs make it easy to try a name in a smaller size, and the format includes different profiles. For a
         sweet, doughy option, look at the{' '}
         <Link className={L} href="/mini-pre-rolls/pink-cookies">doughy Pink Cookies minis</Link>. For a strain-led name with a
-        citrus-leaning profile, see the <Link className={L} href="/mini-pre-rolls/xj-13">XJ-13 mini pre-rolls</Link>. Their names
-        and aromas make them easy to tell apart. Comparing aroma and pack art side by side makes the choice simpler. Each pack
+        citrus-leaning profile, see <Link className={L} href="/mini-pre-rolls/xj-13">the XJ-13 mini three-pack</Link>. Their names
+        and aromas make them easy to tell apart. Each pack
         prints its own build line, so read the label in hand before you buy, and bring the exact name to the counter.
       </Block>
     </>
