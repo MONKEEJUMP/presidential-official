@@ -295,7 +295,7 @@ export async function GET(request: Request) {
         : null;
       const search = (params.get("search") ?? "").replace(/[,()%.*]/g, " ").trim().slice(0, 100);
       const candidates = search.length >= 2 ? await admin.from("market_doors").select("id,legal_name,dba_name,street_address,city,state_code,zip,state_license_id")
-        .eq("state_code", state).neq("sales_business_type", "non_retail").or(`legal_name.ilike.%${search}%,dba_name.ilike.%${search}%`).limit(30) : null;
+        .eq("state_code", state).neq("status", "closed").neq("sales_business_type", "non_retail").or(`legal_name.ilike.%${search}%,dba_name.ilike.%${search}%`).limit(30) : null;
       return json({ customers: customers.data, excluded: excluded.data, lookup: lookup?.data ?? null, candidates: candidates?.data ?? [] });
     }
     if (resource === "verification_requests") return json({ requests: await readSalesRequests(admin, user.id), readOnly: profile.role === "master" });
