@@ -5,6 +5,7 @@ import { buildBreadcrumbSchema, buildWebPageSchema, JsonLd } from "@/lib/seo/sch
 import { createSalesAuthClient } from "@/lib/supabase/sales-server";
 
 import { SalesDashboard } from "./sales-dashboard";
+import { SalesApp } from "./sales-app";
 
 export const dynamic = "force-dynamic";
 
@@ -31,11 +32,12 @@ export const metadata: Metadata = {
 export default async function SalesPage() {
   const auth = await createSalesAuthClient();
   const { data } = await auth.auth.getUser();
+  const Dashboard = process.env.PRESIDENTIAL_SALES_UI === "redesign" ? SalesApp : SalesDashboard;
   return (
     <>
       <JsonLd data={buildWebPageSchema({ path: "/sales", name: TITLE, description: DESCRIPTION })} />
       <JsonLd data={buildBreadcrumbSchema([{ name: "Presidential", path: "/" }, { name: "Sales", path: "/sales" }])} />
-      <SalesDashboard initiallyAuthenticated={Boolean(data.user)} />
+      <Dashboard initiallyAuthenticated={Boolean(data.user)} />
     </>
   );
 }
