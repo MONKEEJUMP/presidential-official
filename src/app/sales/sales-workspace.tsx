@@ -1,17 +1,17 @@
 "use client";
 
-import { type ComponentProps, useEffect, useRef, useState } from "react";
+import { type ComponentProps, type ReactNode, useEffect, useRef, useState } from "react";
 import { displayDoorName, formatSalesDate, salesOutcome, type SalesOutcome, type SalesVerificationClaim } from "@/lib/sales";
 import type { SalesInlineWorkArea } from "./sales-inline-work-area";
 import styles from "./sales-workspace.module.css";
 
-type Props = ComponentProps<typeof SalesInlineWorkArea> & { onBeginContact?: () => void };
+type Props = ComponentProps<typeof SalesInlineWorkArea> & { onBeginContact?: () => void; ownerActions?: ReactNode };
 const OUTCOMES: readonly SalesOutcome[] = ["no_answer", "left_message", "talked_to_buyer", "interested", "not_interested"];
 
 export function SalesWorkspace({ door, timeZone, mode, notes, canWork, saving, undoing, toolkitBusy, discardWarning,
   positionLabel, hasPrevious, hasNext, message, error, onClose, onPrevious, onNext, onBeginContact,
   onClearOutcome, onOutcome, loggedCall, onNotesChange, onNotesActionsTarget, onUndo, hasMoreHistory,
-  onMoreHistory, onWithdrawRequest, tools, onSubmitVerification, onKeepWorking, onDiscard }: Props) {
+  onMoreHistory, onWithdrawRequest, tools, onSubmitVerification, onKeepWorking, onDiscard, ownerActions }: Props) {
   const [tab, setTab] = useState<"contact" | "notes" | "history">("contact");
   const [confirm, setConfirm] = useState<SalesVerificationClaim | "do_not_call" | null>(null);
   const keepEditing = useRef<HTMLButtonElement>(null);
@@ -21,6 +21,7 @@ export function SalesWorkspace({ door, timeZone, mode, notes, canWork, saving, u
   const progress = door.contactProgress;
   const latestUndo = door.callHistory.find(call => call.undoEligible && !call.undone);
   const pendingReport = door.pendingVerification;
+  const address = [door.streetAddress, door.city, door.stateCode, door.zip].filter(Boolean).join(", ");
 
   useEffect(() => { if (discardWarning) keepEditing.current?.focus(); }, [discardWarning]);
 
@@ -55,9 +56,12 @@ export function SalesWorkspace({ door, timeZone, mode, notes, canWork, saving, u
         <nav className={styles.tabs} aria-label="Account sections">
           {(["contact", "notes", "history"] as const).map(value => <button type="button" key={value} aria-pressed={tab === value} onClick={() => setTab(value)}>{value === "notes" ? "Shared notes" : value === "history" ? "History" : "Contact"}</button>)}
         </nav>
+        <div className={styles.contactLine}>
+          <div><span className={styles.label}>Phone</span>{door.phone ? <strong className={styles.phone}>{door.phone}</strong> : <p>Phone number not on file</p>}</div>
+          <div><span className={styles.label}>Store address</span>{door.streetAddress ? <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`} target="_blank" rel="noopener noreferrer">{address}</a> : <p>Street address not recorded{address ? ` · ${address}` : ""}</p>}</div>
+        </div>
         {tab === "contact" ? <div className={styles.stack}>
           <p className={styles.muted}>Store contact · Buyer not recorded</p>
-          {door.phone ? <strong className={styles.phone}>{door.phone}</strong> : <p>Phone number not on file</p>}
           {canRecord && door.phone ? <a className={styles.primary} href={`tel:${door.phone}`}>Call store</a> : null}
           {mode === "history" && !protectedAccount && onBeginContact ? <button className={styles.primary} type="button" disabled={busy} onClick={onBeginContact}>Begin contact</button> : null}
           {mode === "log" && !canWork && !protectedAccount ? <p className={styles.notice}>Opening your reserved workspace… If another rep is using this account, you can still read its history.</p> : null}
@@ -102,6 +106,7 @@ export function SalesWorkspace({ door, timeZone, mode, notes, canWork, saving, u
             {latestUndo?.outcome === "do_not_call" ? <button type="button" disabled={busy} onClick={() => onUndo(latestUndo)}>Undo my do-not-call action</button> : null}
           </div>
         </details>
+        {ownerActions ? <details className={styles.more}><summary>Owner actions</summary><div className={styles.stack}>{ownerActions}</div></details> : null}
       </div>
       <aside className={styles.tools} aria-label="Follow-up and account details">{tools}</aside>
     </div>

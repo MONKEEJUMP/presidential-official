@@ -65,9 +65,9 @@ type ApiResponse = Readonly<{
   requestSubmittedAt?: string;
   requestCallbackAt?: string | null;
   resetAt?: string;
+  priority?: boolean;
 }>;
 
-const STRUCK_OUTCOMES = new Set<SalesOutcome>(["not_interested", "do_not_call"]);
 const STATE_NAMES: Readonly<Record<string, string>> = {
   all: "All states",
   AZ: "ARIZONA",
@@ -89,9 +89,6 @@ function callbackDue(door: SalesDoor, today: string, dateKey: SalesDateKey): boo
   return Boolean(door.nextCallbackAt && dateKey(door.nextCallbackAt) <= today);
 }
 
-function struck(door: SalesDoor): boolean {
-  return Boolean(door.lastCall && STRUCK_OUTCOMES.has(door.lastCall.outcome));
-}
 
 
 
@@ -145,6 +142,9 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
   const [adminEvents, setAdminEvents] = useState<readonly SalesAdminEvent[]>([]);
   const [adminBusy, setAdminBusy] = useState(false);
   const [adminMessage, setAdminMessage] = useState("");
+  const [priorityBusy, setPriorityBusy] = useState<number | null>(null);
+  const [priorityMessage, setPriorityMessage] = useState("");
+  const [priorityError, setPriorityError] = useState("");
   const [changingTeamCode, setChangingTeamCode] = useState(false);
   const [changePinOpen, setChangePinOpen] = useState(false);
   const [changingPin, setChangingPin] = useState(false);
@@ -293,6 +293,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
 
   const activeDoor = snapshot?.doors.find((door) => door.id === activeDoorId) ?? null;
   const isSuper = snapshot?.user.role === "super_master";
+  const workspaceBusy = savingCall || undoingCall || toolkitBusy || callPending || toolPending || priorityBusy !== null;
   const canSeeActivity = Boolean(snapshot);
   const visibleActivity = activity;
   const visibleExecutiveRequests = snapshot?.verificationRequests ?? [];
@@ -324,7 +325,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
   }
 
   function requestMove(action: () => void) {
-    if (savingCall || undoingCall || toolkitBusy) return;
+    if (savingCall || undoingCall || toolkitBusy || priorityBusy !== null) return;
     if (callPending || toolPending) { setPanelError("Confirm the pending save result before leaving this account. Your work is still here."); return; }
     if (activeDoorId && (notesDirty || toolkitDirty)) {
       pendingMove.current = action;
@@ -400,6 +401,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
 
   function closeWorkAreaImmediately() {
     ++historySequence.current;
+    setPriorityMessage(""); setPriorityError("");
     if (activeDoorId && workMode === "log") void fetch("/api/sales/workflow", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "release_claim", doorId: activeDoorId }), keepalive: true }).catch(() => {});
     openListOrder.current = null;
     setActiveDoorId(null); activeDoorRef.current = null;
@@ -592,12 +594,17 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
   }
 
   async function togglePriority(door: SalesDoor) {
+    if (!isSuper || workspaceBusy) return;
+    setPriorityBusy(door.id); setPriorityMessage(""); setPriorityError("");
     try {
-      await postAction({ action: "toggle_company_priority", doorId: door.id, priority: !door.companyPriority });
-      setSnapshot((current) => current ? { ...current, doors: current.doors.map((item) => item.id === door.id ? { ...item, companyPriority: !door.companyPriority } : item) } : current);
+      const result = await postAction({ action: "toggle_company_priority", doorId: door.id, priority: !door.companyPriority });
+      const priority = result.priority ?? !door.companyPriority;
+      setSnapshot((current) => current ? { ...current, doors: current.doors.map((item) => item.id === door.id ? { ...item, companyPriority: priority } : item) } : current);
+      setPriorityMessage(priority ? "Pinned near the top of the dispensary list for the team." : "Team pin removed.");
+      if (snapshot) void loadSnapshot(snapshot.selectedState, browseFilters.current, true);
     } catch (error) {
-      setPageError(error instanceof Error ? error.message : "The company priority could not be changed.");
-    }
+      setPriorityError(error instanceof Error ? error.message : "Could not confirm the team pin. Refresh the account before trying again.");
+    } finally { setPriorityBusy(null); }
   }
 
   async function logout() {
@@ -877,6 +884,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
 
   async function correctVerifiedCustomer(door: SalesDoor) {
     if (!snapshot || !isSuper || !door.verifiedCustomerId) return;
+    if (notesDirty || toolkitDirty) { setPanelError("Save or discard your unfinished work before changing customer status."); return; }
     const choice = window.prompt(
       "Type NOTE to attach an administrative note, or REVERT to return this verified customer to a white opportunity.",
     )?.trim().toUpperCase();
@@ -896,6 +904,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
     if (!reason || !window.confirm(`REVERT ${displayDoorName(door)} TO A WHITE OPPORTUNITY?`)) return;
     try {
       await postAction({ action: "revert_verified_customer", verifiedCustomerId: door.verifiedCustomerId, reason });
+      if (activeDoorRef.current === door.id) closeWorkAreaImmediately();
       await loadSnapshot(snapshot.selectedState);
       setAdminMessage("VERIFIED CUSTOMER RETURNED TO A WHITE OPPORTUNITY. ORIGINAL EVIDENCE PRESERVED.");
     } catch (error) {
@@ -905,10 +914,12 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
 
   async function reopenDoNotCall(door: SalesDoor) {
     if (!snapshot || !isSuper || !door.marketDoorId) return;
+    if (notesDirty || toolkitDirty) { setPanelError("Save or discard your unfinished work before changing the do-not-call status."); return; }
     const reason = window.prompt("Enter the required reason for reopening this Do Not Call store:")?.trim();
     if (!reason || !window.confirm(`REOPEN ${displayDoorName(door)} FOR SALES ACTIVITY?`)) return;
     try {
       await postAction({ action: "reopen_do_not_call", doorId: door.marketDoorId, reason });
+      if (activeDoorRef.current === door.id) closeWorkAreaImmediately();
       await loadSnapshot(snapshot.selectedState);
       setAdminMessage("DO NOT CALL LOCK REOPENED. ORIGINAL ACTIVITY PRESERVED.");
     } catch (error) {
@@ -1087,6 +1098,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
           {taskRestriction ? <p className={ui.notice}>This follow-up requires attention: {taskRestriction.replaceAll("_", " ")}. Account context is read only. Review or complete the scheduled follow-up below.</p> : null}
           {callPending ? <div className={ui.error} role="alert"><strong>Call save result is not confirmed.</strong><p>Your original request is kept. Check its result before leaving this account or recording another outcome.</p><button disabled={savingCall} type="button" onClick={() => void recoverCall()}>Check save status</button><button disabled={savingCall} type="button" onClick={() => void retryPendingCall()}>Retry the same save</button></div> : null}
 <SalesWorkspace
+                ownerActions={isSuper ? <><p>Team pin moves this dispensary near the top of the list for all salespeople.</p><button type="button" disabled={workspaceBusy} onClick={() => void togglePriority(activeDoor)}>{priorityBusy === activeDoor.id ? "Saving team pin…" : activeDoor.companyPriority ? "Remove team pin" : "Pin near top for team"}</button>{priorityMessage ? <p role="status">{priorityMessage}</p> : null}{priorityError ? <p role="alert">{priorityError}</p> : null}{activeDoor.isPurchasing ? <button type="button" disabled={workspaceBusy} onClick={() => void correctVerifiedCustomer(activeDoor)}>Customer correction</button> : null}{activeDoor.doNotCallLocked ? <button type="button" disabled={workspaceBusy} onClick={() => void reopenDoNotCall(activeDoor)}>Reopen do not call</button> : null}</> : undefined}
                 onBeginContact={!taskRestriction && !activeDoor.isPurchasing && !activeDoor.doNotCallLocked ? () => openWorkArea(activeDoor, "log") : undefined}
                 callbackDate={callbackDate}
                 discardWarning={discardWarning}
@@ -1107,7 +1119,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
                 onUndo={(call) => void undoCall(call)}
                 onClearOutcome={(outcome, callId) => void clearContactOutcome(outcome, callId)}
                 onWithdrawRequest={(request) => void withdrawVerification(request)}
-                saving={savingCall || callPending || toolPending}
+                saving={savingCall || callPending || toolPending || priorityBusy !== null}
                 undoing={undoingCall}
                 canWork={canWork && !toolPending && !callPending}
                 toolkitBusy={toolkitBusy}
@@ -1252,7 +1264,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
             {filtersOpen ? <section className={ui.filterPanel} aria-label="Filter dispensaries"><label className={ui.field}><span>State</span><select disabled={loadingData} onChange={(event) => changeFilters({ city: "", search: "" }, event.target.value)} value={snapshot.selectedState}><option value="all">All states</option>{snapshot.states.map((state) => <option key={state}>{state}</option>)}</select></label><label className={ui.field}><span>City</span><select disabled={loadingData} value={city} onChange={(event) => changeFilters({ city: event.target.value === "ALL CITIES" ? "" : event.target.value })}><option value="ALL CITIES">All cities</option>{cities.map((item) => <option key={item}>{item}</option>)}</select></label><button type="button" onClick={() => changeFilters({ city: "", search: "", filter: "not_purchasing", queue: "all" }, "all")}>Clear filters</button></section> : null}
             <div className={ui.filterSummary} aria-live="polite"><span>{STATE_NAMES[snapshot.selectedState] ?? snapshot.selectedState} · {loadingData ? "Updating…" : `${snapshot.totalMatching.toLocaleString()} matching dispensaries`}</span>{search ? <span>“{search}”</span> : null}</div>
             <section className={ui.doorList} aria-busy={loadingData} aria-label="Licensed dispensary doors">
-              {filteredDoors.map((door) => <SalesStoreRow key={door.id} door={door} timeZone={timeZone} callbackDue={callbackDue(door, today, dateKey)} calledToday={calledToday(door, today, dateKey)} struck={struck(door)} canCorrectCustomer={Boolean(isSuper)} canSetPriority={Boolean(isSuper)} openMode={null} onCorrectCustomer={(item) => void correctVerifiedCustomer(item)} onHistory={(item) => openWorkArea(item, "history")} onLogResult={(item) => openWorkArea(item, "log")} onReopenDoNotCall={(item) => void reopenDoNotCall(item)} onTogglePersonalStar={(item) => void togglePersonalStar(item)} onTogglePriority={(item) => void togglePriority(item)} workedByMeToday={Boolean(door.myLastActivityAt && dateKey(door.myLastActivityAt) === today)} notePreview={workflowSummaries.find((item) => item.doorId === door.id)?.notePreview ?? null} />)}
+              {filteredDoors.map((door) => <SalesStoreRow key={door.id} door={door} timeZone={timeZone} callbackDue={callbackDue(door, today, dateKey)} calledToday={calledToday(door, today, dateKey)} onHistory={(item) => openWorkArea(item, "history")} onTogglePersonalStar={(item) => void togglePersonalStar(item)} workedByMeToday={Boolean(door.myLastActivityAt && dateKey(door.myLastActivityAt) === today)} notePreview={workflowSummaries.find((item) => item.doorId === door.id)?.notePreview ?? null} />)}
               {!filteredDoors.length ? <div className={ui.empty}><h2>{queue === "callbacks" ? "No callbacks due in this view." : queue === "upcoming" ? "No upcoming callbacks in this view." : queue === "stars" ? "No starred stores in this view." : "No dispensaries match these filters."}</h2><p>{queue === "stars" ? "Use the star on a dispensary you want to return to." : "Try another city or clear your filters."}</p><button type="button" onClick={() => changeFilters({ city: "", search: "", filter: "not_purchasing", queue: "all" }, "all")}>Clear filters</button></div> : null}
             </section>
             <nav className={ui.pagination} aria-label="Store list pages"><button type="button" disabled={loadingData || snapshot.page === 0} onClick={() => changeFilters({ page: snapshot.page - 1 })}>Previous page</button><span>{snapshot.totalMatching ? snapshot.page * snapshot.pageSize + 1 : 0}–{Math.min((snapshot.page + 1) * snapshot.pageSize, snapshot.totalMatching)} of {snapshot.totalMatching}</span><button type="button" disabled={loadingData || (snapshot.page + 1) * snapshot.pageSize >= snapshot.totalMatching} onClick={() => changeFilters({ page: snapshot.page + 1 })}>Next page</button></nav>
