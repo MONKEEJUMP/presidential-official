@@ -192,6 +192,8 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
       const response = await fetch(`/api/sales?${query}`, { cache: "no-store", signal: controller.signal });
       if (sequence !== requestSequence.current) return null;
       if (response.status === 401 || response.status === 403) {
+        ++todaySequence.current; ++taskSequence.current;
+        setTodayData(null); setTodayError(""); setTodayBusy(false); setArchivedAccount(null);
         setSnapshot(null);
         setActivity([]); setAdminEvents([]); setTeamPanelOpen(false); setActivityOpen(false); setDataReviewOpen(false);
         if (response.status === 403) {
@@ -204,6 +206,8 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
       if (!response.ok || !payload.authenticated) throw new Error(payload.error ?? "Sales data is temporarily unavailable.");
       if (sequence !== requestSequence.current) return null;
       if (payload.mustChangePin) {
+        ++todaySequence.current; ++taskSequence.current;
+        setTodayData(null); setTodayError(""); setTodayBusy(false); setArchivedAccount(null);
         setSnapshot(null);
         setPinChangeRequired(true);
         setActivity([]); setAdminEvents([]); setTeamPanelOpen(false); setActivityOpen(false);
@@ -588,7 +592,8 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
   }
 
   async function logout() {
-    ++requestSequence.current; ++activitySequence.current;
+    ++requestSequence.current; ++activitySequence.current; ++todaySequence.current; ++taskSequence.current;
+    setTodayData(null); setTodayError(""); setTodayBusy(false); setArchivedAccount(null);
     browseAbort.current?.abort();
     if (searchTimer.current) clearTimeout(searchTimer.current);
     await fetch("/api/sales", { method: "DELETE" });
