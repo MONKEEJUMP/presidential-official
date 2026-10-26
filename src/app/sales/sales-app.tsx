@@ -69,6 +69,7 @@ type ApiResponse = Readonly<{
 
 const STRUCK_OUTCOMES = new Set<SalesOutcome>(["not_interested", "do_not_call"]);
 const STATE_NAMES: Readonly<Record<string, string>> = {
+  all: "All states",
   AZ: "ARIZONA",
   NY: "NEW YORK",
   OK: "OKLAHOMA",
@@ -127,6 +128,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
   const [notesActionsTarget, setNotesActionsTarget] = useState<HTMLDivElement | null>(null);
   const [hasMoreHistory, setHasMoreHistory] = useState(false);
   const [dataReviewOpen, setDataReviewOpen] = useState(false);
+  const [reviewState, setReviewState] = useState("AZ");
   const listScrollY = useRef(0);
   const openListOrder = useRef<readonly number[] | null>(null);
   const [snapshot, setSnapshot] = useState<SalesSnapshot | null>(null);
@@ -186,9 +188,8 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
     if (!quiet) setLoadingData(true);
     setPageError("");
     try {
-      let selectedState = state;
-      if (!selectedState) { try { selectedState = localStorage.getItem(`presidential.sales.state:${sessionStorage.getItem("presidential.sales.user") ?? ""}`) ?? undefined; } catch { /* Preferences are optional. */ } }
-      const query = new URLSearchParams({ state: selectedState ?? "AZ", city: filters.city, search: filters.search, filter: filters.filter, queue: filters.queue, page: String(filters.page), tz: Intl.DateTimeFormat().resolvedOptions().timeZone });
+      const selectedState = filters.search.trim() ? "all" : state ?? "all";
+      const query = new URLSearchParams({ geography: "global", state: selectedState, city: filters.search.trim() ? "" : filters.city, search: filters.search, filter: filters.filter, queue: filters.queue, page: String(filters.page), tz: Intl.DateTimeFormat().resolvedOptions().timeZone });
       const response = await fetch(`/api/sales?${query}`, { cache: "no-store", signal: controller.signal });
       if (sequence !== requestSequence.current) return null;
       if (response.status === 401 || response.status === 403) {
@@ -202,7 +203,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
         }
         return null;
       }
-      const payload = (await response.json()) as SalesSnapshot & { error?: string; mustChangePin?: boolean };
+      const payload = (await response.json()) as SalesSnapshot & { error?: string; mustChangePin?: boolean; workflowSummaries?: WorkflowState["summaries"] };
       if (!response.ok || !payload.authenticated) throw new Error(payload.error ?? "Sales data is temporarily unavailable.");
       if (sequence !== requestSequence.current) return null;
       if (payload.mustChangePin) {
@@ -214,6 +215,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
         return null;
       }
       setPinChangeRequired(false);
+      setWorkflowSummaries(payload.workflowSummaries ?? []);
       setBrowseDoorIds(payload.doors.map((door) => door.id));
       setSnapshot((current) => ({
         ...payload,
@@ -222,7 +224,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
           return previous ? { ...door, callHistory: previous.callHistory, contactProgress: previous.contactProgress } : door;
         }), ...(current?.doors.filter((door) => door.id === activeDoorRef.current && !payload.doors.some((item) => item.id === door.id)) ?? [])],
       }));
-      try { sessionStorage.setItem("presidential.sales.user", payload.user.username); localStorage.setItem(`presidential.sales.state:${payload.user.username}`, payload.selectedState); } catch { /* Preferences are optional. */ }
+      try { sessionStorage.setItem("presidential.sales.user", payload.user.username); } catch { /* Preferences are optional. */ }
       return payload;
     } catch (error) {
       if (sequence !== requestSequence.current || controller.signal.aborted) return null;
@@ -363,11 +365,18 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
   function changeFilters(update: Partial<BrowseFilters>, state?: string) {
     requestMove(() => {
       const next = { ...browseFilters.current, ...update, page: update.page ?? 0 };
+      if (state !== undefined || update.city !== undefined) next.search = "";
+      const selectedState = next.search.trim() ? "all" : state ?? snapshot?.selectedState ?? "all";
+      if (next.search.trim()) next.city = "";
       browseFilters.current = next;
+      ++requestSequence.current;
+      browseAbort.current?.abort();
+      setLoadingData(true);
+      setSnapshot(current => current ? { ...current, selectedState } : current);
       setCity(next.city || "ALL CITIES"); setSearch(next.search); setDispensaryFilter(next.filter); setQueue(next.queue);
       if (searchTimer.current) clearTimeout(searchTimer.current);
-      if (update.search !== undefined) searchTimer.current = setTimeout(() => void loadSnapshot(state ?? snapshot?.selectedState, next), 250);
-      else void loadSnapshot(state ?? snapshot?.selectedState, next).then(() => { if (update.page !== undefined) document.querySelector('[aria-label="Licensed dispensary doors"]')?.scrollIntoView({ block: "start" }); });
+      if (update.search !== undefined) searchTimer.current = setTimeout(() => void loadSnapshot(selectedState, next), 250);
+      else void loadSnapshot(selectedState, next).then(() => { if (update.page !== undefined) document.querySelector('[aria-label="Licensed dispensary doors"]')?.scrollIntoView({ block: "start" }); });
     });
   }
 
@@ -928,15 +937,6 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
     void loadToday(todayBucket, todayState, timeZone);
   }, [snapshot?.user.id, todayBucket, todayState, timeZone, loadToday]);
 
-  useEffect(() => {
-    if (!snapshot?.user.id) return;
-    const controller = new AbortController();
-    void fetch(`/api/sales/workflow?state=${snapshot.selectedState}`, { cache: "no-store", signal: controller.signal })
-      .then(async (response) => { if (!response.ok) return; const data = await response.json() as WorkflowState; if (!controller.signal.aborted) setWorkflowSummaries(data.summaries ?? []); })
-      .catch(() => { /* The account workspace supplies authoritative note and callback reads. */ });
-    return () => controller.abort();
-  }, [snapshot?.user.id, snapshot?.selectedState, snapshot?.doors]);
-
   function navigate(next: typeof view) {
     requestMove(() => {
       setView(next); setMenuOpen(false); setDataReviewOpen(false); setChangePinOpen(false); setTeamPanelOpen(false);
@@ -1222,7 +1222,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
         </section>
       ) : null}
 
-      {isSuper && dataReviewOpen ? <><SalesDataReview state={snapshot.selectedState} onChanged={() => void loadSnapshot(snapshot.selectedState)} /><OwnerCallbackReview initialState={snapshot.selectedState} states={snapshot.states} timeZone={timeZone} /></> : null}
+      {isSuper && dataReviewOpen ? <><label className={ui.field}><span>Source review state</span><select value={reviewState} onChange={event => setReviewState(event.target.value)}>{snapshot.states.map(state => <option key={state} value={state}>{STATE_NAMES[state] ?? state}</option>)}</select></label><SalesDataReview key={reviewState} state={reviewState} onChanged={() => void loadSnapshot(snapshot.selectedState)} /><OwnerCallbackReview initialState={snapshot.selectedState} states={snapshot.states} timeZone={timeZone} /></> : null}
 
           </div> : null}
           {view === "today" ? <section className={ui.today} aria-label="Your follow-ups">
@@ -1248,12 +1248,12 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
               <button type="button" aria-pressed={dispensaryFilter === "purchasing"} onClick={() => changeFilters({ filter: "purchasing", queue: "all" })}>Purchasing</button>
               <button type="button" aria-pressed={dispensaryFilter === "all"} onClick={() => changeFilters({ filter: "all", queue: "all" })}>All dispensaries</button>
             </div>
-            <div className={ui.browseToolbar}><button type="button" aria-expanded={filtersOpen} onClick={() => requestMove(() => setFiltersOpen((current) => !current))}>Filters · {snapshot.selectedState}{city !== "ALL CITIES" ? ` · ${city}` : ""}</button><label className={ui.workView}><span>Work view</span><select value={queue} onChange={(event) => changeFilters({ queue: event.target.value as WorkQueue, ...(event.target.value === "callbacks" || event.target.value === "upcoming" ? { filter: "not_purchasing" as const } : {}) })}><option value="all">Browse all</option><option value="callbacks">My callbacks due</option><option value="upcoming">My upcoming callbacks</option><option value="worked">My work today</option><option value="stars">My starred stores</option></select></label><button type="button" disabled={loadingData} onClick={() => requestMove(() => void loadSnapshot(snapshot.selectedState))}>Refresh</button></div>
-            {filtersOpen ? <section className={ui.filterPanel} aria-label="Filter dispensaries"><label className={ui.field}><span>State</span><select disabled={loadingData} onChange={(event) => changeFilters({ city: "", search: "", filter: "not_purchasing", queue: "all" }, event.target.value)} value={snapshot.selectedState}>{snapshot.states.map((state) => <option key={state}>{state}</option>)}</select></label><label className={ui.field}><span>City</span><select value={city} onChange={(event) => changeFilters({ city: event.target.value === "ALL CITIES" ? "" : event.target.value })}><option>ALL CITIES</option>{cities.map((item) => <option key={item}>{item}</option>)}</select></label><button type="button" onClick={() => changeFilters({ city: "", search: "", filter: "not_purchasing", queue: "all" })}>Clear filters</button></section> : null}
+            <div className={ui.browseToolbar}><button type="button" aria-expanded={filtersOpen} onClick={() => requestMove(() => setFiltersOpen((current) => !current))}>Filters · {snapshot.selectedState === "all" ? "All states" : snapshot.selectedState}{city !== "ALL CITIES" ? ` · ${city}` : ""}</button><label className={ui.workView}><span>Work view</span><select value={queue} onChange={(event) => changeFilters({ queue: event.target.value as WorkQueue, ...(event.target.value === "callbacks" || event.target.value === "upcoming" ? { filter: "not_purchasing" as const } : {}) })}><option value="all">Browse all</option><option value="callbacks">My callbacks due</option><option value="upcoming">My upcoming callbacks</option><option value="worked">My work today</option><option value="stars">My starred stores</option></select></label><button type="button" disabled={loadingData} onClick={() => requestMove(() => void loadSnapshot(snapshot.selectedState))}>Refresh</button></div>
+            {filtersOpen ? <section className={ui.filterPanel} aria-label="Filter dispensaries"><label className={ui.field}><span>State</span><select disabled={loadingData} onChange={(event) => changeFilters({ city: "", search: "" }, event.target.value)} value={snapshot.selectedState}><option value="all">All states</option>{snapshot.states.map((state) => <option key={state}>{state}</option>)}</select></label><label className={ui.field}><span>City</span><select disabled={loadingData} value={city} onChange={(event) => changeFilters({ city: event.target.value === "ALL CITIES" ? "" : event.target.value })}><option value="ALL CITIES">All cities</option>{cities.map((item) => <option key={item}>{item}</option>)}</select></label><button type="button" onClick={() => changeFilters({ city: "", search: "", filter: "not_purchasing", queue: "all" }, "all")}>Clear filters</button></section> : null}
             <div className={ui.filterSummary} aria-live="polite"><span>{STATE_NAMES[snapshot.selectedState] ?? snapshot.selectedState} · {loadingData ? "Updating…" : `${snapshot.totalMatching.toLocaleString()} matching dispensaries`}</span>{search ? <span>“{search}”</span> : null}</div>
             <section className={ui.doorList} aria-busy={loadingData} aria-label="Licensed dispensary doors">
               {filteredDoors.map((door) => <SalesStoreRow key={door.id} door={door} timeZone={timeZone} callbackDue={callbackDue(door, today, dateKey)} calledToday={calledToday(door, today, dateKey)} struck={struck(door)} canCorrectCustomer={Boolean(isSuper)} canSetPriority={Boolean(isSuper)} openMode={null} onCorrectCustomer={(item) => void correctVerifiedCustomer(item)} onHistory={(item) => openWorkArea(item, "history")} onLogResult={(item) => openWorkArea(item, "log")} onReopenDoNotCall={(item) => void reopenDoNotCall(item)} onTogglePersonalStar={(item) => void togglePersonalStar(item)} onTogglePriority={(item) => void togglePriority(item)} workedByMeToday={Boolean(door.myLastActivityAt && dateKey(door.myLastActivityAt) === today)} notePreview={workflowSummaries.find((item) => item.doorId === door.id)?.notePreview ?? null} />)}
-              {!filteredDoors.length ? <div className={ui.empty}><h2>{queue === "callbacks" ? "No callbacks due in this view." : queue === "upcoming" ? "No upcoming callbacks in this view." : queue === "stars" ? "No starred stores in this view." : "No dispensaries match these filters."}</h2><p>{queue === "stars" ? "Use the star on a dispensary you want to return to." : "Try another city or clear your filters."}</p><button type="button" onClick={() => changeFilters({ city: "", search: "", filter: "not_purchasing", queue: "all" })}>Clear filters</button></div> : null}
+              {!filteredDoors.length ? <div className={ui.empty}><h2>{queue === "callbacks" ? "No callbacks due in this view." : queue === "upcoming" ? "No upcoming callbacks in this view." : queue === "stars" ? "No starred stores in this view." : "No dispensaries match these filters."}</h2><p>{queue === "stars" ? "Use the star on a dispensary you want to return to." : "Try another city or clear your filters."}</p><button type="button" onClick={() => changeFilters({ city: "", search: "", filter: "not_purchasing", queue: "all" }, "all")}>Clear filters</button></div> : null}
             </section>
             <nav className={ui.pagination} aria-label="Store list pages"><button type="button" disabled={loadingData || snapshot.page === 0} onClick={() => changeFilters({ page: snapshot.page - 1 })}>Previous page</button><span>{snapshot.totalMatching ? snapshot.page * snapshot.pageSize + 1 : 0}–{Math.min((snapshot.page + 1) * snapshot.pageSize, snapshot.totalMatching)} of {snapshot.totalMatching}</span><button type="button" disabled={loadingData || (snapshot.page + 1) * snapshot.pageSize >= snapshot.totalMatching} onClick={() => changeFilters({ page: snapshot.page + 1 })}>Next page</button></nav>
             <details className={ui.help}><summary>How the dispensary list works</summary><p>Gold labels identify verified Presidential customers. Other records are prospects whose purchasing status is not confirmed; ask before pitching. Source records can include separate licenses for one location. Shared notes and history stay with each dispensary.</p><p>Opening an account is read only. Begin contact reserves the workspace. Call outcomes, shared notes and follow-ups save separately.</p></details>

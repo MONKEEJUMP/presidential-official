@@ -1,6 +1,7 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { SALES_TIME_ZONE, type SalesCall, type SalesContactProgress, type SalesDoor, type SalesPersonalStats, type SalesRepActivity, type SalesVerificationRequest } from "@/lib/sales";
+import type { WorkflowSummary } from "@/lib/sales-workflow";
 
 export type BrowseResult = {
   doors: SalesDoor[];
@@ -14,6 +15,7 @@ export type BrowseResult = {
   cities: string[];
   page: number;
   pageSize: number;
+  workflowSummaries: WorkflowSummary[];
 };
 
 function normalizedTimeZone(value: string | null): string {
@@ -27,14 +29,18 @@ function normalizedTimeZone(value: string | null): string {
 }
 
 export async function browseSales(admin: SupabaseClient, userId: string, params: URLSearchParams) {
-  const state = ["AZ", "NY", "OK"].includes(params.get("state") ?? "") ? params.get("state")! : "AZ";
+  const search = (params.get("search") ?? "").slice(0, 160).trim();
+  const requestedState = params.get("state") ?? "all";
+  // The new search is geographic-global; explicit legacy state requests remain compatible.
+  const globalSearch = Boolean(search) && (params.get("geography") === "global" || requestedState === "all");
+  const state = globalSearch || !["AZ", "NY", "OK"].includes(requestedState) ? "all" : requestedState;
   const page = Math.min(100000, Math.max(0, Number.parseInt(params.get("page") ?? "0", 10) || 0));
   const filter = params.get("filter") ?? "not_purchasing";
   const queue = params.get("queue") ?? "all";
   const timeZone = normalizedTimeZone(params.get("tz"));
   const { data, error } = await admin.rpc("browse_sales_targets", {
-    p_actor_id: userId, p_state: state, p_city: (params.get("city") ?? "").slice(0, 100),
-    p_search: (params.get("search") ?? "").slice(0, 160),
+    p_actor_id: userId, p_state: state, p_city: globalSearch ? "" : (params.get("city") ?? "").slice(0, 100),
+    p_search: search,
     p_filter: ["all", "purchasing", "not_purchasing"].includes(filter) ? filter : "not_purchasing",
     p_queue: ["all", "stars", "worked", "callbacks", "upcoming"].includes(queue) ? queue : "all",
     p_offset: page * 40, p_limit: 40, p_time_zone: timeZone,
