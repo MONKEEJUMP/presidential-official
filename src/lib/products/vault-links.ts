@@ -1,4 +1,27 @@
-import { vaultProducts, type VaultProduct } from '@/content/vault/catalog';
+import { findNewVaultProduct, vaultProducts, vaultStrainSlug, type VaultProduct } from '@/content/vault/catalog';
+
+const PRESIDENTIAL_LINE_SLUGS = new Set([
+  'garlic-cookies', 'ghost-haze-train', 'guava-haze', 'head-cheese',
+  'iced-lemon', 'nino-brown', 'whoa-si-whoa',
+]);
+
+export function indexableProductHref(format: string, slug: string): string {
+  const room = format.replace(/^\//, '');
+  const strainSlug = slug.replace(/-title$/, '');
+  const product = findNewVaultProduct(room, strainSlug);
+  if (product) return product.productUrl;
+  const moonRocksSlug = PRESIDENTIAL_LINE_SLUGS.has(strainSlug) ? `presidential-line-${strainSlug}` : strainSlug;
+  return `/moon-rocks/${moonRocksSlug}`;
+}
+
+export function indexableVaultProductHref(product: VaultProduct): string;
+export function indexableVaultProductHref(product: VaultProduct | undefined): string | undefined;
+export function indexableVaultProductHref(product: VaultProduct | undefined): string | undefined {
+  if (!product) return;
+  return product.room === 'blunts' || product.room === 'pre-rolls'
+    ? indexableProductHref(product.room, vaultStrainSlug(product))
+    : product.productUrl;
+}
 
 const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
 export function vaultProductForAlt(alt: string): VaultProduct | undefined {

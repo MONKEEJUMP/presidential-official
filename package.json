@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "node scripts/run-next-build.mjs",
+    "postbuild": "npm run seo:sitemap-noindex",
     "start": "next start",
     "lint": "eslint --max-warnings 0",
     "typecheck": "tsc --noEmit",
@@ -51,6 +52,7 @@
     "cms:runtime-smoke:verify": "node scripts/presidential-cms-runtime-smoke-qa.mjs",
     "cms:live-draft:verify": "node scripts/presidential-cms-live-draft-smoke-qa.mjs",
     "seo:qa": "node scripts/presidential-seo-qa.mjs",
+    "seo:sitemap-noindex": "node scripts/sitemap-noindex-qa.mjs",
     "seo:rendered-home": "node scripts/presidential-rendered-home-route-qa.mjs",
     "seo:rendered-static": "node scripts/presidential-rendered-static-routes-qa.mjs",
     "seo:head-metadata": "node scripts/presidential-rendered-head-metadata-qa.mjs",

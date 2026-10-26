@@ -9,7 +9,7 @@ import {
   FEATURED_PRE_ROLL_ARTWORK_IDS,
   PRE_ROLL_ARTWORKS,
 } from "@/lib/prerolls/catalog";
-import { productDetailPath } from "@/lib/products/product-paths";
+import { indexableProductHref } from "@/lib/products/vault-links";
 import { TIER_SECTION_ORDER, resolveCatalogTier } from "@/lib/catalog/tier-map";
 
 import { TierBadge, TierSectionHeader } from "@/components/presidential/catalog/tier-section";
@@ -115,7 +115,7 @@ export function PreRollExperience({
                   <Link
                     aria-label={`View ${artwork.name} product page`}
                     className={styles.heroArtLink}
-                    href={productDetailPath("/pre-rolls", artwork.id)}
+                    href={indexableProductHref("pre-rolls", artwork.id)}
                   >
                     <Image
                       alt={artwork.alt}
@@ -163,7 +163,7 @@ export function PreRollExperience({
             <Link
               aria-label={`Explore ${artwork.name}, ${artwork.edition}`}
               className={styles[`featuredArt${index + 1}`]}
-              href={productDetailPath("/pre-rolls", artwork.id)}
+              href={indexableProductHref("pre-rolls", artwork.id)}
               key={artwork.id}
             >
               <Image alt="" fill sizes="(max-width: 780px) 50vw, 28vw" {...sanityImage(artwork.src)} />
@@ -310,7 +310,7 @@ export function PreRollExperience({
                 <div className={`${styles.artGrid} ${styles.tierGrid}`}>
                   {entries.map(({ artwork, placement }) => (
                     <article className={artwork.shape === "square" ? styles.artCardSquare : styles.artCardPortrait} key={artwork.id}>
-                      <Link aria-label={`View ${artwork.name} product page`} className={styles.artCardImage} href={productDetailPath("/pre-rolls", artwork.id)}>
+                      <Link aria-label={`View ${artwork.name} product page`} className={styles.artCardImage} href={indexableProductHref("pre-rolls", artwork.id)}>
                         {section === "collabs" ? <TierBadge tier={placement.tierBadge} /> : null}
                         <Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" {...sanityImage(artwork.src)} />
                       </Link>
@@ -334,7 +334,7 @@ export function PreRollExperience({
               <div className={`${styles.artGrid} ${styles.tierGrid}`}>
                 {tieredArtwork.filter(({ placement }) => placement.section === "more").map(({ artwork, placement }) => (
                   <article className={artwork.shape === "square" ? styles.artCardSquare : styles.artCardPortrait} key={artwork.id}>
-                    <Link aria-label={`View ${artwork.name} product page`} className={styles.artCardImage} href={productDetailPath("/pre-rolls", artwork.id)}><Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" {...sanityImage(artwork.src)} /></Link>
+                    <Link aria-label={`View ${artwork.name} product page`} className={styles.artCardImage} href={indexableProductHref("pre-rolls", artwork.id)}><Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" {...sanityImage(artwork.src)} /></Link>
                     <div className={styles.artCardCopy}><p>{artwork.collection}</p><h3><ProductNameLink name={artwork.name} format="Pre-roll" className="text-inherit no-underline">{placement.displayName || artwork.name}</ProductNameLink></h3><span>{artwork.edition}</span><p><ProductMentions format="Pre-roll">{artwork.description}</ProductMentions></p></div>
                   </article>
                 ))}

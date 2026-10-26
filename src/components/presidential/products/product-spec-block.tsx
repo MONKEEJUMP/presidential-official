@@ -6,7 +6,7 @@ import descriptions from "@/content/vault/descriptions.json";
 import { vaultSpecs } from "@/content/vault/specs";
 import { resolveCatalogTier } from "@/lib/catalog/tier-map";
 import { PRE_ROLL_ARTWORKS } from "@/lib/prerolls/catalog";
-import { productDetailPath } from "@/lib/products/product-paths";
+import { indexableProductHref, indexableVaultProductHref } from "@/lib/products/vault-links";
 
 // Spec block for Moon Rocks SKU pages. Every value comes from existing product
 // data (Sanity series, tier-map collaboration partner, and the pre-roll, blunt,
@@ -69,18 +69,18 @@ export function offersFor(name: string): readonly Offer[] {
   const offers = new Map<string, Offer>();
   for (const product of PRE_ROLL_ARTWORKS) {
     if (keys.has(normalize(product.name))) {
-      offers.set("Pre-roll", { format: "Pre-roll", weight: editionWeight(product.edition), build: editionBuild(product.edition), href: productDetailPath("/pre-rolls", product.id) });
+      offers.set("Pre-roll", { format: "Pre-roll", weight: editionWeight(product.edition), build: editionBuild(product.edition), href: indexableProductHref("pre-rolls", product.id) });
     }
   }
   for (const product of BLUNT_ARTWORKS) {
     if (keys.has(normalize(product.name))) {
-      offers.set("Blunt", { format: "Blunt", weight: editionWeight(product.edition), build: editionBuild(product.edition), href: productDetailPath("/blunts", product.id) });
+      offers.set("Blunt", { format: "Blunt", weight: editionWeight(product.edition), build: editionBuild(product.edition), href: indexableProductHref("blunts", product.id) });
     }
   }
   for (const product of vaultProducts) {
     if (keys.has(normalize(product.strain)) && !offers.has(product.format)) {
       const madeWith = vaultSpecs(product)?.madeWith;
-      offers.set(product.format, { format: product.format, weight: descriptionWeight(vaultDescriptions[product.slug]), build: madeWith?.length ? madeWith.join(" · ") : undefined, href: product.productUrl });
+      offers.set(product.format, { format: product.format, weight: descriptionWeight(vaultDescriptions[product.slug]), build: madeWith?.length ? madeWith.join(" · ") : undefined, href: indexableVaultProductHref(product) });
     }
   }
   return FORMAT_ORDER.flatMap((format) => offers.get(format) ?? []);

@@ -6,7 +6,7 @@ import { ProductNameLink, ProductMentions } from "@/components/presidential/prod
 import { useLayoutEffect, type ReactNode } from "react";
 
 import { BLUNT_ARTWORKS } from "@/content/blunts-catalog";
-import { productDetailPath } from "@/lib/products/product-paths";
+import { indexableProductHref } from "@/lib/products/vault-links";
 import { TIER_SECTION_ORDER, resolveCatalogTier } from "@/lib/catalog/tier-map";
 
 import { TierBadge, TierSectionHeader } from "@/components/presidential/catalog/tier-section";
@@ -119,7 +119,7 @@ export function BluntsExperience({
           {featuredIndexes.map((index, position) => {
             const artwork = BLUNT_ARTWORKS[index];
             return (
-              <Link aria-label={`View ${artwork.name} product page`} className={shared[`featuredArt${position + 1}`]} href={productDetailPath("/blunts", artwork.id)} key={artwork.id}>
+              <Link aria-label={`View ${artwork.name} product page`} className={shared[`featuredArt${position + 1}`]} href={indexableProductHref("blunts", artwork.id)} key={artwork.id}>
                 <Image alt="" fill sizes="(max-width: 780px) 50vw, 28vw" {...sanityImage(artwork.src)} /><span>{artwork.name}</span>
               </Link>
             );
@@ -141,7 +141,7 @@ export function BluntsExperience({
                 <div className={`${shared.artGrid} ${shared.tierGrid}`}>
                   {entries.map(({ artwork, placement }) => (
                     <article className={artwork.shape === "square" ? shared.artCardSquare : shared.artCardPortrait} key={artwork.id}>
-                      <Link aria-label={`View ${artwork.name} product page`} className={shared.artCardImage} href={productDetailPath("/blunts", artwork.id)}>
+                      <Link aria-label={`View ${artwork.name} product page`} className={shared.artCardImage} href={indexableProductHref("blunts", artwork.id)}>
                         {section === "collabs" ? <TierBadge tier={placement.tierBadge} /> : null}
                         <Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" {...sanityImage(artwork.src)} />
                       </Link>
@@ -165,7 +165,7 @@ export function BluntsExperience({
               <div className={`${shared.artGrid} ${shared.tierGrid}`}>
                 {tieredArtwork.filter(({ placement }) => placement.section === "more").map(({ artwork, placement }) => (
                   <article className={artwork.shape === "square" ? shared.artCardSquare : shared.artCardPortrait} key={artwork.id}>
-                    <Link aria-label={`View ${artwork.name} product page`} className={shared.artCardImage} href={productDetailPath("/blunts", artwork.id)}><Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" {...sanityImage(artwork.src)} /></Link>
+                    <Link aria-label={`View ${artwork.name} product page`} className={shared.artCardImage} href={indexableProductHref("blunts", artwork.id)}><Image alt={artwork.alt} fill sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw" {...sanityImage(artwork.src)} /></Link>
                     <div className={shared.artCardCopy}><p>Presidential Moon Rock Blunts</p><h3><ProductNameLink name={artwork.name} format="Blunt" className="text-inherit no-underline">{placement.displayName || artwork.name}</ProductNameLink></h3><span>{artwork.edition}</span><p><ProductMentions format="Blunt">{artwork.description}</ProductMentions>{BLUNT_CARD_EXTRAS[artwork.id] ?? null}</p></div>
                   </article>
                 ))}

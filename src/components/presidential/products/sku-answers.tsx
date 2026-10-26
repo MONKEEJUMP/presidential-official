@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { vaultProducts } from "@/content/vault/catalog";
 import descriptions from "@/content/vault/descriptions.json";
+import { indexableProductHref } from "@/lib/products/vault-links";
 
 import { offersFor } from "./product-spec-block";
 
@@ -419,7 +420,7 @@ Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongs
             <Link className={linkClass} href="/moon-rocks/silver">Silver Flavor Series moon rocks</Link> lineup. To read a distillate label, see{" "}
             <Link className={linkClass} href="/learn/what-is-thc-distillate">what THC distillate is</Link>. Read the jar label for
             its build. Don&apos;t grind them, because the concentrate layer gums up a grinder. Pineapple also comes rolled as a{" "}
-            <Link className={linkClass} href="/pre-rolls/pineapple">Pineapple pre-roll</Link>.
+            <Link className={linkClass} href={indexableProductHref("pre-rolls", "pineapple")}>Pineapple pre-roll</Link>.
           </p>
         </>
       ) : null}
@@ -451,7 +452,7 @@ Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongs
             <Link className={linkClass} href="/learn/what-is-live-resin">what live resin is</Link>. In the artwork, NYC Diesel belongs
             to the darker half of the catalog, set against the bright packs such as{" "}
             <Link className={linkClass} href="/moon-rocks/papaya-punch">Papaya Punch&apos;s fruit-buried pack</Link> and Cherry Gelato. It also comes as
-            a <Link className={linkClass} href="/pre-rolls/nyc-diesel">NYC Diesel pre-roll</Link>. THC is batch-specific, so read
+            a <Link className={linkClass} href={indexableProductHref("pre-rolls", "nyc-diesel")}>NYC Diesel pre-roll</Link>. THC is batch-specific, so read
             the current package label and its test results.
           </p>
         </>
@@ -466,7 +467,7 @@ Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongs
             flavor names; see{" "}
             <Link className={linkClass} href="/learn/what-are-moon-rocks">what moon rocks are</Link>. Presidential packs mark Blue
             Dream as Sativa, and the character reads as berry-soft sweetness carried over something distinctly herbal. It also comes
-            as a <Link className={linkClass} href="/pre-rolls/blue-dream">Blue Dream pre-roll</Link>. THC is batch-specific, so
+            as a <Link className={linkClass} href={indexableProductHref("pre-rolls", "blue-dream")}>Blue Dream pre-roll</Link>. THC is batch-specific, so
             read the current package label and its test results.
           </p>
         </>
@@ -483,7 +484,7 @@ Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongs
             <Link className={linkClass} href="/learn/what-is-thc-distillate">what THC distillate is</Link>. The label lists
             flower first, distillate carried through it, and kief as the finish. Don&apos;t grind
             them; the concentrate layer gums up a grinder and strips the kief. Grape also comes as a{" "}
-            <Link className={linkClass} href="/pre-rolls/grape">Grape pre-roll</Link>.
+            <Link className={linkClass} href={indexableProductHref("pre-rolls", "grape")}>Grape pre-roll</Link>.
           </p>
         </>
       ) : null}
@@ -505,7 +506,7 @@ Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongs
           <p className="mt-2 text-sm leading-6 text-po-body">
             King Louis is a Gold Strain Series release. King Louis is also one of a small number of
             Presidential releases with a second name on the pack: IN COLLABORATION WITH VLAD TV. It also runs as a{" "}
-            <Link className={linkClass} href="/pre-rolls/king-louis">King Louis pre-roll</Link>. THC is batch-specific, so read the
+            <Link className={linkClass} href={indexableProductHref("pre-rolls", "king-louis")}>King Louis pre-roll</Link>. THC is batch-specific, so read the
             current package label and its test results. See{" "}
             <Link className={linkClass} href="/moon-rocks/gold">Gold Strain Series moon rocks</Link> and{" "}
             <Link className={linkClass} href="/learn/what-is-live-resin">what live resin is</Link>.
@@ -558,7 +559,7 @@ Watermelon is one of the flavor-led releases in the Silver Flavor Series, alongs
           <p className="mt-2 text-sm leading-6 text-po-body">
             Cereal Milk belongs to the{" "}
             <Link className={linkClass} href="/moon-rocks/rose-gold">Rose Gold Connoisseur Series</Link>. It also comes as a{" "}
-            <Link className={linkClass} href="/pre-rolls/cereal-milk">Cereal Milk pre-roll</Link>. See{" "}
+            <Link className={linkClass} href={indexableProductHref("pre-rolls", "cereal-milk")}>Cereal Milk pre-roll</Link>. See{" "}
             <Link className={linkClass} href="/learn/what-is-live-rosin">what live rosin is</Link> for the extract behind the
             series.
           </p>

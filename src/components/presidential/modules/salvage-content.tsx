@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { indexableProductHref } from "@/lib/products/vault-links";
 
 import { type AnswerItem, answerLinkClass as a } from "./answer-sections";
 
@@ -275,8 +276,8 @@ export const PRE_ROLL_ANSWERS: readonly AnswerItem[] = [
     answer: (
       <p>
         Each standard Moon Rock pre-roll is a 1g roll, and the pack prints its build: read it on{" "}
-        <Link className={a} href="/pre-rolls/grape">Grape</Link>, <Link className={a} href="/pre-rolls/blue-dream">Blue Dream</Link>, or{" "}
-        <Link className={a} href="/pre-rolls/wedding-cake">Wedding Cake</Link> before you choose. Read{" "}
+        <Link className={a} href={indexableProductHref("pre-rolls", "grape")}>Grape</Link>, <Link className={a} href={indexableProductHref("pre-rolls", "blue-dream")}>Blue Dream</Link>, or{" "}
+        <Link className={a} href={indexableProductHref("pre-rolls", "wedding-cake")}>Wedding Cake</Link> before you choose. Read{" "}
         <Link className={a} href="/learn/what-are-moon-rocks">what moon rocks are</Link> for the layered build itself.
       </p>
     ),
