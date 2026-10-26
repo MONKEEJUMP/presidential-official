@@ -884,6 +884,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
 
   async function correctVerifiedCustomer(door: SalesDoor) {
     if (!snapshot || !isSuper || !door.verifiedCustomerId) return;
+    if (notesDirty || toolkitDirty) { setPanelError("Save or discard your unfinished work before changing customer status."); return; }
     const choice = window.prompt(
       "Type NOTE to attach an administrative note, or REVERT to return this verified customer to a white opportunity.",
     )?.trim().toUpperCase();
@@ -903,6 +904,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
     if (!reason || !window.confirm(`REVERT ${displayDoorName(door)} TO A WHITE OPPORTUNITY?`)) return;
     try {
       await postAction({ action: "revert_verified_customer", verifiedCustomerId: door.verifiedCustomerId, reason });
+      if (activeDoorRef.current === door.id) closeWorkAreaImmediately();
       await loadSnapshot(snapshot.selectedState);
       setAdminMessage("VERIFIED CUSTOMER RETURNED TO A WHITE OPPORTUNITY. ORIGINAL EVIDENCE PRESERVED.");
     } catch (error) {
@@ -912,10 +914,12 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
 
   async function reopenDoNotCall(door: SalesDoor) {
     if (!snapshot || !isSuper || !door.marketDoorId) return;
+    if (notesDirty || toolkitDirty) { setPanelError("Save or discard your unfinished work before changing the do-not-call status."); return; }
     const reason = window.prompt("Enter the required reason for reopening this Do Not Call store:")?.trim();
     if (!reason || !window.confirm(`REOPEN ${displayDoorName(door)} FOR SALES ACTIVITY?`)) return;
     try {
       await postAction({ action: "reopen_do_not_call", doorId: door.marketDoorId, reason });
+      if (activeDoorRef.current === door.id) closeWorkAreaImmediately();
       await loadSnapshot(snapshot.selectedState);
       setAdminMessage("DO NOT CALL LOCK REOPENED. ORIGINAL ACTIVITY PRESERVED.");
     } catch (error) {
