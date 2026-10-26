@@ -20,6 +20,7 @@ import { createSalesAdminClient, createSalesAuthClient } from "@/lib/supabase/sa
 import { browseSales, readSalesActivity, readSalesContactProgress, readSalesHistory, readSalesRequests } from "@/lib/sales-browse-server";
 import { consumeSalesAttempt, requireSalesClaim, SalesWorkflowError } from "@/lib/sales-workflow-server";
 import { createSalesRepAccount, SALES_PIN_PATTERN, salesAuthPassword, setSalesPin } from "@/lib/sales-pin";
+import { readSalesAccount, readSalesArchivedHistory, readSalesCallbackReview, readSalesOperationStatus } from "@/lib/sales-today-server";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -255,18 +256,41 @@ async function latestEffectiveDoorCall(admin: SupabaseClient, doorId: number): P
 }
 
 export async function GET(request: Request) {
+  const params = new URL(request.url).searchParams;
+  const resource = params.get("resource");
   const user = await authenticatedUser();
-  if (!user) return json({ authenticated: false }, 401);
+  if (!user) return json(resource === "bootstrap" ? { contractVersion: 1, authenticated: false } : { authenticated: false }, 401);
   try {
     const admin = createSalesAdminClient();
     const profile = await fetchRepProfile(admin, user.id);
     if (!profile?.active) return json({ error: "This sales account is inactive." }, 403);
     if (profile.must_change_pin) {
-      return json({ authenticated: true, mustChangePin: true,
+      return json({ ...(resource === "bootstrap" ? { contractVersion: 1 } : {}), authenticated: true, mustChangePin: true,
         user: { id: user.id, name: profile.display_name, username: profile.username } });
     }
-    const params = new URL(request.url).searchParams;
-    const resource = params.get("resource");
+    if (["bootstrap", "operation_status", "account", "archived_history", "callback_review"].includes(resource ?? "")) {
+      if (!["sales_rep", "master", "super_master"].includes(profile.role)) return json({ error: "This sales role cannot open the CRM." }, 403);
+      if (resource === "bootstrap") {
+        const state = params.get("state") ?? "AZ";
+        if (!["AZ", "NY", "OK"].includes(state)) return json({ error: "Choose AZ, NY, or OK." }, 400);
+        // Reuse the authoritative browse statistics formula without transferring its directory rows or owner settings.
+        const summary = await admin.rpc("browse_sales_targets", { p_actor_id: user.id, p_state: state,
+          p_city: "", p_search: "", p_filter: "not_purchasing", p_queue: "all", p_offset: 0, p_limit: 1, p_time_zone: "America/Chicago" });
+        if (summary.error || !summary.data?.stats) throw summary.error ?? new Error("Sales summary unavailable.");
+        return json({ contractVersion: 1, authenticated: true, mustChangePin: false,
+          user: { id: user.id, name: repName(user, profile), username: profile.username, role: profile.role },
+          states: ["AZ", "NY", "OK"], selectedState: state, stats: summary.data.stats,
+          capabilities: { today: true, dispensaries: true, teamActivity: true, reports: true,
+            ownerTools: isSuper(profile), companyPriority: isSuper(profile) } });
+      }
+      if (resource === "operation_status") return json(await readSalesOperationStatus(admin, user.id, params));
+      if (resource === "account") return json(await readSalesAccount(admin, user.id, params));
+      if (resource === "archived_history") return json(await readSalesArchivedHistory(admin, user.id, params));
+      if (resource === "callback_review") {
+        if (!isSuper(profile)) return json({ error: "Super Master access is required." }, 403);
+        return json(await readSalesCallbackReview(admin, user.id, params));
+      }
+    }
     if (resource === "activity") {
       return json({ activity: await readSalesActivity(admin, user.id) });
     }
@@ -309,6 +333,7 @@ export async function GET(request: Request) {
       doors: browse.doors.map((door) => ({ ...door, pendingVerification: requests.find((item) => item.doorId === door.id && item.status === "pending") ?? null })),
     } satisfies SalesSnapshot);
   } catch (error) {
+    if (error instanceof SalesWorkflowError) return json({ error: error.message }, error.status);
     console.error("Sales snapshot failed", error instanceof Error ? error.message : "unknown");
     return json({ error: "Sales data is temporarily unavailable. Please refresh." }, 503);
   }
