@@ -271,8 +271,8 @@ export async function GET(request: Request) {
     if (["bootstrap", "operation_status", "account", "archived_history", "callback_review"].includes(resource ?? "")) {
       if (!["sales_rep", "master", "super_master"].includes(profile.role)) return json({ error: "This sales role cannot open the CRM." }, 403);
       if (resource === "bootstrap") {
-        const state = params.get("state") ?? "AZ";
-        if (!["AZ", "NY", "OK"].includes(state)) return json({ error: "Choose AZ, NY, or OK." }, 400);
+        const state = params.get("state") ?? "all";
+        if (!["all", "AZ", "NY", "OK"].includes(state)) return json({ error: "Choose all states, AZ, NY, or OK." }, 400);
         // Reuse the authoritative browse statistics formula without transferring its directory rows or owner settings.
         const summary = await admin.rpc("browse_sales_targets", { p_actor_id: user.id, p_state: state,
           p_city: "", p_search: "", p_filter: "not_purchasing", p_queue: "all", p_offset: 0, p_limit: 1, p_time_zone: "America/Chicago" });
