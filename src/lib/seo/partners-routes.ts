@@ -6,7 +6,9 @@ export const PARTNER_ROUTES: readonly SeoRouteRecord[] = ['hub', ...PARTNER_STAT
   const state=PARTNER_STATES.find(s=>s.code===code);
   const copy=PARTNERS_COPY[code as keyof typeof PARTNERS_COPY];
   const path=state ? `/partners/${state.code}` as const : '/partners';
-  return {id:state?`partners-${state.code}`:'partners',path,canonicalPath:path,kind:'brand_story',status:'approved',indexability:'index_follow',sitemap:'include',priority:3,changeFrequency:'monthly',title:copy.title,description:copy.description,h1:copy.h1,
+  // Washington stays crawlable but out of search and the sitemap until launch.
+  const landingSoon = code === 'wa';
+  return {id:state?`partners-${state.code}`:'partners',path,canonicalPath:path,kind:'brand_story',status:'approved',indexability:landingSoon?'conditional_index':'index_follow',sitemap:landingSoon?'exclude':'include',priority:3,changeFrequency:'monthly',title:copy.title,description:copy.description,h1:copy.h1,
     keywords:state?[`where to buy presidential in ${state.name.toLowerCase()}`,`dispensaries carrying presidential ${state.name.toLowerCase()}`,`presidential retailers ${state.name.toLowerCase()}`]:['presidential authorized retailers'],
     schema:['Organization','WebPage','BreadcrumbList',...(state?['ItemList' as const]:[])],requiredData:['committed partners snapshot'],requiredApprovals:[],blocks:[],linksTo:state?['/partners',`/find-us/${state.code}`]:PARTNER_STATES.map(s=>`/partners/${s.code}` as const),sourceArtifact:'0907-PRES-KVRT-0010; owner ruling; src/content/partners.json; src/content/partners-copy.ts'};
 });

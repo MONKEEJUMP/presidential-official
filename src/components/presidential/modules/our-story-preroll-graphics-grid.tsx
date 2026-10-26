@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { vaultProductForImage } from "@/lib/products/vault-links";
+import { indexableVaultProductHref, vaultProductForImage } from "@/lib/products/vault-links";
 import { sanityImage } from "@/lib/cms/sanity-image";
 
 const PREROLL_GRAPHICS = [
@@ -125,7 +125,7 @@ export function OurStoryPrerollGraphicsGrid() {
           {PREROLL_GRAPHICS.map((graphic) => (
             <Link
               className="relative aspect-square overflow-hidden rounded-[20px] border border-po-brand bg-po-ink transition-transform duration-200 hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand"
-              href={vaultProductForImage(graphic.src)?.productUrl ?? graphic.href}
+              href={indexableVaultProductHref(vaultProductForImage(graphic.src)) ?? graphic.href}
               key={graphic.href}
             >
               <Image

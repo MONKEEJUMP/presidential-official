@@ -25,7 +25,7 @@ import {
   readCatalogItemBySlug,
   readCatalogProductParams,
 } from "@/lib/cms/catalog";
-import { buildCatalogProductSeoRoute, CONCRETE_SEO_SERIES_PATHS } from "@/lib/seo/concrete-routes";
+import { buildCatalogProductSeoRoute, CONCRETE_SEO_SERIES_PATHS, normalizeCatalogName } from "@/lib/seo/concrete-routes";
 import {
   buildRouteMetadata,
   isRouteMetadataIndexable,
@@ -128,7 +128,7 @@ export default async function CatalogProductDetailPage({
 
   const rawItem = detail.item as typeof detail.item & { readonly name: string };
   // Chief R38 ruling: the pack art prints GHOST TRAIN HAZE, so the CMS name is corrected for display (slug unchanged).
-  const item = { ...rawItem, name: rawItem.name.split("Ghost Haze Train").join("Ghost Train Haze") };
+  const item = { ...rawItem, name: normalizeCatalogName(rawItem.name) };
   const route = buildCatalogProductSeoRoute(item, slug);
   const meta = seriesMetaFor(item.series);
   const seriesPath = CONCRETE_SEO_SERIES_PATHS.find((path) => route.linksTo.includes(path));

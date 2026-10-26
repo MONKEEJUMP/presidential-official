@@ -37,7 +37,6 @@ const navigationGroups = [
     label: "Connect",
     items: [
       { href: "/pop-up", label: "Pop Up" },
-      { href: "/loyalty", label: "Loyalty" },
       { href: "/contact", label: "Contact" },
     ],
   },

@@ -109,6 +109,16 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      {
+        source: "/moon-rocks/cereal-milk-cereal-milk",
+        destination: "/moon-rocks/cereal-milk",
+        statusCode: 301,
+      },
+      {
+        source: "/moon-podslicensed",
+        destination: "/moon-pods",
+        statusCode: 301,
+      },
       ...["apricotti", "daniel-larusso", "laura-charles"].flatMap((slug) => [
         {
           source: `/moon-rocks/presidential-line-${slug}`,

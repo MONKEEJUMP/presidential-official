@@ -108,12 +108,16 @@ function withMoonRocksFormat(name: string): string {
   return /moon rocks?|blunts?|pre-?rolls?/i.test(name) ? name : `${name} Moon Rocks`;
 }
 
+export function normalizeCatalogName(name: string): string {
+  return name.split("Ghost Haze Train").join("Ghost Train Haze");
+}
+
 export function buildCatalogProductSeoRoute(
   item: ConcreteCatalogItem,
   slug: string,
 ): SeoRouteRecord {
   const template = getRequiredRouteTemplate("moon-rocks-product-detail");
-  const name = item.name.trim();
+  const name = normalizeCatalogName(item.name).trim();
   const series = item.series?.trim();
   const seriesPath = series ? SERIES_PATH_BY_NAME[series] : undefined;
   const relatedGuide = relatedGuideForCatalogItem(item);
