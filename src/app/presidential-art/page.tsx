@@ -3,7 +3,7 @@ import { VaultEntrance } from '@/components/vault/entrance';
 import { buildSocialMetadata } from '@/lib/seo/metadata';
 import { buildBreadcrumbSchema, buildWebPageSchema, JsonLd } from '@/lib/seo/schema';
 
-const TITLE = 'The Presidential Vault — Presidential Art';
+const TITLE = 'The Presidential Vault | Moon Rock Pack Art Collection';
 const DESCRIPTION = 'Explore the complete Presidential art collection. Step into four gallery rooms of Moon Rock Blunts, Pre-rolls, Mini Blunts and Mini Pre-rolls.';
 const CANONICAL = 'https://presidentialmoonrocks.com/presidential-art';
 

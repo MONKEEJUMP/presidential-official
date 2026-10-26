@@ -5,6 +5,7 @@ import { Suspense, type ReactNode } from 'react';
 import { VaultRoomPage } from '@/components/vault/room';
 import { productsInRoom, vaultRoomHeading, vaultRooms } from '@/content/vault/catalog';
 import { VaultRoomCopy } from '@/components/vault/r34-copy';
+import { buildArtRoomTitle } from '@/lib/seo/title-templates';
 
 // Sitebulb oct06d #3: short factual intros for the two mini rooms. Weights and the
 // build are the ones every mini pack states in src/content/vault/specs.json.
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ room: str
   const { room: slug } = await params;
   const room = vaultRooms.find(r => r.slug === slug);
   if (!room) notFound();
-  return { title: `${room.name} — The Presidential Vault`, description: `Explore the Presidential ${room.name} art collection in Room ${room.numeral} of The Presidential Vault. View original artwork and whole pack portraits.`, alternates: { canonical: `https://presidentialmoonrocks.com/presidential-art/${room.slug}` }, robots: { index: true, follow: true } };
+  return { title: buildArtRoomTitle(room.name), description: `Explore the Presidential ${room.name} art collection in Room ${room.numeral} of The Presidential Vault. View original artwork and whole pack portraits.`, alternates: { canonical: `https://presidentialmoonrocks.com/presidential-art/${room.slug}` }, robots: { index: true, follow: true } };
 }
 export default async function RoomPage({ params }: { params: Promise<{ room: string }> }) {
   const { room: slug } = await params;

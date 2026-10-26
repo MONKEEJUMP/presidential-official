@@ -295,7 +295,7 @@ export default async function CatalogProductDetailPage({
                 {/* InLinks r3: House Line and THC Design pages point to the pre-roll hub and the House Line pre-roll SKU. */}
                 {slug === "presidential-moon-rocks" ? (
                   <p className="mt-6 text-sm leading-6 text-po-body">
-                    The House Line also includes a pre-roll, <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/moon-rocks/presidential-prerolls">the Presidential Prerolls pack</Link>,
+                    The House Line also includes <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/moon-rocks/presidential-blunts">House Line Moon Rock blunts</Link> and a pre-roll, <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/moon-rocks/presidential-prerolls">the Presidential Prerolls pack</Link>,
                     and the series&apos; <Link className="font-semibold text-po-ink underline decoration-po-brand underline-offset-4" href="/pre-rolls">pre-rolled Moon Rocks</Link> are collected on the pre-rolls page.
                   </p>
                 ) : null}
