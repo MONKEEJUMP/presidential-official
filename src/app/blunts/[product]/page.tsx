@@ -11,6 +11,7 @@ import {
 import { canonicalUrl } from "@/lib/seo/schema/constants";
 import { findNewVaultProduct, newVaultProductPages, vaultStrainSlug } from '@/content/vault/catalog';
 import { VaultProductPage, vaultProductMetadata } from '@/components/vault/product-page';
+import { buildFormatProductTitle } from '@/lib/seo/title-templates';
 
 type BluntProductPageProps = {
   readonly params: Promise<{ readonly product: string }>;
@@ -32,7 +33,8 @@ export async function generateMetadata({
 
   if (!product) return { robots: { index: false, follow: false } };
 
-  const title = `${product.name} Blunt | Presidential`;
+  const title = buildFormatProductTitle({ name: product.name, format: "Blunt", existing: `${product.name} Blunt | Presidential`,
+    weight: product.edition.match(/^\d+(?:\.\d+)?g\b/)?.[0], extract: product.edition.split("·")[2]?.trim(), infused: /infused/i.test(product.edition) });
   const description = `Explore ${product.name}, a Presidential Moon Rock blunt. Review the format, infusion, flavor profile, and licensed-retailer path.`;
   const canonical = canonicalUrl(`/blunts/${slug}`);
 

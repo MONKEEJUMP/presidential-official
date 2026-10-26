@@ -2,6 +2,7 @@ import { getRouteById, getRouteByPath } from "./route-helpers";
 import type { SeoRoutePath, SeoRouteRecord } from "./route-types";
 import { PRODUCT_METADATA_BY_SLUG } from "./pw7404-1019-product-metadata";
 import { relatedGuideForCatalogItem } from "@/lib/catalog/series-registry";
+import { buildLearnGuideTitle, buildMoonRocksProductTitle } from "./title-templates";
 
 export const CONCRETE_SEO_DOCUMENT_PATHS = [
   "/",
@@ -132,7 +133,7 @@ export function buildCatalogProductSeoRoute(
     id: `moon-rocks-product-${slug}`,
     path,
     canonicalPath: path,
-    title: metadata?.seoTitle ?? `${name} | Presidential Moon Rocks`,
+    title: buildMoonRocksProductTitle({ name, series, slug, existing: metadata?.seoTitle ?? `${name} | Presidential Moon Rocks` }),
     description: metadata?.metaDescription ?? generatedDescription,
     h1: PRODUCT_H1_OVERRIDE_BY_SLUG[slug] ?? withMoonRocksFormat(name),
     // GSC 1012/1014-PS2: no approved prices or reviews exist, so Product (which needs offers/review/rating)
@@ -231,7 +232,7 @@ export function buildLearnGuideSeoRoute(
     indexability: "index_follow",
     sitemap: "include",
     canonicalPath: path,
-    title: `${guide.title.trim()} | Presidential Learn`,
+    title: buildLearnGuideTitle(guide.title.trim()),
     description: guide.intro.trim(),
     h1: guide.title.trim(),
     schema: ["WebPage", "BreadcrumbList"],

@@ -7,11 +7,17 @@ import { canonicalUrl } from '@/lib/seo/schema/constants';
 import { imageAlt, vaultStrainSlug, type VaultProduct } from '@/content/vault/catalog';
 import descriptions from '@/content/vault/descriptions.json';
 import { vaultFormatHeading } from './format-cards';
-import { vaultMetaDescription } from '@/content/vault/specs';
+import { vaultMetaDescription, vaultSpecs } from '@/content/vault/specs';
+import { buildFormatProductTitle } from '@/lib/seo/title-templates';
 import { VaultSkuCopy } from './r34-copy';
 
 export function vaultProductMetadata(product: VaultProduct): Metadata {
-  const title = `${product.strain} Moon Rock ${product.format} | Presidential`;
+  const spec = vaultSpecs(product);
+  const title = buildFormatProductTitle({ name: product.strain, format: product.format,
+    existing: `${product.strain} Moon Rock ${product.format} | Presidential`, weight: spec?.weight,
+    extract: spec?.madeWith.find((part) => !/^(flower|kief|diamonds)$/i.test(part)),
+    infused: Boolean(spec?.madeWith.some((part) => /resin|rosin|distillate/i.test(part))),
+  });
   // Sitebulb oct06d #1: the meta is a short spec summary; the full blurb stays on the page.
   const description = vaultMetaDescription(product) ?? (descriptions as Record<string, string>)[product.slug];
   const image = product.scenes[0] ?? product.pack;

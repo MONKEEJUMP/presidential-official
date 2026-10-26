@@ -9,6 +9,7 @@ import { buildBreadcrumbSchema, buildOrganizationSchema, buildWebPageSchema, Jso
 import { AnswerSections } from '@/components/presidential/modules/answer-sections';
 import { MINI_BLUNT_ANSWERS } from '@/components/presidential/modules/top50-content';
 import { VaultFormatCard } from './format-cards';
+import { selectSeoTitle } from '@/lib/seo/title-templates';
 
 function hubLabel(room: VaultRoom): string {
   return room.name.replace('Pre-rolls', 'Pre-Rolls');
@@ -17,7 +18,7 @@ function hubLabel(room: VaultRoom): string {
 export function vaultFormatHubMetadata(room: VaultRoom): Metadata {
   const label = hubLabel(room);
   const names = productsInRoom(room.slug).map((p) => p.strain);
-  const title = `Presidential ${label} | Infused ${label}`;
+  const title = selectSeoTitle(`Presidential ${label} | Infused ${label}`, [`Presidential Moon Rock ${label} | Infused Cannabis`]);
   // Sitebulb oct06d #5: kept at 155 characters or fewer.
   const description = `Presidential Moon Rock ${label}: ${names.join(', ')}. At licensed retailers.`;
   const canonical = canonicalUrl(`/${room.slug}`);

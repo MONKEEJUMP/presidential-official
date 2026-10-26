@@ -170,7 +170,7 @@ export const APPROVED_TERM_ROUTE_ROWS = [
   },
   {
     slug: "presidential-cannabis",
-    title: "Presidential Cannabis | Official Company Overview",
+    title: "Presidential Cannabis | Official Brand and Product Overview",
     description:
       "Meet Presidential Cannabis, the official brand behind Moon Rocks, infused pre-rolls, tobacco-free blunts and minis. Find licensed retailers.",
     h1: "Presidential Cannabis",
