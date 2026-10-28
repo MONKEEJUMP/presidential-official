@@ -6,15 +6,15 @@ import ui from "./sales-v2.module.css";
 type Props = Readonly<{
   door: SalesDoor; timeZone: string; callbackDue: boolean; calledToday: boolean;
   workedByMeToday: boolean; notePreview: string | null;
-  onHistory: (door: SalesDoor) => void;
+  onOpen: (door: SalesDoor) => void;
   onTogglePersonalStar: (door: SalesDoor) => void;
 }>;
 
-export function SalesStoreRow({ door, timeZone, callbackDue, calledToday, workedByMeToday, notePreview, onHistory, onTogglePersonalStar }: Props) {
+export function SalesStoreRow({ door, timeZone, callbackDue, calledToday, workedByMeToday, notePreview, onOpen, onTogglePersonalStar }: Props) {
   const lastCall = door.lastCall;
   const address = [door.streetAddress, door.city, door.stateCode, door.zip].filter(Boolean).join(", ");
   return <article className={ui.storeRow}>
-    <button type="button" className={ui.storeOpen} aria-label={`Open ${displayDoorName(door)}`} onClick={() => onHistory(door)}><span>Open</span></button>
+    <button type="button" className={ui.storeOpen} aria-label={`Open ${displayDoorName(door)}`} onClick={() => onOpen(door)}><span>Open</span></button>
     <div className={ui.storeSummary}>
       {(door.isPurchasing || door.companyPriority || door.doNotCallLocked || door.hasPendingVerification || workedByMeToday) ? <div className={ui.rowBadges}>
         {door.isPurchasing ? <span className={ui.customerBadge}>Purchasing Presidential</span> : null}

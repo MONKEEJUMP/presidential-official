@@ -25,6 +25,10 @@
 .tabs>button{flex:1;padding:10px 8px}
 .tabs>button[aria-pressed=true],.outcomes>button[aria-pressed=true]{background:#e6f2ed;border-color:var(--crm-green);color:var(--crm-green)}
 .stack{display:grid;gap:16px;min-width:0}
+.workColumns{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:start}
+.workColumns>.stack{min-width:0}
+.statusBanner{display:flex;flex-wrap:wrap;gap:12px;background:#faefd7;border:1px solid #d4b96a;border-radius:8px;color:#775816;padding:14px 16px;margin-bottom:20px}
+.statusBanner strong{font-size:1.125rem}
 .phone{font-size:1.375rem;overflow-wrap:anywhere}
 .contactLine{display:grid;grid-template-columns:minmax(180px,.8fr) minmax(0,1.2fr);gap:24px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--crm-line)}
 .contactLine>div{min-width:0}
@@ -39,6 +43,7 @@
 .notice{color:var(--crm-muted);font-size:.875rem}
 .field{display:grid;gap:8px;min-width:0}
 .field>span{font-size:.875rem}
+.field>.sectionTitle{font-size:1.125rem;font-weight:600}
 .field :is(input,textarea,select){background:white;border:1px solid #bdccc5;border-radius:8px;color:var(--crm-ink);min-height:44px;min-width:0;padding:10px 12px;width:100%}
 .field textarea{min-height:160px;resize:vertical}
 .noteActions{display:flex;gap:8px}
@@ -58,6 +63,7 @@ details.toolCard[open]>summary{margin-bottom:12px}
 .overlay{align-items:center;background:#10241c88;display:flex;inset:0;justify-content:center;overflow-y:auto;padding:20px;position:fixed;z-index:120}
 .dialog{background:white;border:1px solid var(--crm-line);border-radius:12px;box-shadow:0 20px 60px #10241c33;display:grid;gap:20px;max-height:90dvh;max-width:560px;overflow-y:auto;padding:24px;width:100%}
 .dialog>.actions>*{flex:1}
+@media(min-width:1200px){.workColumns{grid-template-columns:minmax(0,1.15fr) minmax(220px,.85fr)}.workColumns .outcomes{grid-template-columns:1fr;gap:8px}.workColumns .stack>.primary{justify-self:stretch;min-width:0}}
 @media(min-width:1500px){.columns{grid-template-columns:minmax(0,1fr) 360px}}
 @media(max-width:1000px){.columns{grid-template-columns:minmax(0,1fr) 280px}.card{padding:20px}.outcomes{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:720px){.columns{display:flex;flex-direction:column;gap:20px}.columns>*{width:100%}.card{padding:20px}.workspace h1{font-size:1.625rem}.contactLine{grid-template-columns:1fr;gap:16px}.backNavigation{gap:8px;margin-bottom:16px}.backNavigation>div{margin-left:auto}.backNavigation>span{order:3;width:100%}.backNavigation button{font-size:.875rem;padding:8px 10px}.outcomes{grid-template-columns:repeat(2,minmax(0,1fr))}.outcomes>button:last-child{grid-column:1/-1}.stack>.primary{justify-self:stretch}.actions>*{flex:1}.overlay{padding:16px}.dialog{padding:20px}.tabs{gap:6px}.tabs>button{font-size:.875rem}}
