@@ -10,6 +10,7 @@ import {
   createSalesDateKey,
   displayDoorName,
   formatSalesDate,
+  isClosedDoor,
   salesOutcome,
   type DoorStatus,
   type SalesAdminEvent,
@@ -299,7 +300,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
   const visibleExecutiveRequests = snapshot?.verificationRequests ?? [];
 
   function openWorkArea(door: SalesDoor, mode: "log" | "history") {
-    if (mode === "log" && (door.isPurchasing || door.doNotCallLocked || taskRestriction)) return;
+    if (mode === "log" && (door.isPurchasing || door.doNotCallLocked || isClosedDoor(door))) return;
     if (activeDoorId === door.id && workMode === mode) {
       finishCloseWorkArea();
       return;
@@ -384,7 +385,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
   function moveToDoor(direction: -1 | 1) {
     const index = filteredDoors.findIndex((door) => door.id === activeDoorId);
     const next = filteredDoors[index + direction];
-    if (next) { openWorkArea(next, next.isPurchasing || next.doNotCallLocked ? "history" : "log"); return; }
+    if (next) { openWorkArea(next, next.isPurchasing || next.doNotCallLocked || isClosedDoor(next) ? "history" : "log"); return; }
     if (!snapshot) return;
     const nextPage = snapshot.page + direction;
     if (nextPage < 0 || nextPage * snapshot.pageSize >= snapshot.totalMatching) return;
@@ -394,7 +395,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
       void loadSnapshot(snapshot.selectedState, filters).then((data) => {
         const available = data?.doors ?? [];
         const candidate = direction > 0 ? available[0] : available.at(-1);
-        if (candidate) openWorkArea(candidate, candidate.isPurchasing || candidate.doNotCallLocked ? "history" : "log");
+        if (candidate) openWorkArea(candidate, candidate.isPurchasing || candidate.doNotCallLocked || isClosedDoor(candidate) ? "history" : "log");
       });
     });
   }
@@ -994,7 +995,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
           if (!response.ok || !data.door) throw new Error(data.error ?? "This account is no longer in the directory. Open its archived history from Needs attention.");
           const door = data.door;
           setSnapshot((current) => current ? { ...current, doors: [...current.doors.filter((item) => item.id !== door.id), door] } : current);
-          openWorkArea(door, "history");
+          openWorkArea(door, task.restriction || door.isPurchasing || door.doNotCallLocked || isClosedDoor(door) ? "history" : "log");
           setTaskRestriction(task.restriction);
         } catch (cause) { setTodayError(cause instanceof Error ? cause.message : "This follow-up account could not be opened."); }
         finally { setOpeningTask(null); }
@@ -1099,7 +1100,6 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
           {callPending ? <div className={ui.error} role="alert"><strong>Call save result is not confirmed.</strong><p>Your original request is kept. Check its result before leaving this account or recording another outcome.</p><button disabled={savingCall} type="button" onClick={() => void recoverCall()}>Check save status</button><button disabled={savingCall} type="button" onClick={() => void retryPendingCall()}>Retry the same save</button></div> : null}
 <SalesWorkspace
                 ownerActions={isSuper ? <><p>Team pin moves this dispensary near the top of the list for all salespeople.</p><button type="button" disabled={workspaceBusy} onClick={() => void togglePriority(activeDoor)}>{priorityBusy === activeDoor.id ? "Saving team pin…" : activeDoor.companyPriority ? "Remove team pin" : "Pin near top for team"}</button>{priorityMessage ? <p role="status">{priorityMessage}</p> : null}{priorityError ? <p role="alert">{priorityError}</p> : null}{activeDoor.isPurchasing ? <button type="button" disabled={workspaceBusy} onClick={() => void correctVerifiedCustomer(activeDoor)}>Customer correction</button> : null}{activeDoor.doNotCallLocked ? <button type="button" disabled={workspaceBusy} onClick={() => void reopenDoNotCall(activeDoor)}>Reopen do not call</button> : null}</> : undefined}
-                onBeginContact={!taskRestriction && !activeDoor.isPurchasing && !activeDoor.doNotCallLocked ? () => openWorkArea(activeDoor, "log") : undefined}
                 callbackDate={callbackDate}
                 discardWarning={discardWarning}
                 door={activeDoor}
@@ -1264,7 +1264,7 @@ export function SalesApp({ initiallyAuthenticated }: Readonly<{ initiallyAuthent
             {filtersOpen ? <section className={ui.filterPanel} aria-label="Filter dispensaries"><label className={ui.field}><span>State</span><select disabled={loadingData} onChange={(event) => changeFilters({ city: "", search: "" }, event.target.value)} value={snapshot.selectedState}><option value="all">All states</option>{snapshot.states.map((state) => <option key={state}>{state}</option>)}</select></label><label className={ui.field}><span>City</span><select disabled={loadingData} value={city} onChange={(event) => changeFilters({ city: event.target.value === "ALL CITIES" ? "" : event.target.value })}><option value="ALL CITIES">All cities</option>{cities.map((item) => <option key={item}>{item}</option>)}</select></label><button type="button" onClick={() => changeFilters({ city: "", search: "", filter: "not_purchasing", queue: "all" }, "all")}>Clear filters</button></section> : null}
             <div className={ui.filterSummary} aria-live="polite"><span>{STATE_NAMES[snapshot.selectedState] ?? snapshot.selectedState} · {loadingData ? "Updating…" : `${snapshot.totalMatching.toLocaleString()} matching dispensaries`}</span>{search ? <span>“{search}”</span> : null}</div>
             <section className={ui.doorList} aria-busy={loadingData} aria-label="Licensed dispensary doors">
-              {filteredDoors.map((door) => <SalesStoreRow key={door.id} door={door} timeZone={timeZone} callbackDue={callbackDue(door, today, dateKey)} calledToday={calledToday(door, today, dateKey)} onHistory={(item) => openWorkArea(item, "history")} onTogglePersonalStar={(item) => void togglePersonalStar(item)} workedByMeToday={Boolean(door.myLastActivityAt && dateKey(door.myLastActivityAt) === today)} notePreview={workflowSummaries.find((item) => item.doorId === door.id)?.notePreview ?? null} />)}
+              {filteredDoors.map((door) => <SalesStoreRow key={door.id} door={door} timeZone={timeZone} callbackDue={callbackDue(door, today, dateKey)} calledToday={calledToday(door, today, dateKey)} onOpen={(item) => openWorkArea(item, item.isPurchasing || item.doNotCallLocked || isClosedDoor(item) ? "history" : "log")} onTogglePersonalStar={(item) => void togglePersonalStar(item)} workedByMeToday={Boolean(door.myLastActivityAt && dateKey(door.myLastActivityAt) === today)} notePreview={workflowSummaries.find((item) => item.doorId === door.id)?.notePreview ?? null} />)}
               {!filteredDoors.length ? <div className={ui.empty}><h2>{queue === "callbacks" ? "No callbacks due in this view." : queue === "upcoming" ? "No upcoming callbacks in this view." : queue === "stars" ? "No starred stores in this view." : "No dispensaries match these filters."}</h2><p>{queue === "stars" ? "Use the star on a dispensary you want to return to." : "Try another city or clear your filters."}</p><button type="button" onClick={() => changeFilters({ city: "", search: "", filter: "not_purchasing", queue: "all" }, "all")}>Clear filters</button></div> : null}
             </section>
             <nav className={ui.pagination} aria-label="Store list pages"><button type="button" disabled={loadingData || snapshot.page === 0} onClick={() => changeFilters({ page: snapshot.page - 1 })}>Previous page</button><span>{snapshot.totalMatching ? snapshot.page * snapshot.pageSize + 1 : 0}–{Math.min((snapshot.page + 1) * snapshot.pageSize, snapshot.totalMatching)} of {snapshot.totalMatching}</span><button type="button" disabled={loadingData || (snapshot.page + 1) * snapshot.pageSize >= snapshot.totalMatching} onClick={() => changeFilters({ page: snapshot.page + 1 })}>Next page</button></nav>

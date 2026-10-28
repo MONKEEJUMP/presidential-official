@@ -2,7 +2,7 @@
 
 import { type ComponentProps, useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { formatSalesDate } from "@/lib/sales";
+import { formatSalesDate, isClosedDoor } from "@/lib/sales";
 import type { WorkflowDetail } from "@/lib/sales-workflow";
 import type { SalesToolkit } from "./sales-toolkit";
 import styles from "./sales-workspace.module.css";
@@ -29,7 +29,6 @@ export function SalesWorkspaceTools({ door, timeZone, userId, isSuper, mode, not
   const [dueDraft, setDueDraft] = useState("");
   const [callbackNote, setCallbackNote] = useState("");
   const [correction, setCorrection] = useState("");
-  const [correctionOpen, setCorrectionOpen] = useState(false);
   const [ownerReason, setOwnerReason] = useState("");
   const [pending, setPending] = useState<PendingSave | null>(null);
   const [readAt, setReadAt] = useState(0);
@@ -38,7 +37,7 @@ export function SalesWorkspaceTools({ door, timeZone, userId, isSuper, mode, not
   const requestBusy = useRef(false);
   const abortRef = useRef<AbortController | null>(null);
   const feedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const restricted = door.isPurchasing || door.doNotCallLocked || door.status === "closed";
+  const restricted = door.isPurchasing || door.doNotCallLocked || isClosedDoor(door);
   const canEdit = Boolean(detail?.claim?.mine && !restricted && mode === "log");
   const website = safeWebsite(door.website);
 
@@ -97,7 +96,7 @@ export function SalesWorkspaceTools({ door, timeZone, userId, isSuper, mode, not
     if (!mounted.current) return;
     setPending(null);
     if (payload.action === "save_note") onNoteSaved(String(payload.text));
-    if (payload.action === "request_correction") { setCorrection(""); setCorrectionOpen(false); }
+    if (payload.action === "request_correction") setCorrection("");
     if (["set_callback", "complete_callback", "undo_callback"].includes(String(payload.action))) callbackDirty.current = false;
     feedback(success);
     onChanged?.();
@@ -159,14 +158,14 @@ export function SalesWorkspaceTools({ door, timeZone, userId, isSuper, mode, not
       <h2>{detail?.callback?.status === "open" ? "Open follow-up" : "Follow-up"}</h2>
       {!detail ? <p className={styles.muted}>Loading follow-up…</p> : detail.callback ? <><p className={detail.callback.status === "open" && Date.parse(detail.callback.dueAt) < readAt ? styles.error : styles.muted}>{detail.callback.status === "done" ? "Completed" : Date.parse(detail.callback.dueAt) < readAt ? "Overdue" : "Scheduled"} · {formatSalesDate(detail.callback.dueAt, true, timeZone)} · {timeZone}</p><p className={styles.muted}>Assigned to {detail.callback.ownerName}</p>{detail.callback.note ? <p>{detail.callback.note}</p> : null}</> : <p className={styles.muted}>No follow-up scheduled.</p>}
       {!door.isPurchasing && detail?.callback?.status === "open" && detail.callback.canManage ? <button className={styles.primary} type="button" disabled={locked} onClick={() => void act({ action: "complete_callback", doorId: door.id, ...ownerPayload }, "Follow-up marked complete.")}>Mark follow-up complete</button> : null}
-      {mode === "log" && !restricted ? <details>
-        <summary>{detail?.callback ? "Reschedule follow-up" : "Set a follow-up"}</summary>
+      {mode === "log" && !restricted ? <div>
+        <h3>{detail?.callback ? "Reschedule follow-up" : "Set a follow-up"}</h3>
         <div className={styles.stack}>
           <label className={styles.field}><span>Date and time · your device&apos;s local time</span><input type="datetime-local" value={dueDraft} onChange={event => setDueDraft(event.target.value)} disabled={callbackLocked} /></label>
           <label className={styles.field}><span>What should happen next?</span><input value={callbackNote} maxLength={1000} onChange={event => setCallbackNote(event.target.value)} disabled={callbackLocked} /></label>
           <button className={styles.primary} type="button" disabled={callbackLocked || !dueDraft} onClick={() => { const due = new Date(dueDraft); if (!Number.isFinite(due.getTime())) { setError("Choose a valid follow-up date and time."); return; } void act({ action: "set_callback", doorId: door.id, dueAt: due.toISOString(), note: callbackNote || null, ...ownerPayload }, "Follow-up saved."); }}>Save follow-up</button>
         </div>
-      </details> : null}
+      </div> : null}
       {detail?.undoCallbackId ? <button type="button" disabled={locked} onClick={() => void act({ action: "undo_callback", doorId: door.id, eventId: detail.undoCallbackId }, "Follow-up change undone.")}>Undo latest follow-up change</button> : null}
     </section>
     {detail?.claim && !detail.claim.mine ? <p className={styles.notice}>In use by {detail.claim.ownerName}. You can read this account or move to the next dispensary.</p> : canEdit ? <p className={styles.badge}>Reserved for you</p> : null}
@@ -175,8 +174,8 @@ export function SalesWorkspaceTools({ door, timeZone, userId, isSuper, mode, not
       {detail?.claim && !detail.claim.mine ? <button type="button" disabled={locked || !ownerReason.trim()} onClick={() => void act({ action: "claim", doorId: door.id, reason: ownerReason }, "Workspace taken over. Reason recorded.")}>Take over workspace</button> : null}
     </section> : null}
     {mode === "log" && notesActionsTarget ? createPortal(<button type="button" aria-busy={savingNote} disabled={!canEdit || locked} onClick={() => void act({ action: "save_note", doorId: door.id, text: notes }, "Notes saved.")}>{savingNote ? "Saving…" : "Save notes"}</button>, notesActionsTarget) : null}
-    <details className={styles.toolCard}>
-      <summary>Contact details</summary><div className={styles.stack}>
+    <section className={styles.toolCard} aria-label="Contact details">
+      <h2>Contact details</h2><div className={styles.stack}>
         <div><span className={styles.label}>Store address</span><p>{[door.streetAddress, door.city, door.stateCode, door.zip].filter(Boolean).join(", ") || "Address not recorded"}</p></div>
         {door.streetAddress || door.city ? <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([door.streetAddress, door.city, door.stateCode, door.zip].filter(Boolean).join(", "))}`} target="_blank" rel="noopener noreferrer">Open map ↗</a> : null}
         <div><span className={styles.label}>Source email · buyer not verified</span>{door.email ? <a href={`mailto:${door.email}`}>{door.email}</a> : <p>Email not recorded</p>}</div>
@@ -184,9 +183,9 @@ export function SalesWorkspaceTools({ door, timeZone, userId, isSuper, mode, not
         {door.extraContacts ? <div><span className={styles.label}>Additional source contacts · roles unverified</span><pre>{door.extraContacts}</pre></div> : null}
         <button type="button" onClick={() => void navigator.clipboard.writeText([door.dbaName || door.legalName, door.phone, door.email, door.streetAddress, door.city, door.stateCode, door.zip].filter(Boolean).join("\n")).then(() => feedback("Contact details copied.")).catch(() => setError("Could not copy. Select the contact text and copy it manually."))}>Copy contact details</button>
       </div>
-    </details>
-    <details className={styles.toolCard} id="crm-team-notes" open={mode === "history"}>
-      <summary>Saved team notes</summary><div className={styles.stack}>
+    </section>
+    <section className={styles.toolCard} id="crm-team-notes" aria-label="Saved team notes">
+      <h2>Saved team notes</h2><div className={styles.stack}>
         {!detail ? <p className={styles.muted}>Loading notes…</p> : !detail.notes.length ? <p className={styles.muted}>No saved team notes yet.</p> : detail.notes.map(note => <article key={note.id} className={note.undone ? styles.undone : styles.historyEntry}><small>{note.repName} · {formatSalesDate(note.createdAt, true, timeZone)}{note.undone ? " · Undone" : ""}</small><p className={styles.noteText}>{note.text || "Current note cleared"}</p>{note.canUndo ? <button type="button" disabled={locked} onClick={() => void act({ action: "undo_note", noteId: note.id }, "Note undone. History preserved.")}>Undo this note</button> : null}</article>)}
         {detail?.nextNoteCursor ? <button type="button" disabled={locked} onClick={async () => {
           try {
@@ -197,10 +196,10 @@ export function SalesWorkspaceTools({ door, timeZone, userId, isSuper, mode, not
           } catch { if (mounted.current) setError("Older notes could not be loaded."); }
         }}>Older notes</button> : null}
       </div>
-    </details>
+    </section>
     <section className={styles.toolCard}>
-      <button type="button" onClick={() => setCorrectionOpen(open => !open)}>Request a correction</button>
-      {correctionOpen ? <><label className={styles.field}><span>Explain the incorrect account information</span><textarea maxLength={1000} value={correction} disabled={locked} onChange={event => setCorrection(event.target.value)} /></label><button type="button" disabled={locked || !correction.trim()} onClick={() => void act({ action: "request_correction", doorId: door.id, reason: correction }, "Correction request sent to the owner.")}>Send correction request</button></> : null}
+      <h2>Request a correction</h2>
+      <label className={styles.field}><span>Explain the incorrect account information</span><textarea maxLength={1000} value={correction} disabled={locked} onChange={event => setCorrection(event.target.value)} /></label><button type="button" disabled={locked || !correction.trim()} onClick={() => void act({ action: "request_correction", doorId: door.id, reason: correction }, "Correction request sent to the owner.")}>Send correction request</button>
     </section>
   </div>;
 }
