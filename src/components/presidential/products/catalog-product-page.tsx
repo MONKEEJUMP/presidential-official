@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { indexableProductHref } from "@/lib/products/vault-links";
 import { ProductMentions, productInlineClass } from "./product-mention";
 
 // R40 standing rule: no one-word links. On these two pages the Skywalker mention links to the indexable jar page
@@ -223,12 +224,12 @@ export function CatalogProductPage({
       </section>
 
       {!vaultProduct && <nav aria-label={`${categoryLabel} product navigation`} className={styles.productNavigation}>
-        <Link href={productDetailPath(categoryPath, previous.id)}>
+        <Link href={indexableProductHref(categoryPath, previous.id)}>
           <ArrowIcon direction="left" />
           <span><small>Previous</small><strong>{previous.name}</strong></span>
         </Link>
         <p>{String(productIndex + 1).padStart(2, "0")} / {String(products.length).padStart(2, "0")}</p>
-        <Link href={productDetailPath(categoryPath, next.id)}>
+        <Link href={indexableProductHref(categoryPath, next.id)}>
           <span><small>Next</small><strong>{next.name}</strong></span>
           <ArrowIcon direction="right" />
         </Link>

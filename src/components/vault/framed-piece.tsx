@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { indexableVaultProductHref } from '@/lib/products/vault-links';
 import { imageAlt, pieceHref, pieceLabel, type VaultImage, type VaultProduct } from '@/content/vault/catalog';
 
 export function FramedArt({ product, image, full = false, className = '', priority = false }: { product: VaultProduct; image: VaultImage; full?: boolean; className?: string; priority?: boolean }) {
@@ -15,6 +16,6 @@ export function FramedPiece({ product, featured = false, entrance = false }: { p
   const image = product.scenes[0] ?? product.pack;
   return <div className={`vault-piece ${featured ? 'vault-featured-piece' : ''} ${entrance ? 'vault-collection-piece' : ''}`}>
     <Link href={pieceHref(product)} scroll={false} className="vault-piece-art" aria-label={`Open ${product.strain} ${product.format} artwork`}><FramedArt product={product} image={image} full={featured} /></Link>
-    <Link href={product.productUrl} className="vault-placard vault-placard-link"><span className="vault-piece-name">{product.strain}</span><span className="vault-piece-format">{pieceLabel(product)}</span></Link>
+    <Link href={indexableVaultProductHref(product)} className="vault-placard vault-placard-link"><span className="vault-piece-name">{product.strain}</span><span className="vault-piece-format">{pieceLabel(product)}</span></Link>
   </div>;
 }
