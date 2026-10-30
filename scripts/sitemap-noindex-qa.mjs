@@ -1,11 +1,14 @@
 import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
+import { createRequire } from "node:module";
 import { createServer } from "node:net";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 
 const productionOrigin = "https://presidentialmoonrocks.com";
+const { parse } = createRequire(import.meta.url)("next/dist/compiled/node-html-parser");
+const intentionalNoindexPaths = new Set(["/sales", "/loyalty", "/wholesale/apply", "/partners/wa"]);
 const requestOptions = { redirect: "manual", headers: { "user-agent": "Sitebulb" } };
 const noindex = /(?:^|[\s,;:])(?:noindex|none)(?:$|[\s,;])/i;
 const pause = (ms) => new Promise((done) => setTimeout(done, ms));
@@ -24,15 +27,20 @@ function attributes(tag) {
     .map((match) => [match[1].toLowerCase(), decode(match[2] ?? match[3] ?? match[4])]));
 }
 
+function pageTags(html) {
+  return [...html.replace(/<!--[^]*?-->|<script\b[^>]*>[^]*?<\/script\s*>/gi, "").matchAll(/<(meta|link)\b[^>]*>/gi)]
+    .map((match) => ({ tag: match[1].toLowerCase(), ...attributes(match[0]) }));
+}
+
+function hasNoindex(tags, headers) {
+  return noindex.test(headers.get("x-robots-tag") ?? "") || tags.some((tag) =>
+    tag.tag === "meta" && /^(robots|googlebot)$/i.test(tag.name ?? "") && noindex.test(tag.content ?? ""));
+}
+
 export function inspectPage(html, headers, expectedUrl) {
   const problems = [];
-  const markup = html.replace(/<!--[^]*?-->|<script\b[^>]*>[^]*?<\/script\s*>/gi, "");
-  const tags = [...markup.matchAll(/<(meta|link)\b[^>]*>/gi)]
-    .map((match) => ({ tag: match[1].toLowerCase(), ...attributes(match[0]) }));
-  if (noindex.test(headers.get("x-robots-tag") ?? "") || tags.some((tag) =>
-    tag.tag === "meta" && /^(robots|googlebot)$/i.test(tag.name ?? "") && noindex.test(tag.content ?? ""))) {
-    problems.push("noindex robots directive");
-  }
+  const tags = pageTags(html);
+  if (hasNoindex(tags, headers)) problems.push("noindex robots directive");
   const canonicals = tags.filter((tag) => tag.tag === "link" && /(?:^|\s)canonical(?:$|\s)/i.test(tag.rel ?? ""));
   if (canonicals.length !== 1 || canonicals[0].href !== expectedUrl) {
     problems.push(`canonical must be exactly ${expectedUrl}`);
@@ -48,6 +56,7 @@ async function request(baseUrl, pathname) {
 // paths are fetched, so the same guard can check a local build or production.
 export async function checkSitemap(baseUrl) {
   const failures = [];
+  const internalTargets = new Map();
   const response = await request(baseUrl, "/sitemap.xml");
   if (response.status !== 200) throw new Error(`Sitemap returned HTTP ${response.status}`);
   const xml = await response.text();
@@ -63,18 +72,50 @@ export async function checkSitemap(baseUrl) {
           throw new Error("Sitemap URL must use the canonical origin without credentials or fragments");
         }
         const page = await request(baseUrl, url.pathname + url.search);
+        const html = page.status === 200 ? await page.text() : "";
         const problems = page.status !== 200
           ? [`HTTP ${page.status}`]
           : !page.headers.get("content-type")?.includes("text/html")
             ? ["Expected an HTML page"]
-            : inspectPage(await page.text(), page.headers, entry);
+            : inspectPage(html, page.headers, entry);
         if (problems.length) failures.push({ url: entry, problems });
+        for (const anchor of parse(html).querySelectorAll("a[href]")) {
+          const href = anchor.getAttribute("href").trim();
+          if (!href || href.startsWith("#")) continue;
+          let target;
+          try { target = new URL(href, entry); } catch { continue; }
+          if (target.origin !== productionOrigin || target.username || target.password ||
+            intentionalNoindexPaths.has(target.pathname.replace(/\/$/, "")) || target.searchParams.has("piece")) continue;
+          target.hash = "";
+          const key = target.href;
+          if (!internalTargets.has(key)) internalTargets.set(key, new Set());
+          internalTargets.get(key).add(entry);
+        }
       } catch (error) {
         failures.push({ url: entry, problems: [error.message] });
       }
     }
   }));
-  return { checked: urls.length, failures };
+  const links = [...internalTargets];
+  cursor = 0;
+  await Promise.all(Array.from({ length: Math.min(4, links.length) }, async () => {
+    while (cursor < links.length) {
+      const [target, sources] = links[cursor++];
+      try {
+        const url = new URL(target);
+        const page = await request(baseUrl, url.pathname + url.search);
+        let html = "";
+        if (page.headers.get("content-type")?.includes("text/html")) html = await page.text();
+        else await page.body?.cancel();
+        const problems = page.status !== 200 ? [`HTTP ${page.status}`]
+          : hasNoindex(pageTags(html), page.headers) ? ["noindex robots directive"] : [];
+        if (problems.length) throw new Error(problems.join("; "));
+      } catch (error) {
+        failures.push({ url: target, problems: [`internal link to noindex/redirect: ${error.message}; from ${[...sources].join(", ")}`] });
+      }
+    }
+  }));
+  return { checked: urls.length, linksChecked: links.length, failures };
 }
 
 async function openPort() {
@@ -122,6 +163,7 @@ async function main() {
     const result = await checkSitemap(baseUrl);
     for (const failure of result.failures) console.error(`FAIL ${failure.url}: ${failure.problems.join("; ")}`);
     console.log(`Sitemap QA: ${result.checked} URLs checked; ${result.failures.length} failed.`);
+    console.log(`Internal link QA: ${result.linksChecked} unique targets checked.`);
     process.exitCode = result.failures.length ? 1 : 0;
   } finally {
     if (child?.pid && child.exitCode === null) {

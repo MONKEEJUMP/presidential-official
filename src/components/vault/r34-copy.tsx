@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { indexableProductHref } from '@/lib/products/vault-links';
 import type { ReactNode } from 'react';
 
 // SURFER-R34: server-rendered body copy for the thin Vault art rooms and pre-roll SKU pages.
@@ -60,9 +61,9 @@ const ROOM_COPY: Readonly<Record<string, ReactNode>> = {
         <h3 className="mb-2 text-base font-semibold text-white">Matching the art to a single roll</h3>
         <p>
           Pack art works best when you can see how it carries over to a specific product. A plain, letters-only design shows up on
-          the <Link className={L} href="/pre-rolls/xxx">woodsy XXX pre-roll</Link>, where the name does the work instead of an
+          the <Link className={L} href={indexableProductHref("pre-rolls", "xxx")}>woodsy XXX pre-roll</Link>, where the name does the work instead of an
           illustration. A cold-leaning name shows up on the{' '}
-          <Link className={L} href="/pre-rolls/white-walker">frost-themed White Walker pre-roll</Link>, part of the group of names
+          <Link className={L} href={indexableProductHref("pre-rolls", "white-walker")}>frost-themed White Walker pre-roll</Link>, part of the group of names
           that reach for cold and frost. Looking at a few product pages side by side makes it easier to recognise a pack on a busy
           shelf. Read the label on the roll in hand for its build and batch details.
         </p>
@@ -140,7 +141,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       Shoppers who prefer a jar can find the same name as a{' '}
       <Link className={L} href="/moon-rocks/gods-gift">God&apos;s Gift moon rock jar</Link>. Availability depends on the
       retailer, so confirm the current selection with the store and check the label on each pack for batch information. In a
-      tobacco-free wrap, the same name comes as <Link className={L} href="/blunts/gods-gift">the 1.5g God&apos;s Gift blunt</Link>.
+      tobacco-free wrap, the same name comes as <Link className={L} href={indexableProductHref("blunts", "gods-gift")}>the 1.5g God&apos;s Gift blunt</Link>.
     </Block>
   ),
   'mini-pre-rolls/waui': (
@@ -149,7 +150,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       <Link className={L} href="/moon-rocks/waui">Waui moon rocks in the jar</Link>. Each one is
       flower, live resin, and diamonds, marked Sativa, with a pineapple-led tropical aroma. The minis suit a shorter session or
       sharing a pack among friends. Shoppers who want one larger roll can pick the{' '}
-      <Link className={L} href="/pre-rolls/waui">full-size Waui roll</Link>, which carries the same strain name. Another name
+      <Link className={L} href={indexableProductHref("pre-rolls", "waui")}>full-size Waui roll</Link>, which carries the same strain name. Another name
       from the same partnership is <Link className={L} href="/moon-rocks/skywalker">Skywalker, another ROVE name</Link>, offered
       as a jar. Retail stock varies from store to store, so confirm the format you want before the trip and read the pack label
       for batch details. For the same three-roll idea in hemp, see{' '}
@@ -160,7 +161,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
     <Block parent="How XJ-13 is built" heading="Other ways to buy XJ-13">
       XJ-13 lists Jack Herer and G13 Haze on the pack as its parentage, and the mini pack holds three 0.5g rolls of flower, live
       resin, and diamonds, marked Sativa. Its aroma leans citrus and clean. The same strain also appears in larger and
-      hemp-wrapped formats. For a single larger roll, the <Link className={L} href="/pre-rolls/xj-13">full 1g XJ-13 roll</Link>{' '}
+      hemp-wrapped formats. For a single larger roll, the <Link className={L} href={indexableProductHref("pre-rolls", "xj-13")}>full 1g XJ-13 roll</Link>{' '}
       keeps the same build in one piece. For a tobacco-free option, look at{' '}
       <Link className={L} href="/mini-blunts/xj-13">XJ-13 in a hemp mini wrap</Link>. Each format has its own label, so read the
       pack for its build and batch details, and ask the store which XJ-13 formats it has in stock.
@@ -170,7 +171,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
     <Block parent="How XXX is built" heading="XXX beyond the mini pack">
       XXX comes from the Gold Strain Series, and the mini pack holds three 0.5g rolls, each one flower, live resin, and diamonds,
       marked Indica. The aroma reads woodsy with a citrus edge. Some shoppers like the minis for a short session; others want a
-      single roll or a hemp wrap. The <Link className={L} href="/pre-rolls/xxx">single XXX roll</Link> offers the strain as one
+      single roll or a hemp wrap. The <Link className={L} href={indexableProductHref("pre-rolls", "xxx")}>single XXX roll</Link> offers the strain as one
       1g pre-roll, and the <Link className={L} href="/mini-blunts/xxx">XXX mini blunt pack</Link> moves it into a tobacco-free
       hemp wrap. Each format prints its own build on the label, so read the pack before buying, and confirm with the store which
       XXX formats it currently has on hand.
@@ -260,7 +261,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
     <Block heading="XXX in other formats">
       XXX is a Gold Strain Series name, and the pre-roll is one 1g roll of flower, live resin, and diamonds, marked Indica on
       the pack. The same name also comes as the <Link className={L} href="/moon-rocks/xxx">XXX moon rock jar</Link>, built with live
-      resin and finished with kief, and the <Link className={L} href="/blunts/xxx">XXX infused blunt</Link> puts the name in a
+      resin and finished with kief, and the <Link className={L} href={indexableProductHref("blunts", "xxx")}>XXX infused blunt</Link> puts the name in a
       hemp wrap. If you&apos;d rather have a smaller roll, the{' '}
       <Link className={L} href="/mini-pre-rolls/xxx">XXX mini pre-roll pack</Link> splits the same name into shorter rolls, and{' '}
       <Link className={L} href="/mini-blunts/xxx">XXX mini blunts in a hemp wrap</Link> do the same in hemp. {/* INLINKS-COPY-R46: lost /moon-rocks/gold link (anchor reworded: "Gold Strain Series moon rocks" is an existing anchor). */}The
@@ -271,7 +272,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       {/* SURFER-R45: /pre-rolls/xxx H2 ("simplest way" softened; art anchor reworded: "pre-roll pack art gallery" is part of an existing anchor). */}
       <Block heading="Comparing the XXX roll with other single rolls">
         The XXX pre-roll has a woodsy, citrus-leaning aroma with an earthy edge. Shoppers comparing it with other single rolls can
-        look at the <Link className={L} href="/pre-rolls/gods-gift">God&apos;s Gift single pre-roll</Link>, whose name reaches for
+        look at the <Link className={L} href={indexableProductHref("pre-rolls", "gods-gift")}>God&apos;s Gift single pre-roll</Link>, whose name reaches for
         reverence rather than flavor. For what the art signals, see{' '}
         <Link className={L} href="/presidential-art/pre-rolls">how pre-roll packs are illustrated</Link>. Comparing aroma and pack
         art helps you choose between single rolls. Each pre-roll prints its own composition line, so read the label in hand for its
@@ -287,13 +288,13 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
       <Link className={L} href="/learn/what-is-live-rosin">guide to live rosin</Link> covers how it&apos;s made. To compare White
       Walker with its series neighbors, browse the <Link className={L} href="/moon-rocks/rose-gold">Rose Gold collection</Link>,
       then confirm current selection with the store. For a tobacco-free wrap, see{' '}
-      <Link className={L} href="/blunts/white-walker">White Walker as a 1.5g blunt</Link>.
+      <Link className={L} href={indexableProductHref("blunts", "white-walker")}>White Walker as a 1.5g blunt</Link>.
     </Block>
       {/* SURFER-R46: White Walker H2 (cold-art claim reworded to its page's "cold end"; "quickest way" softened; anchors reworded: "woodsy XXX pre-roll" and "how pre-roll packs are illustrated" exist). */}
       <Block heading="Comparing White Walker with other single rolls">
         White Walker sits at the cold end of the Presidential catalog, and its name points the same way. Shoppers comparing
         single rolls often look at a contrasting name next, such as{' '}
-        <Link className={L} href="/pre-rolls/xxx">XXX as a single 1g roll</Link>, which keeps its label to three letters. For a
+        <Link className={L} href={indexableProductHref("pre-rolls", "xxx")}>XXX as a single 1g roll</Link>, which keeps its label to three letters. For a
         broader look at single-roll pack designs,{' '}
         <Link className={L} href="/presidential-art/pre-rolls">the single-roll art room</Link> collects them in one place.
         Comparing aroma and pack art side by side helps you choose. Read the label on the roll in hand for its build and batch
@@ -320,7 +321,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   'blunts/gods-gift': (
     <Block heading="God&apos;s Gift outside the blunt">
-      God&apos;s Gift belongs to the Rose Gold Connoisseur Series, and the blunt is 1.5g of flower, live rosin, and diamonds in a tobacco-free wrap, marked Indica. Rose Gold is the connoisseur tier, and the <Link className={L} href="/learn/what-is-live-rosin">guide to pressing live rosin</Link> covers the ice water, heat, and pressure behind it. The same name also comes as <Link className={L} href="/moon-rocks/gods-gift">God&apos;s Gift loose in a jar</Link> and as a <Link className={L} href="/pre-rolls/gods-gift">God&apos;s Gift 1g pre-roll</Link>, and each format prints its own label. Read the pack for batch details, and confirm with the store which God&apos;s Gift formats it carries.
+      God&apos;s Gift belongs to the Rose Gold Connoisseur Series, and the blunt is 1.5g of flower, live rosin, and diamonds in a tobacco-free wrap, marked Indica. Rose Gold is the connoisseur tier, and the <Link className={L} href="/learn/what-is-live-rosin">guide to pressing live rosin</Link> covers the ice water, heat, and pressure behind it. The same name also comes as <Link className={L} href="/moon-rocks/gods-gift">God&apos;s Gift loose in a jar</Link> and as a <Link className={L} href={indexableProductHref("pre-rolls", "gods-gift")}>God&apos;s Gift 1g pre-roll</Link>, and each format prints its own label. Read the pack for batch details, and confirm with the store which God&apos;s Gift formats it carries.
     </Block>
   ),
   'mini-pre-rolls/cherry-gelato': (
@@ -340,7 +341,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   'mini-pre-rolls/24k': (
     <Block heading="24K beyond the mini pack">
-      The 24K mini pre-roll pack is flower, live resin, and diamonds in paper, marked Indica, under a name Presidential takes from a purity measure. It belongs to the Gold Strain Series. Shoppers who want the name unrolled can look at <Link className={L} href="/moon-rocks/24k">24K as loose moon rocks</Link>, which follow their own jar label. For a larger hemp-wrapped roll, the <Link className={L} href="/blunts/24k">1.5g 24K blunt</Link> lists flower, live resin, and diamonds in a tobacco-free wrap. Each format prints its own label, so read the pack in hand for batch details, and ask the store which 24K formats are on the shelf.
+      The 24K mini pre-roll pack is flower, live resin, and diamonds in paper, marked Indica, under a name Presidential takes from a purity measure. It belongs to the Gold Strain Series. Shoppers who want the name unrolled can look at <Link className={L} href="/moon-rocks/24k">24K as loose moon rocks</Link>, which follow their own jar label. For a larger hemp-wrapped roll, the <Link className={L} href={indexableProductHref("blunts", "24k")}>1.5g 24K blunt</Link> lists flower, live resin, and diamonds in a tobacco-free wrap. Each format prints its own label, so read the pack in hand for batch details, and ask the store which 24K formats are on the shelf.
     </Block>
   ),
   'mini-pre-rolls/gorilla-goo': (
@@ -366,12 +367,12 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   'mini-blunts/xj-13': (
     <Block heading="XJ-13 as a jar or a pre-roll">
-      The XJ-13 mini blunt pack prints Jack Herer and G13 Haze as the strain&apos;s parentage, and each roll is flower, live resin, and diamonds in a tobacco-free wrap, marked Sativa. The aroma runs citrus, lemon, and pine. For the name unrolled, see <Link className={L} href="/moon-rocks/xj-13">XJ-13 as loose moon rocks</Link>, which follow their own jar label. For paper instead of hemp, the <Link className={L} href="/pre-rolls/xj-13">1g XJ-13 pre-roll</Link> lists the same build as the minis. Each format prints its own label, so read it before buying, and confirm with the store which XJ-13 formats are on hand.
+      The XJ-13 mini blunt pack prints Jack Herer and G13 Haze as the strain&apos;s parentage, and each roll is flower, live resin, and diamonds in a tobacco-free wrap, marked Sativa. The aroma runs citrus, lemon, and pine. For the name unrolled, see <Link className={L} href="/moon-rocks/xj-13">XJ-13 as loose moon rocks</Link>, which follow their own jar label. For paper instead of hemp, the <Link className={L} href={indexableProductHref("pre-rolls", "xj-13")}>1g XJ-13 pre-roll</Link> lists the same build as the minis. Each format prints its own label, so read it before buying, and confirm with the store which XJ-13 formats are on hand.
     </Block>
   ),
   'mini-blunts/xxx': (
     <Block heading="XXX in a jar or a single roll">
-      XXX mini blunts are flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a woodsy citrus aroma. The same name appears across other Presidential formats, and shoppers can move between them by size and wrap. To break up your own, look at <Link className={L} href="/moon-rocks/xxx">XXX loose in a moon rock jar</Link>, which follows its own label. For a paper-rolled single, the <Link className={L} href="/pre-rolls/xxx">XXX 1g pre-roll</Link> lists flower, live resin, and diamonds. Builds can differ between formats, so read each pack&apos;s label rather than assuming they match. Confirm with the store which XXX formats it carries, and check batch details on the label.
+      XXX mini blunts are flower, live resin, and diamonds in a tobacco-free wrap, marked Indica, with a woodsy citrus aroma. The same name appears across other Presidential formats, and shoppers can move between them by size and wrap. To break up your own, look at <Link className={L} href="/moon-rocks/xxx">XXX loose in a moon rock jar</Link>, which follows its own label. For a paper-rolled single, the <Link className={L} href={indexableProductHref("pre-rolls", "xxx")}>XXX 1g pre-roll</Link> lists flower, live resin, and diamonds. Builds can differ between formats, so read each pack&apos;s label rather than assuming they match. Confirm with the store which XXX formats it carries, and check batch details on the label.
     </Block>
   ),
   'mini-blunts/cherry-gelato': (
@@ -381,7 +382,7 @@ const SKU_COPY: Readonly<Record<string, ReactNode>> = {
   ),
   'mini-blunts/24k': (
     <Block heading="24K across jar and pre-roll">
-      The 24K mini blunt pack holds flower, live resin, and diamonds in a tobacco-free wrap, marked Indica. The same name runs through other Presidential formats, which helps when a store has one size and not another. <Link className={L} href="/pre-rolls/24k">24K in a 1g paper roll</Link> lists flower, live resin, and diamonds. For something to break up yourself, <Link className={L} href="/moon-rocks/24k">24K loose in the jar</Link> carries the name. Each format prints its own label, so check the build and batch details on the pack in hand. Ask the store which 24K formats are on the shelf before you make the trip.
+      The 24K mini blunt pack holds flower, live resin, and diamonds in a tobacco-free wrap, marked Indica. The same name runs through other Presidential formats, which helps when a store has one size and not another. <Link className={L} href={indexableProductHref("pre-rolls", "24k")}>24K in a 1g paper roll</Link> lists flower, live resin, and diamonds. For something to break up yourself, <Link className={L} href="/moon-rocks/24k">24K loose in the jar</Link> carries the name. Each format prints its own label, so check the build and batch details on the pack in hand. Ask the store which 24K formats are on the shelf before you make the trip.
     </Block>
   ),
 };
