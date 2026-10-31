@@ -24,6 +24,8 @@ import { buildRouteShellJsonLd, JsonLd } from "@/lib/seo/schema";
 
 import { softenLearnGuideClaims } from "@/lib/cms/learn-guide-claims";
 import { REPO_LEARN_GUIDES } from "@/lib/learn/repo-learn-guides";
+import { MOONROCKS_GUIDE } from "@/lib/learn/moonrocks-guide";
+import { MoonrocksGuideJsonLd, MoonrocksGuideSections } from "@/components/presidential/modules/moonrocks-guide-sections";
 import { LearnGuideCmsBody } from "./learn-guide-cms-body";
 
 type LearnGuidePageProps = {
@@ -105,17 +107,25 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
       {jsonLdEntries.map((entry) => (
         <JsonLd key={`${route.id}-${entry.id}`} data={entry.data} />
       ))}
+      {slug === "what-are-moon-rocks" && jsonLdEntries.length > 0 ? <MoonrocksGuideJsonLd /> : null}
       <SceneStack>
         <Scene ariaLabelledBy="presidential-learn-guide-title" tone="default">
           <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(320px,0.5fr)] lg:items-start">
             <div className="grid gap-6">
               <SectionHeading
                 as="h1"
-                description={guide.record.intro!}
+                description={slug === "what-are-moon-rocks" ? MOONROCKS_GUIDE.intro : guide.record.intro!}
                 id="presidential-learn-guide-title"
                 kicker="Presidential Learn"
-                title={guide.record.title!}
+                title={route.h1}
               />
+              {slug === "what-are-moon-rocks" ? (
+                <p className="text-sm leading-6 text-po-body">
+                  By <Link className="font-semibold underline underline-offset-4" href="/about">Presidential</Link>.{" "}
+                  Published <time dateTime={MOONROCKS_GUIDE.datePublished}>August 5, 2026</time>.{" "}
+                  Updated <time dateTime={MOONROCKS_GUIDE.dateModified}>October 31, 2026</time>.
+                </p>
+              ) : null}
               <div className="flex flex-col gap-3 sm:flex-row">
                 <CtaLink href="/learn" variant="secondary">
                   Learn hub
@@ -152,6 +162,7 @@ export default async function LearnGuidePage({ params }: LearnGuidePageProps) {
           modules={softenLearnGuideClaims(slug, guide.modules)}
           sourcePath={`/learn/${slug}`}
         />
+        {slug === "what-are-moon-rocks" ? <MoonrocksGuideSections /> : null}
         {slug === "different-extracts-need-different-heat" ? <ExtractSeriesBlock /> : null}
         {answers ? (
           <AnswerSections eyebrow={answers.eyebrow} id={`learn-${slug}-answers`} items={answers.items} />

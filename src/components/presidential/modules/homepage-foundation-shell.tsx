@@ -238,6 +238,7 @@ export function HomepageFoundationShell({
                   place to find it — all in one official home. Read{" "}
                   <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/our-story">the Presidential story</Link>, or explore the{" "}
                   <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/moon-rocks">Presidential Moon Rocks platform</Link>.
+                  {" "}New to the format? Read <Link className="font-semibold text-po-brand underline decoration-po-brand/50 underline-offset-4 hover:decoration-po-brand" href="/learn/what-are-moon-rocks">what are moonrocks</Link>.
                 </p>
               </div>
               <div className="grid gap-5 sm:grid-cols-3">
@@ -257,12 +258,12 @@ export function HomepageFoundationShell({
                     </p>
                     <div className="mt-auto pt-3">
                       <Link
-                        aria-label={`View ${point.image.alt.replace(" product graphic", "")}`}
+                        aria-label={`${point.image.alt.replace(/ Moon Rock product graphic$/, "")} moonrocks`}
                         className="relative block aspect-square cursor-pointer overflow-hidden rounded-[20px] transition-transform duration-200 hover:-translate-y-1 focus-visible:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-po-brand motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:focus-visible:transform-none"
                         href={point.image.href}
                       >
                         <Image
-                          alt={point.image.alt}
+                          alt={`${point.image.alt.replace(/ Moon Rock product graphic$/, "")} moonrocks`}
                           className="object-contain"
                           fill
                           sizes="(min-width: 640px) 33vw, 100vw"

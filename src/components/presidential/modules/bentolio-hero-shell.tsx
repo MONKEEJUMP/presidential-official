@@ -87,7 +87,7 @@ export function HomepageSpinningCrestFold() {
                 href="/moon-rocks"
                 variant="primary"
               >
-                Explore Moon Rocks
+                Explore Presidential Moonrocks
               </CtaLink>
               <CtaLink
                 className="min-h-[58px] w-full px-4 font-display text-[0.7rem] uppercase tracking-[0.07em]"

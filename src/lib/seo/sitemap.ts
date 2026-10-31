@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { MOONROCKS_GUIDE } from "../learn/moonrocks-guide";
 
 import { APPROVED_PUBLIC_SEO_ROUTES } from "./approved-public-routes";
 import { isSitemapEligible } from "./indexability";
@@ -22,6 +23,10 @@ export function buildPresidentialSitemapEntry(
     url: buildRouteCanonicalUrl(route),
     priority: route.priority / 5,
   };
+
+  if (route.path === MOONROCKS_GUIDE.path) {
+    entry.lastModified = MOONROCKS_GUIDE.dateModified;
+  }
 
   if (route.changeFrequency) {
     entry.changeFrequency = route.changeFrequency;

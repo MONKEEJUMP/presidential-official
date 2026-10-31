@@ -365,6 +365,12 @@ export default async function CatalogProductDetailPage({
           </div>
         </Scene>
 
+        <Scene ariaLabel="Moon Rocks guide" tone="default">
+          <p className="mx-auto w-full max-w-7xl text-base leading-7 text-po-body">
+            Learn how <Link className="font-semibold underline underline-offset-4" href="/learn/what-are-moon-rocks">moonrocks</Link>{" "}
+            combine flower, concentrate and a finishing layer, then check this product&apos;s package for its specific build.
+          </p>
+        </Scene>
         <FindUsCtaShell
           className="po-gold-thread-inlay"
           compact

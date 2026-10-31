@@ -18,6 +18,9 @@ import {
 } from "@/lib/catalog/tier-map";
 import { resolveMoonRocksCardArt } from "@/lib/catalog/moon-rocks-card-art";
 import type { SeoRouteRecord } from "@/lib/seo/route-types";
+import { APPROVED_PUBLIC_PRODUCT_ROUTES } from "@/lib/seo/approved-public-routes";
+import { isRouteMetadataIndexable } from "@/lib/seo/metadata";
+import { buildItemListSchema, JsonLd } from "@/lib/seo/schema";
 
 import { TierBadge, TierSectionHeader } from "../catalog/tier-section";
 import { PageFrame } from "../layout/page-frame";
@@ -160,6 +163,18 @@ export async function MoonRocksPlatformShell({
   const activeItemsWithoutArt = placements.filter(
     ({ resolution }) => !resolution.entry.retired && !resolution.entry.hasArt,
   );
+  const indexableProductPaths = new Set(
+    APPROVED_PUBLIC_PRODUCT_ROUTES.filter((productRoute) => isRouteMetadataIndexable(productRoute)).map((productRoute) => productRoute.path),
+  );
+  const listedStrains = placements.filter(({ item, resolution }) =>
+    !resolution.entry.retired &&
+    !FLAVOR_LIST_EXCLUDED_SLUGS.has(catalogItemSlug(item)) &&
+    indexableProductPaths.has(`/moon-rocks/${catalogItemSlug(item)}`),
+  );
+  const strainListSchema = buildItemListSchema("Presidential Moonrocks strains", listedStrains.map(({ item, resolution }) => ({
+    name: `${resolution.entry.displayName || item.name || catalogItemSlug(item)} moonrocks`,
+    path: `/moon-rocks/${catalogItemSlug(item)}`,
+  })));
   const itemsFor = (section: CatalogTierSection) =>
     activeItems
       .filter(({ resolution }) => resolution.entry.section === section);
@@ -172,6 +187,7 @@ export async function MoonRocksPlatformShell({
 
   return (
     <PageFrame>
+      {isRouteMetadataIndexable(route) && listedStrains.length > 0 ? <JsonLd data={strainListSchema} /> : null}
       <SceneStack>
         <DispensariesStyleHero
           ariaLabelledBy="presidential-moon-rocks-title"
@@ -190,11 +206,11 @@ export async function MoonRocksPlatformShell({
           ]}
           eyebrow="Presidential product platform"
           supportingText={[
-            "The Highest Form Of Cannabis.",
+            "Presidential moonrocks: infused flower, pre-rolls and blunts.",
             <InContentText
               key="moon-rocks-description"
               sourcePath="/moon-rocks"
-              value="Explore the Presidential Moon Rocks product platform. Availability varies by state and licensed retailer."
+              value="Explore the Presidential Moon Rocks product platform. Availability varies by state and licensed retailer. For adults 21+ where legal."
             />,
             "Moon Rocks is the flagship Presidential product platform for pre-rolls, blunts, learning, and licensed retailer discovery.",
           ]}
@@ -303,12 +319,12 @@ export async function MoonRocksPlatformShell({
                                 </span>
                               ) : null}
                               <Link
-                                aria-label={`View ${resolution.entry.displayName || item.name || slug} product page`}
+                                aria-label={`${resolution.entry.displayName || item.name || slug} moonrocks`}
                                 className={`${shared.artCardImage} ${shared.moonRocksCardImage}`}
                                 href={`/moon-rocks/${slug}`}
                               >
                                 <Image
-                                  alt={`${resolution.entry.displayName || item.name || slug} Moon Rocks packaging`}
+                                  alt={`${resolution.entry.displayName || item.name || slug} moonrocks`}
                                   className={shared.moonRocksCardArt}
                                   fill
                                   sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw"
@@ -351,12 +367,12 @@ export async function MoonRocksPlatformShell({
                       return (
                         <article className={shared.artCardSquare} key={item._id}>
                           <Link
-                            aria-label={`View ${resolution.entry.displayName || item.name || slug} product page`}
+                            aria-label={`${resolution.entry.displayName || item.name || slug} moonrocks`}
                             className={`${shared.artCardImage} ${shared.moonRocksCardImage}`}
                             href={`/moon-rocks/${slug}`}
                           >
                             <Image
-                              alt={`${resolution.entry.displayName || item.name || slug} Moon Rocks packaging`}
+                              alt={`${resolution.entry.displayName || item.name || slug} moonrocks`}
                               className={shared.moonRocksCardArt}
                               fill
                               sizes="(max-width: 700px) 46vw, (max-width: 1100px) 44vw, 29vw"

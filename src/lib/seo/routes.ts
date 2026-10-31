@@ -72,10 +72,10 @@ export const ROUTE_REGISTRY = [
     priority: 5,
     changeFrequency: "weekly",
     canonicalPath: "/moon-rocks",
-    title: "Presidential Moon Rocks | Infused Pre-Rolls and Blunts",
+    title: "Moonrocks | Presidential Moon Rocks – Infused Flower, Pre-Rolls & Blunts",
     description:
-      "Presidential Moon Rocks: flower, concentrate, and kief in one product. Browse 2G Moon Rocks, pre-rolls, and blunts across Silver, Gold, and Rose Gold.",
-    h1: "Presidential Moon Rocks Collection",
+      "Explore Presidential moonrocks: infused flower, pre-rolls and blunts. Browse Moon Rocks strains across Silver, Gold and Rose Gold. Adults 21+ where legal.",
+    h1: "Presidential Moonrocks Collection",
     keywords: [
       "presidential moon rocks",
       "moon rock pre-rolls",
