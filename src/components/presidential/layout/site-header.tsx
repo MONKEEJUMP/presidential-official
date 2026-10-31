@@ -27,6 +27,7 @@ const navigationGroups = [
     label: "Discover",
     items: [
       { href: "/learn", label: "Learn" },
+      { href: "/learn/what-are-moon-rocks", label: "What are Moonrocks?" },
       { href: "/our-story", label: "Our Story" },
       { href: "/about", label: "About" },
       { href: "/presidential-art", label: "Presidential Art" },

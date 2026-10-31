@@ -1,3 +1,4 @@
+import { MOONROCKS_GUIDE } from "../learn/moonrocks-guide";
 import { getRouteById, getRouteByPath } from "./route-helpers";
 import type { SeoRoutePath, SeoRouteRecord } from "./route-types";
 import { PRODUCT_METADATA_BY_SLUG } from "./pw7404-1019-product-metadata";
@@ -232,9 +233,9 @@ export function buildLearnGuideSeoRoute(
     indexability: "index_follow",
     sitemap: "include",
     canonicalPath: path,
-    title: buildLearnGuideTitle(guide.title.trim()),
-    description: guide.intro.trim(),
-    h1: guide.title.trim(),
+    title: slug === "what-are-moon-rocks" ? MOONROCKS_GUIDE.title : buildLearnGuideTitle(guide.title.trim()),
+    description: slug === "what-are-moon-rocks" ? MOONROCKS_GUIDE.description : guide.intro.trim(),
+    h1: slug === "what-are-moon-rocks" ? MOONROCKS_GUIDE.h1 : guide.title.trim(),
     schema: ["WebPage", "BreadcrumbList"],
     linksTo: [
       "/learn",

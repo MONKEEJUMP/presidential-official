@@ -12,6 +12,7 @@ const footerLinks = [
   { href: "/our-story", label: "Our Story" },
   { href: "/about", label: "About" },
   { href: "/learn", label: "Learn" },
+  { href: "/learn/what-are-moon-rocks", label: "What are Moonrocks?" },
   { href: "/find-us", label: "Find Presidential" },
   { href: "/contact", label: "Contact" },
   { href: "/presidential-thc", label: "Presidential THC" },
